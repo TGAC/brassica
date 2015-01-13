@@ -1,0 +1,38 @@
+== Brassica Information Portal
+
+TODO:
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
+
+=== Dependencies
+
+* MRI 2.2.0
+* postgresql, libpq-dev
+
+
+=== Installation
+
+Install required gems:
+
+    bundle
+
+Make sure `config/database.yml` is in place:
+
+    cp config/database.yml.sample config/database.yml
+
+Make sure it contains correct configuration.
+
+Create databases:
+
+    bin/rake db:create db:migrate db:seed db:test:prepare
+
+
+=== Testing
+
+    bin/rspec
+
+
