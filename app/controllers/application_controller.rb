@@ -4,4 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def index; end
+
+  # Required by devise/omniauth when not using :database_authenticatable
+  # NOTE: remove if :database_authenticatable is switched ON
+  def new_session_path(scope)
+    root_path
+  end
 end
