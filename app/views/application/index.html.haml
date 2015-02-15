@@ -1,5 +1,7 @@
 Welcome!
+
 - if user_signed_in?
   = current_user.full_name
-
-= link_to 'Sign in with ORCiD', user_omniauth_authorize_path(:orcid)
+  = link_to 'Sign out', sign_out_path
+- else
+  = link_to 'Sign in with ORCiD', user_omniauth_authorize_path(:orcid)

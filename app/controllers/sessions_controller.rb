@@ -17,6 +17,12 @@ class SessionsController < Devise::OmniauthCallbacksController
     root_path
   end
 
+  def destroy
+    signed_out = sign_out
+    set_flash_message(:notice, :signed_out) if signed_out
+    redirect_to root_path
+  end
+
   protected
 
   def auth_hash

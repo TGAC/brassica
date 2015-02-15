@@ -4,5 +4,9 @@ Rails.application.routes.draw do
                omniauth_callbacks: 'sessions'
              }
 
+  devise_scope :user do
+    get 'sign_out', to: 'sessions#destroy'
+  end
+
   root 'application#index'
 end
