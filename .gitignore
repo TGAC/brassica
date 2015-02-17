@@ -20,3 +20,7 @@ tags
 
 # Configuration
 config/database.yml
+.env
+
+# Ignore RubyMine config files
+.idea
