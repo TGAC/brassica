@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
 
   include Nondestroyable
 
+  has_many :submissions
+
   validates :login, presence: true, uniqueness: { case_sensitive: false }
 
   def self.find_or_create_from_auth_hash(auth_hash)

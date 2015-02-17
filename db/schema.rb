@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221153704) do
+ActiveRecord::Schema.define(version: 20150221153705) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -944,6 +944,17 @@ ActiveRecord::Schema.define(version: 20150221153704) do
     t.text "confirmed_by_whom", default: "unspecified", null: false
   end
 
+  create_table "submissions", force: :cascade do |t|
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "user_id",                    null: false
+    t.string   "step",                       null: false
+    t.json     "content",    default: {},    null: false
+    t.boolean  "finalized",  default: false, null: false
+  end
+
+  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
+
   create_table "trait_descriptors", primary_key: "trait_descriptor_id", force: :cascade do |t|
     t.text "category",                 default: "unspecified", null: false
     t.text "descriptor_name",          default: "unspecified", null: false
@@ -1010,6 +1021,15 @@ ActiveRecord::Schema.define(version: 20150221153704) do
 
   add_index "trait_scores", ["scoring_occasion_id"], name: "idx_144229_scoring_occasion", using: :btree
   add_index "trait_scores", ["trait_descriptor_id"], name: "idx_144229_trait_descriptor", using: :btree
+
+  create_table "submissions", force: :cascade do |t|
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.integer  "user_id",                      null: false
+    t.string   "step",       default: "start", null: false
+  end
+
+  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "login",                          null: false
