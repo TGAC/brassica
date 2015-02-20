@@ -1,0 +1,17 @@
+= button_to "Submit your research data", submissions_path, class: 'btn btn-primary', method: 'post'
+
+- if @submissions.present?
+  %ul.submissions
+    - @submissions.each do |submission|
+      %li
+        = link_to l(submission.created_at), submission_path(submission)
+
+        - unless submission.finalized?
+          = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default btn-xs'
+          = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning btn-xs'
+        - else
+          %span.label.label-primary Submitted
+
+- else
+  %p You do no have any data submissions so far
+

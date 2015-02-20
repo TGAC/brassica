@@ -1022,15 +1022,6 @@ ActiveRecord::Schema.define(version: 20150221153705) do
   add_index "trait_scores", ["scoring_occasion_id"], name: "idx_144229_scoring_occasion", using: :btree
   add_index "trait_scores", ["trait_descriptor_id"], name: "idx_144229_trait_descriptor", using: :btree
 
-  create_table "submissions", force: :cascade do |t|
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-    t.integer  "user_id",                      null: false
-    t.string   "step",       default: "start", null: false
-  end
-
-  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
-
   create_table "users", force: :cascade do |t|
     t.string   "login",                          null: false
     t.string   "email"

@@ -1,0 +1,21 @@
+%h3 Submission
+
+= link_to "Back", submissions_path
+
+%p
+  Foo:
+  = @submission.content['step01']['foo']
+
+%p
+  Bar:
+  = @submission.content['step01']['bar']
+
+%p
+  Baz:
+  = @submission.content['step02']['baz']
+
+%p
+  Blah:
+  = @submission.content['step02']['blah']
+
+

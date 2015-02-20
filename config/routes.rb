@@ -11,4 +11,6 @@ Rails.application.routes.draw do
   root 'application#index'
 
   get 'temporary/data'
+
+  resources :submissions, except: [:new]
 end

@@ -5,9 +5,15 @@ class ApplicationController < ActionController::Base
 
   def index; end
 
+  private
+
   # Required by devise/omniauth when not using :database_authenticatable
   # NOTE: remove if :database_authenticatable is switched ON
   def new_session_path(scope)
     root_path
+  end
+
+  def require_user
+    redirect_to root_path unless user_signed_in?
   end
 end

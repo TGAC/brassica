@@ -1,0 +1,21 @@
+%h3 Part I
+
+= form_for submission do |f|
+
+  %p.alert.alert-info
+    DEBUG:
+    = submission.data.inspect
+
+  = fields_for :data, OpenStruct.new(submission.data[submission.step]) do |data|
+
+    .form-group
+      = data.label :foo
+      = data.text_field :foo, class: 'form-control'
+      %p.help-block Please, describe <b>foo</b> used in this research
+
+    .form-group
+      = data.label :bar
+      = data.select :bar, [1, 2]
+      %p.help-block Which <b>bar</b> do you prefer?
+
+  = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
