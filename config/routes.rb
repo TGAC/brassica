@@ -9,4 +9,6 @@ Rails.application.routes.draw do
   end
 
   root 'application#index'
+
+  get 'temporary/data'
 end
