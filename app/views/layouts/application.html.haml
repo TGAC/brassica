@@ -7,11 +7,42 @@
     = javascript_include_tag 'application'
     = csrf_meta_tags
   %body
+    #wrap
+      .container
+        .page-header
+          .row
+            .col-xs-6
+              %h1 Brassica Information Portal
 
-    - if notice.present?
-      %p.notice= notice
+            .col-xs-6
+              %ul.nav.nav-pills.pull-right
+                - if user_signed_in?
+                  %li{role: 'presentation'}
+                    %a= current_user.full_name
 
-    - if alert.present?
-      %p.alert= alert
+                %li{role: 'presentation'}
+                  - unless user_signed_in?
+                    = link_to 'Sign in with ORCiD', user_omniauth_authorize_path(:orcid)
+                  - else
+                    = link_to 'Sign out', sign_out_path
 
-    = yield
+                %li{role: 'presentation'}
+                  %a{href: '#'} About
+
+        .flash
+          - if notice.present?
+            %p.notice= notice
+
+          - if alert.present?
+            %p.alert= alert
+
+        .main
+          = yield
+
+      #push
+
+    #footer
+      .container
+        .copy
+          &copy; 2015
+
