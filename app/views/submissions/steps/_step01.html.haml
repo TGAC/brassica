@@ -2,20 +2,20 @@
 
 = form_for submission do |f|
 
-  %p.alert.alert-info
-    DEBUG:
-    = submission.data.inspect
+  = render partial: '/errors', locals: { errors: submission.errors }
+  = render partial: '/errors', locals: { errors: @content.errors }
 
-  = fields_for :data, OpenStruct.new(submission.data[submission.step]) do |data|
+  = f.fields_for :content, @content do |content|
+
 
     .form-group
-      = data.label :foo
-      = data.text_field :foo, class: 'form-control'
+      = content.label :foo
+      = content.text_field :foo, class: 'form-control'
       %p.help-block Please, describe <b>foo</b> used in this research
 
     .form-group
-      = data.label :bar
-      = data.select :bar, [1, 2]
+      = content.label :bar
+      = content.select :bar, [1, 2]
       %p.help-block Which <b>bar</b> do you prefer?
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }

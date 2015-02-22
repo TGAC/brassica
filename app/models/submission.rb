@@ -9,6 +9,11 @@ class Submission < ActiveRecord::Base
 
   before_validation :set_defaults, on: :create
 
+  def content
+    pairs = read_attribute(:content).map { |step, step_content| [step, OpenStruct.new(step_content)] }
+    OpenStruct.new(Hash[pairs])
+  end
+
   def step_forward
     return if last_step? # TODO maybe raise?
     idx = STEPS.index(step)
@@ -40,5 +45,6 @@ class Submission < ActiveRecord::Base
 
   def set_defaults
     self.step = STEPS.first
+    self.content = Hash[STEPS.zip(STEPS.count.times.map {})]
   end
 end

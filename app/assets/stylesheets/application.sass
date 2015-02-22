@@ -49,6 +49,18 @@ html, body
   .copy
     // @include make-sm-column(12)
 
+.errors
+  @extend .panel
+  @extend .panel-default
+  margin: 2em 0
+  color: red
+
+  ul
+    @extend .list-group
+
+    li
+      @extend .list-group-item
+
 .field_with_errors
   color: red
 
