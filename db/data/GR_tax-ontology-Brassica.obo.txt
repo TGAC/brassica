@@ -1,0 +1,643 @@
+format-version: 1.2
+date: 26:04:2013 14:21
+saved-by: cooperl
+auto-generated-by: OBO-Edit 2.2
+subsetdef: class "taxomonic class"
+subsetdef: dicot "dicot taxon"
+subsetdef: family "taxonomic family"
+subsetdef: forma "taxonomic forma"
+subsetdef: genome_type "The type of genome a species may carry."
+subsetdef: genus "taxonomic genus"
+subsetdef: kingdom "taxonomic kingdom"
+subsetdef: monocot "monocot taxon"
+subsetdef: no rank "no taxonomic rank"
+subsetdef: order "taxonomic order"
+subsetdef: phylum "taxonomic phylum"
+subsetdef: species "taxonomic species. Includes Genus"
+subsetdef: subclass "taxomonic subclass"
+subsetdef: subfamily "taxonomic subfamily"
+subsetdef: subgenus "taxonomic subgenus"
+subsetdef: suborder "taxonomic suborder"
+subsetdef: subspecies "taxonomic subspecies. Includes genus and species"
+subsetdef: subtribe "taxonomic subtribe"
+subsetdef: tribe "taxonomic tribe"
+subsetdef: varietas "taxonomic varietas. Includes genus and species"
+default-namespace: gramene_taxonomy
+remark: The subset category "genome type" was introduced by Gramene, because this information is often used by plant breeders.
+
+[Term]
+id: GR_tax:078967
+name: Brassica
+subset: dicot
+subset: genus
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:3705
+is_a: GR_tax:078798 ! Brassicaceae
+
+[Term]
+id: GR_tax:078968
+name: Brassica balearica
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:87089
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078969
+name: Brassica barrelieri
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:180530
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078970
+name: Brassica carinata
+subset: dicot
+subset: species
+synonym: "Ethiopian mustard" RELATED []
+xref: NCBI_taxid:52824
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078971
+name: Brassica cretica
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:69181
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078972
+name: Brassica deflexa
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:180531
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078973
+name: Brassica elongata
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:308263
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078974
+name: Brassica fruticulosa
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:308264
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078975
+name: Brassica gravinae
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:308265
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078976
+name: Brassica hilarionis
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:69182
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078977
+name: Brassica incana
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:129365
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078978
+name: Brassica insularis
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:69183
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078979
+name: Brassica insularis subsp. insularis
+subset: dicot
+subset: subspecies
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:109998
+is_a: GR_tax:078978 ! Brassica insularis
+
+[Term]
+id: GR_tax:078980
+name: Brassica juncea
+subset: dicot
+subset: species
+synonym: "Indian mustard" RELATED []
+xref: NCBI_taxid:3707
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078981
+name: Brassica juncea var. crassicaulis
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:366463
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078982
+name: Brassica juncea var. gracilis
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:366468
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078983
+name: Brassica juncea var. megarrhiza
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:366462
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078984
+name: Brassica juncea var. multiceps
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:323353
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078985
+name: Brassica juncea var. multisecta
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:366466
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078986
+name: Brassica juncea var. rugosa
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:366465
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078987
+name: Brassica juncea var. strumata
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:366464
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078988
+name: Brassica juncea var. tumida
+subset: dicot
+subset: varietas
+synonym: "zha cai" RELATED []
+xref: NCBI_taxid:323352
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078989
+name: Brassica juncea var. utilis
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:366467
+is_a: GR_tax:078980 ! Brassica juncea
+
+[Term]
+id: GR_tax:078990
+name: Brassica macrocarpa
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:69184
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078991
+name: Brassica maurorum
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:180533
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078992
+name: Brassica montana
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:69185
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078993
+name: Brassica napus
+subset: dicot
+subset: species
+synonym: "rape" RELATED []
+xref: NCBI_taxid:3708
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078994
+name: Brassica napus var. napobrassica
+subset: dicot
+subset: varietas
+synonym: "Swedish turnip" RELATED []
+xref: NCBI_taxid:3709
+is_a: GR_tax:078993 ! Brassica napus
+
+[Term]
+id: GR_tax:078995
+name: Brassica napus var. napus
+subset: dicot
+subset: varietas
+synonym: "annual rape" RELATED []
+xref: NCBI_taxid:138011
+is_a: GR_tax:078993 ! Brassica napus
+
+[Term]
+id: GR_tax:078996
+name: Brassica nigra
+subset: dicot
+subset: species
+synonym: "black mustard" RELATED []
+xref: NCBI_taxid:3710
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078997
+name: Brassica nigra var. abyssinica
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:492283
+is_a: GR_tax:078996 ! Brassica nigra
+
+[Term]
+id: GR_tax:078998
+name: Brassica oleracea
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:3712
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:078999
+name: Brassica oleracea var. acephala
+subset: dicot
+subset: varietas
+synonym: "kale" RELATED []
+xref: NCBI_taxid:3713
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079000
+name: Brassica oleracea var. alboglabra
+subset: dicot
+subset: varietas
+synonym: "Chinese kale" RELATED []
+xref: NCBI_taxid:3714
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079001
+name: Brassica oleracea var. botrytis
+subset: dicot
+subset: varietas
+synonym: "cauliflower" RELATED []
+xref: NCBI_taxid:3715
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079002
+name: Brassica oleracea var. capitata
+subset: dicot
+subset: varietas
+synonym: "cabbage" RELATED []
+xref: NCBI_taxid:3716
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079003
+name: Brassica oleracea var. costata
+subset: dicot
+subset: varietas
+synonym: "seakale cabbage" RELATED []
+xref: NCBI_taxid:416546
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079004
+name: Brassica oleracea var. gemmifera
+subset: dicot
+subset: varietas
+synonym: "Brussels sprouts" RELATED []
+xref: NCBI_taxid:178616
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079005
+name: Brassica oleracea var. gongylodes
+subset: dicot
+subset: varietas
+synonym: "kohlrabi" RELATED []
+xref: NCBI_taxid:109379
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079006
+name: Brassica oleracea var. italica
+subset: dicot
+subset: varietas
+synonym: "asparagus broccoli" RELATED []
+xref: NCBI_taxid:36774
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079007
+name: Brassica oleracea var. medullosa
+subset: dicot
+subset: varietas
+synonym: "marrow-stem kale" RELATED []
+xref: NCBI_taxid:178615
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079008
+name: Brassica oleracea var. oleracea
+subset: dicot
+subset: varietas
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:109376
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079009
+name: Brassica oleracea var. ramosa
+subset: dicot
+subset: varietas
+synonym: "perennial kale" RELATED []
+xref: NCBI_taxid:178614
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079010
+name: Brassica oleracea var. viridis
+subset: dicot
+subset: varietas
+synonym: "collards" RELATED []
+xref: NCBI_taxid:308439
+is_a: GR_tax:078998 ! Brassica oleracea
+
+[Term]
+id: GR_tax:079011
+name: Brassica oleracea x Brassica rapa subsp. pekinensis
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:442485
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079012
+name: Brassica oxyrrhina
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:180534
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079013
+name: Brassica procumbens
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:308266
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079014
+name: Brassica rapa
+subset: dicot
+subset: species
+synonym: "field mustard" RELATED []
+xref: NCBI_taxid:3711
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079015
+name: Brassica rapa subsp. campestris
+subset: dicot
+subset: subspecies
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:439823
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079016
+name: Brassica rapa subsp. chinensis
+subset: dicot
+subset: subspecies
+synonym: "bok-choy" RELATED []
+xref: NCBI_taxid:93385
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079017
+name: Brassica rapa var. parachinensis
+subset: dicot
+subset: varietas
+synonym: "false pak-choi" RELATED []
+xref: NCBI_taxid:320797
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079018
+name: Brassica rapa var. purpuraria
+subset: dicot
+subset: varietas
+synonym: "purple stem mustard" RELATED []
+xref: NCBI_taxid:386281
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079019
+name: Brassica rapa subsp. narinosa
+subset: dicot
+subset: subspecies
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:267281
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079020
+name: Brassica rapa subsp. nipposinica
+subset: dicot
+subset: subspecies
+synonym: "wang sheng cai" RELATED []
+xref: NCBI_taxid:333344
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079021
+name: Brassica rapa var. perviridis
+subset: dicot
+subset: varietas
+synonym: "kabuna" RELATED []
+xref: NCBI_taxid:344680
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079022
+name: Brassica rapa subsp. oleifera
+subset: dicot
+subset: subspecies
+synonym: "biennial turnip rape" RELATED []
+xref: NCBI_taxid:145471
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079023
+name: Brassica rapa subsp. pekinensis
+subset: dicot
+subset: subspecies
+synonym: "Chinese cabbage" RELATED []
+xref: NCBI_taxid:51351
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079024
+name: Brassica rapa subsp. rapa
+subset: dicot
+subset: subspecies
+synonym: "turnip" RELATED []
+xref: NCBI_taxid:51350
+is_a: GR_tax:079014 ! Brassica rapa
+
+[Term]
+id: GR_tax:079025
+name: Brassica repanda
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:308267
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079026
+name: Brassica rupestris
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:69186
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079027
+name: Brassica souliei
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:361226
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079028
+name: Brassica souliei subsp. amplexicaulis
+subset: dicot
+subset: subspecies
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:180529
+is_a: GR_tax:079027 ! Brassica souliei
+
+[Term]
+id: GR_tax:079029
+name: Brassica spinescens
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:261533
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079030
+name: Brassica tournefortii
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:37661
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079031
+name: Brassica villosa
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:69187
+is_a: GR_tax:078967 ! Brassica
+
+[Term]
+id: GR_tax:079032
+name: Brassica villosa subsp. bivoniana
+subset: dicot
+subset: subspecies
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:264905
+is_a: GR_tax:079031 ! Brassica villosa
+
+[Term]
+id: GR_tax:079033
+name: Brassica villosa subsp. drepanensis
+subset: dicot
+subset: subspecies
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:264906
+is_a: GR_tax:079031 ! Brassica villosa
+
+[Term]
+id: GR_tax:079034
+name: Brassica sp.
+subset: dicot
+subset: species
+synonym: "unavailable" RELATED []
+xref: NCBI_taxid:3717
+is_a: GR_tax:078967 ! Brassica
+
+[Typedef]
+id: part_of
+name: part of
+
