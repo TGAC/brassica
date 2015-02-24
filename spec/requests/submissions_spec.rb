@@ -35,6 +35,38 @@ RSpec.describe "Submission management", type: :request do
         expect(response).to render_template(:edit)
       end
     end
+
+    describe "PUT /submissions/:id" do
+      let(:submission) { create :submission, user: user }
+
+      it "updates submission with permitted params" do
+        put "/submissions/#{submission.id}", submission: { content: { foo: 'Abrakadabra' } }
+        expect(submission.reload.content.step01.foo).to eq('Abrakadabra')
+      end
+
+      it "ignores not-permitted params" do
+        put "/submissions/#{submission.id}", submission: { content: { kill_all_humans: true } }
+        expect(submission.reload.content.step01.kill_all_humans).to be nil
+      end
+
+      context "unless last step" do
+        it "advances submission step and redirects to edit" do
+          put "/submissions/#{submission.id}", submission: { content: { foo: 'Abrakadabra' } }
+          expect(submission.reload.step).to eq("step02")
+          expect(response).to redirect_to(edit_submission_path(submission))
+        end
+      end
+
+      context "if last step" do
+        before { submission.step_forward }
+
+        it "finalizes submission and redirects to show" do
+          put "/submissions/#{submission.id}", submission: { content: { baz: 'Abrakadabra' } }
+          expect(submission.reload).to be_finalized
+          expect(response).to redirect_to(submission_path(submission))
+        end
+      end
+    end
   end
 
 end

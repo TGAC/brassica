@@ -12,7 +12,7 @@ class SubmissionsController < ApplicationController
 
   def edit
     @submission = current_user.submissions.find(params[:id])
-    @content = step_content_form(@submission)
+    @content = step_content_form(@submission.step, @submission.content[@submission.step])
   end
 
   def create
@@ -27,10 +27,13 @@ class SubmissionsController < ApplicationController
       @submission.step_back
       redirect_to edit_submission_path(@submission)
     else
-      @submission.content = @submission.read_attribute(:content).merge(@submission.step.to_sym => params[:submission][:content])
-      @content = step_content_form(@submission)
+      @content = step_content_form(@submission.step)
 
-      if @submission.valid? && @content.valid?
+      if @content.valid?
+        @content.save do |step_attrs|
+          @submission.content = @submission.read_attribute(:content).merge(@submission.step.to_sym => step_attrs)
+        end
+
         if @submission.last_step?
           @submission.finalize
           redirect_to submission_path(@submission)
@@ -52,8 +55,18 @@ class SubmissionsController < ApplicationController
 
   private
 
-  def step_content_form(submission)
-    klass_name = "Submissions::#{submission.step.classify}ContentForm"
-    klass_name.constantize.new(submission.content[submission.step])
+  def step_content_form(step, step_content_params = nil)
+    klass_name = "Submissions::#{step.to_s.classify}ContentForm"
+    klass = klass_name.constantize
+    step_content_params ||= submission_content_params.permit(klass.permitted_properties)
+    klass.new(OpenStruct.new(step_content_params || {}))
+  end
+
+  def submission_params
+    params.require(:submission)
+  end
+
+  def submission_content_params
+    submission_params.require(:content)
   end
 end

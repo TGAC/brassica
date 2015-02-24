@@ -11,7 +11,9 @@ class Submission < ActiveRecord::Base
 
   def content
     pairs = read_attribute(:content).map { |step, step_content| [step, OpenStruct.new(step_content)] }
-    OpenStruct.new(Hash[pairs])
+    pairs = Hash[pairs]
+    STEPS.each { |step| pairs[step] = {} unless pairs.key?(step) }
+    OpenStruct.new(pairs)
   end
 
   def step_forward

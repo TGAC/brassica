@@ -1,5 +1,5 @@
 module Submissions
-  class Step01ContentForm < Reform::Form
+  class Step01ContentForm < BaseForm
     property :foo
     property :bar
 
