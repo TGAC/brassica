@@ -14,10 +14,7 @@ RSpec.describe "Submission management", type: :request do
   context "with user signed in" do
     let(:user) { create :user }
 
-    before {
-      allow_any_instance_of(SubmissionsController).to receive(:current_user).and_return(user)
-      allow_any_instance_of(SubmissionsController).to receive(:user_signed_in?).and_return(true)
-    }
+    before { login_as(user) }
 
     describe "POST /submissions" do
       it "creates default submission and redirects to edit" do
