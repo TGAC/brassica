@@ -23,6 +23,7 @@ gem 'omniauth-orcid'
 gem 'nokogiri'
 
 gem 'reform', '~> 1.2.6'
+gem 'obo'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
