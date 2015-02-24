@@ -1,4 +1,4 @@
-%h3 Part I
+%h3 Step 1/4
 
 = form_for submission do |f|
 
@@ -9,13 +9,16 @@
 
 
     .form-group
-      = content.label :foo
-      = content.text_field :foo, class: 'form-control'
-      %p.help-block Please, describe <b>foo</b> used in this research
+      = content.label :name
+      = content.text_field :name, class: 'form-control'
+      %p.help-block Please, provide <b>population name</b>
 
     .form-group
-      = content.label :bar
-      = content.select :bar, [1, 2]
-      %p.help-block Which <b>bar</b> do you prefer?
+      = content.label :description
+      = content.text_area :description, class: 'form-control'
+
+    .form-group
+      = content.label :owned_by
+      = content.text_field :owned_by, class: 'form-control'
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }

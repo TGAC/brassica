@@ -1,6 +1,6 @@
 class Submission < ActiveRecord::Base
 
-  STEPS = %w(step01 step02)
+  STEPS = %w(step01 step02 step03 step04)
 
   belongs_to :user
 

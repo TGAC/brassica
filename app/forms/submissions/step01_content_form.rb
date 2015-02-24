@@ -1,8 +1,9 @@
 module Submissions
   class Step01ContentForm < BaseForm
-    property :foo
-    property :bar
+    property :name
+    property :description
+    property :owned_by
 
-    validates :foo, length: { minimum: 10 }
+    validates :name, presence: true
   end
 end

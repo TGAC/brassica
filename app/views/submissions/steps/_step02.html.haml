@@ -1,4 +1,4 @@
-%h3 Part II
+%h3 Step 2/4
 
 = form_for submission do |f|
 
@@ -7,15 +7,16 @@
 
   = f.fields_for :content, @content do |content|
 
+    .form-group
+      = content.label :population_type
+      = content.select :population_type, @content.class.population_types, class: 'form-control'
 
     .form-group
-      = content.label :baz
-      = content.text_area :baz, class: 'form-control'
-      %p.help-block Please, describe <b>baz</b> used in this research
+      = content.label :plant_line
+      = content.select :plant_line, @content.class.plant_lines.unshift(nil), class: 'form-control'
 
     .form-group
-      = content.label :blah
-      = content.select :blah, ["Yuck", "Yikes"]
-      %p.help-block Which <b>blah</b> do you prefer?
+      = content.label :taxonomy_term
+      = content.select :taxonomy_term, @content.class.taxonomy_terms.unshift(nil), class: 'form-control'
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }

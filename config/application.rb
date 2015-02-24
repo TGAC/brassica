@@ -28,7 +28,8 @@ module Brassica
     # config.i18n.default_locale = :de
 
     config.autoload_paths += [
-      "#{config.root}/app/forms"
+      "#{config.root}/app/forms",
+      "#{config.root}/app/forms/concerns"
     ]
   end
 end
