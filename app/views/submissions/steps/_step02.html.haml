@@ -9,14 +9,15 @@
 
     .form-group
       = content.label :population_type
-      = content.select :population_type, @content.class.population_types, class: 'form-control'
+      = content.select :population_type, @content.class.population_types, {}, class: 'form-control select2'
 
     .form-group
       = content.label :plant_line
-      = content.select :plant_line, @content.class.plant_lines.unshift(nil), class: 'form-control'
+      = content.select :plant_line, @content.class.plant_lines.unshift(nil), {}, class: 'form-control select2'
 
     .form-group
       = content.label :taxonomy_term
-      = content.select :taxonomy_term, @content.class.taxonomy_terms.unshift(nil), class: 'form-control'
+      = content.select :taxonomy_term, @content.class.taxonomy_terms.unshift(nil), {}, class: 'form-control select2'
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
+

@@ -9,10 +9,10 @@
 
     .form-group
       = content.label :female_parent_line
-      = content.select :female_parent_line, @content.class.plant_lines.unshift(nil), class: 'form-control'
+      = content.select :female_parent_line, @content.class.plant_lines.unshift(nil), {}, class: 'form-control select2'
 
     .form-group
       = content.label :male_parent_line
-      = content.select :male_parent_line, @content.class.plant_lines.unshift(nil), class: 'form-control'
+      = content.select :male_parent_line, @content.class.plant_lines.unshift(nil), {}, class: 'form-control select2'
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
