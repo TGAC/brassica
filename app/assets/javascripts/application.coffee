@@ -17,5 +17,29 @@
 #= require dataTables.bootstrap
 #= require_tree .
 
-$ -> $('.select2').select2(allowClear: true)
+$ ->
+
+  formatPlantLine = (plantLine) ->
+    plantLine.text
+
+  plantLineSelectOptions = ->
+    allowClear: true
+    minimumInputLength: 2
+    ajax:
+      url: "/plant_lines"
+      dataType: 'json'
+      data: (params) ->
+        name: params.term
+        page: params.page
+      processResults: (data, page) ->
+        results: data
+    escapeMarkup: (markup) -> markup
+    templateResult: formatPlantLine
+    templateSelection: formatPlantLine
+
+  $('.edit_submission .plant-line').select2(plantLineSelectOptions())
+  $('.edit_submission .female-parent-line').select2(plantLineSelectOptions())
+  $('.edit_submission .male-parent-line').select2(plantLineSelectOptions())
+  $('.edit_submission').find('.population-type, .taxonomy-term').select2
+    allowClear: true
 
