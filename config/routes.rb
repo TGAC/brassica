@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   get 'temporary/data'
 
   resources :submissions, except: [:new]
+  resources :plant_lines, only: [:index]
 end
