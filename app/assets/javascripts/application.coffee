@@ -17,5 +17,5 @@
 #= require dataTables.bootstrap
 #= require_tree .
 
-$ -> $('.select2').select2()
+$ -> $('.select2').select2(allowClear: true)
 

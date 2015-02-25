@@ -9,17 +9,17 @@
 
     .form-group
       = content.label :population_type
-      = content.select :population_type, @content.class.population_types, {}, class: 'form-control select2'
+      = content.select :population_type, @content.class.population_types, {}, class: 'form-control select2', 'data-placeholder': "Select population type"
       %p.help-block Required
 
     .form-group
       = content.label :plant_line
-      = content.select :plant_line, @content.class.plant_lines.unshift(nil), {}, class: 'form-control select2'
+      = content.select :plant_line, @content.class.plant_lines.unshift(nil), {}, class: 'form-control select2', 'data-placeholder': "Select plant line"
       %p.help-block Required unless <b>Taxonomy term</b> is selected
 
     .form-group
       = content.label :taxonomy_term
-      = content.select :taxonomy_term, @content.class.taxonomy_terms.unshift(nil), {}, class: 'form-control select2'
+      = content.select :taxonomy_term, @content.class.taxonomy_terms, {}, class: 'form-control select2', 'data-placeholder': "Select taxonomy term"
       %p.help-block Required unless <b>Plant line</b> is selected
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }

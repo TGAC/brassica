@@ -8,6 +8,6 @@ module ModelHelper
   end
 
   def taxonomy_terms
-    ["T1", "T2", "T3", "T34"]
+    @taxonomy_terms ||= TaxonomyTerm.pluck(:name)
   end
 end
