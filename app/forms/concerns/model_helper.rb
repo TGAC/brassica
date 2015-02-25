@@ -12,6 +12,6 @@ module ModelHelper
   end
 
   def taxonomy_terms
-    @taxonomy_terms ||= TaxonomyTerm.pluck(:name)
+    TaxonomyTerm.pluck(:name).unshift(nil)
   end
 end
