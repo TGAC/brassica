@@ -19,8 +19,6 @@ class LinkPlantLinesToTaxonomyTerms < ActiveRecord::Migration
       print "PL: #{pl.genus} #{pl.species} #{pl.subtaxa}"
       # Start in reverse order - look for subtaxa in TT
       tgt_subtaxa = pl.subtaxa
-      # Some records have question marks attached - purge them
-      tgt_subtaxa.gsub!('?','')
       # Purge leading and trailing whitespace
       tgt_subtaxa = tgt_subtaxa.lstrip.rstrip
       if tgt_subtaxa.present? and !(all_genera.include? tgt_subtaxa) and !(all_species.include? tgt_subtaxa)
@@ -46,7 +44,7 @@ class LinkPlantLinesToTaxonomyTerms < ActiveRecord::Migration
         # Special case: if target subtaxa is 'unspecified', 'not applicable' or 'none'
         # then try to assign PL to a species-wide TT record instead
         if blank_records.include? tgt_subtaxa
-          tgt_species = pl.species.gsub('?','').lstrip.rstrip
+          tgt_species = pl.species.lstrip.rstrip
           if tgt_species.present? and !(all_genera.include? tgt_species)
             # Try to find a corresponding record in TTs. Assume genus is always Brassica.
             candidate_tts = TaxonomyTerm.where("name = 'Brassica #{tgt_species}'").all
