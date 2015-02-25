@@ -16,15 +16,19 @@
 
             .col-xs-6
               %ul.nav.nav-pills.pull-right
-                - if user_signed_in?
+                - unless user_signed_in?
                   %li{role: 'presentation'}
-                    %a= current_user.full_name
-
-                %li{role: 'presentation'}
-                  - unless user_signed_in?
                     = link_to 'Sign in with ORCiD', user_omniauth_authorize_path(:orcid)
-                  - else
-                    = link_to 'Sign out', sign_out_path
+
+                - else
+                  %li.dropdown{role: 'presentation'}
+                    %a.dropdown-toggle{'data-toggle': 'dropdown', href: '#'}
+                      = current_user.full_name
+                      %span.caret
+
+                    %ul.dropdown-menu
+                      %li= link_to 'Submissions', submissions_path
+                      %li= link_to 'Sign out', sign_out_path
 
                 %li{role: 'presentation'}
                   %a{href: '#'} About
