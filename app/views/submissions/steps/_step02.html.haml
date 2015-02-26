@@ -9,7 +9,7 @@
 
     .form-group
       = content.label :population_type
-      = content.select :population_type, @content.class.population_types, {}, class: 'population-type form-control', 'data-placeholder': "Select population type"
+      = content.select :population_type, [nil].concat(@content.class.population_types), {}, class: 'population-type form-control', 'data-placeholder': "Select population type"
       %p.help-block Required
 
     %hr
@@ -25,7 +25,7 @@
 
     .form-group
       = content.label :taxonomy_term
-      = content.select :taxonomy_term, @content.class.taxonomy_terms, {}, class: 'taxonomy-term form-control', 'data-placeholder': "Select taxonomy term"
+      = content.select :taxonomy_term, [nil].concat(@content.class.taxonomy_terms), {}, class: 'taxonomy-term form-control', 'data-placeholder': "Select taxonomy term"
       %p.help-block Required unless <b>Plant line</b> is selected
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
