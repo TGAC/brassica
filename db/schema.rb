@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150222094809) do
+ActiveRecord::Schema.define(version: 20150225145528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -476,25 +476,27 @@ ActiveRecord::Schema.define(version: 20150222094809) do
   add_index "plant_line_assigned_genotypes", ["plant_population", "mapping_locus", "zygote_locus_genotype"], name: "idx_143749_fk_plant_line_assigned_genotypes_1", using: :btree
 
   create_table "plant_lines", primary_key: "plant_line_name", force: :cascade do |t|
-    t.text "genus",              default: "unspecified", null: false
-    t.text "species",            default: "unspecified", null: false
-    t.text "subtaxa",            default: "unspecified", null: false
-    t.text "common_name",        default: "unspecified", null: false
-    t.text "plant_variety_name", default: "unspecified", null: false
-    t.text "named_by_whom",      default: "unspecified", null: false
-    t.text "organisation",       default: "unspecified", null: false
-    t.text "genetic_status",     default: "unspecified", null: false
-    t.text "previous_line_name", default: "unspecified", null: false
-    t.text "comments",                                   null: false
-    t.text "entered_by_whom",    default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                            null: false
-    t.text "data_owned_by",      default: "unspecified", null: false
-    t.text "data_status",        default: "unspecified", null: false
-    t.text "confirmed_by_whom",  default: "unspecified", null: false
+    t.text    "genus",              default: "unspecified", null: false
+    t.text    "species",            default: "unspecified", null: false
+    t.text    "subtaxa",            default: "unspecified", null: false
+    t.text    "common_name",        default: "unspecified", null: false
+    t.text    "plant_variety_name", default: "unspecified", null: false
+    t.text    "named_by_whom",      default: "unspecified", null: false
+    t.text    "organisation",       default: "unspecified", null: false
+    t.text    "genetic_status",     default: "unspecified", null: false
+    t.text    "previous_line_name", default: "unspecified", null: false
+    t.text    "comments",                                   null: false
+    t.text    "entered_by_whom",    default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                            null: false
+    t.text    "data_owned_by",      default: "unspecified", null: false
+    t.text    "data_status",        default: "unspecified", null: false
+    t.text    "confirmed_by_whom",  default: "unspecified", null: false
+    t.integer "taxonomy_term_id"
   end
 
   add_index "plant_lines", ["plant_variety_name"], name: "idx_143729_plant_variety", using: :btree
+  add_index "plant_lines", ["taxonomy_term_id"], name: "index_plant_lines_on_taxonomy_term_id", using: :btree
 
   create_table "plant_marker_fragments", primary_key: "scoring_unit_id", force: :cascade do |t|
     t.text "marker_variation",       default: "unspecified", null: false
@@ -956,11 +958,12 @@ ActiveRecord::Schema.define(version: 20150222094809) do
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
   create_table "taxonomy_terms", force: :cascade do |t|
-    t.string   "label",            null: false
-    t.string   "name",             null: false
+    t.string   "label",                           null: false
+    t.string   "name",                            null: false
     t.integer  "taxonomy_term_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "canonical",        default: true
   end
 
   add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
