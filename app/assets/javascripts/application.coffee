@@ -37,9 +37,60 @@ $ ->
     templateResult: formatPlantLine
     templateSelection: formatPlantLine
 
-  $('.edit_submission .plant-line').select2(plantLineSelectOptions())
   $('.edit_submission .female-parent-line').select2(plantLineSelectOptions())
   $('.edit_submission .male-parent-line').select2(plantLineSelectOptions())
-  $('.edit_submission').find('.population-type, .taxonomy-term').select2
-    allowClear: true
+  $('.edit_submission .population-type').select2(allowClear: true)
+
+  markActiveButton = (button) ->
+    $(button).parent().find('button').removeClass('active')
+    $(button).addClass('active')
+
+  activateNewPlantLineFields = ->
+    $('.existing-plant-line, .existing-taxonomy-term').hide()
+    $('.new-plant-line').removeClass('hidden').show()
+
+  activateExistingPlantLineFields = ->
+    initialized = !$('.existing-plant-line').hasClass('hidden')
+
+    $('.new-plant-line, .existing-taxonomy-term').hide()
+    $('.existing-plant-line').removeClass('hidden').show()
+
+    unless initialized
+      $('.edit_submission .plant-line').select2(plantLineSelectOptions())
+
+  activateExistingTaxonomyTermFields = ->
+    initialized = !$('.existing-taxonomy-term').hasClass('hidden')
+
+    $('.new-plant-line, .existing-plant-line').hide()
+    $('.existing-taxonomy-term').removeClass('hidden').show()
+
+    unless initialized
+      $('.edit_submission .taxonomy-term').select2(allowClear: true)
+
+  if $('.edit_submission .existing-taxonomy-term').hasClass('selected')
+    markActiveButton($('button.select-existing-taxonomy-term'))
+    activateExistingTaxonomyTermFields()
+
+  if $('.edit_submission .existing-plant-line').hasClass('selected')
+    markActiveButton($('button.select-existing-plant-line'))
+    activateExistingPlantLineFields()
+
+  if $('.edit_submission .new-plant-line').hasClass('selected')
+    markActiveButton($('button.add-plant-line'))
+    activateNewPlantLineFields()
+
+  $('.edit_submission .select-existing-taxonomy-term').on 'click', (event) ->
+    event.preventDefault()
+    markActiveButton(event.target)
+    activateExistingTaxonomyTermFields()
+
+  $('.edit_submission .select-existing-plant-line').on 'click', (event) ->
+    event.preventDefault()
+    markActiveButton(event.target)
+    activateExistingPlantLineFields()
+
+  $('.edit_submission .add-plant-line').on 'click', (event) ->
+    event.preventDefault()
+    markActiveButton(event.target)
+    activateNewPlantLineFields()
 
