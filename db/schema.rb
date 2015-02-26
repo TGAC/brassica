@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(version: 20150225145528) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "clone_libraries", primary_key: "library_name", force: :cascade do |t|
     t.text "library_type",                default: "unspecified", null: false
@@ -945,12 +946,24 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text "confirmed_by_whom", default: "unspecified", null: false
   end
 
+  create_table "submissions", force: :cascade do |t|
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "user_id",                    null: false
+    t.string   "step",                       null: false
+    t.json     "content",    default: {},    null: false
+    t.boolean  "finalized",  default: false, null: false
+  end
+
+  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
+
   create_table "taxonomy_terms", force: :cascade do |t|
-    t.string   "label",            null: false
-    t.string   "name",             null: false
+    t.string   "label",                           null: false
+    t.string   "name",                            null: false
     t.integer  "taxonomy_term_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.boolean  "canonical",        default: true
   end
 
   add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
