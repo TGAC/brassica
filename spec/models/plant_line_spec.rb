@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PlantPopulation, type: :model do
+RSpec.describe PlantLine, type: :model do
   describe '#drop_dummies' do
     it 'returns empty result when no plant population is present' do
       expect(PlantPopulation.drop_dummies).to eq []
