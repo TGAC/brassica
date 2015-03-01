@@ -15,7 +15,7 @@ RSpec.describe PlantPopulation, type: :model do
     end
   end
 
-  describe '#grid_data', focus: true do
+  describe '#grid_data' do
     it 'returns empty result when no plant population is present' do
       expect(PlantPopulation.grid_data).to be_empty
     end

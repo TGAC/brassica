@@ -19,4 +19,19 @@ class PlantLine < ActiveRecord::Base
                           foreign_key: 'plant_line_name',
                           association_foreign_key: 'plant_population_id'
 
+  scope :grid_data, ->(ids) do
+    columns =
+      'plant_line_name',
+      'taxonomy_terms.name',
+      'common_name',
+      'previous_line_name',
+      'date_entered',
+      'data_owned_by',
+      'organisation'
+
+    where(plant_line_name: ids).
+      joins(:taxonomy_term).
+      order(:plant_line_name).
+      pluck(columns.join(','))
+  end
 end
