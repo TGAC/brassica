@@ -21,9 +21,9 @@
       it with your submission.
 
     .form-group
-      %button.select-existing-taxonomy-term{type: 'button'} Select Taxonomy term
-      %button.select-existing-plant-line{type: 'button'} Select existing Plant line
-      %button.add-plant-line{type: 'button'} Add new Plant line
+      %button#select-existing-taxonomy-term{type: 'button'} Select Taxonomy term
+      %button#select-existing-plant-line{type: 'button'} Select existing Plant line
+      %button#add-plant-line{type: 'button'} Add new Plant line
 
     .form-group.existing-plant-line.hidden{class: @content.plant_line_selected? ? 'selected' : ''}
       = content.label :plant_line
