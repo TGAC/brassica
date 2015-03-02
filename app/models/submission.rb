@@ -10,21 +10,18 @@ class Submission < ActiveRecord::Base
   before_validation :set_defaults, on: :create
 
   def content
-    pairs = read_attribute(:content).map { |step, step_content| [step, OpenStruct.new(step_content)] }
-    pairs = Hash[pairs]
-    STEPS.each { |step| pairs[step] = {} unless pairs.key?(step) }
-    OpenStruct.new(pairs)
+    Content.new(self)
   end
 
   def step_forward
-    return if last_step? # TODO maybe raise?
+    raise CantStepForward if last_step?
     idx = STEPS.index(step)
     self.step = STEPS[idx + 1]
     save!
   end
 
   def step_back
-    return if first_step? # TODO maybe raise?
+    raise CantStepBack if first_step?
     idx = STEPS.index(step)
     self.step = STEPS[idx - 1]
     save!
@@ -43,10 +40,18 @@ class Submission < ActiveRecord::Base
     save!
   end
 
+  def steps
+    STEPS
+  end
+
   private
 
   def set_defaults
     self.step = STEPS.first
     self.content = Hash[STEPS.zip(STEPS.count.times.map {})]
   end
+
+  CantStepForward = Class.new(RuntimeError)
+  CantStepBack = Class.new(RuntimeError)
+
 end
