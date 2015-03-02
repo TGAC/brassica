@@ -9,7 +9,6 @@ $ ->
       # This removes the pagination control when only 1 page
       # and the page length picker when less data than the minimum value
       api = this.api()
-      console.log api.settings()
       paginate = $(api.table().container()).find('.dataTables_paginate')
       lengthPicker = $(api.table().container()).find('.dataTables_length')
       if api.page.info()['pages'] < 2
