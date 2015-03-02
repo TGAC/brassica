@@ -20,6 +20,10 @@
 @import "font-awesome-sprockets"
 @import "font-awesome"
 
+@import "flash"
+@import "errors"
+@import "submissions"
+
 html, body
   height: 100%
 
@@ -50,53 +54,9 @@ html, body
   .copy
     // @include make-sm-column(12)
 
-.errors
-  @extend .panel
-  @extend .panel-default
-  margin: 2em 0
-  color: red
-
-  ul
-    @extend .list-group
-
-    li
-      @extend .list-group-item
-
-.field_with_errors
-  color: red
-
-  .form-control
-    background-color: #fee
-    border-color: red
-
-.flash-notice
-  @extend .alert
-  @extend .alert-success
-
-.flash-alert
-  @extend .alert
-  @extend .alert-danger
-
-.submissions
-  @extend .list-group
-  margin-top: 1em
-
-  > li
-    @extend .list-group-item
-
-    form
-      display: inline-block
-
 .select2
   width: 40%
 
 .select2-container
   display: block !important
-
-.edit_submission
-  #add-plant-line, #select-existing-plant-line, #select-existing-taxonomy-term
-    @extend .btn, .btn-default
-
-  .action-buttons
-    margin-top: 4em
 
