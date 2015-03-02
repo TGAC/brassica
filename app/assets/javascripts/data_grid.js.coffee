@@ -27,5 +27,8 @@ window.configs =
       [
         targets: [2, 3]
         render: (data, type, full, meta) ->
-          '<a href="plant_lines?plant_line_names[]=' + data + '">' + data + '</a>'
+          if data
+            '<a href="plant_lines?plant_line_names[]=' + data + '">' + data + '</a>'
+          else
+            ''
       ]
