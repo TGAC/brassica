@@ -5,6 +5,21 @@ $ ->
     pageLength: 25
     processing: true
     stateSave: true
+    drawCallback: (settings) ->
+      # This removes the pagination control when only 1 page
+      # and the page length picker when less data than the minimum value
+      api = this.api()
+      console.log api.settings()
+      paginate = $(api.table().container()).find('.dataTables_paginate')
+      lengthPicker = $(api.table().container()).find('.dataTables_length')
+      if api.page.info()['pages'] < 2
+        paginate.hide()
+      else
+        paginate.show()
+      if api.page.info()['recordsDisplay'] < 11
+        lengthPicker.hide()
+      else
+        lengthPicker.show()
     # NOTE: use server side processing for large data (too heavy for clients)
     # serverSide: true
 
