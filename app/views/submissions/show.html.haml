@@ -1,21 +1,70 @@
-%h3 Submission
+%ol.breadcrumb
+  %li= link_to "Home", root_path
+  %li= link_to "Submissions", submissions_path
+  %li.active= @submission.name
 
-= link_to "Back", submissions_path
+%h3= @submission.name
 
-%p
-  Foo:
-  = @submission.content['step01']['foo']
+.panel.panel-default
+  %ul.list-group
+    - if @submission.content.step01.name.present?
+      %li.list-group-item
+        %strong Population name
+        = @submission.content.step01.name
 
-%p
-  Bar:
-  = @submission.content['step01']['bar']
+    - if @submission.content.step01.description.present?
+      %li.list-group-item
+        %strong Description
+        = @submission.content.step01.description
 
-%p
-  Baz:
-  = @submission.content['step02']['baz']
+    - if @submission.content.owned_by.present?
+      %li.list-group-item
+        %strong Owned by
+        = @submission.content.step01.owned_by
 
-%p
-  Blah:
-  = @submission.content['step02']['blah']
+    - if @submission.content.step02.population_type.present?
+      %li.list-group-item
+        %strong Population type
+        = @submission.content.step02.population_type
 
+    - if @submission.content.step02.taxonomy_term.present?
+      %li.list-group-item
+        %strong Taxonomy term
+        = @submission.content.step02.taxonomy_term
+
+    - if @submission.content.step02.plant_line.present?
+      %li.list-group-item
+        %strong Plant line
+        = @submission.content.step02.plant_line
+
+    -# FIXME new plant line
+    -# - if @submission.content.step02.population_type.present?
+    -#   %li.list-group-item
+    -#     %strong Population type
+    -#     = @submission.content.step02.population_type
+
+    - if @submission.content.step03.female_parent_line.present?
+      %li.list-group-item
+        %strong Female parent line
+        = @submission.content.step03.female_parent_line
+
+    - if @submission.content.step03.male_parent_line.present?
+      %li.list-group-item
+        %strong Male parent line
+        = @submission.content.step03.male_parent_line
+
+    - if @submission.content.step04.data_owned_by.present?
+      %li.list-group-item
+        %strong Data owned by
+        = @submission.content.step04.data_owned_by
+
+    - if @submission.content.step04.data_provenance.present?
+      %li.list-group-item
+        %strong Data provenance
+        = @submission.content.step04.data_provenance
+
+    - if @submission.content.step04.comments.present?
+      %li.list-group-item
+        %strong Comments
+        = @submission.content.step04.commens
 

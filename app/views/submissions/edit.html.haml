@@ -1,3 +1,8 @@
+%ol.breadcrumb
+  %li= link_to "Home", root_path
+  %li= link_to "Submissions", submissions_path
+  %li.active Edit
+
 %h2 Submission details
 
 = render partial: "submissions/steps/#{@submission.step}", locals: { submission: @submission }

@@ -44,6 +44,10 @@ class Submission < ActiveRecord::Base
     STEPS
   end
 
+  def name
+    [I18n.l(created_at, format: :short), content.step01.try(:name)].compact.join(' ')
+  end
+
   private
 
   def set_defaults
