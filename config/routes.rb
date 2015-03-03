@@ -10,14 +10,6 @@ Rails.application.routes.draw do
 
   root 'application#index'
 
-  resources :plant_populations, only: [:index] do
-    collection do
-      get 'data_grid'
-    end
-  end
-  resources :plant_lines, only: [:index] do
-    collection do
-      get 'data_grid'
-    end
-  end
+  resources :plant_populations, only: [:index]
+  resources :plant_lines, only: [:index]
 end

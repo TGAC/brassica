@@ -1,17 +1,24 @@
 class PlantLinesController < ApplicationController
   def index
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: data_grid
+      end
+    end
   end
 
+
+  private
+
   def data_grid
-    @plant_lines = PlantLine.grid_data(params[:plant_line_names])
+    plant_lines = PlantLine.grid_data(params[:plant_line_names])
 
-    response = {
+    {
       draw: 1,
-      recordsTotal: @plant_lines.size,
-      recordsFiltered: @plant_lines.size,
-      data: @plant_lines
+      recordsTotal: plant_lines.size,
+      recordsFiltered: plant_lines.size,
+      data: plant_lines
     }
-
-    render json: response, layout: false
   end
 end

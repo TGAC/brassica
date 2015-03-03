@@ -32,6 +32,6 @@ class PlantLine < ActiveRecord::Base
     where(plant_line_name: ids).
       joins(:taxonomy_term).
       order(:plant_line_name).
-      pluck(columns.join(','))
+      pluck(*columns)
   end
 end
