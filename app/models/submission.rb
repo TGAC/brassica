@@ -36,6 +36,7 @@ class Submission < ActiveRecord::Base
   end
 
   def finalize
+    raise CantFinalize unless last_step?
     self.finalized = true
     save!
   end
@@ -57,6 +58,7 @@ class Submission < ActiveRecord::Base
 
   CantStepForward = Class.new(RuntimeError)
   CantStepBack = Class.new(RuntimeError)
+  CantFinalize = Class.new(RuntimeError)
   InvalidStep = Class.new(ArgumentError)
 
 end
