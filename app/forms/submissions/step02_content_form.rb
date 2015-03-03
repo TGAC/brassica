@@ -20,6 +20,12 @@ module Submissions
       end
     end
 
+    validate do |form|
+      if [plant_line_added?, plant_line_selected?, taxonomy_term_selected?].count { |v| v } > 1
+        errors.add(:plant_line, " / Taxonomy term have conflicting values")
+      end
+    end
+
     def input_missing?
       !plant_line_selected? && !plant_line_added? && !taxonomy_term_selected?
     end
@@ -35,6 +41,8 @@ module Submissions
     def plant_line_added?
       added_plant_line_attributes.all? { |attr| send(attr).present? }
     end
+
+    private
 
     def added_plant_line_attributes
       [:plant_line_name, :plant_line_comments, :plant_line_data_provenance]
