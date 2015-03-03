@@ -9,6 +9,7 @@ class Submission::Content < OpenStruct
   end
 
   def update(step, step_content)
+    raise Submission::InvalidStep, "No step #{step}" unless submission.steps.include?(step.to_s)
     submission.content = submission.read_attribute(:content).merge(step => step_content.to_h)
   end
 

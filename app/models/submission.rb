@@ -57,5 +57,6 @@ class Submission < ActiveRecord::Base
 
   CantStepForward = Class.new(RuntimeError)
   CantStepBack = Class.new(RuntimeError)
+  InvalidStep = Class.new(ArgumentError)
 
 end
