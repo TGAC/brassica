@@ -14,6 +14,12 @@ class PlantPopulation < ActiveRecord::Base
                           join_table: 'plant_population_lists',
                           association_foreign_key: 'plant_line_name'
 
+
+  # Exlude the ['none', 'unspecified', 'not applicable'] pseudo-record trio
+  scope :drop_dummies, -> do
+    where.not(canonical_population_name: '')
+  end
+
   # Original CropStore query
   # plant_populations.species as Species,
   # plant_populations.canonical_population_name as Population,
@@ -27,7 +33,7 @@ class PlantPopulation < ActiveRecord::Base
   # LEFT JOIN linkage_maps ON linkage_maps.mapping_population = plant_populations.plant_population_id
   # GROUP BY plant_populations.canonical_population_name
   # ORDER BY canonical_population_name
-  scope :grid_data, -> do
+  def self.grid_data
     columns = [
       :species,
       :canonical_population_name,
@@ -37,14 +43,9 @@ class PlantPopulation < ActiveRecord::Base
     ]
 
     select(columns).
-      drop_dummies.
-      group(columns).
-      order(:canonical_population_name).
-      count(:plant_population_id)
-  end
-
-  # Exlude the ['none', 'unspecified', 'not applicable'] pseudo-record trio
-  scope :drop_dummies, -> do
-    where.not(canonical_population_name: '')
+    drop_dummies.
+    group(columns).
+    order(:canonical_population_name).
+    count(:plant_population_id)
   end
 end

@@ -19,7 +19,7 @@ class PlantLine < ActiveRecord::Base
                           foreign_key: 'plant_line_name',
                           association_foreign_key: 'plant_population_id'
 
-  scope :grid_data, ->(ids) do
+  def self.grid_data(ids)
     columns =
       'plant_line_name',
       'taxonomy_terms.name',
