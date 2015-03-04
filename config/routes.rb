@@ -10,5 +10,6 @@ Rails.application.routes.draw do
 
   root 'application#index'
 
-  get 'temporary/data'
+  resources :plant_populations, only: [:index]
+  resources :plant_lines, only: [:index]
 end
