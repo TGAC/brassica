@@ -37,18 +37,18 @@ RSpec.describe "Submission management", type: :request do
       let(:submission) { create :submission, user: user }
 
       it "updates submission with permitted params" do
-        put "/submissions/#{submission.id}", submission: { content: { name: 'Bardzo zielona kapusta' } }
-        expect(submission.reload.content.step01.name).to eq('Bardzo zielona kapusta')
+        put "/submissions/#{submission.id}", submission: { content: { name: 'Population A' } }
+        expect(submission.reload.content.step01.name).to eq('Population A')
       end
 
       it "ignores not-permitted params" do
-        put "/submissions/#{submission.id}", submission: { content: { kill_all_humans: true } }
-        expect(submission.reload.content.step01.kill_all_humans).to be nil
+        put "/submissions/#{submission.id}", submission: { content: { unknown_property: true } }
+        expect(submission.reload.content.step01.unknown_property).to be nil
       end
 
       context "unless last step" do
         it "advances submission step and redirects to edit" do
-          put "/submissions/#{submission.id}", submission: { content: { name: 'Abrakadabra' } }
+          put "/submissions/#{submission.id}", submission: { content: { name: 'Population B' } }
           expect(submission.reload.step).to eq("step02")
           expect(response).to redirect_to(edit_submission_path(submission))
         end
@@ -58,7 +58,7 @@ RSpec.describe "Submission management", type: :request do
         before { 3.times { submission.step_forward } }
 
         it "finalizes submission and redirects to show" do
-          put "/submissions/#{submission.id}", submission: { content: { comments: "Really good stuff, bro!" } }
+          put "/submissions/#{submission.id}", submission: { content: { comments: "Lorem ipsum" } }
           expect(submission.reload).to be_finalized
           expect(response).to redirect_to(submission_path(submission))
         end
