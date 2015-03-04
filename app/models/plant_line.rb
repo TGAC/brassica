@@ -19,4 +19,23 @@ class PlantLine < ActiveRecord::Base
                           foreign_key: 'plant_line_name',
                           association_foreign_key: 'plant_population_id'
 
+  def self.grid_data(filter)
+    columns =
+      'plant_line_name',
+      'taxonomy_terms.name',
+      'common_name',
+      'previous_line_name',
+      'date_entered',
+      'data_owned_by',
+      'organisation'
+
+    query = where(plant_line_name: filter[:plant_line_names]) if filter[:plant_line_names].present?
+    query = where('plant_line_name ILIKE ?', "%#{filter[:search]}%") if filter[:search].present?
+    query ||= none
+
+    query
+      .joins(:taxonomy_term)
+      .order(:plant_line_name)
+      .pluck(*columns)
+  end
 end

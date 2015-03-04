@@ -8,10 +8,10 @@ plantLineSelectOptions = ->
     url: "/plant_lines"
     dataType: 'json'
     data: (params) ->
-      name: params.term
+      search: params.term
       page: params.page
     processResults: (data, page) ->
-      results: data
+      results: $.map(data.data, (row) -> { id: row[0], text: row[0] })
   escapeMarkup: (markup) -> markup
   templateResult: formatPlantLine
   templateSelection: formatPlantLine

@@ -1,0 +1,14 @@
+.container
+  = link_to 'Back to populations', plant_populations_path, class: 'btn btn-default'
+
+  - data_src = plant_lines_path(plant_line_names: params[:plant_line_names])
+  %table#plant-lines.table.table-condensed.data-table{ data: { ajax: data_src }}
+    %thead
+      %tr
+        %th Line name
+        %th Taxonomy
+        %th Common name
+        %th Previous line name
+        %th Entry date
+        %th Data owner
+        %th Organisation
