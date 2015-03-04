@@ -5,8 +5,25 @@
   > li
     @extend .list-group-item
 
-    form
+    .show-submission
       display: inline-block
+      width: 70%
+
+    .updated-at
+      @extend .label, .label-default
+      display: inline-block
+
+    .finalized-at
+      @extend .label, .label-success
+      display: inline-block
+
+    .actions
+      float: right
+      width: 25%
+      text-align: right
+
+      form
+        display: inline-block
 
 .edit_submission
   #add-plant-line, #select-existing-plant-line, #select-existing-taxonomy-term

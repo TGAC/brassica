@@ -3,21 +3,23 @@
   %li.active Submissions
 
 - if @submissions.present?
-  = button_to "Submit new research data", submissions_path, class: 'btn btn-primary', method: 'post'
+  = create_submission_button
 
   %ul.submissions
     - @submissions.each do |submission|
       %li
-        = link_to submission.name, submission_path(submission)
+        = submission_link(submission)
 
-        - unless submission.finalized?
-          = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default btn-xs'
-          = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning btn-xs'
-        - else
-          %span.label.label-primary Submitted
+        .actions
+          - unless submission.finalized?
+            .updated-at= "Last modification #{l submission.updated_at, format: :short}"
+            = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default btn-xs'
+            = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning btn-xs'
+
+          - else
+            .finalized-at= "Submitted on #{l submission.updated_at, format: :short}"
 
 - else
   .jumbotron
-    %p You do no have any data submissions so far
-    = button_to "Submit new research data", submissions_path, class: 'btn btn-primary', method: 'post'
-
+    %p You do not have any submissions yet
+    = create_submission_button
