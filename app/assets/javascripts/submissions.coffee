@@ -16,6 +16,9 @@ plantLineSelectOptions = ->
   templateResult: formatPlantLine
   templateSelection: formatPlantLine
 
+plantLineListSelectOptions = ->
+  $.extend({}, plantLineSelectOptions(), multiple: true)
+
 defaultSelectOptions = ->
   allowClear: true
 
@@ -51,6 +54,7 @@ $ ->
   $('.edit_submission .female-parent-line').select2(plantLineSelectOptions())
   $('.edit_submission .male-parent-line').select2(plantLineSelectOptions())
   $('.edit_submission .population-type').select2(defaultSelectOptions())
+  $('.edit_submission .plant-line-list').select2(plantLineListSelectOptions())
 
   $.each buttonTargets, (buttonId, target) ->
     $button = $('#' + buttonId)
@@ -62,4 +66,24 @@ $ ->
     if $(buttonTargets[buttonId]).hasClass('selected')
       markActiveButton($button[0])
       activateTargetFields($button[0])
+
+  $('.add-plant-line-for-list').on 'click', (event) ->
+    $select = $('.plant-line-list')
+    $form = $('.new-plant-line-for-list')
+    data =
+      plant_line_name: $form.find('#plant_line_name').val()
+      plant_line_comments: $form.find("#plant_line_comments").val()
+      plant_line_data_provenance: $form.find("#plant_line_data_provenance").val()
+
+    # FIXME validate plant line attributes before adding to plant line list select
+    return if data.plant_line_name.toString().length == 0
+
+    selectedValues = $select.val() || []
+
+    $option = $('<option></option>').attr(value: data.plant_line_name).text(data.plant_line_name)
+    $select.append($option)
+
+    selectedValues.push(data.plant_line_name)
+    $select.val(selectedValues)
+    $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
