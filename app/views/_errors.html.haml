@@ -1,0 +1,8 @@
+- errors = [] unless defined?(errors)
+
+- if errors.present?
+  .errors
+    %ul
+      - errors.full_messages.each do |error|
+        %li= error
+

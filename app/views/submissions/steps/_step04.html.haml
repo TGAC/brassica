@@ -1,0 +1,23 @@
+%h3 Step 4/4: Provenance
+
+= form_for submission do |f|
+
+  = render partial: '/errors', locals: { errors: submission.errors }
+  = render partial: '/errors', locals: { errors: @content.errors }
+
+  = f.fields_for :content, @content do |content|
+
+    .form-group
+      = content.label :data_owned_by
+      = content.text_field :data_owned_by, class: 'form-control'
+
+    .form-group
+      = content.label :data_provenance
+      = content.text_area :data_provenance, class: 'form-control'
+
+  .alert.alert-warning
+    Sending your submission will make provided data publicly available.<br/>
+    Please, double check data correctness as further changes will require
+    contact with support team.
+
+  = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }

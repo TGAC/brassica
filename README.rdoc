@@ -20,11 +20,11 @@ Install required gems:
 
     bundle
 
-Make sure `config/database.yml` is in place:
+Make sure `config/database.yml` is in place and contains correct configuration:
 
     cp config/database.yml.sample config/database.yml
 
-Make sure it contains correct configuration.
+Database user must be allowed to enable extensions.
 
 Create databases:
 

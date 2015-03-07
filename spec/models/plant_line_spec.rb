@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe PlantLine, type: :model do
   describe '#grid_data' do
     it 'returns empty result when no plant lines found' do
-      expect(PlantLine.grid_data([1])).to be_empty
+      expect(PlantLine.grid_data(plant_line_names: [1])).to be_empty
     end
 
     it 'orders populations by common name' do
       pl1,pl2,pl3 = create_list(:plant_line, 3)
       ids = [pl2, pl1, pl3].map(&:plant_line_name)
-      expect(PlantLine.grid_data(ids).map(&:first)).to eq ids.sort
+      expect(PlantLine.grid_data(plant_line_names: ids).map(&:first)).to eq ids.sort
     end
 
     it 'gets proper columns' do
@@ -23,7 +23,7 @@ RSpec.describe PlantLine, type: :model do
                    data_owned_by: 'dob',
                    organisation: 'o')
 
-      first_line = PlantLine.grid_data(pl.plant_line_name)[0]
+      first_line = PlantLine.grid_data(plant_line_names: [pl.plant_line_name])[0]
       expect(first_line[1..-1]).to eq %w(tt cn pln) + [de] + %w(dob o)
     end
   end

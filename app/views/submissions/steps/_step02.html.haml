@@ -1,0 +1,55 @@
+%h3 Step 2/4: Taxonomy
+
+= form_for submission do |f|
+
+  = render partial: '/errors', locals: { errors: submission.errors }
+  = render partial: '/errors', locals: { errors: @content.errors }
+
+  = f.fields_for :content, @content do |content|
+
+    .form-group
+      = content.label :population_type
+      = content.select :population_type, [nil].concat(@content.class.population_types), {}, class: 'population-type form-control', 'data-placeholder': "Select population type"
+      %p.help-block Required
+
+    %hr
+
+    .alert.alert-info
+      You need to provide information about <b>Taxonomy term</b> or <b>Plant
+      line</b> describing submitted population.<br/> If suitable <b>Plant
+      line</b> does not seem to exist in our database you are welcome to add
+      it with your submission.
+
+    .form-group
+      %button#select-existing-taxonomy-term{type: 'button'} Select Taxonomy term
+      %button#select-existing-plant-line{type: 'button'} Select existing Plant line
+      %button#add-plant-line{type: 'button'} Add new Plant line
+
+    .form-group.existing-plant-line.hidden{class: @content.plant_line_selected? ? 'selected' : ''}
+      = content.label :plant_line
+      = content.select :plant_line, [@content.plant_line], {}, class: 'plant-line form-control', 'data-placeholder': "Select plant line"
+      %p.help-block Required
+
+    .new-plant-line.hidden{class: @content.plant_line_added? ? 'selected' : ''}
+      .form-group
+        = content.label :plant_line_name
+        = content.text_field :plant_line_name, class: 'form-control', placeholder: 'Enter new plant line name'
+        %p.help-block Required
+
+      .form-group
+        = content.label :plant_line_comments, 'Comments'
+        = content.text_area :plant_line_comments, class: 'form-control'
+        %p.help-block Required
+
+      .form-group
+        = content.label :plant_line_data_provenance, 'Data provenance'
+        = content.text_area :plant_line_data_provenance, class: 'form-control'
+        %p.help-block Required
+
+    .form-group.existing-taxonomy-term.hidden{class: @content.taxonomy_term_selected? ? 'selected' : ''}
+      = content.label :taxonomy_term
+      = content.select :taxonomy_term, [nil].concat(@content.class.taxonomy_terms), {}, class: 'taxonomy-term form-control', 'data-placeholder': "Select taxonomy term"
+      %p.help-block Required
+
+  = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
+

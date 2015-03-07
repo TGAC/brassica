@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   root 'application#index'
 
+  resources :submissions, except: [:new]
   resources :plant_populations, only: [:index]
   resources :plant_lines, only: [:index]
 end

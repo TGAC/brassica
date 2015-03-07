@@ -1,0 +1,25 @@
+%ol.breadcrumb
+  %li= link_to "Home", root_path
+  %li.active Submissions
+
+- if @submissions.present?
+  = create_submission_button
+
+  %ul.submissions
+    - @submissions.each do |submission|
+      %li
+        = submission_link(submission)
+
+        .actions
+          - unless submission.finalized?
+            .updated-at= "Last modification #{l submission.updated_at, format: :short}"
+            = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default btn-xs'
+            = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning btn-xs'
+
+          - else
+            .finalized-at= "Submitted on #{l submission.updated_at, format: :short}"
+
+- else
+  .jumbotron
+    %p You do not have any submissions yet
+    = create_submission_button

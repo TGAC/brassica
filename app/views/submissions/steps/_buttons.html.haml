@@ -1,0 +1,11 @@
+.action-buttons
+  - if submission.first_step?
+    = link_to "Cancel", submissions_path, class: 'btn btn-default'
+  - else
+    = f.submit "Back", class: 'btn btn-default', name: 'back'
+
+  - unless submission.last_step?
+    = f.submit "Next", class: 'btn btn-primary'
+  - else
+    = f.submit "Send", class: 'btn btn-primary'
+
