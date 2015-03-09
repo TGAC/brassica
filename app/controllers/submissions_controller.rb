@@ -16,6 +16,9 @@ class SubmissionsController < ApplicationController
     @content = step_content_form(@submission.step, @submission.content[@submission.step])
   end
 
+  def new
+  end
+
   def create
     submission = current_user.submissions.create!
     redirect_to edit_submission_path(submission)

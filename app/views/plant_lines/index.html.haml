@@ -1,14 +1,17 @@
-.container
-  = link_to 'Back to populations', plant_populations_path, class: 'btn btn-default'
+-# TEMP, NOTE: remove after navigation mode is designed
+%ol.breadcrumb
+  %li= link_to 'Home', root_path
+  %li= link_to 'Plant populations', plant_populations_path
+  %li.active Plant lines
 
-  - data_src = plant_lines_path(plant_line_names: params[:plant_line_names])
-  %table#plant-lines.table.table-condensed.data-table{ data: { ajax: data_src }}
-    %thead
-      %tr
-        %th Line name
-        %th Taxonomy
-        %th Common name
-        %th Previous line name
-        %th Entry date
-        %th Data owner
-        %th Organisation
+- data_src = plant_lines_path(plant_line_names: params[:plant_line_names])
+%table#plant-lines.table.table-condensed.data-table{ data: { ajax: data_src }}
+  %thead
+    %tr
+      %th Line name
+      %th Taxonomy
+      %th Common name
+      %th Previous line name
+      %th Entry date
+      %th Data owner
+      %th Organisation
