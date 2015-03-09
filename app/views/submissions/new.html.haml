@@ -1,0 +1,49 @@
+-# TEMP, NOTE: remove after navigation mode is designed
+%ol.breadcrumb
+  %li= link_to "Home", root_path
+  %li.active Submissions
+
+%h2 Submit new population
+
+%p
+  The following process allows you to submit detailed description of your
+  Brassica plants population. Apart from species information, you may indicate
+  the parent Brassica lines and the list of (possibly new) plant lines
+  connected with this population. You will also have the possibility to provide
+  data ownership and provenance information. Once successfully submitted, the
+  data will be accessible for all users of the Portal. Further contextual help
+  will be provided to you on each of the following steps:
+
+.row
+  .col-md-3.text-center
+    %h1 1
+    .panel.panel-default
+      .panel-heading Basic information.
+      .panel-body
+        Provide a unique name and some description of your population.
+
+  .col-md-3.text-center
+    %h1 2
+    .panel.panel-default
+      .panel-heading Population type.
+      .panel-body
+        Choose what type of population you submit.
+
+  .col-md-3.text-center
+    %h1 3
+    .panel.panel-default
+      .panel-heading Plant lines.
+      .panel-body
+        If applicable, pick parent plant lines and define the list of plant
+        lines connected with submitted population.
+
+  .col-md-3.text-center
+    %h1 4
+    .panel.panel-default
+      .panel-heading Provenance.
+      .panel-body
+        Identify who is the owner of the submitted data and describe the data
+        provenance.
+
+.text-center
+  = create_submission_button
