@@ -14,7 +14,7 @@ module Submissions
     end
 
     def plant_line_list
-      super.select(&:present?)
+      super.try { |pll| pll.select(&:present?) }
     end
   end
 end
