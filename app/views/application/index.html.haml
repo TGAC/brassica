@@ -1,1 +1,31 @@
-= link_to 'Explore data', plant_populations_path
+-# TEMP, NOTE: change the grid when the design is accepted by TGAC
+-# TEMP, NOTE: temporary styling
+.row
+  .col-md-1
+  .col-md-10
+    .lead.text-justify
+      The Brassica Information Portal is a web repository for population and trait
+      scoring information related to Brassica breeding community. It provides
+      information about quantitative trait loci and links curated Brassica phenotype
+      experimental data with genotype information stored in external data sources.
+      Advanced data submission capabilities and API interface allow users to store
+      and publish their own study results in our Portal.
+
+.row
+  .col-md-4.text-center
+    .text-justify
+      Browse and search through more than 100 thousands of trait scores, and
+      look for related QTLs in a variety of Brassica subspicies.
+    = link_to 'Browse data', plant_populations_path, class: 'btn btn-primary'
+
+  .col-md-4.text-center
+    %p
+      Submit your experimental Brassica population data, along with scored
+      traits and found genetic mapping, to be published in the Portal.
+    = link_to 'Submit data', new_submission_path, class: 'btn btn-primary'
+
+  .col-md-4.text-center
+    %p
+      Learn how to integrate your own software with our Portal, in order to
+      retrieve and submit large quantities of data, automatically.
+    = link_to 'API documentation', '#', class: 'btn btn-primary'
