@@ -32,6 +32,7 @@ namespace :curate do
       else
         failures << pl_full_name
       end
+      puts "...processed #{cntr} records..." if cntr % 1000 == 0
     end
     puts "---------------------------"
     puts "Run complete: #{cntr} records processed; #{success_cntr} successes and #{failures.size} failures."
