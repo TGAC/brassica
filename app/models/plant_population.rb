@@ -12,8 +12,8 @@ class PlantPopulation < ActiveRecord::Base
 
   has_and_belongs_to_many :plant_lines,
                           join_table: 'plant_population_lists',
+                          foreign_key: 'plant_population_id',
                           association_foreign_key: 'plant_line_name'
-
 
   # Exlude the ['none', 'unspecified', 'not applicable'] pseudo-record trio
   scope :drop_dummies, -> do
