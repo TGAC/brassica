@@ -43,7 +43,14 @@ window.configs =
         targets: [3, 4]
         render: (data, type, full, meta) ->
           if data
-            '<a href="plant_lines?plant_line_names[]=' + data + '">' + data + '</a>'
+            '<a href="plant_lines?query[plant_line_name][]=' + data + '">' + data + '</a>'
+          else
+            ''
+      ,
+        targets: [6]
+        render: (data, type, full, meta) ->
+          if data && data != '0'
+            '<a href="plant_lines?query[plant_populations.plant_population_id]=' + full[0] + '">' + data + '</a>'
           else
             ''
       ]

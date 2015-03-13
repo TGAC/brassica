@@ -30,9 +30,13 @@ class PlantLine < ActiveRecord::Base
       'data_owned_by',
       'organisation'
 
-    query = where(plant_line_name: filter[:plant_line_names]) if filter[:plant_line_names].present?
+    query = where(filter[:query]) if filter[:query].present?
     query = where('plant_line_name ILIKE ?', "%#{filter[:search]}%") if filter[:search].present?
     query ||= none
+
+    filter[:query].each do |k,_|
+      query = query.joins(k.to_s.split('.')[0].to_sym) if k.to_s.include? '.'
+    end if filter[:query]
 
     query
       .joins(:taxonomy_term)

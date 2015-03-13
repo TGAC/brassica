@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe PlantLine, type: :model do
+RSpec.describe PlantLine do
   describe '#grid_data' do
     it 'returns empty result when no plant lines found' do
       expect(PlantLine.grid_data(plant_line_names: [1])).to be_empty
     end
 
     it 'orders populations by common name' do
-      pl1,pl2,pl3 = create_list(:plant_line, 3)
-      ids = [pl2, pl1, pl3].map(&:plant_line_name)
-      expect(PlantLine.grid_data(plant_line_names: ids).map(&:first)).to eq ids.sort
+      plids = create_list(:plant_line, 3).map(&:plant_line_name)
+      gd = PlantLine.grid_data(query: { plant_line_name: plids })
+      expect(gd.map(&:first)).to eq plids.sort
     end
 
     it 'gets proper columns' do
@@ -23,8 +23,30 @@ RSpec.describe PlantLine, type: :model do
                    data_owned_by: 'dob',
                    organisation: 'o')
 
-      first_line = PlantLine.grid_data(plant_line_names: [pl.plant_line_name])[0]
-      expect(first_line[1..-1]).to eq %w(tt cn pln) + [de] + %w(dob o)
+      gd = PlantLine.grid_data(
+        query: { plant_line_name: [pl.plant_line_name] }
+      )
+      expect(gd.count).to eq 1
+      expect(gd[0][1..-1]).to eq %w(tt cn pln) + [de] + %w(dob o)
+    end
+
+    it 'supports multi-criteria queries' do
+      pl = create(:plant_line, common_name: 'cn', organisation: 'o')
+      create(:plant_line, common_name: 'cn', organisation: 'x')
+      create(:plant_line, common_name: 'nc', organisation: 'o')
+      gd = PlantLine.grid_data(
+        query: {
+          common_name: 'cn',
+          organisation: 'o'
+        }
+      )
+      expect(gd.count).to eq 1
+      expect(gd[0][0]).to eq pl.plant_line_name
+    end
+
+    it 'supports querying by associated objects' do
+      pending('This waits till #37 fix')
+      fail
     end
   end
 end
