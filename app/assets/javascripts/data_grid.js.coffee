@@ -54,7 +54,7 @@ window.configs =
   'plant-populations':
     columnDefs:
       [
-        targets: [2, 3]
+        targets: [3, 4]
         render: (data, type, full, meta) ->
           if data
             '<a href="plant_lines?plant_line_names[]=' + data + '">' + data + '</a>'
