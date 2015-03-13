@@ -31,7 +31,7 @@ class PlantPopulation < ActiveRecord::Base
     ]
 
     select(columns + ['count(plant_lines.plant_line_name)']).
-      includes(:plant_lines).
+      joins(:plant_lines).
       group(columns).
       drop_dummies.
       order(:plant_population_id).
