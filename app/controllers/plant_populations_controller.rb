@@ -3,7 +3,8 @@ class PlantPopulationsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        grid_data = PlantPopulationsDecorator.decorate(PlantPopulation.grid_data)
+        plant_populations = PlantPopulation.grid_data
+        grid_data = ApplicationDecorator.decorate(plant_populations)
         render json: grid_data.as_grid_data
       end
     end
