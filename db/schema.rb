@@ -967,6 +967,7 @@ ActiveRecord::Schema.define(version: 20150225145528) do
   end
 
   add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
+  add_index "taxonomy_terms", ["name"], name: "index_taxonomy_terms_on_name", using: :btree
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
   create_table "trait_descriptors", primary_key: "trait_descriptor_id", force: :cascade do |t|
