@@ -39,10 +39,9 @@ RSpec.describe PlantPopulation do
       # expect(gd.map(&:last)).to contain_exactly 2, 2, 0
     end
 
-    it 'filters out dummy populations', focus: true do
+    it 'filters out dummy populations' do
       create(:plant_population)
       create(:plant_population, canonical_population_name: '')
-      p PlantPopulation.all
       expect(PlantPopulation.grid_data.size).to eq 1
     end
 
