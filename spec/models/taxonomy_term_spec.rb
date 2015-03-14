@@ -1,6 +1,19 @@
 require 'rails_helper'
 
-RSpec.describe TaxonomyTerm, type: :model do
+RSpec.describe TaxonomyTerm do
+  it 'prevents duplicated names' do
+    tt = create(:taxonomy_term)
+    expect { create(:taxonomy_term, name: tt.name) }.
+      to raise_error ActiveRecord::RecordInvalid
+  end
+
+  it 'prevents duplicated names even without callbacks' do
+    tt = create(:taxonomy_term)
+    tt2 = create(:taxonomy_term)
+    expect { tt2.update_attribute(:name, tt.name) }.
+      to raise_error ActiveRecord::RecordNotUnique
+  end
+
   describe '#children_of' do
     before(:each) do
       @r1 = create(:taxonomy_term)
