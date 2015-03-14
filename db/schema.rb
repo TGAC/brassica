@@ -560,7 +560,7 @@ ActiveRecord::Schema.define(version: 20150225145528) do
   end
 
   create_table "plant_population_lists", force: :cascade do |t|
-    t.integer "plant_papulation_id",                         null: false
+    t.integer "plant_population_id",                         null: false
     t.text    "plant_line_name",     default: "unspecified", null: false
     t.text    "sort_order",          default: "unspecified", null: false
     t.text    "comments",                                    null: false
@@ -986,7 +986,7 @@ ActiveRecord::Schema.define(version: 20150225145528) do
   end
 
   add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
-  add_index "taxonomy_terms", ["name"], name: "index_taxonomy_terms_on_name", using: :btree
+  add_index "taxonomy_terms", ["name"], name: "index_taxonomy_terms_on_name", unique: true, using: :btree
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
   create_table "trait_descriptors", primary_key: "trait_descriptor_id", force: :cascade do |t|
