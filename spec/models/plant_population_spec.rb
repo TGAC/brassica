@@ -21,22 +21,16 @@ RSpec.describe PlantPopulation do
     end
 
     it 'properly calculates associated plant lines number' do
-      pending('This waits till #37 fix')
-      fail
       pls = create_list(:plant_line, 3)
       pps = create_list(:plant_population, 3)
       create(:plant_population_list, plant_population: pps[0], plant_line: pls[0])
       create(:plant_population_list, plant_population: pps[0], plant_line: pls[1])
       create(:plant_population_list, plant_population: pps[1], plant_line: pls[2])
       create(:plant_population_list, plant_population: pps[1], plant_line: pls[1])
-      # create(:plant_population, plant_lines: [pls[1], pls[2]])
-      # create(:plant_population, plant_lines: [pls[3], pls[2]])
-      # create(:plant_population)
-
-      # gd = PlantPopulation.grid_data
-      # expect(gd).not_to be_empty
-      # expect(gd.size).to eq 3
-      # expect(gd.map(&:last)).to contain_exactly 2, 2, 0
+      gd = PlantPopulation.grid_data
+      expect(gd).not_to be_empty
+      expect(gd.size).to eq 3
+      expect(gd.map(&:last)).to contain_exactly 2, 2, 0
     end
 
     it 'filters out dummy populations' do
@@ -53,12 +47,12 @@ RSpec.describe PlantPopulation do
     it 'gets proper columns' do
       fpl = create(:plant_line)
       mpl = create(:plant_line)
-      pp = create(:plant_population,
-                  species: 'ssp',
-                  canonical_population_name: 'cpn',
-                  female_parent_line: fpl,
-                  male_parent_line: mpl,
-                  population_type: 'pp_type')
+      create(:plant_population,
+             species: 'ssp',
+             canonical_population_name: 'cpn',
+             female_parent_line: fpl,
+             male_parent_line: mpl,
+             population_type: 'pp_type')
 
       gd = PlantPopulation.grid_data
       expect(gd.count).to eq 1
