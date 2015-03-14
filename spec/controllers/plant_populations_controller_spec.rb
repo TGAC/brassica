@@ -15,13 +15,13 @@ RSpec.describe PlantPopulationsController do
     end
 
     it 'returns datatables json on ajax request' do
-      create_list(:plant_population, 2)
+      pps = create_list(:plant_population, 2)
       get :index, format: :json
       expect(response.content_type).to eq 'application/json'
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 2
       expect(json['data'].size).to eq 2
-      expect(json['data'][1].size).to eq 6
+      expect(json['data'].map(&:first)).to match_array pps.map(&:id)
     end
   end
 end

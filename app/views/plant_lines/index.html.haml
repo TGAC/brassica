@@ -4,7 +4,7 @@
   %li= link_to 'Plant populations', plant_populations_path
   %li.active Plant lines
 
-- data_src = plant_lines_path(plant_line_names: params[:plant_line_names])
+- data_src = plant_lines_path(query: params[:query])
 %table#plant-lines.table.table-condensed.data-table{ data: { ajax: data_src }}
   %thead
     %tr
