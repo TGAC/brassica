@@ -1,4 +1,5 @@
 class PlantLine < ActiveRecord::Base
+  self.primary_key = 'plant_line_name'
 
   belongs_to :plant_variety, foreign_key: 'plant_variety_name'
 
