@@ -559,15 +559,16 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text "confirmed_by_whom", default: "unspecified", null: false
   end
 
-  create_table "plant_population_lists", primary_key: "plant_population_id", force: :cascade do |t|
-    t.text "plant_line_name",   default: "unspecified", null: false
-    t.text "sort_order",        default: "unspecified", null: false
-    t.text "comments",                                  null: false
-    t.text "entered_by_whom",   default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                           null: false
-    t.text "data_status",       default: "unspecified", null: false
-    t.text "confirmed_by_whom", default: "unspecified", null: false
+  create_table "plant_population_lists", force: :cascade do |t|
+    t.integer "plant_papulation_id",                         null: false
+    t.text    "plant_line_name",     default: "unspecified", null: false
+    t.text    "sort_order",          default: "unspecified", null: false
+    t.text    "comments",                                    null: false
+    t.text    "entered_by_whom",     default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                             null: false
+    t.text    "data_status",         default: "unspecified", null: false
+    t.text    "confirmed_by_whom",   default: "unspecified", null: false
   end
 
   add_index "plant_population_lists", ["plant_line_name"], name: "idx_143830_plant_line", using: :btree
