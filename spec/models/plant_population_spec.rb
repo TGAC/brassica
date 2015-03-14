@@ -37,6 +37,7 @@ RSpec.describe PlantPopulation do
       create(:plant_population)
       create(:plant_population, canonical_population_name: '')
       expect(PlantPopulation.grid_data.size).to eq 1
+      expect(PlantPopulation.grid_data.values).to contain_exactly 1
     end
 
     it 'orders populations by population name' do
