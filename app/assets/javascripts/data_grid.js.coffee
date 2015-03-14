@@ -29,7 +29,6 @@ $ ->
 # Specific configurations for particular DataTables, including callbacks
 window.configs =
   'plant-lines':
-    paging: false
     columnDefs:
       [
         targets: 1
