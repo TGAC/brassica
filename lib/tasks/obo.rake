@@ -17,7 +17,7 @@ namespace :obo do
         tax_term.parent = parent if parent
       end
       root_count += 1 unless tax_term.parent
-      tax_term.save
+      tax_term.save!
     end
     puts "Done. Parsed #{total_count} terms, including #{root_count} root(s)."
 
@@ -129,7 +129,7 @@ namespace :obo do
     term.canonical = false
     term.label = 'CROPSTORE'
     term.parent = parent
-    term.save
+    term.save!
     puts "    + [#{term.name}] is_a [#{parent.name}]"
   end
 end
