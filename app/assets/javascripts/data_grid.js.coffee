@@ -5,6 +5,7 @@ $ ->
     pageLength: 25
     processing: true
     stateSave: true
+    dom: "<'row'<'col-sm-4'l><'col-sm-4'T><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
     drawCallback: (settings) ->
       # This removes the pagination control when only 1 page
       # and the page length picker when less data than the minimum value
@@ -21,6 +22,19 @@ $ ->
         lengthPicker.show()
     # NOTE: use server side processing for large data (too heavy for clients)
     # serverSide: true
+
+  $.extend $.fn.dataTable.TableTools.defaults,
+    aButtons:
+      [
+        sExtends: 'csv'
+        sButtonText: 'Export to CSV'
+        sFileName: '*.csv'
+        sToolTip: 'Generates a CSV file with the content of the table below.'
+        oSelectorOpts:
+          filter: 'applied'
+      ]
+    sSwfPath: '/swf/copy_csv_xls.swf'
+
 
   $('.data-table').each (i)->
     $(this).DataTable window.configs[this.id]
