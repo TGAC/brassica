@@ -560,7 +560,7 @@ ActiveRecord::Schema.define(version: 20150225145528) do
   end
 
   create_table "plant_population_lists", force: :cascade do |t|
-    t.integer "plant_papulation_id",                         null: false
+    t.integer "plant_population_id",                         null: false
     t.text    "plant_line_name",     default: "unspecified", null: false
     t.text    "sort_order",          default: "unspecified", null: false
     t.text    "comments",                                    null: false

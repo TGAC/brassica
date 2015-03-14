@@ -45,8 +45,17 @@ RSpec.describe PlantLine do
     end
 
     it 'supports querying by associated objects' do
-      pending('This waits till #37 fix')
-      fail
+      pls = create_list(:plant_line, 2)
+      pp = create(:plant_population)
+      create(:plant_population_list, plant_population: pp, plant_line: pls[0])
+      create(:plant_population_list, plant_population: pp, plant_line: pls[1])
+      gd = PlantLine.grid_data(
+        query: {
+          'plant_populations.plant_population_id' => pp.plant_population_id
+        }
+      )
+      expect(gd.count).to eq 2
+      expect(gd.map(&:first)).to match_array pls.map(&:plant_line_name)
     end
   end
 end
