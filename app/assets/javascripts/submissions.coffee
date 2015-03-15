@@ -19,6 +19,11 @@ plantLineSelectOptions = ->
 plantLineListSelectOptions = ->
   $.extend({}, plantLineSelectOptions(), multiple: true)
 
+plantLineGeneticStatusSelectOptions = ->
+  multiple: true
+  tags: true
+  maximumSelectionLength: 1
+
 defaultSelectOptions = ->
   allowClear: true
 
@@ -55,6 +60,9 @@ $ ->
   $('.edit_submission .male-parent-line').select2(plantLineSelectOptions())
   $('.edit_submission .population-type').select2(defaultSelectOptions())
   $('.edit_submission .plant-line-list').select2(plantLineListSelectOptions())
+
+  $('.edit_submission .previous-line-name').select2(plantLineSelectOptions())
+  $('.edit_submission .genetic-status').select2(plantLineGeneticStatusSelectOptions())
 
   $.each buttonTargets, (buttonId, target) ->
     $button = $('#' + buttonId)

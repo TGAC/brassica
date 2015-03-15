@@ -37,14 +37,29 @@
         %p.help-block Required
 
       .form-group
-        = label_tag :plant_line_comments, 'Comments'
-        = text_area_tag :plant_line_comments, nil, class: 'form-control'
+        = label_tag :plant_line_taxonomy_term
+        = select_tag :plant_line_taxonomy_term, options_for_select(@content.class.taxonomy_terms, @content.plant_line_taxonomy_term), prompt: "Select term...", class: 'form-control'
         %p.help-block Required
 
       .form-group
-        = label_tag :plant_line_data_provenance, 'Data provenance'
-        = text_area_tag :plant_line_data_provenance, nil, class: 'form-control'
-        %p.help-block Required
+        = label_tag :plant_line_common_name, 'Common name'
+        = text_field_tag :plant_line_common_name, nil, class: 'form-control'
+        %p.help-block Optional
+
+      .form-group
+        = label_tag :plant_line_previous_line_name
+        = select_tag :plant_line_previous_line_name, [@content.plant_line_previous_line_name], class: 'previous-line-name form-control', 'data-placeholder': "Select plant line"
+        %p.help-block Optional
+
+      .form-group
+        = label_tag :plant_line_comments, 'Comments'
+        = text_area_tag :plant_line_comments, @content.plant_line_comments, class: 'form-control'
+        %p.help-block Optional
+
+      .form-group
+        = label_tag :plant_line_genetic_status, 'Genetic status'
+        = select_tag :plant_line_genetic_status, options_for_select(PlantLine.genetic_statuses, @content.plant_line_genetic_status), class: 'genetic-status form-control', data: { placeholder: "Search and select existing or enter new status" }
+        %p.help-block Optional
 
       .action-buttons
         %button.add-plant-line-for-list{type: 'button'} Add
