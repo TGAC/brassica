@@ -27,34 +27,6 @@ plantLineGeneticStatusSelectOptions = ->
 defaultSelectOptions = ->
   allowClear: true
 
-buttonTargets =
-  'add-plant-line': '.new-plant-line'
-  'select-existing-plant-line': '.existing-plant-line'
-  'select-existing-taxonomy-term': '.existing-taxonomy-term'
-
-buttonTargetSelectOptions =
-  'add-plant-line': plantLineSelectOptions
-  'select-existing-plant-line': plantLineSelectOptions
-  'select-existing-taxonomy-term': defaultSelectOptions
-
-markActiveButton = (button) ->
-  $(button).parent().find('button').removeClass('active')
-  $(button).addClass('active')
-
-activateTargetFields = (button) ->
-  target = buttonTargets[button.id]
-  initialized = !$(target).hasClass('hidden')
-
-  $('.new-plant-line, .existing-plant-line, .existing-taxonomy-term').not(target).hide()
-  $(target).removeClass('hidden').show()
-
-  unless initialized
-    $(target).find('select').select2(buttonTargetSelectOptions[button.id]())
-
-switchTarget = (button) ->
-  markActiveButton(button)
-  activateTargetFields(button)
-
 appendToSelectedPlantLineLists = (data) ->
   $select = $('.plant-line-list')
   selectedValues = $select.val() || []
@@ -74,17 +46,6 @@ $ ->
 
   $('.edit_submission .previous-line-name').select2(plantLineSelectOptions())
   $('.edit_submission .genetic-status').select2(plantLineGeneticStatusSelectOptions())
-
-  $.each buttonTargets, (buttonId, target) ->
-    $button = $('#' + buttonId)
-
-    $button.on 'click', (event) ->
-      event.preventDefault()
-      switchTarget(event.target)
-
-    if $(buttonTargets[buttonId]).hasClass('selected')
-      markActiveButton($button[0])
-      activateTargetFields($button[0])
 
   $('.add-plant-line-for-list').on 'click', (event) ->
     $form = $('.new-plant-line-for-list')
