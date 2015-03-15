@@ -33,12 +33,12 @@
 
       .form-group
         = label_tag :plant_line_name
-        = text_field_tag :plant_line_name, nil, class: 'form-control', placeholder: 'Enter new plant line name'
+        = text_field_tag :plant_line_name, nil, class: 'form-control', placeholder: 'Enter new plant line name', required: true
         %p.help-block Required
 
       .form-group
         = label_tag :plant_line_taxonomy_term
-        = select_tag :plant_line_taxonomy_term, options_for_select(@content.class.taxonomy_terms, @content.plant_line_taxonomy_term), prompt: "Select term...", class: 'form-control'
+        = select_tag :plant_line_taxonomy_term, options_for_select(@content.class.taxonomy_terms, @content.plant_line_taxonomy_term), prompt: "Select term...", class: 'form-control', required: true
         %p.help-block Required
 
       .form-group
