@@ -475,9 +475,6 @@ class ImportCropstoreDb < ActiveRecord::Migration
 
       create_table "plant_lines", id: false, force: :cascade do |t|
         t.text "plant_line_name",    primary: true
-        t.text "genus",              default: "unspecified", null: false
-        t.text "species",            default: "unspecified", null: false
-        t.text "subtaxa",            default: "unspecified", null: false
         t.text "common_name",        default: "unspecified", null: false
         t.text "plant_variety_name", default: "unspecified", null: false
         t.text "named_by_whom",      default: "unspecified", null: false
