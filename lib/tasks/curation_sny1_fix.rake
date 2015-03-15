@@ -11,6 +11,11 @@ namespace :curate do
     pl_refs = PlantPopulation.pluck(:female_parent_line, :male_parent_line)
     pl_refs = pl_refs.flatten.uniq
     # This will throw an exception if not found
-    pl_refs.each{ |ref| PlantLine.find(ref) }
+    begin
+      pl_refs.each{ |ref| PlantLine.find(ref) }
+    rescue ActiveRecord::RecordNotFound => e
+      puts e.message
+      next
+    end
   end
 end
