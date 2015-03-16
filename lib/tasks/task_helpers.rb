@@ -1,4 +1,12 @@
 namespace :curate do
+  def all_tables
+    simple_query('select relname from pg_stat_user_tables')
+    # NOTE alternative?
+    # simple_query(
+    #   "select table_name from information_schema.tables where table_schema = 'public'"
+    # )
+  end
+
   def tables_with_column(column)
     simple_query(
       "select table_name

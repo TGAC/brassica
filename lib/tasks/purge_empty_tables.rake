@@ -2,8 +2,7 @@ require "#{Rails.root}/lib/tasks/task_helpers"
 
 namespace :curate do
   task purge_empty_tables: :environment do
-    tables = simple_query('select relname from pg_stat_user_tables')
-    tables -= ['schema_migrations', 'users', 'submissions', 'taxonomy_term']
+    tables = all_tables - ['schema_migrations', 'users', 'submissions', 'taxonomy_term']
     tables_to_remove = []
 
     tables.each do |table|
