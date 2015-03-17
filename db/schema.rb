@@ -107,30 +107,30 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text "consensus_group_assignment", default: "unspecified", null: false
     t.text "mapping_locus",              default: "",            null: false
     t.text "canonical_marker_name",      default: "unspecified", null: false
-    t.text "map_position",               default: "unspecified", null: false
+    t.text "map_position",               default: "unspecified"
     t.text "map_data_status",            default: "unspecified", null: false
     t.text "associated_sequence_id",     default: "unspecified", null: false
     t.text "sequence_source_acronym",    default: "unspecified", null: false
     t.text "cs_sequence_data_status",    default: "unspecified", null: false
     t.text "sqs_sequence_data_status",   default: "unspecified", null: false
-    t.text "atg_hit_seq_id",             default: "unspecified", null: false
-    t.text "atg_hit_seq_source",         default: "unspecified", null: false
-    t.text "bac_hit_seq_id",             default: "unspecified", null: false
-    t.text "bac_hit_seq_source",         default: "unspecified", null: false
-    t.text "bac_hit_name",               default: "unspecified", null: false
+    t.text "atg_hit_seq_id"
+    t.text "atg_hit_seq_source"
+    t.text "bac_hit_seq_id"
+    t.text "bac_hit_seq_source"
+    t.text "bac_hit_name"
   end
 
   create_table "map_positions", primary_key: "linkage_group_id", force: :cascade do |t|
     t.text "marker_assay_name", default: "unspecified", null: false
     t.text "mapping_locus",     default: "unspecified", null: false
-    t.text "map_position",      default: "unspecified", null: false
+    t.text "map_position"
     t.text "comments",                                  null: false
     t.text "entered_by_whom",   default: "unspecified", null: false
     t.date "date_entered"
     t.text "data_provenance",                           null: false
     t.text "data_owned_by",     default: "unspecified", null: false
     t.text "data_status",       default: "unspecified", null: false
-    t.text "confirmed_by_whom", default: "unspecified", null: false
+    t.text "confirmed_by_whom"
   end
 
   add_index "map_positions", ["map_position"], name: "idx_143597_map_position", using: :btree

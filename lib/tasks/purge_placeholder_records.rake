@@ -5,8 +5,15 @@ namespace :curate do
     deleted_records = 0
     dropped_not_nulls = []
     dropped_defaults = []
+
+    # Stage 0: preparation for two special cases
+    query('alter table map_positions drop constraint idx_143597_primary')
+    query('alter table map_positions add constraint idx_143597_primary primary key(linkage_group_id, mapping_locus)')
+    query('alter table map_locus_hits drop constraint idx_143575_primary')
+    query('alter table map_locus_hits add constraint idx_143575_primary primary key(linkage_group_id, mapping_locus)')
+
     blank_array = '(' + blank_records.map{ |br| "'#{br}'" }.join(',') + ')'
-    (all_tables - ['map_locus_hits','map_positions']).each do |table|
+    all_tables.each do |table|
       puts "- Table #{table} PKeys: #{pkey_names(table)}"
       query =
         "select * from #{table} where " +
@@ -37,6 +44,8 @@ namespace :curate do
             puts "    * Removed NOT NULL restriction on #{table}.#{column}. Retrying."
             dropped_not_nulls << "#{table}.#{column}"
             retry
+          elsif e.message.starts_with? 'PG::InvalidTableDefinition'
+            query("alter table #{table} alter column #{column} drop not null")
           end
         end
       end
