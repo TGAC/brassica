@@ -9,4 +9,6 @@ class LinkageGroup < ActiveRecord::Base
 
   has_many :map_locus_hits, foreign_key: 'linkage_group_id'
 
+  has_many :qtls
+
 end
