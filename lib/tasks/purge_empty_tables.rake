@@ -16,7 +16,7 @@ namespace :curate do
     end
     if tables_to_remove.present?
       puts "====DROPPED #{tables_to_remove.size} tables:"
-      puts tables_to_remove.join(',')
+      puts tables_to_remove.sort
     else
       puts '====DROPPED 0 tables.'
     end

@@ -2,7 +2,7 @@ require "#{Rails.root}/lib/tasks/task_helpers"
 
 namespace :curate do
   task purge_empty_columns: :environment do
-    dropped_columns = 0
+    dropped_columns = []
     all_tables.each do |table|
       puts "- Table #{table}:"
       column_names(table).each do |column|
@@ -10,10 +10,15 @@ namespace :curate do
         if values.all?{ |v| meaningless?(v) }
           puts "  * Column #{column} has only meaningless values: #{values}. Dropping."
           query("alter table #{table} drop column if exists #{column}")
-          dropped_columns += 1
+          dropped_columns << "#{table}.#{column}"
         end
       end
     end
-    puts "====DROPPED #{dropped_columns} columns."
+    if dropped_columns.present?
+      puts "====DROPPED #{dropped_columns.size} columns:"
+      puts dropped_columns.sort
+    else
+      puts '====DROPPED 0 columns.'
+    end
   end
 end
