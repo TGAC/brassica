@@ -37,32 +37,53 @@ RSpec.describe PlantLine do
       expect(gd[0][1..-1]).to eq %w(tt cn pln) + [de] + %w(dob o)
     end
 
-    it 'supports multi-criteria queries' do
-      pl = create(:plant_line, common_name: 'cn', organisation: 'o')
-      create(:plant_line, common_name: 'cn', organisation: 'x')
-      create(:plant_line, common_name: 'nc', organisation: 'o')
-      gd = PlantLine.grid_data(
-        query: {
-          common_name: 'cn',
-          organisation: 'o'
-        }
-      )
-      expect(gd.count).to eq 1
-      expect(gd[0][0]).to eq pl.plant_line_name
+    it 'will not get all when no param permitted' do
+      # NOTE: means - strong params should prevent passing {} to where
+      create(:plant_line)
+      expect(PlantLine.grid_data(query: { common_name: 'cn' })).to be_empty
+      expect(PlantLine.grid_data(query: {})).to be_empty
     end
 
-    it 'supports querying by associated objects' do
-      pls = create_list(:plant_line, 2)
-      pp = create(:plant_population)
-      create(:plant_population_list, plant_population: pp, plant_line: pls[0])
-      create(:plant_population_list, plant_population: pp, plant_line: pls[1])
+    it 'will only query by permitted params' do
+      create(:plant_line, common_name: 'cn', plant_line_name: 'pln')
+      create(:plant_line, common_name: 'cn', plant_line_name: 'nlp')
+      create(:plant_line, common_name: 'nc', plant_line_name: 'pln')
       gd = PlantLine.grid_data(
-        query: {
-          'plant_populations.plant_population_id' => pp.plant_population_id
-        }
+        query: { common_name: 'cn', plant_line_name: ['pln'] }
       )
       expect(gd.count).to eq 2
-      expect(gd.map(&:first)).to match_array pls.map(&:plant_line_name)
+      expect(gd.map(&:first)).to match_array ['pln', 'pln']
+    end
+
+    context 'when associated with plant population' do
+      before(:each) do
+        @pls = create_list(:plant_line, 3)
+        @pp = create(:plant_population)
+        create(:plant_population_list, plant_population: @pp, plant_line: @pls[0])
+        create(:plant_population_list, plant_population: @pp, plant_line: @pls[1])
+      end
+
+      it 'supports querying by associated objects' do
+        gd = PlantLine.grid_data(
+          query: {
+            'plant_populations.plant_population_id' => @pp.plant_population_id
+          }
+        )
+        expect(gd.count).to eq 2
+        expect(gd.map(&:first)).
+          to match_array [@pls[0].plant_line_name, @pls[1].plant_line_name]
+      end
+
+      it 'supports multi-criteria queries' do
+        gd = PlantLine.grid_data(
+          query: {
+            'plant_populations.plant_population_id' => @pp.plant_population_id,
+            plant_line_name: [@pls[1].plant_line_name]
+          }
+        )
+        expect(gd.count).to eq 1
+        expect(gd[0][0]).to eq @pls[1].plant_line_name
+      end
     end
   end
 end
