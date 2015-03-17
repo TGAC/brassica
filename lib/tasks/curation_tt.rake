@@ -13,9 +13,9 @@ namespace :curate do
       tgt_species = pl.species ? pl.species.strip : ''
       tgt_genus = pl.genus ? pl.genus.strip : ''
       pl_full_name = "#{tgt_genus} #{tgt_species} #{tgt_subtaxa}"
-      name_to_find = if !meaningful(tgt_species)
+      name_to_find = if !meaningful?(tgt_species)
                        "#{tgt_genus}"
-                     elsif !meaningful(tgt_subtaxa)
+                     elsif !meaningful?(tgt_subtaxa)
                        "#{tgt_genus} #{tgt_species}"
                      else
                        ["#{tgt_genus} #{tgt_species} #{tgt_subtaxa}",
@@ -25,6 +25,11 @@ namespace :curate do
 
       cntr += 1
       tt = TaxonomyTerm.find_by(name: name_to_find)
+      unless tt
+        # Second try after typo fixes
+        fixed_name = [name_to_find].flatten.map{ |n| data_fixes(n) }
+        tt = TaxonomyTerm.find_by(name: fixed_name)
+      end
       if tt
         pl.taxonomy_term = tt
         pl.save
@@ -38,10 +43,44 @@ namespace :curate do
     puts "Run complete: #{cntr} records processed; #{success_cntr} successes and #{failures.size} failures."
     puts "Failures:"
     puts failures.uniq.join("\n")
+
+    if failures.empty?
+      puts 'No failures - performing database cleanup'
+      puts '1. Removing trash PL records'
+      begin
+        PlantLine.where(genus: blank_records).destroy_all
+      rescue ActiveRecord::StatementInvalid
+        puts '  Relevant columns already removed.'
+      end
+      puts '2. Removing genus/species/subtaxa columns'
+      PlantLine.connection.execute('ALTER TABLE plant_lines DROP COLUMN IF EXISTS genus')
+      PlantLine.connection.execute('ALTER TABLE plant_lines DROP COLUMN IF EXISTS species')
+      PlantLine.connection.execute('ALTER TABLE plant_lines DROP COLUMN IF EXISTS subtaxa')
+      puts 'Finished'
+    end
   end
 
-  def meaningful(term)
-    blank_records = ['unspecified', '', 'not applicable', 'none']
+  def blank_records
+    ['unspecified', '', 'not applicable', 'none']
+  end
+
+  def meaningful?(term)
     term && !(blank_records.include? term)
+  end
+
+  def data_fixes(name)
+    {
+      'captitata' => 'capitata',
+      'oleracia' => 'oleracea',
+      'olifeira' => 'oleifera',
+      'bourgaei' => 'bourgeaui',
+      'napiformes' => 'napiformis',
+      ' conica' => '',
+      'hybrid' => 'sp.',
+      'MIXED' => 'sp.'
+    }.each do |from,to|
+      name = name.gsub(from, to)
+    end
+    name
   end
 end

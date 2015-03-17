@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe PlantLine do
+  it 'dropped genus species subtaxa columns' do
+    pl = create(:plant_line)
+    expect{ pl.genus }.to raise_error NoMethodError
+    expect{ pl.species }.to raise_error NoMethodError
+    expect{ pl.subtaxa }.to raise_error NoMethodError
+  end
+
   describe '#grid_data' do
     it 'returns empty result when no plant lines found' do
       expect(PlantLine.grid_data(plant_line_names: [1])).to be_empty

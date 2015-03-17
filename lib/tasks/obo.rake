@@ -22,8 +22,18 @@ namespace :obo do
     puts "Done. Parsed #{total_count} terms, including #{root_count} root(s)."
 
     puts "Phase 2: adding non-canonical, CS terms."
+    genera_input = %w(X_Brassicoraphanus)
+    genera_count = 0
+    genera_input.each do |genus|
+      tax_term = TaxonomyTerm.find_or_initialize_by(name: genus)
+      save_with_parent(tax_term, nil)
+      genera_count += 1
+    end
+    puts "  Added #{genera_count} genera."
+
     species_input = %w(alboglabra atlantica bivoniana bourgeaui desnottesii drepanensis nivalis perviridis)
     species_input += %w(juncea? napus? nigra? rapa?)
+    species_input += ['rapa and napus']
     species_count = 0
     brassica = TaxonomyTerm.find_by(name: 'Brassica')
     species_input.each do |species|
@@ -45,12 +55,12 @@ namespace :obo do
                :japonica, :juncea, :laevigata, :mangolica, :melanosperma, :mongolica,
                :napiformis, :sareptana, :suberispifolia, :subintegrifolia, :subsareptana, :tsatsai],
       macrocarpa: [:macrocarpa],
-      napus: [:biennis, :napus, :oleifera, :pabularia],
+      napus: [:biennis, :oleifera, :pabularia],
       nigra: [:dissecta, :nigra, :orientales, :pseudocampestris, :rigida],
       oleracea: [:acephala, 'acephala?', :viridis, :africana, :capitata, :capitata?,
                  :gemnifera, :sabauda, :sabellica, :tronchuda, :tronchuda?, :alboglabra?],
       rapa: ['Broccoletto Gp', 'Neep Greens Gp', 'Pak Choi Group', :chinensis, :dichotoma,
-             :oleifera, :pekinensis, :purpurea, :ruvo, :sylvestris, :trilocularis],
+             :oleifera, :pekinensis, :purpurea, :ruvo, :sylvestris, :trilocularis, :napobrassica],
       rapa?: [:rapa?],
       repanda: [:almeriensis, :blancoana, :cadevallii, :cantabrica, :confusa, :maritima, :nudicaulis],
       rupestris: [:glaucescens, :hispida],
@@ -130,6 +140,6 @@ namespace :obo do
     term.label = 'CROPSTORE'
     term.parent = parent
     term.save!
-    puts "    + [#{term.name}] is_a [#{parent.name}]"
+    puts "    + [#{term.name}] is_a [#{parent.name}]" if parent
   end
 end
