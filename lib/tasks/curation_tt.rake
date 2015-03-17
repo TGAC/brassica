@@ -9,10 +9,9 @@ namespace :curate do
     failures = []
 
     PlantLine.all.each do |pl|
-      next unless meaningful?(pl.genus)
-      tgt_subtaxa = pl.subtaxa.strip.gsub('  ', ' ').gsub(' ?', '?')
-      tgt_species = pl.species.strip
-      tgt_genus = pl.genus.strip
+      tgt_subtaxa = pl.subtaxa ? pl.subtaxa.strip.gsub('  ', ' ').gsub(' ?', '?') : ''
+      tgt_species = pl.species ? pl.species.strip : ''
+      tgt_genus = pl.genus ? pl.genus.strip : ''
       pl_full_name = "#{tgt_genus} #{tgt_species} #{tgt_subtaxa}"
       name_to_find = if !meaningful?(tgt_species)
                        "#{tgt_genus}"
