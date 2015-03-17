@@ -28,40 +28,53 @@
       = content.label :plant_line_list
       = content.select :plant_line_list, @content.plant_line_list || [], {}, multiple: true, class: 'plant-line-list form-control', 'data-placeholder': "Select plant line"
 
-    .new-plant-line-for-list
+    %button.new-plant-line-for-list{ type: :button } Add new Plant line
+
+    .new-plant-line-for-list.hidden
       %h5 Add new <b>Plant line</b>
 
       .form-group
         = label_tag :plant_line_name
-        = text_field_tag :plant_line_name, nil, class: 'form-control', placeholder: 'Enter new plant line name', required: true
+        = text_field_tag :plant_line_name, nil, class: 'form-control required', placeholder: 'Enter new plant line name'
         %p.help-block Required
 
       .form-group
-        = label_tag :plant_line_taxonomy_term
-        = select_tag :plant_line_taxonomy_term, options_for_select(@content.class.taxonomy_terms, @content.plant_line_taxonomy_term), prompt: "Select term...", class: 'form-control', required: true
+        = label_tag :taxonomy_term
+        = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), prompt: "Select term...", class: 'form-control required'
         %p.help-block Required
 
       .form-group
-        = label_tag :plant_line_common_name, 'Common name'
-        = text_field_tag :plant_line_common_name, nil, class: 'form-control'
+        = label_tag :common_name, 'Common name'
+        = text_field_tag :common_name, nil, class: 'form-control'
         %p.help-block Optional
 
       .form-group
-        = label_tag :plant_line_previous_line_name
-        = select_tag :plant_line_previous_line_name, [@content.plant_line_previous_line_name], class: 'previous-line-name form-control', 'data-placeholder': "Select plant line"
+        = label_tag :previous_line_name
+        = select_tag :previous_line_name, [], class: 'previous-line-name form-control', 'data-placeholder': "Select plant line"
         %p.help-block Optional
 
       .form-group
-        = label_tag :plant_line_comments, 'Comments'
-        = text_area_tag :plant_line_comments, @content.plant_line_comments, class: 'form-control'
+        = label_tag :comments, 'Comments'
+        = text_area_tag :comments, nil, class: 'form-control'
         %p.help-block Optional
 
       .form-group
-        = label_tag :plant_line_genetic_status, 'Genetic status'
-        = select_tag :plant_line_genetic_status, options_for_select(PlantLine.genetic_statuses, @content.plant_line_genetic_status), class: 'genetic-status form-control', data: { placeholder: "Search and select existing or enter new status" }
+        = label_tag :genetic_status, 'Genetic status'
+        = select_tag :genetic_status, options_for_select(PlantLine.genetic_statuses), class: 'genetic-status form-control', data: { placeholder: "Search and select existing or enter new status" }
         %p.help-block Optional
 
       .action-buttons
-        %button.add-plant-line-for-list{type: 'button'} Add
+        %button.cancel-new-plant-line-for-list{type: 'button'} Cancel
+        %button.add-new-plant-line-for-list{type: 'button'} Confirm
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
+
+  - @content.new_plant_lines.each do |plant_line|
+    %div{id: "new-plant-line-#{plant_line.plant_line_name.split.join('-').downcase}"}
+      = hidden_field_tag "submission[content][new_plant_lines][][plant_line_name]", plant_line.plant_line_name
+      = hidden_field_tag "submission[content][new_plant_lines][][taxonomy_term]", plant_line.taxonomy_term
+      = hidden_field_tag "submission[content][new_plant_lines][][common_name]", plant_line.common_name
+      = hidden_field_tag "submission[content][new_plant_lines][][previous_line_name]", plant_line.previous_line_name
+      = hidden_field_tag "submission[content][new_plant_lines][][comments]", plant_line.comments
+      = hidden_field_tag "submission[content][new_plant_lines][][genetic_status]", plant_line.genetic_status
+

@@ -62,7 +62,7 @@ class SubmissionsController < ApplicationController
     klass_name = "Submissions::#{step.to_s.classify}ContentForm"
     klass = klass_name.constantize
     step_content_params ||= submission_content_params.permit(klass.permitted_properties)
-    klass.new(OpenStruct.new(step_content_params || {}))
+    klass.new(Hashie::Mash.new(step_content_params || {}))
   end
 
   def submission_params

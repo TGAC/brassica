@@ -8,8 +8,4 @@ module ModelHelper
     results = results.where('plant_line_name ILIKE ?', "%#{name}%")
     results.pluck(:plant_line_name)
   end
-
-  def taxonomy_terms
-    TaxonomyTerm.pluck(:name)
-  end
 end
