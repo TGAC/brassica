@@ -30,7 +30,8 @@ namespace :curate do
     simple_query(
       "select table_name
        from information_schema.columns
-       where column_name = '#{column}'"
+       where column_name = '#{column}'
+       and data_type = 'text'"
     ) - %w(foreign_data_wrappers column_domain_usage)
   end
 
