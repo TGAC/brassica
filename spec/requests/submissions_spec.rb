@@ -56,6 +56,7 @@ RSpec.describe "Submission management", type: :request do
 
       context "if last step" do
         before { 3.times { submission.step_forward } }
+        before { allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call) }
 
         it "finalizes submission and redirects to show" do
           put "/submissions/#{submission.id}", submission: { content: { comments: "Lorem ipsum" } }

@@ -45,6 +45,9 @@ class PlantLine < ActiveRecord::Base
       .pluck(*columns)
   end
 
+  def self.genetic_statuses
+    order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
+  end
 
   private
 

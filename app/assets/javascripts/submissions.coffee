@@ -16,50 +16,76 @@ plantLineSelectOptions = ->
   templateResult: formatPlantLine
   templateSelection: formatPlantLine
 
+plantLineListSelectOptions = ->
+  $.extend({}, plantLineSelectOptions(), multiple: true)
+
+plantLineGeneticStatusSelectOptions = ->
+  multiple: true
+  tags: true
+  maximumSelectionLength: 1
+
 defaultSelectOptions = ->
   allowClear: true
 
-buttonTargets =
-  'add-plant-line': '.new-plant-line'
-  'select-existing-plant-line': '.existing-plant-line'
-  'select-existing-taxonomy-term': '.existing-taxonomy-term'
+appendToSelectedPlantLineLists = (data) ->
+  $select = $('.plant-line-list')
+  selectedValues = $select.val() || []
 
-buttonTargetSelectOptions =
-  'add-plant-line': plantLineSelectOptions
-  'select-existing-plant-line': plantLineSelectOptions
-  'select-existing-taxonomy-term': defaultSelectOptions
+  $option = $('<option></option>').attr(value: data.plant_line_name).text(data.plant_line_name)
+  $select.append($option)
 
-markActiveButton = (button) ->
-  $(button).parent().find('button').removeClass('active')
-  $(button).addClass('active')
+  selectedValues.push(data.plant_line_name)
+  $select.val(selectedValues)
+  $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
-activateTargetFields = (button) ->
-  target = buttonTargets[button.id]
-  initialized = !$(target).hasClass('hidden')
+  # add all PL attributes to DOM so it can be sent with form
+  $form = $('.edit_submission')
+  $container = $('<div></div').attr(id: newPlantLineForListContainerId(data.plant_line_name))
+  $container.appendTo($form)
 
-  $('.new-plant-line, .existing-plant-line, .existing-taxonomy-term').not(target).hide()
-  $(target).removeClass('hidden').show()
+  $.each(data, (attr, val) ->
+    $input = $("<input type='hidden' name='submission[content][new_plant_lines][][" + attr + "]' />")
+    $input.val(val)
+    $input.appendTo($container)
+  )
 
-  unless initialized
-    $(target).find('select').select2(buttonTargetSelectOptions[button.id]())
-
-switchTarget = (button) ->
-  markActiveButton(button)
-  activateTargetFields(button)
+newPlantLineForListContainerId = (plant_line_name) ->
+  'new-plant-line-' + plant_line_name.split(/\s+/).join('-').toLowerCase()
 
 $ ->
   $('.edit_submission .female-parent-line').select2(plantLineSelectOptions())
   $('.edit_submission .male-parent-line').select2(plantLineSelectOptions())
   $('.edit_submission .population-type').select2(defaultSelectOptions())
+  $('.edit_submission .plant-line-list').select2(plantLineListSelectOptions())
 
-  $.each buttonTargets, (buttonId, target) ->
-    $button = $('#' + buttonId)
+  $('.edit_submission .plant-line-list').on 'select2:unselect', (event) ->
+    plant_line_name = event.params.data.id
+    $("##{newPlantLineForListContainerId(plant_line_name)}").remove()
 
-    $button.on 'click', (event) ->
-      event.preventDefault()
-      switchTarget(event.target)
+  $('button.new-plant-line-for-list').on 'click', (event) ->
+    $(event.target).hide()
+    $('div.new-plant-line-for-list').removeClass('hidden').show()
 
-    if $(buttonTargets[buttonId]).hasClass('selected')
-      markActiveButton($button[0])
-      activateTargetFields($button[0])
+    $('.edit_submission .previous-line-name').select2(plantLineSelectOptions())
+    $('.edit_submission .genetic-status').select2(plantLineGeneticStatusSelectOptions())
+
+  $('.add-new-plant-line-for-list').on 'click', (event) ->
+    $form = $('.new-plant-line-for-list')
+
+    [data, errors] = Errors.validate($form)
+
+    if errors.length > 0
+      Errors.hideAll()
+      Errors.showAll(errors)
+    else
+      Errors.hideAll()
+
+      appendToSelectedPlantLineLists(data)
+
+      $('div.new-plant-line-for-list').hide()
+      $('button.new-plant-line-for-list').show()
+
+  $('.cancel-new-plant-line-for-list').on 'click', (event) ->
+    $('div.new-plant-line-for-list').hide()
+    $('button.new-plant-line-for-list').show()
 

@@ -26,9 +26,23 @@
         display: inline-block
 
 .edit_submission
-  #add-plant-line, #select-existing-plant-line, #select-existing-taxonomy-term
-    @extend .btn, .btn-default
+  margin-bottom: 2em
 
   .action-buttons
     margin-top: 4em
 
+  button.new-plant-line-for-list
+    @extend .btn, .btn-default
+
+  div.new-plant-line-for-list
+    @extend .panel, .panel-default
+    padding: 2em
+
+    h5
+      margin: 0 0 1.5em 0
+
+    button.add-new-plant-line-for-list
+      @extend .btn, .btn-primary
+
+    button.cancel-new-plant-line-for-list
+      @extend .btn, .btn-default
