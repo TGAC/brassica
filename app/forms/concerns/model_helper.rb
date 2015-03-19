@@ -1,6 +1,6 @@
 module ModelHelper
   def population_types
-    PopulationTypeLookup.order(:population_type).pluck(:population_type)
+    PopulationTypeLookup.population_types
   end
 
   def plant_lines(name = nil)

@@ -19,7 +19,6 @@ module Submissions
 
       validates :plant_line_name, presence: true
       validates :taxonomy_term, inclusion: { in: TaxonomyTerm.names }
-
     end
 
     # Do not allow :new_plant_lines to include existing :plant_line_name

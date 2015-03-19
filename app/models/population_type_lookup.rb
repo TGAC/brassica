@@ -4,4 +4,7 @@ class PopulationTypeLookup < ActiveRecord::Base
 
   has_many :plant_populations, foreign_key: 'population_type'
 
+  def self.population_types
+    order(:population_type).pluck(:population_type)
+  end
 end
