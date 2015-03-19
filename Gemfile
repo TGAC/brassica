@@ -25,6 +25,7 @@ gem 'nokogiri'
 
 gem 'reform', '~> 1.2.6'
 gem 'obo'
+gem 'hashie'
 
 gem 'rails_12factor', group: :production
 

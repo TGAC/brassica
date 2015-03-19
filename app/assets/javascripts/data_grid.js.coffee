@@ -5,6 +5,7 @@ $ ->
     pageLength: 25
     processing: true
     stateSave: true
+    dom: "<'row'<'col-sm-4'l><'col-sm-4'T><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
     drawCallback: (settings) ->
       # This removes the pagination control when only 1 page
       # and the page length picker when less data than the minimum value
@@ -22,6 +23,19 @@ $ ->
     # NOTE: use server side processing for large data (too heavy for clients)
     # serverSide: true
 
+  $.extend $.fn.dataTable.TableTools.defaults,
+    aButtons:
+      [
+        sExtends: 'csv'
+        sButtonText: 'Export to CSV'
+        sFileName: '*.csv'
+        sToolTip: 'Generates a CSV file with the content of the table below.'
+        oSelectorOpts:
+          filter: 'applied'
+      ]
+    sSwfPath: '/swf/copy_csv_xls.swf'
+
+
   $('.data-table').each (i)->
     $(this).DataTable window.configs[this.id]
 
@@ -29,7 +43,6 @@ $ ->
 # Specific configurations for particular DataTables, including callbacks
 window.configs =
   'plant-lines':
-    paging: false
     columnDefs:
       [
         targets: 1
@@ -40,10 +53,17 @@ window.configs =
   'plant-populations':
     columnDefs:
       [
-        targets: [2, 3]
+        targets: [3, 4]
         render: (data, type, full, meta) ->
           if data
-            '<a href="plant_lines?plant_line_names[]=' + data + '">' + data + '</a>'
+            '<a href="plant_lines?query[plant_line_name][]=' + data + '">' + data + '</a>'
+          else
+            ''
+      ,
+        targets: [6]
+        render: (data, type, full, meta) ->
+          if data && data != '0'
+            '<a href="plant_lines?query[plant_populations.plant_population_id]=' + full[0] + '">' + data + '</a>'
           else
             ''
       ]

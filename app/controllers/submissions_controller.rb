@@ -43,7 +43,7 @@ class SubmissionsController < ApplicationController
 
     if @submission.last_step?
       @submission.finalize
-      redirect_to submission_path(@submission)
+      redirect_to submission_path(@submission), notice: "Plant population submitted, thank you!"
     else
       @submission.step_forward
       redirect_to edit_submission_path(@submission)
@@ -62,7 +62,7 @@ class SubmissionsController < ApplicationController
     klass_name = "Submissions::#{step.to_s.classify}ContentForm"
     klass = klass_name.constantize
     step_content_params ||= submission_content_params.permit(klass.permitted_properties)
-    klass.new(OpenStruct.new(step_content_params || {}))
+    klass.new(Hashie::Mash.new(step_content_params || {}))
   end
 
   def submission_params

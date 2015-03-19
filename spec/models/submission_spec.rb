@@ -55,9 +55,19 @@ RSpec.describe Submission do
   describe '#finalize' do
     let(:submission) { create(:submission, finalized: false) }
 
+    before do
+      allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
+    end
+
     it 'updated submission' do
       submission.update_attribute(:step, submission.steps.last)
       expect { submission.finalize }.to change { submission.finalized? }.from(false).to(true)
+    end
+
+    it 'calls finalizer' do
+      expect_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
+      submission.update_attribute(:step, submission.steps.last)
+      submission.finalize
     end
 
     it 'raises if not at last step' do

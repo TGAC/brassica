@@ -14,5 +14,6 @@
 #= require jquery_ujs
 #= require bootstrap-sprockets
 #= require jquery.dataTables
+#= require dataTables.tableTools
 #= require dataTables.bootstrap
 #= require_tree .

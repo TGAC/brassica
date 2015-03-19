@@ -7,7 +7,7 @@ class PlantPopulationSubmissionDecorator < Draper::Decorator
       l << " (#{species_name})" if species_name
       l << "." if population_name || species
       l << " #{population_type}." if population_type
-      l << " Parents: #{parent_line_names.join(" | ")}" if parent_line_names
+      l << " Parents: #{parent_line_names.join(" | ")}" if parent_line_names.present?
     end.strip
   end
 
@@ -17,10 +17,15 @@ class PlantPopulationSubmissionDecorator < Draper::Decorator
 
   def species_name
     return @species_name if defined?(@species_name)
+    return @species_name = nil if genus.blank? || %w(undefined none not_applicable).include?(genus)
+    @species_name = "#{genus} #{species}".strip
+  end
 
-    if species.present? && ! ['undefined', 'none', 'not_applicable'].include?(species)
-      @species_name = "B. #{species}"
-    end
+  def genus
+    return @genus if defined?(@genus)
+    @genus = plant_line.try(:genus)
+    @genus = "B." if @genus == "Brassica"
+    @genus
   end
 
   def species

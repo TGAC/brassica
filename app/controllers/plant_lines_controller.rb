@@ -14,6 +14,10 @@ class PlantLinesController < ApplicationController
   private
 
   def grid_data_params
-    params.permit(:search, :plant_line_names => [])
+    params.permit(:search,
+                  query: [
+                    'plant_populations.plant_population_id',
+                    plant_line_name: []
+                  ])
   end
 end
