@@ -30,13 +30,14 @@ class PlantLine < ActiveRecord::Base
       'data_owned_by',
       'organisation'
 
-    query = where(filter[:query]) if filter[:query].present?
+    safe_query = grid_data_params(filter[:query])
+    query = where(safe_query) if safe_query.present?
     query = where('plant_line_name ILIKE ?', "%#{filter[:search]}%") if filter[:search].present?
     query ||= none
 
-    filter[:query].each do |k,_|
+    safe_query.each do |k,_|
       query = query.joins(k.to_s.split('.')[0].to_sym) if k.to_s.include? '.'
-    end if filter[:query]
+    end if safe_query.present?
 
     query
       .joins(:taxonomy_term)
@@ -46,5 +47,14 @@ class PlantLine < ActiveRecord::Base
 
   def self.genetic_statuses
     order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?).reject { |s| ['none', 'not applicable', 'unspecified'].include?(s) }
+  end
+
+  private
+
+  def self.grid_data_params(raw_query)
+    parameters = ActionController::Parameters.new(raw_query)
+    parameters.permit('plant_populations.plant_population_id',
+                      plant_line_name: []
+    )
   end
 end
