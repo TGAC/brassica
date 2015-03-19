@@ -2,8 +2,7 @@ class LinkageGroup < ActiveRecord::Base
 
   has_and_belongs_to_many :linkage_maps,
                           join_table: 'map_linkage_group_lists',
-                          foreign_key: 'linkage_group_id',
-                          association_foreign_key: 'linkage_map_id'
+                          foreign_key: 'linkage_group_id'
 
   has_many :map_positions
 
