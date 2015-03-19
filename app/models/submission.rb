@@ -37,8 +37,11 @@ class Submission < ActiveRecord::Base
 
   def finalize
     raise CantFinalize unless last_step?
-    self.finalized = true
-    save!
+    transaction do
+      PlantPopulationFinalizer.new(self).call
+      self.finalized = true
+      save!
+    end
   end
 
   def steps
