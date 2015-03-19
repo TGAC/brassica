@@ -31,7 +31,7 @@ module Submissions
     end
 
     # Ensure all items in :plant_line_list either exist or have
-    # valid entries in :new_plant_lines:w
+    # valid entries in :new_plant_lines
     validate do
       plant_line_list.each do |name|
         unless plant_line_exists?(name) || new_plant_lines.map(&:plant_line_name).include?(name)

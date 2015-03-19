@@ -43,7 +43,7 @@ class SubmissionsController < ApplicationController
 
     if @submission.last_step?
       @submission.finalize
-      redirect_to submission_path(@submission)
+      redirect_to submission_path(@submission), notice: "Plant population submitted, thank you!"
     else
       @submission.step_forward
       redirect_to edit_submission_path(@submission)
