@@ -46,7 +46,7 @@ class PlantLine < ActiveRecord::Base
   end
 
   def self.genetic_statuses
-    order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?).reject { |s| ['none', 'not applicable', 'unspecified'].include?(s) }
+    order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
   end
 
   private
