@@ -10,6 +10,12 @@ class PlantPopulation < ActiveRecord::Base
 
   has_many :plant_population_lists, foreign_key: 'plant_population_id'
 
+  has_many :linkage_maps, foreign_key: 'mapping_population'
+
+  has_many :population_loci, foreign_key: 'plant_population'
+
+  has_many :processed_trait_datasets, foreign_key: 'population_id'
+
   has_and_belongs_to_many :plant_lines,
                           join_table: 'plant_population_lists',
                           foreign_key: 'plant_population_id',
