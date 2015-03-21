@@ -8,14 +8,14 @@ RSpec.describe PlantLine do
     expect{ pl.subtaxa }.to raise_error NoMethodError
   end
 
-  describe '#grid_data' do
+  describe '#filter' do
     it 'returns empty result when no plant lines found' do
-      expect(PlantLine.grid_data(plant_line_names: [1])).to be_empty
+      expect(PlantLine.filter(plant_line_names: [1])).to be_empty
     end
 
     it 'orders populations by common name' do
       plids = create_list(:plant_line, 3).map(&:plant_line_name)
-      gd = PlantLine.grid_data(query: { plant_line_name: plids })
+      gd = PlantLine.filter(query: { plant_line_name: plids })
       expect(gd.map(&:first)).to eq plids.sort
     end
 
@@ -30,7 +30,7 @@ RSpec.describe PlantLine do
                    data_owned_by: 'dob',
                    organisation: 'o')
 
-      gd = PlantLine.grid_data(
+      gd = PlantLine.filter(
         query: { plant_line_name: [pl.plant_line_name] }
       )
       expect(gd.count).to eq 1
@@ -40,15 +40,15 @@ RSpec.describe PlantLine do
     it 'will not get all when no param permitted' do
       # NOTE: means - strong params should prevent passing {} to where
       create(:plant_line)
-      expect(PlantLine.grid_data(query: { common_name: 'cn' })).to be_empty
-      expect(PlantLine.grid_data(query: {})).to be_empty
+      expect(PlantLine.filter(query: { common_name: 'cn' })).to be_empty
+      expect(PlantLine.filter(query: {})).to be_empty
     end
 
     it 'will only query by permitted params' do
       create(:plant_line, common_name: 'cn', plant_line_name: 'pln')
       create(:plant_line, common_name: 'cn', plant_line_name: 'nlp')
       create(:plant_line, common_name: 'nc', plant_line_name: 'pln')
-      gd = PlantLine.grid_data(
+      gd = PlantLine.filter(
         query: { common_name: 'cn', plant_line_name: ['pln'] }
       )
       expect(gd.count).to eq 2
@@ -64,7 +64,7 @@ RSpec.describe PlantLine do
       end
 
       it 'supports querying by associated objects' do
-        gd = PlantLine.grid_data(
+        gd = PlantLine.filter(
           query: {
             'plant_populations.plant_population_id' => @pp.plant_population_id
           }
@@ -75,7 +75,7 @@ RSpec.describe PlantLine do
       end
 
       it 'supports multi-criteria queries' do
-        gd = PlantLine.grid_data(
+        gd = PlantLine.filter(
           query: {
             'plant_populations.plant_population_id' => @pp.plant_population_id,
             plant_line_name: [@pls[1].plant_line_name]

@@ -26,8 +26,8 @@ class PlantPopulation < ActiveRecord::Base
     where.not(canonical_population_name: '')
   end
 
-  def self.grid_data
-    columns = [
+  def self.grouped(columns: nil, count: nil)
+    columns ||= [
       'plant_populations.plant_population_id',
       'plant_populations.species',
       :canonical_population_name,
@@ -36,11 +36,13 @@ class PlantPopulation < ActiveRecord::Base
       :population_type
     ]
 
-    select(columns + ['count(plant_lines.plant_line_name)']).
+    count = 'count(plant_lines.plant_line_name)'
+
+    select(columns + [count]).
       includes(:plant_lines).
       group(columns).
       drop_dummies.
       order(:plant_population_id).
-      pluck(*(columns + ['count(plant_lines.plant_line_name)']))
+      pluck(*(columns + [count]))
   end
 end
