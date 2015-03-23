@@ -16,4 +16,5 @@
 #= require jquery.dataTables
 #= require dataTables.tableTools
 #= require dataTables.bootstrap
+#= require jquery.scrollTo
 #= require_tree .
