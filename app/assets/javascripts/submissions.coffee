@@ -66,8 +66,10 @@ $ ->
 
     $('.edit_submission .previous-line-name').select2(plantLineSelectOptions())
     $('.edit_submission .genetic-status').select2(plantLineGeneticStatusSelectOptions())
-
     $('.edit_submission .genetic-status-wrapper').inputOrSelect()
+    $('.edit_submission .new-plant-line-for-list input[type=text]').on 'keydown', (event) ->
+      if event.keyCode == 13 # Enter key
+        event.preventDefault() # Prevent form submission
 
   $('.add-new-plant-line-for-list').on 'click', (event) ->
     $form = $('.new-plant-line-for-list')
