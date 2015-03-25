@@ -20,11 +20,11 @@ window.Errors =
     data = {}
     errors = []
 
-    attrs = $(form).find('[name]').not('[type=hidden]').map(-> this.name)
+    attrs = $(form).find('[name]:enabled').not('[type=hidden]').map(-> this.name)
     required = $(form).find('.required, [required]').map(-> this.name)
 
     $.each(attrs, (idx, attr) ->
-      val = $(form).find('#' + attr).val()
+      val = $(form).find("[name=#{attr}]:enabled").val()
       data[attr] = val
       if $.inArray(attr, required) != -1 && $.trim(val) == ''
         errors.push('#' + attr)
