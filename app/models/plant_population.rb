@@ -1,4 +1,6 @@
 class PlantPopulation < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   belongs_to :population_type_lookup, foreign_key: 'population_type'
 
@@ -20,6 +22,8 @@ class PlantPopulation < ActiveRecord::Base
                           join_table: 'plant_population_lists',
                           foreign_key: 'plant_population_id',
                           association_foreign_key: 'plant_line_name'
+
+  after_touch { __elasticsearch__.index_document }
 
   # Exlude the ['none', 'unspecified', 'not applicable'] pseudo-record trio
   scope :drop_dummies, -> do
@@ -45,4 +49,22 @@ class PlantPopulation < ActiveRecord::Base
       order(:plant_population_id).
       pluck(*(columns + [count]))
   end
+
+  def as_indexed_json(options = {})
+    plant_line_attrs = [
+      :plant_line_name, :common_name, :genetic_status, :previous_line_name
+    ]
+
+    as_json(
+      only: [
+        :id, :plant_population_name, :canonical_population_name, :description,
+        :population_type
+      ],
+      include: {
+        female_parent_line: { only: plant_line_attrs },
+        male_parent_line: { only: plant_line_attrs },
+      }
+    )
+  end
+
 end
