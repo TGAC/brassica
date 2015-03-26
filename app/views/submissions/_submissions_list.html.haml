@@ -1,0 +1,13 @@
+%ul.submissions
+  - submissions.each do |submission|
+    %li
+      = submission_link(submission)
+
+      .actions
+        - unless submission.finalized?
+          .updated-at= "Last modification #{l submission.updated_at, format: :short}"
+          = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default btn-xs'
+          = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning btn-xs'
+
+        - else
+          .finalized-at= "Submitted on #{l submission.updated_at, format: :short}"

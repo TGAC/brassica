@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
 
   root 'application#index'
+  get 'about', to: 'application#about'
 
   resources :submissions
   resources :plant_populations, only: [:index]
