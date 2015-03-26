@@ -3,7 +3,19 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  def index; end
+  def index
+    # TODO FIXME take only finished, order by submission, limit to 5-7
+    @submissions = Submission.all
+
+    @statistics = [
+      PlantPopulation.count,
+      TraitScore.count,
+      TaxonomyTerm.count,
+      PlantLine.count
+    ]
+  end
+
+  def about; end
 
   private
 
