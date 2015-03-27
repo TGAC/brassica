@@ -20,11 +20,14 @@ RSpec.describe PlantPopulationSubmissionDecorator do
 
     it 'returns population name when no species' do
       sd.object.content.update(:step01, name: 'pn')
-      expect(sd.label).to eq 'pn'
+      expect(sd.label).to eq '<span class="title">pn</span>'
     end
 
     it 'returns empty label when no name or species given' do
-      expect(sd.label).to eq I18n.t('submission.empty_label')
+      expect(sd.label).
+        to eq '<span class="title">' +
+              I18n.t('submission.empty_label') +
+              '</span>'
     end
   end
 
@@ -40,11 +43,15 @@ RSpec.describe PlantPopulationSubmissionDecorator do
 
       sd.object.content.update(:step03, male_parent_line: 'mpl')
       expect(sd.further_details).
-        to eq '<span class="details">pt</span><span class="details">Parents: mpl</span>'
+        to eq '<span class="details">pt</span>' +
+              '<span class="text">Parents: </span>' +
+              '<span class="details">mpl</span>'
 
       sd.object.content.update(:step03, female_parent_line: 'fpl', male_parent_line: 'mpl')
       expect(sd.further_details).
-        to eq '<span class="details">pt</span><span class="details">Parents: fpl | mpl</span>'
+        to eq '<span class="details">pt</span>' +
+              '<span class="text">Parents: </span>' +
+              '<span class="details">fpl | mpl</span>'
     end
   end
 end

@@ -1,13 +1,39 @@
+- mode ||= :public
 %ul.submissions
   - submissions.each do |submission|
     %li
-      = submission_link(submission)
 
-      .actions
-        - unless submission.finalized?
-          .updated-at= "Last modification #{l submission.updated_at, format: :short}"
-          = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default btn-xs'
-          = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning btn-xs'
+      .main-info
+        %div
+          = submission_type(submission)
+          - if mode == :public
+            = submission_public_link(submission)
+          - else
+            = submission_private_link(submission)
+        %div
+          = submission_details(submission)
 
-        - else
-          .finalized-at= "Submitted on #{l submission.updated_at, format: :short}"
+      - unless submission.finalized?
+        .updated-at
+          .text Last modification
+          .details
+            = l submission.updated_at, format: :long
+        .actions
+          = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default'
+          = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning'
+
+      - else
+        .finalized-at
+          .text Submitted on
+          .details
+            = l submission.updated_at, format: :long
+
+        .actions
+          - if mode == :public
+            = link_to 'Details',
+              submission_details_path(submission),
+              class: 'btn btn-default'
+          - else
+            .text-success
+              %i.fa.fa-check-circle
+              Submission finished

@@ -49,7 +49,7 @@
 - if @submissions.present?
   .row
     %h3 Latest submissions
-    = render partial: 'submissions/submissions_list', locals: { submissions: @submissions }
+    = render partial: 'submissions/submissions_list', locals: { submissions: @submissions, mode: :public }
 
 
 .row

@@ -6,7 +6,10 @@ RSpec.describe SubmissionDecorator do
       Submission.submission_types.keys.each do |submission_type|
         submission = create(:submission, submission_type: submission_type)
         sd = SubmissionDecorator.decorate(submission)
-        expect(sd.submission_type).not_to include('translation missing')
+        expect(sd.submission_type).
+          to eq '<span class="text">' +
+                I18n.t("submission.submission_type.#{submission_type}") +
+                ':</span>'
       end
     end
   end

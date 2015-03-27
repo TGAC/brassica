@@ -2,18 +2,23 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   delegate_all
 
   def label
-    ''.tap do |l|
-      l << population_name if population_name
-      l << "(#{species_name})" if species_name
-      l << I18n.t('submission.empty_label') unless population_name || species_name
-    end.strip
+    h.content_tag(
+      :span,
+      ''.tap do |l|
+        l << population_name if population_name
+        l << "(#{species_name})" if species_name
+        l << I18n.t('submission.empty_label') unless population_name || species_name
+      end.strip,
+      class: 'title'
+    )
   end
 
   def further_details
     ''.tap do |l|
       l << h.content_tag(:span, population_type, class: 'details') if population_type
       if parent_line_names.present?
-        l << h.content_tag(:span, "Parents: #{parent_line_names.join(" | ")}", class: 'details')
+        l << h.content_tag(:span, 'Parents: ', class: 'text')
+        l << h.content_tag(:span, parent_line_names.join(" | "), class: 'details')
       end
     end.strip
   end
