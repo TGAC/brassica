@@ -2,9 +2,12 @@ class Submission < ActiveRecord::Base
 
   STEPS = %w(step01 step02 step03 step04)
 
+  enum submission_type: %i(population traits qtl linkage_map)
+
   belongs_to :user
 
   validates :user, presence: true
+  validates :submission_type, presence: true
   validates :step, inclusion: { in: STEPS }
 
   before_validation :set_defaults, on: :create
