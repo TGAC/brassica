@@ -75,4 +75,20 @@ RSpec.describe Submission do
     end
   end
 
+  describe '#finalized' do
+    it 'returns only finalized submissions' do
+      create_list(:submission, 2, finalized: true)
+      create_list(:submission, 1, finalized: false)
+      expect(Submission.count).to eq 3
+      expect(Submission.finalized.count).to eq 2
+    end
+  end
+
+  describe '#recent_first' do
+    it 'orders submissions by update time' do
+      ids = create_list(:submission, 7).map(&:id) +
+            create_list(:submission, 13).map(&:id)
+      expect(Submission.recent_first.map(&:id)).to eq ids.reverse
+    end
+  end
 end

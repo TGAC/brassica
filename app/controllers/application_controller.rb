@@ -4,8 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def index
-    # TODO FIXME take only finished, order by submission, limit to 5-7
-    @submissions = Submission.all
+    @submissions = Submission.finalized.recent_first.take(5)
 
     @statistics = [
       PlantPopulation.count,
