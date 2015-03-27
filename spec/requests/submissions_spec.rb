@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Submission management", type: :request do
+RSpec.describe "Submission management" do
 
   context "with no user signed in" do
     describe "GET /submissions" do

@@ -9,6 +9,9 @@ class Submission < ActiveRecord::Base
 
   before_validation :set_defaults, on: :create
 
+  scope :finalized, -> { where(finalized: true) }
+  scope :recent_first, -> { order(updated_at: :desc) }
+
   def content
     Content.new(self)
   end
