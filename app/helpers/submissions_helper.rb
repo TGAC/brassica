@@ -1,6 +1,6 @@
 module SubmissionsHelper
   def create_submission_button
-    button_to "Submit new population", submissions_path, class: 'btn btn-primary', method: 'post'
+    link_to "Submit new data", new_submission_path, class: 'btn btn-primary'
   end
 
   def submission_link(submission)

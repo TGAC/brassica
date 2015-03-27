@@ -12,3 +12,10 @@ en:
           billion: B
           trillion: T
           quadrillion: Q
+
+  menu:
+    home: Home
+    browse: Browse database
+    submit: Submit data
+    api: API documentation
+    about: About us

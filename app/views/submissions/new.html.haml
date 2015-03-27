@@ -1,9 +1,4 @@
--# TEMP, NOTE: remove after navigation mode is designed
-%ol.breadcrumb
-  %li= link_to "Home", root_path
-  %li.active Submissions
-
-%h2 Submit new population
+.lead Submit new population
 
 %p
   The following process allows you to submit detailed description of your
@@ -46,4 +41,5 @@
         provenance.
 
 .text-center
-  = create_submission_button
+  = button_to "Submit new population", submissions_path, class: 'btn btn-primary', method: 'post'
+
