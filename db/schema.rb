@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150327142010) do
+ActiveRecord::Schema.define(version: 20150327172026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -384,7 +384,6 @@ ActiveRecord::Schema.define(version: 20150327142010) do
   create_table "probes", id: false, force: :cascade do |t|
     t.text "probe_name"
     t.text "species",                 default: "unspecified", null: false
-    t.text "pcr_yes_or_no",           default: "N",           null: false
     t.text "clone_name"
     t.date "date_described"
     t.text "sequence_id"
