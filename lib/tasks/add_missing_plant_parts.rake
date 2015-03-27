@@ -10,7 +10,6 @@ namespace :curate do
                        entered_by_whom: 'pierre.carion@bbsrc.ac.uk',
                        date_entered: '2015-03-21',
                        data_provenance: 'n/a',
-                       data_status: 'public',
                        confirmed_by_whom: 'n/a').save
 
     pp = PlantPart.new(plant_part: 'average of blocks',
@@ -20,7 +19,6 @@ namespace :curate do
                        entered_by_whom: 'pierre.carion@bbsrc.ac.uk',
                        date_entered: '2015-03-21',
                        data_provenance: 'n/a',
-                       data_status: 'public',
                        confirmed_by_whom: 'n/a').save
 
     pp = PlantPart.new(plant_part: 'average of trays',
@@ -30,7 +28,6 @@ namespace :curate do
                        entered_by_whom: 'pierre.carion@bbsrc.ac.uk',
                        date_entered: '2015-03-21',
                        data_provenance: 'n/a',
-                       data_status: 'public',
                        confirmed_by_whom: 'n/a').save
 
   end
