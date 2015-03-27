@@ -20,7 +20,7 @@ class SubmissionsController < ApplicationController
   end
 
   def create
-    submission = current_user.submissions.create!
+    submission = current_user.submissions.create!(submission_create_params)
     redirect_to edit_submission_path(submission)
   end
 
@@ -67,6 +67,11 @@ class SubmissionsController < ApplicationController
 
   def submission_params
     params.require(:submission)
+  end
+
+  # Allow setting submission_type only on create
+  def submission_create_params
+    params.require(:submission).permit(:submission_type)
   end
 
   def submission_content_params
