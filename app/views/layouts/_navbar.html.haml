@@ -1,4 +1,4 @@
-- unless active_nav_label == 'Home'
+- unless active_nav_label == :home
   %nav.navbar.navbar-default
     .container-fluid
       .navbar-header
@@ -15,4 +15,4 @@
               = active_link(label)
             - else
               %li{ class: "#{'disabled' if path == '#'}" }
-                = link_to label, path
+                = link_to t("menu.#{label}"), path

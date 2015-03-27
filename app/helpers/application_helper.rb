@@ -4,34 +4,34 @@ module ApplicationHelper
       when 'application'
         case action_name
           when 'index'
-            'Home'
+            :home
           when 'about'
-            'About us'
+            :about
           else
-            'Home'
+            :home
         end
       when 'plant_populations', 'plant_lines'
-        'Browse database'
+        :browse
       when 'submissions'
-        'Submit data'
+        :submit
       else
-        'Home'
+        :home
     end
   end
 
   def active_link(label)
     content_tag :li, class: 'active' do
-      link_to label, '#'
+      link_to t("menu.#{label}"), '#'
     end
   end
 
   def navbar_menu
     [
-      ['Home', root_path],
-      ['Browse database', plant_populations_path],
-      ['Submit data', new_submission_path],
-      ['API documentation', '#'],
-      ['About us', about_path]
+      [:home, root_path],
+      [:browse, plant_populations_path],
+      [:submit, new_submission_path],
+      [:api, '#'],
+      [:about, about_path]
     ]
   end
 end
