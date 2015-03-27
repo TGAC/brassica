@@ -41,5 +41,5 @@
         provenance.
 
 .text-center
-  = button_to "Submit new population", submissions_path, class: 'btn btn-primary', method: 'post'
-
+    = button_to "Submit new population", submissions_path(submission: { submission_type: :population }),
+      class: 'btn btn-primary', method: 'post'
