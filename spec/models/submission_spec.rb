@@ -6,14 +6,12 @@ RSpec.describe Submission do
   it { should validate_presence_of(:submission_type) }
 
   describe '#submission_type' do
-    let(:submission) { create(:submission) }
+    let(:submission) { build(:submission) }
 
     it 'allows only certain submission type values' do
       %w(population traits qtl linkage_map).each do |t|
         submission.submission_type = t
-        expect(submission.save).to be_truthy
-        submission.reload
-        expect(submission.submission_type).to eq t
+        expect(submission.valid?).to be_truthy
         expect(submission.send(t+'?')).to be_truthy
       end
       expect { submission.submission_type = 'wrong_submission_type' }.
@@ -22,11 +20,12 @@ RSpec.describe Submission do
 
     it 'honors symbols as type values' do
       submission.submission_type = :population
-      expect(submission.save).to be_truthy
+      expect(submission.valid?).to be_truthy
     end
 
     it 'provides handy scopes to query certain types' do
-      submission.submission_type = :population
+      # submission.submission_type = :population
+      create(:submission)
       create(:submission, submission_type: :qtl)
       create(:submission, submission_type: :qtl)
       expect(Submission.qtl.count).to eq 2

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :submission do
-    submission_type 0
+    submission_type :population
     user
   end
 end
