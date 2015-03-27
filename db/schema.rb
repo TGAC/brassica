@@ -481,14 +481,17 @@ ActiveRecord::Schema.define(version: 20150225145528) do
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "user_id",                    null: false
-    t.string   "step",                       null: false
-    t.json     "content",    default: {},    null: false
-    t.boolean  "finalized",  default: false, null: false
+    t.integer  "user_id",                         null: false
+    t.string   "step",                            null: false
+    t.json     "content",         default: {},    null: false
+    t.boolean  "finalized",       default: false, null: false
+    t.integer  "submission_type",                 null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
+  add_index "submissions", ["finalized"], name: "index_submissions_on_finalized", using: :btree
+  add_index "submissions", ["submission_type"], name: "index_submissions_on_submission_type", using: :btree
   add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
   create_table "taxonomy_terms", force: :cascade do |t|
