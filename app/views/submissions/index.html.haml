@@ -1,14 +1,12 @@
--# TEMP, NOTE: remove after navigation mode is designed
-%ol.breadcrumb
-  %li= link_to "Home", root_path
-  %li.active Submissions
+.lead My submissions
 
 - if @submissions.present?
-  = create_submission_button
 
   = render partial: 'submissions_list', locals: { submissions: @submissions }
 
+  = create_submission_button
+
 - else
-  .jumbotron
-    %p You do not have any submissions yet
+  .alert.alert-info
+    %p You do not have any submissions yet.
     = create_submission_button

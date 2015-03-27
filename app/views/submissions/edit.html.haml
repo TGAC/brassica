@@ -1,9 +1,3 @@
-%ol.breadcrumb
-  %li= link_to "Home", root_path
-  %li= link_to "Submissions", submissions_path
-  %li.active Edit
-
-%h2 Plan population submission
+.lead Plant population submission
 
 = render partial: "submissions/steps/#{@submission.step}", locals: { submission: @submission }
-
