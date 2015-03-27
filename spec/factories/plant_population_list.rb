@@ -4,6 +4,5 @@ FactoryGirl.define do
     comments { Faker::Lorem.sentence }
     entered_by_whom { Faker::Internet.email }
     data_provenance { Faker::Lorem.sentence }
-    data_status 'public'
   end
 end

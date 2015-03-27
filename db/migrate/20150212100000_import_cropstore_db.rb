@@ -384,19 +384,20 @@ class ImportCropstoreDb < ActiveRecord::Migration
         t.text "data_status",               default: "unspecified", null: false
       end
 
-# Could not dump table "probes" because of following StandardError
-#   Unknown type 'probes_pcr_yes_or_no' for column 'pcr_yes_or_no'
-# NOTE: probes empty columns to remove:
-# probes.data_owned_by
-# probes.forward_position
-# probes.gene_description
-# probes.pcr_primer_name_a
-# probes.pcr_primer_name_b
-# probes.preparation_description
-# probes.prepared_by_whom
-# probes.probe_length
-# probes.reverse_position
-# probes.template_source
+      create_table "probes", id: false, force: :cascade do |t|
+        t.text "probe_name",                primary: true
+        t.text "species",                   default: "unspecified", null: false
+        t.text "pcr_yes_or_no",             default: "N", null: false
+        t.text "clone_name"
+        t.date "date_described"
+        t.text "sequence_id"
+        t.text "sequence_source_acronym",   default: "unspecified", null: false
+        t.text "comments"
+        t.text "entered_by_whom",           default: "unspecified", null: false
+        t.date "date_entered"
+        t.text "data_provenance"
+        t.text "data_status",               default: "unspecified", null: false
+      end
 
       create_table "processed_trait_datasets", primary_key: "processed_trait_dataset_id", force: :cascade do |t|
         t.text "trial_id",                      default: "unspecified", null: false

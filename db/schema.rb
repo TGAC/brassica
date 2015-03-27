@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150225145528) do
+ActiveRecord::Schema.define(version: 20150327142010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                             null: false
     t.text "data_owned_by",       default: "unspecified", null: false
-    t.text "data_status",         default: "unspecified", null: false
     t.text "confirmed_by_whom"
   end
 
@@ -56,7 +55,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                  null: false
     t.text "data_owned_by",            default: "unspecified", null: false
-    t.text "data_status",              default: "unspecified", null: false
   end
 
   create_table "linkage_groups", primary_key: "linkage_group_id", force: :cascade do |t|
@@ -89,7 +87,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date   "date_entered"
     t.text   "data_provenance",                                      null: false
     t.text   "data_owned_by",                default: "unspecified", null: false
-    t.text   "data_status",                  default: "unspecified", null: false
     t.text   "confirmed_by_whom"
   end
 
@@ -129,7 +126,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                           null: false
     t.text "data_owned_by",     default: "unspecified", null: false
-    t.text "data_status",       default: "unspecified", null: false
     t.text "confirmed_by_whom"
   end
 
@@ -149,7 +145,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance"
     t.text "data_owned_by",         default: "unspecified", null: false
-    t.text "data_status",           default: "unspecified", null: false
     t.text "confirmed_by_whom"
   end
 
@@ -163,7 +158,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance"
     t.text "data_owned_by"
-    t.text "data_status",             default: "unspecified", null: false
   end
 
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "idx_143632_canonical_marker_name", using: :btree
@@ -199,7 +193,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                    null: false
     t.text "data_owned_by",              default: "unspecified", null: false
-    t.text "data_status",                default: "unspecified", null: false
     t.text "confirmed_by_whom"
   end
 
@@ -218,7 +211,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date    "date_entered"
     t.text    "data_provenance"
     t.text    "data_owned_by"
-    t.text    "data_status",        default: "unspecified", null: false
     t.text    "confirmed_by_whom"
     t.integer "taxonomy_term_id"
   end
@@ -234,7 +226,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text "entered_by_whom",   default: "unspecified", null: false
     t.date "date_entered"
     t.text "data_provenance",                           null: false
-    t.text "data_status",       default: "unspecified", null: false
     t.text "confirmed_by_whom", default: "unspecified", null: false
   end
 
@@ -246,7 +237,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text    "entered_by_whom",     default: "unspecified", null: false
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_status",         default: "unspecified", null: false
     t.text    "confirmed_by_whom"
   end
 
@@ -269,7 +259,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_owned_by"
     t.text "data_provenance"
-    t.text "data_status",               default: "unspecified", null: false
     t.text "confirmed_by_whom"
     t.text "plant_population_name",     default: "unspecified", null: false
     t.text "assigned_population_name",  default: "unspecified", null: false
@@ -290,7 +279,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                  null: false
     t.text "data_owned_by",            default: "unspecified", null: false
-    t.text "data_status",              default: "unspecified", null: false
     t.text "confirmed_by_whom"
   end
 
@@ -321,7 +309,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date   "date_entered"
     t.text   "data_provenance",                                            null: false
     t.text   "data_owned_by",                      default: "unspecified", null: false
-    t.text   "data_status",                        default: "unspecified", null: false
     t.text   "confirmed_by_whom"
   end
 
@@ -335,7 +322,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text "entered_by_whom",    default: "unspecified", null: false
     t.date "date_entered"
     t.text "data_provenance",                            null: false
-    t.text "data_status",        default: "unspecified", null: false
   end
 
   add_index "plant_varieties", ["plant_variety_name"], name: "idx_143909_plant_variety_name", using: :btree
@@ -354,7 +340,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text "comments",                                      null: false
     t.text "entered_by_whom",       default: "unspecified", null: false
     t.date "date_entered"
-    t.text "data_status",           default: "unspecified", null: false
     t.text "data_provenance"
   end
 
@@ -377,7 +362,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                           null: false
     t.text "data_owned_by",     default: "unspecified", null: false
-    t.text "data_status",       default: "unspecified", null: false
   end
 
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
@@ -395,7 +379,20 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                 null: false
     t.text "data_owned_by"
-    t.text "data_status",             default: "unspecified", null: false
+  end
+
+  create_table "probes", id: false, force: :cascade do |t|
+    t.text "probe_name"
+    t.text "species",                 default: "unspecified", null: false
+    t.text "pcr_yes_or_no",           default: "N",           null: false
+    t.text "clone_name"
+    t.date "date_described"
+    t.text "sequence_id"
+    t.text "sequence_source_acronym", default: "unspecified", null: false
+    t.text "comments"
+    t.text "entered_by_whom",         default: "unspecified", null: false
+    t.date "date_entered"
+    t.text "data_provenance"
   end
 
   create_table "processed_trait_datasets", primary_key: "processed_trait_dataset_id", force: :cascade do |t|
@@ -409,7 +406,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                    null: false
     t.text "data_owned_by",              default: "unspecified", null: false
-    t.text "data_status",                default: "unspecified", null: false
   end
 
   add_index "processed_trait_datasets", ["trial_id", "trait_descriptor_id", "population_id"], name: "idx_144089_trial_id", using: :btree
@@ -435,7 +431,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                    null: false
     t.text "data_owned_by",              default: "unspecified", null: false
-    t.text "data_status",                default: "unspecified", null: false
   end
 
   add_index "qtl", ["linkage_group_id"], name: "idx_144113_linkage_group", using: :btree
@@ -457,7 +452,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                        null: false
     t.text "data_owned_by",                  default: "unspecified", null: false
-    t.text "data_status",                    default: "unspecified", null: false
   end
 
   add_index "qtl_jobs", ["linkage_map_id"], name: "idx_144140_linkage_map_id", using: :btree
@@ -477,7 +471,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                          null: false
     t.text "data_owned_by",    default: "unspecified", null: false
-    t.text "data_status",      default: "unspecified", null: false
   end
 
   create_table "submissions", force: :cascade do |t|
@@ -530,7 +523,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                  null: false
     t.text "data_owned_by",            default: "unspecified", null: false
-    t.text "data_status",              default: "unspecified", null: false
     t.text "confirmed_by_whom"
   end
 
@@ -545,7 +537,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.text "entered_by_whom", default: "unspecified", null: false
     t.date "date_entered"
     t.text "data_provenance",                         null: false
-    t.text "data_status",     default: "unspecified", null: false
   end
 
   create_table "trait_scores", primary_key: "scoring_unit_id", force: :cascade do |t|
@@ -560,7 +551,6 @@ ActiveRecord::Schema.define(version: 20150225145528) do
     t.date "date_entered"
     t.text "data_provenance",                                 null: false
     t.text "data_owned_by",           default: "unspecified", null: false
-    t.text "data_status",             default: "unspecified", null: false
     t.text "confirmed_by_whom"
   end
 
