@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150327172026) do
+ActiveRecord::Schema.define(version: 20150328165854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -243,26 +243,29 @@ ActiveRecord::Schema.define(version: 20150327172026) do
   add_index "plant_population_lists", ["plant_line_name"], name: "idx_143830_plant_line", using: :btree
 
   create_table "plant_populations", primary_key: "plant_population_id", force: :cascade do |t|
-    t.text "population_type"
-    t.text "genus",                     default: "unspecified", null: false
-    t.text "species",                   default: "unspecified", null: false
-    t.text "female_parent_line"
-    t.text "male_parent_line"
-    t.text "canonical_population_name", default: "unspecified"
-    t.text "description"
-    t.date "date_established"
-    t.text "established_by_whom"
-    t.text "establishing_organisation"
-    t.text "population_owned_by"
-    t.text "comments"
-    t.text "entered_by_whom",           default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_owned_by"
-    t.text "data_provenance"
-    t.text "confirmed_by_whom"
-    t.text "plant_population_name",     default: "unspecified", null: false
-    t.text "assigned_population_name",  default: "unspecified", null: false
+    t.text    "population_type"
+    t.text    "genus",                     default: "unspecified", null: false
+    t.text    "species",                   default: "unspecified", null: false
+    t.text    "female_parent_line"
+    t.text    "male_parent_line"
+    t.text    "canonical_population_name", default: "unspecified"
+    t.text    "description"
+    t.date    "date_established"
+    t.text    "established_by_whom"
+    t.text    "establishing_organisation"
+    t.text    "population_owned_by"
+    t.text    "comments"
+    t.text    "entered_by_whom",           default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_owned_by"
+    t.text    "data_provenance"
+    t.text    "confirmed_by_whom"
+    t.text    "plant_population_name",     default: "unspecified", null: false
+    t.text    "assigned_population_name",  default: "unspecified", null: false
+    t.integer "taxonomy_term_id"
   end
+
+  add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
 
   create_table "plant_scoring_units", primary_key: "scoring_unit_id", force: :cascade do |t|
     t.text "plant_trial_id",           default: "unspecified", null: false

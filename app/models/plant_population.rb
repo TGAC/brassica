@@ -1,5 +1,7 @@
 class PlantPopulation < ActiveRecord::Base
 
+  belongs_to :taxonomy_term
+
   belongs_to :population_type_lookup, foreign_key: 'population_type'
 
   belongs_to :male_parent_line, class_name: 'PlantLine',
