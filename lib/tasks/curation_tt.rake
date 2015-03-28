@@ -8,6 +8,8 @@ namespace :curate do
 
     failures = []
 
+    puts "Processing PlantLine objects..."
+
     PlantLine.all.each do |pl|
       tgt_subtaxa = pl.subtaxa ? pl.subtaxa.strip.gsub('  ', ' ').gsub(' ?', '?') : ''
       tgt_species = pl.species ? pl.species.strip : ''
@@ -40,7 +42,7 @@ namespace :curate do
       puts "...processed #{cntr} records..." if cntr % 1000 == 0
     end
     puts "---------------------------"
-    puts "Run complete: #{cntr} records processed; #{success_cntr} successes and #{failures.size} failures."
+    puts "Run complete: #{cntr} PL records processed; #{success_cntr} successes and #{failures.size} failures."
     puts "Failures:"
     puts failures.uniq.join("\n")
 
@@ -58,6 +60,60 @@ namespace :curate do
       PlantLine.connection.execute('ALTER TABLE plant_lines DROP COLUMN IF EXISTS subtaxa')
       puts 'Finished'
     end
+
+    # Now do the same for plant_populations
+    cntr = 0
+    success_cntr = 0
+
+    failures = []
+
+    puts "Processing PP objects..."
+
+    PlantPopulation.all.each do |pp|
+      tgt_species = pp.species ? pp.species.strip : ''
+      tgt_genus = pp.genus ? pp.genus.strip : ''
+      pp_full_name = "#{tgt_genus} #{tgt_species}"
+      name_to_find = if !meaningful?(tgt_species)
+                       "#{tgt_genus}"
+                     else
+                       "#{tgt_genus} #{tgt_species}"
+                     end
+      cntr += 1
+      tt = TaxonomyTerm.find_by(name: name_to_find)
+      unless tt
+        # Second try after typo fixes
+        fixed_name = [name_to_find].flatten.map{ |n| data_fixes(n) }
+        tt = TaxonomyTerm.find_by(name: fixed_name)
+      end
+      if tt
+        pp.taxonomy_term = tt
+        pp.save
+        success_cntr += 1
+      else
+        failures << pp_full_name
+      end
+      puts "...processed #{cntr} records..." if cntr % 1000 == 0
+    end
+
+    puts "---------------------------"
+    puts "Run complete: #{cntr} PP records processed; #{success_cntr} successes and #{failures.size} failures."
+    puts "Failures:"
+    puts failures.uniq.join("\n")
+
+    if failures.empty?
+      puts 'No failures - performing database cleanup'
+      puts '1. Removing trash PP records'
+      begin
+        PlantPopulation.where(genus: blank_records).destroy_all
+      rescue ActiveRecord::StatementInvalid
+        puts '  Relevant columns already removed.'
+      end
+      puts '2. Removing genus/species columns'
+      PlantLine.connection.execute('ALTER TABLE plant_populations DROP COLUMN IF EXISTS genus')
+      PlantLine.connection.execute('ALTER TABLE plant_populations DROP COLUMN IF EXISTS species')
+      puts 'Finished'
+    end
+
   end
 
   def blank_records
@@ -77,7 +133,8 @@ namespace :curate do
       'napiformes' => 'napiformis',
       ' conica' => '',
       'hybrid' => 'sp.',
-      'MIXED' => 'sp.'
+      'MIXED' => 'sp.',
+      'spp' => 'sp.'
     }.each do |from,to|
       name = name.gsub(from, to)
     end
