@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150328144811) do
+ActiveRecord::Schema.define(version: 20150328155811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -316,22 +316,28 @@ ActiveRecord::Schema.define(version: 20150328144811) do
     t.string "plant_variety_name"
     t.string "crop_type"
     t.string "comments"
-    t.text   "entered_by_whom",        default: "unspecified", null: false
+    t.text   "entered_by_whom"
     t.date   "date_entered"
     t.string "data_provenance"
-    t.string "data_attribution",       default: "unspecified", null: false
-    t.string "country_of_origin",      default: "xxx",         null: false
-    t.string "country_registered",     default: "xxx",         null: false
-    t.string "year_registered",        default: "xxxx",        null: false
+    t.string "data_attribution",      default: "unspecified", null: false
+    t.string "country_of_origin",     default: "xxx",         null: false
+    t.string "country_registered",    default: "xxx",         null: false
+    t.string "year_registered",       default: "xxxx",        null: false
     t.string "breeders_variety_code"
     t.string "owner"
     t.string "quoted_parentage"
     t.string "female_parent"
     t.string "male_parent"
-    t.string "detail_comments"
-    t.string "detail_entered_by_whom", default: "unspecified", null: false
-    t.date   "detail_date_entered"
-    t.string "detail_data_provenance"
+  end
+
+  create_table "plant_variety_country_of_origin", id: false, force: :cascade do |t|
+    t.string "plant_variety_name"
+    t.string "country_code"
+  end
+
+  create_table "plant_variety_country_registered", id: false, force: :cascade do |t|
+    t.string "plant_variety_name"
+    t.string "country_code"
   end
 
   create_table "pop_type_lookup", id: false, force: :cascade do |t|

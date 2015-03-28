@@ -9,7 +9,7 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
       t.string :plant_variety_name,         primary: true
       t.string :crop_type
       t.string :comments
-      t.text :entered_by_whom,              default: "unspecified", null: false
+      t.text :entered_by_whom
       t.date :date_entered
       t.string :data_provenance
 
@@ -22,10 +22,6 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
       t.string :quoted_parentage
       t.string :female_parent
       t.string :male_parent
-      t.string :detail_comments
-      t.string :detail_entered_by_whom,     default: "unspecified", null: false
-      t.date :detail_date_entered
-      t.string :detail_data_provenance
     end
 
     pv_ctr = 0
@@ -46,17 +42,34 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
         pvd_ctr+=1
         insert+= ", data_attribution, country_of_origin, country_registered, \
           year_registered, breeders_variety_code, owner, quoted_parentage, \
-          female_parent, male_parent, detail_comments, detail_entered_by_whom, \
-          detail_date_entered, detail_data_provenance"
+          female_parent, male_parent"
+      end
+
+      # Merge 'comments', 'entered_by_whom', 'date_entered' and 'data_provenance'
+      tgt_comments = row['comments']
+      tgt_entered_by_whom = row['entered_by_whom']
+      tgt_date_entered = row['date_entered']
+      tgt_data_provenance = row['data_provenance']
+
+      unless pvd.blank?
+        # Override pv.comments with pvd.comments
+        tgt_comments = pvd['comments'] unless pvd['comments'].blank?
+        # Override pv.data_provenance with pvd.data_provenance
+        tgt_data_provenance = pvd['data_provenance'] unless pvd['data_provenance'].blank?
+        # Keep pv.date_entered as it is identical with pvd.date_entered
+        # Replace pv.entered_by_whom with pvd.entered_by_whom if longer
+        if pvd['entered_by_whom'].length > tgt_entered_by_whom.length
+          tgt_entered_by_whom = pvd['entered_by_whom']
+        end
       end
 
       insert += ") VALUES (
         E'#{escape(row['plant_variety_name'])}', \
         '#{row['crop_type']}', \
-        '#{row['comments']}', \
-        '#{row['entered_by_whom']}', \
-        '#{row['date_entered']}', \
-        '#{row['data_provenance']}'"
+        '#{tgt_comments}', \
+        '#{tgt_entered_by_whom}', \
+        '#{tgt_date_entered}', \
+        '#{tgt_data_provenance}'"
 
       unless pvd.blank?
         insert+=", \
@@ -68,11 +81,7 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
           E'#{escape(pvd['owner'])}', \
           '#{pvd['quoted_parentage']}', \
           '#{pvd['female_parent']}', \
-          '#{pvd['male_parent']}', \
-          '#{pvd['comments']}', \
-          '#{pvd['entered_by_whom']}', \
-          '#{pvd['date_entered']}', \
-          '#{pvd['data_provenance']}'"
+          '#{pvd['male_parent']}'"
       end
 
       insert += ")"
@@ -162,10 +171,10 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
           '#{pld['quoted_parentage']}', \
           '#{pld['female_parent']}', \
           '#{pld['male_parent']}', \
-          '#{pld['detail_comments']}', \
-          '#{pld['detail_entered_by_whom']}', \
-          '#{pld['detail_date_entered']}', \
-          '#{pld['detail_data_provenance']}')"
+          '#{pld['comments']}', \
+          '#{pld['entered_by_whom']}', \
+          '#{pld['date_entered']}', \
+          '#{pld['data_provenance']}')"
 
         ActiveRecord::Base.connection.execute(insert_pvd)
         pvd_ctr += 1
