@@ -198,28 +198,6 @@ ActiveRecord::Schema.define(version: 20150328144811) do
 
   add_index "plant_accessions", ["plant_line_name"], name: "idx_143691_plant_line", using: :btree
 
-  create_table "plant_line_details", force: :cascade do |t|
-    t.string "plant_variety_name"
-    t.string "crop_type"
-    t.string "comments"
-    t.text   "entered_by_whom",        default: "unspecified", null: false
-    t.date   "date_entered"
-    t.string "data_provenance"
-    t.string "data_attribution",       default: "unspecified", null: false
-    t.string "country_of_origin",      default: "xxx",         null: false
-    t.string "country_registered",     default: "xxx",         null: false
-    t.string "year_registered",        default: "xxxx",        null: false
-    t.string "breeders_variety_code"
-    t.string "owner"
-    t.string "quoted_parentage"
-    t.string "female_parent"
-    t.string "male_parent"
-    t.string "detail_comments"
-    t.string "detail_entered_by_whom", default: "unspecified", null: false
-    t.date   "detail_date_entered"
-    t.string "detail_data_provenance"
-  end
-
   create_table "plant_lines", id: false, force: :cascade do |t|
     t.text    "plant_line_name"
     t.text    "common_name"
@@ -332,6 +310,28 @@ ActiveRecord::Schema.define(version: 20150328144811) do
     t.text   "data_provenance",                                            null: false
     t.text   "data_owned_by",                      default: "unspecified", null: false
     t.text   "confirmed_by_whom"
+  end
+
+  create_table "plant_varieties", force: :cascade do |t|
+    t.string "plant_variety_name"
+    t.string "crop_type"
+    t.string "comments"
+    t.text   "entered_by_whom",        default: "unspecified", null: false
+    t.date   "date_entered"
+    t.string "data_provenance"
+    t.string "data_attribution",       default: "unspecified", null: false
+    t.string "country_of_origin",      default: "xxx",         null: false
+    t.string "country_registered",     default: "xxx",         null: false
+    t.string "year_registered",        default: "xxxx",        null: false
+    t.string "breeders_variety_code"
+    t.string "owner"
+    t.string "quoted_parentage"
+    t.string "female_parent"
+    t.string "male_parent"
+    t.string "detail_comments"
+    t.string "detail_entered_by_whom", default: "unspecified", null: false
+    t.date   "detail_date_entered"
+    t.string "detail_data_provenance"
   end
 
   create_table "pop_type_lookup", id: false, force: :cascade do |t|

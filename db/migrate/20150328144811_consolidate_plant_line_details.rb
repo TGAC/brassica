@@ -1,6 +1,11 @@
 class ConsolidatePlantLineDetails < ActiveRecord::Migration
   def up
-    create_table :plant_line_details do |t|
+
+    # Rename existing PV to avoid naming clash
+    ActiveRecord::Base.connection.execute("ALTER TABLE plant_varieties \
+      RENAME TO old_plant_varieties")
+
+    create_table :plant_varieties do |t|
       t.string :plant_variety_name,         primary: true
       t.string :crop_type
       t.string :comments
@@ -26,15 +31,14 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
     pv_ctr = 0
     pvd_ctr = 0
 
-    result = ActiveRecord::Base.connection.execute("SELECT * FROM plant_varieties")
+    result = ActiveRecord::Base.connection.execute("SELECT * FROM old_plant_varieties")
     result.each do |row|
       pv_ctr += 1
-
 
       pvd = ActiveRecord::Base.connection.execute("SELECT * FROM plant_variety_detail
         WHERE plant_variety_name = E'#{escape(row['plant_variety_name'])}'").first
 
-      insert = "INSERT INTO plant_line_details \
+      insert = "INSERT INTO plant_varieties \
         (plant_variety_name, crop_type, comments, entered_by_whom, \
         date_entered, data_provenance"
 
@@ -73,10 +77,6 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
 
       insert += ")"
 
-      unless pvd.blank?
-        puts "INSERT: #{insert}"
-      end
-
       ActiveRecord::Base.connection.execute(insert)
 
     end
@@ -85,13 +85,13 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
     puts "Processed #{pv_ctr.to_s} PV records and #{pvd_ctr.to_s} PVD records."
     puts "======================"
 
-    drop_table :plant_varieties
+    drop_table :old_plant_varieties
     drop_table :plant_variety_detail
 
   end
 
   def down
-    create_table "plant_varieties", id: false, force: :cascade do |t|
+    create_table "old_plant_varieties", id: false, force: :cascade do |t|
       t.text "plant_variety_name", primary: true
       t.text "genus",              default: "unspecified", null: false
       t.text "species",            default: "unspecified", null: false
@@ -103,7 +103,7 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
       t.text "data_provenance"
     end
 
-    add_index "plant_varieties", ["plant_variety_name"], name: "idx_143909_plant_variety_name", using: :btree
+    add_index "old_plant_varieties", ["plant_variety_name"], name: "idx_143909_plant_variety_name", using: :btree
 
     create_table "plant_variety_detail", id: false, force: :cascade do |t|
       t.text "plant_variety_name",    primary: true
@@ -128,11 +128,11 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
     pv_ctr = 0
     pvd_ctr = 0
 
-    result = ActiveRecord::Base.connection.execute("SELECT * FROM plant_line_details")
+    result = ActiveRecord::Base.connection.execute("SELECT * FROM plant_varieties")
 
     result.each do |pld|
 
-      insert_pv = "INSERT INTO plant_varieties(plant_variety_name, genus, \
+      insert_pv = "INSERT INTO old_plant_varieties(plant_variety_name, genus, \
         species, subtaxa, crop_type, comments, entered_by_whom, date_entered, \
         data_provenance) VALUES ( \
         E'#{escape(pld['plant_variety_name'])}', \
@@ -178,8 +178,9 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
     puts "Inserted #{pv_ctr.to_s} PV records and #{pvd_ctr.to_s} PVD records."
     puts "======================"
 
-    drop_table :plant_line_details
-
+    drop_table :plant_varieties
+    ActiveRecord::Base.connection.execute("ALTER TABLE old_plant_varieties \
+      RENAME TO plant_varieties")
   end
 
   def escape(string)
