@@ -19,3 +19,11 @@ en:
     submit: Submit data
     api: API documentation
     about: About us
+
+  submission:
+    empty_label: "(empty label)"
+    submission_type:
+      population: Population
+      traits: Trait scoring
+      qtl: Quantitative Trait Loci
+      linkage_map: Linkage map
