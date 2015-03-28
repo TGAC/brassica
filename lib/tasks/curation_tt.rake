@@ -10,10 +10,12 @@ namespace :curate do
 
     puts "Processing PlantLine objects..."
 
-    PlantLine.all.each do |pl|
-      tgt_subtaxa = pl.subtaxa ? pl.subtaxa.strip.gsub('  ', ' ').gsub(' ?', '?') : ''
-      tgt_species = pl.species ? pl.species.strip : ''
-      tgt_genus = pl.genus ? pl.genus.strip : ''
+    triples = PlantLine.pluck(:genus, :species, :subtaxa).uniq
+    triples.each do |triple|
+      tgt_subtaxa = triple[2] ? triple[2].strip.gsub('  ', ' ').gsub(' ?', '?') : ''
+      tgt_species = triple[1] ? triple[1].strip : ''
+      tgt_genus = triple[0] ? triple[0].strip : ''
+
       pl_full_name = "#{tgt_genus} #{tgt_species} #{tgt_subtaxa}"
       name_to_find = if !meaningful?(tgt_species)
                        "#{tgt_genus}"
@@ -25,17 +27,17 @@ namespace :curate do
                         "#{tgt_genus} #{tgt_species} subsp. #{tgt_subtaxa}"]
                      end
 
-      cntr += 1
       tt = TaxonomyTerm.find_by(name: name_to_find)
       unless tt
         # Second try after typo fixes
         fixed_name = [name_to_find].flatten.map{ |n| data_fixes(n) }
         tt = TaxonomyTerm.find_by(name: fixed_name)
       end
+      pls = PlantLine.where(genus: triple[0], species: triple[1], subtaxa: triple[2])
+      cntr += pls.count
       if tt
-        pl.taxonomy_term = tt
-        pl.save
-        success_cntr += 1
+        pls.update_all(taxonomy_term_id: tt.id)
+        success_cntr += pls.count
       else
         failures << pl_full_name
       end
