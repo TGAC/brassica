@@ -1,9 +1,12 @@
 class BindPlantVarietiesToCountries < ActiveRecord::Migration
   def up
+
+    # Add index on countries for faster search
+    add_index "countries", ["country_code"], name: 'idx_ccs_country_code', using: :btree
+
     # Grab all existing country codes
     ccs = ActiveRecord::Base.connection.execute("SELECT country_code FROM countries")
     ccs = ccs.collect { |cc| cc['country_code'] }
-    puts "CCS: #{ccs.inspect}"
 
     create_table "plant_variety_country_of_origin", id: false, force: :cascade do |t|
       t.string :plant_variety_name
@@ -65,6 +68,7 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
   def down
     drop_table :plant_variety_country_of_origin
     drop_table :plant_variety_country_registered
+    remove_index(:countries, :name => 'idx_ccs_country_code')
   end
 
   def data_fixes(code)
