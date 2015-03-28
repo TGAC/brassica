@@ -24,10 +24,9 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def details_path
-    #TODO FIXE this will not work until #83 is solved
     Rails.application.routes.url_helpers.plant_populations_path(
       query: {
-        plant_population_name: population_name
+        plant_population_id: population_name
       }
     )
   end

@@ -1,17 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe PlantPopulation do
-  describe '#drop_dummies' do
-    it 'returns empty result when no plant population is present' do
-      expect(PlantPopulation.drop_dummies).to eq []
+  describe '#filter' do
+    before(:each) do
+      @pp = create(:plant_population, canonical_population_name: 'cpn')
     end
 
-    it 'removes empty canonical name records' do
-      pp1 = create(:plant_population)
-      pp2 = create(:plant_population)
-      create(:plant_population, canonical_population_name: '')
+    it 'will not allow search at all' do
+      search = PlantPopulation.filter(search: { canonical_population_name: 'n' })
+      expect(search.count).to eq 0
+    end
 
-      expect(PlantPopulation.drop_dummies).to contain_exactly pp1, pp2
+    it 'will only query by permitted params' do
+      search = PlantPopulation.filter(
+        query: { canonical_population_name: 'cpn' }
+      )
+      expect(search.count).to eq 0
+      search = PlantPopulation.filter(
+        query: { plant_population_id: @pp.plant_population_id }
+      )
+      expect(search.count).to eq 1
+      expect(search[0].plant_population_id).to eq @pp.plant_population_id
     end
   end
 
@@ -31,12 +40,6 @@ RSpec.describe PlantPopulation do
       expect(gd).not_to be_empty
       expect(gd.size).to eq 3
       expect(gd.map(&:last)).to contain_exactly 2, 2, 0
-    end
-
-    it 'filters out dummy populations' do
-      create(:plant_population)
-      create(:plant_population, canonical_population_name: '')
-      expect(PlantPopulation.grouped.size).to eq 1
     end
 
     it 'orders populations by population name' do

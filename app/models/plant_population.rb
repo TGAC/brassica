@@ -21,28 +21,39 @@ class PlantPopulation < ActiveRecord::Base
                           foreign_key: 'plant_population_id',
                           association_foreign_key: 'plant_line_name'
 
-  # Exlude the ['none', 'unspecified', 'not applicable'] pseudo-record trio
-  scope :drop_dummies, -> do
-    where.not(canonical_population_name: '')
+  include Filterable
+
+  scope :by_name, -> { order(:plant_population_id) }
+
+  def self.grouped(params = nil)
+    count = 'count(plant_lines.plant_line_name)'
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.
+      select(table_columns + [count]).
+      includes(:plant_lines).
+      group(table_columns).
+      by_name.
+      pluck(*(table_columns + [count]))
   end
 
-  def self.grouped(columns: nil, count: nil)
-    columns ||= [
+  private
+
+  def self.permitted_params
+    [
+      query: [
+        :plant_population_id
+      ]
+    ]
+  end
+
+  def self.table_columns
+    [
       'plant_populations.plant_population_id',
-      'plant_populations.species',
+      :species,
       :canonical_population_name,
       :female_parent_line,
       :male_parent_line,
       :population_type
     ]
-
-    count = 'count(plant_lines.plant_line_name)'
-
-    select(columns + [count]).
-      includes(:plant_lines).
-      group(columns).
-      drop_dummies.
-      order(:plant_population_id).
-      pluck(*(columns + [count]))
   end
 end
