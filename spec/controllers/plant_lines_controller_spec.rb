@@ -43,5 +43,16 @@ RSpec.describe PlantLinesController do
       expect(json['data'].map(&:first)).to match_array ['pln','pln']
       expect(json['data'].map(&:third)).to match_array ['cn','nc']
     end
+
+    it 'returns search results and provides PL id in the first element' do
+      plns = create_list(:plant_line, 2).map(&:plant_line_name)
+      get :index, format: :json, search: { plant_line_name: plns[0][1..-2] }
+      expect(response.content_type).to eq 'application/json'
+      json = JSON.parse(response.body)
+      expect(json['recordsTotal']).to eq 1
+      expect(json['data'].size).to eq 1
+      expect(json['data'][0].size).to eq 7
+      expect(json['data'][0][0]).to eq plns[0]
+    end
   end
 end
