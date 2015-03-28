@@ -24,6 +24,8 @@ ActiveRecord::Schema.define(version: 20150328155811) do
     t.text "comments",                                null: false
   end
 
+  add_index "countries", ["country_code"], name: "idx_ccs_country_code", using: :btree
+
   create_table "design_factors", primary_key: "design_factor_id", force: :cascade do |t|
     t.text "institute_id",        default: "unspecified", null: false
     t.text "trial_location_name", default: "unspecified", null: false
