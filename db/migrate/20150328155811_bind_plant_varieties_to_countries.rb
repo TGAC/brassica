@@ -62,10 +62,41 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
 
     end
 
+    remove_column :plant_varieties, :country_of_origin
+    remove_column :plant_varieties, :country_registered
 
   end
 
   def down
+    add_column :plant_varieties, :country_of_origin, :string
+    add_column :plant_varieties, :country_registered, :string
+
+    pvs = ActiveRecord::Base.connection.execute("SELECT * FROM plant_varieties")
+    pvs.each do |pv|
+      pv_coo = ""
+      pv_cr = ""
+      coos = ActiveRecord::Base.connection.execute("SELECT country_code FROM \
+        plant_variety_country_of_origin WHERE plant_variety_name = \
+        E'#{escape(pv['plant_variety_name'])}'")
+      crs = ActiveRecord::Base.connection.execute("SELECT country_code FROM \
+        plant_variety_country_registered WHERE plant_variety_name = \
+        E'#{escape(pv['plant_variety_name'])}'")
+      pv_coo = (coos.collect {|coo| coo['country_code']}.join('; '))
+      pv_cr = (crs.collect {|cr| cr['country_code']}.join('; '))
+
+      unless pv_coo.blank?
+        update = "UPDATE plant_varieties SET country_of_origin = '#{pv_coo}' \
+          WHERE plant_variety_name = '#{escape(pv[plant_variety_name])}'"
+        ActiveRecord::Base.connection.execute(update)
+      end
+      unless pv_cr.blank?
+        update = "UPDATE plant_varieties SET country_registered = '#{pv_cr}' \
+          WHERE plant_variety_name = '#{escape(pv[plant_variety_name])}'"
+        ActiveRecord::Base.connection.execute(update)
+      end
+    end
+
+
     drop_table :plant_variety_country_of_origin
     drop_table :plant_variety_country_registered
     remove_index(:countries, :name => 'idx_ccs_country_code')
@@ -97,5 +128,12 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
     code
   end
 
-
+  def escape(string)
+    if string.nil?
+      nil
+    else
+      pattern = /(\'|\"|\.|\*|\/|\-|\\|\)|\$|\+|\(|\^|\?|\!|\~|\`)/
+      string.gsub(pattern){|match|"\\"  + match}
+    end
+  end
 end
