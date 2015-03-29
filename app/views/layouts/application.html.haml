@@ -13,19 +13,6 @@
 
         = render 'layouts/navbar'
 
-                - else
-                  %li.dropdown{role: 'presentation'}
-                    %a.dropdown-toggle{'data-toggle': 'dropdown', href: '#'}
-                      = current_user.full_name
-                      %span.caret
-
-                    %ul.dropdown-menu
-                      %li= link_to 'Submissions', submissions_path
-                      %li= link_to 'Sign out', sign_out_path
-
-                %li{role: 'presentation'}
-                  %a{href: '#'} About
-
         .flash-group
           - if notice.present?
             .flash-notice= notice
