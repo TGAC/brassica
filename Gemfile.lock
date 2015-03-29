@@ -82,6 +82,19 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
+    elasticsearch (1.0.6)
+      elasticsearch-api (= 1.0.6)
+      elasticsearch-transport (= 1.0.6)
+    elasticsearch-api (1.0.6)
+      multi_json
+    elasticsearch-model (0.1.6)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-rails (0.1.6)
+    elasticsearch-transport (1.0.6)
+      faraday
+      multi_json
     erubis (2.7.0)
     execjs (2.3.0)
     factory_girl (4.3.0)
@@ -267,6 +280,8 @@ DEPENDENCIES
   devise (~> 3.4.0)
   dotenv-rails
   draper
+  elasticsearch-model
+  elasticsearch-rails
   factory_girl_rails
   faker
   font-awesome-sass (~> 4.3.1)
