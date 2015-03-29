@@ -27,13 +27,32 @@ class PlantPopulation < ActiveRecord::Base
 
   after_touch { __elasticsearch__.index_document }
 
-  # Exlude the ['none', 'unspecified', 'not applicable'] pseudo-record trio
-  scope :drop_dummies, -> do
-    where.not(canonical_population_name: '')
+  include Filterable
+
+  scope :by_name, -> { order(:plant_population_id) }
+
+  def self.grouped(params = nil)
+    count = 'count(plant_lines.plant_line_name)'
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.
+      includes(:plant_lines).
+      group(table_columns).
+      by_name.
+      pluck(*(table_columns + [count]))
   end
 
-  def self.grouped(columns: nil, count: nil)
-    columns ||= [
+  private
+
+  def self.permitted_params
+    [
+      query: [
+        :plant_population_id
+      ]
+    ]
+  end
+
+  def self.table_columns
+    [
       'plant_populations.plant_population_id',
       'taxonomy_terms.name',
       :canonical_population_name,
@@ -41,15 +60,6 @@ class PlantPopulation < ActiveRecord::Base
       :male_parent_line,
       :population_type
     ]
-
-    count = 'count(plant_lines.plant_line_name)'
-
-    includes(:plant_lines).
-    joins(:taxonomy_term).
-    group(columns).
-    drop_dummies.
-    order(:plant_population_id).
-    pluck(*(columns + [count]))
   end
 
   def as_indexed_json(options = {})

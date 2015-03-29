@@ -27,35 +27,15 @@ class PlantLine < ActiveRecord::Base
   after_update { fathered_descendants.each(&:touch) }
 
   after_touch { __elasticsearch__.index_document }
+  
+  include Filterable
+  include Pluckable
 
-  def self.filter(params, columns: nil)
-    columns ||= [
-      'plant_line_name',
-      'taxonomy_terms.name',
-      'common_name',
-      'previous_line_name',
-      'date_entered',
-      'data_owned_by',
-      'organisation'
-    ]
+  scope :by_name, -> { order(:plant_line_name) }
 
-    params = filter_params(params)
-    query = where(params[:query]) if params[:query].present?
-    query = where('plant_line_name ILIKE ?', "%#{params[:search]}%") if params[:search].present?
-    query ||= none
-
-    columns.each do |column|
-      relation = column.to_s.split('.')[0].pluralize if column.to_s.include? '.'
-      next unless relation
-      relation = relation.singularize unless reflections.keys.include?(relation)
-      query = query.joins(relation.to_sym)
-    end
-
-    params[:query].each do |k,_|
-      query = query.joins(k.to_s.split('.')[0].to_sym) if k.to_s.include? '.'
-    end if params[:query].present?
-
-    query.order(:plant_line_name).pluck(*columns)
+  def self.filtered(params)
+    query = filter(params)
+    query.by_name.pluck_columns(table_columns)
   end
 
   def self.genetic_statuses
@@ -76,14 +56,29 @@ class PlantLine < ActiveRecord::Base
 
   private
 
-  def self.filter_params(unsafe_params)
-    unsafe_params = ActionController::Parameters.new(unsafe_params)
-    unsafe_params.permit(
-      :search,
+  def self.permitted_params
+    [
+      search: [
+        :plant_line_name,
+        'plant_lines.plant_line_name'
+      ],
       query: [
         'plant_populations.plant_population_id',
-        plant_line_name: []
+        plant_line_name: [],
+        'plant_lines.plant_line_name' => []
       ]
-    )
+    ]
+  end
+
+  def self.table_columns
+    [
+      'plant_line_name',
+      'taxonomy_terms.name',
+      'common_name',
+      'previous_line_name',
+      'date_entered',
+      'data_owned_by',
+      'organisation'
+    ]
   end
 end

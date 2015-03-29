@@ -2,14 +2,11 @@
 
 = link_to 'TEMP LINK TO Plant populations', plant_populations_path
 
-- data_src = plant_lines_path(query: params[:query])
-%table#plant-lines.table.table-condensed.data-table{ data: { ajax: data_src }}
-  %thead
-    %tr
-      %th Line name
-      %th Taxonomy
-      %th Common name
-      %th Previous line name
-      %th Entry date
-      %th Data owner
-      %th Organisation
+= datatable_tag do
+  %th Line name
+  %th Taxonomy
+  %th Common name
+  %th Previous line name
+  %th Entry date
+  %th Data owner
+  %th Organisation

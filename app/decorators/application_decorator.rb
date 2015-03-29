@@ -16,8 +16,4 @@ class ApplicationDecorator < Draper::Decorator
       data: data
     }
   end
-
-  def meaningless?(value)
-    ['unspecified', 'not applicable', 'none'].include? value
-  end
 end
