@@ -1,0 +1,18 @@
+# For configuration details refer to
+# https://github.com/elastic/elasticsearch-ruby/tree/master/elasticsearch-transport
+
+default: &default
+  log: true
+  host: "http://localhost:9200"
+
+sandbox: &sandbox
+  <<: *default
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

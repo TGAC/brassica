@@ -1,4 +1,8 @@
 class PlantPopulation < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  belongs_to :taxonomy_term
 
   belongs_to :population_type_lookup, foreign_key: 'population_type'
 
@@ -20,6 +24,8 @@ class PlantPopulation < ActiveRecord::Base
                           join_table: 'plant_population_lists',
                           foreign_key: 'plant_population_id',
                           association_foreign_key: 'plant_line_name'
+
+  after_touch { __elasticsearch__.index_document }
 
   include Filterable
 
@@ -48,11 +54,30 @@ class PlantPopulation < ActiveRecord::Base
   def self.table_columns
     [
       'plant_populations.plant_population_id',
-      :species,
+      'taxonomy_terms.name',
       :canonical_population_name,
       :female_parent_line,
       :male_parent_line,
       :population_type
     ]
   end
+
+  def as_indexed_json(options = {})
+    plant_line_attrs = [
+      :plant_line_name, :common_name, :genetic_status, :previous_line_name
+    ]
+
+    as_json(
+      only: [
+        :id, :plant_population_name, :canonical_population_name, :description,
+        :population_type
+      ],
+      include: {
+        taxonomy_term: { only: [:name] },
+        female_parent_line: { only: plant_line_attrs },
+        male_parent_line: { only: plant_line_attrs },
+      }
+    )
+  end
+
 end

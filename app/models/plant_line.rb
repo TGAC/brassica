@@ -1,4 +1,7 @@
 class PlantLine < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   self.primary_key = 'plant_line_name'
 
   belongs_to :plant_variety, foreign_key: 'plant_variety_name'
@@ -20,6 +23,11 @@ class PlantLine < ActiveRecord::Base
                           foreign_key: 'plant_line_name',
                           association_foreign_key: 'plant_population_id'
 
+  after_update { mothered_descendants.each(&:touch) }
+  after_update { fathered_descendants.each(&:touch) }
+
+  after_touch { __elasticsearch__.index_document }
+  
   include Filterable
   include Pluckable
 
@@ -32,6 +40,18 @@ class PlantLine < ActiveRecord::Base
 
   def self.genetic_statuses
     order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
+  end
+
+  def as_indexed_json(options = {})
+    as_json(
+      only: [
+        :id, :plant_line_name, :common_name, :genetic_status,
+        :previous_line_name
+      ],
+      include: {
+        taxonomy_term: { only: [:name] }
+      }
+    )
   end
 
   private

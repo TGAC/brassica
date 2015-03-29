@@ -49,6 +49,10 @@ class Submission::PlantPopulationFinalizer
 
     attrs.merge!(submission.content.step01.to_h)
     attrs.merge!(submission.content.step02.to_h)
+    if taxonomy_term = TaxonomyTerm.find_by!(name: submission.content.step02.taxonomy_term)
+      attrs.merge!(taxonomy_term: taxonomy_term)
+    end
+
     attrs.merge!(submission.content.step04.to_h)
     attrs.delete(:name) # FIXME change :name to :plant_population_name in the form
     attrs.delete(:owned_by) # FIXME change to :population_owned_by in the form (or remove entirely)

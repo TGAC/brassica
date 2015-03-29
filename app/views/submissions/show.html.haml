@@ -25,10 +25,10 @@
         %strong Population type
         = @submission.population_type
 
-    - if @submission.content.step02.taxonomy_term.present?
+    - if @submission.species_name
       %li.list-group-item
-        %strong Taxonomy term
-        = @submission.content.step02.taxonomy_term
+        %strong Species
+        = @submission.species_name
 
     - if @submission.plant_line_name
       %li.list-group-item

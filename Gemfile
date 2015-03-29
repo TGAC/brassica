@@ -23,6 +23,9 @@ gem 'omniauth'
 gem 'omniauth-orcid'
 gem 'nokogiri'
 
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+
 gem 'reform', '~> 1.2.6'
 gem 'obo'
 gem 'hashie'
