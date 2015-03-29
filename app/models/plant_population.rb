@@ -36,6 +36,7 @@ class PlantPopulation < ActiveRecord::Base
     query = (params && params[:query].present?) ? filter(params) : all
     query.
       includes(:plant_lines).
+      joins(:taxonomy_term).
       group(table_columns).
       by_name.
       pluck(*(table_columns + [count]))

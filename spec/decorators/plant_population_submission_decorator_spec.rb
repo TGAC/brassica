@@ -8,23 +8,27 @@ RSpec.describe PlantPopulationSubmissionDecorator do
   end
 
   describe '#label' do
+    let(:tt) { create(:taxonomy_term) }
+
     it 'does not throw exception' do
       expect { sd.label }.
         not_to raise_error
     end
 
     it 'returns proper label' do
-      # TODO FIXME to be fixed in #93
-      # tt = create(:taxonomy_term)
-      # sd.object.content.update(:step02, taxonomy_term: tt)
-      # expect(sd.label).to eq '<span class="title">pn (' + tt.name + ')</span>'
-      pending 'Cannot test full label without solving #12'
-      fail
+      sd.object.content.update(:step01, name: 'pn')
+      sd.object.content.update(:step02, taxonomy_term: tt.name)
+      expect(sd.label).to eq '<span class="title">pn (' + tt.name + ')</span>'
     end
 
     it 'returns population name when no taxonomy term' do
       sd.object.content.update(:step01, name: 'pn')
       expect(sd.label).to eq '<span class="title">pn</span>'
+    end
+
+    it 'returns taxonomy term when no population name' do
+      sd.object.content.update(:step02, taxonomy_term: tt.name)
+      expect(sd.label).to eq '<span class="title">(' + tt.name + ')</span>'
     end
 
     it 'returns empty label when no name or taxonomy term given' do
