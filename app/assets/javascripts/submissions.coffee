@@ -20,9 +20,7 @@ plantLineListSelectOptions = ->
   $.extend({}, plantLineSelectOptions(), multiple: true)
 
 plantLineGeneticStatusSelectOptions = ->
-  multiple: true
-  tags: true
-  maximumSelectionLength: 1
+  allowClear: true
 
 defaultSelectOptions = ->
   allowClear: true
@@ -67,7 +65,12 @@ $ ->
     $('div.new-plant-line-for-list').removeClass('hidden').show()
 
     $('.edit_submission .previous-line-name').select2(plantLineSelectOptions())
+    $('.edit_submission .previous-line-name-wrapper').inputOrSelect()
     $('.edit_submission .genetic-status').select2(plantLineGeneticStatusSelectOptions())
+    $('.edit_submission .genetic-status-wrapper').inputOrSelect()
+    $('.edit_submission .new-plant-line-for-list input[type=text]').on 'keydown', (event) ->
+      if event.keyCode == 13 # Enter key
+        event.preventDefault() # Prevent form submission
 
   $('.add-new-plant-line-for-list').on 'click', (event) ->
     $form = $('.new-plant-line-for-list')

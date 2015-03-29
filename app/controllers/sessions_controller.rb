@@ -17,6 +17,10 @@ class SessionsController < Devise::OmniauthCallbacksController
     root_path
   end
 
+  def after_sign_in_path_for(resource)
+    request.env['omniauth.origin'] || stored_location_for(resource) || root_path
+  end
+
   def destroy
     signed_out = sign_out
     set_flash_message(:notice, :signed_out) if signed_out

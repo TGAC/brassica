@@ -2,6 +2,39 @@ require 'rails_helper'
 
 RSpec.describe Submission do
 
+  it { should validate_presence_of(:user) }
+  it { should validate_presence_of(:submission_type) }
+
+  describe '#submission_type' do
+    let(:submission) { build(:submission) }
+
+    it 'allows only certain submission type values' do
+      %w(population traits qtl linkage_map).each do |t|
+        submission.submission_type = t
+        expect(submission.valid?).to be_truthy
+        expect(submission.send(t+'?')).to be_truthy
+      end
+      expect { submission.submission_type = 'wrong_submission_type' }.
+        to raise_error ArgumentError
+    end
+
+    it 'honors symbols as type values' do
+      submission.submission_type = :population
+      expect(submission.valid?).to be_truthy
+    end
+
+    it 'provides handy scopes to query certain types' do
+      # submission.submission_type = :population
+      create(:submission)
+      create(:submission, submission_type: :qtl)
+      create(:submission, submission_type: :qtl)
+      expect(Submission.qtl.count).to eq 2
+      expect(Submission.population.count).to eq 1
+      expect(Submission.linkage_map.count).to eq 0
+      expect(Submission.traits.count).to eq 0
+    end
+  end
+
   describe '#content' do
     before {
       subject.content = {
@@ -75,4 +108,20 @@ RSpec.describe Submission do
     end
   end
 
+  describe '#finalized' do
+    it 'returns only finalized submissions' do
+      create_list(:submission, 2, finalized: true)
+      create_list(:submission, 1, finalized: false)
+      expect(Submission.count).to eq 3
+      expect(Submission.finalized.count).to eq 2
+    end
+  end
+
+  describe '#recent_first' do
+    it 'orders submissions by update time' do
+      ids = create_list(:submission, 7).map(&:id) +
+            create_list(:submission, 13).map(&:id)
+      expect(Submission.recent_first.map(&:id)).to eq ids.reverse
+    end
+  end
 end

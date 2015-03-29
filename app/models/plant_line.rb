@@ -20,8 +20,8 @@ class PlantLine < ActiveRecord::Base
                           foreign_key: 'plant_line_name',
                           association_foreign_key: 'plant_population_id'
 
-  def self.grid_data(filter)
-    columns =
+  def self.filter(params, columns: nil)
+    columns ||= [
       'plant_line_name',
       'taxonomy_terms.name',
       'common_name',
@@ -29,20 +29,25 @@ class PlantLine < ActiveRecord::Base
       'date_entered',
       'data_owned_by',
       'organisation'
+    ]
 
-    safe_query = grid_data_params(filter[:query])
-    query = where(safe_query) if safe_query.present?
-    query = where('plant_line_name ILIKE ?', "%#{filter[:search]}%") if filter[:search].present?
+    params = filter_params(params)
+    query = where(params[:query]) if params[:query].present?
+    query = where('plant_line_name ILIKE ?', "%#{params[:search]}%") if params[:search].present?
     query ||= none
 
-    safe_query.each do |k,_|
-      query = query.joins(k.to_s.split('.')[0].to_sym) if k.to_s.include? '.'
-    end if safe_query.present?
+    columns.each do |column|
+      relation = column.to_s.split('.')[0].pluralize if column.to_s.include? '.'
+      next unless relation
+      relation = relation.singularize unless reflections.keys.include?(relation)
+      query = query.joins(relation.to_sym)
+    end
 
-    query
-      .joins(:taxonomy_term)
-      .order(:plant_line_name)
-      .pluck(*columns)
+    params[:query].each do |k,_|
+      query = query.joins(k.to_s.split('.')[0].to_sym) if k.to_s.include? '.'
+    end if params[:query].present?
+
+    query.order(:plant_line_name).pluck(*columns)
   end
 
   def self.genetic_statuses
@@ -51,10 +56,14 @@ class PlantLine < ActiveRecord::Base
 
   private
 
-  def self.grid_data_params(raw_query)
-    parameters = ActionController::Parameters.new(raw_query)
-    parameters.permit('plant_populations.plant_population_id',
-                      plant_line_name: []
+  def self.filter_params(unsafe_params)
+    unsafe_params = ActionController::Parameters.new(unsafe_params)
+    unsafe_params.permit(
+      :search,
+      query: [
+        'plant_populations.plant_population_id',
+        plant_line_name: []
+      ]
     )
   end
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Submission management", type: :request do
+RSpec.describe "Submission management" do
 
   context "with no user signed in" do
     describe "GET /submissions" do
@@ -17,8 +17,8 @@ RSpec.describe "Submission management", type: :request do
     before { login_as(user) }
 
     describe "POST /submissions" do
-      it "creates default submission and redirects to edit" do
-        post "/submissions"
+      it "creates submission of given type and redirects to edit" do
+        post "/submissions", submission: { submission_type: 'qtl' }
         expect(response).to redirect_to(edit_submission_path(Submission.last))
       end
     end
@@ -39,6 +39,12 @@ RSpec.describe "Submission management", type: :request do
       it "updates submission with permitted params" do
         put "/submissions/#{submission.id}", submission: { content: { name: 'Population A' } }
         expect(submission.reload.content.step01.name).to eq('Population A')
+      end
+
+      it "ignores submission type updates" do
+        put "/submissions/#{submission.id}",
+          submission: { content: { name: 'Population A' }, submission_type: 'qtl' }
+        expect(submission.reload.population?).to be_truthy
       end
 
       it "ignores not-permitted params" do

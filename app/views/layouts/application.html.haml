@@ -9,21 +9,13 @@
   %body
     #wrap
       .container
-        .page-header
-          .row
-            .col-xs-6
-              = link_to root_path do
-                %h1 Brassica Information Portal
+        = render 'layouts/header'
 
-            .col-xs-6
-              %ul.nav.nav-pills.pull-right
-                - unless user_signed_in?
-                  %li{role: 'presentation'}
-                    = link_to 'Sign in with ORCiD', user_omniauth_authorize_path(:orcid)
+        = render 'layouts/navbar'
 
                 - else
                   %li.dropdown{role: 'presentation'}
-                    %a.dropdown-toggle{data: {toggle: 'dropdown'}, href: '#'}
+                    %a.dropdown-toggle{'data-toggle': 'dropdown', href: '#'}
                       = current_user.full_name
                       %span.caret
 
@@ -46,8 +38,4 @@
 
       #push
 
-    #footer
-      .container
-        .copy
-          &copy; 2015
-
+    = render 'layouts/footer'

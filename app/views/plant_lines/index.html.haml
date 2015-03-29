@@ -1,8 +1,6 @@
--# TEMP, NOTE: remove after navigation mode is designed
-%ol.breadcrumb
-  %li= link_to 'Home', root_path
-  %li= link_to 'Plant populations', plant_populations_path
-  %li.active Plant lines
+.lead Plant Lines table
+
+= link_to 'TEMP LINK TO Plant populations', plant_populations_path
 
 - data_src = plant_lines_path(query: params[:query])
 %table#plant-lines.table.table-condensed.data-table{ data: { ajax: data_src }}

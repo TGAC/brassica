@@ -15,9 +15,9 @@ RSpec.describe PlantPopulation do
     end
   end
 
-  describe '#grid_data' do
+  describe '#grouped' do
     it 'returns empty result when no plant population is present' do
-      expect(PlantPopulation.grid_data).to be_empty
+      expect(PlantPopulation.grouped).to be_empty
     end
 
     it 'properly calculates associated plant lines number' do
@@ -27,7 +27,7 @@ RSpec.describe PlantPopulation do
       create(:plant_population_list, plant_population: pps[0], plant_line: pls[1])
       create(:plant_population_list, plant_population: pps[1], plant_line: pls[2])
       create(:plant_population_list, plant_population: pps[1], plant_line: pls[1])
-      gd = PlantPopulation.grid_data
+      gd = PlantPopulation.grouped
       expect(gd).not_to be_empty
       expect(gd.size).to eq 3
       expect(gd.map(&:last)).to contain_exactly 2, 2, 0
@@ -36,12 +36,12 @@ RSpec.describe PlantPopulation do
     it 'filters out dummy populations' do
       create(:plant_population)
       create(:plant_population, canonical_population_name: '')
-      expect(PlantPopulation.grid_data.size).to eq 1
+      expect(PlantPopulation.grouped.size).to eq 1
     end
 
     it 'orders populations by population name' do
       ppids = create_list(:plant_population, 3).map(&:plant_population_id)
-      expect(PlantPopulation.grid_data.map(&:first)).to eq ppids.sort
+      expect(PlantPopulation.grouped.map(&:first)).to eq ppids.sort
     end
 
     it 'gets proper columns' do
@@ -54,7 +54,7 @@ RSpec.describe PlantPopulation do
              male_parent_line: mpl,
              population_type: 'pp_type')
 
-      gd = PlantPopulation.grid_data
+      gd = PlantPopulation.grouped
       expect(gd.count).to eq 1
       data = ['ssp', 'cpn', fpl.plant_line_name, mpl.plant_line_name, 'pp_type', 0]
       expect(gd[0][1..-1]).to eq data
