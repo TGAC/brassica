@@ -63,6 +63,7 @@ class PlantPopulation < ActiveRecord::Base
         :population_type
       ],
       include: {
+        taxonomy_term: { only: [:name] },
         female_parent_line: { only: plant_line_attrs },
         male_parent_line: { only: plant_line_attrs },
       }
