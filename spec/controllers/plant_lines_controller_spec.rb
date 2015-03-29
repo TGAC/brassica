@@ -2,24 +2,24 @@ require 'rails_helper'
 
 RSpec.describe PlantLinesController do
   context '#index' do
-    it 'returns table template on html request' do
+    it 'returns table template on html format request' do
       get :index
       expect(response).to render_template('plant_lines/index')
       expect(response).to render_template('layouts/application')
     end
 
-    it 'does not raise error on wrong parameter ajax request' do
+    it 'does not raise error on wrong parameter json format request' do
       get :index, format: :json, query: { plant_line_name: 'wrong!' }
       expect(response).to have_http_status(:success)
     end
 
-    it 'does not render htmls on ajax request' do
+    it 'does not render htmls on json format request' do
       get :index, format: :json
       expect(response).not_to render_template('plant_lines/index')
       expect(response).not_to render_template('layouts/application')
     end
 
-    it 'returns datatables json on ajax request' do
+    it 'returns datatables json on json format request' do
       plns = create_list(:plant_line, 2).map(&:plant_line_name)
       get :index, format: :json, query: { plant_line_name: plns }
       expect(response.content_type).to eq 'application/json'

@@ -25,7 +25,7 @@ class PlantLine < ActiveRecord::Base
 
   scope :by_name, -> { order(:plant_line_name) }
 
-  def self.table_data(params)
+  def self.filtered(params)
     query = filter(params)
     query.by_name.pluck_columns(table_columns)
   end

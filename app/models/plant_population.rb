@@ -29,7 +29,6 @@ class PlantPopulation < ActiveRecord::Base
     count = 'count(plant_lines.plant_line_name)'
     query = (params && params[:query].present?) ? filter(params) : all
     query.
-      select(table_columns + [count]).
       includes(:plant_lines).
       group(table_columns).
       by_name.

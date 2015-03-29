@@ -103,14 +103,14 @@ RSpec.describe PlantLine do
     end
   end
 
-  describe '#table_data' do
+  describe '#filtered' do
     it 'returns empty result when no plant lines found' do
-      expect(PlantLine.table_data(plant_line_names: [1])).to be_empty
+      expect(PlantLine.filtered(plant_line_names: [1])).to be_empty
     end
 
     it 'orders populations by plant line name' do
       plids = create_list(:plant_line, 3).map(&:plant_line_name)
-      td = PlantLine.table_data(query: { plant_line_name: plids })
+      td = PlantLine.filtered(query: { plant_line_name: plids })
       expect(td.map(&:first)).to eq plids.sort
     end
   end
