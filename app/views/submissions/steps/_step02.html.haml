@@ -8,13 +8,13 @@
   = f.fields_for :content, @content do |content|
 
     .form-group
-      = label_tag :taxonomy_term
-      = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), prompt: "Select term...", class: 'form-control required'
+      = content.label :taxonomy_term
+      = content.select :taxonomy_term, options_for_select(TaxonomyTerm.names, @content.taxonomy_term), { include_blank: "Select term..." }, class: 'form-control'
       %p.help-block Required
 
     .form-group
       = content.label :population_type
-      = content.select :population_type, [nil].concat(@content.class.population_types), {}, class: 'population-type form-control', 'data-placeholder': "Select population type"
+      = content.select :population_type, @content.class.population_types, { include_blank: true }, class: 'population-type form-control', 'data-placeholder': "Select population type"
       %p.help-block Required
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
