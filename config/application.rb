@@ -33,5 +33,7 @@ module Brassica
       "#{config.root}/app/forms",
       "#{config.root}/app/forms/concerns"
     ]
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end
