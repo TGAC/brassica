@@ -31,7 +31,7 @@ class PlantPopulation < ActiveRecord::Base
   def self.grouped(columns: nil, count: nil)
     columns ||= [
       'plant_populations.plant_population_id',
-      'plant_populations.species',
+      'taxonomy_terms.name',
       :canonical_population_name,
       :female_parent_line,
       :male_parent_line,
@@ -40,11 +40,11 @@ class PlantPopulation < ActiveRecord::Base
 
     count = 'count(plant_lines.plant_line_name)'
 
-    select(columns + [count]).
-      includes(:plant_lines).
-      group(columns).
-      drop_dummies.
-      order(:plant_population_id).
-      pluck(*(columns + [count]))
+    includes(:plant_lines).
+    joins(:taxonomy_term).
+    group(columns).
+    drop_dummies.
+    order(:plant_population_id).
+    pluck(*(columns + [count]))
   end
 end

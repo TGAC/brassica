@@ -6,7 +6,7 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
       :span,
       ''.tap do |l|
         l << population_name if population_name
-        l << "(#{species_name})" if species_name
+        l << " (#{species_name})" if species_name
         l << I18n.t('submission.empty_label') unless population_name || species_name
       end.strip,
       class: 'title'
@@ -38,20 +38,11 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def species_name
-    return @species_name if defined?(@species_name)
-    return @species_name = nil if genus.blank? || %w(undefined none not_applicable).include?(genus)
-    @species_name = "#{genus} #{species}".strip
+    taxonomy_term
   end
 
-  def genus
-    return @genus if defined?(@genus)
-    @genus = plant_line.try(:genus)
-    @genus = "B." if @genus == "Brassica"
-    @genus
-  end
-
-  def species
-    @species ||= plant_line.try(:species)
+  def taxonomy_term
+    @taxonomy_term ||= object.content.step02.taxonomy_term.presence
   end
 
   def population_type

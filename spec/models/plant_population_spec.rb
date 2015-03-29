@@ -47,16 +47,21 @@ RSpec.describe PlantPopulation do
     it 'gets proper columns' do
       fpl = create(:plant_line)
       mpl = create(:plant_line)
-      create(:plant_population,
-             species: 'ssp',
-             canonical_population_name: 'cpn',
-             female_parent_line: fpl,
-             male_parent_line: mpl,
-             population_type: 'pp_type')
+      pp = create(:plant_population,
+                  female_parent_line: fpl,
+                  male_parent_line: mpl,
+                  population_type: 'pp_type')
 
       gd = PlantPopulation.grouped
       expect(gd.count).to eq 1
-      data = ['ssp', 'cpn', fpl.plant_line_name, mpl.plant_line_name, 'pp_type', 0]
+      data = [
+        pp.taxonomy_term.name,
+        pp.canonical_population_name,
+        fpl.plant_line_name,
+        mpl.plant_line_name,
+        'pp_type',
+        0
+      ]
       expect(gd[0][1..-1]).to eq data
     end
   end
