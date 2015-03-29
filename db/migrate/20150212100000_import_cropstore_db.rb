@@ -240,8 +240,6 @@ class ImportCropstoreDb < ActiveRecord::Migration
 
       create_table "plant_populations", primary_key: "plant_population_id", force: :cascade do |t|
         t.text "population_type"
-        t.text "genus",                     default: "unspecified", null: false
-        t.text "species",                   default: "unspecified", null: false
         t.text "female_parent_line"
         t.text "male_parent_line"
         t.text "canonical_population_name", default: "unspecified"
