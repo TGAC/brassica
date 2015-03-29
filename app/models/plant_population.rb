@@ -2,6 +2,8 @@ class PlantPopulation < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  belongs_to :taxonomy_term
+
   belongs_to :population_type_lookup, foreign_key: 'population_type'
 
   belongs_to :male_parent_line, class_name: 'PlantLine',

@@ -1,13 +1,39 @@
 module SubmissionsHelper
   def create_submission_button
-    button_to "Submit new population", submissions_path, class: 'btn btn-primary', method: 'post'
+    link_to "Submit new data", new_submission_path, class: 'btn btn-primary'
   end
 
-  def submission_link(submission)
-    link_to submission_label(submission), submission_path(submission), class: 'show-submission'
+  def submission_private_link(submission)
+    link_to submission_label(submission), submission_path(submission)
+  end
+
+  def submission_public_link(submission)
+    link_to(
+      submission_label(submission),
+      submission_details_path(submission)
+    )
+  end
+
+
+  def submission_details_path(submission)
+    decorator(submission).details_path
   end
 
   def submission_label(submission)
-    PlantPopulationSubmissionDecorator.decorate(submission).label
+    decorator(submission).label
+  end
+
+  def submission_type(submission)
+    decorator(submission).submission_type
+  end
+
+  def submission_details(submission)
+    decorator(submission).further_details.html_safe
+  end
+
+  private
+
+  def decorator(submission)
+    PlantPopulationSubmissionDecorator.decorate(submission)
   end
 end

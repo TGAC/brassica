@@ -1,0 +1,18 @@
+- unless active_nav_label == :home
+  %nav.navbar.navbar-default
+    .container-fluid
+      .navbar-header
+        %button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#navbar-collapse")
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+
+      .collapse.navbar-collapse#navbar-collapse
+        %ul.nav.navbar-nav
+          - navbar_menu.each do |label, path|
+            - if active_nav_label == label
+              = active_link(label)
+            - else
+              %li{ class: "#{'disabled' if path == '#'}" }
+                = link_to t("menu.#{label}"), path
