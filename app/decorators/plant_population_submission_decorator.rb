@@ -38,7 +38,7 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def species_name
-    # TODO FIXME get it from assigned step02 taxonomy_term | #93
+    taxonomy_term
   end
 
   def taxonomy_term
