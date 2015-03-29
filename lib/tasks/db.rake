@@ -5,12 +5,19 @@ namespace :db do
       puts "Exiting."
       next
     end
+    puts " - dropping old DB and creating a new one"
     recreate_db
+    puts " - loading cropstore DB dump data"
     restore_cropstore_dump
+    puts " - initial curation of CS data"
     perform_initial_curation
+    puts " - adding new BIP migrations"
     migrate_db
+    puts " - loading Gramene and CS taxonomy"
     bootstrap_obo_taxonomy
+    puts " - final curation of CS/taxonomy data"
     perform_final_curation
+    puts " - DONE"
   end
 
   def ask_for_confirmation
@@ -34,9 +41,11 @@ namespace :db do
   end
 
   def perform_initial_curation
-    Rake::Task['curate:purge_empty_tables'].invoke
-    Rake::Task['curate:purge_empty_columns'].invoke
-    Rake::Task['curate:purge_placeholder_records'].invoke
+    silence_stdout do
+      Rake::Task['curate:purge_empty_tables'].invoke
+      Rake::Task['curate:purge_empty_columns'].invoke
+      Rake::Task['curate:purge_placeholder_records'].invoke
+    end
   end
 
   def migrate_db
@@ -47,12 +56,23 @@ namespace :db do
   end
 
   def bootstrap_obo_taxonomy
-    Rake::Task['obo:taxonomy'].invoke
+    silence_stdout do
+      Rake::Task['obo:taxonomy'].invoke
+    end
   end
 
   def perform_final_curation
-    Rake::Task['curate:plant_taxonomy'].invoke
-    Rake::Task['curate:fix_sny1'].invoke
-    Rake::Task['curate:add_missing_plant_parts'].invoke
+    silence_stdout do
+      Rake::Task['curate:plant_taxonomy'].invoke
+      Rake::Task['curate:fix_sny1'].invoke
+      Rake::Task['curate:add_missing_plant_parts'].invoke
+    end
+  end
+
+  def silence_stdout
+    $stdout = File.new( '/dev/null', 'w' )
+    yield
+  ensure
+    $stdout = STDOUT
   end
 end
