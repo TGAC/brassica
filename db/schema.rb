@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150328165854) do
+ActiveRecord::Schema.define(version: 20150328155811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 20150328165854) do
     t.text "data_provenance",                         null: false
     t.text "comments",                                null: false
   end
+
+  add_index "countries", ["country_code"], name: "idx_ccs_country_code", using: :btree
 
   create_table "design_factors", primary_key: "design_factor_id", force: :cascade do |t|
     t.text "institute_id",        default: "unspecified", null: false
@@ -243,27 +245,26 @@ ActiveRecord::Schema.define(version: 20150328165854) do
   add_index "plant_population_lists", ["plant_line_name"], name: "idx_143830_plant_line", using: :btree
 
   create_table "plant_populations", primary_key: "plant_population_id", force: :cascade do |t|
-    t.text    "population_type"
-    t.text    "female_parent_line"
-    t.text    "male_parent_line"
-    t.text    "canonical_population_name", default: "unspecified"
-    t.text    "description"
-    t.date    "date_established"
-    t.text    "established_by_whom"
-    t.text    "establishing_organisation"
-    t.text    "population_owned_by"
-    t.text    "comments"
-    t.text    "entered_by_whom",           default: "unspecified", null: false
-    t.date    "date_entered"
-    t.text    "data_owned_by"
-    t.text    "data_provenance"
-    t.text    "confirmed_by_whom"
-    t.text    "plant_population_name",     default: "unspecified", null: false
-    t.text    "assigned_population_name",  default: "unspecified", null: false
-    t.integer "taxonomy_term_id"
+    t.text "population_type"
+    t.text "genus",                     default: "unspecified", null: false
+    t.text "species",                   default: "unspecified", null: false
+    t.text "female_parent_line"
+    t.text "male_parent_line"
+    t.text "canonical_population_name", default: "unspecified"
+    t.text "description"
+    t.date "date_established"
+    t.text "established_by_whom"
+    t.text "establishing_organisation"
+    t.text "population_owned_by"
+    t.text "comments"
+    t.text "entered_by_whom",           default: "unspecified", null: false
+    t.date "date_entered"
+    t.text "data_owned_by"
+    t.text "data_provenance"
+    t.text "confirmed_by_whom"
+    t.text "plant_population_name",     default: "unspecified", null: false
+    t.text "assigned_population_name",  default: "unspecified", null: false
   end
-
-  add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
 
   create_table "plant_scoring_units", primary_key: "scoring_unit_id", force: :cascade do |t|
     t.text "plant_trial_id",           default: "unspecified", null: false
@@ -313,39 +314,31 @@ ActiveRecord::Schema.define(version: 20150328165854) do
     t.text   "confirmed_by_whom"
   end
 
-  create_table "plant_varieties", id: false, force: :cascade do |t|
-    t.text "plant_variety_name"
-    t.text "genus",              default: "unspecified", null: false
-    t.text "species",            default: "unspecified", null: false
-    t.text "subtaxa"
-    t.text "crop_type"
-    t.text "comments",                                   null: false
-    t.text "entered_by_whom",    default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                            null: false
+  create_table "plant_varieties", force: :cascade do |t|
+    t.string "plant_variety_name"
+    t.string "crop_type"
+    t.string "comments"
+    t.text   "entered_by_whom"
+    t.date   "date_entered"
+    t.string "data_provenance"
+    t.string "data_attribution",      default: "unspecified", null: false
+    t.string "year_registered",       default: "xxxx",        null: false
+    t.string "breeders_variety_code"
+    t.string "owner"
+    t.string "quoted_parentage"
+    t.string "female_parent"
+    t.string "male_parent"
   end
 
-  add_index "plant_varieties", ["plant_variety_name"], name: "idx_143909_plant_variety_name", using: :btree
-
-  create_table "plant_variety_detail", id: false, force: :cascade do |t|
-    t.text "plant_variety_name"
-    t.text "data_attribution",      default: "unspecified", null: false
-    t.text "country_of_origin",     default: "xxx",         null: false
-    t.text "country_registered",    default: "xxx",         null: false
-    t.text "year_registered",       default: "xxxx",        null: false
-    t.text "breeders_variety_code"
-    t.text "owner"
-    t.text "quoted_parentage"
-    t.text "female_parent"
-    t.text "male_parent"
-    t.text "comments",                                      null: false
-    t.text "entered_by_whom",       default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance"
+  create_table "plant_variety_country_of_origin", id: false, force: :cascade do |t|
+    t.string "plant_variety_name"
+    t.string "country_code"
   end
 
-  add_index "plant_variety_detail", ["data_attribution"], name: "idx_143926_data_provenance", using: :btree
-  add_index "plant_variety_detail", ["plant_variety_name"], name: "idx_143926_plant_variety_name", using: :btree
+  create_table "plant_variety_country_registered", id: false, force: :cascade do |t|
+    t.string "plant_variety_name"
+    t.string "country_code"
+  end
 
   create_table "pop_type_lookup", id: false, force: :cascade do |t|
     t.text "population_type"
