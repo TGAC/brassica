@@ -1,5 +1,5 @@
-namespace :db do
-  desc "Prepare DB from zero to production-ready state"
+namespace :app do
+  desc "Prepare DB and ES from zero to production-ready state"
   task :bootstrap => :environment do
     unless ask_for_confirmation
       puts "Exiting."
@@ -9,6 +9,8 @@ namespace :db do
     recreate_db
     puts " - loading cropstore DB dump data"
     restore_cropstore_dump
+    puts " - building ES indices"
+    build_elasticsearch_indices
     puts " - initial curation of CS data"
     perform_initial_curation
     puts " - adding new BIP migrations"
@@ -38,6 +40,10 @@ namespace :db do
     unless system(env, cmd)
       raise "Cropstore dump restoration failed: #{$?}"
     end
+  end
+
+  def build_elasticsearch_indices
+    Rake::Task['elasticsearch:import:all'].invoke
   end
 
   def perform_initial_curation
