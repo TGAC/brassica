@@ -10,7 +10,11 @@ namespace :curate do
 
     puts "Processing PlantLine objects..."
 
-    triples = PlantLine.pluck(:genus, :species, :subtaxa).uniq
+    triples = begin
+      PlantLine.pluck(:genus, :species, :subtaxa).uniq
+    rescue Exception => e
+      []
+    end
     triples.each do |triple|
       tgt_subtaxa = triple[2] ? triple[2].strip.gsub('  ', ' ').gsub(' ?', '?') : ''
       tgt_species = triple[1] ? triple[1].strip : ''
@@ -41,7 +45,6 @@ namespace :curate do
       else
         failures << pl_full_name
       end
-      puts "...processed #{cntr} records..." if cntr % 1000 == 0
     end
     puts "---------------------------"
     puts "Run complete: #{cntr} PL records processed; #{success_cntr} successes and #{failures.size} failures."
