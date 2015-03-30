@@ -4,6 +4,9 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
     # Add index on countries for faster search
     add_index "countries", ["country_code"], name: 'idx_ccs_country_code', using: :btree
 
+    ActiveRecord::Base.connection.execute("DELETE FROM countries WHERE \
+      country_code IN ('xxx', 'n/a', 'ooo')")
+
     # Grab all existing country codes
     ccs = ActiveRecord::Base.connection.execute("SELECT country_code FROM countries")
     ccs = ccs.collect { |cc| cc['country_code'] }
