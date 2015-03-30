@@ -31,7 +31,14 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
             '#{code}')"
           ActiveRecord::Base.connection.execute(insert)
         else
-          puts "Unknown code #{code}. Giving up."
+          # Add notification to comments
+          puts "Unknown code #{code}. Inserting warning in comments."
+          comments = pv['comments']
+          comments = comments.blank? ? '' : comments
+          comments += " | WARNING: Unrecognized country_of_origin: #{code}"
+          update = "UPDATE plant_varieties SET comments = '#{comments}' \
+            WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
+          ActiveRecord::Base.connection.execute(update)
         end
       end
     end
@@ -56,7 +63,14 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
             '#{code}')"
           ActiveRecord::Base.connection.execute(insert)
         else
-          puts "Unknown code #{code}. Giving up."
+          # Add notification to comments
+          puts "Unknown code #{code}. Inserting warning in comments."
+          comments = pv['comments']
+          comments = comments.blank? ? '' : comments
+          comments += " | WARNING: Unrecognized country_registered: #{code}"
+          update = "UPDATE plant_varieties SET comments = '#{comments}' \
+            WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
+          ActiveRecord::Base.connection.execute(update)
         end
       end
 
@@ -68,8 +82,8 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
   end
 
   def down
-    add_column :plant_varieties, :country_of_origin, :string
-    add_column :plant_varieties, :country_registered, :string
+    add_column :plant_varieties, :country_of_origin, :string, default: ''
+    add_column :plant_varieties, :country_registered, :string, default: ''
 
     pvs = ActiveRecord::Base.connection.execute("SELECT * FROM plant_varieties")
     pvs.each do |pv|
@@ -86,12 +100,12 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
 
       unless pv_coo.blank?
         update = "UPDATE plant_varieties SET country_of_origin = '#{pv_coo}' \
-          WHERE plant_variety_name = '#{escape(pv[plant_variety_name])}'"
+          WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
         ActiveRecord::Base.connection.execute(update)
       end
       unless pv_cr.blank?
         update = "UPDATE plant_varieties SET country_registered = '#{pv_cr}' \
-          WHERE plant_variety_name = '#{escape(pv[plant_variety_name])}'"
+          WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
         ActiveRecord::Base.connection.execute(update)
       end
     end
