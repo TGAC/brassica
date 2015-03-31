@@ -11,4 +11,6 @@ class Country < ActiveRecord::Base
                           join_table: 'plant_variety_country_registered',
                           foreign_key: 'country_code',
                           association_foreign_key: 'plant_variety_name'
+
+  has_many :plant_trials, foreign_key: 'country'
 end
