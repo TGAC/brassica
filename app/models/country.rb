@@ -8,4 +8,5 @@ class Country < ActiveRecord::Base
                           class_name: 'PlantVariety',
                           join_table: 'plant_variety_country_registered'
 
+  has_many :plant_trials, foreign_key: 'country'
 end
