@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.text   "comments"
   end
 
+  add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
   add_index "countries", ["country_code"], name: "idx_ccs_country_code", using: :btree
 
   create_table "design_factors", primary_key: "design_factor_id", force: :cascade do |t|
@@ -300,30 +301,30 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   add_index "plant_scoring_units", ["scored_plant_part"], name: "idx_143842_row_plot_position", using: :btree
 
   create_table "plant_trials", primary_key: "plant_trial_id", force: :cascade do |t|
-    t.text   "project_descriptor",                 default: "unspecified", null: false
-    t.text   "plant_trial_description",                                    null: false
-    t.text   "plant_population",                   default: "unspecified", null: false
-    t.text   "trial_year",                         default: "xxxx",        null: false
-    t.text   "institute_id",                       default: "unspecified", null: false
-    t.text   "trial_location_site_name",           default: "unspecified", null: false
-    t.string "country",                  limit: 3, default: "xxx",         null: false
-    t.text   "place_name",                         default: "unspecified", null: false
-    t.text   "latitude",                           default: "unspecified", null: false
-    t.text   "longitude",                          default: "unspecified", null: false
-    t.text   "altitude"
-    t.text   "terrain"
-    t.text   "soil_type"
-    t.text   "contact_person",                     default: "unspecified", null: false
-    t.text   "design_type"
-    t.text   "statistical_factors"
-    t.text   "design_factors"
-    t.text   "design_layout_matrix"
-    t.text   "comments",                                                   null: false
-    t.text   "entered_by_whom",                    default: "unspecified", null: false
-    t.date   "date_entered"
-    t.text   "data_provenance",                                            null: false
-    t.text   "data_owned_by",                      default: "unspecified", null: false
-    t.text   "confirmed_by_whom"
+    t.text    "project_descriptor",       default: "unspecified", null: false
+    t.text    "plant_trial_description",                          null: false
+    t.text    "trial_year",               default: "xxxx",        null: false
+    t.text    "institute_id",             default: "unspecified", null: false
+    t.text    "trial_location_site_name", default: "unspecified", null: false
+    t.text    "place_name",               default: "unspecified", null: false
+    t.text    "latitude",                 default: "unspecified", null: false
+    t.text    "longitude",                default: "unspecified", null: false
+    t.text    "altitude"
+    t.text    "terrain"
+    t.text    "soil_type"
+    t.text    "contact_person",           default: "unspecified", null: false
+    t.text    "design_type"
+    t.text    "statistical_factors"
+    t.text    "design_factors"
+    t.text    "design_layout_matrix"
+    t.text    "comments",                                         null: false
+    t.text    "entered_by_whom",          default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                  null: false
+    t.text    "data_owned_by",            default: "unspecified", null: false
+    t.text    "confirmed_by_whom"
+    t.integer "country_id"
+    t.integer "plant_population_id"
   end
 
   create_table "plant_varieties", force: :cascade do |t|

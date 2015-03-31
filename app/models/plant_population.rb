@@ -18,9 +18,9 @@ class PlantPopulation < ActiveRecord::Base
 
   has_many :population_loci, class_name: 'PopulationLocus'
 
-  has_many :processed_trait_datasets, foreign_key: 'population_id'
+  has_many :processed_trait_datasets
 
-  has_many :plant_trials, foreign_key: 'plant_population'
+  has_many :plant_trials
 
   has_and_belongs_to_many :plant_lines,
                           join_table: 'plant_population_lists'

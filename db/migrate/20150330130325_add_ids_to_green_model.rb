@@ -3,6 +3,9 @@ class AddIdsToGreenModel < ActiveRecord::Migration
   include MigrationHelper
 
   def up
+
+    #===============countries=============#
+
     unless column_exists?(:countries, :id)
       execute "ALTER TABLE countries DROP CONSTRAINT IF EXISTS idx_143365_primary"
       add_column :countries, :id, :primary_key
@@ -23,6 +26,10 @@ class AddIdsToGreenModel < ActiveRecord::Migration
     replace_fk('plant_variety_country_of_origin', 'plant_varieties',
                'plant_variety_name', 'plant_variety_id', 'plant_variety_name')
 
+
+    # Extend plant_trials with new FKs
+    replace_fk('plant_trials', 'countries', 'country',
+               'country_id', 'country_code')
 
     # unless column_exists?(:plant_variety_country_of_origin, :country_id)
     #   add_column :plant_variety_country_of_origin, :country_id, :int
@@ -147,6 +154,10 @@ class AddIdsToGreenModel < ActiveRecord::Migration
 
     # Alter processed_trait_datasets to make use of plant_population_id
     replace_fk('processed_trait_datasets', 'plant_populations', 'population_id',
+               'plant_population_id', 'name')
+
+    # Alter plant_trials to make use of plant_population_id
+    replace_fk('plant_trials', 'plant_populations', 'plant_population',
                'plant_population_id', 'name')
 
     #=========population_type_lookup===========#
