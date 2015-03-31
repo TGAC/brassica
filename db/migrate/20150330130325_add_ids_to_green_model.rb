@@ -125,7 +125,7 @@ class AddIdsToGreenModel < ActiveRecord::Migration
 
     # Existing PK is named plant_population_id - rename to 'name'
     unless column_exists?(:plant_populations, :name)
-      execute("ALTER TABLE plant_populations DROP CONSTRAINT IF EXISTS plant_populations_pkey")
+      execute("ALTER TABLE plant_populations DROP CONSTRAINT IF EXISTS idx_143808_primary")
       execute("ALTER TABLE plant_populations RENAME COLUMN plant_population_id TO name")
       add_column :plant_populations, :id, :primary_key
     end
@@ -150,12 +150,13 @@ class AddIdsToGreenModel < ActiveRecord::Migration
                'plant_population_id', 'name')
 
     #=========population_type_lookup===========#
-    unless column_exists?(:population_type_lookup, :id)
-      add_column :population_type_lookup, :id
+    unless column_exists?(:pop_type_lookup, :id)
+      execute("ALTER TABLE pop_type_lookup DROP CONSTRAINT IF EXISTS idx_144008_primary")
+      add_column :pop_type_lookup, :id, :primary_key
     end
 
     # Alter plant_populations to use population_type_id
-    replace_fk('plant_populations', 'population_type_lookup', 'population_type',
+    replace_fk('plant_populations', 'pop_type_lookup', 'population_type',
         'population_type_id', 'population_type')
 
   end

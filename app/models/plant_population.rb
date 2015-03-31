@@ -7,23 +7,21 @@ class PlantPopulation < ActiveRecord::Base
   belongs_to :population_type_lookup, foreign_key: 'population_type'
 
   belongs_to :male_parent_line, class_name: 'PlantLine',
-             foreign_key: 'male_parent_line'
+             foreign_key: 'male_parent_line_id'
 
   belongs_to :female_parent_line, class_name: 'PlantLine',
-             foreign_key: 'female_parent_line'
+             foreign_key: 'female_parent_line_id'
 
-  has_many :plant_population_lists, foreign_key: 'plant_population_id'
+  has_many :plant_population_lists
 
-  has_many :linkage_maps, foreign_key: 'mapping_population'
+  has_many :linkage_maps
 
-  has_many :population_loci, foreign_key: 'plant_population'
+  has_many :population_loci, class_name: 'PopulationLocus'
 
   has_many :processed_trait_datasets, foreign_key: 'population_id'
 
   has_and_belongs_to_many :plant_lines,
-                          join_table: 'plant_population_lists',
-                          foreign_key: 'plant_population_id',
-                          association_foreign_key: 'plant_line_name'
+                          join_table: 'plant_population_lists'
 
   after_touch { __elasticsearch__.index_document }
 

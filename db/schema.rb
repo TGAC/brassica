@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150328155811) do
+ActiveRecord::Schema.define(version: 20150330130325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,22 +77,20 @@ ActiveRecord::Schema.define(version: 20150328155811) do
   add_index "linkage_groups", ["linkage_group_name"], name: "idx_143534_linkage_group_name", using: :btree
 
   create_table "linkage_maps", primary_key: "linkage_map_id", force: :cascade do |t|
-    t.text   "linkage_map_name",             default: "unspecified", null: false
-    t.text   "mapping_population",           default: "unspecified", null: false
-    t.string "map_version_no",     limit: 3, default: "xxx",         null: false
-    t.date   "map_version_date"
-    t.text   "mapping_software"
-    t.text   "mapping_function"
-    t.text   "map_author"
-    t.text   "comments",                                             null: false
-    t.text   "entered_by_whom",              default: "unspecified", null: false
-    t.date   "date_entered"
-    t.text   "data_provenance",                                      null: false
-    t.text   "data_owned_by",                default: "unspecified", null: false
-    t.text   "confirmed_by_whom"
+    t.text    "linkage_map_name",              default: "unspecified", null: false
+    t.string  "map_version_no",      limit: 3, default: "xxx",         null: false
+    t.date    "map_version_date"
+    t.text    "mapping_software"
+    t.text    "mapping_function"
+    t.text    "map_author"
+    t.text    "comments",                                              null: false
+    t.text    "entered_by_whom",               default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                       null: false
+    t.text    "data_owned_by",                 default: "unspecified", null: false
+    t.text    "confirmed_by_whom"
+    t.integer "plant_population_id"
   end
-
-  add_index "linkage_maps", ["mapping_population"], name: "idx_143550_mapping_population", using: :btree
 
   create_table "map_linkage_group_lists", primary_key: "linkage_map_id", force: :cascade do |t|
     t.text "linkage_group_id", default: "unspecified", null: false
@@ -179,21 +177,22 @@ ActiveRecord::Schema.define(version: 20150328155811) do
   end
 
   create_table "plant_accessions", force: :cascade do |t|
-    t.text "plant_line_name",            default: "unspecified", null: false
-    t.text "plant_accession",            default: "",            null: false
-    t.text "plant_accession_derivation"
-    t.text "accession_originator"
-    t.text "originating_organisation"
-    t.text "year_produced",              default: "xxxx",        null: false
-    t.date "date_harvested"
-    t.text "female_parent_plant_id"
-    t.text "male_parent_plant_id"
-    t.text "comments",                                           null: false
-    t.text "entered_by_whom",            default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                                    null: false
-    t.text "data_owned_by",              default: "unspecified", null: false
-    t.text "confirmed_by_whom"
+    t.text    "plant_line_name",            default: "unspecified", null: false
+    t.text    "plant_accession",            default: "",            null: false
+    t.text    "plant_accession_derivation"
+    t.text    "accession_originator"
+    t.text    "originating_organisation"
+    t.text    "year_produced",              default: "xxxx",        null: false
+    t.date    "date_harvested"
+    t.text    "female_parent_plant_id"
+    t.text    "male_parent_plant_id"
+    t.text    "comments",                                           null: false
+    t.text    "entered_by_whom",            default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                    null: false
+    t.text    "data_owned_by",              default: "unspecified", null: false
+    t.text    "confirmed_by_whom"
+    t.integer "plant_line_id"
   end
 
   add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
@@ -232,58 +231,72 @@ ActiveRecord::Schema.define(version: 20150328155811) do
     t.text "confirmed_by_whom", default: "unspecified", null: false
   end
 
-  create_table "plant_population_lists", primary_key: "plant_population_id", force: :cascade do |t|
-    t.text "plant_line_name",   default: "unspecified", null: false
-    t.text "sort_order",        default: "unspecified", null: false
-    t.text "comments",                                  null: false
-    t.text "entered_by_whom",   default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance"
-    t.text "confirmed_by_whom"
+  create_table "plant_population_lists", id: false, force: :cascade do |t|
+    t.text    "plant_line_name",       default: "unspecified", null: false
+    t.text    "sort_order",            default: "unspecified", null: false
+    t.text    "comments",                                      null: false
+    t.text    "entered_by_whom",       default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "confirmed_by_whom"
+    t.integer "plant_line_id"
+    t.integer "plant_population_name"
+    t.integer "plant_population_id"
   end
 
   add_index "plant_population_lists", ["plant_line_name"], name: "idx_143830_plant_line", using: :btree
+  add_index "plant_population_lists", ["plant_line_name"], name: "plant_population_lists_plant_line_name_idx", using: :btree
+  add_index "plant_population_lists", ["plant_population_name"], name: "plant_population_lists_plant_population_name_idx", using: :btree
 
-  create_table "plant_populations", primary_key: "plant_population_id", force: :cascade do |t|
-    t.text "population_type"
-    t.text "female_parent_line"
-    t.text "male_parent_line"
-    t.text "canonical_population_name", default: "unspecified"
-    t.text "description"
-    t.date "date_established"
-    t.text "established_by_whom"
-    t.text "establishing_organisation"
-    t.text "population_owned_by"
-    t.text "comments"
-    t.text "entered_by_whom",           default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_owned_by"
-    t.text "data_provenance"
-    t.text "confirmed_by_whom"
-    t.text "plant_population_name",     default: "unspecified", null: false
-    t.text "assigned_population_name",  default: "unspecified", null: false
+  create_table "plant_populations", force: :cascade do |t|
+    t.text    "name",                      default: "",            null: false
+    t.text    "population_type"
+    t.text    "female_parent_line"
+    t.text    "male_parent_line"
+    t.text    "canonical_population_name", default: "unspecified"
+    t.text    "description"
+    t.date    "date_established"
+    t.text    "established_by_whom"
+    t.text    "establishing_organisation"
+    t.text    "population_owned_by"
+    t.text    "comments"
+    t.text    "entered_by_whom",           default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_owned_by"
+    t.text    "data_provenance"
+    t.text    "confirmed_by_whom"
+    t.text    "plant_population_name",     default: "unspecified", null: false
+    t.text    "assigned_population_name",  default: "unspecified", null: false
+    t.integer "taxonomy_term_id"
+    t.integer "male_parent_line_id"
+    t.integer "female_parent_line_id"
+    t.integer "population_type_id"
   end
+
+  add_index "plant_populations", ["female_parent_line"], name: "plant_populations_female_parent_line_idx", using: :btree
+  add_index "plant_populations", ["male_parent_line"], name: "plant_populations_male_parent_line_idx", using: :btree
+  add_index "plant_populations", ["name"], name: "plant_populations_name_idx", using: :btree
+  add_index "plant_populations", ["population_type"], name: "plant_populations_population_type_idx", using: :btree
+  add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
 
   create_table "plant_scoring_units", primary_key: "scoring_unit_id", force: :cascade do |t|
-    t.text "plant_trial_id",           default: "unspecified", null: false
-    t.text "design_factor_id",         default: "unspecified", null: false
-    t.text "plant_accession",          default: "unspecified", null: false
-    t.text "scored_plant_part",        default: "unspecified", null: false
-    t.text "number_units_scored"
-    t.text "scoring_unit_sample_size"
-    t.text "scoring_unit_frame_size"
-    t.date "date_planted"
-    t.text "described_by_whom"
-    t.text "comments",                                         null: false
-    t.text "entered_by_whom",          default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                                  null: false
-    t.text "data_owned_by",            default: "unspecified", null: false
-    t.text "confirmed_by_whom"
+    t.text    "plant_trial_id",           default: "unspecified", null: false
+    t.text    "design_factor_id",         default: "unspecified", null: false
+    t.text    "scored_plant_part",        default: "unspecified", null: false
+    t.text    "number_units_scored"
+    t.text    "scoring_unit_sample_size"
+    t.text    "scoring_unit_frame_size"
+    t.date    "date_planted"
+    t.text    "described_by_whom"
+    t.text    "comments",                                         null: false
+    t.text    "entered_by_whom",          default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                  null: false
+    t.text    "data_owned_by",            default: "unspecified", null: false
+    t.text    "confirmed_by_whom"
+    t.integer "plant_accession_id"
   end
 
-  add_index "plant_scoring_units", ["plant_accession"], name: "idx_143842_trial", using: :btree
-  add_index "plant_scoring_units", ["plant_accession"], name: "plant_scoring_units_plant_accession_idx", using: :btree
   add_index "plant_scoring_units", ["scored_plant_part"], name: "idx_143842_row_plot_position", using: :btree
 
   create_table "plant_trials", primary_key: "plant_trial_id", force: :cascade do |t|
@@ -339,25 +352,30 @@ ActiveRecord::Schema.define(version: 20150328155811) do
     t.integer "plant_variety_id"
   end
 
-  create_table "pop_type_lookup", primary_key: "population_type", force: :cascade do |t|
+  create_table "pop_type_lookup", force: :cascade do |t|
+    t.text "population_type",  default: "",            null: false
     t.text "population_class", default: "unspecified", null: false
     t.text "assigned_by_whom", default: "unspecified", null: false
   end
 
+  add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
+
   create_table "population_loci", primary_key: "mapping_locus", force: :cascade do |t|
-    t.text "plant_population",  default: "unspecified", null: false
-    t.text "marker_assay_name", default: "unspecified", null: false
-    t.text "defined_by_whom"
-    t.text "comments"
-    t.text "entered_by_whom",   default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                           null: false
-    t.text "data_owned_by",     default: "unspecified", null: false
+    t.text    "plant_population",    default: "unspecified", null: false
+    t.text    "marker_assay_name",   default: "unspecified", null: false
+    t.text    "defined_by_whom"
+    t.text    "comments"
+    t.text    "entered_by_whom",     default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                             null: false
+    t.text    "data_owned_by",       default: "unspecified", null: false
+    t.integer "plant_population_id"
   end
 
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
   add_index "population_loci", ["marker_assay_name"], name: "idx_143961_marker_assay", using: :btree
   add_index "population_loci", ["plant_population"], name: "idx_143961_plant_population", using: :btree
+  add_index "population_loci", ["plant_population"], name: "population_loci_plant_population_idx", using: :btree
 
   create_table "primers", primary_key: "primer", force: :cascade do |t|
     t.text "sequence",                default: "unspecified", null: false
@@ -384,18 +402,20 @@ ActiveRecord::Schema.define(version: 20150328155811) do
   end
 
   create_table "processed_trait_datasets", primary_key: "processed_trait_dataset_id", force: :cascade do |t|
-    t.text "trial_id",                   default: "unspecified", null: false
-    t.text "trait_descriptor_id",        default: "unspecified", null: false
-    t.text "population_id",              default: "unspecified", null: false
-    t.text "processed_dataset_id"
-    t.text "trait_percent_heritability"
-    t.text "comments",                                           null: false
-    t.text "entered_by_whom",            default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                                    null: false
-    t.text "data_owned_by",              default: "unspecified", null: false
+    t.text    "trial_id",                   default: "unspecified", null: false
+    t.text    "trait_descriptor_id",        default: "unspecified", null: false
+    t.text    "population_id",              default: "unspecified", null: false
+    t.text    "processed_dataset_id"
+    t.text    "trait_percent_heritability"
+    t.text    "comments",                                           null: false
+    t.text    "entered_by_whom",            default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                    null: false
+    t.text    "data_owned_by",              default: "unspecified", null: false
+    t.integer "plant_population_id"
   end
 
+  add_index "processed_trait_datasets", ["population_id"], name: "processed_trait_datasets_population_id_idx", using: :btree
   add_index "processed_trait_datasets", ["trial_id", "trait_descriptor_id", "population_id"], name: "idx_144089_trial_id", using: :btree
 
   create_table "qtl", primary_key: "qtl_job_id", force: :cascade do |t|
