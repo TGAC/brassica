@@ -13,15 +13,20 @@
     %p.text-center
       = link_to 'LEARN MORE', about_path
 
-    .text-center
-      .input-group
-        %input(type="text" class="form-control" placeholder="Search for...")
-        %span.input-group-btn
-          %button.btn.btn-default(type="button") Search
+    .row.search-form.text-center
+      .col-md-8
+        %form
+          .form-group
+            .input-group
+              %input(type="text" class="form-control" placeholder="Search for...")
+              %span.input-group-btn
+                %button.btn.btn-default(type="button") Search
 
-      or
+      .col-md-1
+        %span or
 
-      = link_to 'Start browsing', plant_populations_path, class: 'btn btn-primary'
+      .col-md-2
+        = link_to 'Start browsing', plant_populations_path, class: 'btn btn-primary'
 
 %section.section-actions.container
   .row
