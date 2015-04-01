@@ -16,14 +16,22 @@
  */
 
 @import "bootstrap-sprockets"
-@import "bootstrap-custom"
+@import "bootstrap/bootstrap-custom"
 @import "font-awesome-sprockets"
 @import "font-awesome"
 
-@import "sticky-footer"
-@import "flash"
-@import "errors"
-@import "submissions"
+@import "base/sticky-footer"
+@import "modules/flash"
+@import "modules/errors"
+@import "partials/submissions"
+
+.page-header
+  margin: 0
+  padding-top: 10px
+  .logo
+    display: inline-block
+    height: 60px
+    width: 220px
 
 #footer
   background-color: #eee
