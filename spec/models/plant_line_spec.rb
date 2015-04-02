@@ -14,7 +14,7 @@ RSpec.describe PlantLine do
       create(:plant_line, common_name: 'cn', plant_line_name: 'pln')
     end
 
-    it 'serches plant_line_name' do
+    it 'searches plant_line_name' do
       create(:plant_line, plant_line_name: 'pln pln')
       search = PlantLine.filter(search: { plant_line_name: 'n pl' })
       expect(search.count).to eq 1
@@ -103,14 +103,14 @@ RSpec.describe PlantLine do
     end
   end
 
-  describe '#filtered' do
+  describe '#table_data' do
     it 'returns empty result when no plant lines found' do
-      expect(PlantLine.filtered(plant_line_names: [1])).to be_empty
+      expect(PlantLine.table_data(plant_line_names: [1])).to be_empty
     end
 
     it 'orders populations by plant line name' do
       plids = create_list(:plant_line, 3).map(&:plant_line_name)
-      td = PlantLine.filtered(query: { plant_line_name: plids })
+      td = PlantLine.table_data(query: { plant_line_name: plids })
       expect(td.map(&:first)).to eq plids.sort
     end
   end

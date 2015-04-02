@@ -24,9 +24,9 @@ RSpec.describe PlantPopulation do
     end
   end
 
-  describe '#grouped' do
+  describe '#table_data' do
     it 'returns empty result when no plant population is present' do
-      expect(PlantPopulation.grouped).to be_empty
+      expect(PlantPopulation.table_data).to be_empty
     end
 
     it 'properly calculates associated plant lines number' do
@@ -36,7 +36,7 @@ RSpec.describe PlantPopulation do
       create(:plant_population_list, plant_population: pps[0], plant_line: pls[1])
       create(:plant_population_list, plant_population: pps[1], plant_line: pls[2])
       create(:plant_population_list, plant_population: pps[1], plant_line: pls[1])
-      gd = PlantPopulation.grouped
+      gd = PlantPopulation.table_data
       expect(gd).not_to be_empty
       expect(gd.size).to eq 3
       expect(gd.map(&:last)).to contain_exactly 2, 2, 0
@@ -44,7 +44,7 @@ RSpec.describe PlantPopulation do
 
     it 'orders populations by population name' do
       ppids = create_list(:plant_population, 3).map(&:plant_population_id)
-      expect(PlantPopulation.grouped.map(&:first)).to eq ppids.sort
+      expect(PlantPopulation.table_data.map(&:first)).to eq ppids.sort
     end
 
     it 'gets proper columns' do
@@ -55,7 +55,7 @@ RSpec.describe PlantPopulation do
                   male_parent_line: mpl,
                   population_type: 'pp_type')
 
-      gd = PlantPopulation.grouped
+      gd = PlantPopulation.table_data
       expect(gd.count).to eq 1
       data = [
         pp.taxonomy_term.name,

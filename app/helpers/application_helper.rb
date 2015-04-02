@@ -10,7 +10,7 @@ module ApplicationHelper
           else
             :home
         end
-      when 'plant_populations', 'plant_lines'
+      when 'data_tables'
         :browse
       when 'submissions'
         :submit
@@ -28,10 +28,15 @@ module ApplicationHelper
   def navbar_menu
     [
       [:home, root_path],
-      [:browse, plant_populations_path],
+      [:browse, browse_data_path],
       [:submit, new_submission_path],
       [:api, '#'],
       [:about, about_path]
     ]
+  end
+
+  # Use this as the default main path for browsing UI section
+  def browse_data_path
+    data_tables_path(model: :plant_populations)
   end
 end
