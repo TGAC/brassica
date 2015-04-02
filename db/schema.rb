@@ -234,7 +234,6 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   create_table "plant_population_lists", id: false, force: :cascade do |t|
-    t.text    "plant_line_name",     default: "unspecified", null: false
     t.text    "sort_order",          default: "unspecified", null: false
     t.text    "comments",                                    null: false
     t.text    "entered_by_whom",     default: "unspecified", null: false
@@ -246,8 +245,6 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   add_index "plant_population_lists", ["plant_line_id"], name: "plant_population_lists_plant_line_id_idx", using: :btree
-  add_index "plant_population_lists", ["plant_line_name"], name: "idx_143830_plant_line", using: :btree
-  add_index "plant_population_lists", ["plant_line_name"], name: "plant_population_lists_plant_line_name_idx", using: :btree
   add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
   add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_name_idx", using: :btree
 
@@ -266,7 +263,6 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.text    "data_owned_by"
     t.text    "data_provenance"
     t.text    "confirmed_by_whom"
-    t.text    "plant_population_name",     default: "unspecified", null: false
     t.text    "assigned_population_name",  default: "unspecified", null: false
     t.integer "taxonomy_term_id"
     t.integer "male_parent_line_id"

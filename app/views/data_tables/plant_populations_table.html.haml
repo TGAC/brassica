@@ -1,0 +1,10 @@
+= render 'data_tables/tabs'
+
+.lead Plant Populations table
+
+= datatable_tag do
+  - PlantPopulation.table_columns.each do |column|
+    - column = "#{params[:model]}.#{column}" unless column.to_s.include? '.'
+    %th= t("tables.#{column}")
+
+  %th Plant lines

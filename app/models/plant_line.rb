@@ -29,8 +29,8 @@ class PlantLine < ActiveRecord::Base
 
   scope :by_name, -> { order(:plant_line_name) }
 
-  def self.filtered(params)
-    query = filter(params)
+  def self.table_data(params = nil)
+    query = (params && params[:query].present?) ? filter(params) : all
     query.by_name.pluck_columns(table_columns)
   end
 
@@ -50,6 +50,18 @@ class PlantLine < ActiveRecord::Base
     )
   end
 
+  def self.table_columns
+    [
+      'plant_line_name',
+      'taxonomy_terms.name',
+      'common_name',
+      'previous_line_name',
+      'date_entered',
+      'data_owned_by',
+      'organisation'
+    ]
+  end
+
   private
 
   def self.permitted_params
@@ -62,18 +74,6 @@ class PlantLine < ActiveRecord::Base
         'plant_populations.id',
         'id'
       ]
-    ]
-  end
-
-  def self.table_columns
-    [
-      'plant_line_name',
-      'taxonomy_terms.name',
-      'common_name',
-      'previous_line_name',
-      'date_entered',
-      'data_owned_by',
-      'organisation'
     ]
   end
 end

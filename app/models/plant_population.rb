@@ -31,7 +31,7 @@ class PlantPopulation < ActiveRecord::Base
 
   scope :by_name, -> { order('plant_populations.name') }
 
-  def self.grouped(params = nil)
+  def self.table_data(params = nil)
     count = 'count(plant_lines.plant_line_name)'
     query = (params && params[:query].present?) ? filter(params) : all
     query.
@@ -42,16 +42,6 @@ class PlantPopulation < ActiveRecord::Base
       pluck(*(table_columns + [count] + ref_columns))
   end
 
-  private
-
-  def self.permitted_params
-    [
-      query: [
-        :id, :name
-      ]
-    ]
-  end
-
   def self.table_columns
     [
       'plant_populations.name',
@@ -60,6 +50,16 @@ class PlantPopulation < ActiveRecord::Base
       'female_parent_lines_plant_populations.plant_line_name',
       'male_parent_lines_plant_populations.plant_line_name',
       'pop_type_lookup.population_type'
+    ]
+  end
+
+  private
+
+  def self.permitted_params
+    [
+      query: [
+        :id, :name
+      ]
     ]
   end
 
