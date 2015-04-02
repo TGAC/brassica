@@ -17,7 +17,7 @@ class PlantTrial < ActiveRecord::Base
     [
       'plant_trial_description',
       'project_descriptor',
-      'plant_populations.plant_population_id',
+      'plant_populations.name',
       'trial_year',
       'trial_location_site_name',
       'date_entered'

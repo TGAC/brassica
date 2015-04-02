@@ -42,17 +42,23 @@ en:
       date_entered: Entry date
       data_owned_by: Data owner
       organisation: Organisation
+    female_parent_lines_plant_populations:
+      plant_line_name: Female parent line
+    male_parent_lines_plant_populations:
+      plant_line_name: Male parent line
     plant_populations:
+      name: Population
       canonical_population_name: Canonical name
       female_parent_line: Female parent line
       male_parent_line: Male parent line
-      population_type: Type
     plant_trials:
       plant_trial_description: Trial
       project_descriptor: Project
       trial_year: Year
       trial_location_site_name: Location site
       date_entered: Entry date
+    pop_type_lookup:
+      population_type: Type
     taxonomy_terms:
       name: Species
     trait_descriptors:

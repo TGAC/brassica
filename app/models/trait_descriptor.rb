@@ -15,7 +15,7 @@ class TraitDescriptor < ActiveRecord::Base
   def self.table_columns
     [
       'taxonomy_terms.name',
-      'plant_populations.plant_population_id',
+      'plant_populations.name',
       :descriptor_name,
       'plant_trials.project_descriptor',
       'countries.country_name'
