@@ -45,35 +45,32 @@ RSpec.describe DataTablesController do
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 2
       expect(json['data'].size).to eq 2
-      expect(json['data'].map(&:first)).to match_array pps.map(&:id)
+      expect(json['data'].map{ |pp| pp[-3] }).to match_array pps.map(&:id)
     end
 
     it 'supports query filtering on json format request' do
-      pps = create_list(:plant_population, 2).map(&:plant_population_id)
+      pps = create_list(:plant_population, 2).map(&:id)
       get :index,
           format: :json,
           model: 'plant_populations',
-          query: { plant_population_id: pps[0] }
+          query: { id: pps[0] }
       expect(response.content_type).to eq 'application/json'
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 1
       expect(json['data'].size).to eq 1
-      expect(json['data'][0][0]).to eq pps[0]
+      expect(json['data'][0][-3]).to eq pps[0]
     end
 
     it 'prevents querying by unpermitted parameters' do
-      create(:plant_line, common_name: 'cn', plant_line_name: 'pln')
-      create(:plant_line, common_name: 'cn', plant_line_name: 'nlp')
-      create(:plant_line, common_name: 'nc', plant_line_name: 'pln')
+      create(:plant_line, common_name: 'cn')
       get :index,
           format: :json,
           model: 'plant_lines',
-          query: { common_name: 'cn', plant_line_name: ['pln'] }
+          query: { common_name: 'cn' }
       json = JSON.parse(response.body)
-      expect(json['recordsTotal']).to eq 2
-      expect(json['data'].size).to eq 2
-      expect(json['data'].map(&:first)).to match_array ['pln','pln']
-      expect(json['data'].map(&:third)).to match_array ['cn','nc']
+      expect(json['recordsTotal']).to eq 0
+      expect(json['data'].size).to eq 0
+      expect(json['data']).to eq []
     end
   end
 end
