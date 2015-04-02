@@ -34,9 +34,4 @@ module ApplicationHelper
       [:about, about_path]
     ]
   end
-
-  # Use this as the default main path for browsing UI section
-  def browse_data_path
-    data_tables_path(model: :plant_populations)
-  end
 end
