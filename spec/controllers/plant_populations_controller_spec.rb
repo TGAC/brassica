@@ -21,17 +21,17 @@ RSpec.describe PlantPopulationsController do
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 2
       expect(json['data'].size).to eq 2
-      expect(json['data'].map(&:first)).to match_array pps.map(&:id)
+      expect(json['data'].map{ |pp| pp[-3] }).to match_array pps.map(&:id)
     end
 
     it 'supports query filtering on json format request' do
-      pps = create_list(:plant_population, 2).map(&:name)
-      get :index, format: :json, query: { name: pps[0] }
+      pps = create_list(:plant_population, 2).map(&:id)
+      get :index, format: :json, query: { id: pps[0] }
       expect(response.content_type).to eq 'application/json'
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 1
       expect(json['data'].size).to eq 1
-      expect(json['data'][0][2]).to eq pps[0]
+      expect(json['data'][0][-3]).to eq pps[0]
     end
   end
 end

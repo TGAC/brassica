@@ -39,12 +39,12 @@ RSpec.describe PlantPopulation do
       gd = PlantPopulation.grouped
       expect(gd).not_to be_empty
       expect(gd.size).to eq 3
-      expect(gd.map(&:last)).to contain_exactly 2, 2, 0
+      expect(gd.map{ |pp| pp[-4] }).to contain_exactly 2, 2, 0
     end
 
     it 'orders populations by population name' do
       ppids = create_list(:plant_population, 3).map(&:name)
-      expect(PlantPopulation.grouped.map(&:third)).to eq ppids.sort
+      expect(PlantPopulation.grouped.map(&:first)).to eq ppids.sort
     end
 
     it 'gets proper columns' do
@@ -57,15 +57,15 @@ RSpec.describe PlantPopulation do
       gd = PlantPopulation.grouped
       expect(gd.count).to eq 1
       data = [
-        pp.taxonomy_term.name,
         pp.name,
+        pp.taxonomy_term.name,
         pp.canonical_population_name,
         fpl.plant_line_name,
         mpl.plant_line_name,
         pp.population_type.population_type,
         0
       ]
-      expect(gd[0][1..-1]).to eq data
+      expect(gd[0][0..-4]).to eq data
     end
   end
 end
