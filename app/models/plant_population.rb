@@ -4,44 +4,42 @@ class PlantPopulation < ActiveRecord::Base
 
   belongs_to :taxonomy_term
 
-  belongs_to :population_type_lookup, foreign_key: 'population_type'
+  belongs_to :population_type
 
   belongs_to :male_parent_line, class_name: 'PlantLine',
-             foreign_key: 'male_parent_line'
+             foreign_key: 'male_parent_line_id'
 
   belongs_to :female_parent_line, class_name: 'PlantLine',
-             foreign_key: 'female_parent_line'
+             foreign_key: 'female_parent_line_id'
 
-  has_many :plant_population_lists, foreign_key: 'plant_population_id'
+  has_many :plant_population_lists
 
-  has_many :linkage_maps, foreign_key: 'mapping_population'
+  has_many :linkage_maps
 
-  has_many :population_loci, foreign_key: 'plant_population'
+  has_many :population_loci, class_name: 'PopulationLocus'
 
-  has_many :processed_trait_datasets, foreign_key: 'population_id'
+  has_many :processed_trait_datasets
 
-  has_many :plant_trials, foreign_key: 'plant_population'
+  has_many :plant_trials
 
   has_and_belongs_to_many :plant_lines,
-                          join_table: 'plant_population_lists',
-                          foreign_key: 'plant_population_id',
-                          association_foreign_key: 'plant_line_name'
+                          join_table: 'plant_population_lists'
 
   after_touch { __elasticsearch__.index_document }
 
   include Filterable
 
-  scope :by_name, -> { order(:plant_population_id) }
+  scope :by_name, -> { order('plant_populations.name') }
 
   def self.grouped(params = nil)
     count = 'count(plant_lines.plant_line_name)'
     query = (params && params[:query].present?) ? filter(params) : all
     query.
-      includes(:plant_lines).
-      joins(:taxonomy_term).
-      group(table_columns).
+      joins(:taxonomy_term, :population_type).
+      includes(:plant_lines, :female_parent_line, :male_parent_line).
+      group(table_columns + ref_columns).
       by_name.
-      pluck(*(table_columns + [count]))
+      pluck(*(table_columns + [count] + ref_columns))
   end
 
   private
@@ -49,19 +47,27 @@ class PlantPopulation < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
-        :plant_population_id
+        :id, :name
       ]
     ]
   end
 
   def self.table_columns
     [
-      'plant_populations.plant_population_id',
+      'plant_populations.name',
       'taxonomy_terms.name',
       :canonical_population_name,
-      :female_parent_line,
-      :male_parent_line,
-      :population_type
+      'female_parent_lines_plant_populations.plant_line_name',
+      'male_parent_lines_plant_populations.plant_line_name',
+      'pop_type_lookup.population_type'
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'plant_populations.id',
+      'female_parent_line_id',
+      'male_parent_line_id'
     ]
   end
 
@@ -72,7 +78,7 @@ class PlantPopulation < ActiveRecord::Base
 
     as_json(
       only: [
-        :id, :plant_population_name, :canonical_population_name, :description,
+        :id, :name, :canonical_population_name, :description,
         :population_type
       ],
       include: {

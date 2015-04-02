@@ -1,14 +1,17 @@
 class BindPlantVarietiesToCountries < ActiveRecord::Migration
+  require File.expand_path('lib/migration_helper')
+  include MigrationHelper
+
   def up
 
     # Add index on countries for faster search
     add_index "countries", ["country_code"], name: 'idx_ccs_country_code', using: :btree
 
-    ActiveRecord::Base.connection.execute("DELETE FROM countries WHERE \
+    execute("DELETE FROM countries WHERE \
       country_code IN ('xxx', 'n/a', 'ooo')")
 
     # Grab all existing country codes
-    ccs = ActiveRecord::Base.connection.execute("SELECT country_code FROM countries")
+    ccs = execute("SELECT country_code FROM countries")
     ccs = ccs.collect { |cc| cc['country_code'] }
 
     create_table "plant_variety_country_of_origin", id: false, force: :cascade do |t|
@@ -17,7 +20,7 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
     end
 
     # Iterate over PVs and try to assign each to the appropriate countries
-    pvs = ActiveRecord::Base.connection.execute("SELECT * FROM plant_varieties")
+    pvs = execute("SELECT * FROM plant_varieties")
 
     pvs.each do |pv|
       coo = pv['country_of_origin'].delete(' ').upcase
@@ -32,7 +35,7 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
             plant_variety_name, country_code) VALUES ( \
             '#{pv['plant_variety_name']}', \
             '#{code}')"
-          ActiveRecord::Base.connection.execute(insert)
+          execute(insert)
         else
           # Add notification to comments
           puts "Unknown code #{code}. Inserting warning in comments."
@@ -41,7 +44,7 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
           comments += " | WARNING: Unrecognized country_of_origin: #{code}"
           update = "UPDATE plant_varieties SET comments = '#{comments}' \
             WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
-          ActiveRecord::Base.connection.execute(update)
+          execute(update)
         end
       end
     end
@@ -64,7 +67,7 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
             plant_variety_name, country_code) VALUES ( \
             '#{pv['plant_variety_name']}', \
             '#{code}')"
-          ActiveRecord::Base.connection.execute(insert)
+          execute(insert)
         else
           # Add notification to comments
           puts "Unknown code #{code}. Inserting warning in comments."
@@ -73,7 +76,7 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
           comments += " | WARNING: Unrecognized country_registered: #{code}"
           update = "UPDATE plant_varieties SET comments = '#{comments}' \
             WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
-          ActiveRecord::Base.connection.execute(update)
+          execute(update)
         end
       end
 
@@ -88,14 +91,14 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
     add_column :plant_varieties, :country_of_origin, :string, default: ''
     add_column :plant_varieties, :country_registered, :string, default: ''
 
-    pvs = ActiveRecord::Base.connection.execute("SELECT * FROM plant_varieties")
+    pvs = execute("SELECT * FROM plant_varieties")
     pvs.each do |pv|
       pv_coo = ""
       pv_cr = ""
-      coos = ActiveRecord::Base.connection.execute("SELECT country_code FROM \
+      coos = execute("SELECT country_code FROM \
         plant_variety_country_of_origin WHERE plant_variety_name = \
         E'#{escape(pv['plant_variety_name'])}'")
-      crs = ActiveRecord::Base.connection.execute("SELECT country_code FROM \
+      crs = execute("SELECT country_code FROM \
         plant_variety_country_registered WHERE plant_variety_name = \
         E'#{escape(pv['plant_variety_name'])}'")
       pv_coo = (coos.collect {|coo| coo['country_code']}.join('; '))
@@ -104,12 +107,12 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
       unless pv_coo.blank?
         update = "UPDATE plant_varieties SET country_of_origin = '#{pv_coo}' \
           WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
-        ActiveRecord::Base.connection.execute(update)
+        execute(update)
       end
       unless pv_cr.blank?
         update = "UPDATE plant_varieties SET country_registered = '#{pv_cr}' \
           WHERE plant_variety_name = '#{escape(pv['plant_variety_name'])}'"
-        ActiveRecord::Base.connection.execute(update)
+        execute(update)
       end
     end
 
@@ -145,12 +148,4 @@ class BindPlantVarietiesToCountries < ActiveRecord::Migration
     code
   end
 
-  def escape(string)
-    if string.nil?
-      nil
-    else
-      pattern = /(\'|\"|\.|\*|\/|\-|\\|\)|\$|\+|\(|\^|\?|\!|\~|\`)/
-      string.gsub(pattern){|match|"\\"  + match}
-    end
-  end
 end

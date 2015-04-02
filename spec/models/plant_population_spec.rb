@@ -17,10 +17,10 @@ RSpec.describe PlantPopulation do
       )
       expect(search.count).to eq 0
       search = PlantPopulation.filter(
-        query: { plant_population_id: @pp.plant_population_id }
+        query: { id: @pp.id }
       )
       expect(search.count).to eq 1
-      expect(search[0].plant_population_id).to eq @pp.plant_population_id
+      expect(search[0].id).to eq @pp.id
     end
   end
 
@@ -39,11 +39,11 @@ RSpec.describe PlantPopulation do
       gd = PlantPopulation.grouped
       expect(gd).not_to be_empty
       expect(gd.size).to eq 3
-      expect(gd.map(&:last)).to contain_exactly 2, 2, 0
+      expect(gd.map{ |pp| pp[-4] }).to contain_exactly 2, 2, 0
     end
 
     it 'orders populations by population name' do
-      ppids = create_list(:plant_population, 3).map(&:plant_population_id)
+      ppids = create_list(:plant_population, 3).map(&:name)
       expect(PlantPopulation.grouped.map(&:first)).to eq ppids.sort
     end
 
@@ -52,20 +52,20 @@ RSpec.describe PlantPopulation do
       mpl = create(:plant_line)
       pp = create(:plant_population,
                   female_parent_line: fpl,
-                  male_parent_line: mpl,
-                  population_type: 'pp_type')
+                  male_parent_line: mpl)
 
       gd = PlantPopulation.grouped
       expect(gd.count).to eq 1
       data = [
+        pp.name,
         pp.taxonomy_term.name,
         pp.canonical_population_name,
         fpl.plant_line_name,
         mpl.plant_line_name,
-        'pp_type',
+        pp.population_type.population_type,
         0
       ]
-      expect(gd[0][1..-1]).to eq data
+      expect(gd[0][0..-4]).to eq data
     end
   end
 end
