@@ -64,17 +64,24 @@ window.configs =
   'plant-populations':
     columnDefs:
       [
-        targets: [3, 4]
+        targets: [3]
         render: (data, type, full, meta) ->
           if data
-            '<a href="data_tables?model=plant_lines&query[plant_line_name][]=' + data + '">' + data + '</a>'
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
+          else
+            ''
+      ,
+        targets: [4]
+        render: (data, type, full, meta) ->
+          if data
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[9] + '">' + data + '</a>'
           else
             ''
       ,
         targets: [6]
         render: (data, type, full, meta) ->
           if data && data != '0'
-            '<a href="data_tables?model=plant_lines&query[plant_populations.plant_population_id]=' + full[0] + '">' + data + '</a>'
+            '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[7] + '">' + data + '</a>'
           else
             ''
       ]
