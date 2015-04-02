@@ -93,6 +93,8 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.integer "plant_population_id"
   end
 
+  add_index "linkage_maps", ["plant_population_id"], name: "linkage_maps_plant_population_id_idx", using: :btree
+
   create_table "map_linkage_group_lists", primary_key: "linkage_map_id", force: :cascade do |t|
     t.text "linkage_group_id", default: "unspecified", null: false
     t.text "comments",                                 null: false
@@ -178,7 +180,6 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   create_table "plant_accessions", force: :cascade do |t|
-    t.text    "plant_line_name",            default: "unspecified", null: false
     t.text    "plant_accession",            default: "",            null: false
     t.text    "plant_accession_derivation"
     t.text    "accession_originator"
@@ -197,8 +198,7 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
-  add_index "plant_accessions", ["plant_line_name"], name: "idx_143691_plant_line", using: :btree
-  add_index "plant_accessions", ["plant_line_name"], name: "plant_accessions_plant_line_name_idx", using: :btree
+  add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
 
   create_table "plant_lines", force: :cascade do |t|
     t.text    "plant_line_name",    default: "",            null: false
@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   add_index "plant_lines", ["plant_line_name"], name: "plant_lines_plant_line_name_idx", using: :btree
+  add_index "plant_lines", ["plant_variety_id"], name: "plant_lines_plant_variety_id_idx", using: :btree
   add_index "plant_lines", ["plant_variety_name"], name: "idx_143729_plant_variety", using: :btree
   add_index "plant_lines", ["taxonomy_term_id"], name: "index_plant_lines_on_taxonomy_term_id", using: :btree
 
@@ -233,27 +234,26 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   create_table "plant_population_lists", id: false, force: :cascade do |t|
-    t.text    "plant_line_name",       default: "unspecified", null: false
-    t.text    "sort_order",            default: "unspecified", null: false
-    t.text    "comments",                                      null: false
-    t.text    "entered_by_whom",       default: "unspecified", null: false
+    t.text    "plant_line_name",     default: "unspecified", null: false
+    t.text    "sort_order",          default: "unspecified", null: false
+    t.text    "comments",                                    null: false
+    t.text    "entered_by_whom",     default: "unspecified", null: false
     t.date    "date_entered"
     t.text    "data_provenance"
     t.text    "confirmed_by_whom"
     t.integer "plant_line_id"
-    t.integer "plant_population_name"
     t.integer "plant_population_id"
   end
 
+  add_index "plant_population_lists", ["plant_line_id"], name: "plant_population_lists_plant_line_id_idx", using: :btree
   add_index "plant_population_lists", ["plant_line_name"], name: "idx_143830_plant_line", using: :btree
   add_index "plant_population_lists", ["plant_line_name"], name: "plant_population_lists_plant_line_name_idx", using: :btree
-  add_index "plant_population_lists", ["plant_population_name"], name: "plant_population_lists_plant_population_name_idx", using: :btree
+  add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
+  add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_name_idx", using: :btree
 
   create_table "plant_populations", force: :cascade do |t|
     t.text    "name",                      default: "",            null: false
     t.text    "population_type"
-    t.text    "female_parent_line"
-    t.text    "male_parent_line"
     t.text    "canonical_population_name", default: "unspecified"
     t.text    "description"
     t.date    "date_established"
@@ -274,10 +274,11 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.integer "population_type_id"
   end
 
-  add_index "plant_populations", ["female_parent_line"], name: "plant_populations_female_parent_line_idx", using: :btree
-  add_index "plant_populations", ["male_parent_line"], name: "plant_populations_male_parent_line_idx", using: :btree
+  add_index "plant_populations", ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree
+  add_index "plant_populations", ["male_parent_line_id"], name: "plant_populations_male_parent_line_id_idx", using: :btree
   add_index "plant_populations", ["name"], name: "plant_populations_name_idx", using: :btree
   add_index "plant_populations", ["population_type"], name: "plant_populations_population_type_idx", using: :btree
+  add_index "plant_populations", ["population_type_id"], name: "plant_populations_population_type_id_idx", using: :btree
   add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
 
   create_table "plant_scoring_units", primary_key: "scoring_unit_id", force: :cascade do |t|
@@ -298,6 +299,7 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.integer "plant_accession_id"
   end
 
+  add_index "plant_scoring_units", ["plant_accession_id"], name: "plant_scoring_units_plant_accession_id_idx", using: :btree
   add_index "plant_scoring_units", ["scored_plant_part"], name: "idx_143842_row_plot_position", using: :btree
 
   create_table "plant_trials", primary_key: "plant_trial_id", force: :cascade do |t|
@@ -327,6 +329,8 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.integer "plant_population_id"
   end
 
+  add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
+
   create_table "plant_varieties", force: :cascade do |t|
     t.string "plant_variety_name"
     t.string "crop_type"
@@ -348,10 +352,16 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.integer "plant_variety_id"
   end
 
+  add_index "plant_variety_country_of_origin", ["country_id"], name: "plant_variety_country_of_origin_country_id_idx", using: :btree
+  add_index "plant_variety_country_of_origin", ["plant_variety_id"], name: "plant_variety_country_of_origin_plant_variety_id_idx", using: :btree
+
   create_table "plant_variety_country_registered", id: false, force: :cascade do |t|
     t.integer "country_id"
     t.integer "plant_variety_id"
   end
+
+  add_index "plant_variety_country_registered", ["country_id"], name: "plant_variety_country_registered_country_id_idx", using: :btree
+  add_index "plant_variety_country_registered", ["plant_variety_id"], name: "plant_variety_country_registered_plant_variety_id_idx", using: :btree
 
   create_table "pop_type_lookup", force: :cascade do |t|
     t.text "population_type",  default: "",            null: false
@@ -377,6 +387,7 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   add_index "population_loci", ["marker_assay_name"], name: "idx_143961_marker_assay", using: :btree
   add_index "population_loci", ["plant_population"], name: "idx_143961_plant_population", using: :btree
   add_index "population_loci", ["plant_population"], name: "population_loci_plant_population_idx", using: :btree
+  add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
   create_table "primers", primary_key: "primer", force: :cascade do |t|
     t.text "sequence",                default: "unspecified", null: false

@@ -36,8 +36,7 @@ class Submission::PlantPopulationFinalizer
 
   def create_plant_population
     attrs = {
-      plant_population_id: submission.content.step01.name,
-      plant_population_name: submission.content.step01.name,
+      name: submission.content.step01.name,
       population_owned_by: submission.content.step01.owned_by,
     }
 
@@ -51,6 +50,10 @@ class Submission::PlantPopulationFinalizer
     attrs.merge!(submission.content.step02.to_h)
     if taxonomy_term = TaxonomyTerm.find_by!(name: submission.content.step02.taxonomy_term)
       attrs.merge!(taxonomy_term: taxonomy_term)
+    end
+
+    if population_type = PopulationType.find_by!(population_type: submission.content.step02.population_type)
+      attrs.merge!(population_type: population_type)
     end
 
     attrs.merge!(submission.content.step04.to_h)

@@ -4,7 +4,7 @@ class PlantPopulation < ActiveRecord::Base
 
   belongs_to :taxonomy_term
 
-  belongs_to :population_type_lookup, foreign_key: 'population_type'
+  belongs_to :population_type
 
   belongs_to :male_parent_line, class_name: 'PlantLine',
              foreign_key: 'male_parent_line_id'
@@ -29,14 +29,14 @@ class PlantPopulation < ActiveRecord::Base
 
   include Filterable
 
-  scope :by_name, -> { order(:plant_population_id) }
+  scope :by_name, -> { order('plant_populations.name') }
 
   def self.grouped(params = nil)
     count = 'count(plant_lines.plant_line_name)'
     query = (params && params[:query].present?) ? filter(params) : all
     query.
-      includes(:plant_lines).
-      joins(:taxonomy_term).
+      joins(:taxonomy_term, :population_type).
+      includes(:plant_lines, :female_parent_line, :male_parent_line).
       group(table_columns).
       by_name.
       pluck(*(table_columns + [count]))
@@ -47,19 +47,20 @@ class PlantPopulation < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
-        :plant_population_id
+        :id, :name
       ]
     ]
   end
 
   def self.table_columns
     [
-      'plant_populations.plant_population_id',
+      'plant_populations.id',
       'taxonomy_terms.name',
+      'plant_populations.name',
       :canonical_population_name,
-      :female_parent_line,
-      :male_parent_line,
-      :population_type
+      'female_parent_lines_plant_populations.plant_line_name',
+      'male_parent_lines_plant_populations.plant_line_name',
+      'pop_type_lookup.population_type'
     ]
   end
 
@@ -70,7 +71,7 @@ class PlantPopulation < ActiveRecord::Base
 
     as_json(
       only: [
-        :id, :plant_population_name, :canonical_population_name, :description,
+        :id, :name, :canonical_population_name, :description,
         :population_type
       ],
       include: {

@@ -31,72 +31,11 @@ class AddIdsToGreenModel < ActiveRecord::Migration
     replace_fk('plant_trials', 'countries', 'country',
                'country_id', 'country_code')
 
-    # unless column_exists?(:plant_variety_country_of_origin, :country_id)
-    #   add_column :plant_variety_country_of_origin, :country_id, :int
-    # end
-    # unless column_exists?(:plant_variety_country_of_origin, :plant_variety_id)
-    #   add_column :plant_variety_country_of_origin, :plant_variety_id, :int
-    # end
-    # # Modify all FKs which link to countries
-    # if column_exists?(:plant_variety_country_of_origin, :country_code)
-    #   coos = execute("SELECT * FROM plant_variety_country_of_origin")
-    #   coos.each do |coo|
-    #     c_id = get_id_for_value('countries', 'country_code', coo['country_code'])
-    #     pv_id = get_id_for_value('plant_varieties', 'plant_variety_name', coo['plant_variety_name'])
-    #
-    #     update_1 = "UPDATE plant_variety_country_of_origin \
-    #       SET plant_variety_id = #{pv_id} \
-    #       WHERE plant_variety_name = E'#{coo['plant_variety_name']}'"
-    #
-    #     update_2 = "UPDATE plant_variety_country_of_origin \
-    #       SET country_id = #{c_id} \
-    #       WHERE country_code = '#{coo['country_code']}'"
-    #
-    #     execute(update_1)
-    #     execute(update_2)
-    #   end
-    #
-    #   # Drop obsolete FKs
-    #   remove_column :plant_variety_country_of_origin, :country_code
-    #   remove_column :plant_variety_country_of_origin, :plant_variety_name
-    # end
-
     # Extend crs with new FKs
     replace_fk('plant_variety_country_registered', 'countries', 'country_code',
                'country_id', 'country_code')
     replace_fk('plant_variety_country_registered', 'plant_varieties',
                'plant_variety_name', 'plant_variety_id', 'plant_variety_name')
-
-
-    # unless column_exists?(:plant_variety_country_registered, :country_id)
-    #   add_column :plant_variety_country_registered, :country_id, :int
-    # end
-    # unless column_exists?(:plant_variety_country_registered, :plant_variety_id)
-    #   add_column :plant_variety_country_registered, :plant_variety_id, :int
-    # end
-    # # Modify all FKs which link to countries
-    # if column_exists?(:plant_variety_country_registered, :country_code)
-    #   crs = execute("SELECT * FROM plant_variety_country_registered")
-    #   crs.each do |cr|
-    #     c_id = get_id_for_value('countries', 'country_code', cr['country_code'])
-    #     pv_id = get_id_for_value('plant_varieties', 'plant_variety_name', cr['plant_variety_name'])
-    #
-    #     update_1 = "UPDATE plant_variety_country_registered \
-    #       SET plant_variety_id = #{pv_id} \
-    #       WHERE plant_variety_name = E'#{cr['plant_variety_name']}'"
-    #
-    #     update_2 = "UPDATE plant_variety_country_registered \
-    #       SET country_id = #{c_id} \
-    #       WHERE country_code = '#{cr['country_code']}'"
-    #
-    #     execute(update_1)
-    #     execute(update_2)
-    #   end
-    #
-    #   # Drop obsolete FKs
-    #   remove_column :plant_variety_country_registered, :plant_variety_name
-    #   remove_column :plant_variety_country_registered, :country_code
-    # end
 
     #=========plant_lines==========#
     unless column_exists?(:plant_lines, :id)

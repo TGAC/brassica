@@ -59,7 +59,8 @@ class PlantLine < ActiveRecord::Base
         'plant_lines.plant_line_name'
       ],
       query: [
-        'plant_populations.plant_population_id',
+        'plant_populations.id',
+        'plant_populations.name',
         plant_line_name: [],
         'plant_lines.plant_line_name' => []
       ]

@@ -53,7 +53,7 @@ RSpec.describe PlantLine do
       it 'supports querying by associated objects' do
         search = PlantLine.filter(
           query: {
-            'plant_populations.plant_population_id' => @pp.plant_population_id
+            'plant_populations.name' => @pp.name
           }
         )
         expect(search.count).to eq 2
@@ -64,7 +64,7 @@ RSpec.describe PlantLine do
       it 'supports multi-criteria queries' do
         search = PlantLine.filter(
           query: {
-            'plant_populations.plant_population_id' => @pp.plant_population_id,
+            'plant_populations.id' => @pp.id,
             plant_line_name: [@pls[1].plant_line_name]
           }
         )
@@ -75,7 +75,7 @@ RSpec.describe PlantLine do
       it 'supports both search and query criteria combined' do
         search = PlantLine.filter(
           query: {
-            'plant_populations.plant_population_id' => @pp.plant_population_id
+            'plant_populations.id' => @pp.id
           },
           search: { 'plant_lines.plant_line_name' => @pls[1].plant_line_name[1..-2] }
         )
