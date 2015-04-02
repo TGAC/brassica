@@ -67,7 +67,7 @@ class Submission::PlantPopulationFinalizer
       plant_line = PlantLine.find_by!(plant_line_name: plant_line_name)
       PlantPopulationList.create!(
         plant_population: plant_population,
-        plant_line_name: plant_line.plant_line_name,
+        plant_line: plant_line,
         date_entered: Date.today,
         data_provenance: submission.content.step04.data_provenance,
         entered_by_whom: submission.user.login,

@@ -26,7 +26,7 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   def details_path
     Rails.application.routes.url_helpers.plant_populations_path(
       query: {
-        plant_population_id: population_name
+        id: object.id
       }
     )
   end

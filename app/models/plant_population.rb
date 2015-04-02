@@ -37,9 +37,9 @@ class PlantPopulation < ActiveRecord::Base
     query.
       joins(:taxonomy_term, :population_type).
       includes(:plant_lines, :female_parent_line, :male_parent_line).
-      group(table_columns).
+      group(table_columns + ref_columns).
       by_name.
-      pluck(*(table_columns + [count]))
+      pluck(*(table_columns + [count] + ref_columns))
   end
 
   private
@@ -54,13 +54,20 @@ class PlantPopulation < ActiveRecord::Base
 
   def self.table_columns
     [
-      'plant_populations.id',
-      'taxonomy_terms.name',
       'plant_populations.name',
+      'taxonomy_terms.name',
       :canonical_population_name,
       'female_parent_lines_plant_populations.plant_line_name',
       'male_parent_lines_plant_populations.plant_line_name',
       'pop_type_lookup.population_type'
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'plant_populations.id',
+      'female_parent_line_id',
+      'male_parent_line_id'
     ]
   end
 
