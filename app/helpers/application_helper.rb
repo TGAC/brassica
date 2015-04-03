@@ -26,12 +26,12 @@ module ApplicationHelper
   end
 
   def navbar_menu
-    [
-      [:home, root_path],
-      [:browse, browse_data_path],
-      [:submit, new_submission_path],
-      [:api, '#'],
-      [:about, about_path]
-    ]
+    {
+      home: root_path,
+      browse: browse_data_path,
+      submit: new_submission_path,
+      api: '#',
+      about: about_path
+    }
   end
 end
