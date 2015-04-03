@@ -11,6 +11,8 @@ namespace :app do
     restore_cropstore_dump
     puts " - building ES indices"
     build_elasticsearch_indices
+    puts " - run further migrations"
+    migrate_db
     puts " - DONE"
   end
 
@@ -28,10 +30,14 @@ namespace :app do
   def restore_cropstore_dump
     db_config = Rails.application.config_for(:database)
     env = { "PGUSER" => db_config["username"], "PGPASSWORD" => db_config["password"] }
-    cmd = "pg_restore -O -d #{db_config["database"]} db/cropstore_web_20150403_1530.dump"
+    cmd = "pg_restore -O -d #{db_config["database"]} db/cropstore_dev_20150403_1530.dump"
     unless system(env, cmd)
       raise "Cropstore dump restoration failed: #{$?}"
     end
+  end
+
+  def migrate_db
+    Rake::Task['db:migrate'].invoke
   end
 
   def build_elasticsearch_indices
