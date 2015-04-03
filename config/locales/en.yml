@@ -52,6 +52,7 @@ en:
       female_parent_line: Female parent line
       male_parent_line: Male parent line
     plant_trials:
+      plant_trial_name: Name
       plant_trial_description: Trial
       project_descriptor: Project
       trial_year: Year

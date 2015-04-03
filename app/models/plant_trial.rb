@@ -1,7 +1,7 @@
 class PlantTrial < ActiveRecord::Base
 
   has_many :plant_scoring_units
-  has_many :processed_trait_datasets, foreign_key: 'trial_id'
+  has_many :processed_trait_datasets
   belongs_to :plant_population
   belongs_to :country
 
@@ -15,6 +15,7 @@ class PlantTrial < ActiveRecord::Base
 
   def self.table_columns
     [
+      'plant_trial_name',
       'plant_trial_description',
       'project_descriptor',
       'plant_populations.name',

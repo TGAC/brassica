@@ -79,6 +79,9 @@ module MigrationHelper
 
       end
 
+      # Upsert index on target key field to accelerate queries
+      upsert_index(source_table_name, new_fk)
+
       if errors == 0
         puts "No errors detected - removing old FK #{existing_fk}"
         remove_column source_table_name, existing_fk
