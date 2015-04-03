@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150330130325) do
+ActiveRecord::Schema.define(version: 20150403092718) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,7 +27,8 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
   add_index "countries", ["country_code"], name: "idx_ccs_country_code", using: :btree
 
-  create_table "design_factors", primary_key: "design_factor_id", force: :cascade do |t|
+  create_table "design_factors", force: :cascade do |t|
+    t.text "design_factor_name",  default: "",            null: false
     t.text "institute_id",        default: "unspecified", null: false
     t.text "trial_location_name", default: "unspecified", null: false
     t.text "design_unit_counter", default: "unspecified", null: false
@@ -44,6 +45,7 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.text "confirmed_by_whom"
   end
 
+  add_index "design_factors", ["design_factor_name"], name: "design_factors_design_factor_name_idx", using: :btree
   add_index "design_factors", ["institute_id"], name: "idx_143500_institute_id", using: :btree
 
   create_table "genotype_matrices", primary_key: "linkage_map_id", force: :cascade do |t|
@@ -223,7 +225,8 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   add_index "plant_lines", ["plant_variety_name"], name: "idx_143729_plant_variety", using: :btree
   add_index "plant_lines", ["taxonomy_term_id"], name: "index_plant_lines_on_taxonomy_term_id", using: :btree
 
-  create_table "plant_parts", primary_key: "plant_part", force: :cascade do |t|
+  create_table "plant_parts", force: :cascade do |t|
+    t.text "plant_part",        default: "",            null: false
     t.text "description",                               null: false
     t.text "described_by_whom", default: "unspecified", null: false
     t.text "comments",                                  null: false
@@ -232,6 +235,8 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.text "data_provenance",                           null: false
     t.text "confirmed_by_whom", default: "unspecified", null: false
   end
+
+  add_index "plant_parts", ["plant_part"], name: "plant_parts_plant_part_idx", using: :btree
 
   create_table "plant_population_lists", id: false, force: :cascade do |t|
     t.text    "sort_order",          default: "unspecified", null: false
@@ -246,7 +251,6 @@ ActiveRecord::Schema.define(version: 20150330130325) do
 
   add_index "plant_population_lists", ["plant_line_id"], name: "plant_population_lists_plant_line_id_idx", using: :btree
   add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
-  add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_name_idx", using: :btree
 
   create_table "plant_populations", force: :cascade do |t|
     t.text    "name",                      default: "",            null: false
@@ -277,10 +281,8 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   add_index "plant_populations", ["population_type_id"], name: "plant_populations_population_type_id_idx", using: :btree
   add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
 
-  create_table "plant_scoring_units", primary_key: "scoring_unit_id", force: :cascade do |t|
-    t.text    "plant_trial_id",           default: "unspecified", null: false
-    t.text    "design_factor_id",         default: "unspecified", null: false
-    t.text    "scored_plant_part",        default: "unspecified", null: false
+  create_table "plant_scoring_units", force: :cascade do |t|
+    t.text    "scoring_unit_name",        default: "",            null: false
     t.text    "number_units_scored"
     t.text    "scoring_unit_sample_size"
     t.text    "scoring_unit_frame_size"
@@ -293,12 +295,19 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.text    "data_owned_by",            default: "unspecified", null: false
     t.text    "confirmed_by_whom"
     t.integer "plant_accession_id"
+    t.integer "plant_trial_id"
+    t.integer "design_factor_id"
+    t.integer "plant_part_id"
   end
 
+  add_index "plant_scoring_units", ["design_factor_id"], name: "plant_scoring_units_design_factor_id_idx", using: :btree
   add_index "plant_scoring_units", ["plant_accession_id"], name: "plant_scoring_units_plant_accession_id_idx", using: :btree
-  add_index "plant_scoring_units", ["scored_plant_part"], name: "idx_143842_row_plot_position", using: :btree
+  add_index "plant_scoring_units", ["plant_part_id"], name: "plant_scoring_units_plant_part_id_idx", using: :btree
+  add_index "plant_scoring_units", ["plant_trial_id"], name: "plant_scoring_units_plant_trial_id_idx", using: :btree
+  add_index "plant_scoring_units", ["scoring_unit_name"], name: "plant_scoring_units_scoring_unit_name_idx", using: :btree
 
-  create_table "plant_trials", primary_key: "plant_trial_id", force: :cascade do |t|
+  create_table "plant_trials", force: :cascade do |t|
+    t.text    "plant_trial_name",         default: "",            null: false
     t.text    "project_descriptor",       default: "unspecified", null: false
     t.text    "plant_trial_description",                          null: false
     t.text    "trial_year",               default: "xxxx",        null: false
@@ -326,6 +335,7 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
+  add_index "plant_trials", ["plant_trial_name"], name: "plant_trials_plant_trial_name_idx", using: :btree
 
   create_table "plant_varieties", force: :cascade do |t|
     t.string "plant_variety_name"
@@ -410,8 +420,6 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   create_table "processed_trait_datasets", primary_key: "processed_trait_dataset_id", force: :cascade do |t|
-    t.text    "trial_id",                   default: "unspecified", null: false
-    t.text    "trait_descriptor_id",        default: "unspecified", null: false
     t.text    "population_id",              default: "unspecified", null: false
     t.text    "processed_dataset_id"
     t.text    "trait_percent_heritability"
@@ -421,10 +429,13 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.text    "data_provenance",                                    null: false
     t.text    "data_owned_by",              default: "unspecified", null: false
     t.integer "plant_population_id"
+    t.integer "plant_trial_id"
+    t.integer "trait_descriptor_id"
   end
 
+  add_index "processed_trait_datasets", ["plant_trial_id"], name: "processed_trait_datasets_plant_trial_id_idx", using: :btree
   add_index "processed_trait_datasets", ["population_id"], name: "processed_trait_datasets_population_id_idx", using: :btree
-  add_index "processed_trait_datasets", ["trial_id", "trait_descriptor_id", "population_id"], name: "idx_144089_trial_id", using: :btree
+  add_index "processed_trait_datasets", ["trait_descriptor_id"], name: "processed_trait_datasets_trait_descriptor_id_idx", using: :btree
 
   create_table "qtl", primary_key: "qtl_job_id", force: :cascade do |t|
     t.text "processed_trait_dataset_id", default: "unspecified", null: false
@@ -478,15 +489,18 @@ ActiveRecord::Schema.define(version: 20150330130325) do
     t.text "data_provenance",                          null: false
   end
 
-  create_table "scoring_occasions", primary_key: "scoring_occasion_id", force: :cascade do |t|
+  create_table "scoring_occasions", force: :cascade do |t|
+    t.text "scoring_occasion_name", default: "",            null: false
     t.date "score_start_date"
     t.date "score_end_date"
-    t.text "comments",                                 null: false
-    t.text "entered_by_whom",  default: "unspecified", null: false
+    t.text "comments",                                      null: false
+    t.text "entered_by_whom",       default: "unspecified", null: false
     t.date "date_entered"
-    t.text "data_provenance",                          null: false
-    t.text "data_owned_by",    default: "unspecified", null: false
+    t.text "data_provenance",                               null: false
+    t.text "data_owned_by",         default: "unspecified", null: false
   end
+
+  add_index "scoring_occasions", ["scoring_occasion_name"], name: "scoring_occasions_scoring_occasion_name_idx", using: :btree
 
   create_table "submissions", force: :cascade do |t|
     t.integer  "user_id",                         null: false
@@ -515,7 +529,8 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   add_index "taxonomy_terms", ["name"], name: "index_taxonomy_terms_on_name", unique: true, using: :btree
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
-  create_table "trait_descriptors", primary_key: "trait_descriptor_id", force: :cascade do |t|
+  create_table "trait_descriptors", force: :cascade do |t|
+    t.text "descriptor_label",         default: "",            null: false
     t.text "category",                 default: "unspecified", null: false
     t.text "descriptor_name",          default: "unspecified", null: false
     t.text "units_of_measurements"
@@ -545,35 +560,44 @@ ActiveRecord::Schema.define(version: 20150330130325) do
   end
 
   add_index "trait_descriptors", ["category"], name: "idx_144197_category", using: :btree
+  add_index "trait_descriptors", ["descriptor_label"], name: "idx_144197_trait_descriptor_id", using: :btree
+  add_index "trait_descriptors", ["descriptor_label"], name: "trait_descriptors_descriptor_label_idx", using: :btree
   add_index "trait_descriptors", ["descriptor_name"], name: "idx_144197_descriptor_name", using: :btree
-  add_index "trait_descriptors", ["trait_descriptor_id"], name: "idx_144197_trait_descriptor_id", using: :btree
 
-  create_table "trait_grades", primary_key: "trait_descriptor_id", force: :cascade do |t|
-    t.text "trait_grade",     default: "unspecified", null: false
-    t.text "description",                             null: false
-    t.text "comments",                                null: false
-    t.text "entered_by_whom", default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                         null: false
+  create_table "trait_grades", force: :cascade do |t|
+    t.text    "trait_grade",         default: "unspecified", null: false
+    t.text    "description",                                 null: false
+    t.text    "comments",                                    null: false
+    t.text    "entered_by_whom",     default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                             null: false
+    t.integer "trait_descriptor_id"
   end
 
-  create_table "trait_scores", primary_key: "scoring_unit_id", force: :cascade do |t|
-    t.text "scoring_occasion_id",     default: "unspecified", null: false
-    t.text "trait_descriptor_id",     default: "unspecified", null: false
-    t.text "replicate_score_reading", default: "unspecified", null: false
-    t.text "score_value"
-    t.text "score_spread"
-    t.text "value_type"
-    t.text "comments",                                        null: false
-    t.text "entered_by_whom",         default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                                 null: false
-    t.text "data_owned_by",           default: "unspecified", null: false
-    t.text "confirmed_by_whom"
+  add_index "trait_grades", ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
+
+  create_table "trait_scores", force: :cascade do |t|
+    t.text    "scoring_occasion_name",   default: "unspecified", null: false
+    t.text    "replicate_score_reading", default: "unspecified", null: false
+    t.text    "score_value"
+    t.text    "score_spread"
+    t.text    "value_type"
+    t.text    "comments",                                        null: false
+    t.text    "entered_by_whom",         default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                 null: false
+    t.text    "data_owned_by",           default: "unspecified", null: false
+    t.text    "confirmed_by_whom"
+    t.integer "plant_scoring_unit_id"
+    t.integer "scoring_occasion_id"
+    t.integer "trait_descriptor_id"
   end
 
-  add_index "trait_scores", ["scoring_occasion_id"], name: "idx_144229_scoring_occasion", using: :btree
-  add_index "trait_scores", ["trait_descriptor_id"], name: "idx_144229_trait_descriptor", using: :btree
+  add_index "trait_scores", ["plant_scoring_unit_id"], name: "trait_scores_plant_scoring_unit_id_idx", using: :btree
+  add_index "trait_scores", ["scoring_occasion_id"], name: "trait_scores_scoring_occasion_id_idx", using: :btree
+  add_index "trait_scores", ["scoring_occasion_name"], name: "idx_144229_scoring_occasion", using: :btree
+  add_index "trait_scores", ["scoring_occasion_name"], name: "trait_scores_scoring_occasion_name_idx", using: :btree
+  add_index "trait_scores", ["trait_descriptor_id"], name: "trait_scores_trait_descriptor_id_idx", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "login",                          null: false
