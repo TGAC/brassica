@@ -5,6 +5,8 @@ class LinkageMap < ActiveRecord::Base
 
   belongs_to :plant_population
 
+  has_many :map_linkage_group_lists
+
   has_many :genotype_matrices, foreign_key: 'linkage_map_id'
 
   has_many :map_locus_hits, foreign_key: 'linkage_map_id'

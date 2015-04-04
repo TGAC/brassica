@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403140259) do
+ActiveRecord::Schema.define(version: 20150404125411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -48,21 +48,25 @@ ActiveRecord::Schema.define(version: 20150403140259) do
   add_index "design_factors", ["design_factor_name"], name: "design_factors_design_factor_name_idx", using: :btree
   add_index "design_factors", ["institute_id"], name: "idx_143500_institute_id", using: :btree
 
-  create_table "genotype_matrices", primary_key: "linkage_map_id", force: :cascade do |t|
-    t.text "martix_complied_by",       default: "unspecified", null: false
-    t.text "original_file_name",       default: "unspecified", null: false
-    t.date "date_matrix_available"
-    t.text "number_markers_in_matrix", default: "unspecified", null: false
-    t.text "number_lines_in_matrix",   default: "unspecified", null: false
-    t.text "matrix",                                           null: false
-    t.text "comments",                                         null: false
-    t.text "entered_by_whom",          default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                                  null: false
-    t.text "data_owned_by",            default: "unspecified", null: false
+  create_table "genotype_matrices", force: :cascade do |t|
+    t.text    "martix_complied_by",       default: "unspecified", null: false
+    t.text    "original_file_name",       default: "unspecified", null: false
+    t.date    "date_matrix_available"
+    t.text    "number_markers_in_matrix", default: "unspecified", null: false
+    t.text    "number_lines_in_matrix",   default: "unspecified", null: false
+    t.text    "matrix",                                           null: false
+    t.text    "comments",                                         null: false
+    t.text    "entered_by_whom",          default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                  null: false
+    t.text    "data_owned_by",            default: "unspecified", null: false
+    t.integer "linkage_map_id"
   end
 
-  create_table "linkage_groups", primary_key: "linkage_group_id", force: :cascade do |t|
+  add_index "genotype_matrices", ["linkage_map_id"], name: "genotype_matrices_linkage_map_id_idx", using: :btree
+
+  create_table "linkage_groups", force: :cascade do |t|
+    t.text "linkage_group_label",         default: "",            null: false
     t.text "linkage_group_name",          default: "unspecified", null: false
     t.text "total_length"
     t.text "lod_threshold"
@@ -77,9 +81,11 @@ ActiveRecord::Schema.define(version: 20150403140259) do
     t.text "confirmed_by_whom"
   end
 
+  add_index "linkage_groups", ["linkage_group_label"], name: "linkage_groups_linkage_group_label_idx", using: :btree
   add_index "linkage_groups", ["linkage_group_name"], name: "idx_143534_linkage_group_name", using: :btree
 
-  create_table "linkage_maps", primary_key: "linkage_map_id", force: :cascade do |t|
+  create_table "linkage_maps", force: :cascade do |t|
+    t.text    "linkage_map_label",             default: "",            null: false
     t.text    "linkage_map_name",              default: "unspecified", null: false
     t.string  "map_version_no",      limit: 3, default: "xxx",         null: false
     t.date    "map_version_date"
@@ -95,47 +101,60 @@ ActiveRecord::Schema.define(version: 20150403140259) do
     t.integer "plant_population_id"
   end
 
+  add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", using: :btree
   add_index "linkage_maps", ["plant_population_id"], name: "linkage_maps_plant_population_id_idx", using: :btree
 
-  create_table "map_linkage_group_lists", primary_key: "linkage_map_id", force: :cascade do |t|
-    t.text "linkage_group_id", default: "unspecified", null: false
-    t.text "comments",                                 null: false
+  create_table "map_linkage_group_lists", id: false, force: :cascade do |t|
+    t.text    "comments",         null: false
+    t.integer "linkage_map_id"
+    t.integer "linkage_group_id"
   end
 
-  add_index "map_linkage_group_lists", ["linkage_group_id"], name: "idx_143567_linkage_group_id", using: :btree
+  add_index "map_linkage_group_lists", ["linkage_group_id"], name: "map_linkage_group_lists_linkage_group_id_idx", using: :btree
+  add_index "map_linkage_group_lists", ["linkage_map_id"], name: "map_linkage_group_lists_linkage_map_id_idx", using: :btree
 
-  create_table "map_locus_hits", primary_key: "linkage_group_id", force: :cascade do |t|
-    t.text "linkage_map_id",             default: "unspecified", null: false
-    t.text "consensus_group_assignment", default: "unspecified", null: false
-    t.text "mapping_locus",              default: "",            null: false
-    t.text "canonical_marker_name",      default: "unspecified", null: false
-    t.text "map_position"
-    t.text "map_data_status",            default: "unspecified", null: false
-    t.text "associated_sequence_id",     default: "unspecified", null: false
-    t.text "sequence_source_acronym",    default: "unspecified", null: false
-    t.text "cs_sequence_data_status",    default: "unspecified", null: false
-    t.text "sqs_sequence_data_status",   default: "unspecified", null: false
-    t.text "atg_hit_seq_id"
-    t.text "atg_hit_seq_source"
-    t.text "bac_hit_seq_id"
-    t.text "bac_hit_seq_source"
-    t.text "bac_hit_name"
+  create_table "map_locus_hits", id: false, force: :cascade do |t|
+    t.text    "consensus_group_assignment", default: "unspecified", null: false
+    t.text    "canonical_marker_name",      default: "unspecified", null: false
+    t.text    "map_position"
+    t.text    "map_data_status",            default: "unspecified", null: false
+    t.text    "associated_sequence_id",     default: "unspecified", null: false
+    t.text    "sequence_source_acronym",    default: "unspecified", null: false
+    t.text    "cs_sequence_data_status",    default: "unspecified", null: false
+    t.text    "sqs_sequence_data_status",   default: "unspecified", null: false
+    t.text    "atg_hit_seq_id"
+    t.text    "atg_hit_seq_source"
+    t.text    "bac_hit_seq_id"
+    t.text    "bac_hit_seq_source"
+    t.text    "bac_hit_name"
+    t.integer "linkage_map_id"
+    t.integer "linkage_group_id"
+    t.integer "population_locus_id"
   end
 
-  create_table "map_positions", primary_key: "linkage_group_id", force: :cascade do |t|
-    t.text "marker_assay_name", default: "unspecified", null: false
-    t.text "mapping_locus",     default: "unspecified", null: false
-    t.text "map_position"
-    t.text "comments",                                  null: false
-    t.text "entered_by_whom",   default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                           null: false
-    t.text "data_owned_by",     default: "unspecified", null: false
-    t.text "confirmed_by_whom"
+  add_index "map_locus_hits", ["linkage_group_id"], name: "map_locus_hits_linkage_group_id_idx", using: :btree
+  add_index "map_locus_hits", ["linkage_map_id"], name: "map_locus_hits_linkage_map_id_idx", using: :btree
+  add_index "map_locus_hits", ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
+
+  create_table "map_positions", id: false, force: :cascade do |t|
+    t.text    "marker_assay_name",   default: "unspecified", null: false
+    t.text    "mapping_locus",       default: "unspecified", null: false
+    t.text    "map_position"
+    t.text    "comments",                                    null: false
+    t.text    "entered_by_whom",     default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                             null: false
+    t.text    "data_owned_by",       default: "unspecified", null: false
+    t.text    "confirmed_by_whom"
+    t.integer "linkage_group_id"
+    t.integer "population_locus_id"
   end
 
+  add_index "map_positions", ["linkage_group_id"], name: "map_positions_linkage_group_id_idx", using: :btree
   add_index "map_positions", ["map_position"], name: "idx_143597_map_position", using: :btree
   add_index "map_positions", ["mapping_locus"], name: "idx_143597_mapping_locus", using: :btree
+  add_index "map_positions", ["mapping_locus"], name: "map_positions_mapping_locus_idx", using: :btree
+  add_index "map_positions", ["population_locus_id"], name: "map_positions_population_locus_id_idx", using: :btree
 
   create_table "marker_assays", primary_key: "marker_assay_name", force: :cascade do |t|
     t.text "canonical_marker_name", default: "unspecified", null: false
@@ -378,8 +397,9 @@ ActiveRecord::Schema.define(version: 20150403140259) do
 
   add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
 
-  create_table "population_loci", primary_key: "mapping_locus", force: :cascade do |t|
+  create_table "population_loci", force: :cascade do |t|
     t.text    "plant_population",    default: "unspecified", null: false
+    t.text    "mapping_locus",       default: "unspecified", null: false
     t.text    "marker_assay_name",   default: "unspecified", null: false
     t.text    "defined_by_whom"
     t.text    "comments"
@@ -391,6 +411,7 @@ ActiveRecord::Schema.define(version: 20150403140259) do
   end
 
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
+  add_index "population_loci", ["mapping_locus"], name: "population_loci_mapping_locus_idx", using: :btree
   add_index "population_loci", ["marker_assay_name"], name: "idx_143961_marker_assay", using: :btree
   add_index "population_loci", ["plant_population"], name: "idx_143961_plant_population", using: :btree
   add_index "population_loci", ["plant_population"], name: "population_loci_plant_population_idx", using: :btree
@@ -420,15 +441,16 @@ ActiveRecord::Schema.define(version: 20150403140259) do
     t.text "data_provenance",                                 null: false
   end
 
-  create_table "processed_trait_datasets", primary_key: "processed_trait_dataset_id", force: :cascade do |t|
-    t.text    "population_id",              default: "unspecified", null: false
+  create_table "processed_trait_datasets", force: :cascade do |t|
+    t.text    "processed_trait_dataset_name", default: "",            null: false
+    t.text    "population_id",                default: "unspecified", null: false
     t.text    "processed_dataset_id"
     t.text    "trait_percent_heritability"
-    t.text    "comments",                                           null: false
-    t.text    "entered_by_whom",            default: "unspecified", null: false
+    t.text    "comments",                                             null: false
+    t.text    "entered_by_whom",              default: "unspecified", null: false
     t.date    "date_entered"
-    t.text    "data_provenance",                                    null: false
-    t.text    "data_owned_by",              default: "unspecified", null: false
+    t.text    "data_provenance",                                      null: false
+    t.text    "data_owned_by",                default: "unspecified", null: false
     t.integer "plant_population_id"
     t.integer "plant_trial_id"
     t.integer "trait_descriptor_id"
@@ -436,35 +458,39 @@ ActiveRecord::Schema.define(version: 20150403140259) do
 
   add_index "processed_trait_datasets", ["plant_trial_id"], name: "processed_trait_datasets_plant_trial_id_idx", using: :btree
   add_index "processed_trait_datasets", ["population_id"], name: "processed_trait_datasets_population_id_idx", using: :btree
+  add_index "processed_trait_datasets", ["processed_trait_dataset_name"], name: "processed_trait_datasets_processed_trait_dataset_name_idx", using: :btree
   add_index "processed_trait_datasets", ["trait_descriptor_id"], name: "processed_trait_datasets_trait_descriptor_id_idx", using: :btree
 
-  create_table "qtl", primary_key: "qtl_job_id", force: :cascade do |t|
-    t.text "processed_trait_dataset_id", default: "unspecified", null: false
-    t.text "linkage_group_id",           default: "unspecified", null: false
-    t.text "qtl_rank",                   default: "unspecified", null: false
-    t.text "map_qtl_label",              default: "unspecified", null: false
-    t.text "outer_interval_start"
-    t.text "inner_interval_start"
-    t.text "qtl_mid_position",           default: "unspecified", null: false
-    t.text "inner_interval_end"
-    t.text "outer_interval_end"
-    t.text "peak_value"
-    t.text "peak_p_value"
-    t.text "regression_p"
-    t.text "residual_p"
-    t.text "additive_effect",            default: "unspecified", null: false
-    t.text "genetic_variance_explained"
-    t.text "comments",                                           null: false
-    t.text "entered_by_whom",            default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                                    null: false
-    t.text "data_owned_by",              default: "unspecified", null: false
+  create_table "qtl", force: :cascade do |t|
+    t.text    "qtl_rank",                   default: "unspecified", null: false
+    t.text    "map_qtl_label",              default: "unspecified", null: false
+    t.text    "outer_interval_start"
+    t.text    "inner_interval_start"
+    t.text    "qtl_mid_position",           default: "unspecified", null: false
+    t.text    "inner_interval_end"
+    t.text    "outer_interval_end"
+    t.text    "peak_value"
+    t.text    "peak_p_value"
+    t.text    "regression_p"
+    t.text    "residual_p"
+    t.text    "additive_effect",            default: "unspecified", null: false
+    t.text    "genetic_variance_explained"
+    t.text    "comments",                                           null: false
+    t.text    "entered_by_whom",            default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                    null: false
+    t.text    "data_owned_by",              default: "unspecified", null: false
+    t.integer "processed_trait_dataset_id"
+    t.integer "qtl_job_id"
+    t.integer "linkage_group_id"
   end
 
-  add_index "qtl", ["linkage_group_id"], name: "idx_144113_linkage_group", using: :btree
-  add_index "qtl", ["processed_trait_dataset_id"], name: "idx_144113_trial", using: :btree
+  add_index "qtl", ["linkage_group_id"], name: "qtl_linkage_group_id_idx", using: :btree
+  add_index "qtl", ["processed_trait_dataset_id"], name: "qtl_processed_trait_dataset_id_idx", using: :btree
+  add_index "qtl", ["qtl_job_id"], name: "qtl_qtl_job_id_idx", using: :btree
 
-  create_table "qtl_jobs", primary_key: "qtl_job_id", force: :cascade do |t|
+  create_table "qtl_jobs", force: :cascade do |t|
+    t.text "qtl_job_name",                   default: "",            null: false
     t.text "linkage_map_id",                 default: "unspecified", null: false
     t.text "qtl_software",                   default: "unspecified", null: false
     t.text "qtl_method",                     default: "unspecified", null: false
@@ -483,6 +509,7 @@ ActiveRecord::Schema.define(version: 20150403140259) do
   end
 
   add_index "qtl_jobs", ["linkage_map_id"], name: "idx_144140_linkage_map_id", using: :btree
+  add_index "qtl_jobs", ["qtl_job_name"], name: "qtl_jobs_qtl_job_name_idx", using: :btree
   add_index "qtl_jobs", ["qtl_software", "qtl_method"], name: "idx_144140_qtl_software", using: :btree
 
   create_table "restriction_enzymes", primary_key: "restriction_enzyme", force: :cascade do |t|
