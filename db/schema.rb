@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403092718) do
+ActiveRecord::Schema.define(version: 20150403140259) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,25 +253,26 @@ ActiveRecord::Schema.define(version: 20150403092718) do
   add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
 
   create_table "plant_populations", force: :cascade do |t|
-    t.text    "name",                      default: "",            null: false
+    t.text    "name",                         default: "",            null: false
     t.text    "population_type"
-    t.text    "canonical_population_name", default: "unspecified"
+    t.text    "canonical_population_name",    default: "unspecified"
     t.text    "description"
     t.date    "date_established"
     t.text    "established_by_whom"
     t.text    "establishing_organisation"
     t.text    "population_owned_by"
     t.text    "comments"
-    t.text    "entered_by_whom",           default: "unspecified", null: false
+    t.text    "entered_by_whom",              default: "unspecified", null: false
     t.date    "date_entered"
     t.text    "data_owned_by"
     t.text    "data_provenance"
     t.text    "confirmed_by_whom"
-    t.text    "assigned_population_name",  default: "unspecified", null: false
+    t.text    "assigned_population_name",     default: "unspecified", null: false
     t.integer "taxonomy_term_id"
     t.integer "male_parent_line_id"
     t.integer "female_parent_line_id"
     t.integer "population_type_id"
+    t.integer "plant_population_lists_count", default: 0,             null: false
   end
 
   add_index "plant_populations", ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree

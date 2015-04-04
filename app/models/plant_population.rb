@@ -32,12 +32,10 @@ class PlantPopulation < ActiveRecord::Base
   scope :by_name, -> { order('plant_populations.name') }
 
   def self.table_data(params = nil)
-    count = 'count(plant_lines.plant_line_name)'
+    count = 'plant_population_lists_count'
     query = (params && params[:query].present?) ? filter(params) : all
     query.
-      joins(:taxonomy_term, :population_type).
-      includes(:plant_lines, :female_parent_line, :male_parent_line).
-      group(table_columns + ref_columns).
+      includes(:female_parent_line, :male_parent_line, :taxonomy_term, :population_type).
       by_name.
       pluck(*(table_columns + [count] + ref_columns))
   end
@@ -47,7 +45,7 @@ class PlantPopulation < ActiveRecord::Base
       'plant_populations.name',
       'taxonomy_terms.name',
       :canonical_population_name,
-      'female_parent_lines_plant_populations.plant_line_name',
+      'plant_lines.plant_line_name',
       'male_parent_lines_plant_populations.plant_line_name',
       'pop_type_lookup.population_type'
     ]

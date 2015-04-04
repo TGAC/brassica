@@ -11,6 +11,8 @@ namespace :app do
     restore_cropstore_dump
     puts " - building ES indices"
     build_elasticsearch_indices
+    puts " - run further migrations"
+    migrate_db
     puts " - DONE"
   end
 
@@ -32,6 +34,10 @@ namespace :app do
     unless system(env, cmd)
       raise "Cropstore dump restoration failed: #{$?}"
     end
+  end
+
+  def migrate_db
+    Rake::Task['db:migrate'].invoke
   end
 
   def build_elasticsearch_indices
