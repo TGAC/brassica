@@ -7,7 +7,7 @@ RSpec.describe TraitDescriptor do
       td2 = create(:trait_descriptor, trait_scores: create_list(:trait_score, 2, plant_scoring_unit: nil))
       table_data = TraitDescriptor.table_data
       expect(table_data.count).to eq 2
-      expect(table_data.map{ |td| [td[2], td[5]] }).to eq [
+      expect(table_data.map{ |td| [td[2], td[5]] }).to match_array [
         [td1.descriptor_name, 3],
         [td2.descriptor_name, 2]
       ]
