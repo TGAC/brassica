@@ -10,4 +10,37 @@ class PlantVariety < ActiveRecord::Base
 
   has_many :plant_lines
 
+  include Filterable
+  include Pluckable
+
+  scope :by_name, -> { order(:plant_variety_name) }
+
+  def self.table_data(params = nil)
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.by_name.pluck_columns(table_columns)
+  end
+
+  def self.table_columns
+    [
+      'plant_variety_name',
+      'crop_type',
+      'data_attribution',
+      'year_registered',
+      'breeders_variety_code',
+      'owner',
+      'quoted_parentage',
+      'female_parent',
+      'male_parent'
+    ]
+  end
+
+  private
+
+  def self.permitted_params
+    [
+      query: [
+        :id
+      ]
+    ]
+  end
 end

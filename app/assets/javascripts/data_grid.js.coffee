@@ -48,6 +48,13 @@ window.configs =
         targets: 1
         render: (data, type, full, meta) ->
           data.replace(/Brassica/, 'B.')
+      ,
+        targets: [3]
+        render: (data, type, full, meta) ->
+          if data && full[8]
+            '<a href="data_tables?model=plant_varieties&query[id]=' + full[8] + '">' + data + '</a>'
+          else
+            data
       ]
 
   'trait-descriptors':
@@ -66,22 +73,23 @@ window.configs =
       [
         targets: [3]
         render: (data, type, full, meta) ->
-          if data
+          if data && full[8]
             '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
           else
             ''
       ,
         targets: [4]
         render: (data, type, full, meta) ->
-          if data
+          if data && full[9]
             '<a href="data_tables?model=plant_lines&query[id]=' + full[9] + '">' + data + '</a>'
           else
             ''
       ,
         targets: [6]
         render: (data, type, full, meta) ->
-          if data && data != '0'
+          if data && data != '0' && full[7]
             '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[7] + '">' + data + '</a>'
           else
             ''
       ]
+
