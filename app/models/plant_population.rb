@@ -44,7 +44,7 @@ class PlantPopulation < ActiveRecord::Base
     [
       'plant_populations.name',
       'taxonomy_terms.name',
-      :canonical_population_name,
+      'canonical_population_name',
       'plant_lines.plant_line_name',
       'male_parent_lines_plant_populations.plant_line_name',
       'pop_type_lookup.population_type'
