@@ -5,11 +5,10 @@ class TraitDescriptor < ActiveRecord::Base
   has_many :processed_trait_datasets
 
   def self.table_data(params = nil)
-    count = 'count(trait_scores.score_value)'
     includes(trait_scores: { plant_scoring_unit: { plant_trial: [:country, { plant_population: :taxonomy_term }]}}).
       group(table_columns).
       order('taxonomy_terms.name, plant_trials.project_descriptor').
-      pluck(*(table_columns + [count]))
+      pluck(*table_columns)
   end
 
   def self.table_columns
@@ -18,7 +17,8 @@ class TraitDescriptor < ActiveRecord::Base
       'plant_populations.name',
       'descriptor_name',
       'plant_trials.project_descriptor',
-      'countries.country_name'
+      'countries.country_name',
+      'trait_scores_count'
     ]
   end
 end

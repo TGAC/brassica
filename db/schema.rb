@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150403140259) do
+ActiveRecord::Schema.define(version: 20150408210623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -531,33 +531,34 @@ ActiveRecord::Schema.define(version: 20150403140259) do
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
   create_table "trait_descriptors", force: :cascade do |t|
-    t.text "descriptor_label",         default: "",            null: false
-    t.text "category",                 default: "unspecified", null: false
-    t.text "descriptor_name",          default: "unspecified", null: false
-    t.text "units_of_measurements"
-    t.text "where_to_score",                                   null: false
-    t.text "scoring_method"
-    t.text "when_to_score"
-    t.text "stage_scored"
-    t.text "precautions"
-    t.text "materials"
-    t.text "controls"
-    t.text "calibrated_against"
-    t.text "instrumentation_required"
-    t.text "likely_ambiguities"
-    t.text "contact_person"
-    t.date "date_method_agreed"
-    t.text "score_type"
-    t.text "related_trait_ids"
-    t.text "related_characters"
-    t.text "possible_interactions"
-    t.text "authorities"
-    t.text "comments",                                         null: false
-    t.text "entered_by_whom",          default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                                  null: false
-    t.text "data_owned_by",            default: "unspecified", null: false
-    t.text "confirmed_by_whom"
+    t.text    "descriptor_label",         default: "",            null: false
+    t.text    "category",                 default: "unspecified", null: false
+    t.text    "descriptor_name",          default: "unspecified", null: false
+    t.text    "units_of_measurements"
+    t.text    "where_to_score",                                   null: false
+    t.text    "scoring_method"
+    t.text    "when_to_score"
+    t.text    "stage_scored"
+    t.text    "precautions"
+    t.text    "materials"
+    t.text    "controls"
+    t.text    "calibrated_against"
+    t.text    "instrumentation_required"
+    t.text    "likely_ambiguities"
+    t.text    "contact_person"
+    t.date    "date_method_agreed"
+    t.text    "score_type"
+    t.text    "related_trait_ids"
+    t.text    "related_characters"
+    t.text    "possible_interactions"
+    t.text    "authorities"
+    t.text    "comments",                                         null: false
+    t.text    "entered_by_whom",          default: "unspecified", null: false
+    t.date    "date_entered"
+    t.text    "data_provenance",                                  null: false
+    t.text    "data_owned_by",            default: "unspecified", null: false
+    t.text    "confirmed_by_whom"
+    t.integer "trait_scores_count",       default: 0,             null: false
   end
 
   add_index "trait_descriptors", ["category"], name: "idx_144197_category", using: :btree

@@ -12,7 +12,7 @@ module Pluckable extend ActiveSupport::Concern
         relation = column.to_s.split('.')[0].pluralize if column.to_s.include? '.'
         next unless relation
         relation = relation.singularize unless reflections.keys.include?(relation)
-        query = query.joins(relation.to_sym)
+        query = query.includes(relation.to_sym)
       end
       query.pluck(*columns)
     end

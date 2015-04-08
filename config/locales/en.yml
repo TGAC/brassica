@@ -51,6 +51,7 @@ en:
       canonical_population_name: Canonical name
       female_parent_line: Female parent line
       male_parent_line: Male parent line
+      plant_population_lists_count: Plant lines
     plant_trials:
       plant_trial_name: Name
       plant_trial_description: Trial
@@ -58,9 +59,12 @@ en:
       trial_year: Year
       trial_location_site_name: Location site
       date_entered: Entry date
+    plant_varieties:
+      plant_variety_name: Variety
     pop_type_lookup:
       population_type: Type
     taxonomy_terms:
       name: Species
     trait_descriptors:
       descriptor_name: Trait
+      trait_scores_count: Trait scores
