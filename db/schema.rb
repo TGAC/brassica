@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20150404125411) do
   add_index "design_factors", ["institute_id"], name: "idx_143500_institute_id", using: :btree
 
   create_table "genotype_matrices", force: :cascade do |t|
-    t.text    "martix_complied_by",       default: "unspecified", null: false
+    t.text    "matrix_compiled_by",       default: "unspecified", null: false
     t.text    "original_file_name",       default: "unspecified", null: false
     t.date    "date_matrix_available"
     t.text    "number_markers_in_matrix", default: "unspecified", null: false

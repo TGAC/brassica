@@ -67,6 +67,12 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
       puts "Table genotype_matrices already contains column with name 'id'. Skipping."
     end
 
+
+    # Fix incorrectly named column in genotype_matrices
+    if column_exists?(:genotype_matrices, :martix_complied_by)
+      execute "ALTER TABLE genotype_matrices RENAME COLUMN martix_complied_by TO matrix_compiled_by"
+    end
+
     #==============linkage_maps=============#
 
     unless column_exists?(:linkage_maps, :id)
