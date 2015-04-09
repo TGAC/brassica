@@ -1,0 +1,10 @@
+= render 'data_tables/tabs'
+
+.lead= model_param.humanize
+
+= back_button
+
+= datatable_tag do
+  - model_param.singularize.camelize.constantize.table_columns.each do |table_column|
+    - table_column = model_param + '.' + table_column unless table_column.include? '.'
+    %th= t("tables.#{table_column}")

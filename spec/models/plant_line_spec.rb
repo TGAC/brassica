@@ -87,18 +87,23 @@ RSpec.describe PlantLine do
   describe '#pluckable' do
     it 'gets proper data table columns' do
       tt = create(:taxonomy_term, name: 'tt')
+      pv = create(:plant_variety, plant_variety_name: 'pvn')
       de = Date.today
       pl = create(:plant_line,
+                  plant_line_name: 'pln',
                   taxonomy_term: tt,
                   common_name: 'cn',
-                  previous_line_name: 'pln',
+                  previous_line_name: 'ppln',
                   date_entered: de,
                   data_owned_by: 'dob',
-                  organisation: 'o')
+                  organisation: 'o',
+                  plant_variety: pv)
 
-      plucked = PlantLine.pluck_columns(PlantLine.table_columns)
+      plucked = PlantLine.pluck_columns(
+        PlantLine.table_columns + PlantLine.send(:ref_columns))
       expect(plucked.count).to eq 1
-      expect(plucked[0][1..-1]).to eq %w(tt cn pln) + [de] + %w(dob o)
+      expect(plucked[0]).
+        to eq ['pln', 'tt', 'cn', 'pvn', 'ppln', de, 'dob', 'o', pv.id]
     end
   end
 

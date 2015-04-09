@@ -1,8 +1,0 @@
-= render 'tabs'
-
-.lead Plant Trials table
-
-= datatable_tag do
-  - PlantTrial.table_columns.each do |table_column|
-    - table_column = params[:model] + '.' + table_column unless table_column.include? '.'
-    %th= t("tables.#{table_column}")

@@ -19,7 +19,7 @@ RSpec.describe DataTablesController do
     it 'returns table template on html format request' do
       DataTablesController.new.send('allowed_models').each do |model|
         get :index, model: model
-        expect(response).to render_template("data_tables/#{model}_table")
+        expect(response).to render_template("data_tables/index")
         expect(response).to render_template('layouts/application')
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe DataTablesController do
 
     it 'does not render htmls on json format request' do
       get :index, format: :json, model: 'plant_populations'
-      expect(response).not_to render_template('data_tables/plant_populations_table')
+      expect(response).not_to render_template('data_tables/index')
       expect(response).not_to render_template('layouts/application')
     end
 
