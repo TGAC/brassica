@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(version: 20150404125411) do
   add_index "map_locus_hits", ["linkage_map_id"], name: "map_locus_hits_linkage_map_id_idx", using: :btree
   add_index "map_locus_hits", ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
 
-  create_table "map_positions", id: false, force: :cascade do |t|
+  create_table "map_positions", force: :cascade do |t|
     t.text    "marker_assay_name",   default: "unspecified", null: false
     t.text    "mapping_locus",       default: "unspecified", null: false
     t.text    "map_position"
