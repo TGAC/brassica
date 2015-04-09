@@ -2,7 +2,7 @@ class DataTablesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        render "#{model_param.tableize}_table"
+        model_param
       end
       format.json do
         objects = model_param.singularize.camelize.constantize.table_data(params)
@@ -22,6 +22,6 @@ class DataTablesController < ApplicationController
   end
 
   def allowed_models
-    %w(plant_trials trait_descriptors plant_lines plant_populations)
+    %w(plant_trials trait_descriptors plant_lines plant_populations plant_varieties)
   end
 end

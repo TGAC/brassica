@@ -1,10 +1,8 @@
 module DataTablesHelper
   def datatables_source
-    url_for(
-      controller: controller_name,
-      action: action_name,
+    data_tables_path(
       query: params[:query],
-      model: params[:model]
+      model: model_param
     )
   end
 
@@ -12,7 +10,7 @@ module DataTablesHelper
     content_tag(
       :table,
       class: 'table table-condensed data-table',
-      id: params[:model].dasherize,
+      id: model_param.dasherize,
       data: { ajax: datatables_source }
     ) do
       content_tag(:thead) do
@@ -24,8 +22,8 @@ module DataTablesHelper
   end
 
   def active_tab_label
-    case params[:model]
-      when 'plant_populations', 'plant_lines'
+    case model_param
+      when 'plant_populations', 'plant_lines', 'plant_varieties'
         :plant_populations
       when 'plant_trials', 'trait_descriptors'
         :trait_descriptors
@@ -43,9 +41,23 @@ module DataTablesHelper
   end
 
   def browse_tabs
-    [
-      [:plant_populations, data_tables_path(model: :plant_populations)],
-      [:trait_descriptors, data_tables_path(model: :trait_descriptors)]
-    ]
+    {
+      plant_populations: data_tables_path(model: :plant_populations),
+      trait_descriptors: data_tables_path(model: :trait_descriptors)
+    }
+  end
+
+  def back_button
+    unless browse_tabs.keys.include? model_param.to_sym
+      link_to 'TEMP LINK BACK', browse_tabs[active_tab_label]
+    end
+  end
+
+  def model_param
+    if params[:model].present?
+      params[:model]
+    else
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 end
