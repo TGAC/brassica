@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150409202817) do
+ActiveRecord::Schema.define(version: 20150409210935) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -213,7 +213,7 @@ ActiveRecord::Schema.define(version: 20150409202817) do
     t.text    "organisation"
     t.text    "genetic_status"
     t.text    "previous_line_name"
-    t.text    "comments",                                   null: false
+    t.text    "comments"
     t.text    "entered_by_whom",    default: "unspecified", null: false
     t.date    "date_entered"
     t.text    "data_provenance"
