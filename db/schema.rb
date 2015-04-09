@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408210623) do
+ActiveRecord::Schema.define(version: 20150409202817) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -183,22 +183,6 @@ ActiveRecord::Schema.define(version: 20150408210623) do
   end
 
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "idx_143632_canonical_marker_name", using: :btree
-
-  create_table "occasions", primary_key: "occasion_id", force: :cascade do |t|
-    t.date "start_date"
-    t.text "start_time"
-    t.date "end_date"
-    t.text "end_time"
-    t.text "scored_by_whom"
-    t.text "recorded_by_whom"
-    t.text "comments",                                  null: false
-    t.text "entered_by_whom",   default: "unspecified", null: false
-    t.date "date_entered"
-    t.text "data_provenance",                           null: false
-    t.text "data_owned_by",     default: "unspecified", null: false
-    t.text "data_status",       default: "unspecified", null: false
-    t.text "confirmed_by_whom"
-  end
 
   create_table "plant_accessions", force: :cascade do |t|
     t.text    "plant_accession",            default: "",            null: false
