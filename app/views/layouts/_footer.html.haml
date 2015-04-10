@@ -3,47 +3,55 @@
     .row
       .col-md-4
         %div
-          %strong
-            Brassica Information Portal
-          %br
-          &copy; TGAC 2015
+          BIP LOGO HERE
 
         %div
           TGAC LOGO HERE
           %br
-          %strong
-            The Genome Analysis Centre
+          = link_to 'The Genome Analysis Centre', 'http://www.tgac.ac.uk/'
           %br
           Company Registration: 6855533
           %br
           Charity Number: 1136213
 
       .col-md-4
+        %h4 Contact us
         %address
           %div
-            Norwich Research Park
+            = link_to 'Norwich Research Park', 'https://goo.gl/maps/QRouY'
             %br
             Norwich
             %br
             NR4 7UH UK
 
           %div
-            %abbr(title="Telephone") T:
+            %abbr(title="Telephone") Telephone:
             +44 1603 450861
             %br
-            %abbr(title="E-mail") E:
+            %abbr(title="E-mail") Email:
             %a(href="mailto:tgac.enquiries@tgac.ac.uk") tgac.enquiries@tgac.ac.uk
 
       .col-md-2
       .col-md-2
+        %h4 Links
         %div
-          Browse
+          = link_to t('menu.browse'), navbar_menu[:browse]
           %br
-          Add to database
+          = link_to t('menu.submit'), navbar_menu[:submit]
           %br
-          API Documentation
+          = link_to t('menu.api'), navbar_menu[:api]
 
         %div
-          About us
+          = link_to t('menu.about'), navbar_menu[:about]
           %br
-          Terms of use
+          - if user_signed_in?
+            = link_to 'Submissions', submissions_path
+
+    .row
+      .col-md-12
+        %small
+          &copy; 2015
+          = succeed '.' do
+            = link_to 'The Genome Analysis Centre', 'http://www.tgac.ac.uk/'
+          Design and implementation:
+          = link_to 'Spectrum IT', 'http://espectrum.pl/it'

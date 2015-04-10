@@ -2,26 +2,22 @@ class PlantLine < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
-  self.primary_key = 'plant_line_name'
-
-  belongs_to :plant_variety, foreign_key: 'plant_variety_name'
+  belongs_to :plant_variety
 
   belongs_to :taxonomy_term
 
-  has_many :plant_population_lists, foreign_key: 'plant_line_name'
+  has_many :plant_population_lists
 
   has_many :fathered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'male_parent_line'
+           foreign_key: 'male_parent_line_id'
 
   has_many :mothered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'female_parent_line'
+           foreign_key: 'female_parent_line_id'
 
-  has_many :plant_accessions, foreign_key: 'plant_line_name'
+  has_many :plant_accessions
 
   has_and_belongs_to_many :plant_populations,
-                          join_table: 'plant_population_lists',
-                          foreign_key: 'plant_line_name',
-                          association_foreign_key: 'plant_population_id'
+                          join_table: 'plant_population_lists'
 
   after_update { mothered_descendants.each(&:touch) }
   after_update { fathered_descendants.each(&:touch) }
@@ -33,9 +29,9 @@ class PlantLine < ActiveRecord::Base
 
   scope :by_name, -> { order(:plant_line_name) }
 
-  def self.filtered(params)
-    query = filter(params)
-    query.by_name.pluck_columns(table_columns)
+  def self.table_data(params = nil)
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.by_name.pluck_columns(table_columns + ref_columns)
   end
 
   def self.genetic_statuses
@@ -54,6 +50,19 @@ class PlantLine < ActiveRecord::Base
     )
   end
 
+  def self.table_columns
+    [
+      'plant_line_name',
+      'taxonomy_terms.name',
+      'common_name',
+      'plant_varieties.plant_variety_name',
+      'previous_line_name',
+      'date_entered',
+      'data_owned_by',
+      'organisation'
+    ]
+  end
+
   private
 
   def self.permitted_params
@@ -63,22 +72,15 @@ class PlantLine < ActiveRecord::Base
         'plant_lines.plant_line_name'
       ],
       query: [
-        'plant_populations.plant_population_id',
-        plant_line_name: [],
-        'plant_lines.plant_line_name' => []
+        'plant_populations.id',
+        'id'
       ]
     ]
   end
 
-  def self.table_columns
+  def self.ref_columns
     [
-      'plant_line_name',
-      'taxonomy_terms.name',
-      'common_name',
-      'previous_line_name',
-      'date_entered',
-      'data_owned_by',
-      'organisation'
+      'plant_variety_id'
     ]
   end
 end

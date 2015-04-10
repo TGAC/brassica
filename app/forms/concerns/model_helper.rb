@@ -1,6 +1,6 @@
 module ModelHelper
   def population_types
-    PopulationTypeLookup.population_types
+    PopulationType.population_types
   end
 
   def plant_lines(name = nil)

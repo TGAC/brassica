@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   get 'about', to: 'application#about'
 
   resources :submissions
-  resources :plant_populations, only: [:index]
   resources :plant_lines, only: [:index]
+  resources :data_tables, only: [:index]
+
+  get 'browse_data', to: 'data_tables#index', defaults: { model: 'plant_populations' }
 end

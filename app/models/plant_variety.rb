@@ -1,18 +1,46 @@
 class PlantVariety < ActiveRecord::Base
-  self.primary_key = 'plant_variety_name'
 
   has_and_belongs_to_many :countries_of_origin,
                           class_name: 'Country',
-                          join_table: 'plant_variety_country_of_origin',
-                          foreign_key: 'plant_variety_name',
-                          association_foreign_key: 'country_code'
+                          join_table: 'plant_variety_country_of_origin'
 
   has_and_belongs_to_many :countries_registered,
                           class_name: 'Country',
-                          join_table: 'plant_variety_country_registered',
-                          foreign_key: 'plant_variety_name',
-                          association_foreign_key: 'country_code'
+                          join_table: 'plant_variety_country_registered'
 
-  has_many :plant_lines, foreign_key: 'plant_variety_name'
+  has_many :plant_lines
 
+  include Filterable
+  include Pluckable
+
+  scope :by_name, -> { order(:plant_variety_name) }
+
+  def self.table_data(params = nil)
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.by_name.pluck_columns(table_columns)
+  end
+
+  def self.table_columns
+    [
+      'plant_variety_name',
+      'crop_type',
+      'data_attribution',
+      'year_registered',
+      'breeders_variety_code',
+      'owner',
+      'quoted_parentage',
+      'female_parent',
+      'male_parent'
+    ]
+  end
+
+  private
+
+  def self.permitted_params
+    [
+      query: [
+        :id
+      ]
+    ]
+  end
 end

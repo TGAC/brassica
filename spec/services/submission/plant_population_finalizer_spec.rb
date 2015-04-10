@@ -5,7 +5,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
   let(:submission) { create(:submission) }
   let!(:plant_lines) { create_list(:plant_line, 2) }
   let!(:taxonomy_term) { create(:taxonomy_term) }
-  let!(:population_type_lookup) { create(:population_type_lookup) }
+  let!(:population_type) { create(:population_type) }
 
   subject { described_class.new(submission) }
 
@@ -26,7 +26,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
                                 description: "...", # FIXME must be not null, should be required in form?
                                )
       submission.content.update(:step02,
-                                population_type: PopulationTypeLookup.population_types.sample,
+                                population_type: PopulationType.population_types.sample,
                                 taxonomy_term: taxonomy_term.name)
       submission.content.update(:step03,
                                 plant_line_list: [plant_lines[0].plant_line_name, new_plant_lines[0][:plant_line_name], new_plant_lines[1][:plant_line_name]],

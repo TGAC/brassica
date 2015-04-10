@@ -20,6 +20,10 @@ en:
     api: API documentation
     about: About us
 
+  browse_tabs:
+    plant_populations: Populations
+    trait_descriptors: Traits
+
   submission:
     empty_label: "(empty label)"
     submission_type:
@@ -27,3 +31,40 @@ en:
       traits: Trait scoring
       qtl: Quantitative Trait Loci
       linkage_map: Linkage map
+
+  tables:
+    countries:
+      country_name: Country
+    plant_lines:
+      plant_line_name: Line name
+      common_name: Common name
+      previous_line_name: Previous line name
+      date_entered: Entry date
+      data_owned_by: Data owner
+      organisation: Organisation
+    female_parent_lines_plant_populations:
+      plant_line_name: Female parent line
+    male_parent_lines_plant_populations:
+      plant_line_name: Male parent line
+    plant_populations:
+      name: Population
+      canonical_population_name: Canonical name
+      female_parent_line: Female parent line
+      male_parent_line: Male parent line
+      plant_population_lists_count: Plant lines
+    plant_trials:
+      plant_trial_name: Name
+      plant_trial_description: Trial
+      project_descriptor: Project
+      trial_year: Year
+      trial_location_site_name: Location site
+      date_entered: Entry date
+    plant_varieties:
+      plant_variety_name: Variety
+    pop_type_lookup:
+      population_type: Type
+    taxonomy_terms:
+      name: Species
+    trait_descriptors:
+      descriptor_name: Trait
+      trait_scores_count: Trait scores
