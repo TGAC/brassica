@@ -7,7 +7,7 @@ RSpec.describe ApplicationDecorator do
       gd = ApplicationDecorator.decorate(PlantPopulation.table_data)
       expect(gd.as_grid_data[:recordsTotal]).to eq 4
       expect(gd.as_grid_data[:data].size).to eq 4
-      expect(gd.as_grid_data[:data].map{ |pp| pp[-3] }).to match_array pps.map(&:id)
+      expect(gd.as_grid_data[:data].map(&:last)).to match_array pps.map(&:id)
     end
   end
 end
