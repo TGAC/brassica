@@ -8,21 +8,19 @@
     = csrf_meta_tags
   %body
     #wrap
-      .container
-        = render 'layouts/header'
-
-        = render 'layouts/navbar'
-
+      = render 'layouts/header'
+      = render 'layouts/navbar'
+      .page-content
         .flash-group
-          - if notice.present?
-            .flash-notice= notice
+          .container
+            - if notice.present?
+              .flash-notice= notice
 
-          - if alert.present?
-            .flash-alert= alert
+            - if alert.present?
+              .flash-alert= alert
 
-        .main
-          = yield
+        = yield
 
-      #push
+        #push
 
     = render 'layouts/footer'
