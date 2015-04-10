@@ -16,11 +16,7 @@ FactoryGirl.define do
     likely_ambiguities { Faker::Lorem.sentence }
     contact_person { Faker::Internet.user_name }
     date_method_agreed { Faker::Date.backward }
-    comments { Faker::Lorem.sentence }
-    date_entered { Faker::Date.backward }
-    data_provenance { Faker::Lorem.sentence }
-    entered_by_whom { Faker::Internet.user_name }
     confirmed_by_whom { Faker::Internet.user_name }
-    data_owned_by { Faker::Company.name }
+    instance_eval &AnnotableFactory.annotated
   end
 end

@@ -7,4 +7,5 @@ class PopulationLocus < ActiveRecord::Base
   has_many :map_positions
   has_many :map_locus_hits
 
+  include Annotable
 end

@@ -5,4 +5,5 @@ class Qtl < ActiveRecord::Base
   belongs_to :linkage_group
   belongs_to :qtl_job
 
+  include Annotable
 end

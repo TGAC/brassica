@@ -3,8 +3,8 @@ FactoryGirl.define do
     name { Faker::Lorem.word }
     canonical_population_name { Faker::Lorem.word }
     description { Faker::Lorem.sentence }
-    data_provenance { Faker::Lorem.sentence }
     taxonomy_term
     population_type
+    instance_eval &AnnotableFactory.annotated
   end
 end

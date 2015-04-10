@@ -11,4 +11,5 @@ class LinkageMap < ActiveRecord::Base
 
   has_many :map_locus_hits, foreign_key: 'linkage_map_id'
 
+  include Annotable
 end

@@ -34,7 +34,8 @@ RSpec.describe TraitDescriptor do
         td.descriptor_name,
         td.trait_scores[0].plant_scoring_unit.plant_trial.project_descriptor,
         td.trait_scores[0].plant_scoring_unit.plant_trial.country.country_name,
-        1
+        1,
+        td.id
       ]
     end
   end

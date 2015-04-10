@@ -63,7 +63,6 @@ class PlantPopulation < ActiveRecord::Base
 
   def self.ref_columns
     [
-      'plant_populations.id',
       'female_parent_line_id',
       'male_parent_line_id'
     ]
@@ -87,4 +86,5 @@ class PlantPopulation < ActiveRecord::Base
     )
   end
 
+  include Annotable
 end
