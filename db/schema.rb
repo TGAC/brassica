@@ -32,16 +32,16 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "institute_id",        default: "unspecified", null: false
     t.text "trial_location_name", default: "unspecified", null: false
     t.text "design_unit_counter", default: "unspecified", null: false
-    t.text "design_factor_1",     default: "unspecified"
-    t.text "design_factor_2",     default: "unspecified"
-    t.text "design_factor_3",     default: "unspecified"
-    t.text "design_factor_4",     default: "unspecified"
-    t.text "design_factor_5",     default: "unspecified"
+    t.text "design_factor_1"
+    t.text "design_factor_2"
+    t.text "design_factor_3"
+    t.text "design_factor_4"
+    t.text "design_factor_5"
     t.text "comments"
-    t.text "entered_by_whom",     default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
-    t.text "data_owned_by",       default: "unspecified"
+    t.text "data_owned_by"
     t.text "confirmed_by_whom"
   end
 
@@ -56,10 +56,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "number_lines_in_matrix",   default: "unspecified", null: false
     t.text    "matrix",                                           null: false
     t.text    "comments"
-    t.text    "entered_by_whom",          default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",            default: "unspecified"
+    t.text    "data_owned_by"
     t.integer "linkage_map_id"
   end
 
@@ -73,11 +73,11 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "consensus_group_assignment",  default: "unspecified", null: false
     t.text "consensus_group_orientation"
     t.text "comments"
-    t.text "entered_by_whom",             default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
-    t.text "data_owned_by",               default: "unspecified"
-    t.text "data_status",                 default: "unspecified"
+    t.text "data_owned_by"
+    t.text "data_status"
     t.text "confirmed_by_whom"
   end
 
@@ -93,10 +93,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "mapping_function"
     t.text    "map_author"
     t.text    "comments"
-    t.text    "entered_by_whom",               default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",                 default: "unspecified"
+    t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "plant_population_id"
   end
@@ -141,10 +141,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "mapping_locus",       default: "unspecified", null: false
     t.text    "map_position"
     t.text    "comments"
-    t.text    "entered_by_whom",     default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",       default: "unspecified"
+    t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "linkage_group_id"
     t.integer "population_locus_id"
@@ -164,10 +164,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "primer_b"
     t.text "separation_system"
     t.text "comments"
-    t.text "entered_by_whom",       default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
-    t.text "data_owned_by",         default: "unspecified"
+    t.text "data_owned_by"
     t.text "confirmed_by_whom"
   end
 
@@ -176,7 +176,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "associated_sequence_id"
     t.text "sequence_source_acronym"
     t.text "comments"
-    t.text "entered_by_whom",         default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
     t.text "data_owned_by"
@@ -185,19 +185,19 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "idx_143632_canonical_marker_name", using: :btree
 
   create_table "plant_accessions", force: :cascade do |t|
-    t.text    "plant_accession",            default: "",            null: false
+    t.text    "plant_accession",            default: "",     null: false
     t.text    "plant_accession_derivation"
     t.text    "accession_originator"
     t.text    "originating_organisation"
-    t.text    "year_produced",              default: "xxxx",        null: false
+    t.text    "year_produced",              default: "xxxx", null: false
     t.date    "date_harvested"
     t.text    "female_parent_plant_id"
     t.text    "male_parent_plant_id"
     t.text    "comments"
-    t.text    "entered_by_whom",            default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",              default: "unspecified"
+    t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "plant_line_id"
   end
@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
 
   create_table "plant_lines", force: :cascade do |t|
-    t.text    "plant_line_name",    default: "",            null: false
+    t.text    "plant_line_name",    default: "", null: false
     t.text    "common_name"
     t.text    "plant_variety_name"
     t.text    "named_by_whom"
@@ -214,7 +214,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "genetic_status"
     t.text    "previous_line_name"
     t.text    "comments"
-    t.text    "entered_by_whom",    default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
     t.text    "data_owned_by"
@@ -229,14 +229,14 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   add_index "plant_lines", ["taxonomy_term_id"], name: "index_plant_lines_on_taxonomy_term_id", using: :btree
 
   create_table "plant_parts", force: :cascade do |t|
-    t.text "plant_part",        default: "",            null: false
+    t.text "plant_part",        default: "", null: false
     t.text "description"
-    t.text "described_by_whom", default: "unspecified"
+    t.text "described_by_whom"
     t.text "comments"
-    t.text "entered_by_whom",   default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
-    t.text "confirmed_by_whom", default: "unspecified"
+    t.text "confirmed_by_whom"
   end
 
   add_index "plant_parts", ["plant_part"], name: "plant_parts_plant_part_idx", using: :btree
@@ -244,7 +244,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   create_table "plant_population_lists", id: false, force: :cascade do |t|
     t.text    "sort_order",          default: "unspecified", null: false
     t.text    "comments"
-    t.text    "entered_by_whom",     default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
     t.text    "confirmed_by_whom"
@@ -265,12 +265,12 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "establishing_organisation"
     t.text    "population_owned_by"
     t.text    "comments"
-    t.text    "entered_by_whom",              default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_owned_by"
     t.text    "data_provenance"
     t.text    "confirmed_by_whom"
-    t.text    "assigned_population_name",     default: "unspecified"
+    t.text    "assigned_population_name"
     t.integer "taxonomy_term_id"
     t.integer "male_parent_line_id"
     t.integer "female_parent_line_id"
@@ -286,17 +286,17 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
 
   create_table "plant_scoring_units", force: :cascade do |t|
-    t.text    "scoring_unit_name",        default: "",            null: false
+    t.text    "scoring_unit_name",        default: "", null: false
     t.text    "number_units_scored"
     t.text    "scoring_unit_sample_size"
     t.text    "scoring_unit_frame_size"
     t.date    "date_planted"
     t.text    "described_by_whom"
     t.text    "comments"
-    t.text    "entered_by_whom",          default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",            default: "unspecified"
+    t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "plant_accession_id"
     t.integer "plant_trial_id"
@@ -329,10 +329,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "design_factors"
     t.text    "design_layout_matrix"
     t.text    "comments"
-    t.text    "entered_by_whom",          default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",            default: "unspecified"
+    t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "country_id"
     t.integer "plant_population_id"
@@ -348,8 +348,8 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text   "entered_by_whom"
     t.date   "date_entered"
     t.string "data_provenance"
-    t.string "data_attribution",      default: "unspecified"
-    t.string "year_registered",       default: "xxxx"
+    t.string "data_attribution"
+    t.string "year_registered"
     t.string "breeders_variety_code"
     t.string "owner"
     t.string "quoted_parentage"
@@ -376,7 +376,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   create_table "pop_type_lookup", force: :cascade do |t|
     t.text "population_type",  default: "",            null: false
     t.text "population_class", default: "unspecified", null: false
-    t.text "assigned_by_whom", default: "unspecified"
+    t.text "assigned_by_whom"
   end
 
   add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
@@ -387,10 +387,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "marker_assay_name",   default: "unspecified", null: false
     t.text    "defined_by_whom"
     t.text    "comments"
-    t.text    "entered_by_whom",     default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",       default: "unspecified"
+    t.text    "data_owned_by"
     t.integer "plant_population_id"
   end
 
@@ -407,7 +407,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "sequence_source_acronym", default: "unspecified", null: false
     t.text "description"
     t.text "comments"
-    t.text "entered_by_whom",         default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
     t.text "data_owned_by"
@@ -420,7 +420,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "sequence_id",             default: "unspecified", null: false
     t.text "sequence_source_acronym", default: "unspecified", null: false
     t.text "comments"
-    t.text "entered_by_whom",         default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
   end
@@ -431,10 +431,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "processed_dataset_id"
     t.text    "trait_percent_heritability"
     t.text    "comments"
-    t.text    "entered_by_whom",              default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",                default: "unspecified"
+    t.text    "data_owned_by"
     t.integer "plant_population_id"
     t.integer "plant_trial_id"
     t.integer "trait_descriptor_id"
@@ -460,10 +460,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "additive_effect",            default: "unspecified", null: false
     t.text    "genetic_variance_explained"
     t.text    "comments"
-    t.text    "entered_by_whom",            default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",              default: "unspecified"
+    t.text    "data_owned_by"
     t.integer "processed_trait_dataset_id"
     t.integer "qtl_job_id"
     t.integer "linkage_group_id"
@@ -486,10 +486,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "described_by_whom"
     t.date "date_run"
     t.text "comments"
-    t.text "entered_by_whom",                default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
-    t.text "data_owned_by",                  default: "unspecified"
+    t.text "data_owned_by"
   end
 
   add_index "qtl_jobs", ["linkage_map_id"], name: "idx_144140_linkage_map_id", using: :btree
@@ -502,14 +502,14 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   end
 
   create_table "scoring_occasions", force: :cascade do |t|
-    t.text "scoring_occasion_name", default: "",            null: false
+    t.text "scoring_occasion_name", default: "", null: false
     t.date "score_start_date"
     t.date "score_end_date"
     t.text "comments"
-    t.text "entered_by_whom",       default: "unspecified"
+    t.text "entered_by_whom"
     t.date "date_entered"
     t.text "data_provenance"
-    t.text "data_owned_by",         default: "unspecified"
+    t.text "data_owned_by"
   end
 
   add_index "scoring_occasions", ["scoring_occasion_name"], name: "scoring_occasions_scoring_occasion_name_idx", using: :btree
@@ -564,10 +564,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "possible_interactions"
     t.text    "authorities"
     t.text    "comments"
-    t.text    "entered_by_whom",          default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",            default: "unspecified"
+    t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "trait_scores_count",       default: 0,             null: false
   end
@@ -581,7 +581,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "trait_grade",         default: "unspecified", null: false
     t.text    "description"
     t.text    "comments"
-    t.text    "entered_by_whom",     default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
     t.integer "trait_descriptor_id"
@@ -596,10 +596,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "score_spread"
     t.text    "value_type"
     t.text    "comments"
-    t.text    "entered_by_whom",         default: "unspecified"
+    t.text    "entered_by_whom"
     t.date    "date_entered"
     t.text    "data_provenance"
-    t.text    "data_owned_by",           default: "unspecified"
+    t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "plant_scoring_unit_id"
     t.integer "scoring_occasion_id"
