@@ -17,7 +17,7 @@ class PlantVariety < ActiveRecord::Base
 
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
-    query.by_name.pluck_columns(table_columns)
+    query.by_name.pluck_columns
   end
 
   def self.table_columns
@@ -43,4 +43,6 @@ class PlantVariety < ActiveRecord::Base
       ]
     ]
   end
+
+  include Annotable
 end

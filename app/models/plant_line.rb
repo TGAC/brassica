@@ -31,7 +31,7 @@ class PlantLine < ActiveRecord::Base
 
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
-    query.by_name.pluck_columns(table_columns + ref_columns)
+    query.by_name.pluck_columns
   end
 
   def self.genetic_statuses
@@ -83,4 +83,6 @@ class PlantLine < ActiveRecord::Base
       'plant_variety_id'
     ]
   end
+
+  include Annotable
 end
