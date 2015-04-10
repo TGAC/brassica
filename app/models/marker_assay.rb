@@ -17,4 +17,5 @@ class MarkerAssay < ActiveRecord::Base
   has_many :population_loci, class_name: 'PopulationLocus',
            foreign_key: 'marker_assay_name'
 
+  include Annotable
 end

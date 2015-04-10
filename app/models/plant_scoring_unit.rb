@@ -7,4 +7,5 @@ class PlantScoringUnit < ActiveRecord::Base
 
   has_many :trait_scores
 
+  include Annotable
 end

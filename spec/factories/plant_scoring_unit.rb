@@ -6,12 +6,8 @@ FactoryGirl.define do
     scoring_unit_frame_size { Faker::Number.number(2).to_s + ' plants in ' + Faker::Number.number(1).to_s }
     date_planted { Faker::Date.backward }
     described_by_whom { Faker::Internet.user_name }
-    comments { Faker::Lorem.sentence }
-    date_entered { Faker::Date.backward }
-    data_provenance { Faker::Lorem.sentence }
-    entered_by_whom { Faker::Internet.user_name }
     confirmed_by_whom { Faker::Internet.user_name }
-    data_owned_by { Faker::Company.name }
     plant_trial
+    instance_eval &AnnotableFactory.annotated
   end
 end

@@ -99,11 +99,10 @@ RSpec.describe PlantLine do
                   organisation: 'o',
                   plant_variety: pv)
 
-      plucked = PlantLine.pluck_columns(
-        PlantLine.table_columns + PlantLine.send(:ref_columns))
+      plucked = PlantLine.pluck_columns
       expect(plucked.count).to eq 1
       expect(plucked[0]).
-        to eq ['pln', 'tt', 'cn', 'pvn', 'ppln', de, 'dob', 'o', pv.id]
+        to eq ['pln', 'tt', 'cn', 'pvn', 'ppln', de, 'dob', 'o', pv.id, pl.id]
     end
   end
 

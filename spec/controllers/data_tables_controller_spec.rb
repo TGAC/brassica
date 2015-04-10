@@ -45,7 +45,7 @@ RSpec.describe DataTablesController do
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 2
       expect(json['data'].size).to eq 2
-      expect(json['data'].map{ |pp| pp[-3] }).to match_array pps.map(&:id)
+      expect(json['data'].map(&:last)).to match_array pps.map(&:id)
     end
 
     it 'supports query filtering on json format request' do
@@ -58,7 +58,7 @@ RSpec.describe DataTablesController do
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 1
       expect(json['data'].size).to eq 1
-      expect(json['data'][0][-3]).to eq pps[0]
+      expect(json['data'][0][-1]).to eq pps[0]
     end
 
     it 'prevents querying by unpermitted parameters' do

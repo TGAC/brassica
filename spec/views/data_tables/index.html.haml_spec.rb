@@ -3,8 +3,6 @@ require 'rails_helper'
 RSpec.describe 'data_tables/index.html.haml' do
   context 'when run for plant lines' do
     before(:each) do
-      allow(view).to receive(:controller_name).and_return('plant_lines')
-      allow(view).to receive(:action_name).and_return('index')
       allow(view).to receive(:params).and_return(model: 'plant_lines')
     end
 
@@ -19,6 +17,16 @@ RSpec.describe 'data_tables/index.html.haml' do
     it 'allows to go back to populations' do
       render
       expect(rendered).to include(data_tables_path(model: :plant_populations))
+    end
+  end
+
+  context 'when run for annotable models' do
+    it 'shows annotations column' do
+      annotable_tables.each do |table|
+        allow(view).to receive(:params).and_return(model: table)
+        render
+        expect(rendered).to have_tag('th.annotations')
+      end
     end
   end
 end

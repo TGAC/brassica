@@ -10,7 +10,7 @@ class PlantTrial < ActiveRecord::Base
 
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
-    query.order(:trial_year).pluck_columns(table_columns)
+    query.order(:trial_year).pluck_columns
   end
 
   def self.table_columns
@@ -34,4 +34,6 @@ class PlantTrial < ActiveRecord::Base
       ]
     ]
   end
+
+  include Annotable
 end

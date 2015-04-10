@@ -23,7 +23,7 @@ RSpec.describe PlantTrial do
   describe '#pluckable' do
     it 'gets proper data table columns' do
       pt = create(:plant_trial)
-      plucked = PlantTrial.pluck_columns(PlantTrial.table_columns)
+      plucked = PlantTrial.pluck_columns
       expect(plucked.count).to eq 1
       expect(plucked[0]).
         to eq [
@@ -33,7 +33,8 @@ RSpec.describe PlantTrial do
           pt.plant_population.name,
           pt.trial_year,
           pt.trial_location_site_name,
-          pt.date_entered
+          pt.date_entered,
+          pt.id
         ]
     end
   end
