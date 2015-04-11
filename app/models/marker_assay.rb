@@ -14,7 +14,7 @@ class MarkerAssay < ActiveRecord::Base
 
   belongs_to :probe
 
-  has_many :population_loci, class_name: 'PopulationLocus'
+  has_many :population_loci
 
   include Annotable
 end

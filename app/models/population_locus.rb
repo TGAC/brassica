@@ -1,5 +1,4 @@
 class PopulationLocus < ActiveRecord::Base
-  self.table_name = 'population_loci'
 
   belongs_to :plant_population
   belongs_to :marker_assay
