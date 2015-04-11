@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150409210935) do
+ActiveRecord::Schema.define(version: 20150411122550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,23 +156,39 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   add_index "map_positions", ["mapping_locus"], name: "map_positions_mapping_locus_idx", using: :btree
   add_index "map_positions", ["population_locus_id"], name: "map_positions_population_locus_id_idx", using: :btree
 
-  create_table "marker_assays", primary_key: "marker_assay_name", force: :cascade do |t|
-    t.text "canonical_marker_name", default: "unspecified", null: false
-    t.text "marker_type"
-    t.text "probe_name"
-    t.text "primer_a"
-    t.text "primer_b"
-    t.text "separation_system"
-    t.text "comments"
-    t.text "entered_by_whom"
-    t.date "date_entered"
-    t.text "data_provenance"
-    t.text "data_owned_by"
-    t.text "confirmed_by_whom"
+  create_table "marker_assays", force: :cascade do |t|
+    t.text    "marker_assay_name",             default: "",            null: false
+    t.text    "canonical_marker_name",         default: "unspecified", null: false
+    t.text    "marker_type"
+    t.text    "primer_a_name"
+    t.text    "primer_b_name"
+    t.text    "separation_system"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.text    "confirmed_by_whom"
+    t.integer "restriction_enzyme_a_id"
+    t.integer "marker_sequence_assignment_id"
+    t.integer "restriction_enzyme_b_id"
+    t.integer "primer_a_id"
+    t.integer "primer_b_id"
+    t.integer "probe_id"
   end
 
-  create_table "marker_sequence_assignments", primary_key: "canonical_marker_name", force: :cascade do |t|
+  add_index "marker_assays", ["canonical_marker_name"], name: "marker_assays_canonical_marker_name_idx", using: :btree
+  add_index "marker_assays", ["marker_assay_name"], name: "marker_assays_marker_assay_name_idx", using: :btree
+  add_index "marker_assays", ["marker_sequence_assignment_id"], name: "marker_assays_marker_sequence_assignment_id_idx", using: :btree
+  add_index "marker_assays", ["primer_a_id"], name: "marker_assays_primer_a_id_idx", using: :btree
+  add_index "marker_assays", ["primer_a_name"], name: "marker_assays_primer_a_idx", using: :btree
+  add_index "marker_assays", ["primer_b_id"], name: "marker_assays_primer_b_id_idx", using: :btree
+  add_index "marker_assays", ["primer_b_name"], name: "marker_assays_primer_b_idx", using: :btree
+  add_index "marker_assays", ["probe_id"], name: "marker_assays_probe_id_idx", using: :btree
+
+  create_table "marker_sequence_assignments", force: :cascade do |t|
     t.text "marker_set",              default: "unspecified", null: false
+    t.text "canonical_marker_name",   default: "",            null: false
     t.text "associated_sequence_id"
     t.text "sequence_source_acronym"
     t.text "comments"
@@ -183,6 +199,7 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   end
 
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "idx_143632_canonical_marker_name", using: :btree
+  add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
 
   create_table "plant_accessions", force: :cascade do |t|
     t.text    "plant_accession",            default: "",     null: false
@@ -384,7 +401,6 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   create_table "population_loci", force: :cascade do |t|
     t.text    "plant_population",    default: "unspecified", null: false
     t.text    "mapping_locus",       default: "unspecified", null: false
-    t.text    "marker_assay_name",   default: "unspecified", null: false
     t.text    "defined_by_whom"
     t.text    "comments"
     t.text    "entered_by_whom"
@@ -392,16 +408,18 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text    "data_provenance"
     t.text    "data_owned_by"
     t.integer "plant_population_id"
+    t.integer "marker_assay_id"
   end
 
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
   add_index "population_loci", ["mapping_locus"], name: "population_loci_mapping_locus_idx", using: :btree
-  add_index "population_loci", ["marker_assay_name"], name: "idx_143961_marker_assay", using: :btree
+  add_index "population_loci", ["marker_assay_id"], name: "population_loci_marker_assay_id_idx", using: :btree
   add_index "population_loci", ["plant_population"], name: "idx_143961_plant_population", using: :btree
   add_index "population_loci", ["plant_population"], name: "population_loci_plant_population_idx", using: :btree
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
-  create_table "primers", primary_key: "primer", force: :cascade do |t|
+  create_table "primers", force: :cascade do |t|
+    t.text "primer",                  default: "",            null: false
     t.text "sequence",                default: "unspecified", null: false
     t.text "sequence_id",             default: "unspecified", null: false
     t.text "sequence_source_acronym", default: "unspecified", null: false
@@ -413,7 +431,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.text "data_owned_by"
   end
 
-  create_table "probes", primary_key: "probe_name", force: :cascade do |t|
+  add_index "primers", ["primer"], name: "primers_primer_idx", using: :btree
+
+  create_table "probes", force: :cascade do |t|
+    t.text "probe_name",              default: "",            null: false
     t.text "species",                 default: "unspecified", null: false
     t.text "clone_name",              default: "unspecified", null: false
     t.date "date_described"
@@ -424,6 +445,8 @@ ActiveRecord::Schema.define(version: 20150409210935) do
     t.date "date_entered"
     t.text "data_provenance"
   end
+
+  add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
 
   create_table "processed_trait_datasets", force: :cascade do |t|
     t.text    "processed_trait_dataset_name", default: "",            null: false
@@ -496,9 +519,10 @@ ActiveRecord::Schema.define(version: 20150409210935) do
   add_index "qtl_jobs", ["qtl_job_name"], name: "qtl_jobs_qtl_job_name_idx", using: :btree
   add_index "qtl_jobs", ["qtl_software", "qtl_method"], name: "idx_144140_qtl_software", using: :btree
 
-  create_table "restriction_enzymes", primary_key: "restriction_enzyme", force: :cascade do |t|
-    t.text "recognition_site", default: "unspecified", null: false
-    t.text "data_provenance",                          null: false
+  create_table "restriction_enzymes", force: :cascade do |t|
+    t.text "restriction_enzyme", default: "",            null: false
+    t.text "recognition_site",   default: "unspecified", null: false
+    t.text "data_provenance",                            null: false
   end
 
   create_table "scoring_occasions", force: :cascade do |t|

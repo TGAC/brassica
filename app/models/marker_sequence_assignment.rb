@@ -1,6 +1,6 @@
 class MarkerSequenceAssignment < ActiveRecord::Base
 
-  has_many :marker_assays, foreign_key: 'canonical_marker_name'
+  has_many :marker_assays
 
   include Annotable
 end
