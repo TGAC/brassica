@@ -11,5 +11,10 @@
       - table_column = model_param + '.' + table_column unless table_column.include? '.'
       %th= t("tables.#{table_column}")
 
+  - if model_class.respond_to? :count_columns
+    - model_class.count_columns.each do |count_column|
+      - count_column = count_column.scan(/\(([^\)]+)\)/).last.first
+      %th= t("tables.#{count_column}")
+
   - if model_class.ancestors.include? Annotable
     %th.annotations

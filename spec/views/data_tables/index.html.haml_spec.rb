@@ -29,4 +29,9 @@ RSpec.describe 'data_tables/index.html.haml' do
       end
     end
   end
+
+  it 'has all column names translated' do
+    pending 'test when annotable concern is merged'
+    fail
+  end
 end
