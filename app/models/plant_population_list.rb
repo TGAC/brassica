@@ -1,6 +1,7 @@
 class PlantPopulationList < ActiveRecord::Base
 
-  belongs_to :plant_line, foreign_key: 'plant_line_name'
-  belongs_to :plant_population
+  belongs_to :plant_line
+  belongs_to :plant_population, counter_cache: true
 
+  include Annotable
 end

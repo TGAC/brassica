@@ -4,10 +4,10 @@ RSpec.describe ApplicationDecorator do
   describe '#as_grid_data' do
     it 'returns proper datatables hash' do
       pps = create_list(:plant_population, 4)
-      gd = ApplicationDecorator.decorate(PlantPopulation.grouped)
+      gd = ApplicationDecorator.decorate(PlantPopulation.table_data)
       expect(gd.as_grid_data[:recordsTotal]).to eq 4
       expect(gd.as_grid_data[:data].size).to eq 4
-      expect(gd.as_grid_data[:data].map(&:first)).to match_array pps.map(&:id)
+      expect(gd.as_grid_data[:data].map(&:last)).to match_array pps.map(&:id)
     end
   end
 end

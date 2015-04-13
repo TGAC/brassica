@@ -1,8 +1,11 @@
 class ConsolidatePlantLineDetails < ActiveRecord::Migration
+  require File.expand_path('lib/migration_helper')
+  include MigrationHelper
+
   def up
 
     # Rename existing PV to avoid naming clash
-    ActiveRecord::Base.connection.execute("ALTER TABLE plant_varieties \
+    execute("ALTER TABLE plant_varieties \
       RENAME TO old_plant_varieties")
 
     create_table :plant_varieties do |t|
@@ -27,11 +30,11 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
     pv_ctr = 0
     pvd_ctr = 0
 
-    result = ActiveRecord::Base.connection.execute("SELECT * FROM old_plant_varieties")
+    result = execute("SELECT * FROM old_plant_varieties")
     result.each do |row|
       pv_ctr += 1
 
-      pvd = ActiveRecord::Base.connection.execute("SELECT * FROM plant_variety_detail
+      pvd = execute("SELECT * FROM plant_variety_detail
         WHERE plant_variety_name = E'#{escape(row['plant_variety_name'])}'").first
 
       insert = "INSERT INTO plant_varieties \
@@ -86,7 +89,7 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
 
       insert += ")"
 
-      ActiveRecord::Base.connection.execute(insert)
+      execute(insert)
 
     end
 
@@ -137,7 +140,7 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
     pv_ctr = 0
     pvd_ctr = 0
 
-    result = ActiveRecord::Base.connection.execute("SELECT * FROM plant_varieties")
+    result = execute("SELECT * FROM plant_varieties")
 
     result.each do |pld|
 
@@ -152,7 +155,7 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
         '#{pld['date_entered']}', \
         '#{pld['data_provenance']}')"
 
-      ActiveRecord::Base.connection.execute(insert_pv)
+      execute(insert_pv)
       pv_ctr += 1
 
       unless pld['country_registered'] == 'xxx'
@@ -176,7 +179,7 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
           '#{pld['date_entered']}', \
           '#{pld['data_provenance']}')"
 
-        ActiveRecord::Base.connection.execute(insert_pvd)
+        execute(insert_pvd)
         pvd_ctr += 1
 
       end
@@ -188,17 +191,8 @@ class ConsolidatePlantLineDetails < ActiveRecord::Migration
     puts "======================"
 
     drop_table :plant_varieties
-    ActiveRecord::Base.connection.execute("ALTER TABLE old_plant_varieties \
+    execute("ALTER TABLE old_plant_varieties \
       RENAME TO plant_varieties")
-  end
-
-  def escape(string)
-    if string.nil?
-      nil
-    else
-      pattern = /(\'|\"|\.|\*|\/|\-|\\|\)|\$|\+|\(|\^|\?|\!|\~|\`)/
-      string.gsub(pattern){|match|"\\"  + match}
-    end
   end
 
 end

@@ -12,7 +12,7 @@ plantLineSelectOptions = ->
         plant_line_name: params.term
       page: params.page
     processResults: (data, page) ->
-      results: $.map(data.data, (row) -> { id: row[0], text: row[0] })
+      results: $.map(data, (row) -> { id: row.plant_line_name, text: row.plant_line_name })
   escapeMarkup: (markup) -> markup
   templateResult: formatPlantLine
   templateSelection: formatPlantLine

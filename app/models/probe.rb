@@ -1,5 +1,6 @@
 class Probe < ActiveRecord::Base
 
-  has_many :marker_assays, foreign_key: 'probe_name'
+  has_many :marker_assays
 
+  include Annotable
 end

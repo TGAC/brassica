@@ -37,7 +37,41 @@ $ ->
 
 
   $('.data-table').each (i)->
-    $(this).DataTable window.configs[this.id]
+    specificConfig = window.configs[this.id]
+    if specificConfig
+      specificConfig['columnDefs'] =
+        $.merge(specificConfig['columnDefs'], window.baseColumnDefs(this.id))
+    else
+      specificConfig =
+        columnDefs: window.baseColumnDefs(this.id)
+    $(this).DataTable specificConfig
+
+
+  $('body').popover
+    selector: '[data-popover-source]'
+    placement: 'left'
+    title: 'Record metadata'
+    trigger: 'focus'
+    html: 'true'
+    content: ->
+      divId = "tmp-id-" + $.now()
+      $.ajax
+        url: $(this).data('popover-source')
+        success: (response) ->
+          $('#'+divId).html(JSON.stringify(response))
+      "<div id='#{divId}'>Loading...</div>"
+
+
+window.baseColumnDefs = (model) ->
+  [
+    targets: 'annotations'
+    render: (data, type, full, meta) ->
+      objectId = full[full.length - 1]
+      if objectId
+        '<button data-popover-source="data_tables/' + objectId + '?model=' + model + '">Metadata</button>'
+      else
+        ''
+  ]
 
 
 # Specific configurations for particular DataTables, including callbacks
@@ -48,22 +82,48 @@ window.configs =
         targets: 1
         render: (data, type, full, meta) ->
           data.replace(/Brassica/, 'B.')
+      ,
+        targets: [3]
+        render: (data, type, full, meta) ->
+          if data && full[8]
+            '<a href="data_tables?model=plant_varieties&query[id]=' + full[8] + '">' + data + '</a>'
+          else
+            data
+      ]
+
+  'trait-descriptors':
+    columnDefs:
+      [
+        targets: [3]
+        render: (data, type, full, meta) ->
+          if data
+            '<a href="data_tables?model=plant_trials&query[project_descriptor]=' + data + '">' + data + '</a>'
+          else
+            ''
       ]
 
   'plant-populations':
     columnDefs:
       [
-        targets: [3, 4]
+        targets: [3]
         render: (data, type, full, meta) ->
-          if data
-            '<a href="plant_lines?query[plant_line_name][]=' + data + '">' + data + '</a>'
+          if data && full[7]
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[7] + '">' + data + '</a>'
+          else
+            ''
+      ,
+        targets: [4]
+        render: (data, type, full, meta) ->
+          if data && full[8]
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
           else
             ''
       ,
         targets: [6]
         render: (data, type, full, meta) ->
-          if data && data != '0'
-            '<a href="plant_lines?query[plant_populations.plant_population_id]=' + full[0] + '">' + data + '</a>'
+          if data && data != '0' && full[9]
+            '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[9] + '">' + data + '</a>'
           else
             ''
       ]
+

@@ -14,7 +14,7 @@ RSpec.describe PlantLine do
       create(:plant_line, common_name: 'cn', plant_line_name: 'pln')
     end
 
-    it 'serches plant_line_name' do
+    it 'searches plant_line_name' do
       create(:plant_line, plant_line_name: 'pln pln')
       search = PlantLine.filter(search: { plant_line_name: 'n pl' })
       expect(search.count).to eq 1
@@ -33,13 +33,12 @@ RSpec.describe PlantLine do
     end
 
     it 'will only query by permitted params' do
-      create(:plant_line, common_name: 'cn', plant_line_name: 'nlp')
-      create(:plant_line, common_name: 'nc', plant_line_name: 'pln')
+      pl = create(:plant_line, common_name: 'nc', plant_line_name: 'pln')
       search = PlantLine.filter(
-        query: { common_name: 'cn', plant_line_name: ['pln'] }
+        query: { common_name: 'cn', id: pl.id }
       )
-      expect(search.count).to eq 2
-      expect(search.map(&:plant_line_name)).to match_array ['pln', 'pln']
+      expect(search.count).to eq 1
+      expect(search.first.plant_line_name).to eq 'pln'
     end
 
     context 'when associated with plant population' do
@@ -53,7 +52,7 @@ RSpec.describe PlantLine do
       it 'supports querying by associated objects' do
         search = PlantLine.filter(
           query: {
-            'plant_populations.plant_population_id' => @pp.plant_population_id
+            'plant_populations.id' => @pp.id
           }
         )
         expect(search.count).to eq 2
@@ -64,8 +63,8 @@ RSpec.describe PlantLine do
       it 'supports multi-criteria queries' do
         search = PlantLine.filter(
           query: {
-            'plant_populations.plant_population_id' => @pp.plant_population_id,
-            plant_line_name: [@pls[1].plant_line_name]
+            'plant_populations.id' => @pp.id,
+            id: @pls[1].id
           }
         )
         expect(search.count).to eq 1
@@ -75,7 +74,7 @@ RSpec.describe PlantLine do
       it 'supports both search and query criteria combined' do
         search = PlantLine.filter(
           query: {
-            'plant_populations.plant_population_id' => @pp.plant_population_id
+            'plant_populations.id' => @pp.id
           },
           search: { 'plant_lines.plant_line_name' => @pls[1].plant_line_name[1..-2] }
         )
@@ -88,30 +87,34 @@ RSpec.describe PlantLine do
   describe '#pluckable' do
     it 'gets proper data table columns' do
       tt = create(:taxonomy_term, name: 'tt')
+      pv = create(:plant_variety, plant_variety_name: 'pvn')
       de = Date.today
       pl = create(:plant_line,
+                  plant_line_name: 'pln',
                   taxonomy_term: tt,
                   common_name: 'cn',
-                  previous_line_name: 'pln',
+                  previous_line_name: 'ppln',
                   date_entered: de,
                   data_owned_by: 'dob',
-                  organisation: 'o')
+                  organisation: 'o',
+                  plant_variety: pv)
 
-      plucked = PlantLine.pluck_columns(PlantLine.table_columns)
+      plucked = PlantLine.pluck_columns
       expect(plucked.count).to eq 1
-      expect(plucked[0][1..-1]).to eq %w(tt cn pln) + [de] + %w(dob o)
+      expect(plucked[0]).
+        to eq ['pln', 'tt', 'cn', 'pvn', 'ppln', de, 'dob', 'o', pv.id, pl.id]
     end
   end
 
-  describe '#filtered' do
+  describe '#table_data' do
     it 'returns empty result when no plant lines found' do
-      expect(PlantLine.filtered(plant_line_names: [1])).to be_empty
+      expect(PlantLine.table_data(plant_line_names: 1)).to be_empty
     end
 
-    it 'orders populations by plant line name' do
-      plids = create_list(:plant_line, 3).map(&:plant_line_name)
-      td = PlantLine.filtered(query: { plant_line_name: plids })
-      expect(td.map(&:first)).to eq plids.sort
-    end
+    # it 'orders plant lines by plant line name' do
+    #   plids = create_list(:plant_line, 3).map(&:id)
+    #   td = PlantLine.table_data(query: { id: plids })
+    #   expect(td.map(&:first)).to eq plids.sort
+    # end
   end
 end
