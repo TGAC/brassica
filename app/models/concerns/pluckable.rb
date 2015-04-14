@@ -16,8 +16,9 @@ module Pluckable extend ActiveSupport::Concern
       columns = table_columns + ref_columns
       columns.each do |column|
         relation = column.to_s.split('.')[0].pluralize if column.to_s.include? '.'
-        next unless relation and relation != self.table_name
+        next unless relation && relation != self.table_name
         relation = relation.singularize unless reflections.keys.include?(relation)
+        next unless reflections.keys.include?(relation)
         query = query.includes(relation.to_sym)
       end
       query.pluck(*columns)

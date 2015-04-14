@@ -11,5 +11,24 @@ class LinkageMap < ActiveRecord::Base
 
   has_many :map_locus_hits, foreign_key: 'linkage_map_id'
 
+  default_scope { includes(plant_population: :taxonomy_term) }
+
+  include Pluckable
+
+  def self.table_data(params = nil)
+    pluck_columns
+  end
+
+  def self.table_columns
+    [
+      'taxonomy_terms.name',
+      'linkage_map_label',
+      'linkage_map_name',
+      'plant_populations.name',
+      'map_version_no',
+      'map_version_date'
+    ]
+  end
+
   include Annotable
 end
