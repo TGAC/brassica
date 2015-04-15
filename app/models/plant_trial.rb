@@ -8,6 +8,37 @@ class PlantTrial < ActiveRecord::Base
   include Filterable
   include Pluckable
 
+  validates :plant_trial_name,
+            presence: true
+
+  validates :project_descriptor,
+            presence: true
+
+  validates :plant_trial_description,
+            presence: true
+
+  validates :trial_year,
+            presence: true,
+            length: { is: 4 }
+
+  validates :institute_id,
+            presence: true
+
+  validates :trial_location_site_name,
+            presence: true
+
+  validates :place_name,
+            presence: true
+
+  validates :latitude,
+            presence: true
+
+  validates :longitude,
+            presence: true
+
+  validates :contact_person,
+            presence: true
+
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
     query.order(:trial_year).pluck_columns

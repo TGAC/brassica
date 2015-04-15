@@ -15,6 +15,16 @@ class LinkageMap < ActiveRecord::Base
 
   include Pluckable
 
+  validates :linkage_map_label,
+            presence: true
+
+  validates :linkage_map_name,
+            presence: true
+
+  validates :map_version_no,
+            presence: true,
+            length: {minimum: 1, maximum: 3}
+
   def self.table_data(params = nil)
     pluck_columns
   end

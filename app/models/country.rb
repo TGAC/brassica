@@ -10,4 +10,7 @@ class Country < ActiveRecord::Base
 
   has_many :plant_trials
 
+  validates :country_code,
+            presence: true,
+            uniqueness: true
 end
