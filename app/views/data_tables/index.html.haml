@@ -16,5 +16,5 @@
       - count_column = count_column.scan(/\(([^\)]+)\)/).last.first
       %th= t("tables.#{count_column}")
 
-  - if model_class.ancestors.include? Annotable
+  - if !params[:group] && model_class.ancestors.include?(Annotable)
     %th.annotations

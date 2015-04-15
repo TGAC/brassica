@@ -25,7 +25,7 @@ module DataTablesHelper
     case model_param
       when 'plant_populations', 'plant_lines', 'plant_varieties'
         :plant_populations
-      when 'plant_trials', 'trait_descriptors'
+      when 'plant_trials', 'trait_descriptors', 'trait_scores'
         :trait_descriptors
       when 'linkage_maps'
         :linkage_maps
@@ -47,7 +47,7 @@ module DataTablesHelper
   def browse_tabs
     {
       plant_populations: data_tables_path(model: :plant_populations),
-      trait_descriptors: data_tables_path(model: :trait_descriptors),
+      trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
       linkage_maps: data_tables_path(model: :linkage_maps),
       qtl: data_tables_path(model: :qtl)
     }
