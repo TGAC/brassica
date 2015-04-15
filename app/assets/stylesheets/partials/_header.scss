@@ -1,0 +1,53 @@
+//header
+
+.page-header {
+  padding-bottom: 14px;
+  padding-top: 15px;
+  margin: 0;
+  border-bottom: 1px solid #eaeaea;
+
+  .container {
+    position: relative;
+  }
+
+  .breadcrumb {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    margin-top: -18px;
+  }
+
+  .page-title {
+    margin: 20px 0;
+    font-size: 24px;
+  }
+
+  .logo {
+    display: inline-block;
+    padding: 5px 0;
+  }
+
+  .header-menu {
+    padding: 15px 0;
+  }
+
+  @include max-screen($break-small) {
+    .breadcrumb,
+    .page-title {
+      float: none !important;
+      text-align: center;
+    }
+
+    .breadcrumb {
+      position: inherit;
+      top: inherit;
+      right: inherit;
+    }
+  }
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}

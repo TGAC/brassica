@@ -1,20 +1,52 @@
 //DEFINE ALL VARIABLES HERE
 
-// fonts
-$heading-font-family: "Raleway", sans-serif; // imported from google font
-$base-font-family: "Raleway", sans-serif; // imported from google font
-$heading-text-color: #474747;
-$body-text-color: #4a4a4a;
-
-// colors
+//custom colors
 $accent-color: #72c02c;
-$link-color: $accent-color;
-$link-hover-color: darken($link-color, 8%);
+$mono-color-1: #586373;
+$mono-color-2: #cdcdcd;
+$text-color-negative: #fff;
 $facebook-color: #3b59ab;
 $twitter-color: #2b97f0;
 $googleplus-color: #dd4b39;
 $rss-color: #ff6600;
-$footer-bg-color: #49494b;
+$footer-bg-color: #29384e;
+$footer-bg-color-2: #29384e;
+$heading-text-color: #474747;
+$body-text-color: #333;
+
+//bootstrap variables overwrites
+//colors
+$gray-base: #000;
+$brand-primary: $accent-color;
+//$brand-success:
+//$brand-info:
+//$brand-warning:
+//$brand-danger:
+
+//scaffolding
+$body-bg: #fff;
+$text-color: $body-text-color;
+$link-color: darken($brand-primary, 8%);
+$link-hover-color: darken($link-color, 8%);
+
+//typography
+$font-size-base: 14px;
+
+//components
+
+//tables
+
+//buttons
+$btn-default-border: $mono-color-1;
+
+//forms
+
+
+
+// fonts
+$heading-font-family: "Raleway", sans-serif; // imported from google font
+$base-font-family: "Raleway", sans-serif; // imported from google font
+
 
 // Screen breakpoint variables
 $break-xsmall: 480px;

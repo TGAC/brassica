@@ -1,7 +1,7 @@
 /*
 *	############################################################################
 *
-*	Brassica - Custom Bootstrap Theme
+*	Brassica - Custom Bootstrap Styles
 *	---------------------------------------------------------------------
 *
 *	Version		1.0
@@ -26,41 +26,31 @@
  *= require select2
  */
 
-//import bootstrap styles
-@import "bootstrap/bootstrap-custom";
-@import "bootstrap-sprockets";
-
-//import config styles
+//import config files
 @import "modules/variables";
 @import "modules/mixins";
 
+//import bootstrap styles
+@import "bootstrap/bootstrap-custom";
+@import "bootstrap/ui-bootstrap-elements";
+@import "bootstrap-sprockets";
+
 //import general styles
-@import "base/base";
-@import "base/fonts";
+@import "partials/base";
+@import "partials/header";
+@import "partials/footer";
+@import "partials/ui-elements";
+@import "modules/fonts";
 
 @import "font-awesome-sprockets";
 @import "font-awesome";
 
-@import "base/sticky-footer";
-@import "modules/flash";
-@import "modules/errors";
+@import "partials/sticky-footer";
+@import "partials/flash";
+@import "partials/errors";
 @import "partials/submissions";
 
 // TODO refactor whats below
-.page-header {
-  margin: 0;
-  padding-top: 10px;
-  .logo {
-    display: inline-block;
-    height: 60px;
-    width: 220px;
-  }
-}
-
-#footer {
-  background-color: #eeeeee;
-  padding: 15px;
-}
 
 .select2 {
   width: 40%;

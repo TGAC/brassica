@@ -1,0 +1,58 @@
+
+//button styles
+.btn-secondary {
+  text-transform: none;
+}
+
+.btn-ghost {
+  background-color: transparent;
+}
+
+.btn-negative {
+  color: $text-color-negative;
+  border-color: $text-color-negative;
+}
+
+
+
+
+.section-jumbotron {
+  background: url("/images/hero-bg.jpg") no-repeat scroll center top #4B5B6B;
+  color: $text-color-negative;
+  max-height: 280px;
+  overflow: hidden;
+  
+  .container {
+    max-width: $break-medium;
+  }
+
+  h3 {
+    color: $text-color-negative;
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  .intro-text {
+    font-size: 16px;
+  }
+
+  
+}
+
+.section-search {
+  line-height: 2.4;
+  margin-top: -60px;
+  text-align: center;
+
+  .container {
+    background-color: grey;
+    padding: 15px 0;
+  }
+
+  .form-group {
+    margin: 0;
+  }
+}
+
+
+

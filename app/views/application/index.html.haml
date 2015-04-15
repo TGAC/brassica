@@ -1,8 +1,8 @@
 %section.section-jumbotron.jumbotron
-  .container
+  .container.text-center
     %h3 Brassica Information Portal
 
-    %p
+    %p.intro-text
       The Brassica Information Portal is a web repository for population and trait
       scoring information related to Brassica breeding community. It provides
       information about quantitative trait loci and links curated Brassica phenotype
@@ -10,23 +10,24 @@
       Advanced data submission capabilities and API interface allow users to store
       and publish their own study results in our Portal.
 
-    %p.text-center
-      = link_to 'LEARN MORE', about_path
+    %p
+      = link_to 'Learn more', about_path, { class: 'btn btn-default btn-secondary btn-ghost btn-negative' }
 
-    .row.search-form.text-center
-      .col-md-8
-        %form
-          .form-group
-            .input-group
-              %input(type="text" class="form-control" placeholder="Search for...")
-              %span.input-group-btn
-                %button.btn.btn-default(type="button") Search
+%section.section-search
+  .container
+    .col-md-8
+      %form
+        .form-group
+          .input-group
+            %input(type="text" class="form-control" placeholder="Search for...")
+            %span.input-group-btn
+              %button.btn.btn-default(type="button") Search
 
-      .col-md-1
-        %span or
+    .col-md-1
+      %span - or -
 
-      .col-md-2
-        = link_to 'Start browsing', browse_data_path, class: 'btn btn-primary'
+    .col-md-3
+      = link_to 'Start browsing', browse_data_path, class: 'btn btn-primary btn-block'
 
 %section.section-actions.container
   .row
