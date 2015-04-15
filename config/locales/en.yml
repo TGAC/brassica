@@ -68,3 +68,5 @@ en:
     trait_descriptors:
       descriptor_name: Trait
       trait_scores_count: Trait scores
+    qtl:
+      id: QTL count

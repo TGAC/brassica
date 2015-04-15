@@ -5,7 +5,9 @@ RSpec.describe DataTablesHelper do
     it 'sets proper tab links' do
       expect(browse_tabs).to eq({
         plant_populations: data_tables_path(model: :plant_populations),
-        trait_descriptors: data_tables_path(model: :trait_descriptors)
+        trait_descriptors: data_tables_path(model: :trait_descriptors),
+        linkage_maps: data_tables_path(model: :linkage_maps),
+        qtl: data_tables_path(model: :qtl)
       })
     end
   end
