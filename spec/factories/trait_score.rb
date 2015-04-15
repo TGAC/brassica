@@ -8,5 +8,6 @@ FactoryGirl.define do
     confirmed_by_whom { Faker::Internet.user_name }
     plant_scoring_unit
     instance_eval &AnnotableFactory.annotated
+    trait_descriptor
   end
 end

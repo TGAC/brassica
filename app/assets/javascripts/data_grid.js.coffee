@@ -100,6 +100,13 @@ window.configs =
             '<a href="data_tables?model=plant_trials&query[project_descriptor]=' + data + '">' + data + '</a>'
           else
             ''
+      ,
+        targets: [5]
+        render: (data, type, full, meta) ->
+          if data && full[2]
+            '<a href="data_tables?model=trait_scores&query[trait_descriptors.descriptor_name]=' + full[2] + '">' + data + '</a>'
+          else
+            ''
       ]
 
   'plant-populations':

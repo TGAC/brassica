@@ -3,8 +3,9 @@ require 'rails_helper'
 RSpec.describe TraitDescriptor do
   describe '#table_data' do
     it 'properly calculates associated trait score number' do
-      td1 = create(:trait_descriptor, trait_scores: create_list(:trait_score, 3, plant_scoring_unit: nil))
-      td2 = create(:trait_descriptor, trait_scores: create_list(:trait_score, 2, plant_scoring_unit: nil))
+      td1, td2 = create_list(:trait_descriptor, 2)
+      create_list(:trait_score, 3, plant_scoring_unit: nil, trait_descriptor: td1)
+      create_list(:trait_score, 2, plant_scoring_unit: nil, trait_descriptor: td2)
       table_data = TraitDescriptor.table_data
       expect(table_data.count).to eq 2
       expect(table_data.map{ |td| [td[2], td[5]] }).to match_array [
@@ -15,9 +16,6 @@ RSpec.describe TraitDescriptor do
 
     it 'orders trait by species name' do
       tss = create_list(:trait_score, 3)
-      tss.each do |trait_score|
-        create(:trait_descriptor, trait_scores: [trait_score])
-      end
       ttns = tss.map{ |ts| ts.plant_scoring_unit.plant_trial.plant_population.taxonomy_term.name }
       table_data = TraitDescriptor.table_data
       expect(table_data.count).to eq 3
@@ -25,7 +23,7 @@ RSpec.describe TraitDescriptor do
     end
 
     it 'gets proper columns' do
-      td = create(:trait_descriptor, trait_scores: [create(:trait_score)])
+      td = create(:trait_score).trait_descriptor
       table_data = TraitDescriptor.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
@@ -34,8 +32,7 @@ RSpec.describe TraitDescriptor do
         td.descriptor_name,
         td.trait_scores[0].plant_scoring_unit.plant_trial.project_descriptor,
         td.trait_scores[0].plant_scoring_unit.plant_trial.country.country_name,
-        1,
-        td.id
+        1
       ]
     end
   end
