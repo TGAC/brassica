@@ -1,0 +1,24 @@
+//DEFINE ALL VARIABLES HERE
+
+// fonts
+$heading-font-family: "Raleway", sans-serif; // imported from google font
+$base-font-family: "Raleway", sans-serif; // imported from google font
+$heading-text-color: #474747;
+$body-text-color: #4a4a4a;
+
+// colors
+$accent-color: #72c02c;
+$link-color: $accent-color;
+$link-hover-color: darken($link-color, 8%);
+$facebook-color: #3b59ab;
+$twitter-color: #2b97f0;
+$googleplus-color: #dd4b39;
+$rss-color: #ff6600;
+$footer-bg-color: #49494b;
+
+// Screen breakpoint variables
+$break-xsmall: 480px;
+$break-small: 768px;
+$break-medium: 992px;
+$break-large: 1200px;
+$break-xlarge: 1440px;
