@@ -43,7 +43,13 @@ RSpec.describe 'data_tables/index.html.haml' do
   end
 
   it 'has all column names translated' do
-    pending 'test when annotable concern is merged'
-    fail
+    annotable_tables.each do |table|
+      model_klass = table.singularize.camelize.constantize
+      next unless model_klass.respond_to? :table_columns
+      model_klass.table_columns.each do |column|
+        column = table + '.' + column unless column.include? '.'
+        expect(I18n.t("tables.#{column}")).not_to include 'translation missing'
+      end
+    end
   end
 end
