@@ -1,21 +1,71 @@
 // footer
 
 #footer {
-  background-color: $footer-bg-color;
+  color: $footer-text-color;
+
+  .section-heading {
+    color: $text-color-negative;
+    font-size: 22px;
+
+    &::after {
+      border-color: $footer-accent-color;
+    }
+  }
+
+  a {
+    @include link-color($footer-accent-color);
+  }
+
+  .footer-main {
+    background-color: $footer-bg-color;
+    min-height: 290px;
+    padding: 30px 0;
+  }
+
+  .footer-copyright {
+    background-color: $footer-bg-color-2;
+    min-height: 60px;
+    padding: 20px 0;
+  }
+
+  .footer-contact-us {
+    background: url("/images/footer-bg.png") no-repeat scroll 15px 60px rgba(0, 0, 0, 0);
+    min-height: 220px;
+  }
+
+  .footer-links {
+    li {
+      border-bottom: 1px solid $mono-color-1;
+      font-size: 12px;
+      padding: 3px 0;
+      text-transform: uppercase;
+      &:last-child {
+        border-bottom: none;
+      }
+      a {
+        @include link-color($text-color-negative);
+      }
+    }
+  }
+
+  .logo-bip {
+    background: url("/images/logo-bip-mono.png") no-repeat scroll 0 0 / 100% auto rgba(0, 0, 0, 0);
+    height: 55px;
+    margin-bottom: 15px;
+    opacity: 0.75;
+    width: 200px;
+  }
+
+  .logo-tgac {
+    background: url("/images/logo-tgac.png") no-repeat scroll 0 0 / 100% auto rgba(0, 0, 0, 0);
+    height: 40px;
+    margin-bottom: 15px;
+    opacity: 0.75;
+    width: 150px;
+  }
+
+
+
+
 }
 
-.footer-heading {
-  margin: 0 0 13px 0;
-  font-size: 16px;
-  line-height: 2;
-}
-
-.footer-nav > li {
-  margin-bottom: 10px;
-}
-
-.copyright {
-  padding: 15px 0;
-  background-color: #323232;
-  font-size: 12px;
-}

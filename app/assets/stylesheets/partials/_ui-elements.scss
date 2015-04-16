@@ -14,14 +14,32 @@
 }
 
 
+//forms
+.form-negative {
+  border-color: $mono-color-2;
+}
+
+//text & typography
+.text-negative {
+  color: $mono-color-2;
+}
+
+.section-heading {
+  color: $heading-text-color;
+  font-size: 22px;
+
+  &::after {
+    border-color: $accent-color;
+  }
+}
 
 
+
+//sections
 .section-jumbotron {
   background: url("/images/hero-bg.jpg") no-repeat scroll center top #4B5B6B;
   color: $text-color-negative;
-  max-height: 280px;
-  overflow: hidden;
-  
+
   .container {
     max-width: $break-medium;
   }
@@ -35,8 +53,6 @@
   .intro-text {
     font-size: 16px;
   }
-
-  
 }
 
 .section-search {
@@ -45,12 +61,64 @@
   text-align: center;
 
   .container {
-    background-color: grey;
+    background-color: #50687E;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 15px 0;
   }
 
   .form-group {
     margin: 0;
+  }
+}
+
+//boxed content
+.boxed-content {
+  text-align: center;
+  margin-bottom: 35px;
+
+  > i {
+    font-size: 5em;
+    color: $accent-color;
+  }
+
+  .boxed-content-title {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  &.left-aligned {
+    text-align: left;
+
+    .boxed-content-title {
+      margin-bottom: 10px;
+      line-height: 28px;
+      font-weight: normal;
+    }
+
+    i {
+      float: left;
+      margin-right: 10px;
+      font-size: 2em;
+    }
+  }
+
+  &.left-boxed-icon {
+    i {
+      @include border-radius(2px);
+
+      padding: 10px;
+      width: 60px;
+      height: 60px;
+      background: $accent-color;
+      color: #fff;
+      text-align: center;
+      line-height: 40px;
+    }
+
+    .boxed-content-title,
+    p {
+      padding-left: 80px;
+    }
   }
 }
 

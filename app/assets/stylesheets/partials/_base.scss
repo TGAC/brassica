@@ -7,9 +7,9 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin-top: 5px;
-  font-family: $heading-font-family;
   color: $heading-text-color;
+  font-family: $heading-font-family;
+  margin-top: 5px;
 }
 
 section {
@@ -80,17 +80,13 @@ hr {
 
 .section-heading {
   margin-bottom: 20px;
-  font-size: 22px;
 
   &:after {
+    border-bottom: 4px solid $accent-color;
+    content: " ";
     display: block;
-    content: '......';
-    color: $accent-color;
-    font-weight: 300;
-  }
-
-  &.panel-title:after {
-    display: none;
+    margin-top: 15px;
+    width: 100px;
   }
 }
 

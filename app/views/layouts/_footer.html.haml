@@ -1,28 +1,29 @@
 %footer#footer
-  .container
-    .row
-      .col-md-4
+  .footer-main
+    .container
+      .col-md-3
         %div
-          BIP LOGO HERE
+          .logo-bip
 
         %div
-          TGAC LOGO HERE
-          %br
-          = link_to 'The Genome Analysis Centre', 'http://www.tgac.ac.uk/'
-          %br
-          Company Registration: 6855533
-          %br
-          Charity Number: 1136213
+          .logo-tgac
+          %p
+            = link_to 'The Genome Analysis Centre', 'http://www.tgac.ac.uk/'
+            %br
+            Company Registration: 6855533
+            %br
+            Charity Number: 1136213
+            %br
 
-      .col-md-4
-        %h4 Contact us
+      .col-md-4.col-md-push-1.footer-contact-us
+        %h4.section-heading Contact us
         %address
-          %div
-            = link_to 'Norwich Research Park', 'https://goo.gl/maps/QRouY'
-            %br
-            Norwich
-            %br
-            NR4 7UH UK
+          = link_to 'Norwich Research Park', 'https://goo.gl/maps/QRouY'
+          %br
+          Norwich
+          %br
+          NR4 7UH UK
+          %br
 
           %div
             %abbr(title="Telephone") Telephone:
@@ -31,23 +32,23 @@
             %abbr(title="E-mail") Email:
             %a(href="mailto:tgac.enquiries@tgac.ac.uk") tgac.enquiries@tgac.ac.uk
 
-      .col-md-2
-      .col-md-2
-        %h4 Links
-        %div
-          = link_to t('menu.browse'), navbar_menu[:browse]
-          %br
-          = link_to t('menu.submit'), navbar_menu[:submit]
-          %br
-          = link_to t('menu.api'), navbar_menu[:api]
-
-        %div
-          = link_to t('menu.about'), navbar_menu[:about]
-          %br
+      .col-md-3.col-md-push-1.footer-links
+        %h4.section-heading Links
+        %ul.list-unstyled
+          %li
+            = link_to t('menu.browse'), navbar_menu[:browse]
+          %li
+            = link_to t('menu.submit'), navbar_menu[:submit]
+          %li
+            = link_to t('menu.api'), navbar_menu[:api]
+          %li
+            = link_to t('menu.about'), navbar_menu[:about]
           - if user_signed_in?
-            = link_to 'Submissions', submissions_path
+            %li
+              = link_to 'Submissions', submissions_path
 
-    .row
+  .footer-copyright
+    .container
       .col-md-12
         %small
           &copy; 2015

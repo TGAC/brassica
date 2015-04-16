@@ -19,39 +19,41 @@
       %form
         .form-group
           .input-group
-            %input(type="text" class="form-control" placeholder="Search for...")
+            %input(type="text" class="form-control form-negative" placeholder="Search for...")
             %span.input-group-btn
-              %button.btn.btn-default(type="button") Search
+              %button.btn.btn-primary(type="button") Search
 
     .col-md-1
-      %span - or -
+      %span.text-negative - or -
 
     .col-md-3
       = link_to 'Start browsing', browse_data_path, class: 'btn btn-primary btn-block'
 
 %section.section-actions.container
   .row
-    .col-md-4.text-center
+    .col-md-4.boxed-content
       %i.fa.fa-list.fa-5x
-      .text-justify
+      %h2.boxed-content-title Browse database
+      %p
         Browse and search through more than 100 thousands of trait scores, and
         look for related QTLs in a variety of Brassica subspicies.
       = link_to 'Browse data', browse_data_path, class: 'btn btn-primary'
 
-    .col-md-4.text-center
+    .col-md-4.boxed-content
       %i.fa.fa-file-text-o.fa-5x
-      .text-justify
+      %h2.boxed-content-title Submit new data
+      %p
         Submit your experimental Brassica population data, along with scored
         traits and found genetic mapping, to be published in the Portal.
       = link_to 'Submit data', new_submission_path, class: 'btn btn-primary'
 
-    .col-md-4.text-center
+    .col-md-4.boxed-content
       %i.fa.fa-book.fa-5x
-      .text-justify
+      %h2.boxed-content-title API Documentation
+      %p
         Learn how to integrate your own software with our Portal, in order to
         retrieve and submit large quantities of data, automatically.
       = link_to 'API documentation', '#', class: 'btn btn-primary'
-
 
   - if @submissions.present?
     .row
@@ -60,7 +62,7 @@
 
 %section.section-statistics.container
   .row
-    %h3 Database statistics
+    %h3.section-heading Database statistics
 
     - ['Experimental populations',
        'Trait scores',
@@ -68,7 +70,8 @@
        'Plant lines'].each_with_index do |category_name, i|
 
       .col-md-3.text-center
-        %h1= number_to_human(@statistics[i])
+        .chart{"data-percent" => (number_to_human(@statistics[i]))}
+          %span= number_to_human(@statistics[i])
         = category_name
 
 -# TODO we need some additional space here to separate stats from the footer

@@ -10,6 +10,14 @@
   }
 }
 
+@mixin link-color($color) {
+  color: $color;
+  &:hover, &:focus, &:active {
+    @include transition(all 0.2s ease-in-out);
+    color: darken($color, 15%);
+  }
+}
+
 //--------------------
 
 @mixin screen($res-min, $res-max)
