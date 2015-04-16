@@ -2,8 +2,6 @@ class Probe < ActiveRecord::Base
 
   has_many :marker_assays
 
-  include Annotable
-
   validates :probe_name,
             presence: true
 
@@ -18,4 +16,6 @@ class Probe < ActiveRecord::Base
 
   validates :sequence_source_acronym,
             presence: true
+
+  include Annotable
 end
