@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150416104928) do
+ActiveRecord::Schema.define(version: 20150416114240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 20150416104928) do
     t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "plant_population_id"
+    t.integer "pubmed_id"
   end
 
   add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", using: :btree
@@ -352,6 +353,7 @@ ActiveRecord::Schema.define(version: 20150416104928) do
     t.text    "confirmed_by_whom"
     t.integer "country_id"
     t.integer "plant_population_id"
+    t.integer "pubmed_id"
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
@@ -489,6 +491,7 @@ ActiveRecord::Schema.define(version: 20150416104928) do
     t.integer "processed_trait_dataset_id"
     t.integer "qtl_job_id"
     t.integer "linkage_group_id"
+    t.integer "pubmed_id"
   end
 
   add_index "qtl", ["linkage_group_id"], name: "qtl_linkage_group_id_idx", using: :btree
