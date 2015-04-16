@@ -33,9 +33,6 @@ class PlantPopulation < ActiveRecord::Base
             presence: true,
             allow_blank: true
 
-  validates :canonical_population_name,
-            presence: true
-
   scope :by_name, -> { order('plant_populations.name') }
 
   def self.table_data(params = nil)

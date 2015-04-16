@@ -10,7 +10,4 @@ class RestrictionEnzyme < ActiveRecord::Base
 
   validates :recognition_site,
             presence: true
-
-  validates :data_provenance,
-            presence: true
 end
