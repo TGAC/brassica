@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150416120747) do
+ActiveRecord::Schema.define(version: 20150416161719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -614,10 +614,8 @@ ActiveRecord::Schema.define(version: 20150416120747) do
   add_index "trait_grades", ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
 
   create_table "trait_scores", force: :cascade do |t|
-    t.text    "scoring_occasion_name",   default: "unspecified", null: false
-    t.text    "replicate_score_reading", default: "unspecified", null: false
+    t.text    "scoring_occasion_name", default: "unspecified", null: false
     t.text    "score_value"
-    t.text    "score_spread"
     t.text    "value_type"
     t.text    "comments"
     t.text    "entered_by_whom"

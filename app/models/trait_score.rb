@@ -7,8 +7,5 @@ class TraitScore < ActiveRecord::Base
   validates :scoring_occasion_name,
             presence: true
 
-  validates :replicate_score_reading,
-            presence: true
-
   include Annotable
 end
