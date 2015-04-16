@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150416093017) do
+ActiveRecord::Schema.define(version: 20150416104928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -521,7 +521,7 @@ ActiveRecord::Schema.define(version: 20150416093017) do
   create_table "restriction_enzymes", force: :cascade do |t|
     t.text "restriction_enzyme", default: "",            null: false
     t.text "recognition_site",   default: "unspecified", null: false
-    t.text "data_provenance",                            null: false
+    t.text "data_provenance"
   end
 
   create_table "scoring_occasions", force: :cascade do |t|
@@ -649,11 +649,5 @@ ActiveRecord::Schema.define(version: 20150416093017) do
   end
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
-
-  create_table "version", primary_key: "version", force: :cascade do |t|
-    t.date "date"
-    t.text "updated_by_whom", default: "unspecified", null: false
-    t.text "comments",                                null: false
-  end
 
 end
