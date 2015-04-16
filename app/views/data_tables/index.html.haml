@@ -2,6 +2,14 @@
 
 .lead= model_param.humanize
 
+- if params[:query].present?
+  %span.label.label-primary
+    Showing
+    = model_param.humanize
+    with the following criteria:
+    = surround '[',']' do
+      = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
+
 = back_button
 
 = datatable_tag do
