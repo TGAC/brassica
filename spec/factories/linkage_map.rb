@@ -7,6 +7,7 @@ FactoryGirl.define do
     mapping_software { Faker::Lorem.words(3) }
     mapping_function { Faker::Lorem.word }
     map_author { Faker::Internet.user_name }
+    pubmed_id { Faker::Number.number(7) }
     confirmed_by_whom { Faker::Internet.user_name }
     instance_eval &AnnotableFactory.annotated
     plant_population

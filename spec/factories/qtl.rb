@@ -11,6 +11,7 @@ FactoryGirl.define do
     additive_effect { Faker::Lorem.sentence }
     genetic_variance_explained { Faker::Lorem.sentence }
     instance_eval &AnnotableFactory.annotated
+    pubmed_id { Faker::Number.number(7) }
     linkage_group
     processed_trait_dataset
   end
