@@ -14,5 +14,8 @@ class GenotypeMatrix < ActiveRecord::Base
   validates :number_lines_in_matrix,
             presence: true
 
+  validates :matrix,
+            presence: true
+
   include Annotable
 end
