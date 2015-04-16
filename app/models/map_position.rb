@@ -6,11 +6,11 @@ class MapPosition < ActiveRecord::Base
 
   has_many :map_locus_hits, foreign_key: 'map_position'
 
-  include Annotable
-
   validates :marker_assay_name,
             presence: true
 
   validates :mapping_locus,
             presence: true
+
+  include Annotable
 end

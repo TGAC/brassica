@@ -2,8 +2,6 @@ class QtlJob < ActiveRecord::Base
 
   has_many :qtls
 
-  include Annotable
-
   validates :qtl_job_name,
             presence: true
 
@@ -15,4 +13,6 @@ class QtlJob < ActiveRecord::Base
 
   validates :qtl_method,
             presence: true
+
+  include Annotable
 end

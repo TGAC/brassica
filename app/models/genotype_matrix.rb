@@ -2,8 +2,6 @@ class GenotypeMatrix < ActiveRecord::Base
 
   belongs_to :linkage_map
 
-  include Annotable
-
   validates :matrix_compiled_by,
             presence: true
 
@@ -15,4 +13,6 @@ class GenotypeMatrix < ActiveRecord::Base
 
   validates :number_lines_in_matrix,
             presence: true
+
+  include Annotable
 end
