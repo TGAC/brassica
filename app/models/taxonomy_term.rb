@@ -8,6 +8,7 @@ class TaxonomyTerm < ActiveRecord::Base
   has_many :plant_populations
 
   validates :name, uniqueness: true
+  validates :label, presence: true
 
   scope :children_of, ->(parent_id) { where(taxonomy_term_id: parent_id) }
 

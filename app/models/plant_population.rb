@@ -29,6 +29,10 @@ class PlantPopulation < ActiveRecord::Base
 
   include Filterable
 
+  validates :name,
+            presence: true,
+            allow_blank: true
+
   scope :by_name, -> { order('plant_populations.name') }
 
   def self.table_data(params = nil)

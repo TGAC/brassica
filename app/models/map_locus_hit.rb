@@ -5,4 +5,24 @@ class MapLocusHit < ActiveRecord::Base
   belongs_to :map_position, foreign_key: 'map_position'
   belongs_to :population_locus
 
+  validates :consensus_group_assignment,
+            presence: true
+
+  validates :canonical_marker_name,
+            presence: true
+
+  validates :map_data_status,
+            presence: true
+
+  validates :associated_sequence_id,
+            presence: true
+
+  validates :sequence_source_acronym,
+            presence: true
+
+  validates :cs_sequence_data_status,
+            presence: true
+
+  validates :sqs_sequence_data_status,
+            presence: true
 end
