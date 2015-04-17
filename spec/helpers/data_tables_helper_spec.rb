@@ -20,4 +20,35 @@ RSpec.describe DataTablesHelper do
       expect(datatables_source).to eq data_tables_path(model: 'model_name', query: { a: 'b' })
     end
   end
+
+  describe '#extract_column' do
+    before :each do
+      allow(self).to receive(:params).and_return(model: 'model_name')
+    end
+
+    it 'adds model name to column name' do
+      expect(extract_column('column_name')).to eq %w(model_name column_name)
+    end
+
+    it 'does not add model name when present in argument' do
+      expect(extract_column('right_model_name.column_name')).
+        to eq %w(right_model_name column_name)
+    end
+
+    it 'honor aliasing case insensitive' do
+      expect(extract_column('mn.cn AS column_name')).
+        to eq %w(model_name column_name)
+      expect(extract_column('mn.cn as column_name')).
+        to eq %w(model_name column_name)
+      expect(extract_column('mn.cn as right_model_name.column_name')).
+        to eq %w(right_model_name column_name)
+    end
+
+    it 'strips the aggregate function' do
+      expect(extract_column('count(column_name)')).
+          to eq %w(model_name column_name)
+      expect(extract_column('count(right_model_name.column_name)')).
+          to eq %w(right_model_name column_name)
+    end
+  end
 end

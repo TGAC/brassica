@@ -66,4 +66,21 @@ module DataTablesHelper
       raise ActionController::RoutingError.new('Not Found')
     end
   end
+
+  # Returns [model_table_name, column_name] pair
+  def extract_column(column_string)
+    column_string.match(/\(([^\)]+)\)/) do |match|
+      column_string = match[0][1..-2]  # remove aggregation function
+    end
+
+    column_string = column_string.
+      to_s.                            # make sure it IS a string
+      split(/ as /i)[-1]               # honor aliasing
+
+    if column_string.include? '.'
+      column_string.split '.'
+    else
+      [model_param, column_string]
+    end
+  end
 end
