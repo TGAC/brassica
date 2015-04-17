@@ -3,13 +3,19 @@ require 'rails_helper'
 RSpec.describe TraitDescriptor do
   describe '#table_data' do
     it 'properly calculates associated trait score number' do
-      td1 = create(:trait_descriptor, trait_scores: create_list(:trait_score, 3, plant_scoring_unit: nil))
-      td2 = create(:trait_descriptor, trait_scores: create_list(:trait_score, 2, plant_scoring_unit: nil))
+      pts = create_list(:plant_trial, 2)
+      psu0 = create(:plant_scoring_unit, plant_trial: pts[0])
+      psu1 = create(:plant_scoring_unit, plant_trial: pts[1])
+      tses0 = create_list(:trait_score, 3, plant_scoring_unit: psu0)
+      tses1 = create_list(:trait_score, 2, plant_scoring_unit: psu1)
+      td1 = create(:trait_descriptor, trait_scores: [tses0[0], tses1[0], tses1[1]])
+      td2 = create(:trait_descriptor, trait_scores: [tses0[1], tses0[2]])
       table_data = TraitDescriptor.table_data
-      expect(table_data.count).to eq 2
-      expect(table_data.map{ |td| [td[2], td[5]] }).to match_array [
-        [td1.descriptor_name, 3],
-        [td2.descriptor_name, 2]
+      expect(table_data.count).to eq 3
+      expect(table_data.map{ |td| [td[2], td[3], td[5]] }).to match_array [
+        [td1.descriptor_name, pts[0].project_descriptor, '1'],
+        [td1.descriptor_name, pts[1].project_descriptor, '2'],
+        [td2.descriptor_name, pts[0].project_descriptor, '2']
       ]
     end
 
@@ -34,8 +40,8 @@ RSpec.describe TraitDescriptor do
         td.descriptor_name,
         td.trait_scores[0].plant_scoring_unit.plant_trial.project_descriptor,
         td.trait_scores[0].plant_scoring_unit.plant_trial.country.country_name,
-        1,
-        td.id
+        '1',
+        td.id.to_s
       ]
     end
   end
