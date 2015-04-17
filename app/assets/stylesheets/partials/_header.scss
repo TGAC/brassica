@@ -29,6 +29,14 @@
 
   .header-menu {
     padding: 15px 0;
+
+    .flaticon-user:before {
+      line-height: 0;
+      margin: 0;
+      padding: 0;
+      position: relative;
+      top: 2px;
+    }
   }
 
   @include max-screen($break-small) {

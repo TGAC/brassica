@@ -1,10 +1,16 @@
 //DEFINE ALL VARIABLES HERE
 
+//general
+$footer-height: 350px;
+$footer-margin: 50px;
+
+
 //custom colors
 $accent-color: #72c02c;
+$accent-color-2: #49b4cb;
 $mono-color-1: #586373;
 $mono-color-2: #cdcdcd;
-$text-color-negative: #fff;
+$text-color-negative: #ffffff;
 $facebook-color: #3b59ab;
 $twitter-color: #2b97f0;
 $googleplus-color: #dd4b39;
@@ -14,7 +20,7 @@ $footer-bg-color-2: darken($footer-bg-color, 3%);
 $footer-text-color: #dadada;
 $footer-accent-color: $accent-color;
 $heading-text-color: #474747;
-$body-text-color: #333;
+$body-text-color: #333333;
 
 /*	############################################################################
  *
@@ -69,33 +75,3 @@ $break-small: 768px;
 $break-medium: 992px;
 $break-large: 1200px;
 $break-xlarge: 1440px;
-
-.easyPieChart {
-  position: relative;
-  text-align: center;
-}
-
-.easyPieChart canvas {
-  left: 50%;
-  margin-left: -80px;
-  position: absolute;
-  top: 0;
-}
-
-.chart {
-  float: left;
-  margin: 10px;
-}
-
-.percentage,
-.label {
-  color: #333;
-  font-size: 1.2em;
-  font-weight: 100;
-  left: 0;
-  margin-bottom: 0.3em;
-  position: absolute;
-  text-align: center;
-  top: 60px;
-  width: 100%;
-}

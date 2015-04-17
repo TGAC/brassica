@@ -1,7 +1,11 @@
 // footer
 
+@import "compass/layout/sticky-footer";
+@include sticky-footer(400px, "#wrap");
+
 #footer {
   color: $footer-text-color;
+  padding-top: 50px;
 
   .section-heading {
     color: $text-color-negative;
@@ -18,7 +22,7 @@
 
   .footer-main {
     background-color: $footer-bg-color;
-    min-height: 290px;
+    min-height: ($footer-height - 60px);
     padding: 30px 0;
   }
 
@@ -63,9 +67,5 @@
     opacity: 0.75;
     width: 150px;
   }
-
-
-
-
 }
 

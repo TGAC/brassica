@@ -13,7 +13,8 @@
 
           - else
             %li.dropdown{ role: 'presentation' }
-              %a.dropdown-toggle{ data: { toggle: 'dropdown' }, href: '#' }
+              %a.dropdown-toggle.btn.btn-secondary{ data: { toggle: 'dropdown' }, href: '#' }
+                %i.flaticon-user
                 = current_user.full_name
                 %span.caret
 

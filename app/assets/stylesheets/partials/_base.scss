@@ -81,12 +81,20 @@ hr {
 .section-heading {
   margin-bottom: 20px;
 
-  &:after {
-    border-bottom: 4px solid $accent-color;
+  &::after {
+    border-bottom: 2px solid $accent-color;
     content: " ";
     display: block;
-    margin-top: 15px;
+    margin-top: 10px;
     width: 100px;
+  }
+
+  &.text-center {
+    margin: 0 auto 20px;
+
+    &::after {
+      margin: 10px auto 0;
+    }
   }
 }
 

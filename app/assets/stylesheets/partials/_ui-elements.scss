@@ -71,6 +71,37 @@
   }
 }
 
+//TODO refactor
+.section-actions {
+  [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+  [class^="flaticon-"]:after, [class*=" flaticon-"]:after {
+    color: $mono-color-1;
+    border: 3px solid $accent-color;
+    border-radius: 100%;
+    display: inline-block;
+    font-size: 56px;
+    height: 2em;
+    line-height: 1.9;
+    margin: 0;
+    padding-left: 5px;
+    width: 2em;
+  }
+
+  .boxed-content:hover {
+    i:before {
+      transform: scale(1.1);
+      background-color: $accent-color;
+      border-color: transparent;
+      color: $text-color-negative;
+      transition: all 500ms;
+    }
+  }
+
+  .boxed-content {
+
+  }
+}
+
 //boxed content
 .boxed-content {
   text-align: center;
@@ -84,42 +115,10 @@
   .boxed-content-title {
     font-size: 22px;
     font-weight: 700;
+    margin-top: 10px;
   }
 
-  &.left-aligned {
-    text-align: left;
 
-    .boxed-content-title {
-      margin-bottom: 10px;
-      line-height: 28px;
-      font-weight: normal;
-    }
-
-    i {
-      float: left;
-      margin-right: 10px;
-      font-size: 2em;
-    }
-  }
-
-  &.left-boxed-icon {
-    i {
-      @include border-radius(2px);
-
-      padding: 10px;
-      width: 60px;
-      height: 60px;
-      background: $accent-color;
-      color: #fff;
-      text-align: center;
-      line-height: 40px;
-    }
-
-    .boxed-content-title,
-    p {
-      padding-left: 80px;
-    }
-  }
 }
 
 
