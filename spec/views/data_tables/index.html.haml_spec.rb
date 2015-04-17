@@ -13,11 +13,6 @@ RSpec.describe 'data_tables/index.html.haml' do
         expect(rendered).to include t("tables.#{column}")
       end
     end
-
-    it 'allows to go back to populations' do
-      render
-      expect(rendered).to include(data_tables_path(model: :plant_populations))
-    end
   end
 
   context 'when run for qtls' do
@@ -37,7 +32,20 @@ RSpec.describe 'data_tables/index.html.haml' do
       annotable_tables.each do |table|
         allow(view).to receive(:params).and_return(model: table)
         render
+        expect(rendered).to include(table)
         expect(rendered).to have_tag('th.annotations')
+      end
+    end
+  end
+
+  context 'when run for drill-down tables' do
+    it 'shows proper back button to main tables' do
+      (displayable_tables - browse_tabs.keys.map(&:to_s)).each do |table|
+        allow(view).to receive(:params).and_return(model: table)
+        render
+        expect(rendered).to include(table)
+        expect(rendered).
+          to include(browse_tabs[view.active_tab_label])
       end
     end
   end

@@ -26,6 +26,16 @@ $ ->
   $.extend $.fn.dataTable.TableTools.defaults,
     aButtons:
       [
+        sExtends: 'text'
+        sButtonText: 'Back'
+        fnClick: ( nButton, oConfig, oFlash ) ->
+          window.location = $('#table-back-button').attr('href')
+        fnInit: ( nButton, oConfig ) ->
+          if $('#table-back-button').length
+            $(nButton).find('span').html($('#table-back-button').data('label'))
+          else
+            $(nButton).hide()
+      ,
         sExtends: 'csv'
         sButtonText: 'Export to CSV'
         sFileName: '*.csv'

@@ -55,7 +55,12 @@ module DataTablesHelper
 
   def back_button
     unless browse_tabs.keys.include? model_param.to_sym
-      link_to 'TEMP LINK BACK', browse_tabs[active_tab_label]
+      label = "Back to #{active_tab_label.to_s.humanize}"
+      link_to label,
+              browse_tabs[active_tab_label],
+              id: 'table-back-button',
+              data: { label: label },
+              class: 'hidden'
     end
   end
 
