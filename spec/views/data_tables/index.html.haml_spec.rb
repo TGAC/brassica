@@ -42,13 +42,17 @@ RSpec.describe 'data_tables/index.html.haml' do
     end
   end
 
-  it 'has all column names translated' do
+  it 'has all table and count column names translated' do
     annotable_tables.each do |table|
+      allow(view).to receive(:params).and_return(model: table)
       model_klass = table.singularize.camelize.constantize
-      next unless model_klass.respond_to? :table_columns
-      model_klass.table_columns.each do |column|
-        column = table + '.' + column unless column.include? '.'
-        expect(I18n.t("tables.#{column}")).not_to include 'translation missing'
+      columns = []
+      columns += model_klass.table_columns if model_klass.respond_to? :table_columns
+      columns += model_klass.count_columns if model_klass.respond_to? :count_columns
+      columns.each do |column|
+        _table, _column = view.extract_column(column)
+        expect(I18n.t("tables.#{_table}.#{_column}")).
+          not_to include 'translation missing'
       end
     end
   end

@@ -42,15 +42,11 @@ en:
       date_entered: Entry date
       data_owned_by: Data owner
       organisation: Organisation
-    female_parent_lines_plant_populations:
-      plant_line_name: Female parent line
     linkage_maps:
       linkage_map_label: Map label
       linkage_map_name: Map name
       map_version_no: Version
       map_version_date: Version date
-    male_parent_lines_plant_populations:
-      plant_line_name: Male parent line
     plant_populations:
       name: Population
       canonical_population_name: Canonical name

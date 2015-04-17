@@ -6,15 +6,12 @@
 
 = datatable_tag do
   - model_class = model_param.singularize.camelize.constantize
-  - if model_class.respond_to? :table_columns
-    - model_class.table_columns.each do |table_column|
-      - table_column = model_param + '.' + table_column unless table_column.include? '.'
-      %th= t("tables.#{table_column}")
-
-  - if model_class.respond_to? :count_columns
-    - model_class.count_columns.each do |count_column|
-      - count_column = count_column.scan(/\(([^\)]+)\)/).last.first
-      %th= t("tables.#{count_column}")
+  - [:table_columns, :count_columns].each do |columns_type|
+    - if model_class.respond_to? columns_type
+      - model_class.send(columns_type).each do |column|
+        - model_name, column_name = extract_column(column)
+        %th{ class: "#{column_name}_column" }
+          = t("tables.#{model_name}.#{column_name}")
 
   - if !params[:group] && model_class.ancestors.include?(Annotable)
     %th.annotations
