@@ -77,6 +77,12 @@
 
         %p.help-block Optional
 
+      .form-group
+        = label_tag :plant_variety_name
+        = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
+
+        %p.help-block Optional
+
       .action-buttons
         %button.cancel-new-plant-line-for-list{type: 'button'} Cancel
         %button.add-new-plant-line-for-list{type: 'button'} Confirm

@@ -1,6 +1,9 @@
 formatPlantLine = (plantLine) ->
   plantLine.text
 
+formatPlantVariety = (plantVariety) ->
+  plantVariety.text
+
 plantLineSelectOptions = ->
   allowClear: true
   minimumInputLength: 2
@@ -19,6 +22,23 @@ plantLineSelectOptions = ->
 
 plantLineListSelectOptions = ->
   $.extend({}, plantLineSelectOptions(), multiple: true)
+
+plantVarietySelectOptions = ->
+  allowClear: true
+  minimumInputLength: 2
+  ajax:
+    url: '/plant_varieties'
+    dataType: 'json'
+    data: (params) ->
+      search:
+        plant_variety_name: params.term
+      page:
+        params.page
+    processResults: (data, page) ->
+      results: $.map(data, (row) -> { id: row.plant_variety_name, text: row.plant_variety_name })
+  escapeMarkup: (markup) -> markup
+  templateResult: formatPlantVariety
+  templateSelection: formatPlantVariety
 
 plantLineGeneticStatusSelectOptions = ->
   allowClear: true
@@ -72,6 +92,8 @@ $ ->
     $('.edit_submission .new-plant-line-for-list input[type=text]').on 'keydown', (event) ->
       if event.keyCode == 13 # Enter key
         event.preventDefault() # Prevent form submission
+
+    $('.edit_submission .plant-variety-name').select2(plantVarietySelectOptions())
 
   $('.add-new-plant-line-for-list').on 'click', (event) ->
     $form = $('.new-plant-line-for-list')
