@@ -7,6 +7,6 @@ FactoryGirl.define do
     owner { Faker::Company.name }
     female_parent { Faker::Lorem.word }
     male_parent { Faker::Lorem.word }
-    instance_eval &AnnotableFactory.annotated_no_owner
+    annotable_no_owner
   end
 end

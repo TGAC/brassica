@@ -22,9 +22,7 @@ RSpec.describe TraitScore do
       expect(plucked[0]).
         to eq [
           ts.scoring_occasion_name,
-          ts.replicate_score_reading,
           ts.score_value,
-          ts.score_spread,
           ts.value_type,
           ts.id
         ]

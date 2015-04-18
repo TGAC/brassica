@@ -18,9 +18,7 @@ class TraitScore < ActiveRecord::Base
   def self.table_columns
     [
       'scoring_occasion_name',
-      'replicate_score_reading',
       'score_value',
-      'score_spread',
       'value_type'
     ]
   end

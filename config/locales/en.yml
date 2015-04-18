@@ -23,6 +23,8 @@ en:
   browse_tabs:
     plant_populations: Populations
     trait_descriptors: Traits
+    linkage_maps: Linkage maps
+    qtl: QTL
 
   submission:
     empty_label: "(empty label)"
@@ -79,9 +81,7 @@ en:
       trait_scores_count: Trait scores
     trait_scores:
       scoring_occasion_name: Occasion name
-      replicate_score_reading: Replicate reading
       score_value: Value
-      score_spread: Spread
       value_type: Value type
     qtl:
       id: QTL count

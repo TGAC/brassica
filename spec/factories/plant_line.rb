@@ -4,6 +4,6 @@ FactoryGirl.define do
     common_name { Faker::Lorem.word }
     previous_line_name { Faker::Lorem.word }
     taxonomy_term
-    instance_eval &AnnotableFactory.annotated
+    annotable
   end
 end

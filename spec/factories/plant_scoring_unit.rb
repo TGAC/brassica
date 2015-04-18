@@ -8,6 +8,6 @@ FactoryGirl.define do
     described_by_whom { Faker::Internet.user_name }
     confirmed_by_whom { Faker::Internet.user_name }
     plant_trial
-    instance_eval &AnnotableFactory.annotated
+    annotable
   end
 end

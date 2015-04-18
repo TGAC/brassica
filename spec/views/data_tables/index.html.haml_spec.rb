@@ -45,7 +45,7 @@ RSpec.describe 'data_tables/index.html.haml' do
         render
         expect(rendered).to include(table)
         expect(rendered).
-          to include(browse_tabs[view.active_tab_label])
+          to include(browse_tabs[view.active_tab_label].gsub('&','&amp;'))
       end
     end
   end
