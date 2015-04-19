@@ -1,0 +1,22 @@
+- unless defined?(form)
+  - form = nil
+
+- unless defined?(collapsible)
+  - collapsible = true
+
+-# FIXME choose correct fields (data_owned_by my not be needed)
+- attrs = %w(comments data_owned_by data_provenance)
+
+- if collapsible
+  %button.toggle-annotations.btn.btn-default{ type: 'button', data: { toggle: 'collapse', target: "##{target}" } } Additional Annotations
+
+%div{ id: target, class: collapsible ? 'collapse well' : '' }
+  - attrs.each do |attr|
+    .form-group
+      = label_tag attr, attr.humanize.capitalize
+      - if form
+        = form.text_area attr, class: 'form-control'
+      - else
+        = text_area_tag attr, nil, class: 'form-control'
+
+      %p.help-block Optional

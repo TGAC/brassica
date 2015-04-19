@@ -60,11 +60,6 @@
 
         %p.help-block Optional
 
-      .form-group
-        = label_tag :comments, 'Comments'
-        = text_area_tag :comments, nil, class: 'form-control'
-        %p.help-block Optional
-
       .form-group.genetic-status-wrapper
         .genetic-status-select
           = label_tag :genetic_status, 'Genetic status'
@@ -76,6 +71,8 @@
           %a.clear-input.hidden{href: '#'} ×
 
         %p.help-block Optional
+
+      = render partial: "submissions/annotations", locals: { target: 'new-plant-line-annotations' }
 
       .action-buttons
         %button.cancel-new-plant-line-for-list{type: 'button'} Cancel

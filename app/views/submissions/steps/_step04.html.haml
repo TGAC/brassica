@@ -7,13 +7,7 @@
 
   = f.fields_for :content, @content do |content|
 
-    .form-group
-      = content.label :data_owned_by
-      = content.text_field :data_owned_by, class: 'form-control'
-
-    .form-group
-      = content.label :data_provenance
-      = content.text_area :data_provenance, class: 'form-control'
+    = render partial: "submissions/annotations", locals: { target: 'annotations', collapsible: false, form: content }
 
   .alert.alert-warning
     Sending your submission will make provided data publicly available.<br/>
