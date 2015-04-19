@@ -6,3 +6,41 @@ en:
       traits: Trait scoring
       qtl: Quantitative Trait Loci
       linkage_map: Linkage maps
+
+    description:
+      common: |
+        You will also have the possibility to provide
+        data ownership and provenance information. Once successfully submitted, the
+        data will be accessible for all users of the Portal. Further contextual help
+        will be provided to you on each of the following steps:
+      population: |
+        The following process allows you to submit detailed description of your
+        Brassica plants population. Apart from species information, you may indicate
+        the parent Brassica lines and the list of (possibly new) plant lines
+        connected with this population.
+      traits: |
+        TODO FIXME Introduction to Trait scoring submission process.
+      qtl: |
+        TODO FIXME Introduction to Quantitative Trait Loci submission process.
+      linkage_map: |
+        TODO FIXME Introduction to Linkage maps submission process.
+
+    steps:
+      population:
+        step01:
+          heading: Basic information.
+          body: Provide a unique name and some description of your population.
+        step02:
+          heading: Population type.
+          body: Choose what type of population you submit.
+        step03:
+          heading: Plant lines.
+          body: |
+            If applicable, pick parent plant lines and define the list of plant
+            lines connected with submitted population.
+        step04:
+          heading: Provenance.
+          body: Identify who is the owner of the submitted data and describe the data provenance.
+      traits:
+      qtl:
+      linkage_map:
