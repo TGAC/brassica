@@ -39,7 +39,9 @@ group :development do
   gem 'annotate'
   gem 'better_errors'
   gem 'binding_of_caller'
-  # gem 'capistrano-rails'
+  gem 'capistrano-rails'
+  gem 'capistrano3-puma'
+  gem 'capistrano-chruby'
 end
 
 group :development, :test do
