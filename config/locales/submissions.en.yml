@@ -1,0 +1,8 @@
+en:
+  submission:
+    empty_label: "(empty label)"
+    submission_type:
+      population: Population
+      traits: Trait scoring
+      qtl: Quantitative Trait Loci
+      linkage_map: Linkage maps
