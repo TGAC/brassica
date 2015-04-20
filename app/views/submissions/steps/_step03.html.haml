@@ -70,6 +70,12 @@
 
         %p.help-block Optional
 
+      .form-group
+        = label_tag :plant_variety_name
+        = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
+
+        %p.help-block Optional
+
       = render partial: "submissions/annotations", locals: { model: PlantLine }
 
       .action-buttons

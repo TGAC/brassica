@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150416161719) do
+ActiveRecord::Schema.define(version: 20150420163832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150416161719) do
   create_table "linkage_maps", force: :cascade do |t|
     t.text    "linkage_map_label",             default: "",            null: false
     t.text    "linkage_map_name",              default: "unspecified", null: false
-    t.string  "map_version_no",      limit: 3, default: "xxx",         null: false
+    t.string  "map_version_no",      limit: 3
     t.date    "map_version_date"
     t.text    "mapping_software"
     t.text    "mapping_function"
@@ -200,11 +200,11 @@ ActiveRecord::Schema.define(version: 20150416161719) do
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
 
   create_table "plant_accessions", force: :cascade do |t|
-    t.text    "plant_accession",            default: "",     null: false
+    t.text    "plant_accession",            default: "", null: false
     t.text    "plant_accession_derivation"
     t.text    "accession_originator"
     t.text    "originating_organisation"
-    t.text    "year_produced",              default: "xxxx", null: false
+    t.text    "year_produced"
     t.date    "date_harvested"
     t.text    "female_parent_plant_id"
     t.text    "male_parent_plant_id"
@@ -329,7 +329,7 @@ ActiveRecord::Schema.define(version: 20150416161719) do
     t.text    "plant_trial_name",         default: "",            null: false
     t.text    "project_descriptor",       default: "unspecified", null: false
     t.text    "plant_trial_description",                          null: false
-    t.text    "trial_year",               default: "xxxx",        null: false
+    t.text    "trial_year"
     t.text    "institute_id",             default: "unspecified", null: false
     t.text    "trial_location_site_name", default: "unspecified", null: false
     t.text    "place_name",               default: "unspecified", null: false
@@ -469,7 +469,7 @@ ActiveRecord::Schema.define(version: 20150416161719) do
 
   create_table "qtl", force: :cascade do |t|
     t.text    "qtl_rank",                   default: "unspecified", null: false
-    t.text    "map_qtl_label",              default: "unspecified", null: false
+    t.text    "map_qtl_label",              default: "unspecified"
     t.text    "outer_interval_start"
     t.text    "inner_interval_start"
     t.text    "qtl_mid_position",           default: "unspecified", null: false

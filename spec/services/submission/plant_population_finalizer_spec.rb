@@ -6,6 +6,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
   let!(:plant_lines) { create_list(:plant_line, 2) }
   let!(:taxonomy_term) { create(:taxonomy_term) }
   let!(:population_type) { create(:population_type) }
+  let!(:plant_variety) { create(:plant_variety) }
 
   subject { described_class.new(submission) }
 
@@ -13,7 +14,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
     let(:new_plant_lines_attrs) {
       attributes_for_list(:plant_line, 2).map { |attrs|
         attrs.slice(:plant_line_name, :comments, :data_owned_by, :data_provenance).
-          merge(taxonomy_term: taxonomy_term.name)
+          merge(taxonomy_term: taxonomy_term.name, plant_variety_name: plant_variety.plant_variety_name)
       }
     }
 
@@ -63,6 +64,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
           'data_provenance' => new_plant_lines_attrs[idx][:data_provenance],
           'comments' => new_plant_lines_attrs[idx][:comments],
         )
+        expect(plant_line.plant_variety).to eq plant_variety
       end
     end
 

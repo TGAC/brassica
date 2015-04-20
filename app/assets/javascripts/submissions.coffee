@@ -1,30 +1,25 @@
-formatPlantLine = (plantLine) ->
-  plantLine.text
-
-plantLineSelectOptions = ->
+makeAjaxSelectOptions = (url, id_attr) ->
   allowClear: true
   minimumInputLength: 2
   ajax:
-    url: "/plant_lines"
+    url: url
     dataType: 'json'
     data: (params) ->
-      search:
-        plant_line_name: params.term
+      search = {}
+      search[id_attr] = params.term
+
+      search: search
       page: params.page
     processResults: (data, page) ->
-      results: $.map(data, (row) -> { id: row.plant_line_name, text: row.plant_line_name })
+      results: $.map(data, (row) -> { id: row[id_attr], text: row[id_attr] })
   escapeMarkup: (markup) -> markup
-  templateResult: formatPlantLine
-  templateSelection: formatPlantLine
+  templateResult: (item) -> item.text
+  templateSelection: (item) -> item.text
 
-plantLineListSelectOptions = ->
-  $.extend({}, plantLineSelectOptions(), multiple: true)
-
-plantLineGeneticStatusSelectOptions = ->
-  allowClear: true
-
-defaultSelectOptions = ->
-  allowClear: true
+defaultSelectOptions = { allowClear: true }
+plantLineSelectOptions = makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
+plantLineListSelectOptions = $.extend({}, plantLineSelectOptions, multiple: true)
+plantVarietySelectOptions = makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
 
 appendToSelectedPlantLineLists = (data) ->
   $select = $('.plant-line-list')
@@ -52,10 +47,10 @@ newPlantLineForListContainerId = (plant_line_name) ->
   'new-plant-line-' + plant_line_name.split(/\s+/).join('-').toLowerCase()
 
 $ ->
-  $('.edit_submission .female-parent-line').select2(plantLineSelectOptions())
-  $('.edit_submission .male-parent-line').select2(plantLineSelectOptions())
-  $('.edit_submission .population-type').select2(defaultSelectOptions())
-  $('.edit_submission .plant-line-list').select2(plantLineListSelectOptions())
+  $('.edit_submission .female-parent-line').select2(plantLineSelectOptions)
+  $('.edit_submission .male-parent-line').select2(plantLineSelectOptions)
+  $('.edit_submission .population-type').select2(defaultSelectOptions)
+  $('.edit_submission .plant-line-list').select2(plantLineListSelectOptions)
 
   $('.edit_submission .plant-line-list').on 'select2:unselect', (event) ->
     plant_line_name = event.params.data.id
@@ -65,13 +60,15 @@ $ ->
     $(event.target).hide()
     $('div.new-plant-line-for-list').removeClass('hidden').show()
 
-    $('.edit_submission .previous-line-name').select2(plantLineSelectOptions())
+    $('.edit_submission .previous-line-name').select2(plantLineSelectOptions)
     $('.edit_submission .previous-line-name-wrapper').inputOrSelect()
-    $('.edit_submission .genetic-status').select2(plantLineGeneticStatusSelectOptions())
+    $('.edit_submission .genetic-status').select2(defaultSelectOptions)
     $('.edit_submission .genetic-status-wrapper').inputOrSelect()
     $('.edit_submission .new-plant-line-for-list input[type=text]').on 'keydown', (event) ->
       if event.keyCode == 13 # Enter key
         event.preventDefault() # Prevent form submission
+
+    $('.edit_submission .plant-variety-name').select2(plantVarietySelectOptions)
 
   $('.add-new-plant-line-for-list').on 'click', (event) ->
     $form = $('.new-plant-line-for-list')
