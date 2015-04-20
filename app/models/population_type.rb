@@ -3,6 +3,12 @@ class PopulationType < ActiveRecord::Base
 
   has_many :plant_populations
 
+  validates :population_type,
+            presence: true
+
+  validates :population_class,
+            presence: true
+
   def self.population_types
     order(:population_type).pluck(:population_type)
   end

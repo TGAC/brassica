@@ -5,6 +5,18 @@ class Primer < ActiveRecord::Base
   has_many :marker_assays_b, class_name: 'MarkerAssay',
              foreign_key: 'primer_b_id'
 
+  validates :primer,
+            presence: true
+
+  validates :sequence,
+            presence: true
+
+  validates :sequence_id,
+            presence: true
+
+  validates :sequence_source_acronym,
+            presence: true
+
   def marker_assays
     marker_assays_a | marker_assays_b
   end

@@ -1,45 +1,40 @@
-.lead Submit new population
+%div{ role: 'tabpanel' }
 
-%p
-  The following process allows you to submit detailed description of your
-  Brassica plants population. Apart from species information, you may indicate
-  the parent Brassica lines and the list of (possibly new) plant lines
-  connected with this population. You will also have the possibility to provide
-  data ownership and provenance information. Once successfully submitted, the
-  data will be accessible for all users of the Portal. Further contextual help
-  will be provided to you on each of the following steps:
+  %ul.nav.nav-pills{ role: 'tablist' }
+    %p.navbar-brand Choose submission type:
 
-.row
-  .col-md-3.text-center
-    %h1 1
-    .panel.panel-default
-      .panel-heading Basic information.
-      .panel-body
-        Provide a unique name and some description of your population.
+    - Submission.submission_types.each do |s_type, s_num|
 
-  .col-md-3.text-center
-    %h1 2
-    .panel.panel-default
-      .panel-heading Population type.
-      .panel-body
-        Choose what type of population you submit.
+      %li{ role: 'presentation', class: "#{'active' if s_num == 0}" }
+        %a{ href: "##{s_type}", role: 'tab', aria: { controls: s_type }, data: { toggle: 'tab' } }
+          = t("submission.submission_type.#{s_type}")
 
-  .col-md-3.text-center
-    %h1 3
-    .panel.panel-default
-      .panel-heading Plant lines.
-      .panel-body
-        If applicable, pick parent plant lines and define the list of plant
-        lines connected with submitted population.
+  .tab-content
+    - Submission.submission_types.each do |s_type, s_num|
 
-  .col-md-3.text-center
-    %h1 4
-    .panel.panel-default
-      .panel-heading Provenance.
-      .panel-body
-        Identify who is the owner of the submitted data and describe the data
-        provenance.
+      %div{ role: 'tabpanel', class: "tab-pane #{'active' if s_num == 0}", id: s_type }
 
-.text-center
-  = button_to "Submit new population", submissions_path(submission: { submission_type: :population }),
-    class: 'btn btn-primary', method: 'post'
+        %h3.section-heading
+          Submit new
+          = t("submission.submission_type.#{s_type}")
+
+        %p
+          = t("submission.description.#{s_type}")
+          = t('submission.description.common')
+
+        .row
+
+          - Submission::STEPS.each_with_index do |step_name, step_no|
+
+            .col-md-3.text-center
+              %h1= step_no + 1
+              .panel.panel-default
+                .panel-heading
+                  = t("submission.steps.#{s_type}.#{step_name}.heading")
+                .panel-body
+                  = t("submission.steps.#{s_type}.#{step_name}.body")
+
+        .text-center
+          = button_to 'Start!',
+            submissions_path(submission: { submission_type: s_type }),
+            class: 'btn btn-primary', method: 'post'

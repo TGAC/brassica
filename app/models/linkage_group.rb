@@ -11,5 +11,14 @@ class LinkageGroup < ActiveRecord::Base
 
   has_many :qtls
 
+  validates :linkage_group_label,
+            presence: true
+
+  validates :linkage_group_name,
+            presence: true
+
+  validates :consensus_group_assignment,
+            presence: true
+
   include Annotable
 end

@@ -1,5 +1,3 @@
-%h3 Step 3/4: Plant lines
-
 = form_for submission do |f|
 
   = render partial: '/errors', locals: { errors: submission.errors }
@@ -74,6 +72,12 @@
         .genetic-status-input
           = text_field_tag :genetic_status, nil, class: 'form-control', placeholder: "Enter new status"
           %a.clear-input.hidden{href: '#'} ×
+
+        %p.help-block Optional
+
+      .form-group
+        = label_tag :plant_variety_name
+        = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
 
         %p.help-block Optional
 

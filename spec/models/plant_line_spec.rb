@@ -33,12 +33,13 @@ RSpec.describe PlantLine do
     end
 
     it 'will only query by permitted params' do
-      pl = create(:plant_line, common_name: 'nc', plant_line_name: 'pln')
+      plname = ('a'..'z').to_a.shuffle[0,8].join
+      pl = create(:plant_line, common_name: 'nc', plant_line_name: plname)
       search = PlantLine.filter(
         query: { common_name: 'cn', id: pl.id }
       )
       expect(search.count).to eq 1
-      expect(search.first.plant_line_name).to eq 'pln'
+      expect(search.first.plant_line_name).to eq plname
     end
 
     context 'when associated with plant population' do

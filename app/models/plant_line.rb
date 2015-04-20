@@ -27,6 +27,9 @@ class PlantLine < ActiveRecord::Base
   include Filterable
   include Pluckable
 
+  validates :plant_line_name,
+            presence: true
+
   scope :by_name, -> { order(:plant_line_name) }
 
   def self.table_data(params = nil)

@@ -6,5 +6,11 @@ class ProcessedTraitDataset < ActiveRecord::Base
 
   has_many :qtls
 
+  validates :processed_trait_dataset_name,
+            presence: true
+
+  validates :population_id,
+            presence: true
+
   include Annotable
 end

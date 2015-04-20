@@ -40,6 +40,9 @@ class PlantVariety < ActiveRecord::Base
     [
       query: [
         :id
+      ],
+      search: [
+        :plant_variety_name
       ]
     ]
   end

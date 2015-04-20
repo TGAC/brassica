@@ -29,6 +29,10 @@ class PlantPopulation < ActiveRecord::Base
 
   include Filterable
 
+  validates :name,
+            presence: true,
+            allow_blank: true
+
   scope :by_name, -> { order('plant_populations.name') }
 
   def self.table_data(params = nil)
@@ -44,8 +48,8 @@ class PlantPopulation < ActiveRecord::Base
       'plant_populations.name',
       'taxonomy_terms.name',
       'canonical_population_name',
-      'plant_lines.plant_line_name',
-      'male_parent_lines_plant_populations.plant_line_name',
+      'plant_lines.plant_line_name AS female_parent_line',
+      'male_parent_lines_plant_populations.plant_line_name AS male_parent_line',
       'pop_type_lookup.population_type',
       'plant_population_lists_count'
     ]
