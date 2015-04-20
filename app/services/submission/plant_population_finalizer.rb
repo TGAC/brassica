@@ -24,11 +24,12 @@ class Submission::PlantPopulationFinalizer
     @new_plant_lines = (submission.content.step03.new_plant_lines || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
+      plant_variety = PlantVariety.find_by!(plant_variety_name: attrs.delete(:plant_variety_name))
       attrs = attrs.merge(
         taxonomy_term_id: taxonomy_term.id,
+        plant_variety_id: plant_variety.id,
         date_entered: Date.today,
-        data_provenance: submission.content.step04.data_provenance,
-        comments: '', # FIXME temporary, remove after dropping not null constraint
+        data_provenance: submission.content.step04.data_provenance
       )
       PlantLine.create!(attrs)
     end
@@ -37,7 +38,7 @@ class Submission::PlantPopulationFinalizer
   def create_plant_population
     attrs = {
       name: submission.content.step01.name,
-      population_owned_by: submission.content.step01.owned_by,
+      population_owned_by: submission.content.step01.owned_by
     }
 
     %i[female_parent_line male_parent_line].each do |parent_line_attr|
@@ -69,8 +70,7 @@ class Submission::PlantPopulationFinalizer
         plant_line: plant_line,
         date_entered: Date.today,
         data_provenance: submission.content.step04.data_provenance,
-        entered_by_whom: submission.user.login,
-        comments: '', # FIXME temporary, remove after dropping not null constraint
+        entered_by_whom: submission.user.login
       )
     end
   end

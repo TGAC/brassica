@@ -6,6 +6,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
   let!(:plant_lines) { create_list(:plant_line, 2) }
   let!(:taxonomy_term) { create(:taxonomy_term) }
   let!(:population_type) { create(:population_type) }
+  let!(:plant_variety) { create(:plant_variety) }
 
   subject { described_class.new(submission) }
 
@@ -13,10 +14,12 @@ RSpec.describe Submission::PlantPopulationFinalizer do
     let(:new_plant_lines) { [
       {
         plant_line_name: "ABC",
-        taxonomy_term: taxonomy_term.name
+        taxonomy_term: taxonomy_term.name,
+        plant_variety_name: plant_variety.plant_variety_name
       }, {
         plant_line_name: "DEF",
-        taxonomy_term: taxonomy_term.name
+        taxonomy_term: taxonomy_term.name,
+        plant_variety_name: plant_variety.plant_variety_name
       }
     ] }
 
@@ -59,6 +62,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       subject.new_plant_lines.each_with_index do |plant_line, idx|
         expect(plant_line).to be_persisted
         expect(plant_line.plant_line_name).to eq new_plant_lines[idx][:plant_line_name]
+        expect(plant_line.plant_variety).to eq plant_variety
       end
     end
 
