@@ -86,6 +86,6 @@
 
   - @content.new_plant_lines.each do |plant_line|
     %div{id: "new-plant-line-#{plant_line.plant_line_name.split.join('-').downcase}"}
-      - %w(plant_line_name taxonomy_term common_name previous_line_name comments genetic_status).each do |attr|
+      - %w(plant_line_name taxonomy_term common_name previous_line_name comments genetic_status plant_variety_name).each do |attr|
         = hidden_field_tag "submission[content][new_plant_lines][][#{attr}]", plant_line.send(attr)
 
