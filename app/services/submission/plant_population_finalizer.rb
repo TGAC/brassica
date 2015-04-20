@@ -26,9 +26,8 @@ class Submission::PlantPopulationFinalizer
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
       attrs = attrs.merge(
         taxonomy_term_id: taxonomy_term.id,
-        date_entered: Date.today,
-        data_provenance: submission.content.step04.data_provenance,
-        comments: '', # FIXME temporary, remove after dropping not null constraint
+        entered_by_whom: submission.user.email,
+        date_entered: Date.today
       )
       PlantLine.create!(attrs)
     end

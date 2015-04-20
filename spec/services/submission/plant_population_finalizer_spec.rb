@@ -13,10 +13,16 @@ RSpec.describe Submission::PlantPopulationFinalizer do
     let(:new_plant_lines) { [
       {
         plant_line_name: "ABC",
-        taxonomy_term: taxonomy_term.name
+        taxonomy_term: taxonomy_term.name,
+        comments: '...comments...',
+        data_owned_by: '...data owned by...',
+        data_provenance: '...data provenance...'
       }, {
         plant_line_name: "DEF",
-        taxonomy_term: taxonomy_term.name
+        taxonomy_term: taxonomy_term.name,
+        comments: '...comments...',
+        data_owned_by: '...data owned by...',
+        data_provenance: '...data provenance...'
       }
     ] }
 
@@ -34,7 +40,9 @@ RSpec.describe Submission::PlantPopulationFinalizer do
                                 female_parent_line: plant_lines[0].plant_line_name,
                                 male_parent_line: plant_lines[1].plant_line_name)
       submission.content.update(:step04,
-                                data_provenance: "...data provenance...")
+                                data_owned_by: "...data owned by...",
+                                data_provenance: "...data provenance...",
+                                comments: "...comments...")
     end
 
     it 'creates plant population' do
@@ -44,6 +52,8 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         'name' => "...name...",
         'description' => "...description...",
         "data_provenance" => "...data provenance...",
+        "data_owned_by" => "...data owned by...",
+        "comments" => "...comments...",
         "population_type_id" => population_type.id,
         "taxonomy_term_id" => taxonomy_term.id,
         "female_parent_line_id" => plant_lines[0].id,
@@ -58,7 +68,14 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       expect(subject.new_plant_lines.size).to eq 2
       subject.new_plant_lines.each_with_index do |plant_line, idx|
         expect(plant_line).to be_persisted
-        expect(plant_line.plant_line_name).to eq new_plant_lines[idx][:plant_line_name]
+        expect(plant_line.attributes).to include(
+          'plant_line_name' => new_plant_lines[idx][:plant_line_name],
+          'entered_by_whom' => submission.user.email,
+          'date_entered' => Date.today,
+          'data_owned_by' => '...data owned by...',
+          'data_provenance' => '...data provenance...',
+          'comments' => '...comments...'
+        )
       end
     end
 
