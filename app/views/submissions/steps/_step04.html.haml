@@ -5,7 +5,7 @@
 
   = f.fields_for :content, @content do |content|
 
-    = render partial: "submissions/annotations", locals: { target: 'annotations', collapsible: false, form: content }
+    = render partial: "submissions/annotations", locals: { model: PlantPopulation, collapsible: false, form: content }
 
   .alert.alert-warning
     Sending your submission will make provided data publicly available.<br/>
