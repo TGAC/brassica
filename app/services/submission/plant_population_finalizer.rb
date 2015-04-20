@@ -28,6 +28,7 @@ class Submission::PlantPopulationFinalizer
       attrs = attrs.merge(
         taxonomy_term_id: taxonomy_term.id,
         plant_variety_id: plant_variety.id,
+        entered_by_whom: submission.user.email,
         date_entered: Date.today,
         data_provenance: submission.content.step04.data_provenance
       )

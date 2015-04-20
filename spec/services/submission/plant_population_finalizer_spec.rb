@@ -11,49 +11,44 @@ RSpec.describe Submission::PlantPopulationFinalizer do
   subject { described_class.new(submission) }
 
   context 'given submission with valid content' do
-    let(:new_plant_lines) { [
-      {
-        plant_line_name: "ABC",
-        taxonomy_term: taxonomy_term.name,
-        plant_variety_name: plant_variety.plant_variety_name
-      }, {
-        plant_line_name: "DEF",
-        taxonomy_term: taxonomy_term.name,
-        plant_variety_name: plant_variety.plant_variety_name
+    let(:new_plant_lines_attrs) {
+      attributes_for_list(:plant_line, 2).map { |attrs|
+        attrs.slice(:plant_line_name, :comments, :data_owned_by, :data_provenance).
+          merge(taxonomy_term: taxonomy_term.name, plant_variety_name: plant_variety.plant_variety_name)
       }
-    ] }
+    }
+
+    let(:plant_population_attrs) { attributes_for(:plant_population) }
 
     before do
-      submission.content.update(:step01,
-                                name: "...name...",
-                                description: "...description...",
-                               )
+      submission.content.update(:step01, plant_population_attrs.slice(:name, :description))
       submission.content.update(:step02,
                                 population_type: population_type.population_type,
                                 taxonomy_term: taxonomy_term.name)
       submission.content.update(:step03,
-                                plant_line_list: [plant_lines[0].plant_line_name, new_plant_lines[0][:plant_line_name], new_plant_lines[1][:plant_line_name]],
-                                new_plant_lines: new_plant_lines,
+                                plant_line_list: [plant_lines[0].plant_line_name, new_plant_lines_attrs[0][:plant_line_name], new_plant_lines_attrs[1][:plant_line_name]],
+                                new_plant_lines: new_plant_lines_attrs,
                                 female_parent_line: plant_lines[0].plant_line_name,
                                 male_parent_line: plant_lines[1].plant_line_name)
-      submission.content.update(:step04,
-                                data_provenance: "...data provenance...")
+      submission.content.update(:step04, plant_population_attrs.slice(:data_owned_by, :data_provenance, :comments))
     end
 
     it 'creates plant population' do
       subject.call
       expect(subject.plant_population).to be_persisted
       expect(subject.plant_population.attributes).to include(
-        'name' => "...name...",
-        'description' => "...description...",
-        "data_provenance" => "...data provenance...",
+        'name' => plant_population_attrs[:name],
+        'description' => plant_population_attrs[:description],
+        "data_provenance" => plant_population_attrs[:data_provenance],
+        "data_owned_by" => plant_population_attrs[:data_owned_by],
+        "comments" => plant_population_attrs[:comments],
         "population_type_id" => population_type.id,
         "taxonomy_term_id" => taxonomy_term.id,
         "female_parent_line_id" => plant_lines[0].id,
         "male_parent_line_id" => plant_lines[1].id
       )
       expect(subject.plant_population.plant_lines.map(&:plant_line_name)).
-        to eq([plant_lines[0].plant_line_name] + new_plant_lines.map { |attrs| attrs[:plant_line_name] })
+        to eq([plant_lines[0].plant_line_name] + new_plant_lines_attrs.map { |attrs| attrs[:plant_line_name] })
     end
 
     it 'creates new plant lines' do
@@ -61,7 +56,14 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       expect(subject.new_plant_lines.size).to eq 2
       subject.new_plant_lines.each_with_index do |plant_line, idx|
         expect(plant_line).to be_persisted
-        expect(plant_line.plant_line_name).to eq new_plant_lines[idx][:plant_line_name]
+        expect(plant_line.attributes).to include(
+          'plant_line_name' => new_plant_lines_attrs[idx][:plant_line_name],
+          'entered_by_whom' => submission.user.email,
+          'date_entered' => Date.today,
+          'data_owned_by' => new_plant_lines_attrs[idx][:data_owned_by],
+          'data_provenance' => new_plant_lines_attrs[idx][:data_provenance],
+          'comments' => new_plant_lines_attrs[idx][:comments],
+        )
         expect(plant_line.plant_variety).to eq plant_variety
       end
     end
