@@ -9,7 +9,7 @@ FactoryGirl.define do
     map_author { Faker::Internet.user_name }
     pubmed_id { Faker::Number.number(7) }
     confirmed_by_whom { Faker::Internet.user_name }
-    instance_eval &AnnotableFactory.annotated
+    annotable
     plant_population
   end
 end

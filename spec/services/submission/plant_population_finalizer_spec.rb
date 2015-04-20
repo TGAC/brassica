@@ -25,31 +25,43 @@ RSpec.describe Submission::PlantPopulationFinalizer do
 
     before do
       submission.content.update(:step01,
-                                name: "Experimental population",
-                                description: "...", # FIXME must be not null, should be required in form?
+                                name: "...name...",
+                                description: "...description...",
                                )
       submission.content.update(:step02,
-                                population_type: PopulationType.population_types.sample,
+                                population_type: population_type.population_type,
                                 taxonomy_term: taxonomy_term.name)
       submission.content.update(:step03,
                                 plant_line_list: [plant_lines[0].plant_line_name, new_plant_lines[0][:plant_line_name], new_plant_lines[1][:plant_line_name]],
                                 new_plant_lines: new_plant_lines,
-                                female_parent_line: plant_lines[0].plant_line_name, # FIXME must be not null, should be required in form?
-                                male_parent_line: plant_lines[1].plant_line_name) # FIXME must be not null, should be required in form?
+                                female_parent_line: plant_lines[0].plant_line_name,
+                                male_parent_line: plant_lines[1].plant_line_name)
       submission.content.update(:step04,
-                                data_provenance: "...") # FIXME must be not null, should be required in form?
+                                data_provenance: "...data provenance...")
     end
 
     it 'creates plant population' do
       subject.call
       expect(subject.plant_population).to be_persisted
+      expect(subject.plant_population.attributes).to include(
+        'name' => "...name...",
+        'description' => "...description...",
+        "data_provenance" => "...data provenance...",
+        "population_type_id" => population_type.id,
+        "taxonomy_term_id" => taxonomy_term.id,
+        "female_parent_line_id" => plant_lines[0].id,
+        "male_parent_line_id" => plant_lines[1].id
+      )
+      expect(subject.plant_population.plant_lines.map(&:plant_line_name)).
+        to eq([plant_lines[0].plant_line_name] + new_plant_lines.map { |attrs| attrs[:plant_line_name] })
     end
 
     it 'creates new plant lines' do
       subject.call
       expect(subject.new_plant_lines.size).to eq 2
-      subject.new_plant_lines.each do |plant_line|
+      subject.new_plant_lines.each_with_index do |plant_line, idx|
         expect(plant_line).to be_persisted
+        expect(plant_line.plant_line_name).to eq new_plant_lines[idx][:plant_line_name]
         expect(plant_line.plant_variety).to eq plant_variety
       end
     end

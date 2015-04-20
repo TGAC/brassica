@@ -5,6 +5,6 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence }
     taxonomy_term
     population_type
-    instance_eval &AnnotableFactory.annotated
+    annotable
   end
 end

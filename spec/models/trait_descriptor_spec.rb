@@ -21,9 +21,6 @@ RSpec.describe TraitDescriptor do
 
     it 'orders trait by species name' do
       tss = create_list(:trait_score, 3)
-      tss.each do |trait_score|
-        create(:trait_descriptor, trait_scores: [trait_score])
-      end
       ttns = tss.map{ |ts| ts.plant_scoring_unit.plant_trial.plant_population.taxonomy_term.name }
       table_data = TraitDescriptor.table_data
       expect(table_data.count).to eq 3
@@ -31,7 +28,7 @@ RSpec.describe TraitDescriptor do
     end
 
     it 'gets proper columns' do
-      td = create(:trait_descriptor, trait_scores: [create(:trait_score)])
+      td = create(:trait_score).trait_descriptor
       table_data = TraitDescriptor.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [

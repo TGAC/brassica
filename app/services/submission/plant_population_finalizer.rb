@@ -58,7 +58,6 @@ class Submission::PlantPopulationFinalizer
     end
 
     attrs.merge!(submission.content.step04.to_h)
-    attrs.delete(:name) # FIXME change :name to :plant_population_name in the form
     attrs.delete(:owned_by) # FIXME change to :population_owned_by in the form (or remove entirely)
     @plant_population = PlantPopulation.create!(attrs)
   end

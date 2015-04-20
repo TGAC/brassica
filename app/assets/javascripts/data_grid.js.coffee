@@ -89,11 +89,11 @@ window.configs =
   'plant-lines':
     columnDefs:
       [
-        targets: 1
+        targets: 'name_column'
         render: (data, type, full, meta) ->
           data.replace(/Brassica/, 'B.')
       ,
-        targets: [3]
+        targets: 'plant_variety_name_column'
         render: (data, type, full, meta) ->
           if data && full[8]
             '<a href="data_tables?model=plant_varieties&query[id]=' + full[8] + '">' + data + '</a>'
@@ -104,10 +104,17 @@ window.configs =
   'trait-descriptors':
     columnDefs:
       [
-        targets: [3]
+        targets: 'project_descriptor_column'
         render: (data, type, full, meta) ->
           if data
             '<a href="data_tables?model=plant_trials&query[project_descriptor]=' + data + '">' + data + '</a>'
+          else
+            ''
+      ,
+        targets: 'trait_scores_count_column'
+        render: (data, type, full, meta) ->
+          if data && full[2]
+            '<a href="data_tables?model=trait_scores&query[trait_descriptors.descriptor_name]=' + full[2] + '">' + data + '</a>'
           else
             ''
       ]
@@ -115,25 +122,28 @@ window.configs =
   'plant-populations':
     columnDefs:
       [
-        targets: [3]
+        targets: 'name_column'
+        render: (data, type, full, meta) ->
+          data.replace(/Brassica/, 'B.')
+      ,
+        targets: 'female_parent_line_column'
         render: (data, type, full, meta) ->
           if data && full[7]
             '<a href="data_tables?model=plant_lines&query[id]=' + full[7] + '">' + data + '</a>'
           else
             ''
       ,
-        targets: [4]
+        targets: 'male_parent_line_column'
         render: (data, type, full, meta) ->
           if data && full[8]
             '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
           else
             ''
       ,
-        targets: [6]
+        targets: 'plant_population_lists_count_column'
         render: (data, type, full, meta) ->
           if data && data != '0' && full[9]
             '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[9] + '">' + data + '</a>'
           else
             ''
       ]
-
