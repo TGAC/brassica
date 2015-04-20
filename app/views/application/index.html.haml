@@ -1,8 +1,8 @@
 %section.section-jumbotron.jumbotron
-  .container
+  .container.text-center
     %h3 Brassica Information Portal
 
-    %p
+    %p.intro-text
       The Brassica Information Portal is a web repository for population and trait
       scoring information related to Brassica breeding community. It provides
       information about quantitative trait loci and links curated Brassica phenotype
@@ -10,59 +10,70 @@
       Advanced data submission capabilities and API interface allow users to store
       and publish their own study results in our Portal.
 
-    %p.text-center
-      = link_to 'LEARN MORE', about_path
+    %p
+      = link_to 'Learn more', about_path, { class: 'btn btn-default btn-secondary btn-ghost btn-negative' }
 
-    .text-center
-      .input-group
-        %input(type="text" class="form-control" placeholder="Search for...")
-        %span.input-group-btn
-          %button.btn.btn-default(type="button") Search
+%section.section-search
+  .container
+    .col-md-8
+      %form
+        .form-group
+          .input-group
+            %input(type="text" class="form-control form-negative" placeholder="Search for...")
+            %span.input-group-btn
+              %button.btn.btn-primary(type="button") Search
 
-      or
+    .col-md-1
+      %span.text-negative - or -
 
-      = link_to 'Start browsing', browse_data_path, class: 'btn btn-primary'
+    .col-md-3
+      = link_to 'Start browsing', browse_data_path, class: 'btn btn-primary btn-block'
 
 %section.section-actions.container
   .row
-    .col-md-4.text-center
-      %i.fa.fa-list.fa-5x
-      .text-justify
+    .col-md-4.boxed-content.browse
+      %i.flaticon-database
+      %h2.boxed-content-title Browse database
+      %p
         Browse and search through more than 100 thousands of trait scores, and
         look for related QTLs in a variety of Brassica subspicies.
       = link_to 'Browse data', browse_data_path, class: 'btn btn-primary'
 
-    .col-md-4.text-center
-      %i.fa.fa-file-text-o.fa-5x
-      .text-justify
+    .col-md-4.boxed-content.submit
+      %i.flaticon-pages
+      %h2.boxed-content-title Submit new data
+      %p
         Submit your experimental Brassica population data, along with scored
         traits and found genetic mapping, to be published in the Portal.
       = link_to 'Submit data', new_submission_path, class: 'btn btn-primary'
 
-    .col-md-4.text-center
-      %i.fa.fa-book.fa-5x
-      .text-justify
+    .col-md-4.boxed-content.documentation
+      %i.flaticon-settings
+      %h2.boxed-content-title API Documentation
+      %p
         Learn how to integrate your own software with our Portal, in order to
         retrieve and submit large quantities of data, automatically.
       = link_to 'API documentation', '#', class: 'btn btn-primary'
 
 
-  - if @submissions.present?
+- if @submissions.present?
+  %section.section-submissions.container
     .row
-      %h3 Latest submissions
+      %h3.section-heading.text-center Latest user submissions
       = render partial: 'submissions/submissions_list', locals: { submissions: @submissions, mode: :public }
+
 
 %section.section-statistics.container
   .row
-    %h3 Database statistics
+    %h3.section-heading.text-center Database statistics
 
     - ['Experimental populations',
        'Trait scores',
        'Different varieties',
        'Plant lines'].each_with_index do |category_name, i|
 
-      .col-md-3.text-center
-        %h1= number_to_human(@statistics[i])
-        = category_name
-
--# TODO we need some additional space here to separate stats from the footer
+      .col-md-3
+        .info-chart
+          .pie-chart{"data-percent" => (number_to_human(@statistics[i]))}
+            %span.percent= number_to_human(@statistics[i])
+          %span.chart-title= category_name

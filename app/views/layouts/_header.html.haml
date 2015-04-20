@@ -6,14 +6,15 @@
           = image_tag '/images/logo-bip.png', alt: 'Brassica Information Portal'
 
       .col-xs-6
-        %ul.nav.nav-pills.pull-right
+        %ul.nav.nav-pills.pull-right.header-menu
           - unless user_signed_in?
             %li{ role: 'presentation' }
-              = link_to 'Sign in with ORCiD', user_omniauth_authorize_path(:orcid)
+              = link_to 'Sign in with ORCiD', user_omniauth_authorize_path(:orcid), { class: 'btn btn-default btn-secondary btn-ghost' }
 
           - else
             %li.dropdown{ role: 'presentation' }
-              %a.dropdown-toggle{ data: { toggle: 'dropdown' }, href: '#' }
+              %a.dropdown-toggle.btn.btn-secondary{ data: { toggle: 'dropdown' }, href: '#' }
+                %i.flaticon-user
                 = current_user.full_name
                 %span.caret
 
@@ -22,4 +23,4 @@
                 %li= link_to 'Sign out', sign_out_path
 
           %li{ role: 'presentation' }
-            = link_to 'About', about_path
+            = link_to 'About', about_path, { class: 'btn btn-default btn-secondary btn-ghost' }

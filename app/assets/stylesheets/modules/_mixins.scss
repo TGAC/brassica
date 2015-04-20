@@ -1,0 +1,71 @@
+
+//--------------------
+
+@mixin pagination-button-color($accent-color) {
+  > a:hover, > span:hover,
+  > a:focus, > span:focus {
+    background-color: lighten($accent-color, 8%);
+    border-color: $accent-color;
+    color: #fff;
+  }
+}
+
+@mixin link-color($color) {
+  color: $color;
+  &:hover, &:focus, &:active {
+    @include transition(all 0.2s ease-in-out);
+    color: darken($color, 15%);
+  }
+}
+
+//--------------------
+
+@mixin screen($res-min, $res-max)
+{
+  @media screen and ( min-width: $res-min ) and ( max-width: $res-max )
+  {
+    @content;
+  }
+}
+
+@mixin max-screen($res)
+{
+  @media screen and ( max-width: $res )
+  {
+    @content;
+  }
+}
+
+@mixin min-screen($res)
+{
+  @media screen and ( min-width: $res )
+  {
+    @content;
+  }
+}
+
+@mixin screen-height($res-min, $res-max)
+{
+  @media screen and ( min-height: $res-min ) and ( max-height: $res-max )
+  {
+    @content;
+  }
+}
+
+@mixin max-screen-height($res)
+{
+  @media screen and ( max-height: $res )
+  {
+    @content;
+  }
+}
+
+@mixin min-screen-height($res)
+{
+  @media screen and ( min-height: $res )
+  {
+    @content;
+  }
+}
+
+

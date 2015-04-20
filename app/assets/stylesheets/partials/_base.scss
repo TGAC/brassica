@@ -1,0 +1,118 @@
+@import "compass";
+
+// GENERAL STYLES
+
+body {
+  font-family: $base-font-family;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: $heading-text-color;
+  font-family: $heading-font-family;
+  margin-top: 5px;
+}
+
+section {
+  margin-bottom: 60px;
+}
+
+a {
+  color: $accent-color;
+
+  &:hover, &:focus {
+    color: $link-hover-color;
+    text-decoration: none;
+  }
+}
+
+a,
+a:focus,
+a:hover,
+a:active,
+button,
+button:hover {
+  outline: 0 !important;
+}
+
+hr {
+  border-color: #eaeaea;
+}
+
+/* wrapper */
+.wrapper {
+  background: #fff;
+
+  > footer {
+    background-color: $footer-bg-color;
+    font-weight: 300;
+    color: #eaeaea;
+
+    a {
+      color: #fff;
+
+      &:hover, &:focus {
+        color: #fff;
+        text-decoration: underline;
+      }
+    }
+
+    .container {
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 15px;
+    }
+
+    @include max-screen($break-small) {
+      .container {
+        padding: 30px 15px;
+      }
+    }
+  }
+}
+
+.widget-title {
+  font-size: 18px;
+}
+
+.section-heading {
+  margin-bottom: 20px;
+
+  &::after {
+    border-bottom: 2px solid $accent-color;
+    content: " ";
+    display: block;
+    margin-top: 10px;
+    width: 100px;
+  }
+
+  &.text-center {
+    margin: 0 auto 20px;
+
+    &::after {
+      margin: 10px auto 0;
+    }
+  }
+}
+
+/* social background color */
+.facebook-bg {
+  background-color: $facebook-color;
+}
+
+.twitter-bg {
+  background-color: $twitter-color;
+}
+
+.googleplus-bg {
+  background-color: $googleplus-color;
+}
+
+.rss-bg {
+  background-color: $rss-color;
+}
+
+

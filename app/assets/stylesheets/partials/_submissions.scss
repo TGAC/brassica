@@ -1,0 +1,71 @@
+.submissions {
+  @extend .list-group;
+  margin-top: 1em;
+  > li {
+    @extend .list-group-item;
+    .main-info {
+      display: inline-block;
+      width: 70%;
+    }
+    .details {
+      margin-right: 20px;
+    }
+    .updated-at {
+      display: inline-block;
+      width: 15%;
+    }
+    .finalized-at {
+      display: inline-block;
+      width: 15%;
+    }
+    .actions {
+      float: right;
+      width: 14%;
+      text-align: right;
+      form {
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.edit_submission {
+  margin-bottom: 2em;
+  .action-buttons {
+    margin-top: 4em;
+  }
+  button.new-plant-line-for-list {
+    @extend .btn, .btn-default;
+  }
+  div.new-plant-line-for-list {
+    @extend .panel, .panel-default;
+    padding: 2em;
+    h5 {
+      margin: 0 0 1.5em 0;
+    }
+    button.add-new-plant-line-for-list {
+      @extend .btn, .btn-primary;
+    }
+    button.cancel-new-plant-line-for-list {
+      @extend .btn, .btn-default;
+    }
+  }
+  .genetic-status-input, .previous-line-name-input {
+    position: relative;
+    .clear-input {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: inline-block;
+      width: 1.25em;
+      height: 2.5em;
+      padding: 0.5em 1.5em 0.5em 1em;
+      cursor: pointer;
+      color: $gray-base;
+      &:hover {
+        text-decoration: none !important;
+      }
+    }
+  }
+}
+

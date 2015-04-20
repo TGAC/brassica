@@ -1,0 +1,62 @@
+/*
+*	############################################################################
+*
+*	Brassica - Custom Bootstrap Styles
+*	---------------------------------------------------------------------
+*
+*	Version		1.0
+*	Author		Bartosz Chucherko
+*
+*	############################################################################
+*/
+
+/* This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_self
+ *= require dataTables.bootstrap
+ *= require vendor/_select2
+ */
+
+//import config files
+@import "modules/variables";
+@import "modules/mixins";
+
+//import bootstrap styles
+@import "bootstrap/bootstrap-custom";
+@import "bootstrap/ui-bootstrap-elements";
+@import "bootstrap-sprockets";
+
+//import general styles
+@import "partials/base";
+@import "partials/header";
+@import "partials/footer";
+@import "partials/ui-elements";
+@import "modules/fonts";
+
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+@import "partials/charts";
+@import "partials/flash";
+@import "partials/errors";
+@import "partials/submissions";
+
+// TODO refactor whats below
+
+.select2 {
+  width: 40%;
+}
+
+.select2-container {
+  display: block !important;
+}
+
