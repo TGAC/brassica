@@ -4,7 +4,7 @@ lock '3.3.5'
 set :application, 'brassica'
 set :repo_url, 'ssh://git@github.com:eSpectrum-IT/brassica.git'
 
-set :deploy_to, '/home/brassica/brassica'
+set :deploy_to, '/var/www/brassica'
 set :scm, :git
 
 # Default branch is :master
