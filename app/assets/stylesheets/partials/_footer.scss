@@ -1,7 +1,7 @@
 // footer
 
 @import "compass/layout/sticky-footer";
-@include sticky-footer(400px, "#wrap");
+@include sticky-footer(10px, "#wrap");
 
 #footer {
   color: $footer-text-color;
