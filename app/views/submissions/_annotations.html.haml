@@ -1,8 +1,5 @@
-- unless defined?(form)
-  - form = nil
-
-- unless defined?(collapsible)
-  - collapsible = true
+- form ||= nil
+- collapsible = true unless [true, false].include?(collapsible)
 
 -# FIXME choose correct fields (data_owned_by my not be needed)
 - attrs = %w(data_owned_by  data_provenance comments)
