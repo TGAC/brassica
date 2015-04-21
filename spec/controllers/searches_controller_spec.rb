@@ -3,7 +3,11 @@ require 'rails_helper'
 RSpec.describe SearchesController do
   describe "GET :new" do
     let(:search) { instance_double("Search") }
-    let(:search_results) { { plant_lines: 7, plant_populations: 135 } }
+    let(:search_results) { {
+      plant_lines: 7,
+      plant_populations: 135,
+      plant_varieties: 171,
+    } }
 
     it "returns counts of found records" do
       expect(Search).to receive(:new).with("foo").and_return(search)
@@ -14,8 +18,9 @@ RSpec.describe SearchesController do
       expect(response).to be_success
       results = JSON.parse(response.body)
       expect(results).to match_array [
-        { 'model' => 'plant_line', 'count' => 7, 'message' => 'Found 7 plant lines' },
-        { 'model' => 'plant_population', 'count' => 135, 'message' => 'Found 135 plant populations' }
+        { 'model' => 'plant_lines', 'count' => 7, 'message' => 'Found 7 plant lines' },
+        { 'model' => 'plant_populations', 'count' => 135, 'message' => 'Found 135 plant populations' },
+        { 'model' => 'plant_varieties', 'count' => 171, 'message' => 'Found 171 plant varieties' }
       ]
     end
   end

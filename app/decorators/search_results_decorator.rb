@@ -9,7 +9,7 @@ class SearchResultsDecorator
   def as_autocomplete_data
     data = options.fetch(:counts)
     data.map { |model, count| {
-      model: model.to_s.singularize,
+      model: model.to_s,
       count: count,
       message: I18n.t("search.#{model}_count", count: count)
     } }
