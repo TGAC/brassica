@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]
   resources :data_tables, only: [:index, :show]
+  resources :searches, only: [:new]
 
   get 'browse_data', to: 'data_tables#index', defaults: { model: 'plant_populations' }
 end
