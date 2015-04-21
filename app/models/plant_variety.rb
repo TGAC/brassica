@@ -1,4 +1,6 @@
 class PlantVariety < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   has_and_belongs_to_many :countries_of_origin,
                           class_name: 'Country',
@@ -32,6 +34,12 @@ class PlantVariety < ActiveRecord::Base
       'female_parent',
       'male_parent'
     ]
+  end
+
+  def as_indexed_json(options = {})
+    as_json(
+      only: [ :id, :plant_variety_name ]
+    )
   end
 
   private
