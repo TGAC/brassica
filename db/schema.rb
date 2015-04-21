@@ -11,17 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150411122550) do
+ActiveRecord::Schema.define(version: 20150420163832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
 
   create_table "countries", force: :cascade do |t|
-    t.string "country_code",    limit: 3, default: "", null: false
+    t.string "country_code", limit: 3, default: "", null: false
     t.text   "country_name"
-    t.text   "data_provenance"
-    t.text   "comments"
   end
 
   add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
@@ -77,7 +75,6 @@ ActiveRecord::Schema.define(version: 20150411122550) do
     t.date "date_entered"
     t.text "data_provenance"
     t.text "data_owned_by"
-    t.text "data_status"
     t.text "confirmed_by_whom"
   end
 
@@ -87,7 +84,7 @@ ActiveRecord::Schema.define(version: 20150411122550) do
   create_table "linkage_maps", force: :cascade do |t|
     t.text    "linkage_map_label",             default: "",            null: false
     t.text    "linkage_map_name",              default: "unspecified", null: false
-    t.string  "map_version_no",      limit: 3, default: "xxx",         null: false
+    t.string  "map_version_no",      limit: 3
     t.date    "map_version_date"
     t.text    "mapping_software"
     t.text    "mapping_function"
@@ -99,6 +96,7 @@ ActiveRecord::Schema.define(version: 20150411122550) do
     t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "plant_population_id"
+    t.integer "pubmed_id"
   end
 
   add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", using: :btree
@@ -202,11 +200,11 @@ ActiveRecord::Schema.define(version: 20150411122550) do
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
 
   create_table "plant_accessions", force: :cascade do |t|
-    t.text    "plant_accession",            default: "",     null: false
+    t.text    "plant_accession",            default: "", null: false
     t.text    "plant_accession_derivation"
     t.text    "accession_originator"
     t.text    "originating_organisation"
-    t.text    "year_produced",              default: "xxxx", null: false
+    t.text    "year_produced"
     t.date    "date_harvested"
     t.text    "female_parent_plant_id"
     t.text    "male_parent_plant_id"
@@ -331,7 +329,7 @@ ActiveRecord::Schema.define(version: 20150411122550) do
     t.text    "plant_trial_name",         default: "",            null: false
     t.text    "project_descriptor",       default: "unspecified", null: false
     t.text    "plant_trial_description",                          null: false
-    t.text    "trial_year",               default: "xxxx",        null: false
+    t.text    "trial_year"
     t.text    "institute_id",             default: "unspecified", null: false
     t.text    "trial_location_site_name", default: "unspecified", null: false
     t.text    "place_name",               default: "unspecified", null: false
@@ -353,6 +351,7 @@ ActiveRecord::Schema.define(version: 20150411122550) do
     t.text    "confirmed_by_whom"
     t.integer "country_id"
     t.integer "plant_population_id"
+    t.integer "pubmed_id"
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
@@ -470,7 +469,7 @@ ActiveRecord::Schema.define(version: 20150411122550) do
 
   create_table "qtl", force: :cascade do |t|
     t.text    "qtl_rank",                   default: "unspecified", null: false
-    t.text    "map_qtl_label",              default: "unspecified", null: false
+    t.text    "map_qtl_label",              default: "unspecified"
     t.text    "outer_interval_start"
     t.text    "inner_interval_start"
     t.text    "qtl_mid_position",           default: "unspecified", null: false
@@ -490,6 +489,7 @@ ActiveRecord::Schema.define(version: 20150411122550) do
     t.integer "processed_trait_dataset_id"
     t.integer "qtl_job_id"
     t.integer "linkage_group_id"
+    t.integer "pubmed_id"
   end
 
   add_index "qtl", ["linkage_group_id"], name: "qtl_linkage_group_id_idx", using: :btree
@@ -522,7 +522,7 @@ ActiveRecord::Schema.define(version: 20150411122550) do
   create_table "restriction_enzymes", force: :cascade do |t|
     t.text "restriction_enzyme", default: "",            null: false
     t.text "recognition_site",   default: "unspecified", null: false
-    t.text "data_provenance",                            null: false
+    t.text "data_provenance"
   end
 
   create_table "scoring_occasions", force: :cascade do |t|
@@ -614,10 +614,8 @@ ActiveRecord::Schema.define(version: 20150411122550) do
   add_index "trait_grades", ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
 
   create_table "trait_scores", force: :cascade do |t|
-    t.text    "scoring_occasion_name",   default: "unspecified", null: false
-    t.text    "replicate_score_reading", default: "unspecified", null: false
+    t.text    "scoring_occasion_name", default: "unspecified", null: false
     t.text    "score_value"
-    t.text    "score_spread"
     t.text    "value_type"
     t.text    "comments"
     t.text    "entered_by_whom"
@@ -650,11 +648,5 @@ ActiveRecord::Schema.define(version: 20150411122550) do
   end
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
-
-  create_table "version", primary_key: "version", force: :cascade do |t|
-    t.date "date"
-    t.text "updated_by_whom", default: "unspecified", null: false
-    t.text "comments",                                null: false
-  end
 
 end

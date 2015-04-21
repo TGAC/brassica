@@ -5,6 +5,18 @@ class Qtl < ActiveRecord::Base
   belongs_to :linkage_group
   belongs_to :qtl_job
 
+  validates :qtl_rank,
+            presence: true
+
+  validates :map_qtl_label,
+            presence: true
+
+  validates :qtl_mid_position,
+            presence: true
+
+  validates :additive_effect,
+            presence: true
+
   def self.table_data(params = nil)
     joins(processed_trait_dataset: :trait_descriptor).
       joins(linkage_group: { linkage_maps: { plant_population: :taxonomy_term }}).

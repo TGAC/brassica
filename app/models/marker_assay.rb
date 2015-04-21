@@ -16,5 +16,11 @@ class MarkerAssay < ActiveRecord::Base
 
   has_many :population_loci
 
+  validates :marker_assay_name,
+            presence: true
+
+  validates :canonical_marker_name,
+            presence: true
+
   include Annotable
 end

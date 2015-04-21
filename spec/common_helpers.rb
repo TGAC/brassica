@@ -1,4 +1,5 @@
 module CommonHelpers
+  # All model tables that _should_ include Annotable
   def annotable_tables
     %w(
       design_factors
@@ -28,5 +29,13 @@ module CommonHelpers
       probes
       trait_grades
     )
+  end
+
+  # All model tables that are displayed in data tables
+  def displayable_tables
+    annotable_tables.select do |table|
+      model_klass = table.singularize.camelize.constantize
+      model_klass.respond_to? :table_columns
+    end
   end
 end

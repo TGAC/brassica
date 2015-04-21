@@ -4,5 +4,12 @@ class PlantAccession < ActiveRecord::Base
 
   has_many :plant_scoring_units
 
+  validates :plant_accession,
+            presence: true
+
+  validates :year_produced,
+            presence: true,
+            length: {is: 4}
+
   include Annotable
 end

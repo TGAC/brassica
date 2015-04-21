@@ -1,20 +1,16 @@
-module AnnotableFactory
-  def self.annotated
-    Proc.new {
-      comments { Faker::Lorem.sentence }
-      entered_by_whom { Faker::Internet.user_name }
-      date_entered { Faker::Date.backward }
-      data_provenance { Faker::Lorem.sentence }
-      data_owned_by { Faker::Company.name }
-    }
+FactoryGirl.define do
+  trait :annotable do
+    comments Faker::Lorem.sentence
+    entered_by_whom Faker::Internet.user_name
+    date_entered Faker::Date.backward
+    data_provenance Faker::Lorem.sentence
+    data_owned_by Faker::Company.name
   end
 
-  def self.annotated_no_owner
-    Proc.new {
-      comments { Faker::Lorem.sentence }
-      entered_by_whom { Faker::Internet.user_name }
-      date_entered { Faker::Date.backward }
-      data_provenance { Faker::Lorem.sentence }
-    }
+  trait :annotable_no_owner do
+    comments Faker::Lorem.sentence
+    entered_by_whom Faker::Internet.user_name
+    date_entered Faker::Date.backward
+    data_provenance Faker::Lorem.sentence
   end
 end

@@ -1,0 +1,18 @@
+- form ||= nil
+- collapsible = true unless [true, false].include?(collapsible)
+- attrs = %w(data_owned_by data_provenance comments).select { |attr| model.attribute_names.include?(attr) }
+- target ||= "#{model.name.underscore.dasherize}-annotations"
+
+- if collapsible
+  %button.toggle-annotations.btn.btn-default{ type: 'button', data: { toggle: 'collapse', target: "##{target}" } } Additional Annotations
+
+%div{ id: target, class: collapsible ? 'collapse well' : '' }
+  - attrs.each do |attr|
+    .form-group
+      = label_tag attr, attr.humanize.capitalize
+      - if form
+        = form.text_area attr, class: 'form-control'
+      - else
+        = text_area_tag attr, nil, class: 'form-control'
+
+      %p.help-block Optional

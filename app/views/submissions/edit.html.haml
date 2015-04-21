@@ -1,3 +1,22 @@
-.lead Plant population submission
+%h3.section-heading
+  = t("submission.submission_type.#{@submission.submission_type}")
+  submission
+
+-# TODO FIXME Here goes the 'tramline' current stage indicator with step names
+-# For now I 'simulated' it with four columns and checkboxes
+.row
+
+  - Submission::STEPS.each_with_index do |step_name, step_no|
+
+    .col-md-3.text-center
+      %p
+        = "Step #{step_no + 1}/4:"
+        = t("submission.steps.#{@submission.submission_type}.#{step_name}.heading")
+      = check_box_tag 'a', '', step_name == @submission.step
+
+.well
+  %h4= t("submission.steps.#{@submission.submission_type}.#{@submission.step}.heading")
+
+  %p= t("submission.steps.#{@submission.submission_type}.#{@submission.step}.body")
 
 = render partial: "submissions/steps/#{@submission.step}", locals: { submission: @submission }

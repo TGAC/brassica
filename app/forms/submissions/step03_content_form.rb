@@ -16,6 +16,7 @@ module Submissions
       property :previous_line_name
       property :comments
       property :genetic_status
+      property :plant_variety_name
 
       validates :plant_line_name, presence: true
       validates :taxonomy_term, inclusion: { in: TaxonomyTerm.names }
@@ -55,7 +56,8 @@ module Submissions
             :common_name,
             :previous_line_name,
             :comments,
-            :genetic_status
+            :genetic_status,
+            :plant_variety_name
           ]
         }
       ]

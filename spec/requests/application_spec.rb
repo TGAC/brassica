@@ -14,7 +14,7 @@ RSpec.describe 'Application index' do
       get '/'
       expect(response).to have_http_status(:success)
       expect(response).to render_template('submissions/_submissions_list')
-      expect(response.body).to include 'Latest submissions'
+      expect(response.body).to include 'Latest user submissions'
       expect(response.body.scan('Submitted on').size).to eq 2
     end
 

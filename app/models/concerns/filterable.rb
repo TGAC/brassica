@@ -27,7 +27,12 @@ module Filterable extend ActiveSupport::Concern
       end
 
       params[:query].each do |k,_|
-        query = query.joins(k.to_s.split('.')[0].to_sym) if k.to_s.include? '.'
+        if k.to_s.include? '.'
+          relation = k.to_s.split('.')[0].pluralize
+          next unless relation and relation != self.table_name
+          relation = relation.singularize unless reflections.keys.include?(relation)
+          query = query.joins(relation.to_sym)
+        end
       end if params[:query].present?
       query
     end

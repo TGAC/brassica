@@ -7,5 +7,8 @@ class PlantScoringUnit < ActiveRecord::Base
 
   has_many :trait_scores
 
+  validates :scoring_unit_name,
+            presence: true
+
   include Annotable
 end

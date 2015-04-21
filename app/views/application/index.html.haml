@@ -55,14 +55,13 @@
         retrieve and submit large quantities of data, automatically.
       = link_to 'API documentation', '#', class: 'btn btn-primary'
 
-  - if @submissions.present?
+
+- if @submissions.present?
+  %section.section-submissions.container
     .row
-      %h3 Latest submissions
+      %h3.section-heading.text-center Latest user submissions
       = render partial: 'submissions/submissions_list', locals: { submissions: @submissions, mode: :public }
 
-%section.section-submissions.container
-  .row
-    %h3.section-heading.text-center Latest user submissions
 
 %section.section-statistics.container
   .row
@@ -78,5 +77,3 @@
           .pie-chart{"data-percent" => (number_to_human(@statistics[i]))}
             %span.percent= number_to_human(@statistics[i])
           %span.chart-title= category_name
-
--# TODO we need some additional space here to separate stats from the footer
