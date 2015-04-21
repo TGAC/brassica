@@ -42,15 +42,14 @@ Make sure `config/database.yml` is in place and contains correct configuration:
 
     cp config/database.yml.sample config/database.yml
 
-Database user must be allowed to enable extensions.
+Database user must be allowed to create databases and enable extensions.
 
-Create databases:
+Create and bootstrap the database:
 
-    bin/rake db:create db:migrate db:seed db:test:prepare
+    bin/rake db:create:all
+    bin/rake app:bootstrap
 
-Initialize Elasticsearch indices:
-
-    bin/rake environment elasticsearch:import:all
+This will load production data, migrate it and initialize ES indices.
 
 
 ## Testing
