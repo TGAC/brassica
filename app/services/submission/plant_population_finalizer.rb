@@ -43,7 +43,8 @@ class Submission::PlantPopulationFinalizer
   def create_plant_population
     attrs = {
       name: submission.content.step01.name,
-      population_owned_by: submission.content.step01.owned_by
+      population_owned_by: submission.content.step01.owned_by,
+      date_entered: Date.today
     }
 
     %i[female_parent_line male_parent_line].each do |parent_line_attr|

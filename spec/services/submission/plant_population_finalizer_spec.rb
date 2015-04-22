@@ -41,6 +41,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         'description' => plant_population_attrs[:description],
         "data_provenance" => plant_population_attrs[:data_provenance],
         "data_owned_by" => plant_population_attrs[:data_owned_by],
+        'date_entered' => Date.today,
         "comments" => plant_population_attrs[:comments],
         "population_type_id" => population_type.id,
         "taxonomy_term_id" => taxonomy_term.id,
