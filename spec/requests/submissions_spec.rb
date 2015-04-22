@@ -4,9 +4,9 @@ RSpec.describe "Submission management" do
 
   context "with no user signed in" do
     describe "GET /submissions" do
-      it "redirects to root" do
-        get "/submissions"
-        expect(response).to redirect_to(root_path)
+      it "redirects to submissions" do
+        get "/submissions", {}, { 'HTTP_REFERER' => new_submission_path }
+        expect(response).to redirect_to(new_submission_path)
       end
     end
   end
