@@ -58,7 +58,8 @@ RSpec.describe Annotable do
         if klass.ancestors.include? Pluckable
           expect(klass.ref_columns.last).to eq "#{table}.id"
           instances = create_list(table.singularize, 3)
-          expect(klass.pluck_columns.map(&:last)).to eq instances.map(&:id)
+          expect(klass.pluck_columns.map(&:last)).
+            to match_array instances.map(&:id)
         end
       end
     end
