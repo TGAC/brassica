@@ -24,14 +24,18 @@ class Submission::PlantPopulationFinalizer
     @new_plant_lines = (submission.content.step03.new_plant_lines || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
-      plant_variety = PlantVariety.find_by!(plant_variety_name: attrs.delete(:plant_variety_name))
       attrs = attrs.merge(
         taxonomy_term_id: taxonomy_term.id,
-        plant_variety_id: plant_variety.id,
         entered_by_whom: submission.user.email,
         date_entered: Date.today,
         data_provenance: submission.content.step04.data_provenance
       )
+
+      if attrs[:plant_variety_name].present?
+        plant_variety = PlantVariety.find_by!(plant_variety_name: attrs.delete(:plant_variety_name))
+        attrs[:plant_variety_id] = plant_variety.id
+      end
+
       PlantLine.create!(attrs)
     end
   end
