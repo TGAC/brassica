@@ -5,6 +5,22 @@ RSpec.describe Submission do
   it { should validate_presence_of(:user) }
   it { should validate_presence_of(:submission_type) }
 
+  context "factory" do
+    it "builds valid instance" do
+      expect(build(:submission)).to be_valid
+
+    end
+
+    context "with :finalized trait" do
+      it "creates valid finalized instance" do
+        submission = build(:submission, :finalized)
+
+        expect(submission).to be_valid
+        expect(submission).to be_persisted
+      end
+    end
+  end
+
   describe '#submission_type' do
     let(:submission) { build(:submission) }
 

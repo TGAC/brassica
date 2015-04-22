@@ -62,7 +62,7 @@ class Submission < ActiveRecord::Base
 
   def set_defaults
     self.step = STEPS.first
-    self.content = Hash[STEPS.zip(STEPS.count.times.map {})]
+    self.content = Hash[STEPS.zip(STEPS.count.times.map {})] if content.blank?
   end
 
   CantStepForward = Class.new(RuntimeError)
