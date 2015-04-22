@@ -33,7 +33,7 @@ class PlantLine < ActiveRecord::Base
   scope :by_name, -> { order(:plant_line_name) }
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.by_name.pluck_columns
   end
 

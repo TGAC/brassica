@@ -36,7 +36,7 @@ class PlantPopulation < ActiveRecord::Base
   scope :by_name, -> { order('plant_populations.name') }
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.
       includes(:female_parent_line, :male_parent_line, :taxonomy_term, :population_type).
       by_name.
