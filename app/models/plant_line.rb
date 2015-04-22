@@ -70,6 +70,7 @@ class PlantLine < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       search: [
         :plant_line_name,
         'plant_lines.plant_line_name'

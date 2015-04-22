@@ -19,6 +19,5 @@ $ ->
   $('.search').select2(searchSelectOptions).on('select2:select', (event) =>
     model = event.params.data.id
     term = $('.search').data().term
-    window.location = "/data_tables?model=#{model}&search=#{term}"
+    window.location = "/data_tables?model=#{model}&fetch=#{term}"
   )
-

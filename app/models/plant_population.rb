@@ -59,6 +59,7 @@ class PlantPopulation < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         :id, :name
       ]

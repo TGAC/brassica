@@ -2,6 +2,7 @@ module DataTablesHelper
   def datatables_source
     data_tables_path(
       query: params[:query],
+      fetch: params[:fetch],
       model: model_param
     )
   end
