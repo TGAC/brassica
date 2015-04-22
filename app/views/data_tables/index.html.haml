@@ -21,5 +21,10 @@
         %th{ class: "#{column_name}_column" }
           = t("tables.#{model_name}.#{column_name}")
 
-  - if !params[:group] && model_class.ancestors.include?(Annotable)
-    %th.annotations
+  - unless params[:group]
+    -# per-record actions only make sense in non-grouped tables
+    - if model_class.column_names.include? 'pubmed_id'
+      %th.pubmed
+
+    - if model_class.ancestors.include?(Annotable)
+      %th.annotations
