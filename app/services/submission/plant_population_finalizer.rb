@@ -26,7 +26,7 @@ class Submission::PlantPopulationFinalizer
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
       attrs = attrs.merge(
         taxonomy_term_id: taxonomy_term.id,
-        entered_by_whom: submission.user.email,
+        entered_by_whom: submission.user.full_name,
         date_entered: Date.today,
         data_provenance: submission.content.step04.data_provenance
       )
@@ -44,7 +44,8 @@ class Submission::PlantPopulationFinalizer
     attrs = {
       name: submission.content.step01.name,
       population_owned_by: submission.content.step01.owned_by,
-      date_entered: Date.today
+      date_entered: Date.today,
+      entered_by_whom: submission.user.full_name
     }
 
     %i[female_parent_line male_parent_line].each do |parent_line_attr|
