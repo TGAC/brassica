@@ -14,7 +14,7 @@ RSpec.describe SubmissionDecorator do
     end
   end
 
-  describe '#further_details, #label, #details_path' do
+  describe '#further_details, #label' do
     it 'throw exceptions' do
       submission = create(:submission)
       sd = SubmissionDecorator.decorate(submission)
@@ -22,8 +22,21 @@ RSpec.describe SubmissionDecorator do
         to raise_error('Should be extended by subclasses')
       expect { sd.label }.
         to raise_error('Should be extended by subclasses')
-      expect { sd.details_path }.
-        to raise_error('Should be extended by subclasses')
+    end
+  end
+
+  describe '#details_path' do
+    it 'provides empty path for unfinished submission' do
+      submission = create(:submission)
+      sd = SubmissionDecorator.decorate(submission)
+      expect(sd.details_path).to eq '#'
+    end
+
+    it 'provides correct datatables path for finalized submission' do
+      submission = create(:finalized_submission)
+      sd = SubmissionDecorator.decorate(submission)
+      expect(sd.details_path).
+        to include 'data_tables?model=plant_populations'
     end
   end
 end

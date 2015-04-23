@@ -34,7 +34,7 @@ RSpec.describe "Submission management" do
     end
 
     describe "PUT /submissions/:id" do
-      let(:submission) { create :submission, user: user }
+      let(:submission) { create :submission, user: user, finalized: false }
 
       it "updates submission with permitted params" do
         put "/submissions/#{submission.id}", submission: { content: { name: 'Population A' } }
@@ -65,6 +65,7 @@ RSpec.describe "Submission management" do
         before { allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call) }
 
         it "finalizes submission and redirects to show" do
+          submission.update_attribute(:submitted_object_id, 1)
           put "/submissions/#{submission.id}", submission: { content: { comments: "Lorem ipsum" } }
           expect(submission.reload).to be_finalized
           expect(response).to redirect_to(submission_path(submission))
