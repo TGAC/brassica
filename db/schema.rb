@@ -445,8 +445,7 @@ ActiveRecord::Schema.define(version: 20150423094541) do
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
 
   create_table "processed_trait_datasets", force: :cascade do |t|
-    t.text    "processed_trait_dataset_name", default: "",            null: false
-    t.text    "population_id",                default: "unspecified", null: false
+    t.text    "processed_trait_dataset_name", default: "", null: false
     t.text    "processed_dataset_id"
     t.text    "trait_percent_heritability"
     t.text    "comments"
@@ -460,7 +459,6 @@ ActiveRecord::Schema.define(version: 20150423094541) do
   end
 
   add_index "processed_trait_datasets", ["plant_trial_id"], name: "processed_trait_datasets_plant_trial_id_idx", using: :btree
-  add_index "processed_trait_datasets", ["population_id"], name: "processed_trait_datasets_population_id_idx", using: :btree
   add_index "processed_trait_datasets", ["processed_trait_dataset_name"], name: "processed_trait_datasets_processed_trait_dataset_name_idx", using: :btree
   add_index "processed_trait_datasets", ["trait_descriptor_id"], name: "processed_trait_datasets_trait_descriptor_id_idx", using: :btree
 
