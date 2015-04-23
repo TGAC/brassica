@@ -39,7 +39,7 @@ RSpec.describe PlantPopulation do
       gd = PlantPopulation.table_data
       expect(gd).not_to be_empty
       expect(gd.size).to eq 3
-      expect(gd.map{ |pp| pp[6] }).to contain_exactly 2, 2, 0
+      expect(gd.map{ |pp| pp[7] }).to contain_exactly 2, 2, 0
     end
 
     it 'orders populations by population name' do
@@ -63,6 +63,7 @@ RSpec.describe PlantPopulation do
         fpl.plant_line_name,
         mpl.plant_line_name,
         pp.population_type.population_type,
+        pp.description,
         0,
         fpl.id,
         mpl.id,

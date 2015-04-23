@@ -136,22 +136,22 @@ window.configs =
       ,
         targets: 'female_parent_line_column'
         render: (data, type, full, meta) ->
-          if data && full[7]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[7] + '">' + data + '</a>'
-          else
-            ''
-      ,
-        targets: 'male_parent_line_column'
-        render: (data, type, full, meta) ->
           if data && full[8]
             '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
           else
             ''
       ,
+        targets: 'male_parent_line_column'
+        render: (data, type, full, meta) ->
+          if data && full[9]
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[9] + '">' + data + '</a>'
+          else
+            ''
+      ,
         targets: 'plant_population_lists_count_column'
         render: (data, type, full, meta) ->
-          if data && data != '0' && full[9]
-            '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[9] + '">' + data + '</a>'
+          if data && data != '0' && full[10]
+            '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[10] + '">' + data + '</a>'
           else
             ''
       ]
