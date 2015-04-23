@@ -66,5 +66,11 @@ class PlantTrial < ActiveRecord::Base
     ]
   end
 
+  def self.ref_columns
+    [
+      'pubmed_id'
+    ]
+  end
+
   include Annotable
 end

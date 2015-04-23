@@ -2,8 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Qtl do
   describe '#table_data' do
+    let(:lm) { create(:linkage_map) }
+
     it 'properly calculates grouped qtls number' do
-      lg = create(:linkage_group, linkage_maps: [create(:linkage_map)])
+      lg = create(:linkage_group, linkage_maps: [lm])
       ptd = create(:processed_trait_dataset)
       create_list(:qtl, 3, linkage_group: lg, processed_trait_dataset: ptd)
       table_data = Qtl.table_data
@@ -12,7 +14,7 @@ RSpec.describe Qtl do
     end
 
     it 'properly calculates associated trait scores' do
-      lg = create(:linkage_group, linkage_maps: [create(:linkage_map)])
+      lg = create(:linkage_group, linkage_maps: [lm])
       td1 = create(:trait_descriptor, descriptor_name: 'dn', trait_scores_count: 3)
       td2 = create(:trait_descriptor, descriptor_name: 'dn', trait_scores_count: 7)
       ptd1 = create(:processed_trait_dataset, trait_descriptor: td1)
@@ -25,7 +27,6 @@ RSpec.describe Qtl do
     end
 
     it 'gets proper columns' do
-      lm = create(:linkage_map)
       qtl = create(:qtl)
       qtl.linkage_group.linkage_maps << lm
       qtl.save

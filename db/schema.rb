@@ -536,13 +536,14 @@ ActiveRecord::Schema.define(version: 20150423094541) do
   add_index "scoring_occasions", ["scoring_occasion_name"], name: "scoring_occasions_scoring_occasion_name_idx", using: :btree
 
   create_table "submissions", force: :cascade do |t|
-    t.integer  "user_id",                         null: false
-    t.string   "step",                            null: false
-    t.json     "content",         default: {},    null: false
-    t.boolean  "finalized",       default: false, null: false
-    t.integer  "submission_type",                 null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.integer  "user_id",                             null: false
+    t.string   "step",                                null: false
+    t.json     "content",             default: {},    null: false
+    t.boolean  "finalized",           default: false, null: false
+    t.integer  "submission_type",                     null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "submitted_object_id"
   end
 
   add_index "submissions", ["finalized"], name: "index_submissions_on_finalized", using: :btree

@@ -74,11 +74,19 @@ $ ->
 
 window.baseColumnDefs = (model) ->
   [
+    targets: 'pubmed'
+    render: (data, type, full, meta) ->
+      objectId = full[full.length - 2]
+      if objectId
+        '<a class="btn btn-xs btn-info" href="http://www.ncbi.nlm.nih.gov/pubmed/' + objectId + '">PubMed link</a>'
+      else
+        ''
+  ,
     targets: 'annotations'
     render: (data, type, full, meta) ->
       objectId = full[full.length - 1]
       if objectId
-        '<button data-popover-source="data_tables/' + objectId + '?model=' + model + '">Metadata</button>'
+        '<button class="btn btn-xs btn-info" data-popover-source="data_tables/' + objectId + '?model=' + model + '">Metadata link</button>'
       else
         ''
   ]

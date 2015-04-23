@@ -9,6 +9,7 @@ class Submission < ActiveRecord::Base
   validates :user, presence: true
   validates :submission_type, presence: true
   validates :step, inclusion: { in: STEPS }
+  validates :submitted_object_id, presence: true, if: 'finalized?'
 
   before_validation :set_defaults, on: :create
 
@@ -50,12 +51,31 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def submitted_object
+    finalized? ? associated_model.find(submitted_object_id) : nil
+  end
+
   def steps
     STEPS
   end
 
   def name
     [I18n.l(created_at, format: :short), content.step01.try(:name)].compact.join(' ')
+  end
+
+  def associated_model
+    case submission_type
+    when 'population'
+      PlantPopulation
+    when 'traits'
+      PlantScoringUnit
+    when 'qtl'
+      Qtl
+    when 'linkage_map'
+      LinkageMap
+    else
+      nil
+    end
   end
 
   private
@@ -69,5 +89,4 @@ class Submission < ActiveRecord::Base
   CantStepBack = Class.new(RuntimeError)
   CantFinalize = Class.new(RuntimeError)
   InvalidStep = Class.new(ArgumentError)
-
 end
