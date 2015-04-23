@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150420163832) do
+ActiveRecord::Schema.define(version: 20150422193628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -398,7 +398,6 @@ ActiveRecord::Schema.define(version: 20150420163832) do
   add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
 
   create_table "population_loci", force: :cascade do |t|
-    t.text    "plant_population",    default: "unspecified", null: false
     t.text    "mapping_locus",       default: "unspecified", null: false
     t.text    "defined_by_whom"
     t.text    "comments"
@@ -413,8 +412,6 @@ ActiveRecord::Schema.define(version: 20150420163832) do
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
   add_index "population_loci", ["mapping_locus"], name: "population_loci_mapping_locus_idx", using: :btree
   add_index "population_loci", ["marker_assay_id"], name: "population_loci_marker_assay_id_idx", using: :btree
-  add_index "population_loci", ["plant_population"], name: "idx_143961_plant_population", using: :btree
-  add_index "population_loci", ["plant_population"], name: "population_loci_plant_population_idx", using: :btree
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
   create_table "primers", force: :cascade do |t|
