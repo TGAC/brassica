@@ -45,7 +45,7 @@ en:
       descriptor_name: Trait
       trait_scores_count: Trait scores
     trait_scores:
-      scoring_occasion_name: Occasion name
+      scoring_date: Scored on
       score_value: Value
       value_type: Value type
     qtl:

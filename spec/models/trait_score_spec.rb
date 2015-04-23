@@ -21,9 +21,9 @@ RSpec.describe TraitScore do
       expect(plucked.count).to eq 1
       expect(plucked[0]).
         to eq [
-          ts.scoring_occasion_name,
           ts.score_value,
           ts.value_type,
+          ts.scoring_date,
           ts.id
         ]
     end
