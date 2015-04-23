@@ -37,4 +37,11 @@ module CommonHelpers
       model_klass.respond_to? :table_columns
     end
   end
+
+  def searchable_models
+    Rails.application.eager_load!
+    ActiveRecord::Base.descendants.select do |model|
+      model.included_modules.include? Elasticsearch::Model
+    end
+  end
 end
