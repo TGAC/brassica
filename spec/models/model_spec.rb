@@ -23,11 +23,15 @@ RSpec.describe ActiveRecord::Base do
 
   context 'when model supports elastic search' do
     before(:all) do
-      @searchable = searchable_models
+      @searchables = searchable_models
+    end
+
+    it 'ensures searchable_models helper do not make fools of us' do
+      expect(@searchables).not_to be_empty
     end
 
     it 'makes sure all basic searchable fields are displayed in tables' do
-      @searchable.each do |searchable|
+      @searchables.each do |searchable|
         instance = create(searchable)
         instance.send(:as_indexed_json).each do |k,v|
           next if k == 'id'
