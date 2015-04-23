@@ -65,16 +65,16 @@ class Submission < ActiveRecord::Base
 
   def associated_model
     case submission_type
-      when 'population'
-        PlantPopulation
-      when 'traits'
-        PlantScoringUnit
-      when 'qtl'
-        Qtl
-      when 'linkage_map'
-        LinkageMap
-      else
-        nil
+    when 'population'
+      PlantPopulation
+    when 'traits'
+      PlantScoringUnit
+    when 'qtl'
+      Qtl
+    when 'linkage_map'
+      LinkageMap
+    else
+      nil
     end
   end
 
