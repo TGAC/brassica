@@ -23,16 +23,6 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
     end.strip
   end
 
-  def details_path
-    Rails.application.routes.url_helpers.data_tables_path(
-      model: :plant_populations,
-      query: {
-        id: object.id
-      }
-    )
-  end
-
-
   def population_name
     @population_name ||= object.content.step01.name.presence
   end

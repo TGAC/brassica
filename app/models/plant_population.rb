@@ -18,8 +18,6 @@ class PlantPopulation < ActiveRecord::Base
 
   has_many :population_loci, class_name: 'PopulationLocus'
 
-  has_many :processed_trait_datasets
-
   has_many :plant_trials
 
   has_and_belongs_to_many :plant_lines,

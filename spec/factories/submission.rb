@@ -22,5 +22,7 @@ FactoryGirl.define do
         submission.finalize
       end
     end
+
+    factory :finalized_submission, traits: [:finalized]
   end
 end

@@ -13,6 +13,7 @@ class Submission::PlantPopulationFinalizer
       create_new_plant_lines
       create_plant_population
       create_plant_population_lists
+      submission.update_attributes(submitted_object_id: @plant_population.id)
     end
   end
 

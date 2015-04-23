@@ -20,7 +20,6 @@ module CommonHelpers
       processed_trait_datasets
       qtl
       qtl_jobs
-      scoring_occasions
       trait_descriptors
       trait_scores
 

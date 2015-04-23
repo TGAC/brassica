@@ -53,6 +53,11 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         to eq([plant_lines[0].plant_line_name] + new_plant_lines_attrs.map { |attrs| attrs[:plant_line_name] })
     end
 
+    it 'records created plant population for later use' do
+      subject.call
+      expect(submission.submitted_object_id).to eq subject.plant_population.id
+    end
+
     it 'creates new plant lines' do
       subject.call
       expect(subject.new_plant_lines.size).to eq 2

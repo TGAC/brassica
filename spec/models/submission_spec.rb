@@ -17,6 +17,7 @@ RSpec.describe Submission do
 
         expect(submission).to be_valid
         expect(submission).to be_persisted
+        expect(submission.submitted_object).to be_persisted
       end
     end
   end
@@ -48,6 +49,24 @@ RSpec.describe Submission do
       expect(Submission.population.count).to eq 1
       expect(Submission.linkage_map.count).to eq 0
       expect(Submission.traits.count).to eq 0
+    end
+  end
+
+  describe '#submitted_object' do
+    it 'behaves bad with unexpected submission type' do
+      submission = create(:finalized_submission)
+      submission.update_column(:submission_type, 'unexpected')
+      expect{ submission.submitted_object }.
+        to raise_error NoMethodError
+    end
+
+    it 'provides nil object for unfinished submission' do
+      expect(create(:submission).submitted_object).to eq nil
+    end
+
+    it 'returns associated object for finalized submissions' do
+      expect(create(:finalized_submission).submitted_object).
+        to eq PlantPopulation.first
     end
   end
 
@@ -108,14 +127,22 @@ RSpec.describe Submission do
       allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
     end
 
+    it 'ensures presence of submitted object upon finalization' do
+      submission.update_attribute(:step, submission.steps.last)
+      expect { submission.finalize }.
+        to raise_error ActiveRecord::RecordInvalid
+    end
+
     it 'updated submission' do
       submission.update_attribute(:step, submission.steps.last)
+      submission.update_attribute(:submitted_object_id, 1)
       expect { submission.finalize }.to change { submission.finalized? }.from(false).to(true)
     end
 
     it 'calls finalizer' do
       expect_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
       submission.update_attribute(:step, submission.steps.last)
+      submission.update_attribute(:submitted_object_id, 1)
       submission.finalize
     end
 
@@ -126,7 +153,7 @@ RSpec.describe Submission do
 
   describe '#finalized' do
     it 'returns only finalized submissions' do
-      create_list(:submission, 2, finalized: true)
+      create_list(:finalized_submission, 2)
       create_list(:submission, 1, finalized: false)
       expect(Submission.count).to eq 3
       expect(Submission.finalized.count).to eq 2
@@ -140,4 +167,6 @@ RSpec.describe Submission do
       expect(Submission.recent_first.map(&:id)).to eq ids.reverse
     end
   end
+
+
 end
