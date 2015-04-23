@@ -1,11 +1,7 @@
 class TraitScore < ActiveRecord::Base
 
   belongs_to :plant_scoring_unit
-  belongs_to :scoring_occasion
   belongs_to :trait_descriptor, counter_cache: true
-
-  validates :scoring_occasion_name,
-            presence: true
 
   include Filterable
   include Pluckable
@@ -17,9 +13,9 @@ class TraitScore < ActiveRecord::Base
 
   def self.table_columns
     [
-      'scoring_occasion_name',
       'score_value',
-      'value_type'
+      'value_type',
+      'scoring_date'
     ]
   end
 

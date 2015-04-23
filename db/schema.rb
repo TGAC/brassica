@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150423094541) do
+ActiveRecord::Schema.define(version: 20150423111035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -520,19 +520,6 @@ ActiveRecord::Schema.define(version: 20150423094541) do
     t.text "data_provenance"
   end
 
-  create_table "scoring_occasions", force: :cascade do |t|
-    t.text "scoring_occasion_name", default: "", null: false
-    t.date "score_start_date"
-    t.date "score_end_date"
-    t.text "comments"
-    t.text "entered_by_whom"
-    t.date "date_entered"
-    t.text "data_provenance"
-    t.text "data_owned_by"
-  end
-
-  add_index "scoring_occasions", ["scoring_occasion_name"], name: "scoring_occasions_scoring_occasion_name_idx", using: :btree
-
   create_table "submissions", force: :cascade do |t|
     t.integer  "user_id",                             null: false
     t.string   "step",                                null: false
@@ -610,7 +597,6 @@ ActiveRecord::Schema.define(version: 20150423094541) do
   add_index "trait_grades", ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
 
   create_table "trait_scores", force: :cascade do |t|
-    t.text    "scoring_occasion_name", default: "unspecified", null: false
     t.text    "score_value"
     t.text    "value_type"
     t.text    "comments"
@@ -622,12 +608,11 @@ ActiveRecord::Schema.define(version: 20150423094541) do
     t.integer "plant_scoring_unit_id"
     t.integer "scoring_occasion_id"
     t.integer "trait_descriptor_id"
+    t.date    "scoring_date"
   end
 
   add_index "trait_scores", ["plant_scoring_unit_id"], name: "trait_scores_plant_scoring_unit_id_idx", using: :btree
   add_index "trait_scores", ["scoring_occasion_id"], name: "trait_scores_scoring_occasion_id_idx", using: :btree
-  add_index "trait_scores", ["scoring_occasion_name"], name: "idx_144229_scoring_occasion", using: :btree
-  add_index "trait_scores", ["scoring_occasion_name"], name: "trait_scores_scoring_occasion_name_idx", using: :btree
   add_index "trait_scores", ["trait_descriptor_id"], name: "trait_scores_trait_descriptor_id_idx", using: :btree
 
   create_table "users", force: :cascade do |t|
