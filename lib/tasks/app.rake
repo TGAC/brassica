@@ -12,7 +12,9 @@ namespace :app do
     puts " - building ES indices"
     build_elasticsearch_indices
     puts " - run further migrations"
-    migrate_db
+    silence_stdout do
+      migrate_db
+    end
     puts " - DONE"
   end
 
