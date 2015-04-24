@@ -40,6 +40,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   # gem 'capistrano-rails'
+  gem 'pry-rails'
 end
 
 group :development, :test do

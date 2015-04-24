@@ -9,7 +9,7 @@ FactoryGirl.define do
                                            description: Faker::Lorem.sentence,
                                            owned_by: Faker::Internet.email)
         submission.content.update(:step02, population_type: Faker::Lorem.word,
-                                           taxonomy_term: Faker::Lorem.word)
+                                           taxonomy_term: Faker::Lorem.word + rand(100).to_s)
         submission.content.update(:step03, female_parent_line: nil,
                                            male_parent_line: nil,
                                            plant_line_list: [])
