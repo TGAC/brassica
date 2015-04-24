@@ -41,6 +41,8 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         'description' => plant_population_attrs[:description],
         "data_provenance" => plant_population_attrs[:data_provenance],
         "data_owned_by" => plant_population_attrs[:data_owned_by],
+        'date_entered' => Date.today,
+        'entered_by_whom' => submission.user.full_name,
         "comments" => plant_population_attrs[:comments],
         "population_type_id" => population_type.id,
         "taxonomy_term_id" => taxonomy_term.id,
@@ -63,7 +65,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         expect(plant_line).to be_persisted
         expect(plant_line.attributes).to include(
           'plant_line_name' => new_plant_lines_attrs[idx][:plant_line_name],
-          'entered_by_whom' => submission.user.email,
+          'entered_by_whom' => submission.user.full_name,
           'date_entered' => Date.today,
           'data_owned_by' => new_plant_lines_attrs[idx][:data_owned_by],
           'data_provenance' => new_plant_lines_attrs[idx][:data_provenance],

@@ -4,7 +4,7 @@ class Submission::Content < OpenStruct
 
     pairs = submission.read_attribute(:content).map { |step, step_content| [step, OpenStruct.new(step_content)] }
     pairs = Hash[pairs]
-    submission.steps.each { |step| pairs[step] = {} unless pairs.key?(step) }
+    submission.steps.each { |step| pairs[step] = OpenStruct.new unless pairs.key?(step) }
     super(pairs)
   end
 

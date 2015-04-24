@@ -26,7 +26,7 @@ RSpec.describe "Submission management" do
     describe "GET /submissions/:id/edit" do
       let(:submission) { create :submission, user: user }
 
-      it "renders view" do
+      it "renders template" do
         get "/submissions/#{submission.id}/edit"
         expect(response).to be_success
         expect(response).to render_template(:edit)
@@ -70,6 +70,17 @@ RSpec.describe "Submission management" do
           expect(submission.reload).to be_finalized
           expect(response).to redirect_to(submission_path(submission))
         end
+      end
+    end
+
+    describe "GET /submissions/:id" do
+      let(:submission) { create :finalized_submission, user: user }
+
+      it "renders template" do
+        get "/submissions/#{submission.id}"
+
+        expect(response).to be_success
+        expect(response).to render_template(:show)
       end
     end
   end
