@@ -83,6 +83,8 @@ module DataTablesHelper
       to_s.                            # make sure it IS a string
       split(/ as /i)[-1]               # honor aliasing
 
+    column_string.gsub!('_count','')   # support cached count columns as well
+
     if column_string.include? '.'
       column_string.split '.'
     else

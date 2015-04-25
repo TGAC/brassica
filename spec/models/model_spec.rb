@@ -8,7 +8,12 @@ RSpec::Matchers.define :display_column do |expected|
   end
 end
 
+
 RSpec.describe ActiveRecord::Base do
+  before(:all) do
+    Rails.application.eager_load!
+  end
+
   it 'defines table and ref columns as strings only' do
     Rails.application.eager_load!
     ActiveRecord::Base.descendants.each do |model|
@@ -46,6 +51,14 @@ RSpec.describe ActiveRecord::Base do
           end
         end
       end
+    end
+  end
+
+  it 'responds with nonempty table columns when permitted for data tables' do
+    allowed_models = DataTablesController.new.send(:allowed_models)
+    allowed_models.each do |model|
+      expect(model.classify.constantize).to respond_to(:table_columns)
+      expect(model.classify.constantize.table_columns).not_to be_empty
     end
   end
 end

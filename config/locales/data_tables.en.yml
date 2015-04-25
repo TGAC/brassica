@@ -45,7 +45,7 @@ en:
       name: Species
     trait_descriptors:
       descriptor_name: Trait
-      trait_scores_count: Trait scores
+      trait_scores: Trait scores
     trait_scores:
       scoring_date: Scored on
       score_value: Value

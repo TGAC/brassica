@@ -25,6 +25,7 @@ class PlantPopulation < ActiveRecord::Base
 
   after_touch { __elasticsearch__.index_document }
 
+  include Relatable
   include Filterable
 
   validates :name,
@@ -38,7 +39,7 @@ class PlantPopulation < ActiveRecord::Base
     query.
       includes(:female_parent_line, :male_parent_line, :taxonomy_term, :population_type).
       by_name.
-      pluck(*(table_columns + ref_columns))
+      pluck(*(table_columns + count_columns + ref_columns))
   end
 
   def self.table_columns
@@ -49,8 +50,15 @@ class PlantPopulation < ActiveRecord::Base
       'plant_lines.plant_line_name AS female_parent_line',
       'male_parent_lines_plant_populations.plant_line_name AS male_parent_line',
       'pop_type_lookup.population_type',
-      'description',
-      'plant_population_lists_count'
+      'description'
+    ]
+  end
+
+  def self.count_columns
+    [
+      'plant_population_lists_count AS plant_lines_count',
+      'linkage_maps_count',
+      'plant_trials_count'
     ]
   end
 
