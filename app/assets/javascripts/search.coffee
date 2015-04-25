@@ -1,15 +1,38 @@
-$ ->
-  $('.search').on 'keyup', (event) =>
-    term = $('.search').val()
+class Search
+  constructor: (term, results) ->
+    @$term = $(term)
+    @$results = $(results)
 
-    console.log(term)
-    return if $.trim(term).length <= 2
+  bind: =>
+    @$term.on 'keyup', (event) =>
+      term = $.trim(@$term.val())
 
-    $.ajax
+      return if @term == term
+      return unless term.length >= 2
+
+      @performSearch(term)
+
+  performSearch: (term) =>
+    @term = term
+
+    if @ajax
+      @ajax.abort()
+
+    @ajax = $.ajax
       url: "/search"
       dataType: 'html'
       data:
         search: term
+
+      before:
+        @$results.html("<i class='fa fa-2x fa-spin fa-circle-o-notch'></i>")
+
       success: (response) =>
-        $('.search-results').html(response)
+        @$results.html(response)
+
+      complete:
+        @ajax = null
+
+$ ->
+  new Search('.search', '.search-results').bind()
 
