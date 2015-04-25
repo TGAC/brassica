@@ -60,7 +60,7 @@ class PlantLine < ActiveRecord::Base
       'common_name',
       'plant_varieties.plant_variety_name',
       'previous_line_name',
-      'date_entered',
+      'genetic_status',
       'data_owned_by',
       'organisation'
     ]

@@ -57,6 +57,7 @@ RSpec.describe Annotable do
         klass = table.singularize.camelize.constantize
         if klass.ancestors.include? Pluckable
           expect(klass.ref_columns.last).to eq "#{table}.id"
+          klass.destroy_all
           instances = create_list(table.singularize, 3)
           expect(klass.pluck_columns.map(&:last)).
             to match_array instances.map(&:id)

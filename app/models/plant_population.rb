@@ -49,6 +49,7 @@ class PlantPopulation < ActiveRecord::Base
       'plant_lines.plant_line_name AS female_parent_line',
       'male_parent_lines_plant_populations.plant_line_name AS male_parent_line',
       'pop_type_lookup.population_type',
+      'description',
       'plant_population_lists_count'
     ]
   end
@@ -72,16 +73,16 @@ class PlantPopulation < ActiveRecord::Base
 
   def as_indexed_json(options = {})
     plant_line_attrs = [
-      :plant_line_name, :common_name, :genetic_status, :previous_line_name
+      :plant_line_name
     ]
 
     as_json(
       only: [
-        :id, :name, :canonical_population_name, :description,
-        :population_type
+        :id, :name, :canonical_population_name, :description
       ],
       include: {
         taxonomy_term: { only: [:name] },
+        population_type: { only: [:population_type] },
         female_parent_line: { only: plant_line_attrs },
         male_parent_line: { only: plant_line_attrs },
       }
