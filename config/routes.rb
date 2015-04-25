@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   root 'application#index'
   get 'about', to: 'application#about'
+  get 'api_documentation', to: 'application#api'
 
   resources :submissions
   resources :plant_lines, only: [:index]

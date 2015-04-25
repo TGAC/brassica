@@ -13,8 +13,16 @@ RSpec.describe LinkageMap do
         lm.plant_population.name,
         lm.map_version_no,
         lm.map_version_date,
+        lm.pubmed_id,
         lm.id
       ]
+    end
+
+    it 'returns pubmed_id' do
+      lm = create(:linkage_map)
+      table_data = LinkageMap.table_data
+      expect(table_data.count).to eq 1
+      expect(table_data[0][-2]).to eq lm.pubmed_id
     end
   end
 end

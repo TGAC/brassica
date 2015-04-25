@@ -38,42 +38,6 @@ hr {
   border-color: #eaeaea;
 }
 
-/* wrapper */
-.wrapper {
-  background: #fff;
-
-  > footer {
-    background-color: $footer-bg-color;
-    font-weight: 300;
-    color: #eaeaea;
-
-    a {
-      color: #fff;
-
-      &:hover, &:focus {
-        color: #fff;
-        text-decoration: underline;
-      }
-    }
-
-    .container {
-      padding-top: 30px;
-      padding-bottom: 30px;
-    }
-
-    .logo {
-      width: 100px;
-      margin-bottom: 15px;
-    }
-
-    @include max-screen($break-small) {
-      .container {
-        padding: 30px 15px;
-      }
-    }
-  }
-}
-
 .widget-title {
   font-size: 18px;
 }

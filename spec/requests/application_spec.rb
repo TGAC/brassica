@@ -9,7 +9,7 @@ RSpec.describe 'Application index' do
     end
 
     it 'shows all submissions if less then 5 are finalized' do
-      create_list(:submission, 2, finalized: true)
+      create_list(:finalized_submission, 2)
       create_list(:submission, 1, finalized: false)
       get '/'
       expect(response).to have_http_status(:success)
@@ -19,7 +19,7 @@ RSpec.describe 'Application index' do
     end
 
     it 'shows at most 5 finalized submissions' do
-      create_list(:submission, 7, finalized: true)
+      create_list(:finalized_submission, 7)
       get '/'
       expect(response).to have_http_status(:success)
       expect(response.body.scan('Submitted on').size).to eq 5

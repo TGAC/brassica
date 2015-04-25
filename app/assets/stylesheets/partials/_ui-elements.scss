@@ -13,7 +13,6 @@
   border-color: $text-color-negative;
 }
 
-
 //forms
 .form-negative {
   border-color: $mono-color-2;
@@ -24,6 +23,24 @@
   color: $mono-color-2;
 }
 
+//boxed content
+.boxed-content {
+  text-align: center;
+  margin-bottom: 35px;
+
+  > i {
+    font-size: 5em;
+    color: $accent-color;
+  }
+
+  .boxed-content-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 10px;
+  }
+}
+
+//sections
 .section-heading {
   color: $heading-text-color;
   font-size: 22px;
@@ -33,12 +50,10 @@
   }
 }
 
-
-
-//sections
 .section-jumbotron {
   background: url("/images/hero-bg.jpg") no-repeat scroll center top #4B5B6B;
   color: $text-color-negative;
+  padding-top: 25px;
 
   .container {
     max-width: $break-medium;
@@ -87,39 +102,19 @@
     width: 2em;
   }
 
-  .boxed-content:hover {
-    i:before {
-      transform: scale(1.1);
-      background-color: $accent-color;
-      border-color: transparent;
-      color: $text-color-negative;
-      transition: all 500ms;
+  .boxed-content {
+    &:hover {
+      i:before {
+        transform: scale(1.1);
+        background-color: $accent-color;
+        border-color: transparent;
+        color: $text-color-negative;
+        transition: all 500ms;
+      }
     }
   }
-
-  .boxed-content {
-
-  }
 }
 
-//boxed content
-.boxed-content {
-  text-align: center;
-  margin-bottom: 35px;
-
-  > i {
-    font-size: 5em;
-    color: $accent-color;
-  }
-
-  .boxed-content-title {
-    font-size: 22px;
-    font-weight: 700;
-    margin-top: 10px;
-  }
-
-
-}
 
 
 

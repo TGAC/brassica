@@ -20,7 +20,6 @@ module CommonHelpers
       processed_trait_datasets
       qtl
       qtl_jobs
-      scoring_occasions
       trait_descriptors
       trait_scores
 
@@ -36,6 +35,13 @@ module CommonHelpers
     annotable_tables.select do |table|
       model_klass = table.singularize.camelize.constantize
       model_klass.respond_to? :table_columns
+    end
+  end
+
+  def searchable_models
+    Rails.application.eager_load!
+    ActiveRecord::Base.descendants.select do |model|
+      model.included_modules.include? Elasticsearch::Model
     end
   end
 end

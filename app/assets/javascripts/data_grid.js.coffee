@@ -74,11 +74,19 @@ $ ->
 
 window.baseColumnDefs = (model) ->
   [
+    targets: 'pubmed'
+    render: (data, type, full, meta) ->
+      objectId = full[full.length - 2]
+      if objectId
+        '<a class="btn btn-xs btn-info" href="http://www.ncbi.nlm.nih.gov/pubmed/' + objectId + '">PubMed link</a>'
+      else
+        ''
+  ,
     targets: 'annotations'
     render: (data, type, full, meta) ->
       objectId = full[full.length - 1]
       if objectId
-        '<button data-popover-source="data_tables/' + objectId + '?model=' + model + '">Metadata</button>'
+        '<button class="btn btn-xs btn-info" data-popover-source="data_tables/' + objectId + '?model=' + model + '">Metadata link</button>'
       else
         ''
   ]
@@ -128,22 +136,22 @@ window.configs =
       ,
         targets: 'female_parent_line_column'
         render: (data, type, full, meta) ->
-          if data && full[7]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[7] + '">' + data + '</a>'
-          else
-            ''
-      ,
-        targets: 'male_parent_line_column'
-        render: (data, type, full, meta) ->
           if data && full[8]
             '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
           else
             ''
       ,
+        targets: 'male_parent_line_column'
+        render: (data, type, full, meta) ->
+          if data && full[9]
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[9] + '">' + data + '</a>'
+          else
+            ''
+      ,
         targets: 'plant_population_lists_count_column'
         render: (data, type, full, meta) ->
-          if data && data != '0' && full[9]
-            '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[9] + '">' + data + '</a>'
+          if data && data != '0' && full[10]
+            '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[10] + '">' + data + '</a>'
           else
             ''
       ]

@@ -87,35 +87,35 @@ RSpec.describe PlantLine do
 
   describe '#pluckable' do
     it 'gets proper data table columns' do
-      tt = create(:taxonomy_term, name: 'tt')
-      pv = create(:plant_variety, plant_variety_name: 'pvn')
-      de = Date.today
-      pl = create(:plant_line,
-                  plant_line_name: 'pln',
-                  taxonomy_term: tt,
-                  common_name: 'cn',
-                  previous_line_name: 'ppln',
-                  date_entered: de,
-                  data_owned_by: 'dob',
-                  organisation: 'o',
-                  plant_variety: pv)
+      pl = create(:plant_line, plant_variety: create(:plant_variety))
 
       plucked = PlantLine.pluck_columns
       expect(plucked.count).to eq 1
-      expect(plucked[0]).
-        to eq ['pln', 'tt', 'cn', 'pvn', 'ppln', de, 'dob', 'o', pv.id, pl.id]
+      expect(plucked[0]).to eq [
+        pl.plant_line_name,
+        pl.taxonomy_term.name,
+        pl.common_name,
+        pl.plant_variety.plant_variety_name,
+        pl.previous_line_name,
+        pl.genetic_status,
+        pl.data_owned_by,
+        pl.organisation,
+        pl.plant_variety.id,
+        pl.id
+      ]
     end
   end
 
   describe '#table_data' do
     it 'returns empty result when no plant lines found' do
-      expect(PlantLine.table_data(plant_line_names: 1)).to be_empty
+      expect(PlantLine.table_data({})).to be_empty
     end
 
-    # it 'orders plant lines by plant line name' do
-    #   plids = create_list(:plant_line, 3).map(&:id)
-    #   td = PlantLine.table_data(query: { id: plids })
-    #   expect(td.map(&:first)).to eq plids.sort
-    # end
+    it 'orders plant lines by plant line name' do
+      pp = create(:plant_population)
+      pls = create_list(:plant_line, 3, plant_populations: [pp])
+      td = PlantLine.table_data(query: { 'plant_populations.id': pp.id })
+      expect(td.map(&:first)).to eq pls.map(&:plant_line_name).sort
+    end
   end
 end

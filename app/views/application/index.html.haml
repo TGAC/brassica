@@ -53,7 +53,7 @@
       %p
         Learn how to integrate your own software with our Portal, in order to
         retrieve and submit large quantities of data, automatically.
-      = link_to 'API documentation', '#', class: 'btn btn-primary'
+      = link_to 'API documentation', api_documentation_path, class: 'btn btn-primary'
 
 
 - if @submissions.present?
@@ -74,6 +74,6 @@
 
       .col-md-3
         .info-chart
-          .pie-chart{"data-percent" => (number_to_human(@statistics[i]))}
+          .pie-chart{ data: { percent: 75 }}
             %span.percent= number_to_human(@statistics[i])
           %span.chart-title= category_name
