@@ -65,7 +65,7 @@ $ ->
     title: ->
       $('body').on 'click', '.metadata-close', =>
         $(this).data('bs.popover').hide()
-      $(this).data('title') +
+      'Annotations' +
       '<button type="button" class="close metadata-close" aria-label="Close">' +
         '<span aria-hidden="true">&times;</span>' +
       '</button>'
