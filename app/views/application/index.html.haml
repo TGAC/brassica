@@ -19,7 +19,7 @@
       %form
         .form-group
           .input-group
-            %input.search.form-control.form-negative(type="text" placeholder="Search for...")
+            %input.search.form-control.form-negative(type="text" placeholder="Search for..." autofocus)
             %span.input-group-btn
               %button.btn.btn-primary(type="button") Search
 
@@ -28,6 +28,8 @@
 
     .col-md-3
       = link_to 'Start browsing', browse_data_path, class: 'btn btn-primary btn-block'
+
+    .search-results
 
 %section.section-actions.container
   .row

@@ -1,9 +1,10 @@
 class SearchesController < ApplicationController
 
-  def new
-    results = Search.new(params[:search]).counts
-    results = SearchResultsDecorator.new(counts: results).as_autocomplete_data
-    render json: results
+  def counts
+    @term = params[:search]
+    @counts = Search.new(@term).counts
+
+    render layout: !request.xhr?
   end
 
 end
