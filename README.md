@@ -51,6 +51,9 @@ Create and bootstrap the database:
 
 This will load production data, migrate it and initialize ES indices.
 
+The `app:bootstrap` task may be used at a later time to reset database to its
+initial state but make sure that no instance of the app is running when calling the task.
+
 
 ## Testing
 
