@@ -23,7 +23,7 @@ class PlantLine < ActiveRecord::Base
   after_update { fathered_descendants.each(&:touch) }
 
   after_touch { __elasticsearch__.index_document }
-  
+
   include Filterable
   include Pluckable
 
@@ -39,18 +39,6 @@ class PlantLine < ActiveRecord::Base
 
   def self.genetic_statuses
     order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
-  end
-
-  def as_indexed_json(options = {})
-    as_json(
-      only: [
-        :id, :plant_line_name, :common_name, :genetic_status,
-        :previous_line_name
-      ],
-      include: {
-        taxonomy_term: { only: [:name] }
-      }
-    )
   end
 
   def self.table_columns
@@ -85,6 +73,18 @@ class PlantLine < ActiveRecord::Base
     [
       'plant_variety_id'
     ]
+  end
+
+  def as_indexed_json(options = {})
+    as_json(
+      only: [
+        :id, :plant_line_name, :common_name, :genetic_status,
+        :previous_line_name
+      ],
+      include: {
+        taxonomy_term: { only: [:name] }
+      }
+    )
   end
 
   include Annotable
