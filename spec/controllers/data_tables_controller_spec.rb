@@ -73,4 +73,16 @@ RSpec.describe DataTablesController do
       expect(json['data']).to eq []
     end
   end
+
+  describe '#show' do
+    it 'escapes annotation values' do
+      pp = create(:plant_population, comments: 'This is <b>HTML</b>')
+      get :show,
+          id: pp.id,
+          format: :json,
+          model: 'plant_populations'
+      expect(response.body).not_to include '<b>'
+      expect(response.body).to include '\\u003cb\\u003eHTML\\u003c/b\\u003e'
+    end
+  end
 end

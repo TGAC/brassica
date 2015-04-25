@@ -60,13 +60,45 @@ $ ->
   $('body').popover
     selector: '[data-popover-source]'
     placement: 'left'
-    title: 'Record metadata'
     trigger: 'focus'
     html: 'true'
+    title: ->
+      $('body').on 'click', '.metadata-close', =>
+        $(this).data('bs.popover').hide()
+      $(this).data('title') +
+      '<button type="button" class="close metadata-close" aria-label="Close">' +
+        '<span aria-hidden="true">&times;</span>' +
+      '</button>'
     content: ->
-      divId = "tmp-id-" + $.now()
       $.ajax
         url: $(this).data('popover-source')
-        success: (response) ->
-          $('#'+divId).html(JSON.stringify(response))
-      "<div id='#{divId}'>Loading...</div>"
+        success: (response) =>
+          content = ''
+          content += metadataElement('Data owner', response['data_owned_by'])
+          content += metadataElement('Provenance', response['data_provenance'])
+          content += metadataElement('Comments', response['comments'])
+          content += metadataElement('Entered by', response['entered_by_whom'])
+          content += metadataElement('Entry date', response['date_entered'])
+          content = 'No annotations' if content == ''
+          $(this).data('bs.popover').options.content = content
+          # This is required for the popover to reposition itself properly
+          $(this).data('bs.popover').show()
+      '<i>Loading...</i>'
+
+window.metadataElement = (title, value) ->
+  if value
+    "<strong>#{title}</strong>: #{escapeHtml(value)}</br>"
+  else
+    ''
+
+window.escapeHtml = (string) ->
+  entityMap = {
+    "&": "&amp;"
+    "<": "&lt;"
+    ">": "&gt;"
+    '"': '&quot;'
+    "'": '&#39;'
+    "/": '&#x2F;'
+  }
+  String(string).replace /[&<>"'\/]/g, (s) ->
+    entityMap[s]
