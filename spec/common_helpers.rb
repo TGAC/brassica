@@ -44,4 +44,13 @@ module CommonHelpers
       model.included_modules.include? Elasticsearch::Model
     end
   end
+
+  # All models including Relatable module
+  # i.e. all models displaying 1-to-N relationship in data tables
+  def relatable_models
+    Rails.application.eager_load!
+    ActiveRecord::Base.descendants.select do |model|
+      model.included_modules.include? Relatable
+    end
+  end
 end

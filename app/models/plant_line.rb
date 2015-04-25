@@ -23,7 +23,7 @@ class PlantLine < ActiveRecord::Base
   after_update { fathered_descendants.each(&:touch) }
 
   after_touch { __elasticsearch__.index_document }
-  
+
   include Filterable
   include Pluckable
 

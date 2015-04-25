@@ -46,9 +46,14 @@ RSpec.describe DataTablesHelper do
 
     it 'strips the aggregate function' do
       expect(extract_column('count(column_name)')).
-          to eq %w(model_name column_name)
+        to eq %w(model_name column_name)
       expect(extract_column('count(right_model_name.column_name)')).
-          to eq %w(right_model_name column_name)
+        to eq %w(right_model_name column_name)
+    end
+
+    it 'gets rid of _count suffix' do
+      expect(extract_column('relation_name_count')).
+        to eq %w(model_name relation_name)
     end
   end
 end
