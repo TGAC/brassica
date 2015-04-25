@@ -42,9 +42,9 @@ RSpec.describe PlantPopulation do
       gd = PlantPopulation.table_data
       expect(gd).not_to be_empty
       expect(gd.size).to eq 3
-      expect(gd.map{ |pp| pp[6] }).to contain_exactly 2, 2, 0
-      expect(gd.map{ |pp| pp[7] }).to contain_exactly 0, 3, 1
-      expect(gd.map{ |pp| pp[8] }).to contain_exactly 2, 0, 0
+      expect(gd.map{ |pp| pp[7] }).to contain_exactly 2, 2, 0
+      expect(gd.map{ |pp| pp[8] }).to contain_exactly 0, 3, 1
+      expect(gd.map{ |pp| pp[9] }).to contain_exactly 2, 0, 0
     end
 
     it 'orders populations by population name' do
