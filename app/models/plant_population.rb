@@ -78,7 +78,7 @@ class PlantPopulation < ActiveRecord::Base
 
     as_json(
       only: [
-        :id, :name, :canonical_population_name, :description
+        :name, :canonical_population_name, :description
       ],
       include: {
         taxonomy_term: { only: [:name] },

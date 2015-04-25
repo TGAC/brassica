@@ -78,7 +78,7 @@ class PlantLine < ActiveRecord::Base
   def as_indexed_json(options = {})
     as_json(
       only: [
-        :id, :plant_line_name, :common_name, :genetic_status,
+        :plant_line_name, :common_name, :genetic_status,
         :previous_line_name
       ],
       include: {
