@@ -27,6 +27,8 @@ require 'common_helpers'
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.maintain_test_schema!
 
+Rails.application.eager_load!
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   # config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -34,7 +36,7 @@ RSpec.configure do |config|
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  config.use_transactional_fixtures = false
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
@@ -56,6 +58,13 @@ RSpec.configure do |config|
   config.include RSpecHtmlMatchers
   include CommonHelpers
 
+  config.around :each do |example|
+    DatabaseCleaner.strategy = example.metadata[:elasticsearch] ? :truncation : :transaction
+    DatabaseCleaner.start unless example.metadata[:dont_clean_db]
+    example.run
+    DatabaseCleaner.clean unless example.metadata[:dont_clean_db]
+  end
+
   config.before :each do |example|
     unless example.metadata[:elasticsearch]
       es = Class.new do
@@ -64,9 +73,16 @@ RSpec.configure do |config|
         def delete_document; end
       end.new
 
-      [PlantLine, PlantPopulation, PlantVariety].each do |model|
+      searchable_models.each do |model|
         allow_any_instance_of(model).to receive(:__elasticsearch__).and_return(es)
       end
+    end
+  end
+
+  config.before :each, :elasticsearch do |example|
+    WebMock.disable_net_connect!(allow_localhost: true)
+    searchable_models.each do |model|
+      model.import force: true, refresh: true
     end
   end
 end
