@@ -1,11 +1,13 @@
 class Search
-  constructor: (term, results) ->
-    @$term = $(term)
+  constructor: (form, results) ->
+    @$form = $(form)
     @$results = $(results)
 
   bind: =>
-    @$term.on 'keyup', (event) =>
-      term = $.trim(@$term.val())
+    @$form.on 'submit', (event) =>
+      event.preventDefault()
+
+      term = $.trim(@$form.find('input[type=text]').val())
 
       return if @term == term
       return unless term.length >= 2
