@@ -5,6 +5,7 @@ $ ->
     pageLength: 25
     processing: true
     stateSave: true
+    deferRender: true
     dom: "<'row'<'col-sm-4'l><'col-sm-4'T><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
     drawCallback: (settings) ->
       # This removes the pagination control when only 1 page
@@ -33,6 +34,16 @@ $ ->
         fnInit: ( nButton, oConfig ) ->
           if $('#table-back-button').length
             $(nButton).find('span').html($('#table-back-button').data('label'))
+          else
+            $(nButton).hide()
+      ,
+        sExtends: 'text'
+        sButtonText: 'See all records'
+        fnClick: ( nButton, oConfig, oFlash ) ->
+          window.location = $('#table-see-all-button').attr('href')
+        fnInit: ( nButton, oConfig ) ->
+          if $('#table-see-all-button').length
+            $(nButton).find('span').html($('#table-see-all-button').data('label'))
           else
             $(nButton).hide()
       ,
