@@ -41,18 +41,6 @@ class PlantLine < ActiveRecord::Base
     order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
   end
 
-  def as_indexed_json(options = {})
-    as_json(
-      only: [
-        :id, :plant_line_name, :common_name, :genetic_status,
-        :previous_line_name
-      ],
-      include: {
-        taxonomy_term: { only: [:name] }
-      }
-    )
-  end
-
   def self.table_columns
     [
       'plant_line_name',
@@ -86,6 +74,18 @@ class PlantLine < ActiveRecord::Base
     [
       'plant_variety_id'
     ]
+  end
+
+  def as_indexed_json(options = {})
+    as_json(
+      only: [
+        :plant_line_name, :common_name, :genetic_status,
+        :previous_line_name
+      ],
+      include: {
+        taxonomy_term: { only: [:name] }
+      }
+    )
   end
 
   include Annotable
