@@ -2,6 +2,8 @@ class PlantPopulation < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
+
   belongs_to :taxonomy_term
 
   belongs_to :population_type

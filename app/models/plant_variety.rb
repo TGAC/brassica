@@ -2,6 +2,8 @@ class PlantVariety < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
+
   has_and_belongs_to_many :countries_of_origin,
                           class_name: 'Country',
                           join_table: 'plant_variety_country_of_origin'
