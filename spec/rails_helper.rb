@@ -55,6 +55,20 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :request
   config.include RSpecHtmlMatchers
   include CommonHelpers
+
+  config.before :each do |example|
+    unless example.metadata[:elasticsearch]
+      es = Class.new do
+        def index_document; end
+        def update_document; end
+        def delete_document; end
+      end.new
+
+      [PlantLine, PlantPopulation, PlantVariety].each do |model|
+        allow_any_instance_of(model).to receive(:__elasticsearch__).and_return(es)
+      end
+    end
+  end
 end
 
 OmniAuth.config.test_mode = true
