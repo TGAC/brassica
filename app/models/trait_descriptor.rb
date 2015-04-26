@@ -22,7 +22,7 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.table_data(params = nil)
     connection.execute(
-      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, tdid
+      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, tdid, pt.id
        FROM plant_trials pt JOIN
 
        (SELECT trait_descriptor_id AS tdid, plant_trial_id AS ptid, COUNT(*) AS cnt FROM
