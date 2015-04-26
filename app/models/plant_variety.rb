@@ -36,6 +36,12 @@ class PlantVariety < ActiveRecord::Base
     ]
   end
 
+  def as_indexed_json(options = {})
+    as_json(
+      only: [ :plant_variety_name ]
+    )
+  end
+
   private
 
   def self.permitted_params
@@ -48,12 +54,6 @@ class PlantVariety < ActiveRecord::Base
         :plant_variety_name
       ]
     ]
-  end
-
-  def as_indexed_json(options = {})
-    as_json(
-      only: [ :plant_variety_name ]
-    )
   end
 
   include Annotable

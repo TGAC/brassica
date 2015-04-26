@@ -54,6 +54,18 @@ class PlantLine < ActiveRecord::Base
     ]
   end
 
+  def as_indexed_json(options = {})
+    as_json(
+      only: [
+        :plant_line_name, :common_name, :genetic_status,
+        :previous_line_name
+      ],
+      include: {
+        taxonomy_term: { only: [:name] }
+      }
+    )
+  end
+
   private
 
   def self.permitted_params
@@ -74,18 +86,6 @@ class PlantLine < ActiveRecord::Base
     [
       'plant_variety_id'
     ]
-  end
-
-  def as_indexed_json(options = {})
-    as_json(
-      only: [
-        :plant_line_name, :common_name, :genetic_status,
-        :previous_line_name
-      ],
-      include: {
-        taxonomy_term: { only: [:name] }
-      }
-    )
   end
 
   include Annotable

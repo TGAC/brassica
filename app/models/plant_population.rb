@@ -62,24 +62,6 @@ class PlantPopulation < ActiveRecord::Base
     ]
   end
 
-  private
-
-  def self.permitted_params
-    [
-      :fetch,
-      query: [
-        :id, :name
-      ]
-    ]
-  end
-
-  def self.ref_columns
-    [
-      'female_parent_line_id',
-      'male_parent_line_id'
-    ]
-  end
-
   def as_indexed_json(options = {})
     plant_line_attrs = [
       :plant_line_name
@@ -96,6 +78,24 @@ class PlantPopulation < ActiveRecord::Base
         male_parent_line: { only: plant_line_attrs },
       }
     )
+  end
+
+  private
+
+  def self.permitted_params
+    [
+      :fetch,
+      query: [
+        :id, :name
+      ]
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'female_parent_line_id',
+      'male_parent_line_id'
+    ]
   end
 
   include Annotable
