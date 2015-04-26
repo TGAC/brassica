@@ -39,7 +39,8 @@ class PurgeOldDefaults < ActiveRecord::Migration
     ]
     purgable_values = [
         'no comment',
-        'No comment'
+        'No comment',
+        ''
     ]
 
     tables.each do |table|
