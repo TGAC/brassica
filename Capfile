@@ -4,6 +4,7 @@ require 'capistrano/bundler'
 require 'capistrano/rails'
 require 'capistrano/puma'
 require 'capistrano/console'
+require 'capistrano/chruby'
 
 # Include tasks from other gems included in your Gemfile
 #
@@ -18,7 +19,6 @@ require 'capistrano/console'
 #
 # require 'capistrano/rvm'
 # require 'capistrano/rbenv'
-# require 'capistrano/chruby'
 # require 'capistrano/rails/assets'
 # require 'capistrano/rails/migrations'
 # require 'capistrano/passenger'
