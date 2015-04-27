@@ -39,8 +39,8 @@ window.configs =
       [
         targets: 'name_column'
         render: (data, type, full, meta) ->
-          if data && full[7]
-            '<a href="data_tables?model=plant_populations&query[id]=' + full[7] + '">' + data + '</a>'
+          if data && full[full.length - 3]
+            '<a href="data_tables?model=plant_populations&query[id]=' + full[full.length - 3] + '">' + data + '</a>'
           else
             data
       ]
