@@ -13,7 +13,8 @@ module Pluckable extend ActiveSupport::Concern
   included do
     def self.pluck_columns
       query = self.all
-      columns = table_columns + ref_columns
+      cc = respond_to?(:count_columns) ? count_columns : []
+      columns = table_columns + cc + ref_columns
       columns.each do |column|
         relation = column.to_s.split('.')[0].pluralize if column.to_s.include? '.'
         next unless relation && relation != self.table_name
