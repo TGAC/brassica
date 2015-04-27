@@ -25,7 +25,7 @@ module DataTablesHelper
     case model_param
       when 'plant_populations', 'plant_lines', 'plant_varieties'
         :plant_populations
-      when 'plant_trials', 'trait_descriptors', 'trait_scores'
+      when 'plant_trials', 'trait_descriptors', 'trait_scores', 'plant_scoring_units'
         :trait_descriptors
       when 'linkage_maps'
         :linkage_maps

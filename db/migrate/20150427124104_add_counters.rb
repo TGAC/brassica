@@ -30,6 +30,12 @@ class AddCounters < ActiveRecord::Migration
         :plant_population_lists_count,
         :linkage_maps_count,
         :plant_trials_count
+      ],
+      plant_trials: [
+        :plant_scoring_units_count
+      ],
+      plant_scoring_units: [
+        :trait_scores_count
       ]
     }
   end

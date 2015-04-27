@@ -2,6 +2,13 @@ en:
   tables:
     countries:
       country_name: Country
+    design_factors:
+      design_factor_name: Design factor
+    linkage_maps:
+      linkage_map_label: Map label
+      linkage_map_name: Map name
+      map_version_no: Version
+      map_version_date: Version date
     plant_lines:
       plant_line_name: Line name
       common_name: Common name
@@ -10,11 +17,8 @@ en:
       data_owned_by: Data owner
       organisation: Organisation
       genetic_status: Genetic status
-    linkage_maps:
-      linkage_map_label: Map label
-      linkage_map_name: Map name
-      map_version_no: Version
-      map_version_date: Version date
+    plant_parts:
+      plant_part: Plant part
     plant_populations:
       name: Population
       canonical_population_name: Canonical name
@@ -22,8 +26,14 @@ en:
       male_parent_line: Male parent line
       plant_population_lists_count: Plant lines
       description: Description
+    plant_scoring_units:
+      scoring_unit_name: Scoring unit name
+      number_units_scored: Units scored
+      scoring_unit_sample_size: Sample size
+      scoring_unit_frame_size: Frame size
+      date_planted: Date planted
     plant_trials:
-      plant_trial_name: Name
+      plant_trial_name: Trial name
       plant_trial_description: Trial
       project_descriptor: Project
       trial_year: Year

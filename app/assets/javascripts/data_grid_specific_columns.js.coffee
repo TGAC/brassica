@@ -45,6 +45,17 @@ window.configs =
             data
       ]
 
+  'trait-scores':
+    columnDefs:
+      [
+        targets: 'scoring_unit_name_column'
+        render: (data, type, full, meta) ->
+          if data && full[full.length - 2]
+            '<a href="data_tables?model=plant_scoring_units&query[id]=' + full[full.length - 2] + '">' + data + '</a>'
+          else
+            data
+      ]
+
   'plant-populations':
     columnDefs:
       [

@@ -34,6 +34,7 @@ RSpec.describe PlantTrial do
           pt.trial_year,
           pt.trial_location_site_name,
           pt.date_entered,
+          pt.plant_scoring_units.count,
           pt.plant_population.id,
           pt.pubmed_id,
           pt.id

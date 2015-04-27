@@ -36,6 +36,7 @@ class PlantTrial < ActiveRecord::Base
   validates :contact_person,
             presence: true
 
+  include Relatable
   include Filterable
   include Pluckable
 
@@ -53,6 +54,12 @@ class PlantTrial < ActiveRecord::Base
       'trial_year',
       'trial_location_site_name',
       'date_entered'
+    ]
+  end
+
+  def self.count_columns
+    [
+      'plant_scoring_units_count'
     ]
   end
 

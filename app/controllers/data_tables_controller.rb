@@ -28,6 +28,6 @@ class DataTablesController < ApplicationController
 
   def allowed_models
     %w(plant_trials trait_descriptors plant_lines plant_populations 
-       plant_varieties trait_scores linkage_maps qtl)
+       plant_varieties trait_scores linkage_maps qtl plant_scoring_units)
   end
 end

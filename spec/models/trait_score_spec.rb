@@ -24,6 +24,8 @@ RSpec.describe TraitScore do
           ts.score_value,
           ts.value_type,
           ts.scoring_date,
+          ts.plant_scoring_unit.scoring_unit_name,
+          ts.plant_scoring_unit.id,
           ts.id
         ]
     end
