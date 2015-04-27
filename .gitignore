@@ -24,3 +24,6 @@ config/database.yml
 
 # Ignore RubyMine config files
 .idea
+
+# Capistrano metrics
+/.capistrano
