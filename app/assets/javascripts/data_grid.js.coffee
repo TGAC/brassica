@@ -60,90 +60,45 @@ $ ->
   $('body').popover
     selector: '[data-popover-source]'
     placement: 'left'
-    title: 'Record metadata'
     trigger: 'focus'
     html: 'true'
+    title: ->
+      $('body').on 'click', '.metadata-close', =>
+        $(this).data('bs.popover').hide()
+      'Annotations' +
+      '<button type="button" class="close metadata-close" aria-label="Close">' +
+        '<span aria-hidden="true">&times;</span>' +
+      '</button>'
     content: ->
-      divId = "tmp-id-" + $.now()
       $.ajax
         url: $(this).data('popover-source')
-        success: (response) ->
-          $('#'+divId).html(JSON.stringify(response))
-      "<div id='#{divId}'>Loading...</div>"
+        success: (response) =>
+          content = ''
+          content += metadataElement('Data owner', response['data_owned_by'])
+          content += metadataElement('Provenance', response['data_provenance'])
+          content += metadataElement('Comments', response['comments'])
+          content += metadataElement('Entered by', response['entered_by_whom'])
+          content += metadataElement('Entry date', response['date_entered'])
+          content = 'No annotations' if content == ''
+          $(this).data('bs.popover').options.content = content
+          # This is required for the popover to reposition itself properly
+          $(this).data('bs.popover').show()
+      '<i>Loading...</i>'
 
+window.metadataElement = (title, value) ->
+  if value
+    "<strong>#{title}</strong>: #{escapeHtml(value)}</br>"
+  else
+    ''
 
-window.baseColumnDefs = (model) ->
-  [
-    targets: 'annotations'
-    render: (data, type, full, meta) ->
-      objectId = full[full.length - 1]
-      if objectId
-        '<button data-popover-source="data_tables/' + objectId + '?model=' + model + '">Metadata</button>'
-      else
-        ''
-  ]
-
-
-# Specific configurations for particular DataTables, including callbacks
-window.configs =
-  'plant-lines':
-    columnDefs:
-      [
-        targets: 'name_column'
-        render: (data, type, full, meta) ->
-          data.replace(/Brassica/, 'B.')
-      ,
-        targets: 'plant_variety_name_column'
-        render: (data, type, full, meta) ->
-          if data && full[8]
-            '<a href="data_tables?model=plant_varieties&query[id]=' + full[8] + '">' + data + '</a>'
-          else
-            data
-      ]
-
-  'trait-descriptors':
-    columnDefs:
-      [
-        targets: 'project_descriptor_column'
-        render: (data, type, full, meta) ->
-          if data
-            '<a href="data_tables?model=plant_trials&query[project_descriptor]=' + data + '">' + data + '</a>'
-          else
-            ''
-      ,
-        targets: 'trait_scores_count_column'
-        render: (data, type, full, meta) ->
-          if data && full[2]
-            '<a href="data_tables?model=trait_scores&query[trait_descriptors.descriptor_name]=' + full[2] + '">' + data + '</a>'
-          else
-            ''
-      ]
-
-  'plant-populations':
-    columnDefs:
-      [
-        targets: 'name_column'
-        render: (data, type, full, meta) ->
-          data.replace(/Brassica/, 'B.')
-      ,
-        targets: 'female_parent_line_column'
-        render: (data, type, full, meta) ->
-          if data && full[7]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[7] + '">' + data + '</a>'
-          else
-            ''
-      ,
-        targets: 'male_parent_line_column'
-        render: (data, type, full, meta) ->
-          if data && full[8]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
-          else
-            ''
-      ,
-        targets: 'plant_population_lists_count_column'
-        render: (data, type, full, meta) ->
-          if data && data != '0' && full[9]
-            '<a href="data_tables?model=plant_lines&query[plant_populations.id]=' + full[9] + '">' + data + '</a>'
-          else
-            ''
-      ]
+window.escapeHtml = (string) ->
+  entityMap = {
+    "&": "&amp;"
+    "<": "&lt;"
+    ">": "&gt;"
+    '"': '&quot;'
+    "'": '&#39;'
+    "/": '&#x2F;'
+  }
+  String(string).replace /[&<>"'\/]/g, (s) ->
+    entityMap[s]

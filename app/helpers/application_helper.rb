@@ -7,6 +7,8 @@ module ApplicationHelper
             :home
           when 'about'
             :about
+          when 'api'
+            :api
           else
             :home
         end
@@ -30,7 +32,7 @@ module ApplicationHelper
       home: root_path,
       browse: browse_data_path,
       submit: new_submission_path,
-      api: '#',
+      api: api_documentation_path,
       about: about_path
     }
   end

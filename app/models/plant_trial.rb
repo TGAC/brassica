@@ -2,11 +2,8 @@ class PlantTrial < ActiveRecord::Base
 
   has_many :plant_scoring_units
   has_many :processed_trait_datasets
-  belongs_to :plant_population
+  belongs_to :plant_population, counter_cache: true
   belongs_to :country
-
-  include Filterable
-  include Pluckable
 
   validates :plant_trial_name,
             presence: true
@@ -39,6 +36,9 @@ class PlantTrial < ActiveRecord::Base
   validates :contact_person,
             presence: true
 
+  include Filterable
+  include Pluckable
+
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
     query.order(:trial_year).pluck_columns
@@ -61,8 +61,15 @@ class PlantTrial < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
-        :project_descriptor
+        :project_descriptor,
+        'plant_populations.id'
       ]
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'pubmed_id'
     ]
   end
 

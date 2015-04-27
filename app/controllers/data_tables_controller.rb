@@ -13,7 +13,6 @@ class DataTablesController < ApplicationController
   end
 
   def show
-    params[:model] = params[:model].underscore
     object = model_param.singularize.camelize.constantize.find(params[:id])
     render json: object.annotations_as_json
   end

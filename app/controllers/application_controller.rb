@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   end
 
   def about; end
+  def api; end
 
   private
 

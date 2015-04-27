@@ -9,6 +9,7 @@ en:
       date_entered: Entry date
       data_owned_by: Data owner
       organisation: Organisation
+      genetic_status: Genetic status
     linkage_maps:
       linkage_map_label: Map label
       linkage_map_name: Map name
@@ -20,6 +21,7 @@ en:
       female_parent_line: Female parent line
       male_parent_line: Male parent line
       plant_population_lists_count: Plant lines
+      description: Description
     plant_trials:
       plant_trial_name: Name
       plant_trial_description: Trial
@@ -43,9 +45,9 @@ en:
       name: Species
     trait_descriptors:
       descriptor_name: Trait
-      trait_scores_count: Trait scores
+      trait_scores: Trait scores
     trait_scores:
-      scoring_occasion_name: Occasion name
+      scoring_date: Scored on
       score_value: Value
       value_type: Value type
     qtl:

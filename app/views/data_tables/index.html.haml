@@ -14,12 +14,20 @@
 
 = datatable_tag do
   - model_class = model_param.singularize.camelize.constantize
-  - [:table_columns, :count_columns].each do |columns_type|
-    - if model_class.respond_to? columns_type
-      - model_class.send(columns_type).each do |column|
-        - model_name, column_name = extract_column(column)
-        %th{ class: "#{column_name}_column" }
-          = t("tables.#{model_name}.#{column_name}")
+  - model_class.table_columns.each do |column|
+    - model_name, column_name = extract_column(column)
+    %th{ class: "#{column_name}_column" }
+      = t("tables.#{model_name}.#{column_name}")
 
-  - if !params[:group] && model_class.ancestors.include?(Annotable)
-    %th.annotations
+  - if model_class.respond_to?(:counter_names) && model_class.counter_names.present?
+    - count_data_index = model_class.table_columns.size
+    %th.related{ data: { models: model_class.counter_names,
+                         count_data_index: count_data_index }}
+
+  - unless params[:group]
+    -# per-record actions only make sense in non-grouped tables
+    - if model_class.column_names.include? 'pubmed_id'
+      %th.pubmed
+
+    - if model_class.ancestors.include?(Annotable)
+      %th.annotations

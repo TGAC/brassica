@@ -3,7 +3,7 @@ class LinkageMap < ActiveRecord::Base
   has_and_belongs_to_many :linkage_groups,
                           join_table: 'map_linkage_group_lists'
 
-  belongs_to :plant_population
+  belongs_to :plant_population, counter_cache: true, touch: true
 
   has_many :map_linkage_group_lists
 
@@ -13,6 +13,7 @@ class LinkageMap < ActiveRecord::Base
 
   default_scope { includes(plant_population: :taxonomy_term) }
 
+  include Filterable
   include Pluckable
 
   validates :linkage_map_label,
@@ -26,7 +27,8 @@ class LinkageMap < ActiveRecord::Base
             length: {minimum: 1, maximum: 3}
 
   def self.table_data(params = nil)
-    pluck_columns
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.pluck_columns
   end
 
   def self.table_columns
@@ -37,6 +39,22 @@ class LinkageMap < ActiveRecord::Base
       'plant_populations.name',
       'map_version_no',
       'map_version_date'
+    ]
+  end
+
+  private
+
+  def self.ref_columns
+    [
+      'pubmed_id'
+    ]
+  end
+
+  def self.permitted_params
+    [
+      query: [
+        'plant_populations.id'
+      ]
     ]
   end
 

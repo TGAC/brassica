@@ -14,9 +14,11 @@ module Submissions
       property :taxonomy_term
       property :common_name
       property :previous_line_name
-      property :comments
       property :genetic_status
       property :plant_variety_name
+      property :data_owned_by
+      property :data_provenance
+      property :comments
 
       validates :plant_line_name, presence: true
       validates :taxonomy_term, inclusion: { in: TaxonomyTerm.names }
@@ -55,9 +57,11 @@ module Submissions
             :taxonomy_term,
             :common_name,
             :previous_line_name,
-            :comments,
             :genetic_status,
-            :plant_variety_name
+            :plant_variety_name,
+            :data_owned_by,
+            :data_provenance,
+            :comments,
           ]
         }
       ]

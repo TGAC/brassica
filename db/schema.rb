@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150420163832) do
+ActiveRecord::Schema.define(version: 20150426181026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -291,6 +291,8 @@ ActiveRecord::Schema.define(version: 20150420163832) do
     t.integer "female_parent_line_id"
     t.integer "population_type_id"
     t.integer "plant_population_lists_count", default: 0,             null: false
+    t.integer "linkage_maps_count",           default: 0,             null: false
+    t.integer "plant_trials_count",           default: 0,             null: false
   end
 
   add_index "plant_populations", ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree
@@ -398,7 +400,6 @@ ActiveRecord::Schema.define(version: 20150420163832) do
   add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
 
   create_table "population_loci", force: :cascade do |t|
-    t.text    "plant_population",    default: "unspecified", null: false
     t.text    "mapping_locus",       default: "unspecified", null: false
     t.text    "defined_by_whom"
     t.text    "comments"
@@ -413,8 +414,6 @@ ActiveRecord::Schema.define(version: 20150420163832) do
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
   add_index "population_loci", ["mapping_locus"], name: "population_loci_mapping_locus_idx", using: :btree
   add_index "population_loci", ["marker_assay_id"], name: "population_loci_marker_assay_id_idx", using: :btree
-  add_index "population_loci", ["plant_population"], name: "idx_143961_plant_population", using: :btree
-  add_index "population_loci", ["plant_population"], name: "population_loci_plant_population_idx", using: :btree
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
   create_table "primers", force: :cascade do |t|
@@ -448,8 +447,7 @@ ActiveRecord::Schema.define(version: 20150420163832) do
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
 
   create_table "processed_trait_datasets", force: :cascade do |t|
-    t.text    "processed_trait_dataset_name", default: "",            null: false
-    t.text    "population_id",                default: "unspecified", null: false
+    t.text    "processed_trait_dataset_name", default: "", null: false
     t.text    "processed_dataset_id"
     t.text    "trait_percent_heritability"
     t.text    "comments"
@@ -463,7 +461,6 @@ ActiveRecord::Schema.define(version: 20150420163832) do
   end
 
   add_index "processed_trait_datasets", ["plant_trial_id"], name: "processed_trait_datasets_plant_trial_id_idx", using: :btree
-  add_index "processed_trait_datasets", ["population_id"], name: "processed_trait_datasets_population_id_idx", using: :btree
   add_index "processed_trait_datasets", ["processed_trait_dataset_name"], name: "processed_trait_datasets_processed_trait_dataset_name_idx", using: :btree
   add_index "processed_trait_datasets", ["trait_descriptor_id"], name: "processed_trait_datasets_trait_descriptor_id_idx", using: :btree
 
@@ -525,27 +522,15 @@ ActiveRecord::Schema.define(version: 20150420163832) do
     t.text "data_provenance"
   end
 
-  create_table "scoring_occasions", force: :cascade do |t|
-    t.text "scoring_occasion_name", default: "", null: false
-    t.date "score_start_date"
-    t.date "score_end_date"
-    t.text "comments"
-    t.text "entered_by_whom"
-    t.date "date_entered"
-    t.text "data_provenance"
-    t.text "data_owned_by"
-  end
-
-  add_index "scoring_occasions", ["scoring_occasion_name"], name: "scoring_occasions_scoring_occasion_name_idx", using: :btree
-
   create_table "submissions", force: :cascade do |t|
-    t.integer  "user_id",                         null: false
-    t.string   "step",                            null: false
-    t.json     "content",         default: {},    null: false
-    t.boolean  "finalized",       default: false, null: false
-    t.integer  "submission_type",                 null: false
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.integer  "user_id",                             null: false
+    t.string   "step",                                null: false
+    t.json     "content",             default: {},    null: false
+    t.boolean  "finalized",           default: false, null: false
+    t.integer  "submission_type",                     null: false
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "submitted_object_id"
   end
 
   add_index "submissions", ["finalized"], name: "index_submissions_on_finalized", using: :btree
@@ -614,7 +599,6 @@ ActiveRecord::Schema.define(version: 20150420163832) do
   add_index "trait_grades", ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
 
   create_table "trait_scores", force: :cascade do |t|
-    t.text    "scoring_occasion_name", default: "unspecified", null: false
     t.text    "score_value"
     t.text    "value_type"
     t.text    "comments"
@@ -626,12 +610,11 @@ ActiveRecord::Schema.define(version: 20150420163832) do
     t.integer "plant_scoring_unit_id"
     t.integer "scoring_occasion_id"
     t.integer "trait_descriptor_id"
+    t.date    "scoring_date"
   end
 
   add_index "trait_scores", ["plant_scoring_unit_id"], name: "trait_scores_plant_scoring_unit_id_idx", using: :btree
   add_index "trait_scores", ["scoring_occasion_id"], name: "trait_scores_scoring_occasion_id_idx", using: :btree
-  add_index "trait_scores", ["scoring_occasion_name"], name: "idx_144229_scoring_occasion", using: :btree
-  add_index "trait_scores", ["scoring_occasion_name"], name: "trait_scores_scoring_occasion_name_idx", using: :btree
   add_index "trait_scores", ["trait_descriptor_id"], name: "trait_scores_trait_descriptor_id_idx", using: :btree
 
   create_table "users", force: :cascade do |t|

@@ -7,7 +7,7 @@ RSpec.describe DataTablesHelper do
         plant_populations: data_tables_path(model: :plant_populations),
         trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
         linkage_maps: data_tables_path(model: :linkage_maps),
-        qtl: data_tables_path(model: :qtl)
+        qtl: data_tables_path(model: :qtl, group: true)
       })
     end
   end
@@ -46,9 +46,14 @@ RSpec.describe DataTablesHelper do
 
     it 'strips the aggregate function' do
       expect(extract_column('count(column_name)')).
-          to eq %w(model_name column_name)
+        to eq %w(model_name column_name)
       expect(extract_column('count(right_model_name.column_name)')).
-          to eq %w(right_model_name column_name)
+        to eq %w(right_model_name column_name)
+    end
+
+    it 'gets rid of _count suffix' do
+      expect(extract_column('relation_name_count')).
+        to eq %w(model_name relation_name)
     end
   end
 end

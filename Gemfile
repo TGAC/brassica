@@ -48,6 +48,7 @@ end
 group :development, :test do
   gem 'rspec-rails'
   gem 'pry'
+  gem 'pry-rails'
   gem 'pry-doc'
   gem 'pry-nav'
 end

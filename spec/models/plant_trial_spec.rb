@@ -34,6 +34,7 @@ RSpec.describe PlantTrial do
           pt.trial_year,
           pt.trial_location_site_name,
           pt.date_entered,
+          pt.pubmed_id,
           pt.id
         ]
     end
@@ -42,8 +43,15 @@ RSpec.describe PlantTrial do
   describe '#table_data' do
     it 'orders plant trials by trial year' do
       ptyears = create_list(:plant_trial, 3).map(&:trial_year)
-      td = PlantTrial.table_data
-      expect(td.map{ |pt| pt[4] }).to eq ptyears.sort
+      table_data = PlantTrial.table_data
+      expect(table_data.map{ |pt| pt[4] }).to eq ptyears.sort
+    end
+
+    it 'returns pubmed_id' do
+      pt = create(:plant_trial)
+      table_data = PlantTrial.table_data
+      expect(table_data.count).to eq 1
+      expect(table_data[0][-2]).to eq pt.pubmed_id
     end
   end
 end

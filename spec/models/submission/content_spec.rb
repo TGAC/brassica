@@ -10,10 +10,10 @@ RSpec.describe Submission::Content do
     expect(content[:step01].name).to eq 'Bar'
   end
 
-  it "returns empty hash for each blank step" do
-    expect(content.step02).to eq({})
-    expect(content.step03).to eq({})
-    expect(content.step04).to eq({})
+  it "returns empty struct for each blank step" do
+    expect(content.step02).to eq(OpenStruct.new)
+    expect(content.step03).to eq(OpenStruct.new)
+    expect(content.step04).to eq(OpenStruct.new)
   end
 
   context "#update" do

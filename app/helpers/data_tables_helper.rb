@@ -49,7 +49,7 @@ module DataTablesHelper
       plant_populations: data_tables_path(model: :plant_populations),
       trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
       linkage_maps: data_tables_path(model: :linkage_maps),
-      qtl: data_tables_path(model: :qtl)
+      qtl: data_tables_path(model: :qtl, group: true)
     }
   end
 
@@ -81,6 +81,8 @@ module DataTablesHelper
     column_string = column_string.
       to_s.                            # make sure it IS a string
       split(/ as /i)[-1]               # honor aliasing
+
+    column_string.gsub!('_count','')   # support cached count columns as well
 
     if column_string.include? '.'
       column_string.split '.'

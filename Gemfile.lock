@@ -205,6 +205,8 @@ GEM
       yard (~> 0.8)
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
+    pry-rails (0.3.2)
+      pry (>= 0.9.10)
     puma (2.9.2)
       rack (>= 1.1, < 2.0)
     rack (1.6.0)
@@ -346,6 +348,7 @@ DEPENDENCIES
   pry
   pry-doc
   pry-nav
+  pry-rails
   puma
   rails (= 4.2.0)
   reform (~> 1.2.6)
