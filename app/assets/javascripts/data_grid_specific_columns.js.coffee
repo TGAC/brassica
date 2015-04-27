@@ -34,6 +34,17 @@ window.configs =
 #            ''
       ]
 
+  'plant-trials':
+    columnDefs:
+      [
+        targets: 'name_column'
+        render: (data, type, full, meta) ->
+          if data && full[7]
+            '<a href="data_tables?model=plant_populations&query[id]=' + full[7] + '">' + data + '</a>'
+          else
+            data
+      ]
+
   'plant-populations':
     columnDefs:
       [

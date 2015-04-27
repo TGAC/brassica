@@ -69,6 +69,7 @@ class PlantTrial < ActiveRecord::Base
 
   def self.ref_columns
     [
+      'plant_population_id',
       'pubmed_id'
     ]
   end
