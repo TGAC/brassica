@@ -11,11 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150423124104) do
+ActiveRecord::Schema.define(version: 20150426210041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "api_keys", force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "token",      null: false
+    t.integer  "user_id",    null: false
+  end
+
+  add_index "api_keys", ["token"], name: "index_api_keys_on_token", using: :btree
 
   create_table "countries", force: :cascade do |t|
     t.string "country_code", limit: 3, default: "", null: false
@@ -632,4 +641,5 @@ ActiveRecord::Schema.define(version: 20150423124104) do
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
 
+  add_foreign_key "api_keys", "users", on_update: :cascade, on_delete: :cascade
 end

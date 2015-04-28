@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   include Nondestroyable
 
   has_many :submissions
+  has_one :api_key
 
   validates :login, presence: true, uniqueness: { case_sensitive: false }
 
