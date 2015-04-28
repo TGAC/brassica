@@ -43,15 +43,15 @@ window.configs =
       ,
         targets: 'female_parent_line_column'
         render: (data, type, full, meta) ->
-          if data && full[8]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[8] + '">' + data + '</a>'
+          if data && full[10]
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[10] + '">' + data + '</a>'
           else
             ''
       ,
         targets: 'male_parent_line_column'
         render: (data, type, full, meta) ->
-          if data && full[9]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[9] + '">' + data + '</a>'
+          if data && full[11]
+            '<a href="data_tables?model=plant_lines&query[id]=' + full[11] + '">' + data + '</a>'
           else
             ''
       ]
