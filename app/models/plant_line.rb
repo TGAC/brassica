@@ -2,6 +2,8 @@ class PlantLine < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
+
   belongs_to :plant_variety
 
   belongs_to :taxonomy_term
@@ -33,7 +35,7 @@ class PlantLine < ActiveRecord::Base
   scope :by_name, -> { order(:plant_line_name) }
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.by_name.pluck_columns
   end
 
@@ -54,10 +56,23 @@ class PlantLine < ActiveRecord::Base
     ]
   end
 
+  def as_indexed_json(options = {})
+    as_json(
+      only: [
+        :plant_line_name, :common_name, :genetic_status,
+        :previous_line_name
+      ],
+      include: {
+        taxonomy_term: { only: [:name] }
+      }
+    )
+  end
+
   private
 
   def self.permitted_params
     [
+      :fetch,
       search: [
         :plant_line_name,
         'plant_lines.plant_line_name'
@@ -73,18 +88,6 @@ class PlantLine < ActiveRecord::Base
     [
       'plant_variety_id'
     ]
-  end
-
-  def as_indexed_json(options = {})
-    as_json(
-      only: [
-        :plant_line_name, :common_name, :genetic_status,
-        :previous_line_name
-      ],
-      include: {
-        taxonomy_term: { only: [:name] }
-      }
-    )
   end
 
   include Annotable

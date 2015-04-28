@@ -11,16 +11,12 @@
 # ]
 module Pluckable extend ActiveSupport::Concern
   included do
+    include Joinable
+
     def self.pluck_columns
       query = self.all
       columns = table_columns + ref_columns
-      columns.each do |column|
-        relation = column.to_s.split('.')[0].pluralize if column.to_s.include? '.'
-        next unless relation && relation != self.table_name
-        relation = relation.singularize unless reflections.keys.include?(relation)
-        next unless reflections.keys.include?(relation)
-        query = query.includes(relation.to_sym)
-      end
+      query = join_columns(columns, query, true)
       query.pluck(*columns)
     end
 

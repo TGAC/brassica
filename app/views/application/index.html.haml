@@ -16,18 +16,20 @@
 %section.section-search
   .container
     .col-md-8
-      %form
+      %form.search{ action: "/search" }
         .form-group
           .input-group
-            %input(type="text" class="form-control form-negative" placeholder="Search for...")
+            %input.form-control.form-negative(type="text" placeholder="Search for..." autofocus autocomplete='off')
             %span.input-group-btn
-              %button.btn.btn-primary(type="button") Search
+              %button.btn.btn-primary(type="submit") Search
 
     .col-md-1
       %span.text-negative - or -
 
     .col-md-3
       = link_to 'Start browsing', browse_data_path, class: 'btn btn-primary btn-block'
+
+    .search-results
 
 %section.section-actions.container
   .row

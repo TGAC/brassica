@@ -1,4 +1,8 @@
 class PlantVariety < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
   has_and_belongs_to_many :countries_of_origin,
                           class_name: 'Country',
@@ -16,7 +20,7 @@ class PlantVariety < ActiveRecord::Base
   scope :by_name, -> { order(:plant_variety_name) }
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.by_name.pluck_columns
   end
 
@@ -34,10 +38,17 @@ class PlantVariety < ActiveRecord::Base
     ]
   end
 
+  def as_indexed_json(options = {})
+    as_json(
+      only: [ :plant_variety_name ]
+    )
+  end
+
   private
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         :id
       ],
