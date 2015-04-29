@@ -44,7 +44,7 @@ window.baseColumnDefs = (baseModel) ->
       else
         ''
   ,
-    targets: 'name_column'
+    targets: 'taxonomy_terms_name_column'
     defaultContent: ''
     render: (data, type, full, meta) ->
       data.replace(/Brassica/, 'B.') if data
