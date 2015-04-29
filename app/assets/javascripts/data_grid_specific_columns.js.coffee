@@ -27,9 +27,9 @@ window.configs =
       ,
         targets: 'trait_scores_column'
         render: (data, type, full, meta) ->
-          if data && full[6]
-            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[6] +
-            '&query[plant_scoring_units.plant_trial_id]=' + full[7] + '">' + data + '</a>'
+          if data && full[7] && full[8]
+            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[7] +
+            '&query[plant_scoring_units.plant_trial_id]=' + full[8] + '">' + data + '</a>'
           else
             ''
       ]
