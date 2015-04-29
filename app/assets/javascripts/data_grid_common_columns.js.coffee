@@ -43,4 +43,8 @@ window.baseColumnDefs = (baseModel) ->
         '<button class="btn btn-xs btn-info" data-popover-source="data_tables/' + objectId + '?model=' + baseModel + '">Metadata link</button>'
       else
         ''
+  ,
+    targets: 'name_column'
+    render: (data, type, full, meta) ->
+      data.replace(/Brassica/, 'B.')
   ]

@@ -3,10 +3,6 @@ window.configs =
   'plant-lines':
     columnDefs:
       [
-        targets: 'name_column'
-        render: (data, type, full, meta) ->
-          data.replace(/Brassica/, 'B.')
-      ,
         targets: 'plant_variety_name_column'
         render: (data, type, full, meta) ->
           if data && full[8]
@@ -59,10 +55,6 @@ window.configs =
   'plant-populations':
     columnDefs:
       [
-        targets: 'name_column'
-        render: (data, type, full, meta) ->
-          data.replace(/Brassica/, 'B.')
-      ,
         targets: 'female_parent_line_column'
         render: (data, type, full, meta) ->
           if data && full[8]
