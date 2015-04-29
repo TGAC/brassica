@@ -32,7 +32,7 @@ window.baseColumnDefs = (baseModel) ->
     render: (data, type, full, meta) ->
       objectId = full[full.length - 2]
       if objectId
-        '<a class="btn btn-xs btn-info" href="http://www.ncbi.nlm.nih.gov/pubmed/' + objectId + '">PubMed link</a>'
+        '<a class="btn btn-xs btn-info" title="PubMed Link" href="http://www.ncbi.nlm.nih.gov/pubmed/' + objectId + '">PMed</a>'
       else
         ''
   ,
@@ -40,7 +40,7 @@ window.baseColumnDefs = (baseModel) ->
     render: (data, type, full, meta) ->
       objectId = full[full.length - 1]
       if objectId
-        '<button class="btn btn-xs btn-info" data-popover-source="data_tables/' + objectId + '?model=' + baseModel + '">Metadata link</button>'
+        '<button class="btn btn-xs btn-info" title="Metadata" data-popover-source="data_tables/' + objectId + '?model=' + baseModel + '">MD</button>'
       else
         ''
   ,
