@@ -24,7 +24,8 @@ class TraitScore < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
-        'trait_descriptors.descriptor_name'
+        'trait_descriptor_id',
+        'plant_scoring_units.plant_trial_id'
       ]
     ]
   end
