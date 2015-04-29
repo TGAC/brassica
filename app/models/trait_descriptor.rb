@@ -22,7 +22,7 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.table_data(params = nil)
     connection.execute(
-      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, td.id
+      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, td.id, pt.id
         FROM
         trait_descriptors td
         LEFT OUTER JOIN

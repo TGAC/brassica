@@ -11,6 +11,7 @@
       = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
 
 = back_button
+= see_all_button
 
 = datatable_tag do
   - model_class = model_param.singularize.camelize.constantize

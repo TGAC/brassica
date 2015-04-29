@@ -62,7 +62,8 @@ RSpec.describe TraitDescriptor do
         td.trait_scores[0].plant_scoring_unit.plant_trial.country.country_name,
         '1',
         '0',
-        td.id.to_s
+        td.id.to_s,
+        td.trait_scores[0].plant_scoring_unit.plant_trial.id.to_s
       ]
     end
   end

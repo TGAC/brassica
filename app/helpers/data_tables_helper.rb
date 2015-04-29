@@ -65,6 +65,17 @@ module DataTablesHelper
     end
   end
 
+  def see_all_button
+    if params[:query].present? or params[:fetch].present?
+      label = "See all #{model_param.to_s.humanize}"
+      link_to label,
+              data_tables_path(model: model_param),
+              id: 'table-see-all-button',
+              data: { label: label },
+              class: 'hidden'
+    end
+  end
+
   def model_param
     if params[:model].present?
       params[:model]
