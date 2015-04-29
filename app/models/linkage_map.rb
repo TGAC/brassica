@@ -53,7 +53,8 @@ class LinkageMap < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
-        'plant_populations.id'
+        'plant_populations.id',
+        'id'
       ]
     ]
   end
