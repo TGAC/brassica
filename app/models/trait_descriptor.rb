@@ -22,7 +22,7 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.table_data(params = nil)
     connection.execute(
-      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, tdid
+        'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, tdid
        FROM plant_trials pt JOIN
 
        (SELECT trait_descriptor_id AS tdid, plant_trial_id AS ptid, COUNT(*) AS cnt FROM
@@ -34,6 +34,16 @@ class TraitDescriptor < ActiveRecord::Base
         JOIN trait_descriptors td ON intable.tdid = td.id
         JOIN countries c ON pt.country_id = c.id
         JOIN taxonomy_terms tt ON pp.taxonomy_term_id = tt.id
+
+        LEFT OUTER JOIN (
+          SELECT td.id AS tdid2, COUNT(qtl.id) AS qtlcnt FROM
+          trait_descriptors td
+          LEFT OUTER JOIN processed_trait_datasets ptd ON ptd.trait_descriptor_id = td.id
+          LEFT OUTER JOIN qtl ON qtl.processed_trait_dataset_id = ptd.id
+          GROUP BY td.id
+        ) AS intable2
+
+        ON tdid = tdid2
 
         ORDER BY tt.name, pt.project_descriptor;'
     ).values
