@@ -16,6 +16,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'draper'
+gem 'therubyracer'
 
 gem 'dotenv-rails'
 
@@ -39,13 +40,15 @@ group :development do
   gem 'annotate'
   gem 'better_errors'
   gem 'binding_of_caller'
-  # gem 'capistrano-rails'
-  gem 'pry-rails'
+  gem 'capistrano-rails'
+  gem 'capistrano3-puma'
+  gem 'capistrano-chruby'
 end
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'pry'
+  gem 'pry-rails'
   gem 'pry-doc'
   gem 'pry-nav'
 end
@@ -55,4 +58,6 @@ group :test do
   gem 'faker'
   gem 'shoulda-matchers'
   gem 'rspec-html-matchers'
+  gem 'webmock', require: false
+  gem 'database_cleaner'
 end

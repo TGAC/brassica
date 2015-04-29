@@ -6,8 +6,8 @@ RSpec.describe TraitDescriptor do
       pts = create_list(:plant_trial, 2)
       psu0 = create(:plant_scoring_unit, plant_trial: pts[0])
       psu1 = create(:plant_scoring_unit, plant_trial: pts[1])
-      tses0 = create_list(:trait_score, 3, plant_scoring_unit: psu0)
-      tses1 = create_list(:trait_score, 2, plant_scoring_unit: psu1)
+      tses0 = create_list(:trait_score, 3, plant_scoring_unit: psu0, trait_descriptor: nil)
+      tses1 = create_list(:trait_score, 2, plant_scoring_unit: psu1, trait_descriptor: nil)
       td1 = create(:trait_descriptor, trait_scores: [tses0[0], tses1[0], tses1[1]])
       td2 = create(:trait_descriptor, trait_scores: [tses0[1], tses0[2]])
       table_data = TraitDescriptor.table_data
@@ -16,6 +16,29 @@ RSpec.describe TraitDescriptor do
         [td1.descriptor_name, pts[0].project_descriptor, '1'],
         [td1.descriptor_name, pts[1].project_descriptor, '2'],
         [td2.descriptor_name, pts[0].project_descriptor, '2']
+      ]
+    end
+
+    it 'properly calculates associated qtl number' do
+      pts = create_list(:plant_trial, 2)
+      psu0 = create(:plant_scoring_unit, plant_trial: pts[0])
+      psu1 = create(:plant_scoring_unit, plant_trial: pts[1])
+      tses0 = create_list(:trait_score, 3, plant_scoring_unit: psu0, trait_descriptor: nil)
+      tses1 = create_list(:trait_score, 2, plant_scoring_unit: psu1, trait_descriptor: nil)
+      td1 = create(:trait_descriptor, trait_scores: [tses0[0], tses1[0], tses1[1]])
+      td2 = create(:trait_descriptor, trait_scores: [tses0[1], tses0[2]])
+      ptd1 = create_list(:processed_trait_dataset, 2, trait_descriptor: td1)
+      ptd2 = create_list(:processed_trait_dataset, 3, trait_descriptor: td2)
+      qtl1a = create_list(:qtl, 2, processed_trait_dataset: ptd1[0])
+      qtl1b = create_list(:qtl, 2, processed_trait_dataset: ptd1[1])
+      qtl2a = create_list(:qtl, 3, processed_trait_dataset: ptd2[0])
+      qtl2b = create_list(:qtl, 3, processed_trait_dataset: ptd2[1])
+      table_data = TraitDescriptor.table_data
+      expect(table_data.count).to eq 3
+      expect(table_data.map{ |td| [td[2], td[3], td[5], td[6]] }).to match_array [
+        [td1.descriptor_name, pts[0].project_descriptor, '1', '4'],
+        [td1.descriptor_name, pts[1].project_descriptor, '2', '4'],
+        [td2.descriptor_name, pts[0].project_descriptor, '2', '6']
       ]
     end
 
@@ -38,7 +61,9 @@ RSpec.describe TraitDescriptor do
         td.trait_scores[0].plant_scoring_unit.plant_trial.project_descriptor,
         td.trait_scores[0].plant_scoring_unit.plant_trial.country.country_name,
         '1',
-        td.id.to_s
+        '0',
+        td.id.to_s,
+        td.trait_scores[0].plant_scoring_unit.plant_trial.id.to_s
       ]
     end
   end

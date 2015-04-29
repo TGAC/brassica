@@ -2,6 +2,8 @@ class PlantPopulation < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
+
   belongs_to :taxonomy_term
 
   belongs_to :population_type
@@ -35,7 +37,7 @@ class PlantPopulation < ActiveRecord::Base
   scope :by_name, -> { order('plant_populations.name') }
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.
       includes(:female_parent_line, :male_parent_line, :taxonomy_term, :population_type).
       by_name.
@@ -62,23 +64,6 @@ class PlantPopulation < ActiveRecord::Base
     ]
   end
 
-  private
-
-  def self.permitted_params
-    [
-      query: [
-        :id, :name
-      ]
-    ]
-  end
-
-  def self.ref_columns
-    [
-      'female_parent_line_id',
-      'male_parent_line_id'
-    ]
-  end
-
   def as_indexed_json(options = {})
     plant_line_attrs = [
       :plant_line_name
@@ -95,6 +80,24 @@ class PlantPopulation < ActiveRecord::Base
         male_parent_line: { only: plant_line_attrs },
       }
     )
+  end
+
+  private
+
+  def self.permitted_params
+    [
+      :fetch,
+      query: [
+        :id, :name
+      ]
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'female_parent_line_id',
+      'male_parent_line_id'
+    ]
   end
 
   include Annotable

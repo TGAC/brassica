@@ -2,6 +2,7 @@ module DataTablesHelper
   def datatables_source
     data_tables_path(
       query: params[:query],
+      fetch: params[:fetch],
       model: model_param
     )
   end
@@ -59,6 +60,17 @@ module DataTablesHelper
       link_to label,
               browse_tabs[active_tab_label],
               id: 'table-back-button',
+              data: { label: label },
+              class: 'hidden'
+    end
+  end
+
+  def see_all_button
+    if params[:query].present? or params[:fetch].present?
+      label = "See all #{model_param.to_s.humanize}"
+      link_to label,
+              data_tables_path(model: model_param),
+              id: 'table-see-all-button',
               data: { label: label },
               class: 'hidden'
     end

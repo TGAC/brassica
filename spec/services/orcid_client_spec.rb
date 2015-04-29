@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe OrcidClient do
   describe '#get_user_data' do
+    before { WebMock.allow_net_connect! }
+
     it 'loads user full_name from orcid' do
       extra_info = OrcidClient.get_user_data ENV['ORCID_TEST_UID']
       expect(extra_info).not_to eq nil

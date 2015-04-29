@@ -55,6 +55,19 @@ The `app:bootstrap` task may be used at a later time to reset database to its
 initial state but make sure that no instance of the app is running when calling the task.
 
 
+## Deployment
+
+So far there is only one environment - production. In order to deploy first
+you need to:
+
+* add bip-deploy host to your `~/.ssh/config` (see internal docs)
+* make sure your SSH key is authorized by gateway and deployment servers
+
+To perform deploy run:
+
+    bin/cap production deploy
+
+
 ## Testing
 
     bin/rspec

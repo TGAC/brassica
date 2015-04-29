@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150427124104) do
+ActiveRecord::Schema.define(version: 20150429103222) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -319,7 +319,6 @@ ActiveRecord::Schema.define(version: 20150427124104) do
     t.integer "plant_trial_id"
     t.integer "design_factor_id"
     t.integer "plant_part_id"
-    t.integer "trait_scores_count",       default: 0,  null: false
   end
 
   add_index "plant_scoring_units", ["design_factor_id"], name: "plant_scoring_units_design_factor_id_idx", using: :btree
@@ -329,19 +328,19 @@ ActiveRecord::Schema.define(version: 20150427124104) do
   add_index "plant_scoring_units", ["scoring_unit_name"], name: "plant_scoring_units_scoring_unit_name_idx", using: :btree
 
   create_table "plant_trials", force: :cascade do |t|
-    t.text    "plant_trial_name",          default: "",            null: false
-    t.text    "project_descriptor",        default: "unspecified", null: false
-    t.text    "plant_trial_description",                           null: false
+    t.text    "plant_trial_name",         default: "",            null: false
+    t.text    "project_descriptor",       default: "unspecified", null: false
+    t.text    "plant_trial_description",                          null: false
     t.text    "trial_year"
-    t.text    "institute_id",              default: "unspecified", null: false
-    t.text    "trial_location_site_name",  default: "unspecified", null: false
-    t.text    "place_name",                default: "unspecified", null: false
-    t.text    "latitude",                  default: "unspecified", null: false
-    t.text    "longitude",                 default: "unspecified", null: false
+    t.text    "institute_id",             default: "unspecified", null: false
+    t.text    "trial_location_site_name", default: "unspecified", null: false
+    t.text    "place_name",               default: "unspecified", null: false
+    t.text    "latitude",                 default: "unspecified", null: false
+    t.text    "longitude",                default: "unspecified", null: false
     t.text    "altitude"
     t.text    "terrain"
     t.text    "soil_type"
-    t.text    "contact_person",            default: "unspecified", null: false
+    t.text    "contact_person",           default: "unspecified", null: false
     t.text    "design_type"
     t.text    "statistical_factors"
     t.text    "design_factors"
@@ -355,7 +354,6 @@ ActiveRecord::Schema.define(version: 20150427124104) do
     t.integer "country_id"
     t.integer "plant_population_id"
     t.integer "pubmed_id"
-    t.integer "plant_scoring_units_count", default: 0,             null: false
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
@@ -457,7 +455,6 @@ ActiveRecord::Schema.define(version: 20150427124104) do
     t.date    "date_entered"
     t.text    "data_provenance"
     t.text    "data_owned_by"
-    t.integer "plant_population_id"
     t.integer "plant_trial_id"
     t.integer "trait_descriptor_id"
   end

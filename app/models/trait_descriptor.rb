@@ -22,18 +22,26 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.table_data(params = nil)
     connection.execute(
-      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, tdid
-       FROM plant_trials pt JOIN
-
-       (SELECT trait_descriptor_id AS tdid, plant_trial_id AS ptid, COUNT(*) AS cnt FROM
-       (SELECT * FROM trait_scores JOIN plant_scoring_units ON trait_scores.plant_scoring_unit_id = plant_scoring_units.id) AS core
-       GROUP BY trait_descriptor_id, plant_trial_id) AS intable
-
-        ON intable.ptid = pt.id
-        JOIN plant_populations pp ON pt.plant_population_id = pp.id
-        JOIN trait_descriptors td ON intable.tdid = td.id
-        JOIN countries c ON pt.country_id = c.id
-        JOIN taxonomy_terms tt ON pp.taxonomy_term_id = tt.id
+      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, td.id, pt.id
+        FROM
+        trait_descriptors td
+        LEFT OUTER JOIN
+          (SELECT trait_descriptor_id AS tdid, plant_trial_id AS ptid, COUNT(*) AS cnt FROM
+          (SELECT * FROM trait_scores JOIN plant_scoring_units ON trait_scores.plant_scoring_unit_id = plant_scoring_units.id) AS core
+          GROUP BY trait_descriptor_id, plant_trial_id) AS intable
+        ON intable.tdid = td.id
+        LEFT OUTER JOIN plant_trials pt ON intable.ptid = pt.id
+        LEFT OUTER JOIN plant_populations pp ON pt.plant_population_id = pp.id
+        LEFT OUTER JOIN countries c ON pt.country_id = c.id
+        LEFT OUTER JOIN taxonomy_terms tt ON pp.taxonomy_term_id = tt.id
+        LEFT OUTER JOIN (
+          SELECT td.id AS tdid2, COUNT(qtl.id) AS qtlcnt FROM
+          trait_descriptors td
+          LEFT OUTER JOIN processed_trait_datasets ptd ON ptd.trait_descriptor_id = td.id
+          LEFT OUTER JOIN qtl ON qtl.processed_trait_dataset_id = ptd.id
+          GROUP BY td.id
+        ) AS intable2
+        ON td.id = tdid2
 
         ORDER BY tt.name, pt.project_descriptor;'
     ).values

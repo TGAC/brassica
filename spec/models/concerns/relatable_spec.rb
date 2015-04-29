@@ -37,7 +37,7 @@ RSpec.describe Relatable do
       master_model.counter_names.each do |model|
         permitted_params = model.classify.constantize.send(:permitted_params)
         expect(permitted_params).not_to be_empty
-        expect(permitted_params[0][:query]).
+        expect(permitted_params.dup.extract_options![:query]).
           to include "#{master_model.table_name}.id"
       end
     end
