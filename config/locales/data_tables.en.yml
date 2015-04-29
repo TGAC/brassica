@@ -51,14 +51,28 @@ en:
       male_parent: Male parent
     pop_type_lookup:
       population_type: Type
+    qtl:
+      id: QTL count
+      qtl_rank: QTL Rank
+      map_qtl_label: Map QTL label
+      outer_interval_start: Outer interval start
+      inner_interval_start: Inner interval start
+      qtl_mid_position: QTL mid position
+      inner_interval_end: Inner interval end
+      outer_interval_end: Outer interval end
+      peak_value: Peak value
+      peak_p_value: Peak p value
+      regression_p: Regression p
+      residual_p: Residual p
+      additive_effect: Additive effect
+      genetic_variance_explained: Genetic variance explained
     taxonomy_terms:
       name: Species
     trait_descriptors:
       descriptor_name: Trait
       trait_scores: Trait scores
+      qtl: QTL
     trait_scores:
       scoring_date: Scored on
       score_value: Value
       value_type: Value type
-    qtl:
-      id: QTL count

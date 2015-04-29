@@ -22,7 +22,7 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.table_data(params = nil)
     trait_descriptor_query = ''
-    if params[:query].present? && params[:query][:id].present?
+    if params && params[:query].present? && params[:query][:id].present?
       trait_descriptor_query = "WHERE td.id = #{params[:query][:id]}"
     end
     connection.execute(
