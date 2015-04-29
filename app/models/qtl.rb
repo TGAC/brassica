@@ -17,23 +17,19 @@ class Qtl < ActiveRecord::Base
   validates :additive_effect,
             presence: true
 
-  include Relatable
   include Pluckable
 
   def self.table_data(params = nil)
     includes(processed_trait_dataset: :trait_descriptor).
       includes(linkage_group: { linkage_maps: { plant_population: :taxonomy_term }}).
-      # group(table_columns[0..-3]).
-      # pluck(*table_columns)
-      # query = (params && params[:query].present?) ? filter(params) : all
       pluck_columns
   end
 
   def self.table_columns
     [
       'taxonomy_terms.name',
-      # 'plant_populations.name',
-      # 'linkage_maps.linkage_map_label',
+      'plant_populations.name',
+      'linkage_maps.linkage_map_label',
       'trait_descriptors.descriptor_name',
       'qtl_rank',
       'map_qtl_label',
@@ -51,16 +47,12 @@ class Qtl < ActiveRecord::Base
     ]
   end
 
-  def self.count_columns
-    [
-      # 'sum(trait_descriptors.trait_scores_count) AS trait_scores_count'
-      'trait_descriptors.trait_scores_count'
-    ]
-  end
-
   def self.ref_columns
     [
-      'pubmed_id'
+      'pubmed_id',
+      'plant_populations.id',
+      'linkage_maps.id',
+      'trait_descriptors.id'
     ]
   end
 
