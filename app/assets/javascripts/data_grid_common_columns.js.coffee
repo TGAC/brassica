@@ -46,5 +46,5 @@ window.baseColumnDefs = (baseModel) ->
   ,
     targets: 'name_column'
     render: (data, type, full, meta) ->
-      data.replace(/Brassica/, 'B.')
+      data.replace(/Brassica/, 'B.') if data
   ]
