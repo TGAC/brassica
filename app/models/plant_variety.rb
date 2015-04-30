@@ -50,7 +50,7 @@ class PlantVariety < ActiveRecord::Base
     [
       :fetch,
       query: [
-        :id
+        'id'
       ],
       search: [
         :plant_variety_name

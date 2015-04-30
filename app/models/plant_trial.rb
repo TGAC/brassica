@@ -68,8 +68,9 @@ class PlantTrial < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
-        :project_descriptor,
-        'plant_populations.id'
+        'project_descriptor',
+        'plant_populations.id',
+        'id'
       ]
     ]
   end
