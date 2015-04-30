@@ -12,6 +12,15 @@ RSpec.describe DataTablesHelper do
     end
   end
 
+  describe '#active_tab_label' do
+    it 'returns meaningful label for every tableized model' do
+      displayable_tables.each do |table|
+        allow(self).to receive(:params).and_return(model: table)
+        expect(active_tab_label).not_to eq :wrong_tab
+      end
+    end
+  end
+
   describe '#datatables_source' do
     it 'passes model, fetch and query params intact' do
       allow(self).to receive(:params).and_return(model: 'model_name')
