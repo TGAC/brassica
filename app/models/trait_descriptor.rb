@@ -26,7 +26,7 @@ class TraitDescriptor < ActiveRecord::Base
       trait_descriptor_query = "WHERE td.id = #{params[:query][:id]}"
     end
     connection.execute(
-      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, td.id, pt.id
+      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, pt.id, td.id
         FROM
         trait_descriptors td
         LEFT OUTER JOIN

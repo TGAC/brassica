@@ -17,11 +17,13 @@ class Qtl < ActiveRecord::Base
   validates :additive_effect,
             presence: true
 
+  include Filterable
 
   def self.table_data(params = nil)
-    includes(processed_trait_dataset: :trait_descriptor).
-      includes(linkage_group: { linkage_maps: { plant_population: :taxonomy_term }}).
-      pluck(*(table_columns + ref_columns))
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.includes(processed_trait_dataset: :trait_descriptor).
+          includes(linkage_group: { linkage_maps: { plant_population: :taxonomy_term }}).
+          pluck(*(table_columns + ref_columns))
   end
 
   def self.table_columns
@@ -52,6 +54,14 @@ class Qtl < ActiveRecord::Base
       'plant_populations.id',
       'linkage_maps.id',
       'trait_descriptors.id'
+    ]
+  end
+
+  def self.permitted_params
+    [
+      query: [
+        'processed_trait_datasets.trait_descriptor_id'
+      ]
     ]
   end
 

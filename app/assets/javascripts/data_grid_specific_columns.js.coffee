@@ -21,8 +21,15 @@ window.configs =
         targets: 'trait_descriptors_trait_scores_column'
         render: (data, type, full, meta) ->
           if data && full[7] && full[8]
-            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[7] +
-            '&query[plant_scoring_units.plant_trial_id]=' + full[8] + '">' + data + '</a>'
+            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[8] +
+            '&query[plant_scoring_units.plant_trial_id]=' + full[7] + '">' + data + '</a>'
+          else
+            ''
+      ,
+        targets: 'trait_descriptors_qtl_column'
+        render: (data, type, full, meta) ->
+          if data && full[full.length - 1]
+            '<a href="data_tables?model=qtl&query[processed_trait_datasets.trait_descriptor_id]=' + full[full.length - 1] + '">' + data + '</a>'
           else
             ''
       ]
