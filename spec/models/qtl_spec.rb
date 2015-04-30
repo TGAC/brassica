@@ -28,10 +28,12 @@ RSpec.describe Qtl do
         qtl.residual_p,
         qtl.additive_effect,
         qtl.genetic_variance_explained,
-        qtl.pubmed_id,
+        qtl.qtl_job.qtl_job_name,
+        qtl.qtl_job.id,
         lm.plant_population.id,
         lm.id,
         qtl.processed_trait_dataset.trait_descriptor.id,
+        qtl.pubmed_id,
         qtl.id
       ]
     end

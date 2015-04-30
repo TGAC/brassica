@@ -9,6 +9,13 @@ en:
       linkage_map_name: Map name
       map_version_no: Version
       map_version_date: Version date
+    plant_accessions:
+      plant_accession: Accession
+      plant_accession_derivation: Derivation
+      accession_originator: Originator
+      originating_organisation: Organisation
+      year_produced: Year produced
+      date_harvested: Date harvested
     plant_lines:
       plant_line_name: Line name
       common_name: Common name
@@ -66,6 +73,16 @@ en:
       residual_p: Residual p
       additive_effect: Additive effect
       genetic_variance_explained: Genetic variance explained
+    qtl_jobs:
+      qtl_job_name: Job name
+      qtl_software: Software
+      qtl_method: Method
+      threshold_specification_method: Threshold specification method
+      interval_type: Interval type
+      inner_confidence_threshold: Inner confidence threshold
+      outer_confidence_threshold: Outer confidence threshold
+      qtl_statistic_type: QTL statistics type
+      date_run: Date run
     taxonomy_terms:
       name: Species
     trait_descriptors:

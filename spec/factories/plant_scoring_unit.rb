@@ -10,6 +10,7 @@ FactoryGirl.define do
     plant_trial
     design_factor
     plant_part
+    plant_accession
     annotable
   end
 end

@@ -5,7 +5,7 @@ window.configs =
       [
         targets: 'plant_varieties_plant_variety_name_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('plant_varieties', data, full[8])
+          modelIdUrl('plant_varieties', data, full[full.length - 2])
       ]
 
   'trait-descriptors':
@@ -66,20 +66,44 @@ window.configs =
           modelIdUrl('plant_lines', data, full[11])
       ]
 
+  'plant-accessions':
+    columnDefs:
+      [
+        targets: 'plant_lines_plant_line_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_lines', data, full[full.length - 2])
+      ]
+
+  'plant-scoring-units':
+    columnDefs:
+      [
+        targets: 'plant_trials_plant_trial_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_trials', data, full[full.length - 2])
+      ,
+        targets: 'plant_accessions_plant_accession_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_accessions', data, full[full.length - 3])
+      ]
+
   'qtl':
     columnDefs:
       [
+        targets: 'qtl_jobs_qtl_job_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('qtl_jobs', data, full[full.length - 6])
+      ,
         targets: 'plant_populations_name_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('plant_populations', data, full[full.length - 4])
+          modelIdUrl('plant_populations', data, full[full.length - 5])
       ,
         targets: 'linkage_maps_linkage_map_label_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('linkage_maps', data, full[full.length - 3])
+          modelIdUrl('linkage_maps', data, full[full.length - 4])
       ,
         targets: 'trait_descriptors_descriptor_name_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('trait_descriptors', data, full[full.length - 2])
+          modelIdUrl('trait_descriptors', data, full[full.length - 3])
       ]
 
 

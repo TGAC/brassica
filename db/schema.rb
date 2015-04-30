@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150429103222) do
+ActiveRecord::Schema.define(version: 20150430124104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -215,6 +215,7 @@ ActiveRecord::Schema.define(version: 20150429103222) do
     t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "plant_line_id"
+    t.integer "plant_scoring_units_count",  default: 0,  null: false
   end
 
   add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
@@ -495,22 +496,23 @@ ActiveRecord::Schema.define(version: 20150429103222) do
   add_index "qtl", ["qtl_job_id"], name: "qtl_qtl_job_id_idx", using: :btree
 
   create_table "qtl_jobs", force: :cascade do |t|
-    t.text "qtl_job_name",                   default: "",            null: false
-    t.text "linkage_map_id",                 default: "unspecified", null: false
-    t.text "qtl_software",                   default: "unspecified", null: false
-    t.text "qtl_method",                     default: "unspecified", null: false
-    t.text "threshold_specification_method"
-    t.text "interval_type"
-    t.text "inner_confidence_threshold"
-    t.text "outer_confidence_threshold"
-    t.text "qtl_statistic_type"
-    t.text "described_by_whom"
-    t.date "date_run"
-    t.text "comments"
-    t.text "entered_by_whom"
-    t.date "date_entered"
-    t.text "data_provenance"
-    t.text "data_owned_by"
+    t.text    "qtl_job_name",                   default: "",            null: false
+    t.text    "linkage_map_id",                 default: "unspecified", null: false
+    t.text    "qtl_software",                   default: "unspecified", null: false
+    t.text    "qtl_method",                     default: "unspecified", null: false
+    t.text    "threshold_specification_method"
+    t.text    "interval_type"
+    t.text    "inner_confidence_threshold"
+    t.text    "outer_confidence_threshold"
+    t.text    "qtl_statistic_type"
+    t.text    "described_by_whom"
+    t.date    "date_run"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.integer "qtls_count",                     default: 0,             null: false
   end
 
   add_index "qtl_jobs", ["linkage_map_id"], name: "idx_144140_linkage_map_id", using: :btree

@@ -2,7 +2,7 @@ class PlantScoringUnit < ActiveRecord::Base
 
   belongs_to :design_factor
   belongs_to :plant_trial, counter_cache: true
-  belongs_to :plant_accession
+  belongs_to :plant_accession, counter_cache: true
   belongs_to :plant_part
 
   has_many :trait_scores
@@ -28,7 +28,8 @@ class PlantScoringUnit < ActiveRecord::Base
       'date_planted',
       'design_factors.design_factor_name',
       'plant_trials.plant_trial_name',
-      'plant_parts.plant_part'
+      'plant_parts.plant_part',
+      'plant_accessions.plant_accession'
     ]
   end
 
@@ -44,8 +45,16 @@ class PlantScoringUnit < ActiveRecord::Base
     [
       query: [
         'plant_trials.id',
+        'plant_accessions.id',
         'id'
       ]
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'plant_accessions.id',
+      'plant_trials.id'
     ]
   end
 

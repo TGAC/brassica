@@ -36,6 +36,12 @@ class AddCounters < ActiveRecord::Migration
       ],
       plant_scoring_units: [
         :trait_scores_count
+      ],
+      plant_accessions: [
+        :plant_scoring_units_count
+      ],
+      qtl_jobs: [
+        :qtls_count
       ]
     }
   end
