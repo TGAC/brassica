@@ -48,12 +48,5 @@ RSpec.describe PlantTrial do
       table_data = PlantTrial.table_data
       expect(table_data.map{ |pt| pt[4] }).to eq ptyears.sort
     end
-
-    it 'returns pubmed_id' do
-      pt = create(:plant_trial)
-      table_data = PlantTrial.table_data
-      expect(table_data.count).to eq 1
-      expect(table_data[0][-2]).to eq pt.pubmed_id
-    end
   end
 end
