@@ -3,7 +3,7 @@ class Qtl < ActiveRecord::Base
 
   belongs_to :processed_trait_dataset
   belongs_to :linkage_group
-  belongs_to :qtl_job
+  belongs_to :qtl_job, counter_cache: true
 
   validates :qtl_rank,
             presence: true
@@ -23,6 +23,7 @@ class Qtl < ActiveRecord::Base
     query = (params && params[:query].present?) ? filter(params) : all
     query.includes(processed_trait_dataset: :trait_descriptor).
           includes(linkage_group: { linkage_maps: { plant_population: :taxonomy_term }}).
+          includes(:qtl_job).
           pluck(*(table_columns + ref_columns))
   end
 
@@ -44,23 +45,26 @@ class Qtl < ActiveRecord::Base
       'regression_p',
       'residual_p',
       'additive_effect',
-      'genetic_variance_explained'
+      'genetic_variance_explained',
+      'qtl_jobs.qtl_job_name'
     ]
   end
 
   def self.ref_columns
     [
-      'pubmed_id',
+      'qtl_jobs.id',
       'plant_populations.id',
       'linkage_maps.id',
-      'trait_descriptors.id'
+      'trait_descriptors.id',
+      'pubmed_id'
     ]
   end
 
   def self.permitted_params
     [
       query: [
-        'processed_trait_datasets.trait_descriptor_id'
+        'processed_trait_datasets.trait_descriptor_id',
+        'qtl_jobs.id'
       ]
     ]
   end
