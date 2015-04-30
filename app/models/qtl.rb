@@ -17,12 +17,11 @@ class Qtl < ActiveRecord::Base
   validates :additive_effect,
             presence: true
 
-  include Pluckable
 
   def self.table_data(params = nil)
     includes(processed_trait_dataset: :trait_descriptor).
       includes(linkage_group: { linkage_maps: { plant_population: :taxonomy_term }}).
-      pluck_columns
+      pluck(*(table_columns + ref_columns))
   end
 
   def self.table_columns
