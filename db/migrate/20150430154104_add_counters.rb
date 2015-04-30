@@ -26,6 +26,12 @@ class AddCounters < ActiveRecord::Migration
 
   def table_counters
     {
+      linkage_maps: [
+        :map_linkage_group_lists_count
+      ],
+      linkage_groups: [
+        :map_linkage_group_lists_count
+      ],
       plant_populations: [
         :plant_population_lists_count,
         :linkage_maps_count,

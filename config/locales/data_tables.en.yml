@@ -4,6 +4,13 @@ en:
       country_name: Country
     design_factors:
       design_factor_name: Design factor
+    linkage_groups:
+      linkage_group_label: Group label
+      linkage_group_name: Group name
+      total_length: Total length
+      lod_threshold: LOD threshold
+      consensus_group_assignment: Consensus group assignment
+      consensus_group_orientation: Consensus group orientation
     linkage_maps:
       linkage_map_label: Map label
       linkage_map_name: Map name

@@ -28,6 +28,7 @@ class DataTablesController < ApplicationController
 
   def allowed_models
     [
+      'linkage_groups',
       'linkage_maps',
       'plant_accessions',
       'plant_lines',

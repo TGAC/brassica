@@ -28,7 +28,7 @@ module DataTablesHelper
         :plant_populations
       when 'plant_trials', 'trait_descriptors', 'trait_scores', 'plant_scoring_units'
         :trait_descriptors
-      when 'linkage_maps'
+      when 'linkage_maps', 'linkage_groups'
         :linkage_maps
       when 'qtl', 'qtl_jobs'
         :qtl
