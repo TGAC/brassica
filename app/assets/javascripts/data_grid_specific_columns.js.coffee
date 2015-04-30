@@ -11,6 +11,10 @@ window.configs =
   'trait-descriptors':
     columnDefs:
       [
+        targets: 'plant_populations_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_populations', data, full[full.length - 3])
+      ,
         targets: 'plant_trials_project_descriptor_column'
         render: (data, type, full, meta) ->
           if data
@@ -20,9 +24,9 @@ window.configs =
       ,
         targets: 'trait_descriptors_trait_scores_column'
         render: (data, type, full, meta) ->
-          if data && full[7] && full[8]
-            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[8] +
-            '&query[plant_scoring_units.plant_trial_id]=' + full[7] + '">' + data + '</a>'
+          if data && full[8] && full[9]
+            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[9] +
+            '&query[plant_scoring_units.plant_trial_id]=' + full[8] + '">' + data + '</a>'
           else
             ''
       ,
