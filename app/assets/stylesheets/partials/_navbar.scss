@@ -9,18 +9,19 @@
         color: $text-color-negative;
         &:hover,
         &:focus {
-          background-color: rgba($mono-color-2, 0.25);
-          transition: background-color 500ms ease;
+          background-color: transparent;
+          &::after {
+            border-top: 3px solid $accent-color;
+            top: 0;
+            left: 0%;
+            content: "";
+            position: absolute;
+            width: 100%;
+          }
         }
       }
       &.active {
-        &::after {
-          border-bottom: 3px solid $accent-color;
-          bottom: 0;
-          content: "";
-          position: absolute;
-          width: 100%;
-        }
+        background-color: rgba($mono-color-2, 0.25);
       }
     }
   }

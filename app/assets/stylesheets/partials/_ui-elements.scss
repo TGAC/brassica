@@ -40,6 +40,21 @@
   }
 }
 
+//tabs
+.nav-tabs {
+  > li {
+    > a {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    &.active {
+      > a {
+        border-top: 3px $accent-color solid;
+      }bsnav-tabs styling
+    }
+  }
+}
+
 //sections
 .section-heading {
   color: $heading-text-color;
