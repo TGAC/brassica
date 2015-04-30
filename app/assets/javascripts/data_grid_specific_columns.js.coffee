@@ -5,10 +5,7 @@ window.configs =
       [
         targets: 'plant_varieties_plant_variety_name_column'
         render: (data, type, full, meta) ->
-          if data && full[8]
-            '<a href="data_tables?model=plant_varieties&query[id]=' + full[8] + '">' + data + '</a>'
-          else
-            data
+          modelIdUrl('plant_varieties', data, full[8])
       ]
 
   'trait-descriptors':
@@ -35,10 +32,7 @@ window.configs =
       [
         targets: 'plant_populations_name_column'
         render: (data, type, full, meta) ->
-          if data && full[full.length - 3]
-            '<a href="data_tables?model=plant_populations&query[id]=' + full[full.length - 3] + '">' + data + '</a>'
-          else
-            data
+          modelIdUrl('plant_populations', data, full[full.length - 3])
       ]
 
   'trait-scores':
@@ -46,10 +40,7 @@ window.configs =
       [
         targets: 'plant_scoring_units_scoring_unit_name_column'
         render: (data, type, full, meta) ->
-          if data && full[full.length - 2]
-            '<a href="data_tables?model=plant_scoring_units&query[id]=' + full[full.length - 2] + '">' + data + '</a>'
-          else
-            data
+          modelIdUrl('plant_scoring_units', data, full[full.length - 2])
       ]
 
   'plant-populations':
@@ -57,17 +48,11 @@ window.configs =
       [
         targets: 'plant_populations_female_parent_line_column'
         render: (data, type, full, meta) ->
-          if data && full[10]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[10] + '">' + data + '</a>'
-          else
-            ''
+          modelIdUrl('plant_lines', data, full[10])
       ,
         targets: 'plant_populations_male_parent_line_column'
         render: (data, type, full, meta) ->
-          if data && full[11]
-            '<a href="data_tables?model=plant_lines&query[id]=' + full[11] + '">' + data + '</a>'
-          else
-            ''
+          modelIdUrl('plant_lines', data, full[11])
       ]
 
   'qtl':
@@ -75,22 +60,20 @@ window.configs =
       [
         targets: 'plant_populations_name_column'
         render: (data, type, full, meta) ->
-          if data && full[full.length - 4]
-            '<a href="data_tables?model=plant_populations&query[id]=' + full[full.length - 4] + '">' + data + '</a>'
-          else
-            data
+          modelIdUrl('plant_populations', data, full[full.length - 4])
       ,
         targets: 'linkage_maps_linkage_map_label_column'
         render: (data, type, full, meta) ->
-          if data && full[full.length - 3]
-            '<a href="data_tables?model=linkage_maps&query[id]=' + full[full.length - 3] + '">' + data + '</a>'
-          else
-            data
+          modelIdUrl('linkage_maps', data, full[full.length - 3])
       ,
         targets: 'trait_descriptors_descriptor_name_column'
         render: (data, type, full, meta) ->
-          if data && full[full.length - 2]
-            '<a href="data_tables?model=trait_descriptors&query[id]=' + full[full.length - 2] + '">' + data + '</a>'
-          else
-            data
+          modelIdUrl('trait_descriptors', data, full[full.length - 2])
       ]
+
+
+window.modelIdUrl = (model, label, id) ->
+  if model && label && id
+    '<a href="data_tables?model=' + model + '&query[id]=' + id + '">' + label + '</a>'
+  else
+    label
