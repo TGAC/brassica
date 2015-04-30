@@ -23,12 +23,12 @@
  *
  *= require_self
  *= require dataTables.bootstrap
- *= require vendor/_select2
  */
 
 //import config files
 @import "modules/variables";
 @import "modules/mixins";
+@import "modules/fonts";
 
 //import bootstrap styles
 @import "bootstrap/bootstrap-custom";
@@ -41,24 +41,15 @@
 @import "partials/navbar";
 @import "partials/footer";
 @import "partials/ui-elements";
-@import "modules/fonts";
 
+//import vendor elements
 @import "font-awesome-sprockets";
 @import "font-awesome";
+@import "vendor/select2";
 
+//import ui elements
 @import "partials/charts";
 @import "partials/flash";
 @import "partials/errors";
 @import "partials/submissions";
 @import "partials/search";
-
-// TODO refactor whats below
-
-.select2 {
-  width: 40%;
-}
-
-.select2-container {
-  display: block !important;
-}
-
