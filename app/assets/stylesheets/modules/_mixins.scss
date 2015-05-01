@@ -18,6 +18,17 @@
   }
 }
 
+@mixin boxed-content-icon ($border-color) {
+  i {
+    border-color: $border-color;
+  }
+  &:hover {
+    i {
+      background-color: $border-color;
+    }
+  }
+}
+
 //--------------------
 
 @mixin screen($res-min, $res-max)

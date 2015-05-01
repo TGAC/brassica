@@ -28,7 +28,6 @@
 //import config files
 @import "modules/variables";
 @import "modules/mixins";
-@import "modules/fonts";
 
 //import bootstrap styles
 @import "bootstrap/bootstrap-custom";
@@ -41,6 +40,8 @@
 @import "partials/navbar";
 @import "partials/footer";
 @import "partials/ui-elements";
+@import "modules/fonts";
+@import "modules/icons";
 
 //import vendor elements
 @import "font-awesome-sprockets";

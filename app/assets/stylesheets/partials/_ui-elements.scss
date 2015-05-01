@@ -13,6 +13,14 @@
   border-color: $text-color-negative;
 }
 
+.btn-action {
+  @include button-variant($text-color-negative, $accent-color-2, darken($accent-color-2, 5));
+}
+
+.btn-mono {
+  @include button-variant($text-color-negative, $mono-color-1, darken($mono-color-1, 5));
+}
+
 //forms
 .form-negative {
   border-color: $mono-color-2;
@@ -37,21 +45,6 @@
     font-size: 22px;
     font-weight: 700;
     margin-top: 10px;
-  }
-}
-
-//tabs
-.nav-tabs {
-  > li {
-    > a {
-      padding-left: 20px;
-      padding-right: 20px;
-    }
-    &.active {
-      > a {
-        border-top: 3px $accent-color solid;
-      }bsnav-tabs styling
-    }
   }
 }
 
@@ -103,31 +96,37 @@
 
 //TODO refactor
 .section-actions {
-  [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-  [class^="flaticon-"]:after, [class*=" flaticon-"]:after {
-    color: $mono-color-1;
-    border: 3px solid $accent-color;
-    border-radius: 100%;
-    display: inline-block;
-    font-size: 56px;
-    height: 2em;
-    line-height: 1.9;
-    margin: 0;
-    padding-left: 5px;
-    width: 2em;
-  }
-
   .boxed-content {
+    i {
+      color: $mono-color-1;
+      border: 3px solid $accent-color;
+      border-radius: 100%;
+      display: inline-block;
+      font-size: 56px;
+      height: 2em;
+      line-height: 1.9;
+      margin: 0;
+      padding-left: 5px;
+      width: 2em;
+    }
+
     &:hover {
-      i:before {
-        transform: scale(1.1);
+      i {
         background-color: $accent-color;
-        border-color: transparent;
         color: $text-color-negative;
         transition: all 500ms;
       }
     }
+
+    &.submit {
+      @include boxed-content-icon($accent-color-2);
+    }
+
+    &.documentation {
+      @include boxed-content-icon($mono-color-1);
+    }
   }
+
 }
 
 
