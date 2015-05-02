@@ -7,6 +7,8 @@ class TaxonomyTerm < ActiveRecord::Base
 
   has_many :plant_populations
 
+  has_many :probes
+
   validates :name, uniqueness: true
   validates :label, presence: true
 
