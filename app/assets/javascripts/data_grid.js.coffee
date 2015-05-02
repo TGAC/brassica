@@ -7,7 +7,7 @@ $ ->
     stateSave: true
     deferRender: true
 #    dom: "<'row'<'col-sm-3'f><'col-sm-6'T><'col-sm-3'l>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
-    dom: "<'table-bar'<'col-sm-4 form-group'f><'col-sm-5 form-group'T><'col-sm-3 form-group'l>><'row'<'col-sm-12 table-responsive'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
+    dom: "<'table-bar'<'col-sm-3 form-group'f><'col-sm-7 form-group'T><'col-sm-2 form-group'l>><'row'<'col-sm-12 'tr>><'row table-footer'<'col-sm-6'i><'col-sm-6'p>>"
     drawCallback: (settings) ->
       # This removes the pagination control when only 1 page
       # and the page length picker when less data than the minimum value
@@ -52,7 +52,7 @@ $ ->
       ,
         sExtends: 'csv'
         sButtonClass: 'btn-sm'
-        sButtonText: 'Export to CSV'
+        sButtonText: '<i class="fa fa-download"></i> Export to CSV'
         sFileName: '*.csv'
         sToolTip: 'Generates a CSV file with the content of the table below.'
         oSelectorOpts:

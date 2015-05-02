@@ -66,9 +66,14 @@
       background-color: #dae3ed;
     }
   }
+
+  &.table-browse {
+    margin-bottom: 100px !important;
+    width: 100% !important;
+  }
 }
 
-//filters,labels
+//table surrounding
 .data-filters {
   color: $mono-color-1;
   font-size: 12px;
@@ -77,4 +82,22 @@
   .label {
     font-size: inherit;
   }
+}
+
+.table-footer {
+  top: -90px;
+  position: relative;
+}
+
+//popover
+.popover {
+  .metadata-close {
+    top: 4px;
+    right: 10px;
+    position: absolute;
+  }
+}
+
+.popover-content {
+  word-wrap: break-word;
 }

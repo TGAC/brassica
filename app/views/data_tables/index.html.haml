@@ -9,7 +9,7 @@
         Showing
         = model_param.humanize
         with the following criteria:
-        %span.label.label-primary
+        %span.label.label-info
           = surround '[',']' do
             = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
 

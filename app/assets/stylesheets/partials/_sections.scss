@@ -1,10 +1,6 @@
 .section-heading {
-  color: $heading-text-color;
+  @extend .page-title;
   font-size: 22px;
-
-  &::after {
-    border-color: $accent-color;
-  }
 }
 
 .section-jumbotron {
