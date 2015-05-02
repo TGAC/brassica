@@ -5,8 +5,6 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
   before(:all) do
     WebMock.disable_net_connect!(allow_localhost: true)
 
-    TaxonomyTerm.destroy_all
-
     create(:taxonomy_term, name: 'Tooo')
     create(:taxonomy_term, name: 'Taaaaz')
 
@@ -20,7 +18,6 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
   after(:all) do
     DatabaseCleaner.clean
-    TaxonomyTerm.destroy_all
   end
 
   describe "#plant_populations" do
