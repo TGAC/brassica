@@ -60,9 +60,21 @@
 .table {
   border: 1px solid #dddddd;
   font-size: 13px;
+
   thead {
     tr {
       background-color: #dae3ed;
     }
+  }
+}
+
+//filters,labels
+.data-filters {
+  color: $mono-color-1;
+  font-size: 12px;
+  margin-top: -20px;
+
+  .label {
+    font-size: inherit;
   }
 }
