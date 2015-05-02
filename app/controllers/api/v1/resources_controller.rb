@@ -42,7 +42,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def allowed_models
-    %w(plant_lines plant_varieties)
+    Brassica::Api.models.map { |klass| klass.name.underscore.pluralize }
   end
 
   def decorate_collection(resources)

@@ -1,4 +1,6 @@
-RSpec.shared_examples "API resource" do |model_name, model_klass|
+RSpec.shared_examples "API resource" do |model_klass|
+  model_name = model_klass.name.underscore
+
   context "with invalid api key" do
     describe "GET /api/v1/#{model_name.pluralize}" do
       it "returns 404" do

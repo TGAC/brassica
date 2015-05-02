@@ -23,12 +23,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :resources
 
-      %w(plant_lines plant_varieties).each do |model_name|
+      Brassica::Api.readable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
         get "#{model_name}", to: 'resources#index'
         get "#{model_name}/:id", to: 'resources#show'
       end
 
-      %w(plant_lines).each do |model_name|
+      Brassica::Api.writable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
         post "#{model_name}", to: 'resources#create'
         put "#{model_name}/:id", to: 'resources#update'
         patch "#{model_name}/:id", to: 'resources#update'

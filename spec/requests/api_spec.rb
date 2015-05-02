@@ -2,7 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "API V1" do
 
-  it_behaves_like "API resource", 'plant_line', PlantLine
-  it_behaves_like "API resource", 'plant_variety', PlantVariety
+  Brassica::Api.readable_models.each do |model_klass|
+    it_behaves_like "API resource", model_klass
+  end
 
 end
