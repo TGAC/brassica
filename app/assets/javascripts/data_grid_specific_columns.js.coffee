@@ -1,5 +1,21 @@
 # Specific configurations for particular DataTables, including callbacks
 window.configs =
+  'marker-assays':
+    columnDefs:
+      [
+        targets: 'primer_a_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('primers', data, full[full.length - 4])
+      ,
+        targets: 'primer_b_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('primers', data, full[full.length - 3])
+      ,
+        targets: 'probe_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('probes', data, full[full.length - 2])
+      ]
+
   'plant-lines':
     columnDefs:
       [
@@ -55,3 +71,9 @@ window.configs =
           else
             ''
       ]
+
+window.modelIdUrl = (model, label, id) ->
+  if model && label && id
+    '<a href="data_tables?model=' + model + '&query[id]=' + id + '">' + label + '</a>'
+  else
+    label

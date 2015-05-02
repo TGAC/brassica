@@ -32,6 +32,8 @@ module DataTablesHelper
         :linkage_maps
       when 'qtl'
         :qtl
+      when 'marker_assays', 'primers', 'probes'
+        :marker_assays
       else
         :plant_populations
     end
@@ -50,7 +52,8 @@ module DataTablesHelper
       plant_populations: data_tables_path(model: :plant_populations),
       trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
       linkage_maps: data_tables_path(model: :linkage_maps),
-      qtl: data_tables_path(model: :qtl, group: true)
+      qtl: data_tables_path(model: :qtl, group: true),
+      marker_assays: data_tables_path(model: :marker_assays)
     }
   end
 

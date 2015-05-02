@@ -30,6 +30,13 @@ class AddCounters < ActiveRecord::Migration
         :plant_population_lists_count,
         :linkage_maps_count,
         :plant_trials_count
+      ],
+      probes: [
+        :marker_assays_count
+      ],
+      primers: [
+        :marker_assays_a_count,
+        :marker_assays_b_count
       ]
     }
   end
