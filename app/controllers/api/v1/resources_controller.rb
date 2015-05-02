@@ -8,9 +8,9 @@ class Api::V1::ResourcesController < ApplicationController
 
   def index
     # FIXME support pagination
-    filter_params = params.try(model_name.singularize).presence
+    filter_params = params[model_name.singularize].presence
     resources = filter_params ? model_klass.filter(filter_params) : model_klass.all
-    render json: resources, root: model_name, each_serializer: serializer_klass
+    render json: { model_name => Api::Decorator.decorate_collection(resources || []) }
   end
 
   def show
@@ -38,10 +38,6 @@ class Api::V1::ResourcesController < ApplicationController
 
   def model_klass
     @model_klass ||= model_name.singularize.camelize.constantize
-  end
-
-  def serializer_klass
-    "#{model_name.singularize}_serializer".camelize.constantize
   end
 
   def allowed_models

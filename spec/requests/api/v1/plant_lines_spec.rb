@@ -29,10 +29,14 @@ RSpec.describe "Plant lines v1 API" do
         end
       end
 
-      describe "filtering" do
-        let(:filter_params) { {} }
+      describe "pagination" do
 
-        it "uses .filter" do
+      end
+
+      describe "filtering" do
+        let(:filter_params) { { :search => 'foobar' } }
+
+        it "uses .filter if params given" do
           expect(PlantLine).to receive(:filter).with(filter_params)
 
           get "/api/v1/plant_lines", api_key: api_key.token, plant_line: filter_params
