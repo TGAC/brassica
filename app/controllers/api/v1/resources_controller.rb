@@ -10,11 +10,12 @@ class Api::V1::ResourcesController < ApplicationController
     # FIXME support pagination
     filter_params = params[model_name.singularize].presence
     resources = filter_params ? model_klass.filter(filter_params) : model_klass.all
-    render json: { model_name => Api::Decorator.decorate_collection(resources || []) }
+    render json: { model_name => decorate_collection(resources) }
   end
 
   def show
-    object = model_param.singularize.camelize.constantize.find(params[:id])
+    resource = model_klass.find(params[:id])
+    render json: decorate(resource)
   end
 
   private
@@ -33,7 +34,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def model_name
-    @model_name ||= request.path.match(/\A\/api\/v1\/(([\w_]+)\/?)/)[1]
+    @model_name ||= request.path.match(/\A\/api\/v1\/(([\w_]+)\/?)/)[2]
   end
 
   def model_klass
@@ -43,4 +44,13 @@ class Api::V1::ResourcesController < ApplicationController
   def allowed_models
     %w(plant_lines)
   end
+
+  def decorate_collection(resources)
+    Api::Decorator.decorate_collection(resources || [])
+  end
+
+  def decorate(resource)
+    Api::Decorator.decorate(resource)
+  end
+
 end

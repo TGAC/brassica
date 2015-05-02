@@ -10,6 +10,16 @@ RSpec.describe "Plant lines v1 API" do
         expect(response.status).to eq 404
       end
     end
+
+    describe "GET /api/v1/plant_lines/:id" do
+      let!(:plant_line) { create :plant_line }
+
+      it "returns 404" do
+        get "/api/v1/plant_lines/#{plant_line.id}"
+
+        expect(response.status).to eq 404
+      end
+    end
   end
 
   context "with valid api key" do
@@ -45,6 +55,15 @@ RSpec.describe "Plant lines v1 API" do
         end
       end
     end
+
+    describe "GET /api/v1/plant_lines/:id" do
+      let!(:plant_line) { create :plant_line }
+
+      it "returns plant line" do
+        get "/api/v1/plant_lines/#{plant_line.id}", api_key: api_key.token
+
+        expect(response).to be_success
+      end
+    end
   end
 end
-
