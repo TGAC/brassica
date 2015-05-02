@@ -10,7 +10,7 @@ module DataTablesHelper
   def datatable_tag
     content_tag(
       :table,
-      class: 'table table-condensed data-table',
+      class: 'table table-condensed table-full table-hover data-table',
       id: model_param.dasherize,
       data: { ajax: datatables_source }
     ) do

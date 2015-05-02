@@ -1,0 +1,77 @@
+.section-heading {
+  color: $heading-text-color;
+  font-size: 22px;
+
+  &::after {
+    border-color: $accent-color;
+  }
+}
+
+.section-jumbotron {
+  background: url("/images/hero-bg.jpg") no-repeat scroll center top #4B5B6B;
+  color: $text-color-negative;
+  padding-top: 25px;
+
+  .container {
+    max-width: $break-medium;
+  }
+
+  h3 {
+    color: $text-color-negative;
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  .intro-text {
+    font-size: 16px;
+  }
+}
+
+.section-search {
+  line-height: 2.4;
+  margin-top: -60px;
+  text-align: center;
+
+  .container {
+    background-color: #50687E;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 15px 0;
+  }
+
+  .form-group {
+    margin: 0;
+  }
+}
+
+.section-actions {
+  .boxed-content {
+    i {
+      color: $mono-color-1;
+      border: 3px solid $accent-color;
+      border-radius: 100%;
+      display: inline-block;
+      font-size: 56px;
+      height: 2em;
+      line-height: 1.9;
+      margin: 0;
+      padding-left: 5px;
+      width: 2em;
+    }
+
+    &:hover {
+      i {
+        background-color: $accent-color;
+        color: $text-color-negative;
+        transition: all 500ms;
+      }
+    }
+
+    &.submit {
+      @include boxed-content-icon($accent-color-2);
+    }
+
+    &.documentation {
+      @include boxed-content-icon($mono-color-1);
+    }
+  }
+}

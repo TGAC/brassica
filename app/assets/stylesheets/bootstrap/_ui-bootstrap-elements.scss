@@ -59,6 +59,7 @@
 
 /* tabs */
 .nav-tabs {
+  margin-bottom: 20px;
   > li > a {
     @include border-top-radius(2px);
     padding-left: 20px;
@@ -68,7 +69,15 @@
 
   > li.active {
     > a {
-      border-top: 3px $accent-color solid;
+      overflow: hidden;
+      &::before {
+        border-top: 3px $accent-color solid;
+        content: "";
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
     }
   }
 
