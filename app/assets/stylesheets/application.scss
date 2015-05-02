@@ -30,9 +30,9 @@
 @import "modules/mixins";
 
 //import bootstrap styles
+@import "bootstrap-sprockets";
 @import "bootstrap/bootstrap-custom";
 @import "bootstrap/ui-bootstrap-elements";
-@import "bootstrap-sprockets";
 
 //import general styles
 @import "partials/base";
