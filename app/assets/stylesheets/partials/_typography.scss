@@ -1,0 +1,21 @@
+.page-title {
+  color: $heading-text-color;
+  font-size: 28px;
+  margin-bottom: 20px;
+
+  &::after {
+    border-bottom: 2px solid $accent-color;
+    content: " ";
+    display: block;
+    margin-top: 10px;
+    width: 100px;
+  }
+
+  &.text-center {
+    margin: 0 auto 20px;
+
+    &::after {
+      margin: 10px auto 0;
+    }
+  }
+}

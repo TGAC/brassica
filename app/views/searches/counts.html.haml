@@ -1,0 +1,9 @@
+- if @counts.values.any? { |count| count > 0 }
+  %ul
+    - @counts.each do |model, count|
+      %li
+        - if count > 0
+          = link_to t(".#{model}_count", count: count), data_tables_path(model: model, fetch: @term)
+
+- else
+  %p= t('.nothing_found')

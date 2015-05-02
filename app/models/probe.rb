@@ -1,5 +1,7 @@
 class Probe < ActiveRecord::Base
 
+  belongs_to :taxonomy_term
+
   has_many :marker_assays
 
   validates :probe_name,

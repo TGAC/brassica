@@ -2,6 +2,7 @@ module DataTablesHelper
   def datatables_source
     data_tables_path(
       query: params[:query],
+      fetch: params[:fetch],
       model: model_param
     )
   end
@@ -9,7 +10,7 @@ module DataTablesHelper
   def datatable_tag
     content_tag(
       :table,
-      class: 'table table-condensed data-table',
+      class: 'table table-condensed table-browse table-hover data-table',
       id: model_param.dasherize,
       data: { ajax: datatables_source }
     ) do
@@ -55,10 +56,21 @@ module DataTablesHelper
 
   def back_button
     unless browse_tabs.keys.include? model_param.to_sym
-      label = "Back to #{active_tab_label.to_s.humanize}"
+      label = "<i class='fa fa-chevron-left'></i> Back to #{active_tab_label.to_s.humanize}"
       link_to label,
               browse_tabs[active_tab_label],
               id: 'table-back-button',
+              data: { label: label },
+              class: 'hidden'
+    end
+  end
+
+  def see_all_button
+    if params[:query].present? or params[:fetch].present?
+      label = "<i class='fa fa-list'></i> See all #{model_param.to_s.humanize}"
+      link_to label,
+              data_tables_path(model: model_param),
+              id: 'table-see-all-button',
               data: { label: label },
               class: 'hidden'
     end

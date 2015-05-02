@@ -77,4 +77,24 @@ RSpec.describe 'data_tables/index.html.haml' do
       end
     end
   end
+
+  context 'when server-side filtering is on' do
+    it 'adds show all button when querying for certain records' do
+      allow(view).to receive(:params).and_return(model: 'plant_lines', query: { x: 'a'})
+      render
+      expect(rendered).to include('table-see-all-button')
+    end
+
+    it 'adds show all button when fetching ES-found records' do
+      allow(view).to receive(:params).and_return(model: 'plant_lines', fetch: 'b')
+      render
+      expect(rendered).to include('table-see-all-button')
+    end
+
+    it 'does not add show all button when not querying nor fetching' do
+      allow(view).to receive(:params).and_return(model: 'plant_lines')
+      render
+      expect(rendered).not_to include('table-see-all-button')
+    end
+  end
 end

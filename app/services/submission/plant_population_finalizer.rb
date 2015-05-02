@@ -29,7 +29,6 @@ class Submission::PlantPopulationFinalizer
         taxonomy_term_id: taxonomy_term.id,
         entered_by_whom: submission.user.full_name,
         date_entered: Date.today,
-        data_provenance: submission.content.step04.data_provenance
       )
 
       if attrs[:plant_variety_name].present?

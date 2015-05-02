@@ -25,3 +25,10 @@ en:
     trait_descriptors: Traits
     linkage_maps: Linkage maps
     qtl: QTL
+
+  searches:
+    counts:
+      plant_lines_count: Found %{count} plant lines
+      plant_populations_count: Found %{count} plant populations
+      plant_varieties_count: Found %{count} plant varieties
+      nothing_found: No results found

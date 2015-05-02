@@ -13,27 +13,24 @@
 module Filterable extend ActiveSupport::Concern
 
   included do
+    include Joinable
+
     def self.filter(params)
       params = filter_params(params)
       query = if params[:query].present? || params[:search].present?
-        query = all
-        query = query.where(params[:query]) if params[:query].present?
-        params[:search].each do |k,v|
-          query = query.where("#{k} ILIKE ?", "%#{v}%")
-        end if params[:search].present?
-        query
-      else
-        none
-      end
+                query = all
+                query = query.where(params[:query]) if params[:query].present?
+                params[:search].each do |k,v|
+                  query = query.where("#{k} ILIKE ?", "%#{v}%")
+                end if params[:search].present?
+                query
+              elsif params[:fetch].present?
+                Search.new(params[:fetch]).send(table_name).records
+              else
+                none
+              end
 
-      params[:query].each do |k,_|
-        if k.to_s.include? '.'
-          relation = k.to_s.split('.')[0].pluralize
-          next unless relation and relation != self.table_name
-          relation = relation.singularize unless reflections.keys.include?(relation)
-          query = query.joins(relation.to_sym)
-        end
-      end if params[:query].present?
+      query = join_columns(params[:query].keys, query) if params[:query].present?
       query
     end
 

@@ -1,33 +1,37 @@
-= render 'data_tables/tabs'
+.container
+  = render 'data_tables/tabs'
 
-.lead= model_param.humanize
+  .lead= model_param.humanize
 
-- if params[:query].present?
-  %span.label.label-primary
-    Showing
-    = model_param.humanize
-    with the following criteria:
-    = surround '[',']' do
-      = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
+  - if params[:query].present?
+    .data-filters
+      %p
+        Showing
+        = model_param.humanize
+        with the following criteria:
+        %span.label.label-info
+          = surround '[',']' do
+            = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
 
-= back_button
+  = back_button
+  = see_all_button
 
-= datatable_tag do
-  - model_class = model_param.singularize.camelize.constantize
-  - model_class.table_columns.each do |column|
-    - model_name, column_name = extract_column(column)
-    %th{ class: "#{column_name}_column" }
-      = t("tables.#{model_name}.#{column_name}")
+  = datatable_tag do
+    - model_class = model_param.singularize.camelize.constantize
+    - model_class.table_columns.each do |column|
+      - model_name, column_name = extract_column(column)
+      %th{ class: "#{column_name}_column" }
+        = t("tables.#{model_name}.#{column_name}")
 
-  - if model_class.respond_to?(:counter_names) && model_class.counter_names.present?
-    - count_data_index = model_class.table_columns.size
-    %th.related{ data: { models: model_class.counter_names,
-                         count_data_index: count_data_index }}
+    - if model_class.respond_to?(:counter_names) && model_class.counter_names.present?
+      - count_data_index = model_class.table_columns.size
+      %th.related{ data: { models: model_class.counter_names,
+                           count_data_index: count_data_index }}
 
-  - unless params[:group]
-    -# per-record actions only make sense in non-grouped tables
-    - if model_class.column_names.include? 'pubmed_id'
-      %th.pubmed
+    - unless params[:group]
+      -# per-record actions only make sense in non-grouped tables
+      - if model_class.column_names.include? 'pubmed_id'
+        %th.pubmed
 
-    - if model_class.ancestors.include?(Annotable)
-      %th.annotations
+      - if model_class.ancestors.include?(Annotable)
+        %th.annotations

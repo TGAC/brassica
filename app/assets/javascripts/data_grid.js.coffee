@@ -5,7 +5,9 @@ $ ->
     pageLength: 25
     processing: true
     stateSave: true
-    dom: "<'row'<'col-sm-4'l><'col-sm-4'T><'col-sm-4'f>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
+    deferRender: true
+#    dom: "<'row'<'col-sm-3'f><'col-sm-6'T><'col-sm-3'l>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
+    dom: "<'table-bar'<'col-sm-3 form-group'f><'col-sm-7 form-group'T><'col-sm-2 form-group'l>><'row'<'col-sm-12 'tr>><'row table-footer'<'col-sm-6'i><'col-sm-6'p>>"
     drawCallback: (settings) ->
       # This removes the pagination control when only 1 page
       # and the page length picker when less data than the minimum value
@@ -27,6 +29,7 @@ $ ->
     aButtons:
       [
         sExtends: 'text'
+        sButtonClass: 'btn-sm'
         sButtonText: 'Back'
         fnClick: ( nButton, oConfig, oFlash ) ->
           window.location = $('#table-back-button').attr('href')
@@ -36,8 +39,20 @@ $ ->
           else
             $(nButton).hide()
       ,
+        sExtends: 'text'
+        sButtonClass: 'btn-sm'
+        sButtonText: 'See all records'
+        fnClick: ( nButton, oConfig, oFlash ) ->
+          window.location = $('#table-see-all-button').attr('href')
+        fnInit: ( nButton, oConfig ) ->
+          if $('#table-see-all-button').length
+            $(nButton).find('span').html($('#table-see-all-button').data('label'))
+          else
+            $(nButton).hide()
+      ,
         sExtends: 'csv'
-        sButtonText: 'Export to CSV'
+        sButtonClass: 'btn-sm'
+        sButtonText: '<i class="fa fa-download"></i> Export to CSV'
         sFileName: '*.csv'
         sToolTip: 'Generates a CSV file with the content of the table below.'
         oSelectorOpts:

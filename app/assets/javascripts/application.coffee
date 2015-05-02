@@ -16,6 +16,7 @@
 #= require jquery.dataTables
 #= require dataTables.tableTools
 #= require dataTables.bootstrap
+#= require jquery.inview
 #= require jquery.easypiechart
 #= require jquery.scrollTo
 #= require_tree .
