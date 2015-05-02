@@ -39,8 +39,6 @@ class PlantScoringUnit < ActiveRecord::Base
     ]
   end
 
-  private
-
   def self.permitted_params
     [
       query: [

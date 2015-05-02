@@ -48,8 +48,6 @@ class LinkageMap < ActiveRecord::Base
     ]
   end
 
-  private
-
   def self.ref_columns
     [
       'pubmed_id'

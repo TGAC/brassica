@@ -20,8 +20,6 @@ class TraitScore < ActiveRecord::Base
     ]
   end
 
-  private
-
   def self.ref_columns
     [
       'plant_scoring_units.id'

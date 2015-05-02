@@ -68,8 +68,6 @@ class PlantLine < ActiveRecord::Base
     )
   end
 
-  private
-
   def self.permitted_params
     [
       :fetch,

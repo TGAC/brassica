@@ -82,8 +82,6 @@ class PlantPopulation < ActiveRecord::Base
     )
   end
 
-  private
-
   def self.permitted_params
     [
       :fetch,

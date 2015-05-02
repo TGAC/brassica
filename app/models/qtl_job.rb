@@ -45,8 +45,6 @@ class QtlJob < ActiveRecord::Base
     ]
   end
 
-  private
-
   def self.permitted_params
     [
       query: [
