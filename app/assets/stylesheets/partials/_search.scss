@@ -1,8 +1,13 @@
-// FIXME temporary styles
 .search-results {
   clear: both;
   margin: 4em 1em 1em 1em;
   background-color: #fff;
+  transition: height 500ms ease;
+
+  &:empty {
+    height: 0;
+    margin: 0;
+  }
 
   i.fa {
     padding: 0.5em;

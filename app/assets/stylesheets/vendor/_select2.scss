@@ -1,6 +1,10 @@
+.select2 {
+  width: 40%;
+}
+
 .select2-container {
   box-sizing: border-box;
-  display: inline-block;
+  display: block !important;
   margin: 0;
   position: relative;
   vertical-align: middle;

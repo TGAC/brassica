@@ -38,30 +38,6 @@ hr {
   border-color: #eaeaea;
 }
 
-.widget-title {
-  font-size: 18px;
-}
-
-.section-heading {
-  margin-bottom: 20px;
-
-  &::after {
-    border-bottom: 2px solid $accent-color;
-    content: " ";
-    display: block;
-    margin-top: 10px;
-    width: 100px;
-  }
-
-  &.text-center {
-    margin: 0 auto 20px;
-
-    &::after {
-      margin: 10px auto 0;
-    }
-  }
-}
-
 /* social background color */
 .facebook-bg {
   background-color: $facebook-color;

@@ -34,7 +34,8 @@
 %section.section-actions.container
   .row
     .col-md-4.boxed-content.browse
-      %i.flaticon-database
+      %a(href=browse_data_path)
+        %i.flaticon-database
       %h2.boxed-content-title Browse database
       %p
         Browse and search through more than 100 thousands of trait scores, and
@@ -42,20 +43,22 @@
       = link_to 'Browse data', browse_data_path, class: 'btn btn-primary'
 
     .col-md-4.boxed-content.submit
-      %i.flaticon-pages
+      %a(href=new_submission_path)
+        %i.flaticon-pages
       %h2.boxed-content-title Submit new data
       %p
         Submit your experimental Brassica population data, along with scored
         traits and found genetic mapping, to be published in the Portal.
-      = link_to 'Submit data', new_submission_path, class: 'btn btn-primary'
+      = link_to 'Submit data', new_submission_path, class: 'btn btn-action'
 
     .col-md-4.boxed-content.documentation
-      %i.flaticon-settings
+      %a(href=api_documentation_path)
+        %i.flaticon-settings
       %h2.boxed-content-title API Documentation
       %p
         Learn how to integrate your own software with our Portal, in order to
         retrieve and submit large quantities of data, automatically.
-      = link_to 'API documentation', api_documentation_path, class: 'btn btn-primary'
+      = link_to 'API documentation', api_documentation_path, class: 'btn btn-mono'
 
 
 - if @submissions.present?

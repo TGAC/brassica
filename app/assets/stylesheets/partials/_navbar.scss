@@ -1,0 +1,36 @@
+.navbar-bip {
+  @include border-radius(0);
+  background: url("/images/hero-bg.jpg") no-repeat scroll center top #4B5B6B;
+
+  .nav {
+    li {
+      position: relative;
+      a {
+        color: $text-color-negative;
+        &:hover,
+        &:focus {
+          background-color: rgba($mono-color-2, 0.1);;
+        }
+      }
+      &.active {
+        background-color: rgba($mono-color-2, 0.35);
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.navbar-toggle {
+  position: relative;
+  height: 30px;
+  span {
+    content: "";
+    position: absolute;
+    left: 0;
+    display: block;
+    width: 16px;
+    top: 0;
+    height: 0;
+    box-shadow: 0 10px 0 1px $text-color-negative,0 16px 0 1px $text-color-negative,0 22px 0 1px $text-color-negative;
+  }
+}
