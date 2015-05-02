@@ -1,5 +1,38 @@
 .lead Brassica Information Portal API
 
-%p
-  .text-justify
-    TEMP REPLACE WITH THE ACTUAL CONTENT.
+%h2 General guidelines
+
+%h3 Data format
+
+%p BIP API uses JSON to represent data.
+
+%h3 Read-only and writeable resources
+
+%p Some of available resources are read-only.
+
+%h3 Fetching resources
+
+%p Returned records  are paginated.
+
+= render partial: 'api_props', locals: { title: 'Pagination parameters', props:  t('api.pagination.params') }
+= render partial: 'api_props', locals: { title: 'Paginated response metadata', props:  t('api.pagination.meta') }
+
+.panel.panel-default
+  .panel-heading
+    .panel-title Paginated response format
+
+  .panel-body
+    %pre
+      %code= t('api.pagination.response')
+
+%h2 Resources
+
+- # FIXME replace with Brassica::Api.models after merging #210
+- [PlantLine, PlantPopulation, PlantVariety].each do |model|
+  .section
+    %h3= model.name
+
+    .method GET
+    .url= "/api/v1/#{model.name.underscore.pluralize}"
+
+    = render partial: 'api_props', locals: { title: "Search params", props: t("api.#{model.name.underscore}.index.props") }

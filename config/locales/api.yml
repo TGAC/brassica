@@ -1,0 +1,94 @@
+en:
+  api:
+    pagination:
+      params:
+        -
+          name: page
+          desc: "Page number (default: 1)"
+        -
+          name: per_page
+          desc: "Page size (default: 50, max: 200)" # FIXME replace with currently configured values after merging #210
+
+      meta:
+        -
+          name: "meta[page]"
+          desc: "Current page number"
+        -
+          name: "meta[per_page]"
+          desc: "Page size"
+        -
+          name: "meta[total_count]"
+          desc: "Total number of existing records"
+
+      response: |-
+        {
+          "plant_lines": [
+            {
+              "id": 6,
+              ...
+            },
+            ...
+          ],
+          "meta": {
+            "page": 1,
+            "per_page": 50,
+            "total_count": 1291
+          }
+        }
+
+    plant_line:
+      index:
+        props:
+          -
+            name: "plant_line[fetch]"
+            format: string
+            desc: Query using full text search engine
+          -
+            name: "plant_line[search][plant_line_name]"
+            format: string
+            desc: ...
+          -
+            name: "plant_line[search][plant_lines.plant_line_name]"
+            format: string
+            desc: ...
+          -
+            name: "plant_line[query][id]"
+            format: "id, id[]"
+            desc: Filter by `id`
+          -
+            name: "plant_line[query][plant_populations.id]"
+            format: "id, id[]"
+            desc: Filter by `id` of associated plant population
+
+    plant_population:
+      index:
+        props:
+          -
+            name: "plant_population[fetch]"
+            format: string
+            desc: Query using full text search engine
+          -
+            name: "plant_population[query][id]"
+            format: "int, int[]"
+            desc: Filter by `id`
+          -
+            name: "plant_population[query][name]"
+            format: string
+            desc: Filter by `name`
+
+    plant_variety:
+      index:
+        props:
+          -
+            name: "plant_variety[fetch]"
+            format: string
+            desc: Query using full text search engine
+          -
+            name: "plant_variety[search][plant_variety_name]"
+            format: string
+            desc: ...
+          -
+            name: "plant_population[query][id]"
+            format: "int, int[]"
+            desc: Filter by `id`
+
