@@ -12,7 +12,7 @@ RSpec.describe PlantAccession do
     end
   end
 
-  describe '#pluckable' do
+  describe '#pluck_columns' do
     it 'gets proper data table columns' do
       pa = create(:plant_accession)
 

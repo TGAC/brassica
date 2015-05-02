@@ -20,7 +20,7 @@ RSpec.describe PlantTrial do
     end
   end
 
-  describe '#pluckable' do
+  describe '#pluck_columns' do
     it 'gets proper data table columns' do
       pt = create(:plant_trial)
       plucked = PlantTrial.pluck_columns

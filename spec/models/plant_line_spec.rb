@@ -85,7 +85,7 @@ RSpec.describe PlantLine do
     end
   end
 
-  describe '#pluckable' do
+  describe '#pluck_columns' do
     it 'gets proper data table columns' do
       pl = create(:plant_line, plant_variety: create(:plant_variety))
 

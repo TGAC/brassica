@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PlantScoringUnit do
-  describe '#pluckable' do
+  describe '#pluck_columns' do
     it 'gets proper data table columns' do
       psc = create(:plant_scoring_unit)
       plucked = PlantScoringUnit.pluck_columns
