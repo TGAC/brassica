@@ -7,11 +7,15 @@ class ApiKey < ActiveRecord::Base
 
   before_validation :assign_token, on: :create
 
+  def self.normalize_token(token)
+    token.to_s.slice(0, 64)
+  end
+
   private
 
   def assign_token
     while token.blank? || self.class.exists?(token: token)
-      self.token = SecureRandom.hex.to_s
+      self.token = SecureRandom.hex(32)
     end
   end
 end

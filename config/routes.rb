@@ -18,4 +18,16 @@ Rails.application.routes.draw do
   resources :data_tables, only: [:index, :show]
 
   get 'browse_data', to: 'data_tables#index', defaults: { model: 'plant_populations' }
+
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v1 do
+      resources :resources
+      get 'plant_lines', to: 'resources#index'
+      get 'plant_lines/:id', to: 'resources#show'
+      post 'plant_lines', to: 'resources#create'
+      put 'plant_lines/:id', to: 'resources#update'
+      patch 'plant_lines/:id', to: 'resources#update'
+      delete 'plant_lines/:id', to: 'resources#destroy'
+    end
+  end
 end
