@@ -22,12 +22,18 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :resources
-      get 'plant_lines', to: 'resources#index'
-      get 'plant_lines/:id', to: 'resources#show'
-      post 'plant_lines', to: 'resources#create'
-      put 'plant_lines/:id', to: 'resources#update'
-      patch 'plant_lines/:id', to: 'resources#update'
-      delete 'plant_lines/:id', to: 'resources#destroy'
+
+      %w(plant_lines plant_varieties).each do |model_name|
+        get "#{model_name}", to: 'resources#index'
+        get "#{model_name}/:id", to: 'resources#show'
+      end
+
+      %w(plant_lines).each do |model_name|
+        post "#{model_name}", to: 'resources#create'
+        put "#{model_name}/:id", to: 'resources#update'
+        patch "#{model_name}/:id", to: 'resources#update'
+        delete "#{model_name}/:id", to: 'resources#destroy'
+      end
     end
   end
 end
