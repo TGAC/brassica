@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
-      resources :resources
+      resources :resources, except: [:new]
 
       Brassica::Api.readable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
         get "#{model_name}", to: 'resources#index'

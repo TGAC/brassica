@@ -2,7 +2,7 @@
 class Api::V1::ResourcesController < ApplicationController
   include Pagination
 
-  before_filter :authenticate_api_key!, except: :new
+  before_filter :authenticate_api_key!
   before_filter :require_allowed_model
 
   # FIXME find a way to document api calls
