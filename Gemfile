@@ -15,7 +15,6 @@ gem 'compass-rails'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
-gem 'draper', '~> 2.1.0'
 
 gem 'dotenv-rails'
 
@@ -30,6 +29,8 @@ gem 'elasticsearch-rails'
 gem 'reform', '~> 1.2.6'
 gem 'obo'
 gem 'hashie'
+gem 'draper', '~> 2.1.0'
+gem 'kaminari'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc

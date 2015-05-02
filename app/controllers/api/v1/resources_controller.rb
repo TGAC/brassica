@@ -1,5 +1,6 @@
 # FIXME extend ActionController::Metal instead as some mixins are not needed
 class Api::V1::ResourcesController < ApplicationController
+  include Pagination
 
   before_filter :authenticate_api_key!, except: :new
   before_filter :require_allowed_model
@@ -7,10 +8,13 @@ class Api::V1::ResourcesController < ApplicationController
   # FIXME find a way to document api calls
 
   def index
-    # FIXME support pagination
     filter_params = params[model_name.singularize].presence
+
     resources = filter_params ? model_klass.filter(filter_params) : model_klass.all
-    render json: { model_name => decorate_collection(resources) }
+    resources = paginate_collection(resources)
+    resources = decorate_collection(resources)
+
+    render json: { model_name => resources, :meta => resources.meta }
   end
 
   def show
@@ -46,7 +50,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def decorate_collection(resources)
-    Api::Decorator.decorate_collection(resources || [])
+    Api::CollectionDecorator.decorate(resources || [])
   end
 
   def decorate(resource)

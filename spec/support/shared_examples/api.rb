@@ -39,9 +39,20 @@ RSpec.shared_examples "API resource" do |model_klass|
       end
 
       describe "pagination" do
-        it "supports pagination" do
-          pending
-          fail
+        let!(:resources) { create_list(model_name, 3) }
+
+        it "paginates returned resources" do
+          get "/api/v1/#{model_name.pluralize}", api_key: api_key.token
+
+          expect(parsed_response['meta']).to include('page' => 1, 'per_page' => 25, 'total_count' => 3)
+          expect(parsed_response[model_name.pluralize].count).to eq 3
+        end
+
+        it "allows pagination options" do
+          get "/api/v1/#{model_name.pluralize}", api_key: api_key.token, page: 2, per_page: 1
+
+          expect(parsed_response['meta']).to include('page' => 2, 'per_page' => 1, 'total_count' => 3)
+          expect(parsed_response[model_name.pluralize].count).to eq 1
         end
       end
 
@@ -49,7 +60,7 @@ RSpec.shared_examples "API resource" do |model_klass|
         let(:filter_params) { { :search => 'foobar' } }
 
         it "uses .filter if params given" do
-          expect(model_klass).to receive(:filter).with(filter_params)
+          expect(model_klass).to receive(:filter).with(filter_params).and_call_original
 
           get "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => filter_params
 
