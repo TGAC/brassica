@@ -29,6 +29,10 @@
   .section
     %h3= model.name
 
+    .description Some pretty exhaustive description of the entity represented by this resource
+
+    = render partial: 'api_props', locals: { title: "Attributes", props: api_props("#{model.name.underscore}.attrs") }
+
     -# GET index
     %div
       %span.method GET
@@ -55,8 +59,6 @@
     %div
       %span.method GET
       %span.url= "/api/v1/#{model.name.underscore.pluralize}/:id"
-
-    = render partial: 'api_props', locals: { title: "Response attributes", props: api_props("#{model.name.underscore}.show.attrs") }
 
     %h4 Example
     %pre

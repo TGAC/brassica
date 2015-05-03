@@ -42,6 +42,72 @@ en:
         }
 
     plant_line:
+      attrs:
+        -
+          name: id
+          format: int
+          desc: Unique id
+        -
+          name: plant_line_name
+          format: string
+          desc:
+        -
+          name: common_name
+          format: string
+          desc:
+        -
+          name: plant_variety_name
+          format: string
+          desc:
+        -
+          name: named_by_whom
+          format: string
+          desc:
+        -
+          name: organisation
+          format: string
+          desc:
+        -
+          name: genetic_status
+          format: string
+          desc:
+        -
+          name: previous_line_name
+          format: string
+          desc:
+        -
+          name: comments
+          format: string
+          desc:
+        -
+          name: entered_by_whom
+          format: string
+          desc:
+        -
+          name: date_entered
+          format: date
+          desc:
+        -
+          name: data_provenance
+          format: string
+          desc:
+        -
+          name: data_owned_by
+          format: string
+          desc:
+        -
+          name: confirmed_by_whom
+          format: string
+          desc:
+        -
+          name: taxonomy_term_id
+          format: int
+          desc:
+        -
+          name: plant_variety_id
+          format: int
+          desc:
+
       index:
         params:
           -
@@ -71,78 +137,18 @@ en:
           Accept: application/json
 
       show:
-        attrs:
-          -
-            name: id
-            format: int
-            desc: Unique id
-          -
-            name: plant_line_name
-            format: string
-            desc:
-          -
-            name: common_name
-            format: string
-            desc:
-          -
-            name: plant_variety_name
-            format: string
-            desc:
-          -
-            name: named_by_whom
-            format: string
-            desc:
-          -
-            name: organisation
-            format: string
-            desc:
-          -
-            name: genetic_status
-            format: string
-            desc:
-          -
-            name: previous_line_name
-            format: string
-            desc:
-          -
-            name: comments
-            format: string
-            desc:
-          -
-            name: entered_by_whom
-            format: string
-            desc:
-          -
-            name: date_entered
-            format: date
-            desc:
-          -
-            name: data_provenance
-            format: string
-            desc:
-          -
-            name: data_owned_by
-            format: string
-            desc:
-          -
-            name: confirmed_by_whom
-            format: string
-            desc:
-          -
-            name: taxonomy_term_id
-            format: int
-            desc:
-          -
-            name: plant_variety_id
-            format: int
-            desc:
-
         example: |-
           GET %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
 
     plant_population:
+      attrs:
+        -
+          name: id
+          format: int
+          desc: Unique id
+
       index:
         params:
           -
@@ -164,18 +170,18 @@ en:
           Accept: application/json
 
       show:
-        attrs:
-          -
-            name: id
-            format: int
-            desc: Unique id
-
         example: |-
           GET %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
 
     plant_variety:
+      attrs:
+        -
+          name: id
+          format: int
+          desc: Unique id
+
       index:
         params:
           -
@@ -197,12 +203,6 @@ en:
           Accept: application/json
 
       show:
-        attrs:
-          -
-            name: id
-            format: int
-            desc: Unique id
-
         example: |-
           GET %{url} HTTP/1.1
           Content-Type: application/json
