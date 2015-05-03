@@ -6,7 +6,7 @@ module Brassica
     end
 
     def self.readable_models
-      [PlantLine, PlantVariety]
+      [PlantPopulation, PlantLine, PlantVariety]
     end
 
     def self.writable_models
