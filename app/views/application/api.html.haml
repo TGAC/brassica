@@ -14,8 +14,8 @@
 
 %p Returned records  are paginated.
 
-= render partial: 'api_props', locals: { title: 'Pagination parameters', props:  t('api.pagination.params') }
-= render partial: 'api_props', locals: { title: 'Paginated response metadata', props:  t('api.pagination.meta') }
+= render partial: 'api_props', locals: { title: 'Pagination parameters', props:  api_props('pagination.params', default_per_page: Kaminari.config.default_per_page, max_per_page: Kaminari.config.max_per_page) }
+= render partial: 'api_props', locals: { title: 'Paginated response metadata', props:  api_props('pagination.meta') }
 
 .panel.panel-default
   .panel-heading
@@ -27,15 +27,15 @@
 
 %h2 Resources
 
-- # FIXME replace with Brassica::Api.models after merging #210
-- [PlantLine, PlantPopulation, PlantVariety].each do |model|
+- Brassica::Api.models.each do |model|
   .section
     %h3= model.name
 
-    .method GET
-    .url= "/api/v1/#{model.name.underscore.pluralize}"
+    %div
+      %span.method GET
+      %span.url= "/api/v1/#{model.name.underscore.pluralize}"
 
-    = render partial: 'api_props', locals: { title: "Search params", props: t("api.#{model.name.underscore}.index.props") }
+    = render partial: 'api_props', locals: { title: "Search params", props: api_props("#{model.name.underscore}.index.props") }
 
     .api-live-example
       - if user_signed_in?
@@ -44,6 +44,6 @@
         %pre.response.hidden
           %code{style: 'display: block; max-height: 300px; overflow: auto'}
       - else
-        .alert.alert-info Sign in to try the API in your browser!
+        .alert.alert-info Sign in to try it in your browser!
 
     %hr
