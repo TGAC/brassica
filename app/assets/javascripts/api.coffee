@@ -1,13 +1,14 @@
-
 $ ->
-
   if $('.api-live-example').length > 0
+    hljs.initHighlightingOnLoad()
+
     $.ajax
       url: "/api_key"
       method: "get"
       success: (response) =>
         window.api_key = response
 
+  # FIXME needs refactoring
   $('.api-live-example button').on 'click', (event) ->
     url = $(event.target).data('url')
     method = $(event.target).data('method') || 'get'
@@ -25,7 +26,14 @@ $ ->
 
       complete: (response) =>
         json = JSON.stringify(response.responseJSON, null, 4)
-        $code.text(json)
+        text = """
+        HTTP/1.1 #{response.status} #{response.statusText}
+        Content-Type: #{response.getResponseHeader('Content-Type')}
+
+        #{json}
+        """
+
+        $code.text(text)
         hljs.highlightBlock($code[0])
         $container.find('.response').removeClass('hidden')
 

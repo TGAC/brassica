@@ -38,7 +38,7 @@
 
     %h4 Example
     %pre
-      %code= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
+      %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
 
     .api-live-example
       - if user_signed_in?
@@ -60,7 +60,7 @@
 
     %h4 Example
     %pre
-      %code= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}")
+      %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}")
 
     .api-live-example
       - if user_signed_in?
