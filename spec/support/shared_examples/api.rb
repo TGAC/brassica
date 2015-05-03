@@ -44,7 +44,11 @@ RSpec.shared_examples "API resource" do |model_klass|
         it "paginates returned resources" do
           get "/api/v1/#{model_name.pluralize}", api_key: api_key.token
 
-          expect(parsed_response['meta']).to include('page' => 1, 'per_page' => 25, 'total_count' => 3)
+          expect(parsed_response['meta']).to include(
+            'page' => 1,
+            'per_page' => Kaminari.config.default_per_page,
+            'total_count' => 3
+          )
           expect(parsed_response[model_name.pluralize].count).to eq 3
         end
 
