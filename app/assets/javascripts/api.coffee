@@ -13,7 +13,7 @@ $ ->
     method = $(event.target).data('method') || 'get'
 
     $container = $(event.target).parent()
-    $container.find('.url').text(url)
+    $container.find('.url').text("#{method.toUpperCase()} #{url}")
     $container.find('button').hide()
     $code = $container.find('.response code')
 

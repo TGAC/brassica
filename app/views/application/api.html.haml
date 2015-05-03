@@ -2,9 +2,7 @@
 
 %h2 General guidelines
 
-%h3 Data format
-
-%p BIP API uses JSON to represent data.
+%p BIP provides HTTP REST-style API which uses JSON to represent returned resources. Full access to the API is allowed for all registered users. In order to authenticate users pass <code>api_key</code> parameter in each call to the API.
 
 %h3 Read-only and writeable resources
 
@@ -12,7 +10,7 @@
 
 %h3 Fetching resources
 
-%p Returned records  are paginated.
+%p BIP API exposes several endpoints allowing to fetch existing resources. These endpoints always return paginated responses.
 
 = render partial: 'api_props', locals: { title: 'Pagination parameters', props:  api_props('pagination.params', default_per_page: Kaminari.config.default_per_page, max_per_page: Kaminari.config.max_per_page) }
 = render partial: 'api_props', locals: { title: 'Paginated response metadata', props:  api_props('pagination.meta') }
@@ -35,7 +33,7 @@
       %span.method GET
       %span.url= "/api/v1/#{model.name.underscore.pluralize}"
 
-    = render partial: 'api_props', locals: { title: "Search params", props: api_props("#{model.name.underscore}.index.props") }
+    = render partial: 'api_props', locals: { title: "Search params", props: api_props("#{model.name.underscore}.index.params") }
 
     .api-live-example
       - if user_signed_in?
@@ -47,3 +45,21 @@
         .alert.alert-info Sign in to try it in your browser!
 
     %hr
+
+    %div
+      %span.method GET
+      %span.url= "/api/v1/#{model.name.underscore.pluralize}/:id"
+
+    = render partial: 'api_props', locals: { title: "Response attributes", props: api_props("#{model.name.underscore}.show.attrs") }
+
+    .api-live-example
+      - if user_signed_in?
+        %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}" } } Try it!
+        .url
+        %pre.response.hidden
+          %code{style: 'display: block; max-height: 300px; overflow: auto'}
+      - else
+        .alert.alert-info Sign in to try it in your browser!
+
+    %hr
+

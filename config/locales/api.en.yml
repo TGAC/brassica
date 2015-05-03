@@ -43,7 +43,7 @@ en:
 
     plant_line:
       index:
-        props:
+        params:
           -
             name: "plant_line[fetch]"
             format: string
@@ -65,9 +65,76 @@ en:
             format: "id, id[]"
             desc: Filter by `id` of associated plant population
 
+      show:
+        attrs:
+          -
+            name: id
+            format: int
+            desc: Unique id
+          -
+            name: plant_line_name
+            format: string
+            desc:
+          -
+            name: common_name
+            format: string
+            desc:
+          -
+            name: plant_variety_name
+            format: string
+            desc:
+          -
+            name: named_by_whom
+            format: string
+            desc:
+          -
+            name: organisation
+            format: string
+            desc:
+          -
+            name: genetic_status
+            format: string
+            desc:
+          -
+            name: previous_line_name
+            format: string
+            desc:
+          -
+            name: comments
+            format: string
+            desc:
+          -
+            name: entered_by_whom
+            format: string
+            desc:
+          -
+            name: date_entered
+            format: date
+            desc:
+          -
+            name: data_provenance
+            format: string
+            desc:
+          -
+            name: data_owned_by
+            format: string
+            desc:
+          -
+            name: confirmed_by_whom
+            format: string
+            desc:
+          -
+            name: taxonomy_term_id
+            format: int
+            desc:
+          -
+            name: plant_variety_id
+            format: int
+            desc:
+
     plant_population:
       index:
-        props:
+        params:
           -
             name: "plant_population[fetch]"
             format: string
@@ -81,9 +148,16 @@ en:
             format: string
             desc: Filter by `name`
 
+      show:
+        attrs:
+          -
+            name: id
+            format: int
+            desc: Unique id
+
     plant_variety:
       index:
-        props:
+        params:
           -
             name: "plant_variety[fetch]"
             format: string
@@ -96,4 +170,11 @@ en:
             name: "plant_population[query][id]"
             format: "int, int[]"
             desc: Filter by `id`
+
+      show:
+        attrs:
+          -
+            name: id
+            format: int
+            desc: Unique id
 
