@@ -65,6 +65,11 @@ en:
             format: "id, id[]"
             desc: Filter by `id` of associated plant population
 
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
       show:
         attrs:
           -
@@ -132,6 +137,11 @@ en:
             format: int
             desc:
 
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
     plant_population:
       index:
         params:
@@ -148,12 +158,22 @@ en:
             format: string
             desc: Filter by `name`
 
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
       show:
         attrs:
           -
             name: id
             format: int
             desc: Unique id
+
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
 
     plant_variety:
       index:
@@ -171,10 +191,20 @@ en:
             format: "int, int[]"
             desc: Filter by `id`
 
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
       show:
         attrs:
           -
             name: id
             format: int
             desc: Unique id
+
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
 

@@ -29,11 +29,16 @@
   .section
     %h3= model.name
 
+    -# GET index
     %div
       %span.method GET
       %span.url= "/api/v1/#{model.name.underscore.pluralize}"
 
     = render partial: 'api_props', locals: { title: "Search params", props: api_props("#{model.name.underscore}.index.params") }
+
+    %h4 Example
+    %pre
+      %code= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
 
     .api-live-example
       - if user_signed_in?
@@ -46,11 +51,16 @@
 
     %hr
 
+    -# GET show
     %div
       %span.method GET
       %span.url= "/api/v1/#{model.name.underscore.pluralize}/:id"
 
     = render partial: 'api_props', locals: { title: "Response attributes", props: api_props("#{model.name.underscore}.show.attrs") }
+
+    %h4 Example
+    %pre
+      %code= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}")
 
     .api-live-example
       - if user_signed_in?
