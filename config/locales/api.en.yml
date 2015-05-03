@@ -4,20 +4,25 @@ en:
       params:
         -
           name: page
+          format: int
           desc: "Page number (default: 1)"
         -
           name: per_page
-          desc: "Page size (default: 50, max: 200)" # FIXME replace with currently configured values after merging #210
+          format: int
+          desc: "Page size (default: %{default_per_page}, max: %{max_per_page})"
 
       meta:
         -
           name: "meta[page]"
+          format: int
           desc: "Current page number"
         -
           name: "meta[per_page]"
+          format: int
           desc: "Page size"
         -
           name: "meta[total_count]"
+          format: int
           desc: "Total number of existing records"
 
       response: |-
