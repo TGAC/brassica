@@ -13,6 +13,7 @@ FactoryGirl.define do
     pubmed_id { Faker::Number.number(7) }
     annotable
     linkage_group
+    qtl_job
     processed_trait_dataset
   end
 end

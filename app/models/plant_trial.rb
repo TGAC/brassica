@@ -36,6 +36,7 @@ class PlantTrial < ActiveRecord::Base
   validates :contact_person,
             presence: true
 
+  include Relatable
   include Filterable
   include Pluckable
 
@@ -56,19 +57,25 @@ class PlantTrial < ActiveRecord::Base
     ]
   end
 
-  private
+  def self.count_columns
+    [
+      'plant_scoring_units_count'
+    ]
+  end
 
   def self.permitted_params
     [
       query: [
-        :project_descriptor,
-        'plant_populations.id'
+        'project_descriptor',
+        'plant_populations.id',
+        'id'
       ]
     ]
   end
 
   def self.ref_columns
     [
+      'plant_population_id',
       'pubmed_id'
     ]
   end

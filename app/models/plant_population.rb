@@ -46,8 +46,8 @@ class PlantPopulation < ActiveRecord::Base
 
   def self.table_columns
     [
-      'plant_populations.name',
       'taxonomy_terms.name',
+      'plant_populations.name',
       'canonical_population_name',
       'plant_lines.plant_line_name AS female_parent_line',
       'male_parent_lines_plant_populations.plant_line_name AS male_parent_line',
@@ -82,13 +82,12 @@ class PlantPopulation < ActiveRecord::Base
     )
   end
 
-  private
-
   def self.permitted_params
     [
       :fetch,
       query: [
-        :id, :name
+        'id',
+        'name'
       ]
     ]
   end

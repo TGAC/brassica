@@ -25,7 +25,7 @@ RSpec.describe TraitScore do
     end
   end
 
-  describe '#pluckable' do
+  describe '#pluck_columns' do
     it 'gets proper data table columns' do
       ts = create(:trait_score)
       plucked = TraitScore.pluck_columns
@@ -35,6 +35,8 @@ RSpec.describe TraitScore do
           ts.score_value,
           ts.value_type,
           ts.scoring_date,
+          ts.plant_scoring_unit.scoring_unit_name,
+          ts.plant_scoring_unit.id,
           ts.id
         ]
     end

@@ -20,7 +20,7 @@ RSpec.describe PlantTrial do
     end
   end
 
-  describe '#pluckable' do
+  describe '#pluck_columns' do
     it 'gets proper data table columns' do
       pt = create(:plant_trial)
       plucked = PlantTrial.pluck_columns
@@ -34,6 +34,8 @@ RSpec.describe PlantTrial do
           pt.trial_year,
           pt.trial_location_site_name,
           pt.date_entered,
+          pt.plant_scoring_units.count,
+          pt.plant_population.id,
           pt.pubmed_id,
           pt.id
         ]
@@ -45,13 +47,6 @@ RSpec.describe PlantTrial do
       ptyears = create_list(:plant_trial, 3).map(&:trial_year)
       table_data = PlantTrial.table_data
       expect(table_data.map{ |pt| pt[4] }).to eq ptyears.sort
-    end
-
-    it 'returns pubmed_id' do
-      pt = create(:plant_trial)
-      table_data = PlantTrial.table_data
-      expect(table_data.count).to eq 1
-      expect(table_data[0][-2]).to eq pt.pubmed_id
     end
   end
 end

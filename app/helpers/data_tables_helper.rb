@@ -24,16 +24,16 @@ module DataTablesHelper
 
   def active_tab_label
     case model_param
-      when 'plant_populations', 'plant_lines', 'plant_varieties'
+      when 'plant_populations', 'plant_lines', 'plant_varieties', 'plant_accessions'
         :plant_populations
-      when 'plant_trials', 'trait_descriptors', 'trait_scores'
+      when 'plant_trials', 'trait_descriptors', 'trait_scores', 'plant_scoring_units'
         :trait_descriptors
-      when 'linkage_maps'
+      when 'linkage_maps', 'linkage_groups'
         :linkage_maps
-      when 'qtl'
+      when 'qtl', 'qtl_jobs'
         :qtl
       else
-        :plant_populations
+        :wrong_tab
     end
   end
 
@@ -50,7 +50,7 @@ module DataTablesHelper
       plant_populations: data_tables_path(model: :plant_populations),
       trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
       linkage_maps: data_tables_path(model: :linkage_maps),
-      qtl: data_tables_path(model: :qtl, group: true)
+      qtl: data_tables_path(model: :qtl)
     }
   end
 

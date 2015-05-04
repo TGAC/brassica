@@ -15,18 +15,6 @@ RSpec.describe 'data_tables/index.html.haml' do
     end
   end
 
-  context 'when run for qtls' do
-    before(:each) do
-      allow(view).to receive(:params).and_return(model: 'qtls')
-    end
-
-    it 'contains additional count columns' do
-      render
-      expect(rendered).to include t('tables.qtl.id')
-      expect(rendered).to include t('tables.trait_descriptors.trait_scores')
-    end
-  end
-
   context 'for "publishable" models' do
     it 'contains additional pubmed column' do
       %w(plant_trials qtls linkage_maps).each do |model|

@@ -32,7 +32,7 @@ window.baseColumnDefs = (baseModel) ->
     render: (data, type, full, meta) ->
       objectId = full[full.length - 2]
       if objectId
-        '<a class="btn btn-xs btn-info" href="http://www.ncbi.nlm.nih.gov/pubmed/' + objectId + '">PubMed link</a>'
+        '<a class="btn btn-xs btn-info" title="PubMed Link" href="http://www.ncbi.nlm.nih.gov/pubmed/' + objectId + '">PMed</a>'
       else
         ''
   ,
@@ -43,4 +43,9 @@ window.baseColumnDefs = (baseModel) ->
         '<button class="btn btn-xs btn-info" data-popover-source="data_tables/' + objectId + '?model=' + baseModel + '" title="Metadata"><i class="fa fa-info-circle fa-lg"></i></button>'
       else
         ''
+  ,
+    targets: 'taxonomy_terms_name_column'
+    defaultContent: ''
+    render: (data, type, full, meta) ->
+      data.replace(/Brassica/, 'B.') if data
   ]
