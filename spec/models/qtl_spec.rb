@@ -4,28 +4,6 @@ RSpec.describe Qtl do
   describe '#table_data' do
     let(:lm) { create(:linkage_map) }
 
-    it 'properly calculates grouped qtls number' do
-      lg = create(:linkage_group, linkage_maps: [lm])
-      ptd = create(:processed_trait_dataset)
-      create_list(:qtl, 3, linkage_group: lg, processed_trait_dataset: ptd)
-      table_data = Qtl.table_data
-      expect(table_data.count).to eq 1
-      expect(table_data[0].last).to eq 3
-    end
-
-    it 'properly calculates associated trait scores' do
-      lg = create(:linkage_group, linkage_maps: [lm])
-      td1 = create(:trait_descriptor, descriptor_name: 'dn', trait_scores_count: 3)
-      td2 = create(:trait_descriptor, descriptor_name: 'dn', trait_scores_count: 7)
-      ptd1 = create(:processed_trait_dataset, trait_descriptor: td1)
-      ptd2 = create(:processed_trait_dataset, trait_descriptor: td2)
-      create(:qtl, linkage_group: lg, processed_trait_dataset: ptd1)
-      create(:qtl, linkage_group: lg, processed_trait_dataset: ptd2)
-      table_data = Qtl.table_data
-      expect(table_data.count).to eq 1
-      expect(table_data[0][-2]).to eq 10
-    end
-
     it 'gets proper columns' do
       qtl = create(:qtl)
       qtl.linkage_group.linkage_maps << lm
@@ -37,8 +15,26 @@ RSpec.describe Qtl do
         lm.plant_population.name,
         lm.linkage_map_label,
         qtl.processed_trait_dataset.trait_descriptor.descriptor_name,
-        0,
-        1
+        qtl.qtl_rank,
+        qtl.map_qtl_label,
+        qtl.outer_interval_start,
+        qtl.inner_interval_start,
+        qtl.qtl_mid_position,
+        qtl.inner_interval_end,
+        qtl.outer_interval_end,
+        qtl.peak_value,
+        qtl.peak_p_value,
+        qtl.regression_p,
+        qtl.residual_p,
+        qtl.additive_effect,
+        qtl.genetic_variance_explained,
+        qtl.qtl_job.qtl_job_name,
+        qtl.qtl_job.id,
+        lm.plant_population.id,
+        lm.id,
+        qtl.processed_trait_dataset.trait_descriptor.id,
+        qtl.pubmed_id,
+        qtl.id
       ]
     end
   end

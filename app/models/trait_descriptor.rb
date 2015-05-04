@@ -21,8 +21,12 @@ class TraitDescriptor < ActiveRecord::Base
             numericality: true
 
   def self.table_data(params = nil)
+    trait_descriptor_query = ''
+    if params && params[:query].present? && params[:query][:id].present?
+      trait_descriptor_query = "WHERE td.id = #{params[:query][:id].to_i}"
+    end
     connection.execute(
-      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, td.id, pt.id
+      'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, pp.id, pt.id, td.id
         FROM
         trait_descriptors td
         LEFT OUTER JOIN
@@ -41,9 +45,9 @@ class TraitDescriptor < ActiveRecord::Base
           LEFT OUTER JOIN qtl ON qtl.processed_trait_dataset_id = ptd.id
           GROUP BY td.id
         ) AS intable2
-        ON td.id = tdid2
-
-        ORDER BY tt.name, pt.project_descriptor;'
+        ON td.id = tdid2 ' +
+        trait_descriptor_query +
+        ' ORDER BY tt.name, pt.project_descriptor;'
     ).values
   end
 
@@ -54,7 +58,8 @@ class TraitDescriptor < ActiveRecord::Base
       'descriptor_name',
       'plant_trials.project_descriptor',
       'countries.country_name',
-      'trait_scores_count'
+      'trait_scores_count',
+      'qtl_count'
     ]
   end
 

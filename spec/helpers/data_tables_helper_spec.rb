@@ -7,8 +7,17 @@ RSpec.describe DataTablesHelper do
         plant_populations: data_tables_path(model: :plant_populations),
         trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
         linkage_maps: data_tables_path(model: :linkage_maps),
-        qtl: data_tables_path(model: :qtl, group: true)
+        qtl: data_tables_path(model: :qtl)
       })
+    end
+  end
+
+  describe '#active_tab_label' do
+    it 'returns meaningful label for every tableized model' do
+      displayable_tables.each do |table|
+        allow(self).to receive(:params).and_return(model: table)
+        expect(active_tab_label).not_to eq :wrong_tab
+      end
     end
   end
 

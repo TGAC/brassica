@@ -1,0 +1,21 @@
+.dataTables_wrapper {
+  .dataTables_filter {
+    text-align: left;
+  }
+  .dataTables_length {
+    text-align: right;
+  }
+}
+
+.dataTable thead {
+  > tr  {
+    > th {
+      vertical-align: top;
+    }
+  }
+  .sorting_asc::after,
+  .sorting_desc::after {
+    color: $accent-color;
+    opacity: 1 !important;
+  }
+}

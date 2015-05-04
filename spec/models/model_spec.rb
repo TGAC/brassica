@@ -14,14 +14,21 @@ RSpec.describe ActiveRecord::Base do
     Rails.application.eager_load!
   end
 
-  it 'defines table and ref columns as strings only' do
-    Rails.application.eager_load!
+  it 'defines table, count and ref columns as strings only' do
     ActiveRecord::Base.descendants.each do |model|
-      if model.respond_to? 'table_columns'
-        expect(model.table_columns).to all be_an(String)
+      [:table_columns, :ref_columns, :count_columns].each do |columns_type|
+        if model.respond_to? columns_type
+          expect(model.send(columns_type)).to all be_an(String)
+        end
       end
-      if model.respond_to? 'ref_columns'
-        expect(model.ref_columns).to all be_an(String)
+    end
+  end
+
+  it 'defined permitted query params as strings only' do
+    ActiveRecord::Base.descendants.each do |model|
+      if model.respond_to? :permitted_params
+        expect(model.send(:permitted_params).dup.extract_options![:query]).
+          to all be_an(String)
       end
     end
   end

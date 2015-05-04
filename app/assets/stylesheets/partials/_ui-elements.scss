@@ -13,6 +13,14 @@
   border-color: $text-color-negative;
 }
 
+.btn-action {
+  @include button-variant($text-color-negative, $accent-color-2, darken($accent-color-2, 5));
+}
+
+.btn-mono {
+  @include button-variant($text-color-negative, $mono-color-1, darken($mono-color-1, 5));
+}
+
 //forms
 .form-negative {
   border-color: $mono-color-2;
@@ -40,81 +48,56 @@
   }
 }
 
-//sections
-.section-heading {
-  color: $heading-text-color;
-  font-size: 22px;
-
-  &::after {
-    border-color: $accent-color;
-  }
+//tables
+.table-bar {
+  @include clearfix;
+  @include border-radius(2px);
+  background-color: #CED7E0;
+  border: 1px solid #bbb;
+  padding-top: 5px;
 }
 
-.section-jumbotron {
-  background: url("/images/hero-bg.jpg") no-repeat scroll center top #4B5B6B;
-  color: $text-color-negative;
-  padding-top: 25px;
+.table {
+  border: 1px solid #dddddd;
+  font-size: 13px;
 
-  .container {
-    max-width: $break-medium;
-  }
-
-  h3 {
-    color: $text-color-negative;
-    font-size: 32px;
-    font-weight: bold;
-  }
-
-  .intro-text {
-    font-size: 16px;
-  }
-}
-
-.section-search {
-  line-height: 2.4;
-  margin-top: -60px;
-  text-align: center;
-
-  .container {
-    background-color: #50687E;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    padding: 15px 0;
-  }
-
-  .form-group {
-    margin: 0;
-  }
-}
-
-//TODO refactor
-.section-actions {
-  [class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-  [class^="flaticon-"]:after, [class*=" flaticon-"]:after {
-    color: $mono-color-1;
-    border: 3px solid $accent-color;
-    border-radius: 100%;
-    display: inline-block;
-    font-size: 56px;
-    height: 2em;
-    line-height: 1.9;
-    margin: 0;
-    padding-left: 5px;
-    width: 2em;
-  }
-
-  .boxed-content {
-    &:hover {
-      i:before {
-        transform: scale(1.1);
-        background-color: $accent-color;
-        border-color: transparent;
-        color: $text-color-negative;
-        transition: all 500ms;
-      }
+  thead {
+    tr {
+      background-color: #dae3ed;
     }
   }
+
+  &.table-browse {
+    margin-bottom: 100px !important;
+    width: 100% !important;
+  }
 }
 
+//table surrounding
+.data-filters {
+  color: $mono-color-1;
+  font-size: 12px;
+  margin-top: -20px;
 
+  .label {
+    font-size: inherit;
+  }
+}
 
+.table-footer {
+  top: -90px;
+  position: relative;
+}
 
+//popover
+.popover {
+  .metadata-close {
+    top: 4px;
+    right: 10px;
+    position: absolute;
+  }
+}
+
+.popover-content {
+  word-wrap: break-word;
+}

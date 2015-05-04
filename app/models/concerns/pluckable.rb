@@ -15,7 +15,8 @@ module Pluckable extend ActiveSupport::Concern
 
     def self.pluck_columns
       query = self.all
-      columns = table_columns + ref_columns
+      cc = respond_to?(:count_columns) ? count_columns : []
+      columns = table_columns + cc + ref_columns
       query = join_columns(columns, query, true)
       query.pluck(*columns)
     end

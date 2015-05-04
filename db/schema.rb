@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150501124104) do
+ActiveRecord::Schema.define(version: 20150502162359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -422,37 +422,34 @@ ActiveRecord::Schema.define(version: 20150501124104) do
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
   create_table "primers", force: :cascade do |t|
-    t.text    "primer",                  default: "",            null: false
-    t.text    "sequence",                default: "unspecified", null: false
-    t.text    "sequence_id",             default: "unspecified", null: false
-    t.text    "sequence_source_acronym", default: "unspecified", null: false
-    t.text    "description"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "data_owned_by"
-    t.integer "marker_assays_a_count",   default: 0,             null: false
-    t.integer "marker_assays_b_count",   default: 0,             null: false
+    t.text "primer",                  default: "",            null: false
+    t.text "sequence",                default: "unspecified", null: false
+    t.text "sequence_id",             default: "unspecified", null: false
+    t.text "sequence_source_acronym", default: "unspecified", null: false
+    t.text "description"
+    t.text "comments"
+    t.text "entered_by_whom"
+    t.date "date_entered"
+    t.text "data_provenance"
+    t.text "data_owned_by"
   end
 
   add_index "primers", ["primer"], name: "primers_primer_idx", using: :btree
 
   create_table "probes", force: :cascade do |t|
     t.text    "probe_name",              default: "",            null: false
-    t.text    "species",                 default: "unspecified", null: false
     t.text    "clone_name",              default: "unspecified", null: false
     t.date    "date_described"
     t.text    "sequence_id",             default: "unspecified", null: false
     t.text    "sequence_source_acronym", default: "unspecified", null: false
     t.text    "comments"
     t.text    "entered_by_whom"
-    t.date    "date_entered"
     t.text    "data_provenance"
-    t.integer "marker_assays_count",     default: 0,             null: false
+    t.integer "taxonomy_term_id"
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
+  add_index "probes", ["taxonomy_term_id"], name: "probes_taxonomy_term_id_idx", using: :btree
 
   create_table "processed_trait_datasets", force: :cascade do |t|
     t.text    "processed_trait_dataset_name", default: "", null: false

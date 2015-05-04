@@ -5,25 +5,3 @@
 $font-path: "/fonts/";
 $font-icon: "flaticon";
 @include font-face($font-icon, font-files("#{$font-path}/#{$font-icon}.eot", "#{$font-path}/#{$font-icon}.woff", "#{$font-path}/#{$font-icon}.ttf", "#{$font-path}/#{$font-icon}.svg"));
-
-[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
-[class^="flaticon-"]:after, [class*=" flaticon-"]:after {
-  font-family: Flaticon;
-  font-size: 20px;
-  font-style: normal;
-  margin-left: 20px;
-}.flaticon-magnifier:before {
-   content: "\e000";
- }
-.flaticon-pages:before {
-  content: "\e001";
-}
-.flaticon-database:before {
-  content: "\e002";
-}
-.flaticon-settings:before {
-  content: "\e003";
-}
-.flaticon-user:before {
-  content: "\e004";
-}

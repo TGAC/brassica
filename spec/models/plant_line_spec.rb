@@ -85,15 +85,15 @@ RSpec.describe PlantLine do
     end
   end
 
-  describe '#pluckable' do
+  describe '#pluck_columns' do
     it 'gets proper data table columns' do
       pl = create(:plant_line, plant_variety: create(:plant_variety))
 
       plucked = PlantLine.pluck_columns
       expect(plucked.count).to eq 1
       expect(plucked[0]).to eq [
-        pl.plant_line_name,
         pl.taxonomy_term.name,
+        pl.plant_line_name,
         pl.common_name,
         pl.plant_variety.plant_variety_name,
         pl.previous_line_name,
@@ -115,7 +115,7 @@ RSpec.describe PlantLine do
       pp = create(:plant_population)
       pls = create_list(:plant_line, 3, plant_populations: [pp])
       td = PlantLine.table_data(query: { 'plant_populations.id': pp.id })
-      expect(td.map(&:first)).to eq pls.map(&:plant_line_name).sort
+      expect(td.map(&:second)).to eq pls.map(&:plant_line_name).sort
     end
   end
 end

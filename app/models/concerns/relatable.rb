@@ -28,6 +28,8 @@ module Relatable extend ActiveSupport::Concern
       counter_name = counter_name.split(/ as /i)[-1]  # honor aliasing
       counter_name.gsub!('_count','')   # support cached count columns as well
 
+      counter_name.gsub!('qtls','qtl')  # unfortunate special case... :(
+
       if counter_name.include? '.'
         counter_name.split('.')[-1]
       else

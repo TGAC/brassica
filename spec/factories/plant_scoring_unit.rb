@@ -8,6 +8,9 @@ FactoryGirl.define do
     described_by_whom { Faker::Internet.user_name }
     confirmed_by_whom { Faker::Internet.user_name }
     plant_trial
+    design_factor
+    plant_part
+    plant_accession
     annotable
   end
 end

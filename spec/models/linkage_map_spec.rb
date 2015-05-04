@@ -4,6 +4,9 @@ RSpec.describe LinkageMap do
   describe '#table_data' do
     it 'gets proper columns' do
       lm = create(:linkage_map)
+      create_list(:linkage_group, 2).each do |lg|
+        lm.linkage_groups << lg
+      end
       table_data = LinkageMap.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
@@ -13,16 +16,10 @@ RSpec.describe LinkageMap do
         lm.plant_population.name,
         lm.map_version_no,
         lm.map_version_date,
+        lm.linkage_groups.count,
         lm.pubmed_id,
         lm.id
       ]
-    end
-
-    it 'returns pubmed_id' do
-      lm = create(:linkage_map)
-      table_data = LinkageMap.table_data
-      expect(table_data.count).to eq 1
-      expect(table_data[0][-2]).to eq lm.pubmed_id
     end
   end
 end

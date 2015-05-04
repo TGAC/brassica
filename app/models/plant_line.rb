@@ -45,8 +45,8 @@ class PlantLine < ActiveRecord::Base
 
   def self.table_columns
     [
-      'plant_line_name',
       'taxonomy_terms.name',
+      'plant_line_name',
       'common_name',
       'plant_varieties.plant_variety_name',
       'previous_line_name',
@@ -67,8 +67,6 @@ class PlantLine < ActiveRecord::Base
       }
     )
   end
-
-  private
 
   def self.permitted_params
     [
