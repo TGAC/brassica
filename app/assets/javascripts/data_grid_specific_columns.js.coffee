@@ -3,15 +3,15 @@ window.configs =
   'marker-assays':
     columnDefs:
       [
-        targets: 'primer_a_column'
+        targets: 'marker_assays_primer_a_column'
         render: (data, type, full, meta) ->
           modelIdUrl('primers', data, full[full.length - 4])
       ,
-        targets: 'primer_b_column'
+        targets: 'marker_assays_primer_b_column'
         render: (data, type, full, meta) ->
           modelIdUrl('primers', data, full[full.length - 3])
       ,
-        targets: 'probe_name_column'
+        targets: 'probes_probe_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('probes', data, full[full.length - 2])
       ]

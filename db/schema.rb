@@ -422,16 +422,18 @@ ActiveRecord::Schema.define(version: 20150502162359) do
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
   create_table "primers", force: :cascade do |t|
-    t.text "primer",                  default: "",            null: false
-    t.text "sequence",                default: "unspecified", null: false
-    t.text "sequence_id",             default: "unspecified", null: false
-    t.text "sequence_source_acronym", default: "unspecified", null: false
-    t.text "description"
-    t.text "comments"
-    t.text "entered_by_whom"
-    t.date "date_entered"
-    t.text "data_provenance"
-    t.text "data_owned_by"
+    t.text    "primer",                  default: "",            null: false
+    t.text    "sequence",                default: "unspecified", null: false
+    t.text    "sequence_id",             default: "unspecified", null: false
+    t.text    "sequence_source_acronym", default: "unspecified", null: false
+    t.text    "description"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.integer "marker_assays_a_count",   default: 0,             null: false
+    t.integer "marker_assays_b_count",   default: 0,             null: false
   end
 
   add_index "primers", ["primer"], name: "primers_primer_idx", using: :btree
@@ -445,6 +447,7 @@ ActiveRecord::Schema.define(version: 20150502162359) do
     t.text    "comments"
     t.text    "entered_by_whom"
     t.text    "data_provenance"
+    t.integer "marker_assays_count",     default: 0,             null: false
     t.integer "taxonomy_term_id"
   end
 

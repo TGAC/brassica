@@ -47,9 +47,6 @@ class MarkerAssay < ActiveRecord::Base
       'primer_bs_marker_assays.primer AS primer_b',
       'separation_system',
       'probes.probe_name'
-      # 'restriction_enzyme_a_id',
-      # 'restriction_enzyme_b_id',
-      # 'marker_sequence_assignment_id'
     ]
   end
 
@@ -66,7 +63,7 @@ class MarkerAssay < ActiveRecord::Base
       query: [
         'primer_a_id',
         'primer_b_id',
-        'probe_id'
+        'probes.id'
       ]
     ]
   end

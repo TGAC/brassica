@@ -31,7 +31,7 @@ class Probe < ActiveRecord::Base
   def self.table_columns
     [
       'probe_name',
-      'species',
+      'taxonomy_terms.name',
       'clone_name',
       'date_described',
       'sequence_id',

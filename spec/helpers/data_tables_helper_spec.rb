@@ -7,7 +7,8 @@ RSpec.describe DataTablesHelper do
         plant_populations: data_tables_path(model: :plant_populations),
         trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
         linkage_maps: data_tables_path(model: :linkage_maps),
-        qtl: data_tables_path(model: :qtl)
+        qtl: data_tables_path(model: :qtl),
+        marker_assays: data_tables_path(model: :marker_assays)
       })
     end
   end
