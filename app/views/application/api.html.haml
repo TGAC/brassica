@@ -1,16 +1,29 @@
 .lead Brassica Information Portal API
 
-%h2 General guidelines
+%h2 General introduction
 
 %p BIP provides HTTP REST-style API which uses JSON to represent returned resources. Full access to the API is allowed for all registered users. In order to authenticate users pass <code>api_key</code> parameter in each call to the API.
 
-%h3 Read-only and writeable resources
+%p The API exposes several resources for which fetching and submission of new entries is supported. These include:
 
-%p Some of available resources are read-only.
+%ul
+  %li PlantPopulation
+  %li PlantLine
+  %li ...
 
-%h3 Fetching resources
+%p Several other resources allow for fetching data only:
 
-%p BIP API exposes several endpoints allowing to fetch existing resources. These endpoints always return paginated responses.
+%ul
+  %li TaxonomyTerm
+  %li PlantVariety
+  %li ...
+
+
+%h2 Fetching data
+
+%p Each single resource can be fetched by giving its <code>id</code>. Multiple resources can be fetched with or without additional parameters limiting returned results. These parameters are specific for each resource and will be described in detail later.
+
+%p Fetching multiple resources always yields paginated results.
 
 = render partial: 'api_props', locals: { title: 'Pagination parameters', props:  api_props('pagination.params', default_per_page: Kaminari.config.default_per_page, max_per_page: Kaminari.config.max_per_page) }
 = render partial: 'api_props', locals: { title: 'Paginated response metadata', props:  api_props('pagination.meta') }
@@ -22,6 +35,11 @@
   .panel-body
     %pre
       %code= t('api.pagination.response')
+
+%h2 Searching for data
+
+
+
 
 %h2 Resources
 
