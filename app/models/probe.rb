@@ -7,9 +7,6 @@ class Probe < ActiveRecord::Base
   validates :probe_name,
             presence: true
 
-  validates :species,
-            presence: true
-
   validates :clone_name,
             presence: true
 
