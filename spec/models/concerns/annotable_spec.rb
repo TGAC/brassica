@@ -22,10 +22,11 @@ RSpec.describe Annotable do
         test_hash = {
           'comments' => instance.comments,
           'entered_by_whom' => instance.entered_by_whom,
-          'date_entered' => instance.date_entered,
           'data_provenance' => instance.data_provenance
         }.merge(
           instance.has_attribute?('data_owned_by') ? { 'data_owned_by' => instance.data_owned_by } : {}
+        ).merge(
+          instance.has_attribute?('date_entered') ? { 'date_entered' => instance.date_entered } : {}
         )
         expect(instance.annotations_as_json).to eq test_hash
         expect(test_hash.values.map(&:nil?)).to all be_falsey
