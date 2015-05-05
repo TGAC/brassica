@@ -2,7 +2,7 @@ module Brassica
   module Api
 
     def self.models
-      (self.readable_models + self.writable_models).uniq
+      self.readable_models | self.writable_models
     end
 
     def self.readable_models

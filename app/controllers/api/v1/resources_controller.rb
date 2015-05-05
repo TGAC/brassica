@@ -42,7 +42,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def model_klass
-    @model_klass ||= model_name.singularize.camelize.constantize
+    @model_klass ||= model_name.classify.constantize
   end
 
   def allowed_models
