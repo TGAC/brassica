@@ -107,7 +107,7 @@ GEM
     dotenv (1.0.2)
     dotenv-rails (1.0.2)
       dotenv (= 1.0.2)
-    draper (1.4.0)
+    draper (2.1.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
       activesupport (>= 3.0)
@@ -163,6 +163,9 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.2)
     jwt (1.2.1)
+    kaminari (0.15.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     libv8 (3.16.14.7)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
@@ -340,7 +343,7 @@ DEPENDENCIES
   database_cleaner
   devise (~> 3.4.0)
   dotenv-rails
-  draper
+  draper (~> 2.1.0)
   elasticsearch-model
   elasticsearch-rails
   factory_girl_rails
@@ -349,6 +352,7 @@ DEPENDENCIES
   haml-rails
   hashie
   jquery-rails
+  kaminari
   nokogiri
   obo
   omniauth

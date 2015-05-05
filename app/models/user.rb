@@ -10,8 +10,11 @@ class User < ActiveRecord::Base
   include Nondestroyable
 
   has_many :submissions
+  has_one :api_key
 
   validates :login, presence: true, uniqueness: { case_sensitive: false }
+
+  after_create :create_api_key!
 
   def self.find_or_create_from_auth_hash(auth_hash)
     user = self.find_or_initialize_by(login: auth_hash['uid'])
@@ -19,4 +22,5 @@ class User < ActiveRecord::Base
     user.save
     user
   end
+
 end
