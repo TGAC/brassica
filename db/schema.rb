@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506124104) do
+ActiveRecord::Schema.define(version: 20150506195820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -86,8 +86,6 @@ ActiveRecord::Schema.define(version: 20150506124104) do
     t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
     t.integer "map_linkage_group_lists_count", default: 0,             null: false
-    t.integer "map_positions_count",           default: 0,             null: false
-    t.integer "map_locus_hits_count",          default: 0,             null: false
   end
 
   add_index "linkage_groups", ["linkage_group_label"], name: "linkage_groups_linkage_group_label_idx", using: :btree
@@ -110,7 +108,6 @@ ActiveRecord::Schema.define(version: 20150506124104) do
     t.integer "plant_population_id"
     t.integer "pubmed_id"
     t.integer "map_linkage_group_lists_count",           default: 0,             null: false
-    t.integer "map_locus_hits_count",                    default: 0,             null: false
   end
 
   add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", using: :btree
@@ -125,7 +122,7 @@ ActiveRecord::Schema.define(version: 20150506124104) do
   add_index "map_linkage_group_lists", ["linkage_group_id"], name: "map_linkage_group_lists_linkage_group_id_idx", using: :btree
   add_index "map_linkage_group_lists", ["linkage_map_id"], name: "map_linkage_group_lists_linkage_map_id_idx", using: :btree
 
-  create_table "map_locus_hits", id: false, force: :cascade do |t|
+  create_table "map_locus_hits", force: :cascade do |t|
     t.text    "consensus_group_assignment", default: "unspecified", null: false
     t.text    "canonical_marker_name",      default: "unspecified", null: false
     t.text    "map_position"
@@ -184,7 +181,6 @@ ActiveRecord::Schema.define(version: 20150506124104) do
     t.integer "primer_a_id"
     t.integer "primer_b_id"
     t.integer "probe_id"
-    t.integer "population_loci_count",         default: 0,             null: false
   end
 
   add_index "marker_assays", ["canonical_marker_name"], name: "marker_assays_canonical_marker_name_idx", using: :btree
@@ -306,7 +302,6 @@ ActiveRecord::Schema.define(version: 20150506124104) do
     t.integer "plant_population_lists_count", default: 0,             null: false
     t.integer "linkage_maps_count",           default: 0,             null: false
     t.integer "plant_trials_count",           default: 0,             null: false
-    t.integer "population_loci_count",        default: 0,             null: false
   end
 
   add_index "plant_populations", ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree
@@ -416,7 +411,7 @@ ActiveRecord::Schema.define(version: 20150506124104) do
   add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
 
   create_table "population_loci", force: :cascade do |t|
-    t.text    "mapping_locus",        default: "unspecified", null: false
+    t.text    "mapping_locus",       default: "unspecified", null: false
     t.text    "defined_by_whom"
     t.text    "comments"
     t.text    "entered_by_whom"
@@ -425,8 +420,6 @@ ActiveRecord::Schema.define(version: 20150506124104) do
     t.text    "data_owned_by"
     t.integer "plant_population_id"
     t.integer "marker_assay_id"
-    t.integer "map_locus_hits_count", default: 0,             null: false
-    t.integer "map_positions_count",  default: 0,             null: false
   end
 
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
@@ -460,8 +453,8 @@ ActiveRecord::Schema.define(version: 20150506124104) do
     t.text    "comments"
     t.text    "entered_by_whom"
     t.text    "data_provenance"
-    t.integer "marker_assays_count",     default: 0,             null: false
     t.integer "taxonomy_term_id"
+    t.integer "marker_assays_count",     default: 0,             null: false
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
