@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506120540) do
+ActiveRecord::Schema.define(version: 20150506195820) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20150506120540) do
   add_index "map_linkage_group_lists", ["linkage_group_id"], name: "map_linkage_group_lists_linkage_group_id_idx", using: :btree
   add_index "map_linkage_group_lists", ["linkage_map_id"], name: "map_linkage_group_lists_linkage_map_id_idx", using: :btree
 
-  create_table "map_locus_hits", id: false, force: :cascade do |t|
+  create_table "map_locus_hits", force: :cascade do |t|
     t.text    "consensus_group_assignment", default: "unspecified", null: false
     t.text    "canonical_marker_name",      default: "unspecified", null: false
     t.text    "map_position"
