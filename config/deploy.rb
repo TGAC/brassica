@@ -36,14 +36,13 @@ set :default_env, {
 # set :keep_releases, 5
 
 namespace :deploy do
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+  after :finished, :rebuild_indices do
+    on roles(:app), in: :groups, limit: 1, wait: 10 do
+      within release_path do
+        execute :rake, "environment elasticsearch:import:model CLASS='PlantLine' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='PlantPopulation' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='PlantVariety' FORCE=y"
+      end
     end
   end
-
 end
