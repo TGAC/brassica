@@ -1,10 +1,10 @@
 # Single Concern for all models that have at least that set of fields:
 # t.text "comments"
 # t.text "entered_by_whom"
-# t.date "date_entered"
 # t.text "data_provenance"
 #
-# and could have one more optional field
+# and could have one or two more optional fields
+# t.date "date_entered"
 # t.text "data_owned_by"
 #
 # Provides common methods for dealing with these fields.
@@ -15,8 +15,10 @@ module Annotable extend ActiveSupport::Concern
     def annotations_as_json
       as_json(
         only: [
-          :comments, :entered_by_whom, :date_entered, :data_provenance
-        ] + (has_attribute?(:data_owned_by) ? [:data_owned_by] : [])
+          :comments, :entered_by_whom, :data_provenance
+        ] +
+        (has_attribute?(:date_entered) ? [:date_entered] : []) +
+        (has_attribute?(:data_owned_by) ? [:data_owned_by] : [])
       )
     end
 

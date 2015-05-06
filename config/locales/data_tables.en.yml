@@ -2,6 +2,27 @@ en:
   tables:
     countries:
       country_name: Country
+    design_factors:
+      design_factor_name: Design factor
+    linkage_groups:
+      linkage_group_label: Group label
+      linkage_group_name: Group name
+      total_length: Total length
+      lod_threshold: LOD threshold
+      consensus_group_assignment: Consensus group assignment
+      consensus_group_orientation: Consensus group orientation
+    linkage_maps:
+      linkage_map_label: Map label
+      linkage_map_name: Map name
+      map_version_no: Version
+      map_version_date: Version date
+    plant_accessions:
+      plant_accession: Accession
+      plant_accession_derivation: Derivation
+      accession_originator: Originator
+      originating_organisation: Organisation
+      year_produced: Year produced
+      date_harvested: Date harvested
     plant_lines:
       plant_line_name: Line name
       common_name: Common name
@@ -15,6 +36,18 @@ en:
       linkage_map_name: Map name
       map_version_no: Version
       map_version_date: Version date
+    marker_assays:
+      marker_assay_name: Name
+      canonical_marker_name: Canonical name
+      marker_type: Type
+      separation_system: Separation system
+      restriction_enzyme_a_id: Restriction enzyme A
+      restriction_enzyme_b_id: Restriction enzyme B
+      marker_sequence_assignment_id: Sequence assignment
+      primer_a: Primer A
+      primer_b: Primer B
+    plant_parts:
+      plant_part: Plant part
     plant_populations:
       name: Population
       canonical_population_name: Canonical name
@@ -22,8 +55,14 @@ en:
       male_parent_line: Male parent line
       plant_population_lists_count: Plant lines
       description: Description
+    plant_scoring_units:
+      scoring_unit_name: Scoring unit name
+      number_units_scored: Units scored
+      scoring_unit_sample_size: Sample size
+      scoring_unit_frame_size: Frame size
+      date_planted: Date planted
     plant_trials:
-      plant_trial_name: Name
+      plant_trial_name: Trial name
       plant_trial_description: Trial
       project_descriptor: Project
       trial_year: Year
@@ -41,14 +80,51 @@ en:
       male_parent: Male parent
     pop_type_lookup:
       population_type: Type
+    primers:
+      primer: Primer
+      sequence: Sequence
+      sequence_id: Sequence id
+      sequence_source_acronym: Sequence source acronym
+      description: Description
+    probes:
+      probe_name: Probe name
+      species: Species
+      clone_name: Clone name
+      date_described: Date described
+      sequence_id: Sequence id
+      sequence_source_acronym: Sequence source acronym
+    qtl:
+      id: QTL count
+      qtl_rank: QTL Rank
+      map_qtl_label: Map QTL label
+      outer_interval_start: Outer interval start
+      inner_interval_start: Inner interval start
+      qtl_mid_position: QTL mid position
+      inner_interval_end: Inner interval end
+      outer_interval_end: Outer interval end
+      peak_value: Peak value
+      peak_p_value: Peak p value
+      regression_p: Regression p
+      residual_p: Residual p
+      additive_effect: Additive effect
+      genetic_variance_explained: Genetic variance explained
+    qtl_jobs:
+      qtl_job_name: Job name
+      qtl_software: Software
+      qtl_method: Method
+      threshold_specification_method: Threshold specification method
+      interval_type: Interval type
+      inner_confidence_threshold: Inner confidence threshold
+      outer_confidence_threshold: Outer confidence threshold
+      qtl_statistic_type: QTL statistics type
+      date_run: Date run
     taxonomy_terms:
       name: Species
     trait_descriptors:
       descriptor_name: Trait
       trait_scores: Trait scores
+      qtl: QTL
     trait_scores:
       scoring_date: Scored on
       score_value: Value
       value_type: Value type
-    qtl:
-      id: QTL count

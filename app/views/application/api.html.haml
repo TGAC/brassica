@@ -1,5 +1,112 @@
 .lead Brassica Information Portal API
 
-%p
-  .text-justify
-    TEMP REPLACE WITH THE ACTUAL CONTENT.
+.row
+  .col-sm-2
+    %nav{style: 'position: fixed'}
+      %ul.list-group
+        %li.list-group-item= link_to "General introduction", "#general-introduction"
+        %li.list-group-item= link_to "Fetching data", "#fetching-data"
+        %li.list-group-item= link_to "Searching for data", "#searching-for-data"
+
+      %ul.list-group
+        - Brassica::Api.models.each do |model|
+          %li.list-group-item= link_to model.name, "#{model.name.underscore.dasherize}"
+
+  .col-sm-10
+    %a{name: 'general-introduction'}
+    %h2 General introduction
+
+    %p BIP provides HTTP REST-style API which uses JSON to represent returned resources. Full access to the API is allowed for all registered users. In order to authenticate users pass <code>api_key</code> parameter in each call to the API.
+
+    %p The API exposes several resources for which fetching and submission of new entries is supported. These include:
+
+    %ul
+      %li PlantPopulation
+      %li PlantLine
+      %li ...
+
+    %p Several other resources allow for fetching data only:
+
+    %ul
+      %li TaxonomyTerm
+      %li PlantVariety
+      %li ...
+
+
+    %a{name: 'fetching-data'}
+    %h2 Fetching data
+
+    %p Each single resource can be fetched by giving its <code>id</code>. Multiple resources can be fetched with or without additional parameters limiting returned results. These parameters are specific for each resource and will be described in detail later.
+
+    %p Fetching multiple resources always yields paginated results.
+
+    = render partial: 'api_props', locals: { title: 'Pagination parameters', props:  api_props('pagination.params', default_per_page: Kaminari.config.default_per_page, max_per_page: Kaminari.config.max_per_page) }
+    = render partial: 'api_props', locals: { title: 'Paginated response metadata', props:  api_props('pagination.meta') }
+
+    .panel.panel-default
+      .panel-heading
+        .panel-title Paginated response format
+
+      .panel-body
+        %pre
+          %code= t('api.pagination.response')
+
+    %a{name: 'searching-for-data'}
+    %h2 Searching for data
+
+    %p Similar generic section about how to issue full-text search calls to BIP, how to adjust scope (model), what to expect as the outcome
+
+
+    %h2 Resources
+
+    - Brassica::Api.models.each do |model|
+      .section
+        %a{name: model.name.underscore.dasherize}
+        %h3= model.name
+
+        .description Some pretty exhaustive description of the entity represented by this resource
+
+        = render partial: 'api_props', locals: { title: "Attributes", props: api_props("#{model.name.underscore}.attrs") }
+
+        -# GET index
+        %div
+          %span.method GET
+          %span.url= "/api/v1/#{model.name.underscore.pluralize}"
+
+        = render partial: 'api_props', locals: { title: "Search params", props: api_props("#{model.name.underscore}.index.params") }
+
+        %h4 Example
+        %pre
+          %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
+
+        .api-live-example
+          - if user_signed_in?
+            %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3" } } Try it!
+            .url
+            %pre.response.hidden
+              %code{style: 'display: block; max-height: 300px; overflow: auto'}
+          - else
+            .alert.alert-info Sign in to try it in your browser!
+
+        %hr
+
+        -# GET show
+        %div
+          %span.method GET
+          %span.url= "/api/v1/#{model.name.underscore.pluralize}/:id"
+
+        %h4 Example
+        %pre
+          %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}")
+
+        .api-live-example
+          - if user_signed_in?
+            %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}" } } Try it!
+            .url
+            %pre.response.hidden
+              %code{style: 'display: block; max-height: 300px; overflow: auto'}
+          - else
+            .alert.alert-info Sign in to try it in your browser!
+
+        %hr
+

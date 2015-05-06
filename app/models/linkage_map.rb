@@ -1,20 +1,14 @@
 class LinkageMap < ActiveRecord::Base
 
-  has_and_belongs_to_many :linkage_groups,
-                          join_table: 'map_linkage_group_lists'
+  has_many :linkage_groups, through: :map_linkage_group_lists
 
   belongs_to :plant_population, counter_cache: true, touch: true
 
   has_many :map_linkage_group_lists
 
-  has_many :genotype_matrices, foreign_key: 'linkage_map_id'
+  has_many :genotype_matrices
 
-  has_many :map_locus_hits, foreign_key: 'linkage_map_id'
-
-  default_scope { includes(plant_population: :taxonomy_term) }
-
-  include Filterable
-  include Pluckable
+  has_many :map_locus_hits
 
   validates :linkage_map_label,
             presence: true
@@ -24,7 +18,13 @@ class LinkageMap < ActiveRecord::Base
 
   validates :map_version_no,
             presence: true,
-            length: {minimum: 1, maximum: 3}
+            length: { minimum: 1, maximum: 3 }
+
+  default_scope { includes(plant_population: :taxonomy_term) }
+
+  include Relatable
+  include Filterable
+  include Pluckable
 
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
@@ -42,7 +42,11 @@ class LinkageMap < ActiveRecord::Base
     ]
   end
 
-  private
+  def self.count_columns
+    [
+      'linkage_maps.map_linkage_group_lists_count AS linkage_groups_count'
+    ]
+  end
 
   def self.ref_columns
     [
@@ -53,7 +57,9 @@ class LinkageMap < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
-        'plant_populations.id'
+        'plant_populations.id',
+        'linkage_groups.id',
+        'id'
       ]
     ]
   end

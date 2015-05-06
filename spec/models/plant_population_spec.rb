@@ -49,7 +49,7 @@ RSpec.describe PlantPopulation do
 
     it 'orders populations by population name' do
       ppids = create_list(:plant_population, 3).map(&:name)
-      expect(PlantPopulation.table_data.map(&:first)).to eq ppids.sort
+      expect(PlantPopulation.table_data.map(&:second)).to eq ppids.sort
     end
 
     it 'gets proper columns' do
@@ -62,8 +62,8 @@ RSpec.describe PlantPopulation do
       gd = PlantPopulation.table_data
       expect(gd.count).to eq 1
       data = [
-        pp.name,
         pp.taxonomy_term.name,
+        pp.name,
         pp.canonical_population_name,
         fpl.plant_line_name,
         mpl.plant_line_name,

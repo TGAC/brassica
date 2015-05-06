@@ -44,13 +44,11 @@ class PlantVariety < ActiveRecord::Base
     )
   end
 
-  private
-
   def self.permitted_params
     [
       :fetch,
       query: [
-        :id
+        'id'
       ],
       search: [
         :plant_variety_name

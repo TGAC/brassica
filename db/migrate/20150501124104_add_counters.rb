@@ -26,10 +26,35 @@ class AddCounters < ActiveRecord::Migration
 
   def table_counters
     {
+      linkage_maps: [
+        :map_linkage_group_lists_count
+      ],
+      linkage_groups: [
+        :map_linkage_group_lists_count
+      ],
       plant_populations: [
         :plant_population_lists_count,
         :linkage_maps_count,
         :plant_trials_count
+      ],
+      plant_trials: [
+        :plant_scoring_units_count
+      ],
+      plant_scoring_units: [
+        :trait_scores_count
+      ],
+      plant_accessions: [
+        :plant_scoring_units_count
+      ],
+      probes: [
+        :marker_assays_count
+      ],
+      primers: [
+        :marker_assays_a_count,
+        :marker_assays_b_count
+      ],
+      qtl_jobs: [
+        :qtls_count
       ]
     }
   end

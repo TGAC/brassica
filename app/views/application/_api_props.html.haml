@@ -1,0 +1,11 @@
+.panel.panel-default
+  .panel-heading
+    .panel-title= title
+
+  %table.table
+    - props.each do |prop|
+      %tr
+        %td.prop= prop[:name]
+        %td.format= prop[:format]
+        %td.desc= prop[:desc]
+
