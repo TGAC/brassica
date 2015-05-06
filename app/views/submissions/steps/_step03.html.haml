@@ -8,12 +8,12 @@
     .form-group
       = content.label :female_parent_line
       = content.select :female_parent_line, [@content.female_parent_line], {}, class: 'female-parent-line form-control', 'data-placeholder': "Select plant line"
-      %p.help-block Optional
+      %small.help-block Optional
 
     .form-group
       = content.label :male_parent_line
       = content.select :male_parent_line, [@content.male_parent_line], {}, class: 'male-parent-line form-control', 'data-placeholder': "Select plant line"
-      %p.help-block Optional
+      %small.help-block Optional
 
     %hr
 
@@ -34,17 +34,17 @@
       .form-group
         = label_tag :plant_line_name
         = text_field_tag :plant_line_name, nil, class: 'form-control required', placeholder: 'Enter new plant line name'
-        %p.help-block Required
+        %small.help-block Required
 
       .form-group
         = label_tag :taxonomy_term
         = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), prompt: "Select term...", class: 'form-control required'
-        %p.help-block Required
+        %small.help-block Required
 
       .form-group
         = label_tag :common_name, 'Common name'
         = text_field_tag :common_name, nil, class: 'form-control'
-        %p.help-block Optional
+        %small.help-block Optional
 
       .form-group.previous-line-name-wrapper
         .previous-line-name-select
@@ -56,7 +56,7 @@
           = text_field_tag :previous_line_name, nil, class: 'form-control', placeholder: "Enter new plant line name"
           %a.clear-input.hidden{href: '#'} ×
 
-        %p.help-block Optional
+        %small.help-block Optional
 
       .form-group.genetic-status-wrapper
         .genetic-status-select
@@ -68,13 +68,13 @@
           = text_field_tag :genetic_status, nil, class: 'form-control', placeholder: "Enter new status"
           %a.clear-input.hidden{href: '#'} ×
 
-        %p.help-block Optional
+        %small.help-block Optional
 
       .form-group
         = label_tag :plant_variety_name
         = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
 
-        %p.help-block Optional
+        %small.help-block Optional
 
       = render partial: "submissions/annotations", locals: { model: PlantLine }
 

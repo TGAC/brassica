@@ -1,68 +1,68 @@
-.lead Plant population submission
+.container
+  %h3.section-heading Plant population submission
+  %h4= @submission.name
 
-%h3= @submission.name
+  .panel.panel-default
 
-.panel.panel-default
+    %ul.list-group
+      - if @submission.population_name
+        %li.list-group-item
+          %strong Population name
+          = @submission.population_name
 
-  %ul.list-group
-    - if @submission.population_name
-      %li.list-group-item
-        %strong Population name
-        = @submission.population_name
+      - if @submission.description
+        %li.list-group-item
+          %strong Description
+          = @submission.description
 
-    - if @submission.description
-      %li.list-group-item
-        %strong Description
-        = @submission.description
+      - if @submission.owned_by
+        %li.list-group-item
+          %strong Population owned by
+          = @submission.owned_by
 
-    - if @submission.owned_by
-      %li.list-group-item
-        %strong Population owned by
-        = @submission.owned_by
+      - if @submission.population_type
+        %li.list-group-item
+          %strong Population type
+          = @submission.population_type
 
-    - if @submission.population_type
-      %li.list-group-item
-        %strong Population type
-        = @submission.population_type
+      - if @submission.species_name
+        %li.list-group-item
+          %strong Species
+          = @submission.species_name
 
-    - if @submission.species_name
-      %li.list-group-item
-        %strong Species
-        = @submission.species_name
+      - if @submission.plant_line_name
+        %li.list-group-item
+          %strong Plant line
+          = @submission.plant_line_name
 
-    - if @submission.plant_line_name
-      %li.list-group-item
-        %strong Plant line
-        = @submission.plant_line_name
+      -# FIXME new plant line
+      -# - if @submission.content.step02.population_type.present?
+      -#   %li.list-group-item
+      -#     %strong Population type
+      -#     = @submission.content.step02.population_type
 
-    -# FIXME new plant line
-    -# - if @submission.content.step02.population_type.present?
-    -#   %li.list-group-item
-    -#     %strong Population type
-    -#     = @submission.content.step02.population_type
+      - if @submission.female_parent_line_name
+        %li.list-group-item
+          %strong Female parent line
+          = @submission.female_parent_line_name
 
-    - if @submission.female_parent_line_name
-      %li.list-group-item
-        %strong Female parent line
-        = @submission.female_parent_line_name
+      - if @submission.male_parent_line_name
+        %li.list-group-item
+          %strong Male parent line
+          = @submission.male_parent_line_name
 
-    - if @submission.male_parent_line_name
-      %li.list-group-item
-        %strong Male parent line
-        = @submission.male_parent_line_name
+      - if @submission.data_owned_by
+        %li.list-group-item
+          %strong Data owned by
+          = @submission.data_owned_by
 
-    - if @submission.data_owned_by
-      %li.list-group-item
-        %strong Data owned by
-        = @submission.data_owned_by
+      - if @submission.data_provenance
+        %li.list-group-item
+          %strong Data provenance
+          = @submission.data_provenance
 
-    - if @submission.data_provenance
-      %li.list-group-item
-        %strong Data provenance
-        = @submission.data_provenance
-
-    - if @submission.comments
-      %li.list-group-item
-        %strong Comments
-        = @submission.comments
+      - if @submission.comments
+        %li.list-group-item
+          %strong Comments
+          = @submission.comments
 

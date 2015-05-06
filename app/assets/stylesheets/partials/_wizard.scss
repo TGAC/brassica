@@ -1,0 +1,158 @@
+// BASED ON: http://www.cssscript.com/responsive-step-progress-indicator-with-pure-css/
+/* Copyright 2013-2015 etc Chris Tabor. Licensed under MIT. */
+
+// colors
+
+$inactive: #999;
+$active: $accent-color;
+$hover: #5671d0;
+$step-danger: #d3140f;
+$step-warning: #edb10a;
+$step-info: #5b32d6;
+
+// sizing
+
+$bubble-size: 50px;
+$bubble-line-thickness: 1px;
+$border-thickness: 1px;
+$darken-amount: 30%;
+
+// misc
+$mobile-size: 400px;
+
+@mixin bubble-style($color) {
+  background-color: $color;
+  color: $color;
+  border-color: darken($color, $darken-amount);
+  &:before,
+  &:after {
+    background-color: $color;
+    border-color: darken($color, $darken-amount);
+  }
+}
+.flexer {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.no-flexer {
+  display: block;
+}
+.no-flexer-element {
+  -ms-flex: 0;
+  -webkit-flex: 0;
+  -moz-flex: 0;
+  flex: 0;
+}
+.flexer-element {
+  -ms-flex: 1;
+  -webkit-flex: 1;
+  -moz-flex: 1;
+  flex: 1;
+}
+.step-indicator {
+  @extend .flexer;
+  margin: 0;
+  padding: 0;
+  font-size: 80%;
+  margin: 20px 0;
+  position: relative;
+  .panel {
+    box-shadow: none;
+    .panel-heading,
+    .panel-body {
+      padding: 0 5px;
+    }
+  }
+  > li {
+    @extend .flexer-element;
+    list-style: none;
+    text-align: center;
+    width: auto;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    text-overflow: ellipsis;
+    color: $inactive;
+    display: block;
+  }
+  > li .step {
+    background-color: $body-bg;
+    border: $border-thickness solid $inactive;
+    border-radius: 100%;
+    width: $bubble-size;
+    height: $bubble-size;
+    display: block;
+    font-size: 2.5em;
+    line-height: 1.5;
+    margin: 0 auto 0.5em auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  // line connectors
+
+  &::after {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: $bubble-size / 2 - $border-thickness;
+    width: 100%;
+    height: $bubble-line-thickness;
+    content: '';
+    background-color: $inactive;
+  }
+
+  // completed state
+
+  > li.active {
+    color: $accent-color;
+    .step {
+      @include bubble-style($active);
+      border-color: $accent-color;
+      color: $text-color-negative;
+    }
+  }
+
+  > li.completed {
+    color: $accent-color;
+    .step:after {
+      @include border-radius(100%);
+      background-color: $body-bg;
+      font-family: "FontAwesome";
+      content: "\f00c";
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      line-height: 1.6;
+    }
+  }
+
+  // button states
+
+  > li a:hover .step {
+    @include bubble-style($hover);
+  }
+
+  // override states
+
+  > li.danger .step {
+    @include bubble-style($step-danger);
+  }
+  > li.warning .step {
+    @include bubble-style($step-warning);
+  }
+  > li.info .step {
+    @include bubble-style($step-info);
+  }
+}
+
+@media handheld, screen and (max-width: $mobile-size) {
+  .step-indicator {
+    font-size: 60%;
+  }
+}
