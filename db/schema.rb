@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150502162359) do
+ActiveRecord::Schema.define(version: 20150506095125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -458,7 +458,7 @@ ActiveRecord::Schema.define(version: 20150502162359) do
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
-  add_index "probes", ["taxonomy_term_id"], name: "probes_species_id_idx", using: :btree
+  add_index "probes", ["taxonomy_term_id"], name: "probes_taxonomy_term_id_idx", using: :btree
 
   create_table "processed_trait_datasets", force: :cascade do |t|
     t.text    "processed_trait_dataset_name", default: "", null: false
