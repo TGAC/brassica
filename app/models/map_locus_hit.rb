@@ -11,18 +11,9 @@ class MapLocusHit < ActiveRecord::Base
   validates :canonical_marker_name,
             presence: true
 
-  validates :map_data_status,
-            presence: true
-
   validates :associated_sequence_id,
             presence: true
 
   validates :sequence_source_acronym,
-            presence: true
-
-  validates :cs_sequence_data_status,
-            presence: true
-
-  validates :sqs_sequence_data_status,
             presence: true
 end

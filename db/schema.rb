@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506095125) do
+ActiveRecord::Schema.define(version: 20150506120540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,11 +126,8 @@ ActiveRecord::Schema.define(version: 20150506095125) do
     t.text    "consensus_group_assignment", default: "unspecified", null: false
     t.text    "canonical_marker_name",      default: "unspecified", null: false
     t.text    "map_position"
-    t.text    "map_data_status",            default: "unspecified", null: false
     t.text    "associated_sequence_id",     default: "unspecified", null: false
     t.text    "sequence_source_acronym",    default: "unspecified", null: false
-    t.text    "cs_sequence_data_status",    default: "unspecified", null: false
-    t.text    "sqs_sequence_data_status",   default: "unspecified", null: false
     t.text    "atg_hit_seq_id"
     t.text    "atg_hit_seq_source"
     t.text    "bac_hit_seq_id"
@@ -456,8 +453,8 @@ ActiveRecord::Schema.define(version: 20150506095125) do
     t.text    "comments"
     t.text    "entered_by_whom"
     t.text    "data_provenance"
-    t.integer "marker_assays_count",     default: 0,             null: false
     t.integer "taxonomy_term_id"
+    t.integer "marker_assays_count",     default: 0,             null: false
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
