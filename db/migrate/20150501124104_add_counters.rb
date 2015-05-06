@@ -46,6 +46,13 @@ class AddCounters < ActiveRecord::Migration
       plant_accessions: [
         :plant_scoring_units_count
       ],
+      probes: [
+        :marker_assays_count
+      ],
+      primers: [
+        :marker_assays_a_count,
+        :marker_assays_b_count
+      ],
       qtl_jobs: [
         :qtls_count
       ]

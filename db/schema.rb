@@ -11,11 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150502162359) do
+ActiveRecord::Schema.define(version: 20150506120540) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "api_keys", force: :cascade do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "token",      null: false
+    t.integer  "user_id",    null: false
+  end
+
+  add_index "api_keys", ["token"], name: "index_api_keys_on_token", using: :btree
 
   create_table "countries", force: :cascade do |t|
     t.string "country_code", limit: 3, default: "", null: false
@@ -117,11 +126,8 @@ ActiveRecord::Schema.define(version: 20150502162359) do
     t.text    "consensus_group_assignment", default: "unspecified", null: false
     t.text    "canonical_marker_name",      default: "unspecified", null: false
     t.text    "map_position"
-    t.text    "map_data_status",            default: "unspecified", null: false
     t.text    "associated_sequence_id",     default: "unspecified", null: false
     t.text    "sequence_source_acronym",    default: "unspecified", null: false
-    t.text    "cs_sequence_data_status",    default: "unspecified", null: false
-    t.text    "sqs_sequence_data_status",   default: "unspecified", null: false
     t.text    "atg_hit_seq_id"
     t.text    "atg_hit_seq_source"
     t.text    "bac_hit_seq_id"
@@ -422,16 +428,18 @@ ActiveRecord::Schema.define(version: 20150502162359) do
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
   create_table "primers", force: :cascade do |t|
-    t.text "primer",                  default: "",            null: false
-    t.text "sequence",                default: "unspecified", null: false
-    t.text "sequence_id",             default: "unspecified", null: false
-    t.text "sequence_source_acronym", default: "unspecified", null: false
-    t.text "description"
-    t.text "comments"
-    t.text "entered_by_whom"
-    t.date "date_entered"
-    t.text "data_provenance"
-    t.text "data_owned_by"
+    t.text    "primer",                  default: "",            null: false
+    t.text    "sequence",                default: "unspecified", null: false
+    t.text    "sequence_id",             default: "unspecified", null: false
+    t.text    "sequence_source_acronym", default: "unspecified", null: false
+    t.text    "description"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.integer "marker_assays_a_count",   default: 0,             null: false
+    t.integer "marker_assays_b_count",   default: 0,             null: false
   end
 
   add_index "primers", ["primer"], name: "primers_primer_idx", using: :btree
@@ -446,6 +454,7 @@ ActiveRecord::Schema.define(version: 20150502162359) do
     t.text    "entered_by_whom"
     t.text    "data_provenance"
     t.integer "taxonomy_term_id"
+    t.integer "marker_assays_count",     default: 0,             null: false
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
@@ -637,4 +646,5 @@ ActiveRecord::Schema.define(version: 20150502162359) do
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
 
+  add_foreign_key "api_keys", "users", on_update: :cascade, on_delete: :cascade
 end

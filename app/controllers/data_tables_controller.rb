@@ -2,6 +2,7 @@ class DataTablesController < ApplicationController
   def index
     respond_to do |format|
       format.html do
+        double_reference_adjustment
         model_param
       end
       format.json do
@@ -30,16 +31,30 @@ class DataTablesController < ApplicationController
     [
       'linkage_groups',
       'linkage_maps',
+      'marker_assays',
       'plant_accessions',
       'plant_lines',
       'plant_populations',
       'plant_scoring_units',
       'plant_trials',
       'plant_varieties',
+      'primers',
+      'probes',
       'qtl',
       'qtl_jobs',
       'trait_descriptors',
       'trait_scores'
     ]
+  end
+
+  def double_reference_adjustment
+    ['_a', '_b'].each do |suffix|
+      if params[:model].present? && params[:model].end_with?(suffix)
+        params[:model] = params[:model][0..-3]
+        if params[:query].present? && params[:query]['primers.id'].present?
+          params[:query] = { "primer#{suffix}_id" => params[:query]['primers.id'] }
+        end
+      end
+    end
   end
 end
