@@ -3,9 +3,6 @@ require 'rails_helper'
 RSpec.describe MapLocusHit do
   describe '#filter' do
     it 'will query by permitted params' do
-      pending 'MLH model specs waiting for #233 fix'
-      fail
-
       mlhs = create_list(:map_locus_hit, 2)
       filtered = MapLocusHit.filter(
         query: { 'population_loci.id' => mlhs[0].population_locus.id }
