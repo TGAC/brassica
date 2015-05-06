@@ -35,6 +35,7 @@ RSpec.describe PlantPopulation do
       create_list(:linkage_map, 3, plant_population: pps[1])
       create_list(:linkage_map, 1, plant_population: pps[2])
       create_list(:plant_trial, 2, plant_population: pps[0])
+      create_list(:population_locus, 4, plant_population: pps[2])
       create(:plant_population_list, plant_population: pps[0], plant_line: pls[0])
       create(:plant_population_list, plant_population: pps[0], plant_line: pls[1])
       create(:plant_population_list, plant_population: pps[1], plant_line: pls[2])
@@ -45,6 +46,7 @@ RSpec.describe PlantPopulation do
       expect(gd.map{ |pp| pp[7] }).to contain_exactly 2, 2, 0
       expect(gd.map{ |pp| pp[8] }).to contain_exactly 0, 3, 1
       expect(gd.map{ |pp| pp[9] }).to contain_exactly 2, 0, 0
+      expect(gd.map{ |pp| pp[10] }).to contain_exactly 0, 0, 4
     end
 
     it 'orders populations by population name' do
@@ -69,7 +71,7 @@ RSpec.describe PlantPopulation do
         mpl.plant_line_name,
         pp.population_type.population_type,
         pp.description,
-        0, 0, 0,
+        0, 0, 0, 0,
         fpl.id,
         mpl.id,
         pp.id

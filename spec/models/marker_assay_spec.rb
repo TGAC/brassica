@@ -25,6 +25,7 @@ RSpec.describe MarkerAssay do
   describe '#table_data' do
     it 'gets proper data table columns' do
       ma = create(:marker_assay)
+      create_list(:population_locus, 2, marker_assay: ma)
 
       table_data = MarkerAssay.table_data
       expect(table_data.count).to eq 1
@@ -36,6 +37,7 @@ RSpec.describe MarkerAssay do
         ma.primer_b.primer,
         ma.separation_system,
         ma.probe.probe_name,
+        ma.population_loci.count,
         ma.primer_a.id,
         ma.primer_b.id,
         ma.probe.id,

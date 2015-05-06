@@ -16,6 +16,31 @@ en:
       linkage_map_name: Map name
       map_version_no: Version
       map_version_date: Version date
+    map_locus_hits:
+      consensus_group_assignment: Consensus group
+      canonical_marker_name: Canonical marker name
+      map_position: Map position
+      associated_sequence_id: Associated sequence
+      sequence_source_acronym: Sequence source acronym
+      atg_hit_seq_id: ATG hit seq
+      atg_hit_seq_source: ATG source
+      bac_hit_seq_id: BAC hit seq
+      bac_hit_seq_source: BAC source
+      bac_hit_name: BAC hit name
+    map_positions:
+      marker_assay_name: Marker assay
+      mapping_locus: Mapping locus
+      map_position: Map position
+    marker_assays:
+      marker_assay_name: Assay name
+      canonical_marker_name: Canonical name
+      marker_type: Type
+      separation_system: Separation system
+      restriction_enzyme_a_id: Restriction enzyme A
+      restriction_enzyme_b_id: Restriction enzyme B
+      marker_sequence_assignment_id: Sequence assignment
+      primer_a: Primer A
+      primer_b: Primer B
     plant_accessions:
       plant_accession: Accession
       plant_accession_derivation: Derivation
@@ -31,21 +56,6 @@ en:
       data_owned_by: Data owner
       organisation: Organisation
       genetic_status: Genetic status
-    linkage_maps:
-      linkage_map_label: Map label
-      linkage_map_name: Map name
-      map_version_no: Version
-      map_version_date: Version date
-    marker_assays:
-      marker_assay_name: Name
-      canonical_marker_name: Canonical name
-      marker_type: Type
-      separation_system: Separation system
-      restriction_enzyme_a_id: Restriction enzyme A
-      restriction_enzyme_b_id: Restriction enzyme B
-      marker_sequence_assignment_id: Sequence assignment
-      primer_a: Primer A
-      primer_b: Primer B
     plant_parts:
       plant_part: Plant part
     plant_populations:
@@ -80,6 +90,9 @@ en:
       male_parent: Male parent
     pop_type_lookup:
       population_type: Type
+    population_loci:
+      mapping_locus: Mapping locus
+      defined_by_whom: Defined by
     primers:
       primer: Primer
       sequence: Sequence

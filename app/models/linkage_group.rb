@@ -41,14 +41,17 @@ class LinkageGroup < ActiveRecord::Base
 
   def self.count_columns
     [
-      'linkage_groups.map_linkage_group_lists_count AS linkage_maps_count'
+      'linkage_groups.map_linkage_group_lists_count AS linkage_maps_count',
+      'map_positions_count',
+      'map_locus_hits_count'
     ]
   end
 
   def self.permitted_params
     [
       query: [
-        'linkage_maps.id'
+        'linkage_maps.id',
+        'id'
       ]
     ]
   end

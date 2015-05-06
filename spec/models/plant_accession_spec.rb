@@ -5,7 +5,7 @@ RSpec.describe PlantAccession do
     it 'will query by permitted params' do
       pas = create_list(:plant_accession, 2)
       filtered = PlantAccession.filter(
-        query: { id: pas[0].id }
+        query: { 'id' => pas[0].id }
       )
       expect(filtered.count).to eq 1
       expect(filtered.first).to eq pas[0]
@@ -16,6 +16,7 @@ RSpec.describe PlantAccession do
     it 'gets proper data table columns' do
       pa = create(:plant_accession)
 
+      create_list(:plant_scoring_unit, 3, plant_accession: pa)
       plucked = PlantAccession.pluck_columns
       expect(plucked.count).to eq 1
       expect(plucked[0]).to eq [

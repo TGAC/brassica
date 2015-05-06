@@ -44,7 +44,8 @@ class LinkageMap < ActiveRecord::Base
 
   def self.count_columns
     [
-      'linkage_maps.map_linkage_group_lists_count AS linkage_groups_count'
+      'linkage_maps.map_linkage_group_lists_count AS linkage_groups_count',
+      'map_locus_hits_count'
     ]
   end
 
