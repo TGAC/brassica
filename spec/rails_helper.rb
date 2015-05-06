@@ -58,6 +58,10 @@ RSpec.configure do |config|
   config.include RSpecHtmlMatchers
   include CommonHelpers
 
+  config.before :suite do
+    DatabaseCleaner.clean_with :truncation
+  end
+
   config.around :each do |example|
     DatabaseCleaner.strategy = example.metadata[:elasticsearch] ? :truncation : :transaction
     DatabaseCleaner.start unless example.metadata[:dont_clean_db]
