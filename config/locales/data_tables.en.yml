@@ -31,6 +31,21 @@ en:
       data_owned_by: Data owner
       organisation: Organisation
       genetic_status: Genetic status
+    linkage_maps:
+      linkage_map_label: Map label
+      linkage_map_name: Map name
+      map_version_no: Version
+      map_version_date: Version date
+    marker_assays:
+      marker_assay_name: Name
+      canonical_marker_name: Canonical name
+      marker_type: Type
+      separation_system: Separation system
+      restriction_enzyme_a_id: Restriction enzyme A
+      restriction_enzyme_b_id: Restriction enzyme B
+      marker_sequence_assignment_id: Sequence assignment
+      primer_a: Primer A
+      primer_b: Primer B
     plant_parts:
       plant_part: Plant part
     plant_populations:
@@ -65,6 +80,19 @@ en:
       male_parent: Male parent
     pop_type_lookup:
       population_type: Type
+    primers:
+      primer: Primer
+      sequence: Sequence
+      sequence_id: Sequence id
+      sequence_source_acronym: Sequence source acronym
+      description: Description
+    probes:
+      probe_name: Probe name
+      species: Species
+      clone_name: Clone name
+      date_described: Date described
+      sequence_id: Sequence id
+      sequence_source_acronym: Sequence source acronym
     qtl:
       id: QTL count
       qtl_rank: QTL Rank
