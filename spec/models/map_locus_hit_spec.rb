@@ -31,7 +31,7 @@ RSpec.describe MapLocusHit do
       expect(table_data[0]).to eq [
         mlh.consensus_group_assignment,
         mlh.canonical_marker_name,
-        mlh.map_position,
+        mlh.map_position.map_position,
         mlh.population_locus.mapping_locus,
         mlh.linkage_map.linkage_map_label,
         mlh.linkage_group.linkage_group_label,

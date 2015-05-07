@@ -25,8 +25,8 @@ RSpec.describe PopulationLocus do
   describe '#table_data' do
     it 'gets proper data table columns' do
       pl = create(:population_locus)
-      create_list(:map_position, 3, population_locus: pl)
-      create_list(:map_locus_hit, 2, population_locus: pl)
+      mps = create_list(:map_position, 3, population_locus: pl)
+      create_list(:map_locus_hit, 2, population_locus: pl, map_position: mps[0])
 
       table_data = PopulationLocus.table_data
       expect(table_data.count).to eq 1
