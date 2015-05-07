@@ -31,6 +31,8 @@ class DataTablesController < ApplicationController
     [
       'linkage_groups',
       'linkage_maps',
+      'map_locus_hits',
+      'map_positions',
       'marker_assays',
       'plant_accessions',
       'plant_lines',
@@ -38,6 +40,7 @@ class DataTablesController < ApplicationController
       'plant_scoring_units',
       'plant_trials',
       'plant_varieties',
+      'population_loci',
       'primers',
       'probes',
       'qtl',

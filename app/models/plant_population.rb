@@ -60,7 +60,8 @@ class PlantPopulation < ActiveRecord::Base
     [
       'plant_population_lists_count AS plant_lines_count',
       'linkage_maps_count',
-      'plant_trials_count'
+      'plant_trials_count',
+      'population_loci_count'
     ]
   end
 

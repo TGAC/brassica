@@ -2,7 +2,7 @@ class MapLocusHit < ActiveRecord::Base
 
   belongs_to :linkage_map
   belongs_to :linkage_group
-  belongs_to :map_position, foreign_key: 'map_position'
+  belongs_to :map_position
   belongs_to :population_locus
 
   validates :consensus_group_assignment,
@@ -16,4 +16,48 @@ class MapLocusHit < ActiveRecord::Base
 
   validates :sequence_source_acronym,
             presence: true
+
+  include Filterable
+  include Pluckable
+
+  def self.table_data(params = nil)
+    query = (params && params[:query].present?) ? filter(params) : all
+    query.pluck_columns
+  end
+
+  def self.table_columns
+    [
+      'consensus_group_assignment',
+      'canonical_marker_name',
+      'map_position',
+      'population_loci.mapping_locus',
+      'linkage_maps.linkage_map_label',
+      'linkage_groups.linkage_group_label',
+      'associated_sequence_id',
+      'sequence_source_acronym',
+      'atg_hit_seq_id',
+      'atg_hit_seq_source',
+      'bac_hit_seq_id',
+      'bac_hit_seq_source',
+      'bac_hit_name'
+    ]
+  end
+
+  def self.permitted_params
+    [
+      query: [
+        'population_loci.id',
+        'linkage_maps.id',
+        'linkage_groups.id'
+      ]
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'linkage_map_id',
+      'linkage_group_id',
+      'population_locus_id'
+    ]
+  end
 end

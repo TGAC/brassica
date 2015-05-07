@@ -28,14 +28,14 @@ class MarkerAssay < ActiveRecord::Base
   validates :canonical_marker_name,
             presence: true
 
+  include Relatable
   include Filterable
-  # include Pluckable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.
       includes(:primer_a, :primer_b, :probe).
-      pluck(*(table_columns + ref_columns))
+      pluck(*(table_columns + count_columns + ref_columns))
   end
 
   def self.table_columns
@@ -50,11 +50,11 @@ class MarkerAssay < ActiveRecord::Base
     ]
   end
 
-  # def self.count_columns
-  #   [
-  #     'population_loci_count'
-  #   ]
-  # end
+  def self.count_columns
+    [
+      'population_loci_count'
+    ]
+  end
 
   private
 
@@ -63,7 +63,8 @@ class MarkerAssay < ActiveRecord::Base
       query: [
         'primer_a_id',
         'primer_b_id',
-        'probes.id'
+        'probes.id',
+        'id'
       ]
     ]
   end

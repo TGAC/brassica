@@ -1,5 +1,33 @@
 # Specific configurations for particular DataTables, including callbacks
 window.configs =
+  'map-locus-hits':
+    columnDefs:
+      [
+        targets: 'population_loci_mapping_locus_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('population_loci', data, full[full.length - 1])
+      ,
+        targets: 'linkage_maps_linkage_map_label_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('linkage_maps', data, full[full.length - 3])
+      ,
+        targets: 'linkage_groups_linkage_group_label_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('linkage_groups', data, full[full.length - 2])
+      ]
+
+  'map-positions':
+    columnDefs:
+      [
+        targets: 'linkage_groups_linkage_group_label_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('linkage_groups', data, full[full.length - 3])
+      ,
+        targets: 'population_loci_mapping_locus_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('population_loci', data, full[full.length - 2])
+      ]
+
   'marker-assays':
     columnDefs:
       [
@@ -68,6 +96,18 @@ window.configs =
         targets: 'plant_scoring_units_scoring_unit_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_scoring_units', data, full[full.length - 2])
+      ]
+
+  'population-loci':
+    columnDefs:
+      [
+        targets: 'plant_populations_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_populations', data, full[full.length - 3])
+      ,
+        targets: 'marker_assays_marker_assay_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('marker_assays', data, full[full.length - 2])
       ]
 
   'plant-populations':
