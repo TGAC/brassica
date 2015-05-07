@@ -4,7 +4,7 @@ class MapPosition < ActiveRecord::Base
 
   belongs_to :population_locus
 
-  has_many :map_locus_hits, foreign_key: 'map_position'
+  has_many :map_locus_hits
 
   validates :marker_assay_name,
             presence: true

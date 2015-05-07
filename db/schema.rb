@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150506195820) do
+ActiveRecord::Schema.define(version: 20150507100614) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,10 +136,12 @@ ActiveRecord::Schema.define(version: 20150506195820) do
     t.integer "linkage_map_id"
     t.integer "linkage_group_id"
     t.integer "population_locus_id"
+    t.integer "map_position_id"
   end
 
   add_index "map_locus_hits", ["linkage_group_id"], name: "map_locus_hits_linkage_group_id_idx", using: :btree
   add_index "map_locus_hits", ["linkage_map_id"], name: "map_locus_hits_linkage_map_id_idx", using: :btree
+  add_index "map_locus_hits", ["map_position_id"], name: "map_locus_hits_map_position_id_idx", using: :btree
   add_index "map_locus_hits", ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
 
   create_table "map_positions", force: :cascade do |t|
@@ -453,8 +455,8 @@ ActiveRecord::Schema.define(version: 20150506195820) do
     t.text    "comments"
     t.text    "entered_by_whom"
     t.text    "data_provenance"
-    t.integer "taxonomy_term_id"
     t.integer "marker_assays_count",     default: 0,             null: false
+    t.integer "taxonomy_term_id"
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
