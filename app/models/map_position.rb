@@ -4,7 +4,7 @@ class MapPosition < ActiveRecord::Base
 
   belongs_to :population_locus, counter_cache: true
 
-  # has_many :map_locus_hits, foreign_key: 'map_position' # PROBLEMATIC, do not use
+  has_many :map_locus_hits
 
   validates :marker_assay_name,
             presence: true
