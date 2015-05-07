@@ -453,8 +453,8 @@ ActiveRecord::Schema.define(version: 20150506120540) do
     t.text    "comments"
     t.text    "entered_by_whom"
     t.text    "data_provenance"
-    t.integer "taxonomy_term_id"
     t.integer "marker_assays_count",     default: 0,             null: false
+    t.integer "taxonomy_term_id"
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree

@@ -29,6 +29,7 @@
   text-align: center;
 
   .container {
+    @include border-radius(2px);
     background-color: #50687E;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 15px 0;

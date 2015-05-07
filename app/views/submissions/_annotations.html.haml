@@ -4,7 +4,9 @@
 - target ||= "#{model.name.underscore.dasherize}-annotations"
 
 - if collapsible
-  %button.toggle-annotations.btn.btn-default{ type: 'button', data: { toggle: 'collapse', target: "##{target}" } } Additional Annotations
+  %button.toggle-annotations.btn.btn-default{ type: 'button', data: { toggle: 'collapse', target: "##{target}" } }
+    %i.fa.fa-caret-down
+    Additional Annotations`
 
 %div{ id: target, class: collapsible ? 'collapse well' : '' }
   - attrs.each do |attr|

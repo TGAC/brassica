@@ -558,3 +558,12 @@ $s2-border-radius: 2px;
   }
 }
 
+.field_with_errors {
+  .select2-selection {
+    border-color: red;
+  }
+  .select2-selection__rendered {
+    background-color: #ffeeee;
+    line-height: 32px !important;
+  }
+}
