@@ -48,13 +48,15 @@ class MapLocusHit < ActiveRecord::Base
       query: [
         'population_loci.id',
         'linkage_maps.id',
-        'linkage_groups.id'
+        'linkage_groups.id',
+        'map_positions.id'
       ]
     ]
   end
 
   def self.ref_columns
     [
+      'map_position_id',
       'linkage_map_id',
       'linkage_group_id',
       'population_locus_id'

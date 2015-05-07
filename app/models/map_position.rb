@@ -12,6 +12,7 @@ class MapPosition < ActiveRecord::Base
   validates :mapping_locus,
             presence: true
 
+  include Relatable
   include Filterable
   include Pluckable
 
@@ -29,11 +30,18 @@ class MapPosition < ActiveRecord::Base
     ]
   end
 
+  def self.count_columns
+    [
+      'map_locus_hits_count'
+    ]
+  end
+
   def self.permitted_params
     [
       query: [
         'linkage_groups.id',
-        'population_loci.id'
+        'population_loci.id',
+        'id'
       ]
     ]
   end
