@@ -26,12 +26,10 @@
     - if model_class.respond_to?(:counter_names) && model_class.counter_names.present?
       - count_data_index = model_class.table_columns.size
       %th.related{ data: { models: model_class.counter_names,
-                           count_data_index: count_data_index }}
+                           count_data_index: count_data_index,
+                           orderable: 'false' }}
 
     - unless params[:group]
       -# per-record actions only make sense in non-grouped tables
-      - if model_class.column_names.include? 'pubmed_id'
-        %th.pubmed
-
       - if model_class.ancestors.include?(Annotable)
-        %th.annotations
+        %th.annotations{ data: { orderable: 'false' }}

@@ -28,14 +28,6 @@ window.baseColumnDefs = (baseModel) ->
         '</ul>' +
       '</div>'
   ,
-    targets: 'pubmed'
-    render: (data, type, full, meta) ->
-      objectId = full[full.length - 2]
-      if objectId
-        '<a class="btn btn-xs btn-info" title="PubMed Link" href="http://www.ncbi.nlm.nih.gov/pubmed/' + objectId + '">PMed</a>'
-      else
-        ''
-  ,
     targets: 'annotations'
     render: (data, type, full, meta) ->
       objectId = full[full.length - 1]

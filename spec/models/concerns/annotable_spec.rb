@@ -27,6 +27,8 @@ RSpec.describe Annotable do
           instance.has_attribute?('data_owned_by') ? { 'data_owned_by' => instance.data_owned_by } : {}
         ).merge(
           instance.has_attribute?('date_entered') ? { 'date_entered' => instance.date_entered } : {}
+        ).merge(
+          instance.has_attribute?('pubmed_id') ? { 'pubmed_id' => instance.pubmed_id } : {}
         )
         expect(instance.annotations_as_json).to eq test_hash
         expect(test_hash.values.map(&:nil?)).to all be_falsey
@@ -50,6 +52,14 @@ RSpec.describe Annotable do
     end
 
     fail if no_factory.present? || not_made_annotable.present?
+  end
+
+  it 'makes sure all pubmed models are Annotable' do
+    ActiveRecord::Base.descendants.each do |model|
+      if model.column_names.include? 'pubmed_id'
+        expect(annotable_tables).to include model.table_name
+      end
+    end
   end
 
   context 'when model is Pluckable as well' do
