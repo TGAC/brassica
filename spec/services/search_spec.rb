@@ -37,6 +37,9 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                               male_parent_line: nil,
                               female_parent_line: nil)
 
+    # Special cases
+    create(:plant_line, plant_line_name: "123@456")
+
     # FIXME without sleep ES is not able to update index in time
     sleep 1
   end
@@ -105,6 +108,15 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(counts[:plant_lines]).to eq PlantLine.count
       expect(counts[:plant_populations]).to eq PlantPopulation.count
       expect(counts[:plant_varieties]).to eq PlantVariety.count
+    end
+
+    context "special cases" do
+      it "returns proper counts" do
+        expect(Search.new("123").counts).to include(plant_lines: 1)
+        expect(Search.new("123@").counts).to include(plant_lines: 1)
+        expect(Search.new("@456").counts).to include(plant_lines: 1)
+        expect(Search.new("123@456").counts).to include(plant_lines: 1)
+      end
     end
   end
 end
