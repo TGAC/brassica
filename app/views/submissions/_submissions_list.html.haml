@@ -18,9 +18,16 @@
           .text Last modification
           .details
             = l submission.updated_at, format: :long
-        .actions
-          = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default'
-          = button_to 'Delete', submission_path(submission), method: :delete, class: 'btn btn-warning'
+        - unless mode == :public
+          .actions.collapse{ data: { confirmation: submission.id }, style: 'transition:none'}
+            Sure?
+            = button_to 'Yes', submission_path(submission), method: :delete, class: 'btn btn-warning'
+            %a.btn.btn-default{ href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
+              No
+          .actions.collapse.in{ data: { confirmation: submission.id }, style: 'transition:none'}
+            = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default'
+            %a.btn.btn-warning{ href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
+              Delete
 
       - else
         .finalized-at
