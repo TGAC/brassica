@@ -7,7 +7,6 @@ $ ->
       format: 'json'
       method: "get"
       success: (response) =>
-        console.log(response)
         window.api_key = response.api_key
 
   # FIXME needs refactoring
