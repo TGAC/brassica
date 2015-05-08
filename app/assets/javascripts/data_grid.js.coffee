@@ -50,15 +50,31 @@ $ ->
           else
             $(nButton).hide()
       ,
-        sExtends: 'csv'
+        sExtends: 'text'
         sButtonClass: 'btn-sm'
         sButtonText: '<i class="fa fa-download"></i> Export to CSV'
-        sFileName: '*.csv'
         sToolTip: 'Generates a CSV file with the content of the table below.'
+        sFieldSeperator: ','
         oSelectorOpts:
-          filter: 'applied'
+          search: 'applied'
+        sFieldBoundary: '"'
+        mColumns: (dt) ->
+          api = new $.fn.dataTable.Api(dt)
+          api.columns().indexes().toArray().slice(0, -2)
+        fnClick: ( nButton, oConfig, oFlash ) ->
+          data = this.fnGetTableData(oConfig)
+          blob = new Blob([data])
+          filename = 'BIP_' + $(this.s.dt.nTable).attr('id').replace(/-/g,'_') + '.csv'
+          if window.navigator.msSaveOrOpenBlob
+            window.navigator.msSaveBlob(blob, filename)
+          else
+            a = window.document.createElement("a")
+            a.href = window.URL.createObjectURL(blob, {type: "text/plain"})
+            a.download = filename
+            document.body.appendChild(a)
+            a.click()
+            document.body.removeChild(a)
       ]
-    sSwfPath: '/swf/copy_csv_xls.swf'
 
 
   $('.data-table').each (i)->
