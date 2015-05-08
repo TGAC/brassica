@@ -1,5 +1,86 @@
-.lead Brassica Information Portal API
+.container.docs
+  %h2.page-title Brassica Information Portal API
 
-%p
-  .text-justify
-    TEMP REPLACE WITH THE ACTUAL CONTENT.
+  .row
+    .col-sm-2
+      %nav.docs-sidebar{"data-offset-top" => "220", "data-spy" => "affix"}
+        %ul.nav
+          %li
+            %a API Method 1
+          %li
+            %a API Method 1
+          %li
+            %a API Method 1
+          %li
+            %a API Method 1
+          %li
+            %a API Method 1
+    .col-sm-10
+      %h3.section-heading API Method 1
+      %p
+        In general a section is
+        %strong defined
+        using a
+        %strong keyword
+        in a Markdown entity.
+        Depending on the type of section the keyword is written either as a Markdown header entity or in a list item entity.
+      %h4 Usage
+      %p  nec dui ullamcorper, pulvinar risus eu, facilisis elit. Morbi ac placerat turpis. Nunc facilisis aliquet mollis. Maecenas ante quam, egestas vitae hendrerit non, pellentesque finibus urna. Morbi in tincidunt neque. Phasellus tempor metus lorem, sit amet hendrerit sem sollicitudin id. Cras vestibulum eget mi non auctor. In nec pulvinar neque, at finibus lectus. Donec magna magna, rhoncus nec accumsan ac, vestibulum quis enim. Vestibulum vitae interdum quam, iaculis varius purus.
+      %blockquote
+        %p
+          %strong> NOTE
+          \: There are two special sections that are recognized by their position in the document instead of a keyword: The
+          %a{:href => "#"} Metadata section
+          and the
+          = succeed "." do
+            %a{:href => "#"} API Name & Overview section
+      %p  nec dui ullamcorper, pulvinar risus eu, facilisis elit. Morbi ac placerat turpis. Nunc facilisis aliquet mollis. Maecenas ante quam, egestas vitae hendrerit non, pellentesque finibus urna. Morbi in tincidunt neque. Phasellus tempor metus lorem, sit amet hendrerit sem sollicitudin id. Cras vestibulum eget mi non auctor. In nec pulvinar neque, at finibus lectus. Donec magna magna, rhoncus nec accumsan ac, vestibulum quis enim. Vestibulum vitae interdum quam, iaculis varius purus.
+      %h4 Examples
+      %ol
+        %li
+          %p
+            Sending invalid JSON will result in a
+            %code 400 Bad Request
+            response.
+          %pre
+            %code
+              :preserve
+                 HTTP/1.1 400 Bad Request
+                 Content-Length: 35
+
+                 {"message":"Problems parsing JSON"}
+        %li
+          %p
+            Sending the wrong type of JSON values will result in a
+            %code
+              400 Bad
+              Request
+            response.
+          %pre
+            %code
+              :preserve
+                 HTTP/1.1 400 Bad Request
+                 Content-Length: 40
+
+                 {"message":"Body should be a JSON object"}
+        %li
+          %p
+            Sending invalid fields will result in a
+            %code 422 Unprocessable Entity
+            response.
+          %pre
+            %code
+              :preserve
+                 HTTP/1.1 422 Unprocessable Entity
+                 Content-Length: 149
+
+                 {
+                   "message": "Validation Failed",
+                   "errors": [
+                     {
+                       "resource": "Issue",
+                       "field": "title",
+                       "code": "missing_field"
+                     }
+                   ]
+                 }

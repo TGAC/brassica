@@ -1,13 +1,12 @@
 .page-title {
   color: $heading-text-color;
-  font-size: 28px;
   margin-bottom: 20px;
 
   &::after {
     border-bottom: 2px solid $accent-color;
     content: " ";
     display: block;
-    margin-top: 10px;
+    margin-top: 5px;
     width: 100px;
   }
 
@@ -18,4 +17,9 @@
       margin: 10px auto 0;
     }
   }
+}
+
+.text-long {
+  max-width: $break-small;
+  margin-bottom: 20px;
 }
