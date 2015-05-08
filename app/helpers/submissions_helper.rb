@@ -3,6 +3,10 @@ module SubmissionsHelper
     link_to "Submit new data", new_submission_path, class: 'btn btn-primary'
   end
 
+  def create_my_submissions_button
+    link_to "My submissions", submissions_path, class: 'btn btn-primary'
+  end
+
   def submission_private_link(submission)
     link_to submission_label(submission), submission_path(submission)
   end
