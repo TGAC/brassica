@@ -94,6 +94,7 @@ $ ->
           content += metadataElement('Comments', response['comments'])
           content += metadataElement('Entered by', response['entered_by_whom'])
           content += metadataElement('Entry date', response['date_entered'])
+          content += pubmedLink(response['pubmed_id'])
           content = 'No annotations' if content == ''
           $(this).data('bs.popover').options.content = content
           # This is required for the popover to reposition itself properly
@@ -103,6 +104,12 @@ $ ->
 window.metadataElement = (title, value) ->
   if value
     "<strong>#{title}</strong>: #{escapeHtml(value)}</br>"
+  else
+    ''
+
+window.pubmedLink = (value) ->
+  if value
+    "<a href='http://www.ncbi.nlm.nih.gov/pubmed/#{escapeHtml(value)}' target='_blank'>PubMed Link</a></br>"
   else
     ''
 

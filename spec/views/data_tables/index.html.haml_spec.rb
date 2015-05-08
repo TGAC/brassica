@@ -15,22 +15,6 @@ RSpec.describe 'data_tables/index.html.haml' do
     end
   end
 
-  context 'for "publishable" models' do
-    it 'contains additional pubmed column' do
-      %w(plant_trials qtls linkage_maps).each do |model|
-        allow(view).to receive(:params).and_return(model: model)
-        render
-        expect(rendered).to include 'pubmed'
-      end
-    end
-
-    it 'does not show pubmed column in group mode' do
-      allow(view).to receive(:params).and_return(model: 'qtls', group: true)
-      render
-      expect(rendered).not_to include 'pubmed'
-    end
-  end
-
   context 'when run for annotable models' do
     it 'shows annotations column' do
       (displayable_tables & annotable_tables).each do |table|
