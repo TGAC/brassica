@@ -18,7 +18,8 @@ module Annotable extend ActiveSupport::Concern
           :comments, :entered_by_whom, :data_provenance
         ] +
         (has_attribute?(:date_entered) ? [:date_entered] : []) +
-        (has_attribute?(:data_owned_by) ? [:data_owned_by] : [])
+        (has_attribute?(:data_owned_by) ? [:data_owned_by] : []) +
+        (has_attribute?(:pubmed_id) ? [:pubmed_id] : [])
       )
     end
 
