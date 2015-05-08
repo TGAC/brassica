@@ -16,6 +16,8 @@ module ApplicationHelper
         :browse
       when 'submissions'
         :submit
+      when 'api_keys'
+        :api
       else
         :home
     end
@@ -35,5 +37,19 @@ module ApplicationHelper
       api: api_documentation_path,
       about: about_path
     }
+  end
+
+  def api_props(key, interpolations = nil)
+    props = I18n.t("api.#{key}")
+
+    if interpolations
+      props.each do |prop|
+        interpolations.each do |var, val|
+          prop[:desc] = prop[:desc].gsub(/%{#{var}}/, val.to_s)
+        end
+      end
+    end
+
+    props
   end
 end

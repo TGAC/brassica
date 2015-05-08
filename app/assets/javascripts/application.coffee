@@ -19,4 +19,5 @@
 #= require jquery.inview
 #= require jquery.easypiechart
 #= require jquery.scrollTo
+#= require highlight.pack
 #= require_tree .

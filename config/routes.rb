@@ -20,6 +20,12 @@ Rails.application.routes.draw do
   get 'search', to: 'searches#counts'
   get 'browse_data', to: 'data_tables#index', defaults: { model: 'plant_populations' }
 
+  resource :api_keys, only: [:show] do
+    member do
+      put :recreate
+    end
+  end
+
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :resources, except: [:new]

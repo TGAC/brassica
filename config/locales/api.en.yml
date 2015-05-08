@@ -1,0 +1,210 @@
+en:
+  api:
+    pagination:
+      params:
+        -
+          name: page
+          format: int
+          desc: "Page number (default: 1)"
+        -
+          name: per_page
+          format: int
+          desc: "Page size (default: %{default_per_page}, max: %{max_per_page})"
+
+      meta:
+        -
+          name: "meta[page]"
+          format: int
+          desc: "Current page number"
+        -
+          name: "meta[per_page]"
+          format: int
+          desc: "Page size"
+        -
+          name: "meta[total_count]"
+          format: int
+          desc: "Total number of existing records"
+
+      response: |-
+        {
+          "plant_lines": [
+            {
+              "id": 6,
+              ...
+            },
+            ...
+          ],
+          "meta": {
+            "page": 1,
+            "per_page": 50,
+            "total_count": 1291
+          }
+        }
+
+    plant_line:
+      attrs:
+        -
+          name: id
+          format: int
+          desc: Unique id
+        -
+          name: plant_line_name
+          format: string
+          desc:
+        -
+          name: common_name
+          format: string
+          desc:
+        -
+          name: plant_variety_name
+          format: string
+          desc:
+        -
+          name: named_by_whom
+          format: string
+          desc:
+        -
+          name: organisation
+          format: string
+          desc:
+        -
+          name: genetic_status
+          format: string
+          desc:
+        -
+          name: previous_line_name
+          format: string
+          desc:
+        -
+          name: comments
+          format: string
+          desc:
+        -
+          name: entered_by_whom
+          format: string
+          desc:
+        -
+          name: date_entered
+          format: date
+          desc:
+        -
+          name: data_provenance
+          format: string
+          desc:
+        -
+          name: data_owned_by
+          format: string
+          desc:
+        -
+          name: confirmed_by_whom
+          format: string
+          desc:
+        -
+          name: taxonomy_term_id
+          format: int
+          desc:
+        -
+          name: plant_variety_id
+          format: int
+          desc:
+
+      index:
+        params:
+          -
+            name: "plant_line[fetch]"
+            format: string
+            desc: Query using full text search engine
+          -
+            name: "plant_line[search][plant_line_name]"
+            format: string
+            desc: ...
+          -
+            name: "plant_line[search][plant_lines.plant_line_name]"
+            format: string
+            desc: ...
+          -
+            name: "plant_line[query][id]"
+            format: "id, id[]"
+            desc: Filter by `id`
+          -
+            name: "plant_line[query][plant_populations.id]"
+            format: "id, id[]"
+            desc: Filter by `id` of associated plant population
+
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
+      show:
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
+    plant_population:
+      attrs:
+        -
+          name: id
+          format: int
+          desc: Unique id
+
+      index:
+        params:
+          -
+            name: "plant_population[fetch]"
+            format: string
+            desc: Query using full text search engine
+          -
+            name: "plant_population[query][id]"
+            format: "int, int[]"
+            desc: Filter by `id`
+          -
+            name: "plant_population[query][name]"
+            format: string
+            desc: Filter by `name`
+
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
+      show:
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
+    plant_variety:
+      attrs:
+        -
+          name: id
+          format: int
+          desc: Unique id
+
+      index:
+        params:
+          -
+            name: "plant_variety[fetch]"
+            format: string
+            desc: Query using full text search engine
+          -
+            name: "plant_variety[search][plant_variety_name]"
+            format: string
+            desc: ...
+          -
+            name: "plant_population[query][id]"
+            format: "int, int[]"
+            desc: Filter by `id`
+
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
+      show:
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+
