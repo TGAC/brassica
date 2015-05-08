@@ -19,6 +19,11 @@ RSpec.describe MapLocusHit do
       )
       expect(filtered.count).to eq 1
       expect(filtered.first).to eq mlhs[0]
+      filtered = MapLocusHit.filter(
+        query: { 'map_positions.id' => mlhs[0].map_position.id }
+      )
+      expect(filtered.count).to eq 1
+      expect(filtered.first).to eq mlhs[0]
     end
   end
 
@@ -31,7 +36,7 @@ RSpec.describe MapLocusHit do
       expect(table_data[0]).to eq [
         mlh.consensus_group_assignment,
         mlh.canonical_marker_name,
-        mlh.map_position,
+        mlh.map_position.map_position,
         mlh.population_locus.mapping_locus,
         mlh.linkage_map.linkage_map_label,
         mlh.linkage_group.linkage_group_label,
@@ -42,6 +47,7 @@ RSpec.describe MapLocusHit do
         mlh.bac_hit_seq_id,
         mlh.bac_hit_seq_source,
         mlh.bac_hit_name,
+        mlh.map_position.id,
         mlh.linkage_map.id,
         mlh.linkage_group.id,
         mlh.population_locus.id

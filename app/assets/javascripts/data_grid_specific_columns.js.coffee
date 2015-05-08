@@ -3,6 +3,10 @@ window.configs =
   'map-locus-hits':
     columnDefs:
       [
+        targets: 'map_positions_map_position_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('map_positions', data, full[full.length - 4])
+      ,
         targets: 'population_loci_mapping_locus_column'
         render: (data, type, full, meta) ->
           modelIdUrl('population_loci', data, full[full.length - 1])

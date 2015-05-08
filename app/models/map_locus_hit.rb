@@ -1,9 +1,9 @@
 class MapLocusHit < ActiveRecord::Base
 
-  belongs_to :linkage_map
-  belongs_to :linkage_group
-  belongs_to :map_position
-  belongs_to :population_locus
+  belongs_to :linkage_map, counter_cache: true
+  belongs_to :linkage_group, counter_cache: true
+  belongs_to :map_position, counter_cache: true
+  belongs_to :population_locus, counter_cache: true
 
   validates :consensus_group_assignment,
             presence: true
@@ -29,7 +29,7 @@ class MapLocusHit < ActiveRecord::Base
     [
       'consensus_group_assignment',
       'canonical_marker_name',
-      'map_position',
+      'map_positions.map_position',
       'population_loci.mapping_locus',
       'linkage_maps.linkage_map_label',
       'linkage_groups.linkage_group_label',
@@ -48,13 +48,15 @@ class MapLocusHit < ActiveRecord::Base
       query: [
         'population_loci.id',
         'linkage_maps.id',
-        'linkage_groups.id'
+        'linkage_groups.id',
+        'map_positions.id'
       ]
     ]
   end
 
   def self.ref_columns
     [
+      'map_position_id',
       'linkage_map_id',
       'linkage_group_id',
       'population_locus_id'

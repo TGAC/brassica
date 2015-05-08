@@ -14,12 +14,18 @@ RSpec.describe MapPosition do
       )
       expect(filtered.count).to eq 1
       expect(filtered.first).to eq mps[0]
+      filtered = MapPosition.filter(
+        query: { 'id' => mps[0].id }
+      )
+      expect(filtered.count).to eq 1
+      expect(filtered.first).to eq mps[0]
     end
   end
 
   describe '#table_data' do
     it 'gets proper data table columns' do
       mp = create(:map_position)
+      create_list(:map_locus_hit, 2, map_position: mp)
 
       table_data = MapPosition.table_data
       expect(table_data.count).to eq 1
@@ -28,6 +34,7 @@ RSpec.describe MapPosition do
         mp.map_position,
         mp.linkage_group.linkage_group_label,
         mp.population_locus.mapping_locus,
+        2,
         mp.linkage_group.id,
         mp.population_locus.id,
         mp.id

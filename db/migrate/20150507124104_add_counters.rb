@@ -35,6 +35,9 @@ class AddCounters < ActiveRecord::Migration
         :map_positions_count,
         :map_locus_hits_count
       ],
+      map_positions: [
+        :map_locus_hits_count
+      ],
       marker_assays: [
         :population_loci_count
       ],

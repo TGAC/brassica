@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507100614) do
+ActiveRecord::Schema.define(version: 20150507124104) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,8 +148,8 @@ ActiveRecord::Schema.define(version: 20150507100614) do
   add_index "map_locus_hits", ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
 
   create_table "map_positions", force: :cascade do |t|
-    t.text    "marker_assay_name",   default: "unspecified", null: false
-    t.text    "mapping_locus",       default: "unspecified", null: false
+    t.text    "marker_assay_name",    default: "unspecified", null: false
+    t.text    "mapping_locus",        default: "unspecified", null: false
     t.text    "map_position"
     t.text    "comments"
     t.text    "entered_by_whom"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 20150507100614) do
     t.text    "confirmed_by_whom"
     t.integer "linkage_group_id"
     t.integer "population_locus_id"
+    t.integer "map_locus_hits_count", default: 0,             null: false
   end
 
   add_index "map_positions", ["linkage_group_id"], name: "map_positions_linkage_group_id_idx", using: :btree
@@ -462,8 +463,8 @@ ActiveRecord::Schema.define(version: 20150507100614) do
     t.text    "comments"
     t.text    "entered_by_whom"
     t.text    "data_provenance"
-    t.integer "marker_assays_count",     default: 0,             null: false
     t.integer "taxonomy_term_id"
+    t.integer "marker_assays_count",     default: 0,             null: false
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
