@@ -16,6 +16,8 @@ module ApplicationHelper
         :browse
       when 'submissions'
         :submit
+      when 'api_keys'
+        :api
       else
         :home
     end

@@ -1,5 +1,5 @@
 .container
-  .lead API Key
+  .h2.page-title API Key
 
   .row
     .col-sm-6
@@ -8,13 +8,17 @@
         %code
           = @api_key.token
 
-      %p Please, consult <a href='/api_documentation'>API Documentation</a> for more information.
+      %p
+        Please, consult
+        = link_to t('menu.api'), navbar_menu[:api]
+        for more information.
 
     .col-sm-6
       %p
         = button_to "Renew key", recreate_api_keys_path, method: "put", class: 'btn btn-default'
 
-      %p
+      %p.text-danger
+        %strong Important.
         This operation will revoke your current API Key. That means it will no
         longer be valid and every API call using that API Key value will fail.
         When you decide to renew your API Key, please make sure that you use
