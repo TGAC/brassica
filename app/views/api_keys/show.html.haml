@@ -1,0 +1,14 @@
+.container
+  .lead API Key
+
+  %p Your can access BIP API using the following key:
+
+  .row
+    .col-sm-6
+      %code
+        = @api_key.token
+
+    .col-sm-6
+      = button_to "Renew", recreate_api_keys_path, method: "put", class: 'btn btn-default'
+
+  %p Please, consult <a href='/api_documentation'>API Documentation</a> for more information.
