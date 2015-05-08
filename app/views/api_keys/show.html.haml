@@ -1,14 +1,21 @@
 .container
   .lead API Key
 
-  %p Your can access BIP API using the following key:
-
   .row
     .col-sm-6
-      %code
-        = @api_key.token
+      %p Your can access BIP API using the following key:
+      %p
+        %code
+          = @api_key.token
+
+      %p Please, consult <a href='/api_documentation'>API Documentation</a> for more information.
 
     .col-sm-6
-      = button_to "Renew", recreate_api_keys_path, method: "put", class: 'btn btn-default'
+      %p
+        = button_to "Renew key", recreate_api_keys_path, method: "put", class: 'btn btn-default'
 
-  %p Please, consult <a href='/api_documentation'>API Documentation</a> for more information.
+      %p
+        This operation will revoke your current API Key. That means it will no
+        longer be valid and every API call using that API Key value will fail.
+        When you decide to renew your API Key, please make sure that you use
+        the new value in your BIP client.
