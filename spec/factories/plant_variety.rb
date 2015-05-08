@@ -8,5 +8,13 @@ FactoryGirl.define do
     female_parent { Faker::Lorem.word }
     male_parent { Faker::Lorem.word }
     annotable_no_owner
+
+    trait :with_has_many_associations do
+      after(:create) do |plant_variety_registry, evaluator|
+        plant_variety_registry.plant_lines = build_list(:plant_line, 2, plant_variety_id: evaluator.id)
+        plant_variety_registry.countries_of_origin = build_list(:country, 3)
+        plant_variety_registry.countries_registered = build_list(:country, 2)
+      end
+    end
   end
 end
