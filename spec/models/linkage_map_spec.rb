@@ -7,6 +7,7 @@ RSpec.describe LinkageMap do
       create_list(:linkage_group, 2).each do |lg|
         lm.linkage_groups << lg
       end
+      create_list(:map_locus_hit, 2, linkage_map: lm)
       table_data = LinkageMap.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
@@ -17,6 +18,7 @@ RSpec.describe LinkageMap do
         lm.map_version_no,
         lm.map_version_date,
         lm.linkage_groups.count,
+        lm.map_locus_hits.count,
         lm.pubmed_id,
         lm.id
       ]

@@ -7,6 +7,8 @@ RSpec.describe LinkageGroup do
       create_list(:linkage_map, 3).each do |lm|
         lg.linkage_maps << lm
       end
+      mps = create_list(:map_position, 1, linkage_group: lg)
+      create_list(:map_locus_hit, 2, linkage_group: lg, map_position: mps[0])
       table_data = LinkageGroup.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
@@ -17,6 +19,8 @@ RSpec.describe LinkageGroup do
         lg.consensus_group_assignment,
         lg.consensus_group_orientation,
         lg.linkage_maps.count,
+        lg.map_positions.count,
+        lg.map_locus_hits.count,
         lg.id
       ]
     end
