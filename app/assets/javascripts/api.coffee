@@ -3,10 +3,11 @@ $ ->
     hljs.initHighlightingOnLoad()
 
     $.ajax
-      url: "/api_key"
+      url: "/api_keys"
+      format: 'json'
       method: "get"
       success: (response) =>
-        window.api_key = response
+        window.api_key = response.api_key
 
   # FIXME needs refactoring
   $('.api-live-example button').on 'click', (event) ->
