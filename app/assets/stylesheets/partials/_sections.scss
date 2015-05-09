@@ -1,6 +1,5 @@
 .section-heading {
   @extend .page-title;
-  font-size: 22px;
 }
 
 .section-jumbotron {
@@ -29,6 +28,7 @@
   text-align: center;
 
   .container {
+    @include border-radius(2px);
     background-color: #50687E;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     padding: 15px 0;
@@ -68,6 +68,91 @@
 
     &.documentation {
       @include boxed-content-icon($mono-color-1);
+    }
+  }
+}
+
+//docs
+.docs {
+  p {
+    margin-bottom: 20px;
+  }
+  ol {
+    counter-reset: li;
+    list-style: outside none none;
+    padding-bottom: 10px;
+    position: relative;
+    > li {
+      padding: 5px 0 5px 50px;
+      position: relative;
+      &::before {
+        border-right: 1px solid #ddd;
+        color: $mono-color-2;
+        content: counter(li, decimal);
+        counter-increment: li;
+        font-size: 22px;
+        font-weight: bold;
+        height: 100%;
+        left: 0;
+        line-height: 35px;
+        padding: 0 10px 0 0;
+        position: absolute;
+        text-align: right;
+        top: 0;
+        width: 30px;
+      }
+    }
+  }
+  table {
+    border: none;
+
+    td.prop {
+      width: 30%;
+    }
+    td.format {
+      width: 15%;
+    }
+  }
+  code {
+    background-color: whitesmoke;
+  }
+  .action {
+    margin: 32px 0 16px 0;
+    font-size: 16px;
+    font-weight: bold;
+
+    .method {
+      @extend .badge;
+      font-size: 18px;
+      margin-right: 8px;
+    }
+  }
+}
+.docs-sidebar {
+  @include max-screen($break-small) {
+    display: none;
+  }
+  top: 20px;
+  .nav {
+    > li {
+      > a {
+        color: #767676;
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        padding: 4px 20px;
+      }
+    }
+    > .active {
+      &:focus > a,
+      &:hover > a,
+      > a {
+        background-color: transparent;
+        border-left: 2px solid $accent-color;
+        color: $accent-color;
+        font-weight: 700;
+        padding-left: 18px;
+      }
     }
   }
 }

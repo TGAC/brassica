@@ -1,40 +1,44 @@
-%div{ role: 'tabpanel' }
+.container
+  %p Choose submission type:
+  %div{ role: 'tabpanel' }
 
-  %ul.nav.nav-pills{ role: 'tablist' }
-    %p.navbar-brand Choose submission type:
+    %ul.nav.nav-pills{ role: 'tablist' }
 
-    - Submission.submission_types.each do |s_type, s_num|
 
-      %li{ role: 'presentation', class: "#{'active' if s_num == 0}" }
-        %a{ href: "##{s_type}", role: 'tab', aria: { controls: s_type }, data: { toggle: 'tab' } }
-          = t("submission.submission_type.#{s_type}")
+      - Submission.submission_types.each do |s_type, s_num|
 
-  .tab-content
-    - Submission.submission_types.each do |s_type, s_num|
+        %li{ role: 'presentation', class: "#{'active' if s_num == 0}" }
+          %a{ href: "##{s_type}", role: 'tab', aria: { controls: s_type }, data: { toggle: 'tab' } }
+            = t("submission.submission_type.#{s_type}")
 
-      %div{ role: 'tabpanel', class: "tab-pane #{'active' if s_num == 0}", id: s_type }
+    .tab-content
+      - Submission.submission_types.each do |s_type, s_num|
 
-        %h3.section-heading
-          Submit new
-          = t("submission.submission_type.#{s_type}")
+        %div{ role: 'tabpanel', class: "tab-pane #{'active' if s_num == 0}", id: s_type }
 
-        %p
-          = t("submission.description.#{s_type}")
-          = t('submission.description.common')
+          %h3.section-heading
+            Submit new
+            = t("submission.submission_type.#{s_type}")
 
-        .row
+          %p
+            = t("submission.description.#{s_type}")
+            = t('submission.description.common')
 
-          - Submission::STEPS.each_with_index do |step_name, step_no|
+          .row
+            .col-sm-12
+              %ol.step-indicator
+                - Submission::STEPS.each_with_index do |step_name, step_no|
 
-            .col-md-3.text-center
-              %h1= step_no + 1
-              .panel.panel-default
-                .panel-heading
-                  = t("submission.steps.#{s_type}.#{step_name}.heading")
-                .panel-body
-                  = t("submission.steps.#{s_type}.#{step_name}.body")
+                  %li
+                    .step
+                      = step_no + 1
+                    .panel
+                      .panel-heading
+                        %h4= t("submission.steps.#{s_type}.#{step_name}.heading")
+                      .panel-body
+                        = t("submission.steps.#{s_type}.#{step_name}.body")
 
-        .text-center
-          = button_to 'Start!',
-            submissions_path(submission: { submission_type: s_type }),
-            class: 'btn btn-primary', method: 'post'
+          .text-center
+            = button_to 'Start!',
+              submissions_path(submission: { submission_type: s_type }),
+              class: 'btn btn-primary btn-lg', method: 'post'

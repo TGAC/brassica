@@ -49,7 +49,7 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import "vendor/select2";
-@import "highlight-zenburn";
+@import "highlight-solarized-light";
 
 //import ui elements
 @import "partials/sections";
@@ -57,5 +57,6 @@
 @import "partials/flash";
 @import "partials/errors";
 @import "partials/submissions";
+@import "partials/wizard";
 @import "partials/search";
 @import "partials/overrides";

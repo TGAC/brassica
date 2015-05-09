@@ -6,13 +6,11 @@
   = f.fields_for :content, @content do |content|
 
     .form-group
-      = content.label :taxonomy_term
+      = content.label :taxonomy_term, class: 'required'
       = content.select :taxonomy_term, options_for_select(TaxonomyTerm.names, @content.taxonomy_term), { include_blank: "Select term..." }, class: 'form-control'
-      %p.help-block Required
 
     .form-group
-      = content.label :population_type
+      = content.label :population_type, class: 'required'
       = content.select :population_type, @content.class.population_types, { include_blank: true }, class: 'population-type form-control', 'data-placeholder': "Select population type"
-      %p.help-block Required
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }

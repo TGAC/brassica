@@ -21,9 +21,30 @@
   @include button-variant($text-color-negative, $mono-color-1, darken($mono-color-1, 5));
 }
 
+.btn-wide {
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+.btn.toggle-annotations {
+  margin-bottom: 5px;
+}
+
 //forms
 .form-negative {
   border-color: $mono-color-2;
+}
+
+.form-group {
+  .required::before {
+    color: red;
+    content: "*";
+    float: left;
+    font-size: 2em;
+    height: 12px;
+    line-height: normal;
+    margin-right: 2px;
+  }
 }
 
 //text & typography

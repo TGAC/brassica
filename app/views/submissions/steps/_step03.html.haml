@@ -8,12 +8,10 @@
     .form-group
       = content.label :female_parent_line
       = content.select :female_parent_line, [@content.female_parent_line], {}, class: 'female-parent-line form-control', 'data-placeholder': "Select plant line"
-      %p.help-block Optional
 
     .form-group
       = content.label :male_parent_line
       = content.select :male_parent_line, [@content.male_parent_line], {}, class: 'male-parent-line form-control', 'data-placeholder': "Select plant line"
-      %p.help-block Optional
 
     %hr
 
@@ -26,61 +24,54 @@
       = content.label :plant_line_list
       = content.select :plant_line_list, @content.plant_line_list || [], {}, multiple: true, class: 'plant-line-list form-control', 'data-placeholder': "Select plant line"
 
-    %button.new-plant-line-for-list{ type: :button } Add new Plant line
+    %button.btn.btn-default.new-plant-line-for-list{ type: :button } Add new Plant line
 
-    .new-plant-line-for-list.hidden
-      %h5 Add new <b>Plant line</b>
+    .panel.panel-info.new-plant-line-for-list.hidden
+      .panel-heading
+        %h4 Add new <b>Plant line</b>
 
-      .form-group
-        = label_tag :plant_line_name
-        = text_field_tag :plant_line_name, nil, class: 'form-control required', placeholder: 'Enter new plant line name'
-        %p.help-block Required
+      .panel-body
+        .form-group
+          = label_tag :plant_line_name, nil, class: 'required'
+          = text_field_tag :plant_line_name, nil, class: 'form-control required', placeholder: 'Enter new plant line name'
 
-      .form-group
-        = label_tag :taxonomy_term
-        = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), prompt: "Select term...", class: 'form-control required'
-        %p.help-block Required
+        .form-group
+          = label_tag :taxonomy_term, nil, class: 'required'
+          = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), prompt: "Select term...", class: 'form-control required'
 
-      .form-group
-        = label_tag :common_name, 'Common name'
-        = text_field_tag :common_name, nil, class: 'form-control'
-        %p.help-block Optional
+        .form-group
+          = label_tag :common_name, 'Common name'
+          = text_field_tag :common_name, nil, class: 'form-control'
 
-      .form-group.previous-line-name-wrapper
-        .previous-line-name-select
-          = label_tag :previous_line_name
-          = select_tag :previous_line_name, [], class: 'previous-line-name form-control', 'data-placeholder': "Select existing plant line"
+        .form-group.previous-line-name-wrapper
+          .previous-line-name-select
+            = label_tag :previous_line_name
+            = select_tag :previous_line_name, [], class: 'previous-line-name form-control', 'data-placeholder': "Select existing plant line"
 
-        .previous-line-name-alternative or
-        .previous-line-name-input
-          = text_field_tag :previous_line_name, nil, class: 'form-control', placeholder: "Enter new plant line name"
-          %a.clear-input.hidden{href: '#'} ×
+          .previous-line-name-alternative or
+          .previous-line-name-input
+            = text_field_tag :previous_line_name, nil, class: 'form-control', placeholder: "Enter new plant line name"
+            %a.clear-input.hidden{href: '#'} ×
 
-        %p.help-block Optional
+        .form-group.genetic-status-wrapper
+          .genetic-status-select
+            = label_tag :genetic_status, 'Genetic status'
+            = select_tag :genetic_status, options_for_select(PlantLine.genetic_statuses), prompt: '', class: 'genetic-status form-control', data: { placeholder: "Select existing status" }
 
-      .form-group.genetic-status-wrapper
-        .genetic-status-select
-          = label_tag :genetic_status, 'Genetic status'
-          = select_tag :genetic_status, options_for_select(PlantLine.genetic_statuses), prompt: '', class: 'genetic-status form-control', data: { placeholder: "Select existing status" }
+          .genetic-status-alternative or
+          .genetic-status-input
+            = text_field_tag :genetic_status, nil, class: 'form-control', placeholder: "Enter new status"
+            %a.clear-input.hidden{href: '#'} ×
 
-        .genetic-status-alternative or
-        .genetic-status-input
-          = text_field_tag :genetic_status, nil, class: 'form-control', placeholder: "Enter new status"
-          %a.clear-input.hidden{href: '#'} ×
+        .form-group
+          = label_tag :plant_variety_name
+          = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
 
-        %p.help-block Optional
+        = render partial: "submissions/annotations", locals: { model: PlantLine }
 
-      .form-group
-        = label_tag :plant_variety_name
-        = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
-
-        %p.help-block Optional
-
-      = render partial: "submissions/annotations", locals: { model: PlantLine }
-
-      .action-buttons
-        %button.cancel-new-plant-line-for-list{type: 'button'} Cancel
-        %button.add-new-plant-line-for-list{type: 'button'} Confirm
+        .action-buttons
+          %button.btn.btn-default.cancel-new-plant-line-for-list{type: 'button'} Cancel
+          %button.btn.btn-primary.add-new-plant-line-for-list{type: 'button'} Confirm
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
 
