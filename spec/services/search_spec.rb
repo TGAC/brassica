@@ -37,8 +37,11 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                               male_parent_line: nil,
                               female_parent_line: nil)
 
-    ma1 = create(:marker_assay, marker_assay_name: 'wisc_CHS28aX_a00')
-    ma2 = create(:marker_assay, marker_assay_name: 'other marker assay name')
+    pr1 = create(:probe, taxonomy_term: tt1)
+    ma1 = create(:marker_assay, marker_assay_name: 'wisc_CHS28aX_a00',
+                                probe: pr1)
+    ma2 = create(:marker_assay, marker_assay_name: 'other marker assay name',
+                                probe: pr1)
     plo1 = create(:population_locus, mapping_locus: 'cnu_m182a',
                                      marker_assay: ma1,
                                      plant_population: pp1)
