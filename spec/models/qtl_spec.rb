@@ -11,9 +11,6 @@ RSpec.describe Qtl do
       table_data = Qtl.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
-        lm.plant_population.taxonomy_term.name,
-        lm.plant_population.name,
-        lm.linkage_map_label,
         qtl.processed_trait_dataset.trait_descriptor.descriptor_name,
         qtl.qtl_rank,
         qtl.map_qtl_label,
@@ -28,7 +25,6 @@ RSpec.describe Qtl do
         qtl.residual_p,
         qtl.additive_effect,
         qtl.genetic_variance_explained,
-        qtl.qtl_job.qtl_job_name,
         qtl.qtl_job.id,
         lm.plant_population.id,
         lm.id,

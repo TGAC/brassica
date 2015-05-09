@@ -7,17 +7,19 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('map_positions', data, full[full.length - 4])
       ,
-        targets: 'population_loci_mapping_locus_column'
+        targets: 'related-specific'
         render: (data, type, full, meta) ->
-          modelIdUrl('population_loci', data, full[full.length - 1])
-      ,
-        targets: 'linkage_maps_linkage_map_label_column'
-        render: (data, type, full, meta) ->
-          modelIdUrl('linkage_maps', data, full[full.length - 3])
-      ,
-        targets: 'linkage_groups_linkage_group_label_column'
-        render: (data, type, full, meta) ->
-          modelIdUrl('linkage_groups', data, full[full.length - 2])
+          '<div class="dropdown">' +
+            '<button class="btn btn-xs btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" title="Related data">' +
+            'Related ' +
+            '<span class="caret"></span>' +
+            '</button>' +
+            '<ul class="dropdown-menu" role="menu">' +
+            createRelatedLink('population_loci', full[full.length - 1]) +
+            createRelatedLink('linkage_groups', full[full.length - 2]) +
+            createRelatedLink('linkage_maps', full[full.length - 3]) +
+            '</ul>' +
+            '</div>'
       ]
 
   'map-positions':
@@ -164,6 +166,20 @@ window.configs =
         targets: 'trait_descriptors_descriptor_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('trait_descriptors', data, full[full.length - 3])
+      ,
+        targets: 'related-specific'
+        render: (data, type, full, meta) ->
+          '<div class="dropdown">' +
+            '<button class="btn btn-xs btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" title="Related data">' +
+            'Related ' +
+            '<span class="caret"></span>' +
+            '</button>' +
+            '<ul class="dropdown-menu" role="menu">' +
+            createRelatedLink('linkage_maps', full[full.length - 4]) +
+            createRelatedLink('plant_populations', full[full.length - 5]) +
+            createRelatedLink('qtl_jobs', full[full.length - 6]) +
+            '</ul>' +
+            '</div>'
       ]
 
 
@@ -172,3 +188,9 @@ window.modelIdUrl = (model, label, id) ->
     '<a href="data_tables?model=' + model + '&query[id]=' + id + '">' + label + '</a>'
   else
     label
+
+
+window.createRelatedLink = (model, value) ->
+  createCounterLink('data_tables?model=' + model + '&query[id]=' + value,
+    (if value then 1 else 0),
+    model.replace(/_/g,' '))
