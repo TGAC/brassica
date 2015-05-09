@@ -6,6 +6,11 @@ RSpec.describe "searches/counts.html.haml" do
       plant_lines: 7,
       plant_populations: 135,
       plant_varieties: 171,
+      map_locus_hits: 2,
+      map_positions: 1,
+      population_loci: 0,
+      linkage_maps: 6,
+      linkage_groups: 11
     } }
 
 
@@ -15,6 +20,11 @@ RSpec.describe "searches/counts.html.haml" do
       expect(rendered).to include "Found 7 plant lines"
       expect(rendered).to include "Found 135 plant populations"
       expect(rendered).to include "Found 171 plant varieties"
+      expect(rendered).to include "Found 2 map locus hits"
+      expect(rendered).to include "Found 1 map positions"
+      expect(rendered).not_to include "Found 0 population loci"
+      expect(rendered).to include "Found 6 linkage maps"
+      expect(rendered).to include "Found 11 linkage groups"
     end
   end
 

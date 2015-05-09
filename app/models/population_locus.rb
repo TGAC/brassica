@@ -1,4 +1,8 @@
 class PopulationLocus < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
   belongs_to :plant_population, counter_cache: true
   belongs_to :marker_assay, counter_cache: true
@@ -12,12 +16,16 @@ class PopulationLocus < ActiveRecord::Base
   validates :mapping_locus,
             presence: true
 
+  after_touch { __elasticsearch__.index_document }
+  after_update { map_positions.each(&:touch) }
+  after_update { map_locus_hits.each(&:touch) }
+
   include Relatable
   include Filterable
   include Pluckable
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.pluck_columns
   end
 
@@ -39,6 +47,7 @@ class PopulationLocus < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'plant_populations.id',
         'marker_assays.id',
@@ -52,6 +61,19 @@ class PopulationLocus < ActiveRecord::Base
       'plant_population_id',
       'marker_assay_id'
     ]
+  end
+
+  def as_indexed_json(options = {})
+    as_json(
+      only: [
+        :mapping_locus,
+        :defined_by_whom
+      ],
+      include: {
+        plant_population: { only: [:name] },
+        marker_assay: { only: [:marker_assay_name] }
+      }
+    )
   end
 
   include Annotable

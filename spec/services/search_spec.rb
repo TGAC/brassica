@@ -7,8 +7,8 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
     DatabaseCleaner.clean_with :truncation
 
-    create(:taxonomy_term, name: 'Tooo')
-    create(:taxonomy_term, name: 'Taaaaz')
+    tt1 = create(:taxonomy_term, name: 'Tooo')
+    tt2 = create(:taxonomy_term, name: 'Taaaaz')
 
     create(:plant_variety, plant_variety_name: "Pvoo")
     create(:plant_variety, plant_variety_name: "Pvoobar")
@@ -24,10 +24,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                         common_name: "Ploobarbaz cabbage",
                         taxonomy_term: TaxonomyTerm.second)
 
-    create(:plant_population, name: 'Ppoo',
-                              taxonomy_term: TaxonomyTerm.first,
-                              male_parent_line: nil,
-                              female_parent_line: nil)
+    pp1 = create(:plant_population, name: 'Ppoo',
+                                    taxonomy_term: tt1,
+                                    male_parent_line: nil,
+                                    female_parent_line: nil)
     create(:plant_population, name: 'Ppoobar',
                               taxonomy_term: TaxonomyTerm.second,
                               male_parent_line: nil,
@@ -36,6 +36,39 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                               taxonomy_term: TaxonomyTerm.second,
                               male_parent_line: nil,
                               female_parent_line: nil)
+
+    ma1 = create(:marker_assay, marker_assay_name: 'wisc_CHS28aX_a00')
+    ma2 = create(:marker_assay, marker_assay_name: 'other marker assay name')
+    plo1 = create(:population_locus, mapping_locus: 'cnu_m182a',
+                                     marker_assay: ma1,
+                                     plant_population: pp1)
+    plo2 = create(:population_locus, mapping_locus: 'pO153E2NP',
+                                     marker_assay: ma2,
+                                     plant_population: pp1)
+    lg1 = create(:linkage_group, consensus_group_assignment: 'consensus1',
+                                 linkage_group_label: 'linkage group label')
+    lg2 = create(:linkage_group, consensus_group_assignment: 'no consensus',
+                                 linkage_group_label: 'group2')
+    lm1 = create(:linkage_map, linkage_map_label: 'linkage map label',
+                               map_version_no: '1',
+                               plant_population: pp1)
+    lm2 = create(:linkage_map, linkage_map_label: 'linkage map label',
+                               map_version_no: '333',
+                               plant_population: pp1)
+    mp1 = create(:map_position, map_position: '102.8',
+                                linkage_group: lg1,
+                                population_locus: plo1)
+    mp2 = create(:map_position, map_position: '54.2',
+                                linkage_group: lg2,
+                                population_locus: plo2)
+    create(:map_locus_hit, atg_hit_seq_source: 'GATTACA',
+                           population_locus: plo1,
+                           map_position: mp1,
+                           linkage_map: lm1)
+    create(:map_locus_hit, atg_hit_seq_source: 'TTTTTTT',
+                           population_locus: plo2,
+                           map_position: mp2,
+                           linkage_map: lm2)
 
     # Special cases
     create(:plant_line, plant_line_name: "123@456")
@@ -102,12 +135,75 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
   end
 
+  describe '#map_locus_hits' do
+    it 'finds MLH by :atg_hit_seq_source' do
+      expect(Search.new("TT").map_locus_hits.count).to eq 2
+      expect(Search.new("ATT").map_locus_hits.count).to eq 1
+    end
+
+    it 'finds MLH by exact map_position.map_position' do
+      expect(Search.new("102.8").map_locus_hits.count).to eq 1
+    end
+
+    it 'does not find MLH by inexact map_position.map_position' do
+      pending 'This test should pass if #253 is fixed'
+      expect(Search.new("2.8").map_locus_hits.count).to eq 0
+    end
+  end
+
+  describe '#map_positions' do
+    it 'finds MP by :map_position' do
+      expect(Search.new("102.8").map_positions.count).to eq 1
+    end
+
+    it 'finds MP by linkage_group.linkage_group_label' do
+      expect(Search.new("group la").map_positions.count).to eq 1
+      expect(Search.new("group").map_positions.count).to eq 2
+    end
+  end
+
+  describe '#population_loci' do
+    it 'finds PLoci by :mapping_locus' do
+      expect(Search.new("pO153").population_loci.count).to eq 1
+    end
+
+    it 'finds PLoci by marker_assays.marker_assay_name' do
+      expect(Search.new("CHS28aX").population_loci.count).to eq 1
+      expect(Search.new("CHS28aXa").population_loci.count).to eq 0
+    end
+  end
+
+  describe '#linkage_maps' do
+    it 'finds LM by :map_version_no' do
+      expect(Search.new("333").linkage_maps.count).to eq 1
+    end
+
+    it 'finds LM by plant_population.name' do
+      expect(Search.new("Ppoo").linkage_maps.count).to eq 2
+    end
+
+    it 'finds LM by taxonomy_term.name' do
+      expect(Search.new("Too").linkage_maps.count).to eq 2
+    end
+  end
+
+  describe '#linkage_groups' do
+    it 'finds LG by :consensus_group_assignment' do
+      expect(Search.new("sensus1").linkage_groups.count).to eq 1
+    end
+  end
+
   describe "#counts" do
     it "returns proper counts" do
       counts = Search.new("*").counts
       expect(counts[:plant_lines]).to eq PlantLine.count
       expect(counts[:plant_populations]).to eq PlantPopulation.count
       expect(counts[:plant_varieties]).to eq PlantVariety.count
+      expect(counts[:map_locus_hits]).to eq MapLocusHit.count
+      expect(counts[:map_positions]).to eq MapPosition.count
+      expect(counts[:population_loci]).to eq PopulationLocus.count
+      expect(counts[:linkage_groups]).to eq LinkageGroup.count
+      expect(counts[:linkage_maps]).to eq LinkageMap.count
     end
 
     context "special cases" do

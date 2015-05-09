@@ -26,6 +26,8 @@ class PlantPopulation < ActiveRecord::Base
                           join_table: 'plant_population_lists'
 
   after_touch { __elasticsearch__.index_document }
+  after_update { population_loci.each(&:touch) }
+  after_update { linkage_maps.each(&:touch) }
 
   include Relatable
   include Filterable

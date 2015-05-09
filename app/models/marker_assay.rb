@@ -28,6 +28,8 @@ class MarkerAssay < ActiveRecord::Base
   validates :canonical_marker_name,
             presence: true
 
+  after_update { population_loci.each(&:touch) }
+
   include Relatable
   include Filterable
 
