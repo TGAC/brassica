@@ -4,26 +4,26 @@ RSpec.describe Searchable do
   describe '#indexed_json_structure' do
     it 'returns proper json structure' do
       # Chosen three examples
-      proper = {
-        only: [
-          :consensus_group_assignment,
-          :canonical_marker_name,
-          :associated_sequence_id,
-          :sequence_source_acronym,
-          :atg_hit_seq_id,
-          :atg_hit_seq_source,
-          :bac_hit_seq_id,
-          :bac_hit_seq_source,
-          :bac_hit_name
-        ],
-        include: {
-          map_position: { only: [:map_position] },
-          population_locus: { only: [:mapping_locus] },
-          linkage_map: { only: [:linkage_map_label] },
-          linkage_group: { only: [:linkage_group_label] }
-        }
-      }
-      expect(MapLocusHit.indexed_json_structure).to eq proper
+      # proper = {
+      #   only: [
+      #     :consensus_group_assignment,
+      #     :canonical_marker_name,
+      #     :associated_sequence_id,
+      #     :sequence_source_acronym,
+      #     :atg_hit_seq_id,
+      #     :atg_hit_seq_source,
+      #     :bac_hit_seq_id,
+      #     :bac_hit_seq_source,
+      #     :bac_hit_name
+      #   ],
+      #   include: {
+      #     map_position: { only: [:map_position] },
+      #     population_locus: { only: [:mapping_locus] },
+      #     linkage_map: { only: [:linkage_map_label] },
+      #     linkage_group: { only: [:linkage_group_label] }
+      #   }
+      # }
+      # expect(MapLocusHit.indexed_json_structure).to eq proper
 
       proper = {
         only: [
