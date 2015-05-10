@@ -20,8 +20,6 @@ module Searchable extend ActiveSupport::Concern
         table, column = c.split('.')
         to_include[table.singularize.to_sym] = { only: [column.to_sym] }
       end
-      p to_include if self == MapLocusHit
-      p table_columns if self == MapLocusHit
       @indexed_json_structure = {
         only: only,
         include: to_include
