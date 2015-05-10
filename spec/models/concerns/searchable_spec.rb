@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Annotable do
+RSpec.describe Searchable do
   describe '#indexed_json_structure' do
     it 'returns proper json structure' do
       # Chosen three examples
@@ -16,7 +16,7 @@ RSpec.describe Annotable do
           :bac_hit_seq_source,
           :bac_hit_name
         ],
-          include: {
+        include: {
           map_position: { only: [:map_position] },
           population_locus: { only: [:mapping_locus] },
           linkage_map: { only: [:linkage_map_label] },
