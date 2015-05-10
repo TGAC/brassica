@@ -5,8 +5,9 @@ $ ->
     pageLength: 25
     processing: true
     stateSave: true
+    stateLoadParams: (settings, data) ->
+      data.search.search = ''
     deferRender: true
-#    dom: "<'row'<'col-sm-3'f><'col-sm-6'T><'col-sm-3'l>><'row'<'col-sm-12'tr>><'row'<'col-sm-6'i><'col-sm-6'p>>"
     dom: "<'table-bar'<'col-sm-3 form-group'f><'col-sm-7 form-group'T><'col-sm-2 form-group'l>><'row'<'col-sm-12 'tr>><'row table-footer'<'col-sm-6'i><'col-sm-6'p>>"
     drawCallback: (settings) ->
       # This removes the pagination control when only 1 page
@@ -22,8 +23,6 @@ $ ->
         lengthPicker.hide()
       else
         lengthPicker.show()
-    # NOTE: use server side processing for large data (too heavy for clients)
-    # serverSide: true
 
   $.extend $.fn.dataTable.TableTools.defaults,
     aButtons:
@@ -60,7 +59,10 @@ $ ->
         sFieldBoundary: '"'
         mColumns: (dt) ->
           api = new $.fn.dataTable.Api(dt)
-          api.columns().indexes().toArray().slice(0, -2)
+          if $(dt.nTHead).find('th.related').length
+            api.columns().indexes().toArray().slice(0, -2)
+          else
+            api.columns().indexes().toArray().slice(0, -1)
         fnClick: ( nButton, oConfig, oFlash ) ->
           data = this.fnGetTableData(oConfig)
           blob = new Blob([data])

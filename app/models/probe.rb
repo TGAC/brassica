@@ -27,8 +27,8 @@ class Probe < ActiveRecord::Base
 
   def self.table_columns
     [
-      'probe_name',
       'taxonomy_terms.name',
+      'probe_name',
       'clone_name',
       'date_described',
       'sequence_id',
