@@ -1,36 +1,26 @@
 class PlantPopulation < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
-  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
   belongs_to :taxonomy_term
-
   belongs_to :population_type
-
   belongs_to :male_parent_line, class_name: 'PlantLine',
              foreign_key: 'male_parent_line_id'
-
   belongs_to :female_parent_line, class_name: 'PlantLine',
              foreign_key: 'female_parent_line_id'
 
   has_many :plant_population_lists
-
   has_many :linkage_maps
-
-  has_many :population_loci, class_name: 'PopulationLocus'
-
+  has_many :population_loci
   has_many :plant_trials
 
   has_and_belongs_to_many :plant_lines,
                           join_table: 'plant_population_lists'
 
-  after_touch { __elasticsearch__.index_document }
   after_update { population_loci.each(&:touch) }
   after_update { linkage_maps.each(&:touch) }
 
   include Relatable
   include Filterable
+  include Searchable
 
   validates :name,
             presence: true,
@@ -67,22 +57,18 @@ class PlantPopulation < ActiveRecord::Base
     ]
   end
 
-  def as_indexed_json(options = {})
-    plant_line_attrs = [
-      :plant_line_name
-    ]
-
-    as_json(
+  def self.indexed_json_structure
+    {
       only: [
         :name, :canonical_population_name, :description
       ],
       include: {
-        taxonomy_term: { only: [:name] },
-        population_type: { only: [:population_type] },
-        female_parent_line: { only: plant_line_attrs },
-        male_parent_line: { only: plant_line_attrs },
+        taxonomy_term: { only: :name },
+        population_type: { only: :population_type },
+        female_parent_line: { only: :plant_line_name },
+        male_parent_line: { only: :plant_line_name },
       }
-    )
+    }
   end
 
   def self.permitted_params

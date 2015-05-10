@@ -1,21 +1,13 @@
 class PlantLine < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
-  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
   belongs_to :plant_variety
-
   belongs_to :taxonomy_term
 
   has_many :plant_population_lists
-
   has_many :fathered_descendants, class_name: 'PlantPopulation',
            foreign_key: 'male_parent_line_id'
-
   has_many :mothered_descendants, class_name: 'PlantPopulation',
            foreign_key: 'female_parent_line_id'
-
   has_many :plant_accessions
 
   has_and_belongs_to_many :plant_populations,
@@ -24,10 +16,9 @@ class PlantLine < ActiveRecord::Base
   after_update { mothered_descendants.each(&:touch) }
   after_update { fathered_descendants.each(&:touch) }
 
-  after_touch { __elasticsearch__.index_document }
-
   include Filterable
   include Pluckable
+  include Searchable
 
   validates :plant_line_name,
             presence: true
@@ -54,18 +45,6 @@ class PlantLine < ActiveRecord::Base
       'data_owned_by',
       'organisation'
     ]
-  end
-
-  def as_indexed_json(options = {})
-    as_json(
-      only: [
-        :plant_line_name, :common_name, :genetic_status,
-        :previous_line_name
-      ],
-      include: {
-        taxonomy_term: { only: [:name] }
-      }
-    )
   end
 
   def self.permitted_params

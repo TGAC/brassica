@@ -1,8 +1,4 @@
 class PlantVariety < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
-  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
   has_and_belongs_to_many :countries_of_origin,
                           class_name: 'Country',
@@ -16,6 +12,7 @@ class PlantVariety < ActiveRecord::Base
 
   include Filterable
   include Pluckable
+  include Searchable
 
   scope :by_name, -> { order(:plant_variety_name) }
 
@@ -36,12 +33,6 @@ class PlantVariety < ActiveRecord::Base
       'female_parent',
       'male_parent'
     ]
-  end
-
-  def as_indexed_json(options = {})
-    as_json(
-      only: [ :plant_variety_name ]
-    )
   end
 
   def self.permitted_params

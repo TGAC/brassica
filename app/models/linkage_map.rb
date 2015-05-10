@@ -1,8 +1,4 @@
 class LinkageMap < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
-  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
   belongs_to :plant_population, counter_cache: true, touch: true
 
@@ -21,7 +17,6 @@ class LinkageMap < ActiveRecord::Base
             presence: true,
             length: { minimum: 1, maximum: 3 }
 
-  after_touch { __elasticsearch__.index_document }
   after_update { map_locus_hits.each(&:touch) }
 
   default_scope { includes(plant_population: :taxonomy_term) }
@@ -29,6 +24,7 @@ class LinkageMap < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -70,8 +66,8 @@ class LinkageMap < ActiveRecord::Base
     ]
   end
 
-  def as_indexed_json(options = {})
-    as_json(
+  def self.indexed_json_structure
+    {
       only: [
         :linkage_map_label,
         :linkage_map_name,
@@ -84,7 +80,7 @@ class LinkageMap < ActiveRecord::Base
           include: { taxonomy_term: { only: [:name] } }
         }
       }
-    )
+    }
   end
 
   include Annotable

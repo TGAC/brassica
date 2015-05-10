@@ -1,8 +1,4 @@
 class LinkageGroup < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
-  index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
   has_many :linkage_maps, through: :map_linkage_group_lists
   has_many :map_linkage_group_lists
@@ -19,13 +15,13 @@ class LinkageGroup < ActiveRecord::Base
   validates :consensus_group_assignment,
             presence: true
 
-  after_touch { __elasticsearch__.index_document }
   after_update { map_positions.each(&:touch) }
   after_update { map_locus_hits.each(&:touch) }
 
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -59,19 +55,6 @@ class LinkageGroup < ActiveRecord::Base
         'id'
       ]
     ]
-  end
-
-  def as_indexed_json(options = {})
-    as_json(
-      only: [
-        :linkage_group_label,
-        :linkage_group_name,
-        :total_length,
-        :lod_threshold,
-        :consensus_group_assignment,
-        :consensus_group_orientation
-      ]
-    )
   end
 
   include Annotable

@@ -76,6 +76,15 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
+  it 'does not use count aggregations in table columns' do
+    allowed_models = DataTablesController.new.send(:allowed_models)
+    allowed_models.each do |model|
+      model.classify.constantize.table_columns.each do |c|
+        expect(c).not_to include('(')
+      end
+    end
+  end
+
   context "supporting API" do
     Brassica::Api.readable_models.each do |klass|
       context klass do
