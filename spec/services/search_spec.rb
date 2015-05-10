@@ -122,7 +122,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
 
     it "finds PL by fragment of :plant_line_name" do
-      expect(Search.new("lo").plant_lines.count).to eq 3
+      result = Search.new("lo").plant_lines.select do |pl|
+        pl.plant_line_name.include? 'lo'
+      end
+      expect(result.count).to eq 3
       expect(Search.new("looba").plant_lines.count).to eq 2
       expect(Search.new("loobarba").plant_lines.count).to eq 1
       expect(Search.new("loobarbaz").plant_lines.first.id.to_i).
