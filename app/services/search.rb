@@ -3,7 +3,7 @@ class Search
   attr_accessor :query
 
   def initialize(query)
-    self.query = query.include?("@") ? query : "*#{query}*"
+    self.query = prepare_query(query.dup)
   end
 
   def counts
@@ -62,5 +62,25 @@ class Search
 
   def linkage_maps
     LinkageMap.search(query, size: LinkageMap.count)
+  end
+
+  private
+
+  def prepare_query(query)
+    query = escape_query_special_chars(query)
+    add_query_wildcards(query)
+  end
+
+  def escape_query_special_chars(query)
+    special_chars.each { |chr| query.gsub!(chr, "\\#{chr}") }
+    query
+  end
+
+  def add_query_wildcards(query)
+    query.include?("@") ? query : "*#{query}*"
+  end
+
+  def special_chars
+    %w(: [ ] ( ) { } + - ~ < = > ^ \ / && || ! " * ?)
   end
 end
