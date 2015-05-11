@@ -22,9 +22,7 @@ class PlantPopulation < ActiveRecord::Base
   include Filterable
   include Searchable
 
-  validates :name,
-            presence: true,
-            allow_blank: true
+  validates :name, presence: true
 
   scope :by_name, -> { order('plant_populations.name') }
 
