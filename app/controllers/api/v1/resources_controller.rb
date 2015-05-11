@@ -5,8 +5,6 @@ class Api::V1::ResourcesController < ApplicationController
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
 
-  # FIXME find a way to document api calls
-
   def index
     filter_params = params[model_name.singularize].presence
 
@@ -22,6 +20,15 @@ class Api::V1::ResourcesController < ApplicationController
     render json: decorate(resource)
   end
 
+  def create
+    resource = model_klass.new(create_params)
+
+    if resource.save
+      render json: decorate(resource)
+    else
+    end
+  end
+
   private
 
   def authenticate_api_key!
@@ -32,7 +39,10 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def require_allowed_model
-    unless allowed_models.include?(model_name)
+    if request.request_method_symbol == :get && !Brassica::Api.readable_model?(model_name)
+      raise ActionController::RoutingError.new('Not Found')
+    end
+    if request.request_method_symbol != :get && !Brassica::Api.writable_model?(model_name)
       raise ActionController::RoutingError.new('Not Found')
     end
   end
@@ -45,16 +55,17 @@ class Api::V1::ResourcesController < ApplicationController
     @model_klass ||= model_name.classify.constantize
   end
 
-  def allowed_models
-    Brassica::Api.models.map { |klass| klass.name.underscore.pluralize }
-  end
-
   def decorate_collection(resources)
     Api::CollectionDecorator.decorate(resources || [])
   end
 
   def decorate(resource)
     Api::Decorator.decorate(resource)
+  end
+
+  def create_params
+    blacklisted_attrs = %w(id)
+    params.require(model_name.singularize).permit(model_klass.attribute_names - blacklisted_attrs)
   end
 
 end

@@ -1,4 +1,4 @@
-RSpec.shared_examples "API resource" do |model_klass|
+RSpec.shared_examples "API-readable resource" do |model_klass|
   model_name = model_klass.name.underscore
 
   context "with invalid api key" do
