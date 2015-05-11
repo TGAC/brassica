@@ -32,4 +32,9 @@ en:
       plant_lines_count: Found %{count} plant lines
       plant_populations_count: Found %{count} plant populations
       plant_varieties_count: Found %{count} plant varieties
+      map_locus_hits_count: Found %{count} map locus hits
+      map_positions_count: Found %{count} map positions
+      population_loci_count: Found %{count} population loci
+      linkage_maps_count: Found %{count} linkage maps
+      linkage_groups_count: Found %{count} linkage groups
       nothing_found: No results found

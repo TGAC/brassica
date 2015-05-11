@@ -45,12 +45,19 @@ RSpec.describe ActiveRecord::Base do
     it 'makes sure all basic searchable fields are displayed in tables' do
       @searchables.each do |searchable|
         instance = create(searchable)
-        instance.send(:as_indexed_json).each do |k,v|
+        instance.as_indexed_json.each do |k, v|
           next if k == 'id'
           if v.instance_of? Hash
-            v.each do |column,_|
-              expect(searchable.table_columns).
-                to display_column(instance.send(k).class.table_name + '.' + column)
+            v.each do |column, value|
+              if value.instance_of? Hash
+                value.each do |deep_column, _|
+                  expect(searchable.table_columns).
+                    to display_column(column.pluralize + '.' + deep_column)
+                end
+              else
+                expect(searchable.table_columns).
+                  to display_column(instance.send(k).class.table_name + '.' + column)
+              end
             end
           else
             expect(searchable.table_columns).
@@ -66,6 +73,15 @@ RSpec.describe ActiveRecord::Base do
     allowed_models.each do |model|
       expect(model.classify.constantize).to respond_to(:table_columns)
       expect(model.classify.constantize.table_columns).not_to be_empty
+    end
+  end
+
+  it 'does not use count aggregations in table columns' do
+    allowed_models = DataTablesController.new.send(:allowed_models)
+    allowed_models.each do |model|
+      model.classify.constantize.table_columns.each do |c|
+        expect(c).not_to include('(')
+      end
     end
   end
 

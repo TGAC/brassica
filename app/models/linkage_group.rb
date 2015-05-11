@@ -1,13 +1,9 @@
 class LinkageGroup < ActiveRecord::Base
 
   has_many :linkage_maps, through: :map_linkage_group_lists
-
   has_many :map_linkage_group_lists
-
   has_many :map_positions
-
   has_many :map_locus_hits
-
   has_many :qtls
 
   validates :linkage_group_label,
@@ -19,12 +15,16 @@ class LinkageGroup < ActiveRecord::Base
   validates :consensus_group_assignment,
             presence: true
 
+  after_update { map_positions.each(&:touch) }
+  after_update { map_locus_hits.each(&:touch) }
+
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.pluck_columns
   end
 
@@ -49,6 +49,7 @@ class LinkageGroup < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'linkage_maps.id',
         'id'

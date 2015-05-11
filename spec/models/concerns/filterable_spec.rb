@@ -24,6 +24,14 @@ RSpec.describe Filterable do
       end
     end
 
+    it 'filters when fetch param is present' do
+      @searchable.each do |searchable|
+        expect(searchable).
+          to receive(:filter).with(query).and_return(searchable.none)
+        searchable.table_data(query)
+      end
+    end
+
     it 'calls Search service for results in proper model context' do
       @searchable.each do |searchable|
         expect(Search).to receive(:new).with('n').and_return(search)

@@ -12,12 +12,16 @@ class PopulationLocus < ActiveRecord::Base
   validates :mapping_locus,
             presence: true
 
+  after_update { map_positions.each(&:touch) }
+  after_update { map_locus_hits.each(&:touch) }
+
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.pluck_columns
   end
 
@@ -39,6 +43,7 @@ class PopulationLocus < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'plant_populations.id',
         'marker_assays.id',

@@ -19,9 +19,10 @@ class MapLocusHit < ActiveRecord::Base
 
   include Filterable
   include Pluckable
+  include Searchable
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.pluck_columns
   end
 
@@ -42,6 +43,7 @@ class MapLocusHit < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'population_loci.id',
         'linkage_maps.id',

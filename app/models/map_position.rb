@@ -1,7 +1,6 @@
 class MapPosition < ActiveRecord::Base
 
   belongs_to :linkage_group, counter_cache: true
-
   belongs_to :population_locus, counter_cache: true
 
   has_many :map_locus_hits
@@ -12,12 +11,15 @@ class MapPosition < ActiveRecord::Base
   validates :mapping_locus,
             presence: true
 
+  after_update { map_locus_hits.each(&:touch) }
+
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
 
   def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
+    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.pluck_columns
   end
 
@@ -38,6 +40,7 @@ class MapPosition < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'linkage_groups.id',
         'population_loci.id',
