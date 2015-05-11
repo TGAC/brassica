@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Searchable do
-  describe '#indexed_json_structure' do
+  describe '.indexed_json_structure' do
     it 'returns proper json structure' do
       # Chosen three examples
       proper = {

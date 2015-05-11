@@ -45,12 +45,12 @@ RSpec.describe ActiveRecord::Base do
     it 'makes sure all basic searchable fields are displayed in tables' do
       @searchables.each do |searchable|
         instance = create(searchable)
-        instance.send(:as_indexed_json).each do |k,v|
+        instance.as_indexed_json.each do |k, v|
           next if k == 'id'
           if v.instance_of? Hash
-            v.each do |column,value|
+            v.each do |column, value|
               if value.instance_of? Hash
-                value.each do |deep_column,_|
+                value.each do |deep_column, _|
                   expect(searchable.table_columns).
                     to display_column(column.pluralize + '.' + deep_column)
                 end
