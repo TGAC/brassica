@@ -21,3 +21,8 @@
 #= require jquery.scrollTo
 #= require highlight.pack
 #= require_tree .
+
+$ ->
+  $('body').tooltip
+    selector: '[data-toggle=tooltip]'
+    placement: 'top'
