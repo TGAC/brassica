@@ -8,5 +8,20 @@ FactoryGirl.define do
     taxonomy_term
     population_type
     annotable
+
+    trait :with_has_many_associations do
+      after(:create) do |plant_population_registry, evaluator|
+        plant_population_registry.linkage_maps =
+          build_list(:linkage_map, 2, plant_population_id: evaluator.id)
+
+        plant_population_registry.population_loci =
+          build_list(:population_locus, 3, plant_population_id: evaluator.id)
+
+        plant_population_registry.plant_trials =
+          build_list(:plant_trial, 2, plant_population_id: evaluator.id)
+
+        plant_population_registry.plant_lines = build_list(:plant_line, 4)
+      end
+    end
   end
 end

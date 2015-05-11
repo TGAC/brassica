@@ -344,4 +344,7 @@ div[class*="col-"] > .form-group {
   }
 }
 
-
+/* badge */
+.badge {
+  @include border-radius(2px);
+}

@@ -5,7 +5,7 @@
         = link_to root_path, { class: 'logo' } do
           = image_tag '/images/logo-bip.png', alt: 'Brassica Information Portal'
 
-      .col-xs-6
+      .col-sm-6
         %ul.nav.nav-pills.pull-right.header-menu
           - unless user_signed_in?
             %li{ role: 'presentation' }

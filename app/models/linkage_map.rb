@@ -34,9 +34,9 @@ class LinkageMap < ActiveRecord::Base
   def self.table_columns
     [
       'taxonomy_terms.name',
+      'plant_populations.name',
       'linkage_map_label',
       'linkage_map_name',
-      'plant_populations.name',
       'map_version_no',
       'map_version_date'
     ]
@@ -51,6 +51,7 @@ class LinkageMap < ActiveRecord::Base
 
   def self.ref_columns
     [
+      'plant_population_id',
       'pubmed_id'
     ]
   end

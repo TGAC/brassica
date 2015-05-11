@@ -29,12 +29,15 @@ $body-text-color: #333333;
  *	############################################################################
  */
 
+$border-radius-base: 2px;
+
 //colors
 $gray-base: #000;
 $brand-primary: $accent-color;
-//$brand-success:
+$brand-success: #62A325;
+$state-success-text: $brand-success;
 //$brand-info:
-//$brand-warning:
+$brand-warning: #EA6420;
 //$brand-danger:
 
 

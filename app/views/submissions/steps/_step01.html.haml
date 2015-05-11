@@ -7,9 +7,9 @@
 
 
     .form-group
-      = content.label :name, "Population name"
+      = content.label :name, "Population name", class: 'required'
       = content.text_field :name, class: 'form-control'
-      %p.help-block Please, provide <b>population name</b>
+      %small.help-block Please, provide <b>population name</b>
 
     .form-group
       = content.label :description

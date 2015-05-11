@@ -25,6 +25,7 @@ en:
     trait_descriptors: Traits
     linkage_maps: Linkage maps
     qtl: QTL
+    marker_assays: Marker assays
 
   searches:
     counts:
