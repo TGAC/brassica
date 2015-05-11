@@ -201,7 +201,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
   describe "#counts" do
     it "returns proper counts" do
-      counts = Search.new("*").counts
+      counts = Search.new("").counts
       expect(counts[:plant_lines]).to eq PlantLine.count
       expect(counts[:plant_populations]).to eq PlantPopulation.count
       expect(counts[:plant_varieties]).to eq PlantVariety.count
@@ -218,6 +218,22 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
         expect(Search.new("123@").counts).to include(plant_lines: 1)
         expect(Search.new("@456").counts).to include(plant_lines: 1)
         expect(Search.new("123@456").counts).to include(plant_lines: 1)
+      end
+    end
+  end
+
+  describe "query transformation" do
+    examples = {
+      'foo' => '*foo*',
+      'foo@example.com' => 'foo@example.com',
+      'foo:bar' => '*foo\:bar*'
+    }
+
+    examples.each do |input_query, output_query|
+      context "given #{input_query}" do
+        it "transforms it to #{output_query}" do
+          expect(Search.new(input_query).query).to eq output_query
+        end
       end
     end
   end
