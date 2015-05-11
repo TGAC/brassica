@@ -9,17 +9,25 @@
           = @api_key.token
 
       %p
-        Please, consult
+        This is your
+        %strong personal
+        secret key and should not be shared with others. Please, consult
         = link_to t('menu.api'), navbar_menu[:api]
         for more information.
 
     .col-sm-6
       %p
-        = button_to "Renew key", recreate_api_keys_path, method: "put", class: 'btn btn-default'
+        In case you would like to revoke the current key for some reason
+        (e.g., you think it is compromised), please
+        %strong Renew
+        it.
+
+      %p
+        = button_to "Renew key", recreate_api_keys_path, method: "put", class: 'btn btn-danger'
 
       %p.text-danger
         %strong Important.
         This operation will revoke your current API Key. That means it will no
-        longer be valid and every API call using that API Key value will fail.
+        longer be valid and every future API call using that API Key value will fail.
         When you decide to renew your API Key, please make sure that you use
         the new value in your BIP client.

@@ -5,9 +5,10 @@
 
     = render partial: 'submissions_list', locals: { submissions: @submissions, mode: :private }
 
-    = create_submission_button
+    = new_submission_button
 
   - else
     .alert.alert-info
       %p You do not have any submissions yet.
-    %p= create_submission_button
+
+    %p= new_submission_button
