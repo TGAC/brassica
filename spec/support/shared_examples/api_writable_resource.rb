@@ -27,7 +27,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           end
         }
 
-        it "creates " do
+        it "creates an object " do
           expect {
             post "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => model_attrs
           }.to change {
@@ -35,27 +35,60 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           }.by(1)
 
           expect(response).to be_success
+          expect(parsed_response).to have_key(model_name)
         end
       end
 
       context "with invalid attributes" do
+        let(:model_attrs) {
+          {}.tap do |attrs|
+            required_attrs.each do |attr|
+              attrs[attr] = ""
+            end
+          end
+        }
+
+        it "returns errors" do
+          expect {
+            post "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => model_attrs
+          }.not_to change {
+            model_klass.count
+          }
+
+          expect(response.status).to eq 422
+        end
       end
 
       context "with blacklisted params" do
+        let(:model_attrs) {
+        }
+
+        it "" do
+          pending
+          fail
+        end
       end
 
       context "with misnamed attributes" do
+        let(:model_attrs) {
+          { foo: "bar" }
+        }
+
+        it "returns errors" do
+          expect {
+            post "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => model_attrs
+          }.not_to change {
+            model_klass.count
+          }
+
+          expect(response.status).to eq 422
+        end
       end
     end
   end
 
   def required_attributes(model_klass)
-    [].tap do |attrs|
-      model_klass.validators.each do |validator|
-        validator.attributes.each do |attr|
-          attrs << attr
-        end
-      end
-    end
+    model_klass.validators.map(&:attributes).flatten.uniq
   end
+
 end

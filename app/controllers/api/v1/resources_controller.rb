@@ -4,6 +4,7 @@ class Api::V1::ResourcesController < ApplicationController
 
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
+  before_filter :require_proper_input, except: [:index, :show]
 
   def index
     filter_params = params[model_name.singularize].presence
@@ -24,8 +25,9 @@ class Api::V1::ResourcesController < ApplicationController
     resource = model_klass.new(create_params)
 
     if resource.save
-      render json: decorate(resource)
+      render json: { model_name.singularize => decorate(resource) }, status: :created
     else
+      render json: {}, status: 422
     end
   end
 
@@ -47,6 +49,15 @@ class Api::V1::ResourcesController < ApplicationController
     end
   end
 
+  def require_proper_input
+    model_attrs = model_klass.attribute_names
+    misnamed_attrs = (params[model_name.singularize].try(:keys) || []) - model_attrs
+
+    if misnamed_attrs.present?
+      render json: {}, status: 422
+    end
+  end
+
   def model_name
     @model_name ||= request.path.match(/\A\/api\/v1\/(([\w_]+)\/?)/)[2]
   end
@@ -64,8 +75,11 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create_params
+    # FIXME extract ParamValidator or sth
     blacklisted_attrs = %w(id)
-    params.require(model_name.singularize).permit(model_klass.attribute_names - blacklisted_attrs)
+    permitted_attrs =  model_klass.attribute_names - blacklisted_attrs
+
+    params.require(model_name.singularize).permit(permitted_attrs)
   end
 
 end
