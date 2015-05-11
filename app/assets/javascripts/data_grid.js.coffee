@@ -90,6 +90,15 @@ $ ->
     $(this).DataTable specificConfig
 
 
+  $('body').scrollspy
+    target: '.docs-sidebar'
+
+
+  $('body').tooltip
+    selector: '[data-toggle]'
+    placement: 'top'
+
+
   $('body').popover
     selector: '[data-popover-source]'
     placement: 'left'
