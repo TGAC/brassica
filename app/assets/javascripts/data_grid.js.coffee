@@ -52,7 +52,6 @@ $ ->
         sExtends: 'text'
         sButtonClass: 'btn-sm'
         sButtonText: '<i class="fa fa-download"></i> Export to CSV'
-        sToolTip: 'Generates a CSV file with the content of the table below.'
         sFieldSeperator: ','
         oSelectorOpts:
           search: 'applied'

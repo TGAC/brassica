@@ -21,7 +21,8 @@
     - model_class.table_columns.each do |column|
       - model_name, column_name = extract_column(column)
       %th{ class: "#{model_name}_#{column_name}_column",
-           title: t("tables.#{model_name}.#{column_name}_title", default: '') }
+           title: t("tables.#{model_name}.#{column_name}_title", default: ''),
+           data: { toggle: 'tooltip', container: 'body' }}
         = t("tables.#{model_name}.#{column_name}")
 
     - if model_class.respond_to?(:counter_names) && model_class.counter_names.present?
