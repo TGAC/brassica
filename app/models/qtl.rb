@@ -22,16 +22,13 @@ class Qtl < ActiveRecord::Base
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
     query.includes(processed_trait_dataset: :trait_descriptor).
-          includes(linkage_group: { linkage_maps: { plant_population: :taxonomy_term }}).
+          includes(linkage_group: { linkage_maps: :plant_population }).
           includes(:qtl_job).
           pluck(*(table_columns + ref_columns))
   end
 
   def self.table_columns
     [
-      'taxonomy_terms.name',
-      'plant_populations.name',
-      'linkage_maps.linkage_map_label',
       'trait_descriptors.descriptor_name',
       'qtl_rank',
       'map_qtl_label',
@@ -45,8 +42,7 @@ class Qtl < ActiveRecord::Base
       'regression_p',
       'residual_p',
       'additive_effect',
-      'genetic_variance_explained',
-      'qtl_jobs.qtl_job_name'
+      'genetic_variance_explained'
     ]
   end
 

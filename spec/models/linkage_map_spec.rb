@@ -12,13 +12,14 @@ RSpec.describe LinkageMap do
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
         lm.plant_population.taxonomy_term.name,
+        lm.plant_population.name,
         lm.linkage_map_label,
         lm.linkage_map_name,
-        lm.plant_population.name,
         lm.map_version_no,
         lm.map_version_date,
         lm.linkage_groups.count,
         lm.map_locus_hits.count,
+        lm.plant_population.id,
         lm.pubmed_id,
         lm.id
       ]

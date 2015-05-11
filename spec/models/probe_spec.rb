@@ -19,8 +19,8 @@ RSpec.describe Probe do
       table_data = Probe.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
-        p.probe_name,
         p.taxonomy_term.name,
+        p.probe_name,
         p.clone_name,
         p.date_described,
         p.sequence_id,

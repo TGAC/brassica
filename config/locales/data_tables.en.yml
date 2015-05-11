@@ -109,18 +109,28 @@ en:
     qtl:
       id: QTL count
       qtl_rank: QTL Rank
-      map_qtl_label: Map QTL label
-      outer_interval_start: Outer interval start
-      inner_interval_start: Inner interval start
-      qtl_mid_position: QTL mid position
-      inner_interval_end: Inner interval end
-      outer_interval_end: Outer interval end
+      map_qtl_label: Label
+      map_qtl_label_title: Map QTL label
+      outer_interval_start: Outer start
+      outer_interval_start_title: Outer interval start
+      inner_interval_start: Inner start
+      inner_interval_start_title: Inner interval start
+      qtl_mid_position: Mid pos.
+      qtl_mid_position_title: QTL Middle position
+      inner_interval_end: Inner end
+      inner_interval_end_title: Inner interval end
+      outer_interval_end: Outer end
+      outer_interval_end_title: Outer interval end
       peak_value: Peak value
-      peak_p_value: Peak p value
-      regression_p: Regression p
-      residual_p: Residual p
-      additive_effect: Additive effect
-      genetic_variance_explained: Genetic variance explained
+      peak_p_value: Peak p
+      regression_p: Regr. p
+      regression_p_title: Regression p
+      residual_p: Res. p
+      residual_p_title: Residual p
+      additive_effect: Add. eff.
+      additive_effect_title: Additive effect
+      genetic_variance_explained: Gen. var.
+      genetic_variance_explained_title: Genetic variance explained
     qtl_jobs:
       qtl_job_name: Job name
       qtl_software: Software
