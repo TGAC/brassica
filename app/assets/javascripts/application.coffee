@@ -24,5 +24,5 @@
 
 $ ->
   $('body').tooltip
-    selector: '[data-toggle=tooltip]'
+    selector: '[data-toggle]'
     placement: 'top'
