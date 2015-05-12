@@ -1,0 +1,22 @@
+.action
+  %span.method GET
+  %span.url= "/api/v1/#{model.name.underscore.pluralize}"
+
+= render partial: 'api_props',
+         locals: { title: "Search params",
+                   props: api_props("#{model.name.underscore}.index.params") }
+
+%h4 Example
+%pre
+  %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
+
+.api-live-example
+  - if user_signed_in?
+    %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3" } } Try it!
+    .url
+    %pre.response.hidden
+      %code
+
+  - else
+    .alert.alert-info Sign in to try it in your browser!
+

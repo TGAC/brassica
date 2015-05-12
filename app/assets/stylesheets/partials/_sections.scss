@@ -126,6 +126,12 @@
       font-size: 18px;
       margin-right: 8px;
     }
+
+    .response {
+      display: block;
+      max-height: 300px;
+      overflow: auto;
+    }
   }
 }
 .docs-sidebar {

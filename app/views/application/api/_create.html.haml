@@ -1,0 +1,8 @@
+.action
+  %span.method POST
+  %span.url /api/v1/#{model.name.underscore.pluralize}
+
+%h4 Example
+%pre
+  %code.http= t("api.#{model.name.underscore}.create.example", url: "/api/v1/#{model.name.underscore.pluralize}")
+
