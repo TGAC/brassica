@@ -7,13 +7,13 @@ class Api::V1::ResourcesController < ApplicationController
   before_filter :require_strictly_correct_params, only: :create
 
   def index
-    filter_params = params[model_name.singularize].presence
+    filter_params = params[model_name].presence
 
     resources = filter_params ? model_klass.filter(filter_params) : model_klass.all
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
-    render json: { model_name => resources, :meta => resources.meta }
+    render json: { model_name.pluralize => resources, :meta => resources.meta }
   end
 
   def show
@@ -25,7 +25,7 @@ class Api::V1::ResourcesController < ApplicationController
     resource = model_klass.new(create_params)
 
     if resource.save
-      render json: { model_name.singularize => decorate(resource) }, status: :created
+      render json: { model_name => decorate(resource) }, status: :created
     else
       errors = []
 
@@ -59,7 +59,7 @@ class Api::V1::ResourcesController < ApplicationController
 
   def require_strictly_correct_params
     model_attrs = model_klass.attribute_names
-    misnamed_attrs = (params[model_name.singularize].try(:keys) || []) - model_attrs
+    misnamed_attrs = (params[model_name].try(:keys) || []) - model_attrs
 
     if misnamed_attrs.present?
       errors = []
@@ -74,7 +74,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def model_name
-    @model_name ||= request.path.match(/\A\/api\/v1\/(([\w_]+)\/?)/)[2]
+    @model_name ||= request.path.match(/\A\/api\/v1\/(([\w_]+)\/?)/)[2].singularize
   end
 
   def model_klass
@@ -90,11 +90,10 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create_params
-    # FIXME extract ParamValidator or sth
     blacklisted_attrs = %w(id)
     permitted_attrs =  model_klass.attribute_names - blacklisted_attrs
 
-    params.require(model_name.singularize).permit(permitted_attrs)
+    params.require(model_name).permit(permitted_attrs)
   end
 
 end
