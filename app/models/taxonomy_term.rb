@@ -16,6 +16,7 @@ class TaxonomyTerm < ActiveRecord::Base
 
   after_update { plant_lines.each(&:touch) }
   after_update { plant_populations.each(&:touch) }
+  after_update { probes.each(&:touch) }
 
   def self.names
     order(:name).pluck(:name)

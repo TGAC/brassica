@@ -17,6 +17,7 @@ class PlantPopulation < ActiveRecord::Base
 
   after_update { population_loci.each(&:touch) }
   after_update { linkage_maps.each(&:touch) }
+  after_update { plant_trials.each(&:touch) }
 
   include Relatable
   include Filterable

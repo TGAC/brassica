@@ -30,6 +30,7 @@ class MarkerAssay < ActiveRecord::Base
 
   after_update { population_loci.each(&:touch) }
 
+  include Searchable
   include Relatable
   include Filterable
 
@@ -58,10 +59,25 @@ class MarkerAssay < ActiveRecord::Base
     ]
   end
 
-  private
+  def self.indexed_json_structure
+    {
+      only: [
+        :marker_assay_name,
+        :canonical_marker_name,
+        :marker_type,
+        :separation_system
+      ],
+      include: {
+        probe: { only: :probe_name },
+        primer_a: { only: :primer },
+        primer_b: { only: :primer },
+      }
+    }
+  end
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'primer_a_id',
         'primer_b_id',

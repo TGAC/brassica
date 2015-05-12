@@ -8,5 +8,7 @@ class ProcessedTraitDataset < ActiveRecord::Base
   validates :processed_trait_dataset_name,
             presence: true
 
+  after_touch { qtls.each(&:touch) }
+
   include Annotable
 end

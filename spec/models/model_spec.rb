@@ -44,6 +44,7 @@ RSpec.describe ActiveRecord::Base do
 
     it 'makes sure all basic searchable fields are displayed in tables' do
       @searchables.each do |searchable|
+        next if searchable == Qtl
         instance = create(searchable)
         instance.as_indexed_json.each do |k, v|
           next if k == 'id'
