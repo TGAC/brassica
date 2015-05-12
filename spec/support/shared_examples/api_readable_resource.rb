@@ -30,7 +30,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         let!(:resources) { create_list(model_name, 3) }
 
         it "renders existing resources" do
-          get "/api/v1/#{model_name.pluralize}", api_key: api_key.token
+          get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => api_key.token }
 
           expect(response).to be_success
           expect(parsed_response).to have_key(model_name.pluralize)
@@ -42,7 +42,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         let!(:resources) { create_list(model_name, 3) }
 
         it "paginates returned resources" do
-          get "/api/v1/#{model_name.pluralize}", api_key: api_key.token
+          get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => api_key.token }
 
           expect(parsed_response['meta']).to include(
             'page' => 1,
@@ -53,7 +53,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         end
 
         it "allows pagination options" do
-          get "/api/v1/#{model_name.pluralize}", api_key: api_key.token, page: 2, per_page: 1
+          get "/api/v1/#{model_name.pluralize}", { page: 2, per_page: 1 }, { "X-BIP-Api-Key" => api_key.token }
 
           expect(parsed_response['meta']).to include('page' => 2, 'per_page' => 1, 'total_count' => 3)
           expect(parsed_response[model_name.pluralize].count).to eq 1
@@ -66,7 +66,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         it "uses .filter if params given" do
           expect(model_klass).to receive(:filter).with(filter_params).and_call_original
 
-          get "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => filter_params
+          get "/api/v1/#{model_name.pluralize}", { model_name => filter_params }, { "X-BIP-Api-Key" => api_key.token }
 
           expect(response).to be_success
         end
@@ -77,7 +77,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
       let!(:resource) { create model_name }
 
       it "returns requested resource" do
-        get "/api/v1/#{model_name.pluralize}/#{resource.id}", api_key: api_key.token
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
 
         expect(response).to be_success
       end

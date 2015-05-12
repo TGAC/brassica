@@ -29,7 +29,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "creates an object " do
           expect {
-            post "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => model_attrs
+            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.to change {
             model_klass.count
           }.by(1)
@@ -50,7 +50,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "returns errors" do
           expect {
-            post "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => model_attrs
+            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.not_to change {
             model_klass.count
           }
@@ -69,7 +69,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "returns errors" do
           expect {
-            post "/api/v1/#{model_name.pluralize}", api_key: api_key.token, model_name => model_attrs
+            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.not_to change {
             model_klass.count
           }

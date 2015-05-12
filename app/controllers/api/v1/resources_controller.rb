@@ -42,8 +42,10 @@ class Api::V1::ResourcesController < ApplicationController
   private
 
   def authenticate_api_key!
-    token = ApiKey.normalize_token(params[:api_key])
-    unless token.present? && ApiKey.exists?(token: params[:api_key])
+    token = params[:api_key] || request.headers["X-BIP-Api-Key"]
+    token = ApiKey.normalize_token(token)
+
+    unless token.present? && ApiKey.exists?(token: token)
       render text: "Not Found", status: 404
     end
   end

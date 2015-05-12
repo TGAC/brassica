@@ -141,14 +141,20 @@ en:
           GET %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
       create:
         example: |-
           POST %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
-          { "plant_line_name": "My new line" }
+          {
+            "plant_line": {
+              "plant_line_name": "My new line"
+            }
+          }
 
     plant_population:
       attrs:
@@ -176,20 +182,27 @@ en:
           GET %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
       show:
         example: |-
           GET %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
       create:
         example: |-
           POST %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
-          { "name": "My new population" }
+          {
+            "plant_population": {
+              "name": "My new population"
+            }
+          }
 
     plant_variety:
       attrs:
@@ -217,9 +230,11 @@ en:
           GET %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
       show:
         example: |-
           GET %{url} HTTP/1.1
           Content-Type: application/json
           Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
