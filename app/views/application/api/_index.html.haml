@@ -2,9 +2,7 @@
   %span.method GET
   %span.url= "/api/v1/#{model.name.underscore.pluralize}"
 
-= render partial: 'api_props',
-         locals: { title: "Search params",
-                   props: api_props("#{model.name.underscore}.index.params") }
+= api_props 'Search params', "#{model.name.underscore}.index.params"
 
 %h4 Example
 %pre

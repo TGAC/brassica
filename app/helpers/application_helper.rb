@@ -39,7 +39,7 @@ module ApplicationHelper
     }
   end
 
-  def api_props(key, interpolations = nil)
+  def api_props(title, key, interpolations = nil)
     props = I18n.t("api.#{key}")
 
     if interpolations
@@ -50,6 +50,8 @@ module ApplicationHelper
       end
     end
 
-    props
+    render partial: "application/api/props", locals: {
+      title: title, props: props
+    }
   end
 end

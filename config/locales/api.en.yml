@@ -1,5 +1,28 @@
 en:
   api:
+    general:
+      create:
+        examples:
+          missing_required_attrs_response: |-
+            HTTP/1.1 422 Unprocessable Entity
+            Content-Type: application/json
+
+            {
+              "errors": [
+                { "attribute": "name", "message": "Can't be blank" }
+              ]
+            }
+
+          unknown_attrs_response: |-
+            HTTP/1.1 422 Unprocessable Entity
+            Content-Type: application/json
+
+            {
+              "errors": [
+                { "attribute": "nmae", "message": "Unrecognized attribute name" }
+              ]
+            }
+
     pagination:
       params:
         -
@@ -25,7 +48,16 @@ en:
           format: int
           desc: "Total number of existing records"
 
+      request: |-
+        GET /api/v1/plant_lines?page=2&per_page=100 HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
       response: |-
+        HTTP/1.1 200 OK
+        Content-Type: application/json
+
         {
           "plant_lines": [
             {
@@ -35,8 +67,8 @@ en:
             ...
           ],
           "meta": {
-            "page": 1,
-            "per_page": 50,
+            "page": 2,
+            "per_page": 100,
             "total_count": 1291
           }
         }
@@ -50,6 +82,7 @@ en:
         -
           name: plant_line_name
           format: string
+          create: required
           desc:
         -
           name: common_name
@@ -162,6 +195,11 @@ en:
           name: id
           format: int
           desc: Unique id
+        -
+          name: name
+          format: string
+          create: required
+          desc:
 
       index:
         params:

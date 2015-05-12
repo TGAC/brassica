@@ -26,70 +26,32 @@
         new entries is supported. These include:
 
       %ul
-        %li PlantPopulation
-        %li PlantLine
-        %li ...
+        - Brassica::Api.writable_models.each do |model|
+          %li= model.name
 
-      %p Several other resources allow for fetching data only:
-
-      %ul
-        %li TaxonomyTerm
-        %li PlantVariety
-        %li ...
-
+      %p
+        For each resource there are attributes (described later) required
+        for create requests. Skipping any of those will result in an
+        <code>422</code> error response. Passing attributes which are not recognized by the API will also
+        result in <code>422</code> error response.
 
       %h4 Examples
       %ol
         %li
-          %p
-            Sending invalid JSON will result in a
-            %code 400 Bad Request
-            response.
+          %p Missing value for required attribute
           %pre
-            %code
-              :preserve
-                 HTTP/1.1 400 Bad Request
-                 Content-Length: 35
+            %code= t('api.general.create.examples.missing_required_attrs_response')
 
-                 {"message":"Problems parsing JSON"}
         %li
-          %p
-            Sending the wrong type of JSON values will result in a
-            %code
-              400 Bad
-              Request
-            response.
+          %p Misspelled attribute name
           %pre
-            %code
-              :preserve
-                 HTTP/1.1 400 Bad Request
-                 Content-Length: 40
+            %code= t('api.general.create.examples.unknown_attrs_response')
 
-                 {"message":"Body should be a JSON object"}
-        %li
-          %p
-            Sending invalid fields will result in a
-            %code 422 Unprocessable Entity
-            response.
-          %pre
-            %code
-              :preserve
-                 HTTP/1.1 422 Unprocessable Entity
-                 Content-Length: 149
+      %p Several other resources allow for fetching data only:
 
-                 {
-                   "message": "Validation Failed",
-                   "errors": [
-                     {
-                       "resource": "Issue",
-                       "field": "title",
-                       "code": "missing_field"
-                     }
-                   ]
-                 }
-
-
-
+      %ul
+        - Brassica::Api.readonly_models.each do |model|
+          %li= model.name
 
       %h3#fetching-data.section-heading Fetching data
 
@@ -101,22 +63,18 @@
 
       %p Fetching multiple resources always yields paginated results.
 
-      = render partial: 'api_props',
-               locals: { title: 'Pagination parameters',
-                         props:  api_props('pagination.params',
-                                           default_per_page: Kaminari.config.default_per_page,
-                                           max_per_page: Kaminari.config.max_per_page) }
-      = render partial: 'api_props',
-               locals: { title: 'Paginated response metadata',
-                         props:  api_props('pagination.meta') }
+      = api_props('Pagination parameters', 'pagination.params',
+          default_per_page: Kaminari.config.default_per_page,
+          max_per_page: Kaminari.config.max_per_page)
 
-      .panel.panel-default
-        .panel-heading
-          .panel-title Paginated response format
+      = api_props('Paginated response metadata', 'pagination.meta')
 
-        .panel-body
-          %pre
-            %code= t('api.pagination.response')
+      %h4 Example
+      %pre
+        %code= t('api.pagination.request')
+
+      %pre
+        %code= t('api.pagination.response')
 
       %h3#searching-for-data.section-heading Searching for data
 
@@ -130,9 +88,7 @@
 
           .description Some pretty exhaustive description of the entity represented by this resource
 
-          = render partial: 'api_props',
-                   locals: { title: "Attributes",
-                             props: api_props("#{model.name.underscore}.attrs") }
+          = api_props('Attributes', "#{model.name.underscore}.attrs")
 
           -# GET index
           = render partial: 'application/api/index', locals: { model: model }
