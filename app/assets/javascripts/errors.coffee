@@ -3,18 +3,14 @@ window.Errors =
     $('.field_with_errors').each(-> Errors.hide(this))
 
   hide: (err) ->
-    $el = $(err).children()
-    $(err).before($el)
-    $(err).remove()
+    $(err).removeClass('field_with_errors')
 
   showAll: (elements) ->
     $.each(elements, (idx, el) -> Errors.show(el))
     $(document.body).scrollTo($(elements)[0], offset: { top: -100, left: 0 })
 
   show: (el) ->
-    $error = $("<div class='field_with_errors'></div>")
-    $(el).before($error)
-    $(el).appendTo($error)
+    $(el).parents('.form-group').addClass('field_with_errors')
 
   validate: (form) ->
     data = {}

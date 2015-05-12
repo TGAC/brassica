@@ -47,6 +47,7 @@ newPlantLineForListContainerId = (plant_line_name) ->
   'new-plant-line-' + plant_line_name.split(/\s+/).join('-').toLowerCase()
 
 $ ->
+  $('.edit_submission .taxonomy-term').select2(defaultSelectOptions)
   $('.edit_submission .female-parent-line').select2(plantLineSelectOptions)
   $('.edit_submission .male-parent-line').select2(plantLineSelectOptions)
   $('.edit_submission .population-type').select2(defaultSelectOptions)

@@ -37,7 +37,7 @@
 
         .form-group
           = label_tag :taxonomy_term, nil, class: 'required'
-          = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), prompt: "Select term...", class: 'form-control required'
+          = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), include_blank: true, class: 'taxonomy-term form-control required', 'data-placeholder': 'Select term'
 
         .form-group
           = label_tag :common_name, 'Common name'
