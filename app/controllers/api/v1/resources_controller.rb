@@ -4,7 +4,7 @@ class Api::V1::ResourcesController < ApplicationController
 
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
-  before_filter :require_proper_input, except: [:index, :show]
+  before_filter :require_strictly_correct_params, only: :create
 
   def index
     filter_params = params[model_name.singularize].presence
@@ -27,7 +27,15 @@ class Api::V1::ResourcesController < ApplicationController
     if resource.save
       render json: { model_name.singularize => decorate(resource) }, status: :created
     else
-      render json: {}, status: 422
+      errors = []
+
+      resource.errors.messages.each do |attr, messages|
+        messages.each do |msg|
+          errors << { attribute: attr, message: msg.capitalize }
+        end
+      end
+
+      render json: { errors: errors }, status: 422
     end
   end
 
@@ -49,13 +57,20 @@ class Api::V1::ResourcesController < ApplicationController
     end
   end
 
-  def require_proper_input
+  def require_strictly_correct_params
     model_attrs = model_klass.attribute_names
     misnamed_attrs = (params[model_name.singularize].try(:keys) || []) - model_attrs
 
     if misnamed_attrs.present?
-      render json: {}, status: 422
+      errors = []
+
+      misnamed_attrs.each do |attr|
+        errors << { attribute: attr, message: "Unrecognized attribute name" }
+      end
+
+      render json: { errors: errors }, status: 422
     end
+    true
   end
 
   def model_name

@@ -39,7 +39,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         end
       end
 
-      context "with invalid attributes" do
+      context "with invalid params" do
         let(:model_attrs) {
           {}.tap do |attrs|
             required_attrs.each do |attr|
@@ -56,20 +56,13 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           }
 
           expect(response.status).to eq 422
+          expect(parsed_response).to have_key("errors")
+          expect(parsed_response['errors'].first).
+            to eq('attribute' => required_attrs.first.to_s, 'message' => "Can't be blank")
         end
       end
 
-      context "with blacklisted params" do
-        let(:model_attrs) {
-        }
-
-        it "" do
-          pending
-          fail
-        end
-      end
-
-      context "with misnamed attributes" do
+      context "with misnamed params" do
         let(:model_attrs) {
           { foo: "bar" }
         }
@@ -82,6 +75,9 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           }
 
           expect(response.status).to eq 422
+          expect(parsed_response).to have_key("errors")
+          expect(parsed_response['errors'].first).
+            to eq('attribute' => 'foo', 'message' => 'Unrecognized attribute name')
         end
       end
     end
