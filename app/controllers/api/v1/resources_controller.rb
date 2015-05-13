@@ -61,6 +61,7 @@ class Api::V1::ResourcesController < ApplicationController
 
   def require_strictly_correct_params
     model_attrs = model_klass.attribute_names
+    model_attrs += Api::AssociationFinder.new(model_klass).has_and_belongs_to_many_associations.map(&:param)
     misnamed_attrs = (params[model_name].try(:keys) || []) - model_attrs
 
     if misnamed_attrs.present?
@@ -93,7 +94,9 @@ class Api::V1::ResourcesController < ApplicationController
 
   def create_params
     blacklisted_attrs = %w(id)
-    permitted_attrs =  model_klass.attribute_names - blacklisted_attrs
+    model_attrs = model_klass.attribute_names
+    model_attrs += Api::AssociationFinder.new(model_klass).has_and_belongs_to_many_associations.map(&:param)
+    permitted_attrs =  model_attrs - blacklisted_attrs
 
     params.require(model_name).permit(permitted_attrs)
   end

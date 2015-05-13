@@ -26,6 +26,12 @@ class Api::AssociationFinder
     end.compact
   end
 
+  def has_and_belongs_to_many_associations
+    klass.reflections.map do |association, reflection|
+      next unless reflection.is_a?(ActiveRecord::Reflection::HasAndBelongsToManyReflection)
+    end
+  end
+
   private
 
   def blacklisted_has_many_association?(name)

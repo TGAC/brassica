@@ -37,6 +37,21 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           expect(response).to be_success
           expect(parsed_response).to have_key(model_name)
         end
+
+        it "associates objects" do
+          association = Api::AssociationFinder.new(model_klass).has_and_belongs_to_many_associations.first
+          if association
+            associated_objects = create_list(association.class_name.underscore.to_sym, 2)
+            associated_objects_pkeys = associated_objects.map(&association.primary_key.to_sym)
+            model_attrs[association.param] = associated_objects_pkeys
+
+            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+
+            expect(response).to be_success
+            expect(parsed_response[model_name]).to have_key(association.param)
+            expect(parsed_response[model_name][association.param]).to eq associated_objects_pkeys
+          end
+        end
       end
 
       context "with invalid params" do

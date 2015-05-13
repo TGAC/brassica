@@ -9,9 +9,7 @@ class Api::Decorator < Draper::Decorator
     {}.tap do |json|
       associations = Api::AssociationFinder.new(object.class).has_many_associations
       associations.each do |association|
-        attr = "#{association.name}_#{association.primary_key.to_s.pluralize}"
-
-        json[attr] = object.send(association.name).pluck(association.primary_key)
+        json[association.param] = object.send(association.name).pluck(association.primary_key)
       end
     end
   end
