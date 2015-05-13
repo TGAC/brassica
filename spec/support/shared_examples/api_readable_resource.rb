@@ -80,6 +80,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
 
         expect(response).to be_success
+        expect(parsed_response).to have_key(model_name)
       end
     end
   end
