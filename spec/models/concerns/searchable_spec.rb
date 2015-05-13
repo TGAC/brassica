@@ -29,9 +29,6 @@ RSpec.describe Searchable do
           :bac_hit_name
         ],
         include: {
-          linkage_map: { only: [:linkage_map_label] },
-          linkage_group: { only: [:linkage_group_label] },
-          population_locus: { only: [:mapping_locus] },
           map_position: { only: [:map_position] }
         }
       }
