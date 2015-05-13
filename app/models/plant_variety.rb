@@ -11,6 +11,7 @@ class PlantVariety < ActiveRecord::Base
   has_many :plant_lines
 
   validates :plant_variety_name,
+            presence: true,
             uniqueness: true
 
   include Filterable
