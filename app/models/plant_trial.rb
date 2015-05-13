@@ -7,7 +7,8 @@ class PlantTrial < ActiveRecord::Base
   has_many :processed_trait_datasets
 
   validates :plant_trial_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :project_descriptor,
             presence: true

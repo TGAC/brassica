@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :linkage_map do
-    sequence(:linkage_map_label) { Faker::Lorem.characters(10) }
+    sequence(:linkage_map_label) { Faker::Lorem.characters(20) }
     sequence(:linkage_map_name) { Faker::Lorem.characters(10) }
     map_version_no { Faker::Number.number(3).to_s }
     map_version_date { Faker::Date.backward }

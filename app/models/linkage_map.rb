@@ -8,7 +8,8 @@ class LinkageMap < ActiveRecord::Base
   has_many :map_locus_hits
 
   validates :linkage_map_label,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :linkage_map_name,
             presence: true

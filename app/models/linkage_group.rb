@@ -7,7 +7,8 @@ class LinkageGroup < ActiveRecord::Base
   has_many :qtls
 
   validates :linkage_group_label,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :linkage_group_name,
             presence: true

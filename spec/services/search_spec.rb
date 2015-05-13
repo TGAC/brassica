@@ -47,13 +47,12 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                           description: 'Describing primer A')
     pi2 = create(:primer, primer: 'primerX',
                           description: 'No description of primer provided')
-    ma1 = create(:marker_assay, marker_assay_name: 'wisc_CHS28aX_a00',
+    ma1 = create(:marker_assay, marker_assay_name: 'CHS28aX',
                                 marker_type: 'marker type',
                                 primer_a: pi1,
                                 primer_b: pi2,
                                 probe: pr1)
-    ma2 = create(:marker_assay, marker_assay_name: 'other marker assay name',
-                                marker_type: 'autre chose',
+    ma2 = create(:marker_assay, marker_type: 'autre chose',
                                 primer_a: nil,
                                 primer_b: pi2,
                                 probe: pr1)
@@ -67,11 +66,9 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                                  linkage_group_label: 'linkage group label')
     lg2 = create(:linkage_group, consensus_group_assignment: 'no consensus',
                                  linkage_group_label: 'group2')
-    lm1 = create(:linkage_map, linkage_map_label: 'linkage map label',
-                               map_version_no: '1',
+    lm1 = create(:linkage_map, map_version_no: '1',
                                plant_population: pp1)
-    lm2 = create(:linkage_map, linkage_map_label: 'linkage map label',
-                               map_version_no: '333',
+    lm2 = create(:linkage_map, map_version_no: '333',
                                plant_population: pp1)
     mp1 = create(:map_position, map_position: '102.8',
                                 linkage_group: lg1,

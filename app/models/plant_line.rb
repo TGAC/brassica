@@ -21,7 +21,8 @@ class PlantLine < ActiveRecord::Base
   include Searchable
 
   validates :plant_line_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   scope :by_name, -> { order(:plant_line_name) }
 

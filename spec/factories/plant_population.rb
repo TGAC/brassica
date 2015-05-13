@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :plant_population do
-    name { Faker::Lorem.word }
+    name { Faker::Lorem.characters(20) }
     canonical_population_name { Faker::Lorem.word }
     description { Faker::Lorem.sentence }
     male_parent_line { create(:plant_line) }

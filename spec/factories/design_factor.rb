@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :design_factor do
-    sequence(:design_factor_name) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
+    sequence(:design_factor_name) {|n| "#{Faker::Lorem.characters(20)}_#{n}"}
     institute_id { Faker::Company.name }
     trial_location_name { Faker::Lorem.sentence }
     design_unit_counter { Faker::Number.number(3).to_s }

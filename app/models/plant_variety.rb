@@ -10,6 +10,9 @@ class PlantVariety < ActiveRecord::Base
 
   has_many :plant_lines
 
+  validates :plant_variety_name,
+            uniqueness: true
+
   include Filterable
   include Pluckable
   include Searchable

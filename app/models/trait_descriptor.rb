@@ -5,7 +5,8 @@ class TraitDescriptor < ActiveRecord::Base
   has_many :processed_trait_datasets
 
   validates :descriptor_label,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :category,
             presence: true
