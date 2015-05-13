@@ -9,7 +9,7 @@
           %li= link_to "Fetching data", "#fetching-data"
           %li= link_to "Searching for data", "#searching-for-data"
 
-          - Brassica::Api.models.each do |model|
+          - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
 
     .col-sm-10{"data-spy" => 'scroll', "data-target" => '.docs-sidebar', style: 'position:relative'}
@@ -26,7 +26,7 @@
         new entries is supported. These include:
 
       %ul
-        - Brassica::Api.writable_models.each do |model|
+        - Api.writable_models.each do |model|
           %li= model.name
 
       %p
@@ -50,7 +50,7 @@
       %p Several other resources allow for fetching data only:
 
       %ul
-        - Brassica::Api.readonly_models.each do |model|
+        - Api.readonly_models.each do |model|
           %li= model.name
 
       %h3#fetching-data.section-heading Fetching data
@@ -82,7 +82,7 @@
         Similar generic section about how to issue full-text search calls to
         BIP, how to adjust scope (model), what to expect as the outcome
 
-      - Brassica::Api.models.each do |model|
+      - Api.models.each do |model|
         .section
           %h3.section-heading{id: model.name.underscore.dasherize}= model.name
 
@@ -98,7 +98,7 @@
           = render partial: 'application/api/show', locals: { model: model }
           %hr
 
-          - if Brassica::Api.writable_model?(model)
+          - if Api.writable_model?(model)
             = render partial: 'application/api/create', locals: { model: model }
             %hr
 

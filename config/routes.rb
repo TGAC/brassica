@@ -30,12 +30,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :resources, except: [:new]
 
-      Brassica::Api.readable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
+      Api.readable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
         get "#{model_name}", to: 'resources#index'
         get "#{model_name}/:id", to: 'resources#show'
       end
 
-      Brassica::Api.writable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
+      Api.writable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
         post "#{model_name}", to: 'resources#create'
         put "#{model_name}/:id", to: 'resources#update'
         patch "#{model_name}/:id", to: 'resources#update'

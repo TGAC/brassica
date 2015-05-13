@@ -51,10 +51,10 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def require_allowed_model
-    if request.request_method_symbol == :get && !Brassica::Api.readable_model?(model_name)
+    if request.request_method_symbol == :get && !Api.readable_model?(model_name)
       raise ActionController::RoutingError.new('Not Found')
     end
-    if request.request_method_symbol != :get && !Brassica::Api.writable_model?(model_name)
+    if request.request_method_symbol != :get && !Api.writable_model?(model_name)
       raise ActionController::RoutingError.new('Not Found')
     end
   end
