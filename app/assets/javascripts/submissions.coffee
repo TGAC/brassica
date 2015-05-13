@@ -1,78 +1,74 @@
-makeAjaxSelectOptions = (url, id_attr) ->
-  allowClear: true
-  minimumInputLength: 2
-  ajax:
-    url: url
-    dataType: 'json'
-    data: (params) ->
-      search = {}
-      search[id_attr] = params.term
+class Submission
+  @makeAjaxSelectOptions: (url, id_attr) =>
+    allowClear: true
+    minimumInputLength: 2
+    ajax:
+      url: url
+      dataType: 'json'
+      data: (params) ->
+        search = {}
+        search[id_attr] = params.term
 
-      search: search
-      page: params.page
-    processResults: (data, page) ->
-      results: $.map(data, (row) -> { id: row[id_attr], text: row[id_attr] })
-  escapeMarkup: (markup) -> markup
-  templateResult: (item) -> item.text
-  templateSelection: (item) -> item.text
+        search: search
+        page: params.page
+      processResults: (data, page) ->
+        results: $.map(data, (row) -> { id: row[id_attr], text: row[id_attr] })
+    escapeMarkup: (markup) -> markup
+    templateResult: (item) -> item.text
+    templateSelection: (item) -> item.text
 
-defaultSelectOptions = { allowClear: true }
-plantLineSelectOptions = makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
-plantLineListSelectOptions = $.extend({}, plantLineSelectOptions, multiple: true)
-plantVarietySelectOptions = makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
+  defaultSelectOptions: { allowClear: true }
+  plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
+  plantLineListSelectOptions: $.extend({}, @plantLineSelectOptions, multiple: true)
+  plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
 
-appendToSelectedPlantLineLists = (data) ->
-  $select = $('.plant-line-list')
-  selectedValues = $select.val() || []
+  constructor: (el) ->
+    @$el = $(el)
 
-  $option = $('<option></option>').attr(value: data.plant_line_name).text(data.plant_line_name)
-  $select.append($option)
+  $: (args) =>
+    @$el.find(args)
 
-  selectedValues.push(data.plant_line_name)
-  $select.val(selectedValues)
-  $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
+  bind: =>
+    @$('.taxonomy-term').select2(@defaultSelectOptions)
+    @$('.male-parent-line, .female-parent-line').select2(@plantLineSelectOptions)
+    @$('.population-type').select2(@defaultSelectOptions)
+    @$('.plant-line-list').select2(@plantLineListSelectOptions)
 
-  # add all PL attributes to DOM so it can be sent with form
-  $form = $('.edit_submission')
-  $container = $('<div></div').attr(id: newPlantLineForListContainerId(data.plant_line_name))
-  $container.appendTo($form)
+    @bindNewPlantLineControls()
 
-  $.each(data, (attr, val) ->
-    $input = $("<input type='hidden' name='submission[content][new_plant_lines][][" + attr + "]' />")
-    $input.val(val)
-    $input.appendTo($container)
-  )
+  bindNewPlantLineControls: =>
+    @$('.plant-line-list').on 'select2:unselect', (event) =>
+      @removeNewPlantLineFromList(event.params.data.id)
 
-newPlantLineForListContainerId = (plant_line_name) ->
-  'new-plant-line-' + plant_line_name.split(/\s+/).join('-').toLowerCase()
+    @$('button.new-plant-line-for-list').on 'click', (event) =>
+      $(event.target).hide()
+      @initNewPlantLineForm()
 
-$ ->
-  $('.edit_submission .taxonomy-term').select2(defaultSelectOptions)
-  $('.edit_submission .female-parent-line').select2(plantLineSelectOptions)
-  $('.edit_submission .male-parent-line').select2(plantLineSelectOptions)
-  $('.edit_submission .population-type').select2(defaultSelectOptions)
-  $('.edit_submission .plant-line-list').select2(plantLineListSelectOptions)
+    @$('.add-new-plant-line-for-list').on 'click', (event) =>
+      @validateNewPlantLineForList(@appendToSelectedPlantLineLists)
 
-  $('.edit_submission .plant-line-list').on 'select2:unselect', (event) ->
-    plant_line_name = event.params.data.id
-    $("##{newPlantLineForListContainerId(plant_line_name)}").remove()
+    @$('.cancel-new-plant-line-for-list').on 'click', (event) =>
+      @$('div.new-plant-line-for-list').hide()
+      @$('button.new-plant-line-for-list').show()
 
-  $('button.new-plant-line-for-list').on 'click', (event) ->
-    $(event.target).hide()
-    $('div.new-plant-line-for-list').removeClass('hidden').show()
+  initNewPlantLineForm: =>
+    @$('div.new-plant-line-for-list').removeClass('hidden').show()
 
-    $('.edit_submission .previous-line-name').select2(plantLineSelectOptions)
-    $('.edit_submission .previous-line-name-wrapper').inputOrSelect()
-    $('.edit_submission .genetic-status').select2(defaultSelectOptions)
-    $('.edit_submission .genetic-status-wrapper').inputOrSelect()
-    $('.edit_submission .new-plant-line-for-list input[type=text]').on 'keydown', (event) ->
+    @$('.previous-line-name').select2(@plantLineSelectOptions)
+    @$('.previous-line-name-wrapper').inputOrSelect()
+    @$('.genetic-status').select2(@defaultSelectOptions)
+    @$('.genetic-status-wrapper').inputOrSelect()
+    @$('.new-plant-line-for-list input[type=text]').on 'keydown', (event) =>
       if event.keyCode == 13 # Enter key
         event.preventDefault() # Prevent form submission
 
-    $('.edit_submission .plant-variety-name').select2(plantVarietySelectOptions)
+    @$('.plant-variety-name').select2(@plantVarietySelectOptions)
 
-  $('.add-new-plant-line-for-list').on 'click', (event) ->
-    $form = $('.new-plant-line-for-list')
+  newPlantLineForListContainerId: (plant_line_name) =>
+    'new-plant-line-' + plant_line_name.split(/\s+/).join('-').toLowerCase()
+
+  validateNewPlantLineForList: (onValidData) =>
+    $form = @$('.new-plant-line-for-list')
 
     [data, errors] = Errors.validate($form)
 
@@ -82,12 +78,36 @@ $ ->
     else
       Errors.hideAll()
 
-      appendToSelectedPlantLineLists(data)
+      onValidData(data)
 
-      $('div.new-plant-line-for-list').hide()
-      $('button.new-plant-line-for-list').show()
+      @$('div.new-plant-line-for-list').hide()
+      @$('button.new-plant-line-for-list').show()
 
-  $('.cancel-new-plant-line-for-list').on 'click', (event) ->
-    $('div.new-plant-line-for-list').hide()
-    $('button.new-plant-line-for-list').show()
+  appendToSelectedPlantLineLists: (data) =>
+    $select = @$('.plant-line-list')
+    selectedValues = $select.val() || []
+
+    $option = $('<option></option>').attr(value: data.plant_line_name).text(data.plant_line_name)
+    $select.append($option)
+
+    selectedValues.push(data.plant_line_name)
+    $select.val(selectedValues)
+    $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
+
+    # add all PL attributes to DOM so it can be sent with form
+    $form = @$el
+    $container = $('<div></div').attr(id: @newPlantLineForListContainerId(data.plant_line_name))
+    $container.appendTo($form)
+
+    $.each(data, (attr, val) =>
+      $input = $("<input type='hidden' name='submission[content][new_plant_lines][][" + attr + "]' />")
+      $input.val(val)
+      $input.appendTo($container)
+    )
+
+  removeNewPlantLineFromList: (plant_line_name) =>
+    $("##{@newPlantLineForListContainerId(plant_line_name)}").remove()
+
+$ ->
+  new Submission('.edit_submission').bind()
 
