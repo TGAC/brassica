@@ -3,7 +3,7 @@
 
   .lead= model_param.humanize
 
-  - if params[:query].present?
+  - if params[:query].present? || params[:fetch].present?
     .data-filters
       %p
         Showing
@@ -11,7 +11,11 @@
         with the following criteria:
         %span.label.label-info
           = surround '[',']' do
-            = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
+            - if params[:query].present?
+              = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
+            - if params[:fetch].present?
+              = "search = "
+              = params[:fetch]
 
   = back_button
   = see_all_button

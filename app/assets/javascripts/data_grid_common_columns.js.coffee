@@ -11,6 +11,7 @@ window.baseColumnDefs = (baseModel) ->
   baseModel = baseModel.replace(/-/g,'_')
   [
     targets: 'related'
+    width: '5%'
     render: (data, type, full, meta) ->
       query = 'query[' + baseModel + '.id]=' + full[full.length - 1]
       relatedModels = $(meta.settings.nTable).find('.related').data('models')
@@ -18,17 +19,27 @@ window.baseColumnDefs = (baseModel) ->
       modelPaths = ('data_tables?model=' + model + '&' + query for model in relatedModels)
       modelNames = (model.replace(/_/g,' ') for model in relatedModels)
       modelCount = (full[countDataIndex + i] for model, i in relatedModels)
-      '<div class="dropdown">' +
-        '<button class="btn btn-xs btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" title="Related data">' +
-          'Related ' +
-          '<span class="caret"></span>' +
-        '</button>' +
-        '<ul class="dropdown-menu" role="menu">' +
-          (createCounterLink(modelPaths[i], modelCount[i], modelNames[i]) for model, i in relatedModels).join('') +
-        '</ul>' +
-      '</div>'
+      totalCount = modelCount.reduce (t, s) -> t + s
+      if totalCount == 0
+        '<div title="No related data" data-toggle="tooltip">' +
+          '<button class="btn btn-xs btn-info disabled" disabled="disabled" type="button">' +
+            'Related ' +
+            '<span class="caret"></span>' +
+          '</button>' +
+        '</div>'
+      else
+        '<div class="dropdown">' +
+          '<button class="btn btn-xs btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" title="Related data">' +
+            'Related ' +
+            '<span class="caret"></span>' +
+          '</button>' +
+          '<ul class="dropdown-menu" role="menu">' +
+            (createCounterLink(modelPaths[i], modelCount[i], modelNames[i]) for model, i in relatedModels).join('') +
+          '</ul>' +
+        '</div>'
   ,
     targets: 'annotations'
+    width: '0.1%'
     render: (data, type, full, meta) ->
       objectId = full[full.length - 1]
       if objectId
