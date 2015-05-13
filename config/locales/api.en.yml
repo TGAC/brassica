@@ -3,6 +3,20 @@ en:
     general:
       create:
         examples:
+          ok_response: |-
+            HTTP/1.1 200 OK
+            Content-Type: application/json; charset=utf-8
+
+            {
+              "plant_variety": {
+                "id": 1,
+                "plant_variety_name": "0068",
+                "crop_type": "oilseed rape",
+                ...
+                "plant_lines_ids": [10792]
+              }
+            }
+
           missing_required_attrs_response: |-
             HTTP/1.1 422 Unprocessable Entity
             Content-Type: application/json

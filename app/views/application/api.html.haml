@@ -29,6 +29,17 @@
         - Api.writable_models.each do |model|
           %li= model.name
 
+      -# FIXME verify and describe date format
+      %p
+        All attributes are expressed as basic data types such as <code>int</code>,
+        <code>string</code>, <code>date</code> or arrays of these. Specifically related objects
+        are not included in the response as a whole but as an array of their
+        unique identifiers.
+
+      %h4 Example
+      %pre
+        %code= t('api.general.create.examples.ok_response')
+
       %p
         For each resource there are attributes (described later) required
         for create requests. Skipping any of those will result in an
