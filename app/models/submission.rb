@@ -9,7 +9,7 @@ class Submission < ActiveRecord::Base
   validates :user, presence: true
   validates :submission_type, presence: true
   validates :step, inclusion: { in: STEPS }
-  validates :submitted_object_id, presence: true, if: 'finalized?'
+  validates :submitted_object_id, presence: true, uniqueness: true, if: 'finalized?'
 
   before_validation :set_defaults, on: :create
 

@@ -70,7 +70,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     lm1 = create(:linkage_map, linkage_map_label: 'linkage map label',
                                map_version_no: '1',
                                plant_population: pp1)
-    lm2 = create(:linkage_map, linkage_map_label: 'linkage map label',
+    lm2 = create(:linkage_map, linkage_map_label: 'linkage map label 2',
                                map_version_no: '333',
                                plant_population: pp1)
     mp1 = create(:map_position, map_position: '102.8',

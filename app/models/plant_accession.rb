@@ -5,7 +5,8 @@ class PlantAccession < ActiveRecord::Base
   has_many :plant_scoring_units
 
   validates :plant_accession,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :year_produced,
             presence: true,

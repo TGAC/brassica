@@ -5,7 +5,8 @@ class Probe < ActiveRecord::Base
   has_many :marker_assays
 
   validates :probe_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :clone_name,
             presence: true

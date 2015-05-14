@@ -25,7 +25,7 @@ class PlantPopulation < ActiveRecord::Base
 
   validates :name,
             presence: true,
-            allow_blank: true
+            uniqueness: true
 
   scope :by_name, -> { order('plant_populations.name') }
 

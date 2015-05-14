@@ -6,7 +6,8 @@ class RestrictionEnzyme < ActiveRecord::Base
              foreign_key: 'restriction_enzyme_b_id'
 
   validates :restriction_enzyme,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :recognition_site,
             presence: true

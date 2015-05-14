@@ -6,7 +6,8 @@ class ProcessedTraitDataset < ActiveRecord::Base
   has_many :qtls
 
   validates :processed_trait_dataset_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   after_touch { qtls.each(&:touch) }
 

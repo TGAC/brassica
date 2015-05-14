@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :plant_population do
-    name { Faker::Lorem.word }
+    sequence(:name) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
     canonical_population_name { Faker::Lorem.word }
     description { Faker::Lorem.sentence }
     male_parent_line { create(:plant_line) }

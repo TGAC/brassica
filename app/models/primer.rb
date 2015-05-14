@@ -8,7 +8,8 @@ class Primer < ActiveRecord::Base
            foreign_key: 'primer_b_id'
 
   validates :primer,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :sequence,
             presence: true
