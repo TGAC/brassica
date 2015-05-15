@@ -7,6 +7,7 @@ FactoryGirl.define do
     female_parent_line { create(:plant_line) }
     taxonomy_term
     population_type
+    user
     annotable
 
     trait :with_has_many_associations do

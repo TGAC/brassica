@@ -6,6 +6,7 @@ FactoryGirl.define do
     organisation { Faker::Company.name }
     genetic_status { Faker::Lorem.word }
     taxonomy_term
+    user
     annotable
 
     trait :with_has_many_associations do
