@@ -5,7 +5,8 @@ class Probe < ActiveRecord::Base
   has_many :marker_assays
 
   validates :probe_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :clone_name,
             presence: true
@@ -16,6 +17,9 @@ class Probe < ActiveRecord::Base
   validates :sequence_source_acronym,
             presence: true
 
+  after_update { marker_assays.each(&:touch) }
+
+  include Searchable
   include Relatable
   include Filterable
   include Pluckable
@@ -46,6 +50,7 @@ class Probe < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'id'
       ]

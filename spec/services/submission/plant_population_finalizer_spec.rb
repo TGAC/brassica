@@ -58,6 +58,11 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       expect(submission.submitted_object_id).to eq subject.plant_population.id
     end
 
+    it 'assigns correct user as the owner of the population' do
+      subject.call
+      expect(submission.user).to eq subject.plant_population.user
+    end
+
     it 'creates new plant lines' do
       subject.call
       expect(subject.new_plant_lines.size).to eq 2
@@ -73,6 +78,11 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         )
         expect(plant_line.plant_variety).to eq plant_variety
       end
+    end
+
+    it 'assigns correct user as the owner of created plant lines' do
+      subject.call
+      expect(subject.new_plant_lines.map(&:user)).to all eq submission.user
     end
 
     it 'crates plant population lists' do

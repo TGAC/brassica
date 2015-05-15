@@ -3,7 +3,8 @@ class DesignFactor < ActiveRecord::Base
   has_many :plant_scoring_units
 
   validates :design_factor_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :institute_id,
             presence: true

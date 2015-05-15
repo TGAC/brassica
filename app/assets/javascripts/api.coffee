@@ -38,3 +38,5 @@ $ ->
         hljs.highlightBlock($code[0])
         $container.find('.response').removeClass('hidden')
 
+  $('body').scrollspy
+    target: '.docs-sidebar'

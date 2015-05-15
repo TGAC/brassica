@@ -3,7 +3,8 @@ class QtlJob < ActiveRecord::Base
   has_many :qtls
 
   validates :qtl_job_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :linkage_map_id,
             presence: true

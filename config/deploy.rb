@@ -42,6 +42,17 @@ namespace :deploy do
         execute :rake, "environment elasticsearch:import:model CLASS='PlantLine' FORCE=y"
         execute :rake, "environment elasticsearch:import:model CLASS='PlantPopulation' FORCE=y"
         execute :rake, "environment elasticsearch:import:model CLASS='PlantVariety' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='LinkageGroup' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='LinkageMap' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='MapPosition' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='MapLocusHit' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='PopulationLocus' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='MarkerAssay' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='Primer' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='Probe' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='PlantTrial' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='Qtl' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='TraitDescriptor' FORCE=y"
       end
     end
   end

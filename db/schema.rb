@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507124104) do
+ActiveRecord::Schema.define(version: 20150515124729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -252,6 +252,7 @@ ActiveRecord::Schema.define(version: 20150507124104) do
     t.text    "confirmed_by_whom"
     t.integer "taxonomy_term_id"
     t.integer "plant_variety_id"
+    t.integer "user_id"
   end
 
   add_index "plant_lines", ["plant_line_name"], name: "plant_lines_plant_line_name_idx", using: :btree
@@ -310,6 +311,7 @@ ActiveRecord::Schema.define(version: 20150507124104) do
     t.integer "linkage_maps_count",           default: 0,             null: false
     t.integer "plant_trials_count",           default: 0,             null: false
     t.integer "population_loci_count",        default: 0,             null: false
+    t.integer "user_id"
   end
 
   add_index "plant_populations", ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree

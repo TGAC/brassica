@@ -1,6 +1,21 @@
 require "#{Rails.root}/lib/tasks/task_helpers"
 
 namespace :curate do
+  task find_nas: :environment do
+    value_to_check = 'n/a'
+
+    all_tables.each do |table|
+      puts "Dealing with table #{table}"
+      query("select * from #{table}").each do |record|
+        record.each_with_index do |column, i|
+          if column == value_to_check
+            puts "   FOUND #{value_to_check} in #{table} in column #{i}"
+          end
+        end
+      end
+    end
+  end
+
   task purge_placeholder_records: :environment do
     deleted_records = 0
     dropped_not_nulls = []

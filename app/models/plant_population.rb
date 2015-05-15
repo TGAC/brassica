@@ -6,6 +6,7 @@ class PlantPopulation < ActiveRecord::Base
              foreign_key: 'male_parent_line_id'
   belongs_to :female_parent_line, class_name: 'PlantLine',
              foreign_key: 'female_parent_line_id'
+  belongs_to :user
 
   has_many :plant_population_lists
   has_many :linkage_maps
@@ -15,14 +16,19 @@ class PlantPopulation < ActiveRecord::Base
   has_and_belongs_to_many :plant_lines,
                           join_table: 'plant_population_lists'
 
+  validates :name,
+            presence: true,
+            uniqueness: true
+  validates :user,
+            presence: { on: :create }
+
   after_update { population_loci.each(&:touch) }
   after_update { linkage_maps.each(&:touch) }
+  after_update { plant_trials.each(&:touch) }
 
   include Relatable
   include Filterable
   include Searchable
-
-  validates :name, presence: true
 
   scope :by_name, -> { order('plant_populations.name') }
 

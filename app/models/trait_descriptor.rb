@@ -5,7 +5,8 @@ class TraitDescriptor < ActiveRecord::Base
   has_many :processed_trait_datasets
 
   validates :descriptor_label,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :category,
             presence: true
@@ -20,10 +21,17 @@ class TraitDescriptor < ActiveRecord::Base
             presence: true,
             numericality: true
 
+  after_update { processed_trait_datasets.each(&:touch) }
+
+  include Searchable
+
   def self.table_data(params = nil)
     trait_descriptor_query = ''
     if params && params[:query].present? && params[:query][:id].present?
       trait_descriptor_query = "WHERE td.id = #{params[:query][:id].to_i}"
+    elsif params && params[:fetch].present?
+      ids = Search.new(params[:fetch]).send(table_name).records.map(&:id)
+      trait_descriptor_query = "WHERE td.id IN (#{ids.join(',')})"
     end
     connection.execute(
       'SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, pp.id, pt.id, td.id
@@ -61,6 +69,14 @@ class TraitDescriptor < ActiveRecord::Base
       'trait_scores_count',
       'qtl_count'
     ]
+  end
+
+  def self.indexed_json_structure
+    {
+      only: [
+        :descriptor_name
+      ]
+    }
   end
 
   include Annotable

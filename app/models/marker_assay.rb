@@ -23,13 +23,15 @@ class MarkerAssay < ActiveRecord::Base
   has_many :population_loci
 
   validates :marker_assay_name,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :canonical_marker_name,
             presence: true
 
   after_update { population_loci.each(&:touch) }
 
+  include Searchable
   include Relatable
   include Filterable
 
@@ -58,10 +60,25 @@ class MarkerAssay < ActiveRecord::Base
     ]
   end
 
-  private
+  def self.indexed_json_structure
+    {
+      only: [
+        :marker_assay_name,
+        :canonical_marker_name,
+        :marker_type,
+        :separation_system
+      ],
+      include: {
+        probe: { only: :probe_name },
+        primer_a: { only: :primer },
+        primer_b: { only: :primer },
+      }
+    }
+  end
 
   def self.permitted_params
     [
+      :fetch,
       query: [
         'primer_a_id',
         'primer_b_id',

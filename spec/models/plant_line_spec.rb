@@ -8,6 +8,19 @@ RSpec.describe PlantLine do
     expect{ pl.subtaxa }.to raise_error NoMethodError
   end
 
+  it 'does not need owner for updates' do
+    pl = create(:plant_line)
+    pl.update_attribute(:user_id, nil)
+    pl.plant_line_name = 'pln'
+    pl.save
+    expect(pl.valid?).to be_truthy
+    expect(pl.plant_line_name).to eq 'pln'
+  end
+
+  it 'requires owner for new lines' do
+    expect{ create(:plant_line, user: nil) }.
+        to raise_error ActiveRecord::RecordInvalid
+  end
 
   describe '#filter' do
     before(:each) do

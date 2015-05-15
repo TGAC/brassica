@@ -28,19 +28,34 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                                     taxonomy_term: tt1,
                                     male_parent_line: nil,
                                     female_parent_line: nil)
-    create(:plant_population, name: 'Ppoobar',
-                              taxonomy_term: TaxonomyTerm.second,
-                              male_parent_line: nil,
-                              female_parent_line: nil)
+    pp2 = create(:plant_population, name: 'Ppoobar',
+                                    taxonomy_term: TaxonomyTerm.second,
+                                    male_parent_line: nil,
+                                    female_parent_line: nil)
     create(:plant_population, name: 'Ppoobarbaz',
                               taxonomy_term: TaxonomyTerm.second,
                               male_parent_line: nil,
                               female_parent_line: nil)
 
-    pr1 = create(:probe, taxonomy_term: tt1)
+    pr1 = create(:probe, probe_name: 'probeno1',
+                         clone_name: 'Attack of clones',
+                         taxonomy_term: tt1)
+    pr2 = create(:probe, probe_name: 'some other probe',
+                         clone_name: 'Gamma clone',
+                         taxonomy_term: tt2)
+    pi1 = create(:primer, primer: 'primerA',
+                          description: 'Describing primer A')
+    pi2 = create(:primer, primer: 'primerX',
+                          description: 'No description of primer provided')
     ma1 = create(:marker_assay, marker_assay_name: 'wisc_CHS28aX_a00',
+                                marker_type: 'marker type',
+                                primer_a: pi1,
+                                primer_b: pi2,
                                 probe: pr1)
     ma2 = create(:marker_assay, marker_assay_name: 'other marker assay name',
+                                marker_type: 'autre chose',
+                                primer_a: nil,
+                                primer_b: pi2,
                                 probe: pr1)
     plo1 = create(:population_locus, mapping_locus: 'cnu_m182a',
                                      marker_assay: ma1,
@@ -55,7 +70,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     lm1 = create(:linkage_map, linkage_map_label: 'linkage map label',
                                map_version_no: '1',
                                plant_population: pp1)
-    lm2 = create(:linkage_map, linkage_map_label: 'linkage map label',
+    lm2 = create(:linkage_map, linkage_map_label: 'linkage map label 2',
                                map_version_no: '333',
                                plant_population: pp1)
     mp1 = create(:map_position, map_position: '102.8',
@@ -72,6 +87,18 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                            population_locus: plo2,
                            map_position: mp2,
                            linkage_map: lm2)
+    create(:plant_trial, project_descriptor: 'Project X',
+                         plant_population: pp1)
+    create(:plant_trial, project_descriptor: 'Yet Another Big Success',
+                         plant_population: pp2)
+    td1 = create(:trait_descriptor, descriptor_name: 'leafy leaf')
+    td2 = create(:trait_descriptor, descriptor_name: 'uranium uptake')
+    ptd1 = create(:processed_trait_dataset, trait_descriptor: td1)
+    ptd2 = create(:processed_trait_dataset, trait_descriptor: td2)
+    create(:qtl, outer_interval_start: '55.7',
+                 processed_trait_dataset: ptd1)
+    create(:qtl, outer_interval_start: '347.11',
+                 processed_trait_dataset: ptd2)
 
     # Special cases
     create(:plant_line, plant_line_name: "123@456")
@@ -85,7 +112,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
   end
 
   describe "#plant_populations" do
-    it "finds PP by its name" do
+    it "finds PP by :name" do
       expect(Search.new("Ppoo").plant_populations.count).to eq 3
       expect(Search.new("Ppoobar").plant_populations.count).to eq 2
       expect(Search.new("Ppoobarbaz").plant_populations.count).to eq 1
@@ -93,7 +120,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
         to eq PlantPopulation.find_by!(name: 'Ppoobarbaz').id
     end
 
-    it "finds PPs by taxonomy term name" do
+    it "finds PPs by taxonomy_term.name" do
       results = Search.new(TaxonomyTerm.first.name).plant_populations
       expect(results.count).to eq 1
 
@@ -132,7 +159,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
         to eq PlantLine.find_by!(plant_line_name: 'Ploobarbaz').id
     end
 
-    it "finds PLs by taxonomy term name" do
+    it "finds PLs by taxonomy_term.name" do
       results = Search.new(TaxonomyTerm.first.name).plant_lines
       expect(results.count).to eq 1
 
@@ -199,9 +226,62 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
   end
 
+  describe '#marker_assays' do
+    it 'finds MA by :marker_type' do
+      expect(Search.new("autre chose").marker_assays.count).to eq 1
+    end
+
+    it 'finds MA by primer_a.primer sans case' do
+      expect(Search.new("PrimerA").marker_assays.count).to eq 1
+    end
+  end
+
+  describe '#primers' do
+    it 'finds PI by :description' do
+      expect(Search.new("Describing").primers.count).to eq 1
+    end
+  end
+
+  describe '#probes' do
+    it 'finds PR by :clone_name' do
+      expect(Search.new("Gamma").probes.count).to eq 1
+    end
+
+    it 'finds PR by taxonomy_term.name' do
+      expect(Search.new("Tooo").probes.count).to eq 1
+    end
+  end
+
+  describe '#plant_trials' do
+    it 'finds PT by :project_descriptor' do
+      expect(Search.new("Yet Another").plant_trials.count).to eq 1
+    end
+
+    it 'finds PT by plant_population.name' do
+      expect(Search.new("Ppoob").plant_trials.count).to eq 1
+    end
+  end
+
+  describe '#qtl' do
+    it 'finds QTL by :outer_interval_start' do
+      expect(Search.new('347.11').qtl.count).to eq 1
+    end
+
+    it 'finds QTL by trait_descriptor.descriptor_name' do
+      expect(Search.new("leafy").qtl.count).to eq 1
+    end
+  end
+
+  describe '#trait_descriptors' do
+    it 'finds TD by :descriptor_name' do
+      expect(Search.new("uranium").trait_descriptors.count).to eq 1
+    end
+  end
+
+
   describe "#counts" do
     it "returns proper counts" do
-      counts = Search.new("*").counts
+      counts = Search.new("").counts
       expect(counts[:plant_lines]).to eq PlantLine.count
       expect(counts[:plant_populations]).to eq PlantPopulation.count
       expect(counts[:plant_varieties]).to eq PlantVariety.count
@@ -210,6 +290,12 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(counts[:population_loci]).to eq PopulationLocus.count
       expect(counts[:linkage_groups]).to eq LinkageGroup.count
       expect(counts[:linkage_maps]).to eq LinkageMap.count
+      expect(counts[:marker_assays]).to eq MarkerAssay.count
+      expect(counts[:primers]).to eq Primer.count
+      expect(counts[:probes]).to eq Probe.count
+      expect(counts[:plant_trials]).to eq PlantTrial.count
+      expect(counts[:qtl]).to eq Qtl.count
+      expect(counts[:trait_descriptors]).to eq TraitDescriptor.count
     end
 
     context "special cases" do
@@ -218,6 +304,22 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
         expect(Search.new("123@").counts).to include(plant_lines: 1)
         expect(Search.new("@456").counts).to include(plant_lines: 1)
         expect(Search.new("123@456").counts).to include(plant_lines: 1)
+      end
+    end
+  end
+
+  describe "query transformation" do
+    examples = {
+      'foo' => '*foo*',
+      'foo@example.com' => 'foo@example.com',
+      'foo:bar' => '*foo\:bar*'
+    }
+
+    examples.each do |input_query, output_query|
+      context "given #{input_query}" do
+        it "transforms it to #{output_query}" do
+          expect(Search.new(input_query).query).to eq output_query
+        end
       end
     end
   end

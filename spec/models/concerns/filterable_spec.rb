@@ -5,7 +5,7 @@ RSpec.describe Filterable do
     before(:all) do
       Rails.application.eager_load!
       @searchable = ActiveRecord::Base.descendants.select do |model|
-        model.included_modules.include? Elasticsearch::Model
+        model.included_modules.include?(Elasticsearch::Model) && model != TraitDescriptor
       end
     end
 

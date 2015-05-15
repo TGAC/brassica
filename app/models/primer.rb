@@ -8,7 +8,8 @@ class Primer < ActiveRecord::Base
            foreign_key: 'primer_b_id'
 
   validates :primer,
-            presence: true
+            presence: true,
+            uniqueness: true
 
   validates :sequence,
             presence: true
@@ -23,6 +24,10 @@ class Primer < ActiveRecord::Base
     marker_assays_a | marker_assays_b
   end
 
+  after_update { marker_assays_a.each(&:touch) }
+  after_update { marker_assays_b.each(&:touch) }
+
+  include Searchable
   include Relatable
   include Filterable
   include Pluckable
@@ -49,10 +54,9 @@ class Primer < ActiveRecord::Base
     ]
   end
 
-  private
-
   def self.permitted_params
     [
+      :fetch,
       query: [
         'id'
       ]

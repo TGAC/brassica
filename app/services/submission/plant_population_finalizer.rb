@@ -29,6 +29,7 @@ class Submission::PlantPopulationFinalizer
         taxonomy_term_id: taxonomy_term.id,
         entered_by_whom: submission.user.full_name,
         date_entered: Date.today,
+        user: submission.user
       )
 
       if attrs[:plant_variety_name].present?
@@ -45,7 +46,8 @@ class Submission::PlantPopulationFinalizer
       name: submission.content.step01.name,
       population_owned_by: submission.content.step01.owned_by,
       date_entered: Date.today,
-      entered_by_whom: submission.user.full_name
+      entered_by_whom: submission.user.full_name,
+      user: submission.user
     }
 
     %i[female_parent_line male_parent_line].each do |parent_line_attr|

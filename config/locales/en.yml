@@ -29,12 +29,46 @@ en:
 
   searches:
     counts:
-      plant_lines_count: Found %{count} plant lines
-      plant_populations_count: Found %{count} plant populations
-      plant_varieties_count: Found %{count} plant varieties
-      map_locus_hits_count: Found %{count} map locus hits
-      map_positions_count: Found %{count} map positions
-      population_loci_count: Found %{count} population loci
-      linkage_maps_count: Found %{count} linkage maps
-      linkage_groups_count: Found %{count} linkage groups
+      plant_lines_count:
+        one: Found %{count} plant line
+        other: Found %{count} plant lines
+      plant_populations_count:
+        one: Found %{count} plant population
+        other: Found %{count} plant populations
+      plant_varieties_count:
+        one: Found %{count} plant variety
+        other: Found %{count} plant varieties
+      map_locus_hits_count:
+        one: Found %{count} map locus hit
+        other: Found %{count} map locus hits
+      map_positions_count:
+        one: Found %{count} map position
+        other: Found %{count} map positions
+      population_loci_count:
+        one: Found %{count} population locus
+        other: Found %{count} population loci
+      linkage_maps_count:
+        one: Found %{count} linkage map
+        other: Found %{count} linkage maps
+      linkage_groups_count:
+        one: Found %{count} linkage group
+        other: Found %{count} linkage groups
+      marker_assays_count:
+        one: Found %{count} marker assay
+        other: Found %{count} marker assays
+      primers_count:
+        one: Found %{count} primer
+        other: Found %{count} primers
+      probes_count:
+        one: Found %{count} probe
+        other: Found %{count} probes
+      plant_trials_count:
+        one: Found %{count} plant trial
+        other: Found %{count} plant trials
+      qtl_count:
+        one: Found %{count} quantitative trait locus
+        other: Found %{count} quantitative trait loci
+      trait_descriptors_count:
+        one: Found %{count} trait descriptor
+        other: Found %{count} trait descriptors
       nothing_found: No results found
