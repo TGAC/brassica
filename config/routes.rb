@@ -37,9 +37,6 @@ Rails.application.routes.draw do
 
       Api.writable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
         post "#{model_name}", to: 'resources#create'
-        put "#{model_name}/:id", to: 'resources#update'
-        patch "#{model_name}/:id", to: 'resources#update'
-        delete "#{model_name}/:id", to: 'resources#destroy'
       end
     end
   end
