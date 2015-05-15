@@ -15,7 +15,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
     let(:api_key) { create(:api_key) }
     let(:parsed_response) { JSON.parse(response.body) }
 
-    let(:required_attrs) { required_attributes(model_klass) }
+    let(:required_attrs) { required_attributes(model_klass) - [:user]}
 
     describe "POST /api/v1/#{model_name.pluralize}" do
       context "with valid attributes" do

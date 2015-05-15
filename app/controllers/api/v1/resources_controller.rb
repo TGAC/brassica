@@ -22,7 +22,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create
-    resource = model_klass.new(create_params)
+    resource = model_klass.new(create_params.merge(:user_id => api_key.user_id))
 
     if resource.save
       render json: { model_name => decorate(resource) }, status: :created
@@ -42,12 +42,18 @@ class Api::V1::ResourcesController < ApplicationController
   private
 
   def authenticate_api_key!
+    unless api_key.present?
+      render text: "Not Found", status: 404
+    end
+  end
+
+  def api_key
+    return @api_key if defined?(@api_key)
+
     token = params[:api_key] || request.headers["X-BIP-Api-Key"]
     token = ApiKey.normalize_token(token)
 
-    unless token.present? && ApiKey.exists?(token: token)
-      render text: "Not Found", status: 404
-    end
+    @api_key = token && ApiKey.find_by(token: token)
   end
 
   def require_allowed_model
@@ -92,7 +98,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create_params
-    blacklisted_attrs = %w(id)
+    blacklisted_attrs = %w(id user_id)
     model_attrs = model_klass.attribute_names
     permitted_attrs =  model_attrs - blacklisted_attrs
 
