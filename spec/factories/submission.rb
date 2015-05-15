@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     trait :finalized do
       after(:build) do |submission|
-        submission.content.update(:step01, name: Faker::Lorem.word,
+        submission.content.update(:step01, name: Faker::Lorem.word + rand(100).to_s,
                                            description: Faker::Lorem.sentence,
                                            owned_by: Faker::Internet.email)
         submission.content.update(:step02, population_type: Faker::Lorem.word,
