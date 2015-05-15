@@ -98,7 +98,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create_params
-    blacklisted_attrs = %w(id user_id)
+    blacklisted_attrs = %w(id user_id created_at updated_at)
     model_attrs = model_klass.attribute_names
     permitted_attrs =  model_attrs - blacklisted_attrs
 
