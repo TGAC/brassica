@@ -2,6 +2,7 @@ class PlantLine < ActiveRecord::Base
 
   belongs_to :plant_variety
   belongs_to :taxonomy_term
+  belongs_to :user
 
   has_many :plant_population_lists
   has_many :fathered_descendants, class_name: 'PlantPopulation',
@@ -23,6 +24,8 @@ class PlantLine < ActiveRecord::Base
   validates :plant_line_name,
             presence: true,
             uniqueness: true
+  validates :user,
+            presence: { on: :create }
 
   scope :by_name, -> { order(:plant_line_name) }
 

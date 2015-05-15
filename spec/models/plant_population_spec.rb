@@ -1,6 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe PlantPopulation do
+  it 'does not need owner for updates' do
+    pp = create(:plant_population)
+    pp.update_attribute(:user_id, nil)
+    pp.canonical_population_name = 'cpn'
+    pp.save
+    expect(pp.valid?).to be_truthy
+    expect(pp.canonical_population_name).to eq 'cpn'
+  end
+
+  it 'requires owner for new populations' do
+    expect{ create(:plant_population, user: nil) }.
+      to raise_error ActiveRecord::RecordInvalid
+  end
+
   describe '#filter' do
     before(:each) do
       @pp = create(:plant_population, canonical_population_name: 'cpn')
