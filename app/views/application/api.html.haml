@@ -37,7 +37,7 @@
         unique identifiers.
 
       %h4 Example
-      %pre
+      %pre.response
         %code= t('api.general.create.examples.ok_response')
 
       %p
@@ -50,12 +50,12 @@
       %ol
         %li
           %p Missing value for required attribute
-          %pre
+          %pre.response
             %code= t('api.general.create.examples.missing_required_attrs_response')
 
         %li
           %p Misspelled attribute name
-          %pre
+          %pre.response
             %code= t('api.general.create.examples.unknown_attrs_response')
 
       %p Several other resources allow for fetching data only:
@@ -84,7 +84,7 @@
       %pre
         %code= t('api.pagination.request')
 
-      %pre
+      %pre.response
         %code= t('api.pagination.response')
 
       %h3#searching-for-data.section-heading Searching for data

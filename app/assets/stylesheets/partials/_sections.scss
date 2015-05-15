@@ -123,9 +123,6 @@
       width: 12%;
     }
   }
-  pre.example {
-    margin-bottom: 2em;
-  }
   code {
     background-color: whitesmoke;
   }
@@ -139,12 +136,12 @@
       font-size: 18px;
       margin-right: 8px;
     }
+  }
 
-    .response {
-      display: block;
-      max-height: 300px;
-      overflow: auto;
-    }
+  .response {
+    display: block;
+    max-height: 350px;
+    overflow: auto;
   }
 }
 .docs-sidebar {
