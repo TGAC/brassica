@@ -87,7 +87,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def model_name
-    @model_name ||= request.path.match(/\A\/api\/v1\/(([\w_]+)\/?)/)[2].singularize
+    @model_name ||= params.fetch(:plural_model_name).singularize
   end
 
   def model_klass
