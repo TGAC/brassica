@@ -33,12 +33,17 @@ class SubmissionsController < ApplicationController
       redirect_to edit_submission_path(@submission) and return
     end
 
-    unless @content.valid?
+    unless @content.valid? || params[:leave]
       render action: :edit and return
     end
 
     @content.save do |step_attrs|
       @submission.content.update(@submission.step, step_attrs)
+    end
+
+    if params[:leave]
+      @submission.save!
+      redirect_to submissions_path and return
     end
 
     if @submission.last_step?

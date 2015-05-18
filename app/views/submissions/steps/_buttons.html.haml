@@ -7,7 +7,7 @@
     = f.submit "Back", class: 'btn btn-default btn-wide btn-back', name: 'back'
 
   .pull-right
-    = link_to "Save & edit later", submissions_path, class: 'btn btn-default'
+    = f.submit "Save & edit later", class: 'btn btn-default btn-leave', name: 'leave'
 
     - unless submission.last_step?
       = f.submit "Next", class: 'btn btn-primary btn-wide btn-next'
