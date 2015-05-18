@@ -27,13 +27,11 @@ class Api::V1::ResourcesController < ApplicationController
     if resource.save
       render json: { model_name => decorate(resource) }, status: :created
     else
-      errors = []
-
-      resource.errors.messages.each do |attr, messages|
-        messages.each do |msg|
-          errors << { attribute: attr, message: msg.capitalize }
+      errors = resource.errors.messages.map do |attr, messages|
+        messages.map do |msg|
+          { attribute: attr, message: msg.capitalize }
         end
-      end
+      end.flatten
 
       render json: { errors: errors }, status: 422
     end
