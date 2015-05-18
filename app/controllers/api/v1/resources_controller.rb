@@ -77,10 +77,8 @@ class Api::V1::ResourcesController < ApplicationController
     misnamed_attrs = (params[model_name].try(:keys) || []) - model_attrs
 
     if misnamed_attrs.present?
-      errors = []
-
-      misnamed_attrs.each do |attr|
-        errors << { attribute: attr, message: "Unrecognized attribute name" }
+      errors = misnamed_attrs.map do |attr|
+        { attribute: attr, message: "Unrecognized attribute name" }
       end
 
       render json: { errors: errors }, status: 422
