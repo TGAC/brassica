@@ -83,12 +83,14 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
       describe "filtering" do
         let(:filter_params) { { :search => 'foobar' } }
 
-        it "uses .filter if params given" do
-          expect(model_klass).to receive(:filter).with(filter_params).and_call_original
+        if model_klass.ancestors.include?(Filterable)
+          it "uses .filter if params given" do
+            expect(model_klass).to receive(:filter).with(filter_params).and_call_original
 
-          get "/api/v1/#{model_name.pluralize}", { model_name => filter_params }, { "X-BIP-Api-Key" => api_key.token }
+            get "/api/v1/#{model_name.pluralize}", { model_name => filter_params }, { "X-BIP-Api-Key" => api_key.token }
 
-          expect(response).to be_success
+            expect(response).to be_success
+          end
         end
       end
     end

@@ -9,7 +9,7 @@ class Api::V1::ResourcesController < ApplicationController
   def index
     filter_params = params[model_name].presence
 
-    resources = filter_params ? model_klass.filter(filter_params) : model_klass.all
+    resources = Api::Index.new(model_klass).where(filter_params)
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 

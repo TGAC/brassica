@@ -4,7 +4,7 @@ class Api
   end
 
   def self.readable_models
-    [PlantPopulation, PlantLine, PlantVariety]
+    [PlantPopulation, PlantLine, PlantVariety, TaxonomyTerm]
   end
 
   def self.writable_models
