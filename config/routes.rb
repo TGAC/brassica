@@ -28,19 +28,17 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
-      resources :resources, except: [:new]
+      get_constraints = {
+        plural_model_name: /#{Api.readable_models.map { |klass| klass.name.underscore.pluralize }.join("|")}/
+      }
 
-      Brassica::Api.readable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
-        get "#{model_name}", to: 'resources#index'
-        get "#{model_name}/:id", to: 'resources#show'
-      end
+      post_constraints = {
+        plural_model_name: /#{Api.writable_models.map { |klass| klass.name.underscore.pluralize }.join("|")}/
+      }
 
-      Brassica::Api.writable_models.map { |klass| klass.name.underscore.pluralize }.each do |model_name|
-        post "#{model_name}", to: 'resources#create'
-        put "#{model_name}/:id", to: 'resources#update'
-        patch "#{model_name}/:id", to: 'resources#update'
-        delete "#{model_name}/:id", to: 'resources#destroy'
-      end
+      get ":plural_model_name", to: 'resources#index', constraints: get_constraints
+      get ":plural_model_name/:id", to: 'resources#show', constraints: get_constraints
+      post ":plural_model_name", to: 'resources#create', constraints: post_constraints
     end
   end
 end

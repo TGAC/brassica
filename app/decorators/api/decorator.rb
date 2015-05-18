@@ -7,25 +7,11 @@ class Api::Decorator < Draper::Decorator
 
   def associations_as_json
     {}.tap do |json|
-      object.class.reflections.each do |association, reflection|
-        next if reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection) # These are already included
-        next if blacklisted_has_many_association?(association)
-
-        association_klass = (reflection.options[:class_name] || association.classify).constantize
-        primary_key = reflection.options[:primary_key] || association_klass.primary_key
-
-        next unless primary_key # Skip associations with join tables used by HABTM
-
-        attr = "#{association}_#{primary_key.to_s.pluralize}"
-
-        json[attr] = object.send(association).pluck(primary_key)
+      associations = Api::AssociationFinder.new(object.class).has_many_associations
+      associations.each do |association|
+        json[association.param] = object.send(association.name).pluck(association.primary_key)
       end
     end
   end
 
-  private
-
-  def blacklisted_has_many_association?(name)
-    %w(User Submission ApiKey).include?(name.classify)
-  end
 end

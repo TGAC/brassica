@@ -4,49 +4,92 @@ class Api::V1::ResourcesController < ApplicationController
 
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
-
-  # FIXME find a way to document api calls
+  before_filter :require_strictly_correct_params, only: :create
 
   def index
-    filter_params = params[model_name.singularize].presence
+    filter_params = params[model_name].presence
 
-    resources = filter_params ? model_klass.filter(filter_params) : model_klass.all
+    resources = Api::Index.new(model_klass).where(filter_params)
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
-    render json: { model_name => resources, :meta => resources.meta }
+    render json: { model_name.pluralize => resources, :meta => resources.meta }
   end
 
   def show
     resource = model_klass.find(params[:id])
-    render json: decorate(resource)
+    render json: { model_name => decorate(resource) }
+  end
+
+  def create
+    resource = model_klass.new(create_params.merge(:user_id => api_key.user_id))
+
+    if resource.save
+      render json: { model_name => decorate(resource) }, status: :created
+    else
+      errors = resource.errors.messages.map do |attr, messages|
+        messages.map do |msg|
+          { attribute: attr, message: msg.capitalize }
+        end
+      end.flatten
+
+      render json: { errors: errors }, status: 422
+    end
   end
 
   private
 
   def authenticate_api_key!
-    token = ApiKey.normalize_token(params[:api_key])
-    unless token.present? && ApiKey.exists?(token: params[:api_key])
-      render text: "Not Found", status: 404
+    unless api_key_token.present?
+      render text: "Unauthorized\n\nBIP API requires API key authentication", status: 401
+      return
+    end
+    unless api_key.present?
+      render text: "Unauthorized\n\nInvalid API key", status: 401
+      return
     end
   end
 
+  def api_key_token
+    return @api_key_token if defined?(@api_key_token)
+    token = params[:api_key] || request.headers["X-BIP-Api-Key"]
+    @api_key_token = ApiKey.normalize_token(token)
+  end
+
+  def api_key
+    return @api_key if defined?(@api_key)
+    @api_key = api_key_token && ApiKey.find_by(token: api_key_token)
+  end
+
   def require_allowed_model
-    unless allowed_models.include?(model_name)
+    if request.request_method_symbol == :get && !Api.readable_model?(model_name)
+      raise ActionController::RoutingError.new('Not Found')
+    end
+    if request.request_method_symbol != :get && !Api.writable_model?(model_name)
       raise ActionController::RoutingError.new('Not Found')
     end
   end
 
+  def require_strictly_correct_params
+    model_attrs = model_klass.attribute_names
+    misnamed_attrs = (params[model_name].try(:keys) || []) - model_attrs
+
+    if misnamed_attrs.present?
+      errors = misnamed_attrs.map do |attr|
+        { attribute: attr, message: "Unrecognized attribute name" }
+      end
+
+      render json: { errors: errors }, status: 422
+    end
+    true
+  end
+
   def model_name
-    @model_name ||= request.path.match(/\A\/api\/v1\/(([\w_]+)\/?)/)[2]
+    @model_name ||= params.fetch(:plural_model_name).singularize
   end
 
   def model_klass
     @model_klass ||= model_name.classify.constantize
-  end
-
-  def allowed_models
-    Brassica::Api.models.map { |klass| klass.name.underscore.pluralize }
   end
 
   def decorate_collection(resources)
@@ -55,6 +98,14 @@ class Api::V1::ResourcesController < ApplicationController
 
   def decorate(resource)
     Api::Decorator.decorate(resource)
+  end
+
+  def create_params
+    blacklisted_attrs = %w(id user_id created_at updated_at)
+    model_attrs = model_klass.attribute_names
+    permitted_attrs =  model_attrs - blacklisted_attrs
+
+    params.require(model_name).permit(permitted_attrs)
   end
 
 end

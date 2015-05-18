@@ -1,0 +1,17 @@
+.action
+  %span.method GET
+  %span.url /api/v1/#{model.name.underscore.pluralize}/<code>:id</code>
+
+%h4 Example
+%pre
+  %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}")
+
+.api-live-example
+  - if user_signed_in?
+    %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}" } } Try it!
+    .url
+    %pre.response.hidden
+      %code
+
+  - else
+    .alert.alert-info Sign in to try it in your browser!

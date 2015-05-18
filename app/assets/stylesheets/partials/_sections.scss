@@ -74,6 +74,13 @@
 
 //docs
 .docs {
+  h3 {
+    margin-top: 2em;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
   p {
     margin-bottom: 20px;
   }
@@ -110,7 +117,10 @@
       width: 30%;
     }
     td.format {
-      width: 15%;
+      width: 12%;
+    }
+    td.create {
+      width: 12%;
     }
   }
   code {
@@ -126,6 +136,12 @@
       font-size: 18px;
       margin-right: 8px;
     }
+  }
+
+  .response {
+    display: block;
+    max-height: 350px;
+    overflow: auto;
   }
 }
 .docs-sidebar {

@@ -85,14 +85,4 @@ RSpec.describe ActiveRecord::Base do
       end
     end
   end
-
-  context "supporting API" do
-    Brassica::Api.readable_models.each do |klass|
-      context klass do
-        it "includes Filterable" do
-          expect(klass.ancestors).to include(Filterable)
-        end
-      end
-    end
-  end
 end

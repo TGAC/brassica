@@ -9,7 +9,7 @@
           %li= link_to "Fetching data", "#fetching-data"
           %li= link_to "Searching for data", "#searching-for-data"
 
-          - Brassica::Api.models.each do |model|
+          - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
 
     .col-sm-10
@@ -18,7 +18,7 @@
       %p
         BIP provides HTTP REST-style API which uses JSON to represent returned
         resources. Full access to the API is allowed for all registered users.
-        In order to authenticate users pass <code>api_key</code> parameter in
+        In order to authenticate users pass <code>X-BIP-Api-Key</code> header in
         each call to the API.
 
       %p
@@ -26,70 +26,43 @@
         new entries is supported. These include:
 
       %ul
-        %li PlantPopulation
-        %li PlantLine
-        %li ...
+        - Api.writable_models.each do |model|
+          %li= model.name
 
-      %p Several other resources allow for fetching data only:
+      -# FIXME verify and describe date format
+      %p
+        All attributes are expressed as basic data types such as <code>int</code>,
+        <code>string</code>, <code>date</code> or arrays of these. Specifically related objects
+        are not included in the response as a whole but as an array of their
+        unique identifiers.
 
-      %ul
-        %li TaxonomyTerm
-        %li PlantVariety
-        %li ...
+      %h4 Example
+      %pre.response
+        %code= t('api.general.create.examples.ok_response')
 
+      %p
+        For each resource there are attributes (described later) required
+        for create requests. Skipping any of those will result in an
+        <code>422</code> error response. Passing attributes which are not recognized by the API will also
+        result in <code>422</code> error response.
 
       %h4 Examples
       %ol
         %li
-          %p
-            Sending invalid JSON will result in a
-            %code 400 Bad Request
-            response.
-          %pre
-            %code
-              :preserve
-                 HTTP/1.1 400 Bad Request
-                 Content-Length: 35
+          %p Missing value for required attribute
+          %pre.response
+            %code= t('api.general.create.examples.missing_required_attrs_response')
 
-                 {"message":"Problems parsing JSON"}
         %li
-          %p
-            Sending the wrong type of JSON values will result in a
-            %code
-              400 Bad
-              Request
-            response.
-          %pre
-            %code
-              :preserve
-                 HTTP/1.1 400 Bad Request
-                 Content-Length: 40
+          %p Misspelled attribute name
+          %pre.response
+            %code= t('api.general.create.examples.unknown_attrs_response')
 
-                 {"message":"Body should be a JSON object"}
-        %li
-          %p
-            Sending invalid fields will result in a
-            %code 422 Unprocessable Entity
-            response.
-          %pre
-            %code
-              :preserve
-                 HTTP/1.1 422 Unprocessable Entity
-                 Content-Length: 149
+      %p Several other resources allow for fetching data only:
 
-                 {
-                   "message": "Validation Failed",
-                   "errors": [
-                     {
-                       "resource": "Issue",
-                       "field": "title",
-                       "code": "missing_field"
-                     }
-                   ]
-                 }
-
-
-
+      %ul
+        - Api.readonly_models.each do |model|
+          %li= model.name
 
       %h3#fetching-data.section-heading Fetching data
 
@@ -101,22 +74,18 @@
 
       %p Fetching multiple resources always yields paginated results.
 
-      = render partial: 'api_props',
-               locals: { title: 'Pagination parameters',
-                         props:  api_props('pagination.params',
-                                           default_per_page: Kaminari.config.default_per_page,
-                                           max_per_page: Kaminari.config.max_per_page) }
-      = render partial: 'api_props',
-               locals: { title: 'Paginated response metadata',
-                         props:  api_props('pagination.meta') }
+      = api_props('Pagination parameters', 'pagination.params',
+          default_per_page: Kaminari.config.default_per_page,
+          max_per_page: Kaminari.config.max_per_page)
 
-      .panel.panel-default
-        .panel-heading
-          .panel-title Paginated response format
+      = api_props('Paginated response metadata', 'pagination.meta')
 
-        .panel-body
-          %pre
-            %code= t('api.pagination.response')
+      %h4 Example
+      %pre
+        %code= t('api.pagination.request')
+
+      %pre.response
+        %code= t('api.pagination.response')
 
       %h3#searching-for-data.section-heading Searching for data
 
@@ -124,57 +93,23 @@
         Similar generic section about how to issue full-text search calls to
         BIP, how to adjust scope (model), what to expect as the outcome
 
-      - Brassica::Api.models.each do |model|
+      - Api.models.each do |model|
         .section
           %h3.section-heading{id: model.name.underscore.dasherize}= model.name
 
           .description Some pretty exhaustive description of the entity represented by this resource
 
-          = render partial: 'api_props',
-                   locals: { title: "Attributes",
-                             props: api_props("#{model.name.underscore}.attrs") }
+          = api_props('Attributes', "#{model.name.underscore}.attrs")
 
           -# GET index
-          .action
-            %span.method GET
-            %span.url= "/api/v1/#{model.name.underscore.pluralize}"
-
-          = render partial: 'api_props',
-                   locals: { title: "Search params",
-                             props: api_props("#{model.name.underscore}.index.params") }
-
-          %h4 Example
-          %pre
-            %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
-
-          .api-live-example
-            - if user_signed_in?
-              %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3" } } Try it!
-              .url
-              %pre.response.hidden
-                %code{style: 'display: block; max-height: 300px; overflow: auto'}
-            - else
-              .alert.alert-info Sign in to try it in your browser!
-
+          = render partial: 'application/api/index', locals: { model: model }
           %hr
 
           -# GET show
-          .action
-            %span.method GET
-            %span.url /api/v1/#{model.name.underscore.pluralize}/<code>:id</code>
-
-          %h4 Example
-          %pre
-            %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}")
-
-          .api-live-example
-            - if user_signed_in?
-              %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}" } } Try it!
-              .url
-              %pre.response.hidden
-                %code{style: 'display: block; max-height: 300px; overflow: auto'}
-            - else
-              .alert.alert-info Sign in to try it in your browser!
-
+          = render partial: 'application/api/show', locals: { model: model }
           %hr
+
+          - if Api.writable_model?(model)
+            = render partial: 'application/api/create', locals: { model: model }
+            %hr
 
