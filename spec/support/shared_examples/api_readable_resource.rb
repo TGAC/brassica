@@ -1,22 +1,42 @@
 RSpec.shared_examples "API-readable resource" do |model_klass|
   model_name = model_klass.name.underscore
 
-  context "with invalid api key" do
+  context "with no api key" do
     describe "GET /api/v1/#{model_name.pluralize}" do
-      it "returns 404" do
+      it "returns 401" do
         get "/api/v1/#{model_name.pluralize}"
 
-        expect(response.status).to eq 404
+        expect(response.status).to eq 401
       end
     end
 
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
       let!(:resource) { create model_name }
 
-      it "returns 404" do
+      it "returns 401" do
         get "/api/v1/#{model_name.pluralize}/#{resource.id}"
 
-        expect(response.status).to eq 404
+        expect(response.status).to eq 401
+      end
+    end
+  end
+
+  context "with invalid api key" do
+    describe "GET /api/v1/#{model_name.pluralize}" do
+      it "returns 403" do
+        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
+
+        expect(response.status).to eq 401
+      end
+    end
+
+    describe "GET /api/v1/#{model_name.pluralize}/:id" do
+      let!(:resource) { create model_name }
+
+      it "returns 403" do
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", {}, { "X-BIP-Api-Key" => "invalid" }
+
+        expect(response.status).to eq 401
       end
     end
   end

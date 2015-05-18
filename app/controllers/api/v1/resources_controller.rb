@@ -42,18 +42,25 @@ class Api::V1::ResourcesController < ApplicationController
   private
 
   def authenticate_api_key!
-    unless api_key.present?
-      render text: "Not Found", status: 404
+    unless api_key_token.present?
+      render text: "Unauthorized\n\nBIP API requires API key authentication", status: 401
+      return
     end
+    unless api_key.present?
+      render text: "Unauthorized\n\nInvalid API key", status: 401
+      return
+    end
+  end
+
+  def api_key_token
+    return @api_key_token if defined?(@api_key_token)
+    token = params[:api_key] || request.headers["X-BIP-Api-Key"]
+    @api_key_token = ApiKey.normalize_token(token)
   end
 
   def api_key
     return @api_key if defined?(@api_key)
-
-    token = params[:api_key] || request.headers["X-BIP-Api-Key"]
-    token = ApiKey.normalize_token(token)
-
-    @api_key = token && ApiKey.find_by(token: token)
+    @api_key = api_key_token && ApiKey.find_by(token: api_key_token)
   end
 
   def require_allowed_model

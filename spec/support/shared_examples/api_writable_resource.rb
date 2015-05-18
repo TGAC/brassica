@@ -1,12 +1,22 @@
 RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
 
-  context "with invalid api key" do
+  context "with no api key" do
     describe "POST /api/v1/#{model_name.pluralize}" do
-      it "returns 404" do
+      it "returns 401" do
         get "/api/v1/#{model_name.pluralize}"
 
-        expect(response.status).to eq 404
+        expect(response.status).to eq 401
+      end
+    end
+  end
+
+  context "with invalid api key" do
+    describe "POST /api/v1/#{model_name.pluralize}" do
+      it "returns 401" do
+        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
+
+        expect(response.status).to eq 401
       end
     end
   end
