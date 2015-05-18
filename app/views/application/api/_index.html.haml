@@ -6,7 +6,7 @@
 
 %h4 Example
 %pre
-  %code.http= t("api.#{model.name.underscore}.show.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
+  %code.http= t("api.#{model.name.underscore}.index.example", url: "/api/v1/#{model.name.underscore.pluralize}?per_page=3")
 
 .api-live-example
   - if user_signed_in?
