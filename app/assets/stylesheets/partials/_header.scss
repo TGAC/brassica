@@ -24,7 +24,16 @@
 
   .logo {
     display: inline-block;
+    height: 60px;
     padding: 5px 0;
+    width: 220px;
+    a {
+      height: 100%;
+      img {
+        height: auto;
+        width: 100%;
+      }
+    }
   }
 
   .header-menu {
