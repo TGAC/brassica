@@ -22,6 +22,13 @@
         each call to the API.
 
       %p
+        - if user_signed_in?
+          Your personal API key is available in the
+          = link_to 'profile page', api_keys_path
+        - else
+          .alert.alert-info You need to sign in to obtain your personal API key.
+
+      %p
         The API exposes several resources for which fetching and submission of
         new entries is supported. These include:
 
