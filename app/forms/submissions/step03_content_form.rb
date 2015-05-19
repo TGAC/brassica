@@ -28,7 +28,7 @@ module Submissions
     validate do
       new_plant_lines.each do |new_plant_line|
         if plant_line_exists?(new_plant_line.plant_line_name)
-          errors.add(:new_plant_lines, "#{new_plant_line.plant_line_name} already exists in our database")
+          errors.add(:new_plant_line, "#{new_plant_line.plant_line_name} already exists in our database")
         end
       end
     end

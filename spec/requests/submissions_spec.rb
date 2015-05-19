@@ -62,13 +62,23 @@ RSpec.describe "Submission management" do
 
       context "if last step" do
         before { 3.times { submission.step_forward } }
-        before { allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call) }
 
-        it "finalizes submission and redirects to show" do
-          submission.update_attribute(:submitted_object_id, 1)
-          put "/submissions/#{submission.id}", submission: { content: { comments: "Lorem ipsum" } }
-          expect(submission.reload).to be_finalized
-          expect(response).to redirect_to(submission_path(submission))
+        context "and can finalize" do
+          before { allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call).and_return(true) }
+
+          it "finalizes submission and redirects to show" do
+            put "/submissions/#{submission.id}", submission: { content: { comments: "Lorem ipsum" } }
+            expect(response).to redirect_to(submission_path(submission))
+          end
+        end
+
+        context "and cannot finalize" do
+          before { allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call).and_return(false) }
+
+          it "redirects to first step with :validate option" do
+            put "/submissions/#{submission.id}", submission: { content: { comments: "Lorem ipsum" } }
+            expect(response).to redirect_to(edit_submission_path(submission, validate: true))
+          end
         end
       end
     end

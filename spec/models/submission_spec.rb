@@ -127,18 +127,6 @@ RSpec.describe Submission do
       allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
     end
 
-    it 'ensures presence of submitted object upon finalization' do
-      submission.update_attribute(:step, submission.steps.last)
-      expect { submission.finalize }.
-        to raise_error ActiveRecord::RecordInvalid
-    end
-
-    it 'updated submission' do
-      submission.update_attribute(:step, submission.steps.last)
-      submission.update_attribute(:submitted_object_id, 1)
-      expect { submission.finalize }.to change { submission.finalized? }.from(false).to(true)
-    end
-
     it 'calls finalizer' do
       expect_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
       submission.update_attribute(:step, submission.steps.last)
