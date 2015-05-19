@@ -9,7 +9,7 @@ class SubmissionsController < ApplicationController
   def show
     submission = current_user.submissions.find(params[:id])
     @submission = PlantPopulationSubmissionDecorator.decorate(submission)
- end
+  end
 
   def edit
     @submission = current_user.submissions.find(params[:id])
