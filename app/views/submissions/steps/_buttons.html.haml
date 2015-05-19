@@ -1,13 +1,16 @@
 .action-buttons
-  = my_submissions_button
 
   - if submission.first_step?
-    = link_to "Cancel", submissions_path, class: 'btn btn-default'
+    .btn.btn-default.btn-wide.btn-back.disabled(name="back")
+      Back
   - else
-    = f.submit "Back", class: 'btn btn-default btn-back', name: 'back'
+    = f.submit "Back", class: 'btn btn-default btn-wide btn-back', name: 'back'
 
-  - unless submission.last_step?
-    = f.submit "Next", class: 'btn btn-primary btn-wide btn-next pull-right'
-  - else
-    = f.submit "Send", class: 'btn btn-primary btn-wide pull-right'
+  .pull-right
+    = f.submit "Save & edit later", class: 'btn btn-default btn-leave', name: 'leave'
+
+    - unless submission.last_step?
+      = f.submit "Next", class: 'btn btn-primary btn-wide btn-next'
+    - else
+      = f.submit "Send", class: 'btn btn-primary btn-wide'
 
