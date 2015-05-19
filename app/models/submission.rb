@@ -42,13 +42,14 @@ class Submission < ActiveRecord::Base
     step == STEPS.last
   end
 
+  def reset_step
+    self.step = STEPS[0]
+    save!
+  end
+
   def finalize
     raise CantFinalize unless last_step?
-    transaction do
-      PlantPopulationFinalizer.new(self).call
-      self.finalized = true
-      save!
-    end
+    PlantPopulationFinalizer.new(self).call
   end
 
   def submitted_object

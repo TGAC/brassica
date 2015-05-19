@@ -13,8 +13,9 @@ class Submission::PlantPopulationFinalizer
       create_new_plant_lines
       create_plant_population
       create_plant_population_lists
-      submission.update_attributes(submitted_object_id: @plant_population.id)
+      update_submission
     end
+    submission.finalized?
   end
 
   private
@@ -68,7 +69,12 @@ class Submission::PlantPopulationFinalizer
 
     attrs.merge!(submission.content.step04.to_h)
     attrs.delete(:owned_by) # FIXME change to :population_owned_by in the form (or remove entirely)
-    @plant_population = PlantPopulation.create!(attrs)
+
+    if PlantPopulation.where(name: attrs[:name]).exists?
+      rollback
+    else
+      @plant_population = PlantPopulation.create!(attrs)
+    end
   end
 
   def create_plant_population_lists
@@ -82,5 +88,16 @@ class Submission::PlantPopulationFinalizer
         entered_by_whom: submission.user.login
       )
     end
+  end
+
+  def update_submission
+    submission.update_attributes!(
+      finalized: true,
+      submitted_object_id: @plant_population.id
+    )
+  end
+
+  def rollback
+    raise ActiveRecord::Rollback
   end
 end

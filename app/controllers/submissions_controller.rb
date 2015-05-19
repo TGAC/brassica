@@ -9,11 +9,12 @@ class SubmissionsController < ApplicationController
   def show
     submission = current_user.submissions.find(params[:id])
     @submission = PlantPopulationSubmissionDecorator.decorate(submission)
-  end
+ end
 
   def edit
     @submission = current_user.submissions.find(params[:id])
     @content = step_content_form(@submission.step, @submission.content[@submission.step])
+    @content.valid? if params[:validate]
   end
 
   def new
@@ -41,12 +42,15 @@ class SubmissionsController < ApplicationController
       @submission.content.update(@submission.step, step_attrs)
     end
 
-    if @submission.last_step?
-      @submission.finalize
-      redirect_to submission_path(@submission), notice: "Plant population submitted, thank you!"
-    else
+    if !@submission.last_step?
       @submission.step_forward
       redirect_to edit_submission_path(@submission)
+    elsif @submission.finalize
+      redirect_to submission_path(@submission), notice: "Plant population submitted, thank you!"
+    else
+      @submission.reset_step
+      redirect_to edit_submission_path(@submission, validate: true),
+        alert: "Submission cannot be accepted. Please, review entered data and fix remaining issues."
     end
   end
 
