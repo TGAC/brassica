@@ -19,7 +19,7 @@ class Submission
 
   defaultSelectOptions: { allowClear: true }
   plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
-  plantLineListSelectOptions: $.extend({}, @plantLineSelectOptions, multiple: true)
+  plantLineListSelectOptions: $.extend(@makeAjaxSelectOptions('/plant_lines', 'plant_line_name'), multiple: true)
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
 
   constructor: (el) ->
