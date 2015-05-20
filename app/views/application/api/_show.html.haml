@@ -6,12 +6,4 @@
 %pre
   %code.http= t("api.#{model.name.underscore}.show.example", default: :'api.default.show.example', url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}")
 
-.api-live-example
-  - if user_signed_in?
-    %button.btn.btn-default{type: 'button', data: { url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}" } } Try it!
-    .url
-    %pre.response.hidden
-      %code
-
-  - else
-    .alert.alert-info Sign in to try it in your browser!
+= render partial: 'application/api/try_it', locals: { url: "/api/v1/#{model.name.underscore.pluralize}/#{model.first.id}" }

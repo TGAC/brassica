@@ -7,6 +7,7 @@
         %ul.nav
           %li= link_to "General introduction", "#general-introduction"
           %li= link_to "Fetching data", "#fetching-data"
+          %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
 
           - Api.models.each do |model|
@@ -71,6 +72,7 @@
         - Api.readonly_models.each do |model|
           %li= model.name
 
+
       %h3#fetching-data.section-heading Fetching data
 
       %p
@@ -93,6 +95,32 @@
 
       %pre.response
         %code= t('api.pagination.response')
+
+
+      %h3#filtering-data.section-heading Filtering data
+
+      %p
+        Most of resources might be filtered by values of specific resource attributes.
+        Attribute tables, presented below per each resource type, indicate when a specific
+        attribute may be a subject to filtering (look for the `Q` marker). The usage pattern
+        is as follows:
+
+      = api_props('Query filtering', 'filtering.params')
+
+      %h4 Example
+      %pre
+        %code= t('api.filtering.request')
+
+      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[query][plant_line_name]=WINFRED" }
+
+      %p Applying multiple attributes in a single query is possible as well.
+
+      %h4 Example
+      %pre
+        %code= t('api.filtering.multi_request')
+
+      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998" }
+
 
       %h3#searching-for-data.section-heading Searching for data
 
