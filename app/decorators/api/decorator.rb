@@ -2,7 +2,7 @@ class Api::Decorator < Draper::Decorator
   delegate_all
 
   def as_json(*)
-    super.
+    super(object.class.try(:json_options)).
       reject do |k,v|
         blacklisted_attrs.include?(k) || k.end_with?('_count')
       end.

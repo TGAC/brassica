@@ -813,6 +813,14 @@ en:
         -
           name: confirmed_by_whom
         -
+          name: design_factor
+          format: object
+          desc: Additional information about the design of the population experiment
+        -
+          name: plant_part
+          format: object
+          desc: Description of the plant part that was scored
+        -
           name: plant_accession_id
           format: int
           desc: BIP identifier of the associated database Plant Accession
@@ -824,9 +832,6 @@ en:
           name: trait_scores_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Trait Scores recorded during this scoring unit
-
-#        "design_factor_id": 1523,
-#        "plant_part_id": 4,
 
       index:
         params:

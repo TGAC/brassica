@@ -63,4 +63,8 @@ class MapLocusHit < ActiveRecord::Base
       'population_locus_id'
     ]
   end
+
+  def self.json_options
+    { except: :map_position }
+  end
 end
