@@ -97,12 +97,35 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
       let!(:resource) { create model_name }
+      let(:parsed_object) { JSON.parse(response.body)[model_name] }
 
       it "returns requested resource" do
         get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
 
         expect(response).to be_success
         expect(parsed_response).to have_key(model_name)
+      end
+
+      it "never shows blacklisted columns" do
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+
+        expect(parsed_object).not_to have_key('user_id')
+        expect(parsed_object).not_to have_key('user')
+        expect(parsed_object).not_to have_key('created_at')
+        expect(parsed_object).not_to have_key('updated_at')
+      end
+
+      context 'when run for Relatable model' do
+        if model_klass.ancestors.include?(Relatable)
+          it "excludes counters" do
+            get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+
+            resource.class.count_columns.each do |count_column|
+              count_column = count_column.split(/ as /i)[-1]
+              expect(parsed_object).not_to have_key(count_column)
+            end
+          end
+        end
       end
     end
   end
