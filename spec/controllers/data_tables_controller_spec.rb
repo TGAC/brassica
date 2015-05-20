@@ -62,11 +62,11 @@ RSpec.describe DataTablesController do
     end
 
     it 'prevents querying by unpermitted parameters' do
-      create(:plant_line, common_name: 'cn')
+      create(:plant_line, named_by_whom: 'nbw')
       get :index,
           format: :json,
           model: 'plant_lines',
-          query: { common_name: 'cn' }
+          query: { named_by_whom: 'nbw' }
       json = JSON.parse(response.body)
       expect(json['recordsTotal']).to eq 0
       expect(json['data'].size).to eq 0

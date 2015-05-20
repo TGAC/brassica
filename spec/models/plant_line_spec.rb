@@ -24,7 +24,9 @@ RSpec.describe PlantLine do
 
   describe '#filter' do
     before(:each) do
-      create(:plant_line, common_name: 'cn', plant_line_name: 'pln')
+      create(:plant_line, common_name: 'cn',
+                          plant_line_name: 'pln',
+                          named_by_whom: 'nbw')
     end
 
     it 'searches plant_line_name' do
@@ -41,15 +43,15 @@ RSpec.describe PlantLine do
 
     it 'will not get all when no param permitted' do
       # NOTE: means - strong params should prevent passing {} to where
-      expect(PlantLine.filter(query: { common_name: 'cn' })).to be_empty
+      expect(PlantLine.filter(query: { named_by_whom: 'nbw' })).to be_empty
       expect(PlantLine.filter(query: {})).to be_empty
     end
 
     it 'will only query by permitted params' do
       plname = ('a'..'z').to_a.shuffle[0,8].join
-      pl = create(:plant_line, common_name: 'nc', plant_line_name: plname)
+      pl = create(:plant_line, named_by_whom: 'nbw', plant_line_name: plname)
       search = PlantLine.filter(
-        query: { common_name: 'cn', id: pl.id }
+        query: { named_by_whom: 'nbw', id: pl.id }
       )
       expect(search.count).to eq 1
       expect(search.first.plant_line_name).to eq plname

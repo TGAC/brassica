@@ -126,24 +126,29 @@ en:
       attrs:
         -
           name: id
+          create: Q
         -
           name: plant_line_name
-          create: required
+          create: required, Q
           desc: Unique name of this Plant Line given by the person when submitting data
         -
           name: common_name
+          create: Q
           desc: A common name of this Plant Line, that is widely recognized by the breeders community
         -
           name: named_by_whom
           desc: Either a person or a legal entity that given the name
         -
           name: organisation
+          create: Q
           desc: The legal entity that owns this Plant Line
         -
           name: genetic_status
+          create: Q
           desc: TODO FIXME ASK TGAC
         -
           name: previous_line_name
+          create: Q
           desc: TODO FIXME ASK TGAC
         -
           name: comments
@@ -195,13 +200,11 @@ en:
             format: string
             desc: ...
           -
-            name: "plant_line[query][id]"
-            format: "id, id[]"
-            desc: Filter by `id`
-          -
-            name: "plant_line[query][plant_populations.id]"
-            format: "id, id[]"
-            desc: Filter by `id` of associated plant population
+            name: "plant_line[query][plant_line_name]"
+            format: "int, string"
+            desc: |
+              Filter results by an exact value of `plant_line_name`. Any other attribute marked with `Q` in the table
+              may be used instead of `plant_line_name`. Multiple attribute filters may be applied in a single query.
 
       create:
         example: |-
@@ -220,9 +223,10 @@ en:
       attrs:
         -
           name: id
+          create: Q
         -
           name: name
-          create: required
+          create: required, Q
           desc: Unique name of this Plant Population given by the person when submitting data
         -
           name: data_owned_by
@@ -292,13 +296,11 @@ en:
             format: string
             desc: Query using full text search engine
           -
-            name: "plant_population[query][id]"
-            format: "int, int[]"
-            desc: Filter by `id`
-          -
             name: "plant_population[query][name]"
-            format: string
-            desc: Filter by `name`
+            format: "int, string"
+            desc: |
+              Filter results by an exact value of `name`. Any other attribute marked with `Q` in the table
+              may be used instead of `name`. Multiple attribute filters may be applied in a single query.
 
       create:
         example: |-
@@ -317,11 +319,14 @@ en:
       attrs:
         -
           name: id
+          create: Q
         -
           name: plant_variety_name
+          create: Q
           desc: The name of this veriety given by either data submitting person or the database curator
         -
           name: crop_type
+          create: Q
           desc: TODO FIXME ASK TGAC
         -
           name: comments
@@ -333,24 +338,31 @@ en:
           name: data_provenance
         -
           name: data_attribution
+          create: Q
           desc: TODO FIXME ASK TGAC
         -
           name: year_registered
+          create: Q
           desc: Year (or sometimes years) when this variety was officially registered
         -
           name: breeders_variety_code
+          create: Q
           desc: TODO FIXME ASK TGAC
         -
           name: owner
+          create: Q
           desc: Name of a legal organization that introduced that variety
         -
           name: quoted_parentage
+          create: Q
           desc: Parentage information for this variety as given by literature or the database curator
         -
           name: female_parent
+          create: Q
           desc: Female parent of this variety, if identified
         -
           name: male_parent
+          create: Q
           desc: Male parent of this variety, if identified
         -
           name: countries_of_origin
@@ -376,9 +388,11 @@ en:
             format: string
             desc: ...
           -
-            name: "plant_population[query][id]"
-            format: "int, int[]"
-            desc: Filter by `id`
+            name: "plant_variety[query][id]"
+            format: "int, string"
+            desc: |
+              Filter results by an exact value of `id`. Any other attribute marked with `Q` in the table
+              may be used instead of `id`. Multiple attribute filters may be applied in a single query.
 
     taxonomy_term:
       attrs:
@@ -416,4 +430,4 @@ en:
           -
             name: "none"
             format: ""
-            desc: ""
+            desc: No filtering available - you may either list taxonomy terms or pick a single one

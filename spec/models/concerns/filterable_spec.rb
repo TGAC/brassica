@@ -1,6 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe Filterable do
+  describe '#params_for_filter' do
+    it 'rejects aliases and related model columns' do
+      all_params = [
+        'normal_param',
+        'alias as alias_downcase',
+        'alias AS ALIAS_UPCASE',
+        'related_model.param'
+      ]
+      class FilterableClass; include Filterable; end
+      expect(FilterableClass.params_for_filter(all_params).size).to eq 1
+      expect(FilterableClass.params_for_filter(all_params)[0]).to eq 'normal_param'
+    end
+  end
+
   context 'when model supports elastic search' do
     before(:all) do
       Rails.application.eager_load!
