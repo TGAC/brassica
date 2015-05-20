@@ -91,6 +91,16 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
             expect(response).to be_success
           end
+
+          it 'supports filtering with query param for all visible attributes' do
+            model_klass.params_for_filter(model_klass.table_columns).each do |attribute|
+              expect(model_klass.permitted_params.dup.extract_options![:query]).
+                to include attribute
+              query = { :query => { attribute => 'x' } }
+              expect(model_klass).to receive(:filter).with(query).and_call_original
+              get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
+            end
+          end
         end
       end
     end
