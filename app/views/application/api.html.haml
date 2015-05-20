@@ -96,15 +96,19 @@
 
       %h3#searching-for-data.section-heading Searching for data
 
+      -# TODO FIXME this section to be developed further
       %p
         Similar generic section about how to issue full-text search calls to
         BIP, how to adjust scope (model), what to expect as the outcome
+
+
+      -# Models section follows
 
       - Api.models.each do |model|
         .section
           %h3.section-heading{id: model.name.underscore.dasherize}= model.name
 
-          .description Some pretty exhaustive description of the entity represented by this resource
+          .description The following table explains the list of attributes describing this resource
 
           = api_props('Attributes', "#{model.name.underscore}.attrs")
 
@@ -116,7 +120,7 @@
           = render partial: 'application/api/show', locals: { model: model }
           %hr
 
+          -# POST create
           - if Api.writable_model?(model)
             = render partial: 'application/api/create', locals: { model: model }
             %hr
-

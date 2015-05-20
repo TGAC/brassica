@@ -87,73 +87,98 @@ en:
           }
         }
 
+    default:
+      attrs:
+        id:
+          format: int
+          desc: Unique BIP database identifier
+        comments:
+          desc: Additional note from the person who published this data
+        confirmed_by_whom:
+          desc: The person that accepted this BIP database entry
+        data_owned_by:
+          format: string
+          desc: Name of the legal entity that published this data
+        data_provenance:
+          desc: Additional information regarding the origin of this data
+        date_entered:
+          format: date
+          desc: The day the data was published
+        entered_by_whom:
+          desc: The name of the person who published this data
+        taxonomy_term_id:
+          format: int
+          desc: BIP identifier of a Taxonomy Term entry, related with this record
+      show:
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+      index:
+        example: |-
+          GET %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
     plant_line:
       attrs:
         -
           name: id
-          format: int
-          desc: Unique id
         -
           name: plant_line_name
-          format: string
           create: required
-          desc:
+          desc: Unique name of this Plant Line given by the person when submitting data
         -
           name: common_name
-          format: string
-          desc:
-        -
-          name: plant_variety_name
-          format: string
-          desc:
+          desc: A common name of this Plant Line, that is widely recognized by the breeders community
         -
           name: named_by_whom
-          format: string
-          desc:
+          desc: Either a person or a legal entity that given the name
         -
           name: organisation
-          format: string
-          desc:
+          desc: The legal entity that owns this Plant Line
         -
           name: genetic_status
-          format: string
-          desc:
+          desc: TODO FIXME ASK TGAC
         -
           name: previous_line_name
-          format: string
-          desc:
+          desc: TODO FIXME ASK TGAC
         -
           name: comments
-          format: string
-          desc:
         -
           name: entered_by_whom
-          format: string
-          desc:
         -
           name: date_entered
-          format: date
-          desc:
         -
           name: data_provenance
-          format: string
-          desc:
         -
           name: data_owned_by
-          format: string
-          desc:
         -
           name: confirmed_by_whom
-          format: string
-          desc:
         -
           name: taxonomy_term_id
-          format: int
-          desc:
         -
           name: plant_variety_id
           format: int
-          desc:
+          desc: BIP identifier of the Plant Variety that this Plant Line is classified as
+        -
+          name: fathered_descendants_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Lines descending from this entry on male side
+        -
+          name: mothered_descendants_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Lines descending from this entry on female side
+        -
+          name: plant_accessions_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of related Plant Accessions
+        -
+          name: plant_populations_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Populations bred in this Plant Line
 
       index:
         params:
@@ -178,18 +203,6 @@ en:
             format: "id, id[]"
             desc: Filter by `id` of associated plant population
 
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-
-      show:
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
-
       create:
         example: |-
           POST %{url} HTTP/1.1
@@ -207,13 +220,70 @@ en:
       attrs:
         -
           name: id
-          format: int
-          desc: Unique id
         -
           name: name
-          format: string
           create: required
-          desc:
+          desc: Unique name of this Plant Population given by the person when submitting data
+        -
+          name: data_owned_by
+        -
+          name: population_type
+          format: object
+          desc: Additional information about the type of this population
+        -
+          name: description
+          desc: Important ree text information given by the data publisher regarding this population
+        -
+          name: date_established
+          format: date
+          desc: TODO FIXME ASK TGAC
+        -
+          name: established_by_whom
+          desc: TODO FIXME ASK TGAC
+        -
+          name: establishing_organisation
+          desc: TODO FIXME ASK TGAC
+        -
+          name: population_owned_by
+          desc: Name of the legal organization that owns this population
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: taxonomy_term_id
+        -
+          name: male_parent_line_id
+          format: int
+          desc: BIP identifier of the Plant Line that this population descends from on the male side
+        -
+          name: female_parent_line_id
+          format: int
+          desc: BIP identifier of the Plant Line that this population descends from on the female side
+        -
+          name: linkage_maps_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Linkage Maps defined for this population
+        -
+          name: population_loci_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Population Loci published up to now for this population
+        -
+          name: plant_trials_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of trait Plant Trials performed so far for this population
+        -
+          name: plant_lines_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Lines that this population is associated with
 
       index:
         params:
@@ -229,19 +299,6 @@ en:
             name: "plant_population[query][name]"
             format: string
             desc: Filter by `name`
-
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
-
-      show:
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
       create:
         example: |-
@@ -260,8 +317,53 @@ en:
       attrs:
         -
           name: id
-          format: int
-          desc: Unique id
+        -
+          name: plant_variety_name
+          desc: The name of this veriety given by either data submitting person or the database curator
+        -
+          name: crop_type
+          desc: TODO FIXME ASK TGAC
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_provenance
+        -
+          name: data_attribution
+          desc: TODO FIXME ASK TGAC
+        -
+          name: year_registered
+          desc: Year (or sometimes years) when this variety was officially registered
+        -
+          name: breeders_variety_code
+          desc: TODO FIXME ASK TGAC
+        -
+          name: owner
+          desc: Name of a legal organization that introduced that variety
+        -
+          name: quoted_parentage
+          desc: Parentage information for this variety as given by literature or the database curator
+        -
+          name: female_parent
+          desc: Female parent of this variety, if identified
+        -
+          name: male_parent
+          desc: Male parent of this variety, if identified
+        -
+          name: countries_of_origin
+          format: object[]
+          desc: Zero or more of JSON documents listing countries that this variety originated from
+        -
+          name: countries_registered
+          format: object[]
+          desc: Zero or more of JSON documents listing countries that this variety is registered in
+        -
+          name: plant_lines_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Lines classified under this plant variety
 
       index:
         params:
@@ -278,40 +380,40 @@ en:
             format: "int, int[]"
             desc: Filter by `id`
 
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
-
-      show:
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
-
     taxonomy_term:
       attrs:
         -
           name: id
+        -
+          name: label
+          desc: Gramene Taxonomy ontology identifier, if available
+        -
+          name: name
+          desc: Regular taxonomical name
+        -
+          name: taxonomy_term_id
           format: int
-          desc: Unique id
+          desc: BIP identifier of a parent Taxonomy Term (not given for root terms)
+        -
+          name: canonical
+          format: boolean
+          desc: Set to true if the term is defined in Gramene Taxonomy, false otherwise
+        -
+          name: plant_lines_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Lines classified under this term
+        -
+          name: plant_populations_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Populations classified under this term
+        -
+          name: probes_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Probes classified under this term
 
       index:
         params:
           -
             name: "none"
-
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
-
-      show:
-        example: |-
-          GET %{url} HTTP/1.1
-          Content-Type: application/json
-          Accept: application/json
-          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+            format: ""
+            desc: ""
