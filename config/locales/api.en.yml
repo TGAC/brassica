@@ -114,7 +114,6 @@ en:
         confirmed_by_whom:
           desc: The person that accepted this BIP database entry
         data_owned_by:
-          format: string
           desc: Name of the legal entity that published this data
         data_provenance:
           desc: Additional information regarding the origin of this data
@@ -488,6 +487,346 @@ en:
           name: qtls_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Quantitative Trait Loci related to this group
+
+      index:
+        params:
+          -
+            name: "???"
+
+    linkage_map:
+      attrs:
+        -
+          name: id
+          create: Q
+        -
+          name: linkage_map_label
+          create: Q
+          desc: The label given to this linkage map by the datatbase curator
+        -
+          name: linkage_map_name
+          create: Q
+          desc: Unique name of this linkage map
+        -
+          name: map_version_no
+          create: Q
+          desc: Descriptive of the version of this linkage map
+        -
+          name: map_version_date
+          format: date
+          create: Q
+          desc: Day when this linkage map was prepared
+        -
+          name: mapping_software
+          desc: Description of the software package used to create this linkage map
+        -
+          name: mapping_function
+          desc: Description of the algorithm used to create this linkage map
+        -
+          name: map_author
+          desc: The person who created this linkage map
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: pubmed_id
+          desc: The PubMed identifier of the publication where this linkage map was published
+        -
+          name: plant_population_id
+          format: int
+          desc: BIP identifier of the Plant Population for which this linkage map was created
+        -
+          name: linkage_groups_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Linkage Groups related to this map
+        -
+          name: map_locus_hits_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Map Locus Hits related to this map
+
+      index:
+        params:
+          -
+            name: "???"
+
+    map_locus_hit:
+      attrs:
+        -
+          name: id
+          create: Q
+        -
+          name: consensus_group_assignment
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: canonical_marker_name
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: associated_sequence_id
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: sequence_source_acronym
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: atg_hit_seq_id
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: atg_hit_seq_source
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: bac_hit_seq_id
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: bac_hit_seq_source
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: bac_hit_name
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: linkage_map_id
+          format: int
+          desc: BIP identifier of the Linkage Map related to this locus hit
+        -
+          name: linkage_group_id
+          format: int
+          desc: BIP identifier of the Linkage Group related to this locus hit
+        -
+          name: population_locus_id
+          format: int
+          desc: BIP identifier of the Population Locus related to this locus hit
+        -
+          name: map_position_id
+          format: int
+          desc: BIP identifier of the Map Position of this locus hit
+
+      index:
+        params:
+          -
+            name: "???"
+
+    map_position:
+      attrs:
+        -
+          name: id
+          create: Q
+        -
+          name: map_position
+          create: Q
+          desc: Position identifier
+        -
+          name: marker_assay_name
+          create: Q
+          desc: Associated name of a marker assay as assigned by the database curator
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: linkage_group_id
+          format: int
+          desc: BIP identifier of the Linkage Group this map position is listed in
+        -
+          name: population_locus_id
+          format: int
+          desc: BIP identifier of the Population Locus for this map position
+        -
+          name: map_locus_hits_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Map Locus Hits related to this position
+
+      index:
+        params:
+          -
+            name: "???"
+
+    marker_assay:
+      attrs:
+        -
+          name: id
+          create: Q
+        -
+          name: marker_assay_name
+          create: Q
+          desc: Unique name given to this marker assay by data contributor or database curator
+        -
+          name: canonical_marker_name
+          create: Q
+          desc: Canonical name for this assay as assigned by the database curator
+        -
+          name: marker_type
+          create: Q
+          desc: What kind of marker is represented by this data
+        -
+          name: separation_system
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: probe_id
+          format: int
+          desc: BIP identifier of the associated Probe
+        -
+          name: primer_a_id
+          format: int
+          desc: BIP identifier of the Primer associated with this marker assay (5` end)
+        -
+          name: primer_b_id
+          format: int
+          desc: BIP identifier of the Primer associated with this marker assay (3` end)
+        -
+          name: population_loci_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Population Locus related to this marker
+
+      index:
+        params:
+          -
+            name: "???"
+
+    plant_accession:
+      attrs:
+        -
+          name: id
+          create: Q
+        -
+          name: plant_accession
+          create: Q
+          desc: Unique name given to this accession by the database curator
+        -
+          name: plant_accession_derivation
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: accession_originator
+          create: Q
+          desc: The person who requested this plant accession
+        -
+          name: originating_organisation
+          create: Q
+          desc: The name of the legal entity that requested this plant accession
+        -
+          name: year_produced
+          create: Q
+          desc: What year this plant was produced
+        -
+          name: date_harvested
+          format: date
+          create: Q
+          desc: Day when this plant was harvested
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: plant_line_id
+          format: int
+          desc: BIP identifier of the associated Plant Line
+        -
+          name: plant_scoring_units_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Scoring Units performed for this plant
+
+      index:
+        params:
+          -
+            name: "???"
+
+    plant_scoring_unit:
+      attrs:
+        -
+          name: id
+          create: Q
+        -
+          name: scoring_unit_name
+          create: Q
+          desc: Unique name given to this scoring unit by data submitting person
+        -
+          name: number_units_scored
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: scoring_unit_sample_size
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: scoring_unit_frame_size
+          create: Q
+          desc: TODO FIXME ASK TGAC
+        -
+          name: date_planted
+          format: date
+          create: Q
+          desc: Day when the population scored in this unit was planted
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: plant_accession_id
+          format: int
+          desc: BIP identifier of the associated database Plant Accession
+        -
+          name: plant_trial_id
+          format: int
+          desc: BIP identifier of the Plant Trial in the scope of which this plant scoring took place
+        -
+          name: trait_scores_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Trait Scores recorded during this scoring unit
+
+#        "design_factor_id": 1523,
+#        "plant_part_id": 4,
 
       index:
         params:

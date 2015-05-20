@@ -42,11 +42,12 @@ class PlantScoringUnit < ActiveRecord::Base
 
   def self.permitted_params
     [
-      query: [
-        'plant_trials.id',
-        'plant_accessions.id',
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'plant_trials.id',
+          'plant_accessions.id',
+          'id'
+        ]
     ]
   end
 

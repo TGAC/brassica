@@ -51,10 +51,11 @@ class LinkageGroup < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: [
-        'linkage_maps.id',
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'linkage_maps.id',
+          'id'
+        ]
     ]
   end
 

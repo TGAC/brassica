@@ -4,11 +4,23 @@ class Api
   end
 
   def self.readable_models
-    [PlantPopulation, PlantLine, PlantVariety, TaxonomyTerm]
+    [
+      LinkageGroup,
+      LinkageMap,
+      MapLocusHit,
+      MapPosition,
+      MarkerAssay,
+      PlantAccession,
+      PlantLine,
+      PlantPopulation,
+      PlantScoringUnit,
+      PlantVariety,
+      TaxonomyTerm
+    ]
   end
 
   def self.writable_models
-    [PlantPopulation, PlantLine]
+    [PlantLine, PlantPopulation]
   end
 
   def self.readonly_models

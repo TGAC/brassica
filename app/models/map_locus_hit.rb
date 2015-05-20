@@ -44,12 +44,14 @@ class MapLocusHit < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: [
-        'population_loci.id',
-        'linkage_maps.id',
-        'linkage_groups.id',
-        'map_positions.id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'population_loci.id',
+          'linkage_maps.id',
+          'linkage_groups.id',
+          'map_positions.id',
+          'id'
+        ]
     ]
   end
 

@@ -79,12 +79,13 @@ class MarkerAssay < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: [
-        'primer_a_id',
-        'primer_b_id',
-        'probes.id',
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'primer_a_id',
+          'primer_b_id',
+          'probes.id',
+          'id'
+        ]
     ]
   end
 

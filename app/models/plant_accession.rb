@@ -44,9 +44,10 @@ class PlantAccession < ActiveRecord::Base
 
   def self.permitted_params
     [
-      query: [
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'id'
+        ]
     ]
   end
 
