@@ -51,5 +51,9 @@ class PlantVariety < ActiveRecord::Base
     ]
   end
 
+  def self.json_expand_associations
+    ['countries_of_origin', 'countries_registered']
+  end
+
   include Annotable
 end

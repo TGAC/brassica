@@ -10,10 +10,15 @@ class Api::Decorator < Draper::Decorator
   end
 
   def associations_as_json
+    associations_to_expand = object.class.try(:json_expand_associations) || []
     {}.tap do |json|
       associations = Api::AssociationFinder.new(object.class).has_many_associations
       associations.each do |association|
-        json[association.param] = object.send(association.name).pluck(association.primary_key)
+        if associations_to_expand.include? association.name
+          json[association.name] = object.send(association.name).as_json
+        else
+          json[association.param] = object.send(association.name).pluck(association.primary_key)
+        end
       end
     end
   end

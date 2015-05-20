@@ -120,9 +120,25 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
           it "excludes counters" do
             get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
 
-            resource.class.count_columns.each do |count_column|
+            model_klass.count_columns.each do |count_column|
               count_column = count_column.split(/ as /i)[-1]
               expect(parsed_object).not_to have_key(count_column)
+            end
+          end
+        end
+      end
+
+      context 'when declared to expand relations' do
+        if model_klass.respond_to?(:json_expand_associations)
+          it 'returns related objects as subdocuments and not ids' do
+            resource_with_associations = create(model_name, :with_has_many_associations)
+            get "/api/v1/#{model_name.pluralize}/#{resource_with_associations.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+
+            model_klass.json_expand_associations.each do |expanded_association|
+              expect(parsed_object).not_to have_key("#{expanded_association}_ids")
+              expect(parsed_object).to have_key(expanded_association)
+              expect(parsed_object[expanded_association].size).
+                to eq resource_with_associations.send(expanded_association).count
             end
           end
         end
