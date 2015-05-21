@@ -343,7 +343,7 @@ en:
         -
           name: data_attribution
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Additional information about the data attribution for this variety
         -
           name: year_registered
           create: Q
@@ -351,7 +351,7 @@ en:
         -
           name: breeders_variety_code
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Code given to this variety by plant breeders
         -
           name: owner
           create: Q
