@@ -42,6 +42,8 @@ class MapPosition < ActiveRecord::Base
     [
       :fetch,
       query: [
+        'marker_assay_name',
+        'map_position',
         'linkage_groups.id',
         'population_loci.id',
         'id'

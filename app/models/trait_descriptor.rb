@@ -79,5 +79,9 @@ class TraitDescriptor < ActiveRecord::Base
     }
   end
 
+  def self.json_options
+    { include: [:trait_grades] }
+  end
+
   include Annotable
 end

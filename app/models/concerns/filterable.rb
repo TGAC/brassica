@@ -43,5 +43,13 @@ module Filterable extend ActiveSupport::Concern
 
     # By default, do not permit any parameter
     def self.permitted_params; end
+
+    # Helper method for models permitting more parameters
+    # Filters out parameter names unfit for direct filtering
+    def self.params_for_filter(params)
+      params.reject do |param|
+        param.include?('.') || param.match(/as/i)
+      end
+    end
   end
 end

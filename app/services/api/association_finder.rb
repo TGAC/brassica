@@ -10,6 +10,7 @@ class Api::AssociationFinder
     klass.reflections.map do |association, reflection|
       next if reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection)
       next if blacklisted_has_many_association?(association)
+      next if klass.respond_to?(:json_options) && klass.json_options[:include].include?(association.to_sym)
 
       association_klass = (reflection.options[:class_name] || association.classify).constantize
       primary_key = reflection.options[:primary_key] || association_klass.primary_key

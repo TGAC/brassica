@@ -42,6 +42,13 @@ module ApplicationHelper
   def api_props(title, key, interpolations = nil)
     props = I18n.t("api.#{key}")
 
+    props.each do |prop|
+      unless prop[:format]
+        prop[:format] = I18n.t("api.default.attrs.#{prop[:name]}.format", default: 'string')
+      end
+      prop[:desc] = I18n.t("api.default.attrs.#{prop[:name]}.desc") unless prop[:desc]
+    end
+
     if interpolations
       props.each do |prop|
         interpolations.each do |var, val|

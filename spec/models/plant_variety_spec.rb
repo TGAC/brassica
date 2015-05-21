@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PlantVariety do
   describe '#filter' do
-    it 'allow queries by id' do
+    it 'allows queries by id' do
       pvs = create_list(:plant_variety, 2)
       search = PlantVariety.filter(
         query: {
@@ -11,6 +11,29 @@ RSpec.describe PlantVariety do
       )
       expect(search.count).to eq 1
       expect(search.first).to eq pvs[0]
+    end
+
+    # Just a sample from the allowed query params list
+    it 'allows queries by quoted_parentage' do
+      pvs = create_list(:plant_variety, 2)
+      search = PlantVariety.filter(
+        query: {
+          'quoted_parentage' => pvs[0].quoted_parentage
+        }
+      )
+      expect(search.count).to eq 1
+      expect(search.first).to eq pvs[0]
+    end
+
+    # Just a sample ffrom the disallowed query param list
+    it 'disallows queries by entered_by_whom' do
+      create(:plant_variety, entered_by_whom: 'him')
+      search = PlantVariety.filter(
+        query: {
+          'entered_by_whom' => 'him'
+        }
+      )
+      expect(search.count).to eq 0
     end
   end
 

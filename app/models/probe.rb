@@ -51,9 +51,10 @@ class Probe < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: [
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'id'
+        ]
     ]
   end
 

@@ -91,18 +91,57 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
             expect(response).to be_success
           end
+
+          it 'supports filtering with query param for all visible attributes' do
+            model_klass.params_for_filter(model_klass.table_columns + ['id']).each do |attribute|
+              expect(model_klass.permitted_params.dup.extract_options![:query]).
+                to include attribute
+              value = case model_klass.columns_hash[attribute].type
+                        when :date
+                          '2008-12-12'
+                        else
+                          'text default'
+                      end
+              query = { :query => { attribute => value } }
+              expect(model_klass).to receive(:filter).with(query).and_call_original
+              get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
+            end
+          end
         end
       end
     end
 
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
       let!(:resource) { create model_name }
+      let(:parsed_object) { JSON.parse(response.body)[model_name] }
 
       it "returns requested resource" do
         get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
 
         expect(response).to be_success
         expect(parsed_response).to have_key(model_name)
+      end
+
+      it "never shows blacklisted columns" do
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+
+        expect(parsed_object).not_to have_key('user_id')
+        expect(parsed_object).not_to have_key('user')
+        expect(parsed_object).not_to have_key('created_at')
+        expect(parsed_object).not_to have_key('updated_at')
+      end
+
+      context 'when run for Relatable model' do
+        if model_klass.ancestors.include?(Relatable)
+          it "excludes counters" do
+            get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+
+            model_klass.count_columns.each do |count_column|
+              count_column = count_column.split(/ as /i)[-1]
+              expect(parsed_object).not_to have_key(count_column)
+            end
+          end
+        end
       end
     end
   end

@@ -58,10 +58,11 @@ class PlantLine < ActiveRecord::Base
         :plant_line_name,
         'plant_lines.plant_line_name'
       ],
-      query: [
-        'plant_populations.id',
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'plant_populations.id',
+          'id'
+        ]
     ]
   end
 

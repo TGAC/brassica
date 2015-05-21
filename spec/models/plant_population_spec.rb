@@ -17,17 +17,12 @@ RSpec.describe PlantPopulation do
 
   describe '#filter' do
     before(:each) do
-      @pp = create(:plant_population, canonical_population_name: 'cpn')
-    end
-
-    it 'will not allow search at all' do
-      search = PlantPopulation.filter(search: { canonical_population_name: 'n' })
-      expect(search.count).to eq 0
+      @pp = create(:plant_population)
     end
 
     it 'will only query by permitted params' do
       search = PlantPopulation.filter(
-        query: { canonical_population_name: 'cpn' }
+        query: { user_id: @pp.user.id }
       )
       expect(search.count).to eq 0
       search = PlantPopulation.filter(

@@ -42,11 +42,12 @@ class PlantScoringUnit < ActiveRecord::Base
 
   def self.permitted_params
     [
-      query: [
-        'plant_trials.id',
-        'plant_accessions.id',
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'plant_trials.id',
+          'plant_accessions.id',
+          'id'
+        ]
     ]
   end
 
@@ -55,6 +56,10 @@ class PlantScoringUnit < ActiveRecord::Base
       'plant_accessions.id',
       'plant_trials.id'
     ]
+  end
+
+  def self.json_options
+    { include: [:design_factor, :plant_part] }
   end
 
   include Annotable

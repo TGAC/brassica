@@ -7,6 +7,7 @@ FactoryGirl.define do
     owner { Faker::Company.name }
     female_parent { Faker::Lorem.word }
     male_parent { Faker::Lorem.word }
+    quoted_parentage{ Faker::Lorem.sentence }
     annotable_no_owner
 
     trait :with_has_many_associations do

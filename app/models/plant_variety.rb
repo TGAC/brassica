@@ -42,13 +42,17 @@ class PlantVariety < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: [
-        'id'
-      ],
+      query: params_for_filter(table_columns) + ['id'],
       search: [
         :plant_variety_name
       ]
     ]
+  end
+
+  def self.json_options
+    {
+      include: [:countries_of_origin, :countries_registered]
+    }
   end
 
   include Annotable

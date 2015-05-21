@@ -80,7 +80,9 @@ class PlantPopulation < ActiveRecord::Base
       :fetch,
       query: [
         'id',
-        'name'
+        'name',
+        'canonical_population_name',
+        'description'
       ]
     ]
   end
