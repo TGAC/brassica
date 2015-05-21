@@ -3,7 +3,7 @@ class SubmissionsController < ApplicationController
   before_filter :authenticate_user!, except: :new
 
   def index
-    @submissions = current_user.submissions
+    @submissions = current_user.submissions.recent_first
   end
 
   def show
