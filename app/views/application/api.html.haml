@@ -40,9 +40,15 @@
       -# FIXME verify and describe date format
       %p
         All attributes are expressed as basic data types such as <code>int</code>,
-        <code>string</code>, <code>date</code> or arrays of these. Specifically related objects
-        are not included in the response as a whole but as an array of their
-        unique identifiers.
+        <code>string</code>, <code>date</code> or arrays of these. Most of the related
+        objects are not included in the response as a whole but as an identifier (or an array
+        of identifiers), for instance <code>taxonomy_term_id</code> or <code>qtls_ids</code>.
+        Use these identifiers to retrieve relevant resources with subsequent API calls.
+
+      %p
+        Related objects that are not available through dedicated API read call are, however,
+        included completely inside the parent data structure, like, for example, <code>population_type</code>.
+        Those are usually denoted with <code>object</code> format in the attribute tables.
 
       %h4 Example
       %pre.response
