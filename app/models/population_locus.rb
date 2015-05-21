@@ -45,6 +45,8 @@ class PopulationLocus < ActiveRecord::Base
     [
       :fetch,
       query: [
+        'mapping_locus',
+        'defined_by_whom',
         'plant_populations.id',
         'marker_assays.id',
         'id'

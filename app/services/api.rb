@@ -14,8 +14,16 @@ class Api
       PlantLine,
       PlantPopulation,
       PlantScoringUnit,
+      PlantTrial,
       PlantVariety,
-      TaxonomyTerm
+      PopulationLocus,
+      Primer,
+      Probe,
+      Qtl,
+      QtlJob,
+      TaxonomyTerm,
+      TraitDescriptor,
+      TraitScore
     ]
   end
 

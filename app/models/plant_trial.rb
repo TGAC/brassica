@@ -56,7 +56,7 @@ class PlantTrial < ActiveRecord::Base
       'plant_populations.name',
       'trial_year',
       'trial_location_site_name',
-      'date_entered'
+      'institute_id'
     ]
   end
 
@@ -69,11 +69,12 @@ class PlantTrial < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: [
-        'project_descriptor',
-        'plant_populations.id',
-        'id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'project_descriptor',
+          'plant_populations.id',
+          'id'
+        ]
     ]
   end
 
@@ -82,6 +83,10 @@ class PlantTrial < ActiveRecord::Base
       'plant_population_id',
       'pubmed_id'
     ]
+  end
+
+  def self.json_options
+    { include: [:country] }
   end
 
   include Annotable

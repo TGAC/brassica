@@ -50,7 +50,9 @@ class PlantVariety < ActiveRecord::Base
   end
 
   def self.json_options
-    { include: [:countries_of_origin, :countries_registered] }
+    {
+      include: [:countries_of_origin, :countries_registered]
+    }
   end
 
   include Annotable

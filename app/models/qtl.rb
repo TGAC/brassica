@@ -60,10 +60,12 @@ class Qtl < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: [
-        'processed_trait_datasets.trait_descriptor_id',
-        'qtl_jobs.id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'processed_trait_datasets.trait_descriptor_id',
+          'qtl_jobs.id',
+          'id'
+        ]
     ]
   end
 

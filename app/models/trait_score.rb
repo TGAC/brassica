@@ -28,11 +28,13 @@ class TraitScore < ActiveRecord::Base
 
   def self.permitted_params
     [
-      query: [
-        'trait_descriptor_id',
-        'plant_scoring_units.plant_trial_id',
-        'plant_scoring_units.id'
-      ]
+      query: params_for_filter(table_columns) +
+        [
+          'trait_descriptor_id',
+          'plant_scoring_units.plant_trial_id',
+          'plant_scoring_units.id',
+          'id'
+        ]
     ]
   end
 
