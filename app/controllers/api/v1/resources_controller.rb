@@ -49,12 +49,11 @@ class Api::V1::ResourcesController < ApplicationController
 
   def authenticate_api_key!
     unless api_key_token.present?
-      render text: "Unauthorized\n\nBIP API requires API key authentication", status: 401
+      render json: '{"reason": "BIP API requires API key authentication"}', status: 401
       return
     end
     unless api_key.present?
-      render text: "Unauthorized\n\nInvalid API key", status: 401
-      return
+      render json: '{"reason": "Invalid API key"}', status: 401
     end
   end
 

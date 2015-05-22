@@ -1,5 +1,6 @@
 RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
+  let(:parsed_response) { JSON.parse(response.body) }
 
   context "with no api key" do
     describe "POST /api/v1/#{model_name.pluralize}" do
@@ -7,6 +8,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         get "/api/v1/#{model_name.pluralize}"
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
       end
     end
   end
@@ -17,13 +19,13 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
       end
     end
   end
 
   context "with valid api key" do
     let(:api_key) { create(:api_key) }
-    let(:parsed_response) { JSON.parse(response.body) }
 
     let(:required_attrs) { required_attributes(model_klass) - [:user]}
 
