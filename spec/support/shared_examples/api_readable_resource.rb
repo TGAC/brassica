@@ -23,7 +23,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
   context "with invalid api key" do
     describe "GET /api/v1/#{model_name.pluralize}" do
-      it "returns 403" do
+      it "returns 401" do
         get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
@@ -33,7 +33,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
       let!(:resource) { create model_name }
 
-      it "returns 403" do
+      it "returns 401" do
         get "/api/v1/#{model_name.pluralize}/#{resource.id}", {}, { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
