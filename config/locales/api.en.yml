@@ -35,7 +35,7 @@ en:
 
             {
               "errors": [
-                { "attribute": "nmae", "message": "Unrecognized attribute name" }
+                { "attribute": "priner", "message": "Unrecognized attribute name" }
               ]
             }
 
