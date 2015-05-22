@@ -2,6 +2,8 @@
 class Api::V1::ResourcesController < ApplicationController
   include Pagination
 
+  protect_from_forgery with: :null_session
+
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
   before_filter :require_strictly_correct_params, only: :create
