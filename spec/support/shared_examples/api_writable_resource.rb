@@ -37,7 +37,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           end
         }
 
-        it "creates an object " do
+        it "creates an object" do
           expect {
             post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.to change {
@@ -46,6 +46,26 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
           expect(response).to be_success
           expect(parsed_response).to have_key(model_name)
+        end
+
+        it "sets correct annotations" do
+          post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+
+          expect(response).to be_success
+          expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
+          expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
+        end
+
+        it "prevents user impersonating anyone or changing dates" do
+          better_attrs = model_attrs.merge(
+            :date_entered => Date.today - 3.days,
+            :entered_by_whom => 'This was not me!'
+          )
+          post "/api/v1/#{model_name.pluralize}", { model_name => better_attrs }, { "X-BIP-Api-Key" => api_key.token }
+
+          expect(response).to be_success
+          expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
+          expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
         end
       end
 

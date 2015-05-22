@@ -24,7 +24,13 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create
-    resource = model_klass.new(create_params.merge(:user_id => api_key.user_id))
+    resource = model_klass.new(
+      create_params.merge(
+        :user_id => api_key.user_id,
+        :date_entered => Date.today,
+        :entered_by_whom => api_key.user.full_name
+      )
+    )
 
     if resource.save
       render json: { model_name => decorate(resource) }, status: :created
@@ -103,7 +109,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create_params
-    blacklisted_attrs = %w(id user_id created_at updated_at)
+    blacklisted_attrs = %w(id user_id created_at updated_at date_entered entered_by_whom)
     model_attrs = model_klass.attribute_names
     permitted_attrs =  model_attrs - blacklisted_attrs
 
