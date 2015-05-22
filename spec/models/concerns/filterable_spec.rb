@@ -64,9 +64,6 @@ RSpec.describe Filterable do
             break
           end
         end
-        # expect(searchable.filter(fetch: 'query').to_a).to eq [s]
-        pending 'Uncomment the above expectation if ES testing is possible'
-        fail
       end
     end
   end
