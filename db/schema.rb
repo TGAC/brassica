@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150521123750) do
+ActiveRecord::Schema.define(version: 20150522090211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20150521123750) do
     t.integer "map_linkage_group_lists_count", default: 0,             null: false
     t.integer "map_positions_count",           default: 0,             null: false
     t.integer "map_locus_hits_count",          default: 0,             null: false
+    t.integer "linkage_map_id"
   end
 
   add_index "linkage_groups", ["linkage_group_label"], name: "linkage_groups_linkage_group_label_idx", using: :btree
@@ -115,15 +116,6 @@ ActiveRecord::Schema.define(version: 20150521123750) do
 
   add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", using: :btree
   add_index "linkage_maps", ["plant_population_id"], name: "linkage_maps_plant_population_id_idx", using: :btree
-
-  create_table "map_linkage_group_lists", id: false, force: :cascade do |t|
-    t.text    "comments"
-    t.integer "linkage_map_id"
-    t.integer "linkage_group_id"
-  end
-
-  add_index "map_linkage_group_lists", ["linkage_group_id"], name: "map_linkage_group_lists_linkage_group_id_idx", using: :btree
-  add_index "map_linkage_group_lists", ["linkage_map_id"], name: "map_linkage_group_lists_linkage_map_id_idx", using: :btree
 
   create_table "map_locus_hits", force: :cascade do |t|
     t.text    "consensus_group_assignment", default: "unspecified", null: false

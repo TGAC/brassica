@@ -1,7 +1,6 @@
 class LinkageGroup < ActiveRecord::Base
 
-  has_many :linkage_maps, through: :map_linkage_group_lists
-  has_many :map_linkage_group_lists
+  belongs_to :linkage_map
   has_many :map_positions
   has_many :map_locus_hits
   has_many :qtls
