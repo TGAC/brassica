@@ -53,7 +53,11 @@ class Api::V1::ResourcesController < ApplicationController
       return
     end
     unless api_key.present?
-      render json: '{"reason": "Invalid API key"}', status: 401
+      if api_key_token == I18n.t('api.general.demo_key')
+        render json: '{"reason": "Please use your own, personal API key"}', status: 401
+      else
+        render json: '{"reason": "Invalid API key"}', status: 401
+      end
     end
   end
 

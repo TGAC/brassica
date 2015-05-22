@@ -1,6 +1,8 @@
 en:
   api:
     general:
+      demo_key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
       create:
         examples:
           ok_response: |-

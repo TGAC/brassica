@@ -25,12 +25,21 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
   end
 
   context "with invalid api key" do
+    let(:demo_key) { I18n.t('api.general.demo_key') }
+
     describe "GET /api/v1/#{model_name.pluralize}" do
       it "returns 401" do
         get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).not_to be_empty
+      end
+
+      it "shows gentle reminder if one is using demo key" do
+        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => demo_key }
+
+        expect(response.status).to eq 401
+        expect(parsed_response['reason']).to eq "Please use your own, personal API key"
       end
     end
 
