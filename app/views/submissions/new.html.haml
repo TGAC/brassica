@@ -4,15 +4,20 @@
 
     %ul.nav.nav-pills{ role: 'tablist' }
 
-
+      -# TODO FIXME Temporary disabled all submission types apart from Population
       - Submission.submission_types.each do |s_type, s_num|
 
-        %li{ role: 'presentation', class: "#{'active' if s_num == 0}" }
-          %a{ href: "##{s_type}", role: 'tab', aria: { controls: s_type }, data: { toggle: 'tab' } }
-            = t("submission.submission_type.#{s_type}")
+        %li{ role: 'presentation', class: "#{s_num == 0 ? 'active' : 'disabled'}" }
+          - if s_num == 0
+            %a{ href: "##{s_type}", role: 'tab', aria: { controls: s_type }, data: { toggle: 'tab' } }
+              = t("submission.submission_type.#{s_type}")
+          - else
+            %a{ href: "##{s_type}" }
+              = t("submission.submission_type.#{s_type}")
 
     .tab-content
       - Submission.submission_types.each do |s_type, s_num|
+        - next unless s_num == 0
 
         %div{ role: 'tabpanel', class: "tab-pane #{'active' if s_num == 0}", id: s_type }
 
