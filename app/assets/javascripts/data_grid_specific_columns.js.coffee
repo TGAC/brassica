@@ -1,5 +1,13 @@
 # Specific configurations for particular DataTables, including callbacks
 window.configs =
+  'linkage-groups':
+    columnDefs:
+      [
+        targets: 'linkage_maps_linkage_map_label_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('linkage_maps', data, full[full.length - 2])
+      ]
+
   'linkage-maps':
     columnDefs:
       [
