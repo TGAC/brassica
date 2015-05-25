@@ -1370,3 +1370,26 @@ en:
         params:
           -
             name: "???"
+
+    population_type:
+      attrs:
+        -
+          name: id
+        -
+          name: population_type
+          desc: The textual description of the population type
+        -
+          name: population_class
+          desc: What class of populations that type belong to
+        -
+          name: assigned_by_whom
+          desc: The name of the popultion type assigning party
+        -
+          name: plant_populations_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Populations that are of this population type
+
+      index:
+        params:
+          -
+            name: "???"
