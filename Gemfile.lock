@@ -126,6 +126,9 @@ GEM
       faraday
       multi_json
     erubis (2.7.0)
+    exception_notification (4.1.0)
+      actionmailer (>= 3.0.4)
+      activesupport (>= 3.0.4)
     execjs (2.3.0)
     factory_girl (4.3.0)
       activesupport (>= 3.0.0)
@@ -346,6 +349,7 @@ DEPENDENCIES
   draper (~> 2.1.0)
   elasticsearch-model
   elasticsearch-rails
+  exception_notification
   factory_girl_rails
   faker
   font-awesome-sass (~> 4.3.1)

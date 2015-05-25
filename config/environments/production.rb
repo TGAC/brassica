@@ -78,4 +78,14 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+    ignore_exceptions:
+      ['ActionController::InvalidAuthenticityToken', 'ActionController::BadRequest'] +
+      ExceptionNotifier.ignored_exceptions,
+    email: {
+      email_prefix: "[BIP ERROR] ",
+      sender_address: %{"notifier" <notifier@bip.tgac.ac.uk>},
+      exception_recipients: [ENV['ADMIN_MAIL_PRIMARY'], ENV['ADMIN_MAIL_SECONDARY']]
+    }
 end
