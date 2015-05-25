@@ -9,6 +9,7 @@
           %li= link_to "Fetching data", "#fetching-data"
           %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
+          %li= link_to "Submitting data", "#submitting-data"
 
           - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
@@ -37,7 +38,6 @@
         - Api.writable_models.each do |model|
           %li= model.name
 
-      -# FIXME verify and describe date format
       %p
         All attributes are expressed as basic data types such as <code>int</code>,
         <code>string</code>, <code>date</code> or arrays of these. Most of the related
@@ -54,25 +54,7 @@
       %pre.response
         %code= t('api.general.create.examples.ok_response')
 
-      %p
-        For each resource there are attributes (described later) required
-        for create requests. Skipping any of those will result in an
-        <code>422</code> error response. Passing attributes which are not recognized by the API will also
-        result in <code>422</code> error response.
-
-      %h4 Examples
-      %ol
-        %li
-          %p Missing value for required attribute
-          %pre.response
-            %code= t('api.general.create.examples.missing_required_attrs_response')
-
-        %li
-          %p Misspelled attribute name
-          %pre.response
-            %code= t('api.general.create.examples.unknown_attrs_response')
-
-      %p Several other resources allow for fetching data only:
+      %p Several resources allow for fetching data only:
 
       %ul
         - Api.readonly_models.each do |model|
@@ -138,6 +120,61 @@
       %p
         Similar generic section about how to issue full-text search calls to
         BIP, how to adjust scope (model), what to expect as the outcome
+
+
+      %h3#submitting-data.section-heading Submitting new data
+
+      %p
+        Currently one is able to submit the following resources via API:
+
+      %ul
+        - Api.writable_models.each do |model|
+          %li= model.name
+
+      %p
+        Data submission is based on JSON format. That is, the API <code>POST</code>
+        request should pass a JSON document in its post data, where the most important
+        element is called as the resource itself (e.g. <code>plant_population</code>).
+        Each resource section below show an example of such a <code>POST</code> API call.
+
+      %p
+        For each resource there are attributes (described later) required
+        for create requests. Skipping any of those will result in an
+        <code>422</code> error response. Passing attributes which are not recognized by the API will also
+        result in <code>422</code> error response.
+
+      %h4 Examples
+      %ol
+        %li
+          %p Missing value for required attribute
+          %pre.response
+            %code= t('api.general.create.examples.missing_required_attrs_response')
+
+        %li
+          %p Misspelled attribute name
+          %pre.response
+            %code= t('api.general.create.examples.unknown_attrs_response')
+
+      %p
+        Most of the resource attributes, as shown in the following attribute tables,
+        are text (<code>string</code> format) - these are simply pieces of text of
+        arbitrary length, enclosed in double quote marks <code>"</code>. Attributes
+        that are of <code>int</code> format are passed without quotes.
+
+      %p
+        Dates should be delivered in textual format - several different notations are
+        acceptable and will be recognized, but we advise to stick to a single, consistent
+        format of <code>YYYY-MM-DD</code>. Examples are given below:
+
+      %h4 Example
+      %pre.response
+        %code= t('api.general.create.examples.attribute_value_samples')
+
+      %p
+        Two attributes are never set by submitting users, but are rather automatically
+        set by the server:
+
+      = api_props('Default attribute values', 'general.create.default_attribute_values')
 
 
       -# Models section follows

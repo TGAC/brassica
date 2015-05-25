@@ -10,12 +10,16 @@ en:
             Content-Type: application/json; charset=utf-8
 
             {
-              "plant_variety": {
+              "plant_population": {
                 "id": 1,
-                "plant_variety_name": "0068",
-                "crop_type": "oilseed rape",
+                "name": "BnaWAIT_01",
+                "population_type": {
+                  "population_type": "Integrated",
+                  "population_class": "Mapping",
+                  ...
+                },
                 ...
-                "plant_lines_ids": [10792]
+                "linkage_maps_ids": [8]
               }
             }
 
@@ -38,6 +42,28 @@ en:
                 { "attribute": "priner", "message": "Unrecognized attribute name" }
               ]
             }
+
+          attribute_value_samples: |-
+            {
+              "plant_population": {
+                ...
+                "description": "Example of text content",
+                "date_established": "2015-05-30",
+                "taxonomy_term_id": 5,
+                ...
+              }
+            }
+
+        default_attribute_values:
+          -
+            name: entered_by_whom
+            format: string
+            desc: Always set to the user name of whomever API Key was used to submit the data.
+          -
+            name: date_entered
+            format: date
+            desc: Always set to the day the data was successfully submitted.
+
 
     filtering:
       params:
