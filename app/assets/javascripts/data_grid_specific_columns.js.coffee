@@ -23,6 +23,14 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('map_positions', data, full[full.length - 4])
       ,
+        targets: 'map_locus_hits_atg_hit_seq_id_column'
+        render: (data, type, full, meta) ->
+          if data
+            ensemblId = data.split('.')[0]
+            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=all;idx=;q=' + ensemblId + '&filter_species=Brassica" target="blank">' + data + '</a>'
+          else
+            ''
+      ,
         targets: 'related-specific'
         render: (data, type, full, meta) ->
           '<div class="dropdown">' +
