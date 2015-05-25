@@ -17,6 +17,11 @@ class ApplicationController < ActionController::Base
   def about; end
   def api; end
 
+  # TODO FIXME Just for deployment testing, remove later
+  def make_me_an_error
+    raise RuntimeError.new("Testing exception mailing capability")
+  end
+
   private
 
   # Required by devise/omniauth when not using :database_authenticatable

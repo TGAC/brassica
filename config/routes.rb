@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get 'about', to: 'application#about'
   get 'api_documentation', to: 'application#api'
 
+  # TODO FIXME Just for deployment testing, remove later
+  get 'make_me_an_error', to: 'application#make_me_an_error'
+
   resources :submissions
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]
