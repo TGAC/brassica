@@ -11,12 +11,14 @@ RSpec.describe LinkageGroup do
       expect(table_data[0]).to eq [
         lg.linkage_group_label,
         lg.linkage_group_name,
+        lg.linkage_map.linkage_map_label,
         lg.total_length,
         lg.lod_threshold,
         lg.consensus_group_assignment,
         lg.consensus_group_orientation,
         lg.map_positions.count,
         lg.map_locus_hits.count,
+        lg.linkage_map.id,
         lg.id
       ]
     end

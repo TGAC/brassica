@@ -32,6 +32,7 @@ class LinkageGroup < ActiveRecord::Base
     [
       'linkage_group_label',
       'linkage_group_name',
+      'linkage_maps.linkage_map_label',
       'total_length',
       'lod_threshold',
       'consensus_group_assignment',
@@ -43,6 +44,12 @@ class LinkageGroup < ActiveRecord::Base
     [
       'map_positions_count',
       'map_locus_hits_count'
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'linkage_map_id'
     ]
   end
 
