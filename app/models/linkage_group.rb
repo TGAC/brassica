@@ -1,6 +1,6 @@
 class LinkageGroup < ActiveRecord::Base
 
-  belongs_to :linkage_map
+  belongs_to :linkage_map, counter_cache: true
   has_many :map_positions
   has_many :map_locus_hits
   has_many :qtls
@@ -41,7 +41,6 @@ class LinkageGroup < ActiveRecord::Base
 
   def self.count_columns
     [
-      'linkage_groups.map_linkage_group_lists_count AS linkage_maps_count',
       'map_positions_count',
       'map_locus_hits_count'
     ]

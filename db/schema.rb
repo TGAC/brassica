@@ -73,11 +73,11 @@ ActiveRecord::Schema.define(version: 20150522090211) do
   add_index "genotype_matrices", ["linkage_map_id"], name: "genotype_matrices_linkage_map_id_idx", using: :btree
 
   create_table "linkage_groups", force: :cascade do |t|
-    t.text    "linkage_group_label",           default: "",            null: false
-    t.text    "linkage_group_name",            default: "unspecified", null: false
+    t.text    "linkage_group_label",         default: "",            null: false
+    t.text    "linkage_group_name",          default: "unspecified", null: false
     t.text    "total_length"
     t.text    "lod_threshold"
-    t.text    "consensus_group_assignment",    default: "unspecified", null: false
+    t.text    "consensus_group_assignment",  default: "unspecified", null: false
     t.text    "consensus_group_orientation"
     t.text    "comments"
     t.text    "entered_by_whom"
@@ -85,9 +85,8 @@ ActiveRecord::Schema.define(version: 20150522090211) do
     t.text    "data_provenance"
     t.text    "data_owned_by"
     t.text    "confirmed_by_whom"
-    t.integer "map_linkage_group_lists_count", default: 0,             null: false
-    t.integer "map_positions_count",           default: 0,             null: false
-    t.integer "map_locus_hits_count",          default: 0,             null: false
+    t.integer "map_positions_count",         default: 0,             null: false
+    t.integer "map_locus_hits_count",        default: 0,             null: false
     t.integer "linkage_map_id"
   end
 
@@ -95,9 +94,9 @@ ActiveRecord::Schema.define(version: 20150522090211) do
   add_index "linkage_groups", ["linkage_group_name"], name: "idx_143534_linkage_group_name", using: :btree
 
   create_table "linkage_maps", force: :cascade do |t|
-    t.text    "linkage_map_label",                       default: "",            null: false
-    t.text    "linkage_map_name",                        default: "unspecified", null: false
-    t.string  "map_version_no",                limit: 3
+    t.text    "linkage_map_label",              default: "",            null: false
+    t.text    "linkage_map_name",               default: "unspecified", null: false
+    t.string  "map_version_no",       limit: 3
     t.date    "map_version_date"
     t.text    "mapping_software"
     t.text    "mapping_function"
@@ -110,8 +109,8 @@ ActiveRecord::Schema.define(version: 20150522090211) do
     t.text    "confirmed_by_whom"
     t.integer "plant_population_id"
     t.integer "pubmed_id"
-    t.integer "map_linkage_group_lists_count",           default: 0,             null: false
-    t.integer "map_locus_hits_count",                    default: 0,             null: false
+    t.integer "map_locus_hits_count",           default: 0,             null: false
+    t.integer "linkage_groups_count",           default: 0,             null: false
   end
 
   add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", using: :btree
