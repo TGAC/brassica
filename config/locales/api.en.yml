@@ -54,6 +54,17 @@ en:
               }
             }
 
+          wrong_vs_right_related_object: |-
+            {
+              "plant_population": {
+                ...
+                "population_type": "DH segregating",  # WRONG
+                "population_type_id": 1,  # RIGHT
+                ...
+              }
+            }
+
+
         default_attribute_values:
           -
             name: entered_by_whom
@@ -270,7 +281,7 @@ en:
           name: data_owned_by
         -
           name: population_type
-          format: object
+          format: object, readonly
           desc: Additional information about the type of this population
         -
           name: description
@@ -302,6 +313,10 @@ en:
           name: confirmed_by_whom
         -
           name: taxonomy_term_id
+        -
+          name: population_type_id
+          format: int
+          desc: BIP identifier of the Population Type assigned to this population
         -
           name: male_parent_line_id
           format: int

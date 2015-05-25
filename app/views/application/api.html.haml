@@ -176,6 +176,16 @@
 
       = api_props('Default attribute values', 'general.create.default_attribute_values')
 
+      %p
+        Finally, one does not set attributes marked as <code>readonly</code> in the attribute
+        tables (one such example is attribute <code>population_type</code> of Plant Population).
+        Instead, one should assign a BIP identifier of such a related object when submitting
+        new data. For instance, when submitting a new Plant Population:
+
+      %h4 Example
+      %pre.response
+        %code= t('api.general.create.examples.wrong_vs_right_related_object')
+
 
       -# Models section follows
 
