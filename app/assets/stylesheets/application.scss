@@ -21,8 +21,8 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_self
  *= require dataTables.bootstrap
+ *= require cookies_eu
  */
 
 //import config files
@@ -49,6 +49,7 @@
 @import "font-awesome-sprockets";
 @import "font-awesome";
 @import "vendor/select2";
+@import "vendor/cookies_eu";
 @import "highlight-solarized-light";
 
 //import ui elements

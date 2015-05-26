@@ -20,6 +20,7 @@
 #= require jquery.easypiechart
 #= require jquery.scrollTo
 #= require highlight.pack
+#= require cookies_eu
 #= require_tree .
 
 $ ->

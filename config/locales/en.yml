@@ -1,6 +1,4 @@
 en:
-  hello: "Hello world"
-
   number:
     human:
       decimal_units:
@@ -72,3 +70,8 @@ en:
         one: Found %{count} trait descriptor
         other: Found %{count} trait descriptors
       nothing_found: No results found
+
+  cookies_eu:
+    cookies_text: To be of better service to you this website makes use of cookies
+    ok: Accept cookies
+    learn_more: More info
