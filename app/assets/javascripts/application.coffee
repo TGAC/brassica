@@ -26,3 +26,10 @@ $ ->
   $('body').tooltip
     selector: '[data-toggle]'
     placement: 'top'
+
+
+  bh = $('#footer').offset()
+  $('.docs-sidebar').affix offset:
+    top: 220
+    bottom: ->
+      return @bottom = - bh.top + 320
