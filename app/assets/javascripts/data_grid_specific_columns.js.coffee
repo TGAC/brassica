@@ -27,7 +27,7 @@ window.configs =
         render: (data, type, full, meta) ->
           if data
             ensemblId = data.split('.')[0]
-            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=all;idx=;q=' + ensemblId + '&filter_species=Brassica" target="blank">' + data + '</a>'
+            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=Brassica;idx=;q=' + ensemblId + '" target="blank">' + data + '</a>'
           else
             ''
       ,
