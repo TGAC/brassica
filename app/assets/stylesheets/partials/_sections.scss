@@ -149,6 +149,9 @@
     display: none;
   }
   top: 20px;
+  &.affix-bottom {
+    position: absolute;
+  }
   .nav {
     > li {
       > a {
