@@ -23,6 +23,13 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('map_positions', data, full[full.length - 4])
       ,
+        targets: ['map_locus_hits_associated_sequence_id_column', 'map_locus_hits_bac_hit_seq_id_column']
+        render: (data, type, full, meta) ->
+          if data && full[meta['col'] + 1].indexOf("NCBI") > -1
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+          else
+            data
+      ,
         targets: 'map_locus_hits_atg_hit_seq_id_column'
         render: (data, type, full, meta) ->
           if data
