@@ -141,6 +141,17 @@ window.configs =
           modelIdUrl('marker_assays', data, full[full.length - 2])
       ]
 
+  'probes':
+    columnDefs:
+      [
+        targets: 'probes_sequence_id_column'
+        render: (data, type, full, meta) ->
+          if data && full[meta['col'] + 1].indexOf("NCBI") > -1
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+          else
+            data
+      ]
+
   'qtl':
     columnDefs:
       [
