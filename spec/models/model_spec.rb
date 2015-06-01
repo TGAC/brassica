@@ -67,6 +67,13 @@ RSpec.describe ActiveRecord::Base do
         end
       end
     end
+
+    it 'is also Filterable to provide search result fetching' do
+      @searchables.each do |searchable|
+        next if searchable == TraitDescriptor  # it implements fetching without importing Filterable
+        expect(searchable.ancestors.include?(Filterable)).to be_truthy
+      end
+    end
   end
 
   it 'responds with nonempty table columns when permitted for data tables' do

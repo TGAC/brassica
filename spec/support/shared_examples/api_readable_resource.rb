@@ -95,6 +95,9 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
       describe "filtering" do
         let(:filter_params) { { :search => 'foobar' } }
+        before(:all) do
+          WebMock.disable_net_connect!(allow_localhost: true)
+        end
 
         if model_klass.ancestors.include?(Filterable)
           it "uses .filter if params given" do
@@ -116,9 +119,26 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
                           'text default'
                       end
               query = { :query => { attribute => value } }
+
               expect(model_klass).to receive(:filter).with(query).and_call_original
+
               get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
             end
+          end
+        end
+
+        if model_klass.ancestors.include?(Searchable) && model_klass != TraitDescriptor  # it implements fetching without importing Filterable
+          it 'supports fetch query param' do
+            hit_attribute = model_klass.indexed_json_structure[:only].first
+            term = create(model_klass).send(hit_attribute)
+            fetch_params = { fetch: term }
+
+            expect(Search).to receive(:new).at_least(1).with(term).and_call_original
+            expect(model_klass).to receive(:filter).with(fetch_params).and_call_original
+
+            get "/api/v1/#{model_name.pluralize}", { model_name => fetch_params }, { "X-BIP-Api-Key" => api_key.token }
+
+            expect(response).to be_success
           end
         end
       end

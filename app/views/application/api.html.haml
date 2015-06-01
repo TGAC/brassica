@@ -94,32 +94,83 @@
       %p
         Most of resources might be filtered by values of specific resource attributes.
         Attribute tables, presented below per each resource type, indicate when a specific
-        attribute may be a subject to filtering (look for the `Q` marker). The usage pattern
-        is as follows:
+        attribute may be a subject to filtering (look for the <strong>`Q`</strong> marker).
+        The usage pattern is as follows:
 
       = api_props('Query filtering', 'filtering.params')
 
-      %h4 Example
-      %pre
-        %code= t('api.filtering.request')
+      %h4 Examples
+      %ol
+        %li
+          %p Plant Lines filtering by <code>plant_line_name</code>
+          %pre
+            %code= t('api.filtering.request')
 
-      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[query][plant_line_name]=WINFRED" }
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[query][plant_line_name]=WINFRED" }
 
-      %p Applying multiple attributes in a single query is possible as well.
+        %li
+          %p
+            Applying multiple attributes in a single query is possible as well - here we filter
+            Plant Varieties by <code>owner</code> and <code>registration_year</code>
+          %pre
+            %code= t('api.filtering.multi_request')
 
-      %h4 Example
-      %pre
-        %code= t('api.filtering.multi_request')
-
-      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998" }
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998" }
 
 
       %h3#searching-for-data.section-heading Searching for data
 
-      -# TODO FIXME this section to be developed further
       %p
-        Similar generic section about how to issue full-text search calls to
-        BIP, how to adjust scope (model), what to expect as the outcome
+        It is also possible to search a given resource by passing a term and matching it against
+        most of the attributes at once. It resembles the search capability available in BIP front page,
+        but it is accessible via API. One also needs to scope the search to a chosen resource.
+
+      %p
+        <i>What exactly is being searched?</i> The resource attributes that are checked for the presence of term
+        are basically all those marked with the <strong>`Q`</strong> marker in the attribute tables.
+        Also, some related resource attributes are checked - the rule of thumb is that if an attribute
+        value is visible as a column in the
+
+        = link_to 'browse data', browse_data_path
+
+        tables, it should be searchable via the <code>fetch</code> API parameter.
+
+      = api_props('Searching', 'searching.params')
+
+      %h4 Examples
+      %ol
+        %li
+          %p Plant Lines search
+          %pre
+            %code= t('api.searching.request')
+
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[fetch]=WINFRED" }
+
+        %li
+          %p
+            Please note the result metadata tells how much records in total were found - the
+            <code>total_count</code> value in the <code>meta</code> result document element.
+            Therefore, one is able to combine searching and pagination in a single request,
+            to retrieve further data.
+          %pre
+            %code= t('api.searching.pagination_request')
+
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[fetch]=WINFRED&per_page=2&page=2" }
+
+        %li
+          %p
+            Searching by related object attribute - the <code>name</code> of a Taxonomy Term
+          %pre
+            %code= t('api.searching.subobject_request')
+
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_populations?plant_population[fetch]=oleracea&per_page=5" }
+
+      %p
+        In order to maintain consistency between subsequent searches, all search results are ordered
+        by internal <code>id</code> BIP identifier. This ensures the API will return the same results
+        in the same order in two subsequent calls - provided, of course, new data were not submitted
+        in the meantime. For this reason what one gets via `fetch` API calls might differ slightly from
+        what could be seen when using the front page search form.
 
 
       %h3#submitting-data.section-heading Submitting new data

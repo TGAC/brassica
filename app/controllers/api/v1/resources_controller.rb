@@ -11,7 +11,7 @@ class Api::V1::ResourcesController < ApplicationController
   def index
     filter_params = params[model_name].presence
 
-    resources = Api::Index.new(model_klass).where(filter_params)
+    resources = Api::Index.new(model_klass).where(filter_params).order(:id)
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
