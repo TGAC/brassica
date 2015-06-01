@@ -17,6 +17,7 @@ class Api
       PlantTrial,
       PlantVariety,
       PopulationLocus,
+      PopulationType,
       Primer,
       Probe,
       Qtl,

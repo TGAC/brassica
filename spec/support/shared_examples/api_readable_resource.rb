@@ -1,5 +1,6 @@
 RSpec.shared_examples "API-readable resource" do |model_klass|
   model_name = model_klass.name.underscore
+  let(:parsed_response) { JSON.parse(response.body) }
 
   context "with no api key" do
     describe "GET /api/v1/#{model_name.pluralize}" do
@@ -7,6 +8,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         get "/api/v1/#{model_name.pluralize}"
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
       end
     end
 
@@ -17,33 +19,44 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         get "/api/v1/#{model_name.pluralize}/#{resource.id}"
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
       end
     end
   end
 
   context "with invalid api key" do
+    let(:demo_key) { I18n.t('api.general.demo_key') }
+
     describe "GET /api/v1/#{model_name.pluralize}" do
-      it "returns 403" do
+      it "returns 401" do
         get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
+      end
+
+      it "shows gentle reminder if one is using demo key" do
+        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => demo_key }
+
+        expect(response.status).to eq 401
+        expect(parsed_response['reason']).to eq "Please use your own, personal API key"
       end
     end
 
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
       let!(:resource) { create model_name }
 
-      it "returns 403" do
+      it "returns 401" do
         get "/api/v1/#{model_name.pluralize}/#{resource.id}", {}, { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
       end
     end
   end
 
   context "with valid api key" do
     let(:api_key) { create(:api_key) }
-    let(:parsed_response) { JSON.parse(response.body) }
 
     describe "GET /api/v1/#{model_name.pluralize}" do
       describe "response" do

@@ -2,6 +2,8 @@
 class Api::V1::ResourcesController < ApplicationController
   include Pagination
 
+  protect_from_forgery with: :null_session
+
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
   before_filter :require_strictly_correct_params, only: :create
@@ -22,7 +24,13 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create
-    resource = model_klass.new(create_params.merge(:user_id => api_key.user_id))
+    resource = model_klass.new(
+      create_params.merge(
+        :user_id => api_key.user_id,
+        :date_entered => Date.today,
+        :entered_by_whom => api_key.user.full_name
+      )
+    )
 
     if resource.save
       render json: { model_name => decorate(resource) }, status: :created
@@ -41,12 +49,15 @@ class Api::V1::ResourcesController < ApplicationController
 
   def authenticate_api_key!
     unless api_key_token.present?
-      render text: "Unauthorized\n\nBIP API requires API key authentication", status: 401
+      render json: '{"reason": "BIP API requires API key authentication"}', status: 401
       return
     end
     unless api_key.present?
-      render text: "Unauthorized\n\nInvalid API key", status: 401
-      return
+      if api_key_token == I18n.t('api.general.demo_key')
+        render json: '{"reason": "Please use your own, personal API key"}', status: 401
+      else
+        render json: '{"reason": "Invalid API key"}', status: 401
+      end
     end
   end
 
@@ -101,7 +112,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create_params
-    blacklisted_attrs = %w(id user_id created_at updated_at)
+    blacklisted_attrs = %w(id user_id created_at updated_at date_entered entered_by_whom)
     model_attrs = model_klass.attribute_names
     permitted_attrs =  model_attrs - blacklisted_attrs
 

@@ -1,5 +1,6 @@
 RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
+  let(:parsed_response) { JSON.parse(response.body) }
 
   context "with no api key" do
     describe "POST /api/v1/#{model_name.pluralize}" do
@@ -7,23 +8,33 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         get "/api/v1/#{model_name.pluralize}"
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
       end
     end
   end
 
   context "with invalid api key" do
+    let(:demo_key) { I18n.t('api.general.demo_key') }
+
     describe "POST /api/v1/#{model_name.pluralize}" do
       it "returns 401" do
         get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
+        expect(parsed_response['reason']).not_to be_empty
+      end
+
+      it "shows gentle reminder if one is using demo key" do
+        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => demo_key }
+
+        expect(response.status).to eq 401
+        expect(parsed_response['reason']).to eq "Please use your own, personal API key"
       end
     end
   end
 
   context "with valid api key" do
     let(:api_key) { create(:api_key) }
-    let(:parsed_response) { JSON.parse(response.body) }
 
     let(:required_attrs) { required_attributes(model_klass) - [:user]}
 
@@ -37,7 +48,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           end
         }
 
-        it "creates an object " do
+        it "creates an object" do
           expect {
             post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.to change {
@@ -46,6 +57,26 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
           expect(response).to be_success
           expect(parsed_response).to have_key(model_name)
+        end
+
+        it "sets correct annotations" do
+          post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+
+          expect(response).to be_success
+          expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
+          expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
+        end
+
+        it "prevents user impersonating anyone or changing dates" do
+          better_attrs = model_attrs.merge(
+            :date_entered => Date.today - 3.days,
+            :entered_by_whom => 'This was not me!'
+          )
+          post "/api/v1/#{model_name.pluralize}", { model_name => better_attrs }, { "X-BIP-Api-Key" => api_key.token }
+
+          expect(response).to be_success
+          expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
+          expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
         end
       end
 
