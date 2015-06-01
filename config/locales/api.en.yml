@@ -465,7 +465,7 @@ en:
         -
           name: linkage_group_label
           create: Q
-          desc: The label given to this linkage group by the datatbase curator
+          desc: The label given to this linkage group by the database curator
         -
           name: linkage_group_name
           create: Q
@@ -602,7 +602,7 @@ en:
         -
           name: atg_hit_seq_source
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Indication about the source of the sequence (usually the e!ensembl portal)
         -
           name: bac_hit_seq_id
           create: Q
@@ -610,7 +610,7 @@ en:
         -
           name: bac_hit_seq_source
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Indication about the source of the sequence (usually NCBI services)
         -
           name: bac_hit_name
           create: Q
@@ -1307,7 +1307,7 @@ en:
           desc: Class of populations this type belongs to
         -
           name: assigned_by_whom
-          desc: Assignee of this popultion type
+          desc: Assignee of this population type
         -
           name: plant_populations_ids
           format: "int[]"
