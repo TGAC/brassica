@@ -1192,7 +1192,7 @@ en:
         -
           name: trait_grades
           format: object[]
-          desc: (Optional) descriptive grades which can be applied to score this trait
+          desc: Optional descriptive grades which can be applied to score this trait
         -
           name: where_to_score
           desc: Where the trait is measured
@@ -1228,7 +1228,7 @@ en:
           desc: Environmental interactions that should be taken into account when scoring
         -
           name: score_type
-          desc: Nature of the final score (direct or otherwise, compuation methods applied, etc.)
+          desc: Nature of the final score (direct or otherwise, computation methods applied, etc.)
         -
           name: contact_person
           desc: Person to be contacted regarding further information about scoring this trait

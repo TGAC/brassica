@@ -122,7 +122,7 @@
       %p
         It is also possible to search for a given resource by passing a term and matching it against
         multiple attributes at once. This resembles the search capability available on the BIP front page.
-        Such queries needs to be scoped by resource type.
+        Such queries need to be scoped by resource type.
 
       %p
         <i>What exactly is being sought?</i> The resource attributes that are checked for the presence of the search term
@@ -149,8 +149,8 @@
           %p
             The result includes metadata showing how many records were found - see the
             <code>total_count</code> value in the <code>meta</code> result document element.
-            It is therefore possible to combine querying and pagination in a single request,
-            e.g. to retrieve additional data.
+            It is therefore possible to combine filtering and pagination in a single request,
+            e.g. to retrieve further data.
           %pre
             %code= t('api.searching.pagination_request')
 
