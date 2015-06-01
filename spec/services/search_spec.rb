@@ -14,7 +14,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     create(:plant_variety, plant_variety_name: "Pvoobar")
     create(:plant_variety, plant_variety_name: "Pvoobarbaz")
 
-    create(:plant_line, plant_line_name: "Ploo",
+    create(:plant_line, plant_line_name: "Ploob",
                         common_name: "Ploo cabbage",
                         taxonomy_term: TaxonomyTerm.first)
     create(:plant_line, plant_line_name: "Ploobar",
@@ -149,10 +149,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
 
     it "finds PL by fragment of :plant_line_name" do
-      result = Search.new("lo").plant_lines.select do |pl|
-        pl.plant_line_name.include? 'lo'
-      end
-      expect(result.count).to eq 3
+      expect(Search.new("loo").plant_lines.count).to eq 3
       expect(Search.new("looba").plant_lines.count).to eq 2
       expect(Search.new("loobarba").plant_lines.count).to eq 1
       expect(Search.new("loobarbaz").plant_lines.first.id.to_i).

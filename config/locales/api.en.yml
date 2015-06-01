@@ -1,6 +1,8 @@
 en:
   api:
     general:
+      demo_key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
       create:
         examples:
           ok_response: |-
@@ -8,12 +10,16 @@ en:
             Content-Type: application/json; charset=utf-8
 
             {
-              "plant_variety": {
+              "plant_population": {
                 "id": 1,
-                "plant_variety_name": "0068",
-                "crop_type": "oilseed rape",
+                "name": "BnaWAIT_01",
+                "population_type": {
+                  "population_type": "Integrated",
+                  "population_class": "Mapping",
+                  ...
+                },
                 ...
-                "plant_lines_ids": [10792]
+                "linkage_maps_ids": [8]
               }
             }
 
@@ -33,9 +39,42 @@ en:
 
             {
               "errors": [
-                { "attribute": "nmae", "message": "Unrecognized attribute name" }
+                { "attribute": "priner", "message": "Unrecognized attribute name" }
               ]
             }
+
+          attribute_value_samples: |-
+            {
+              "plant_population": {
+                ...
+                "description": "Example of text content",
+                "date_established": "2015-05-30",
+                "taxonomy_term_id": 5,
+                ...
+              }
+            }
+
+          wrong_vs_right_related_object: |-
+            {
+              "plant_population": {
+                ...
+                "population_type": "DH segregating",  # WRONG
+                "population_type_id": 1,  # RIGHT
+                ...
+              }
+            }
+
+
+        default_attribute_values:
+          -
+            name: entered_by_whom
+            format: string
+            desc: Always set to the user name of whomever API Key was used to submit the data.
+          -
+            name: date_entered
+            format: date
+            desc: Always set to the day the data was successfully submitted.
+
 
     filtering:
       params:
@@ -50,6 +89,30 @@ en:
         X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
       multi_request: |-
         GET /api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998 HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+    searching:
+      params:
+        -
+          name: resource_name[fetch]
+          format: string
+          desc: |
+            Given a term it should return all the resources of a given type that have attribute
+            values matching (at least partially) the search term.
+      request: |-
+        GET /api/v1/plant_lines?plant_line[fetch]=WINFRED HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+      pagination_request: |-
+        GET /api/v1/plant_lines?plant_line[fetch]=WINFRED&per_page=2&page=2 HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+      subobject_request: |-
+        GET /api/v1/plant_populations?plant_population[fetch]=oleracea&per_page=5 HTTP/1.1
         Content-Type: application/json
         Accept: application/json
         X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
@@ -201,21 +264,6 @@ en:
           format: "int[]"
           desc: Zero or more of BIP identifiers of Plant Populations bred in this Plant Line
 
-      index:
-        params:
-          -
-            name: "plant_line[fetch]"
-            format: string
-            desc: Query using full text search engine
-          -
-            name: "plant_line[search][plant_line_name]"
-            format: string
-            desc: ...
-          -
-            name: "plant_line[search][plant_lines.plant_line_name]"
-            format: string
-            desc: ...
-
       create:
         example: |-
           POST %{url} HTTP/1.1
@@ -242,7 +290,7 @@ en:
           name: data_owned_by
         -
           name: population_type
-          format: object
+          format: object, readonly
           desc: Additional information about the type of this population
         -
           name: description
@@ -275,6 +323,10 @@ en:
         -
           name: taxonomy_term_id
         -
+          name: population_type_id
+          format: int
+          desc: BIP identifier of the Population Type assigned to this population
+        -
           name: male_parent_line_id
           format: int
           desc: BIP identifier of the Plant Line that this population descends from on the male side
@@ -298,13 +350,6 @@ en:
           name: plant_lines_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Plant Lines that this population is associated with
-
-      index:
-        params:
-          -
-            name: "plant_population[fetch]"
-            format: string
-            desc: Query using full text search engine
 
       create:
         example: |-
@@ -381,17 +426,6 @@ en:
           format: "int[]"
           desc: Zero or more of BIP identifiers of Plant Lines classified under this plant variety
 
-      index:
-        params:
-          -
-            name: "plant_variety[fetch]"
-            format: string
-            desc: Query using full text search engine
-          -
-            name: "plant_variety[search][plant_variety_name]"
-            format: string
-            desc: ...
-
     taxonomy_term:
       attrs:
         -
@@ -422,13 +456,6 @@ en:
           name: probes_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Probes classified under this term
-
-      index:
-        params:
-          -
-            name: "none"
-            format: ""
-            desc: No filtering available - you may either list taxonomy terms or pick a single one
 
     linkage_group:
       attrs:
@@ -487,11 +514,6 @@ en:
           name: qtls_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Quantitative Trait Loci related to this group
-
-      index:
-        params:
-          -
-            name: "???"
 
     linkage_map:
       attrs:
@@ -552,11 +574,6 @@ en:
           format: "int[]"
           desc: Zero or more of BIP identifiers of Map Locus Hits related to this map
 
-      index:
-        params:
-          -
-            name: "???"
-
     map_locus_hit:
       attrs:
         -
@@ -615,11 +632,6 @@ en:
           format: int
           desc: BIP identifier of the Map Position of this locus hit
 
-      index:
-        params:
-          -
-            name: "???"
-
     map_position:
       attrs:
         -
@@ -657,11 +669,6 @@ en:
           name: map_locus_hits_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Map Locus Hits related to this position
-
-      index:
-        params:
-          -
-            name: "???"
 
     marker_assay:
       attrs:
@@ -713,11 +720,6 @@ en:
           format: "int[]"
           desc: Zero or more of BIP identifiers of Population Locus related to this marker
 
-      index:
-        params:
-          -
-            name: "???"
-
     plant_accession:
       attrs:
         -
@@ -768,11 +770,6 @@ en:
           name: plant_scoring_units_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Plant Scoring Units performed for this plant
-
-      index:
-        params:
-          -
-            name: "???"
 
     plant_scoring_unit:
       attrs:
@@ -832,11 +829,6 @@ en:
           name: trait_scores_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of Trait Scores recorded during this scoring unit
-
-      index:
-        params:
-          -
-            name: "???"
 
     plant_trial:
       attrs:
@@ -925,11 +917,6 @@ en:
           format: "int[]"
           desc: Zero or more of BIP identifiers of Plant Scoring Units recorded during this trial project
 
-      index:
-        params:
-          -
-            name: "???"
-
     population_locus:
       attrs:
         -
@@ -970,11 +957,6 @@ en:
           format: "int[]"
           desc: Zero or more of BIP identifiers of Map Locus Hits associated with this locus
 
-      index:
-        params:
-          -
-            name: "???"
-
     primer:
       attrs:
         -
@@ -1010,11 +992,6 @@ en:
           name: marker_assays_b_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of marker assays related to that primer (3` end)
-
-      index:
-        params:
-          -
-            name: "???"
 
     probe:
       attrs:
@@ -1056,11 +1033,6 @@ en:
           name: marker_assays_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of marker assays related to that probe
-
-      index:
-        params:
-          -
-            name: "???"
 
     qtl:
       attrs:
@@ -1141,11 +1113,6 @@ en:
           format: int
           desc: BIP identifier of the Linkage Group that this QTL was associated with
 
-      index:
-        params:
-          -
-            name: "???"
-
     qtl_job:
       attrs:
         -
@@ -1205,11 +1172,6 @@ en:
           name: qtls_ids
           format: "int[]"
           desc: Zero or more of BIP identifiers of QTLs that were defined as a result of this QTL job execution
-
-      index:
-        params:
-          -
-            name: "???"
 
     trait_descriptor:
       attrs:
@@ -1294,11 +1256,6 @@ en:
           format: "int[]"
           desc: Zero or more of BIP identifiers of Trait Scores measured for this plant trait in various projects
 
-      index:
-        params:
-          -
-            name: "???"
-
     trait_score:
       attrs:
         -
@@ -1338,7 +1295,20 @@ en:
           format: int
           desc: BIP identifier of the Trait Descriptor that gives more information about the scored trait
 
-      index:
-        params:
-          -
-            name: "???"
+    population_type:
+      attrs:
+        -
+          name: id
+        -
+          name: population_type
+          desc: The textual description of the population type
+        -
+          name: population_class
+          desc: What class of populations that type belong to
+        -
+          name: assigned_by_whom
+          desc: The name of the popultion type assigning party
+        -
+          name: plant_populations_ids
+          format: "int[]"
+          desc: Zero or more of BIP identifiers of Plant Populations that are of this population type

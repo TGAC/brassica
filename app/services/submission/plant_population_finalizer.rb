@@ -38,7 +38,11 @@ class Submission::PlantPopulationFinalizer
         attrs[:plant_variety_id] = plant_variety.id
       end
 
-      PlantLine.create!(attrs)
+      if PlantLine.where(plant_line_name: attrs[:plant_line_name]).exists?
+        rollback(2)
+      else
+        PlantLine.create!(attrs)
+      end
     end
   end
 
@@ -71,7 +75,7 @@ class Submission::PlantPopulationFinalizer
     attrs.delete(:owned_by) # FIXME change to :population_owned_by in the form (or remove entirely)
 
     if PlantPopulation.where(name: attrs[:name]).exists?
-      rollback
+      rollback(0)
     else
       @plant_population = PlantPopulation.create!(attrs)
     end
@@ -97,7 +101,8 @@ class Submission::PlantPopulationFinalizer
     )
   end
 
-  def rollback
+  def rollback(to_step)
+    submission.errors.add(:step, to_step)
     raise ActiveRecord::Rollback
   end
 end

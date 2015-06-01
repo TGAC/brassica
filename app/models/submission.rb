@@ -42,8 +42,9 @@ class Submission < ActiveRecord::Base
     step == STEPS.last
   end
 
-  def reset_step
-    self.step = STEPS[0]
+  def reset_step(to_step = 0)
+    to_step = 0 if to_step.nil? || to_step.to_i >= STEPS.length || to_step.to_i < 0
+    self.step = STEPS[to_step.to_i]
     save!
   end
 
