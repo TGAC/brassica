@@ -69,7 +69,7 @@ en:
           -
             name: entered_by_whom
             format: string
-            desc: Always set to the user name of whomever API Key was used to submit the data.
+            desc: Always set to the name of the user whose API Key was used to submit the data.
           -
             name: date_entered
             format: date
@@ -81,7 +81,7 @@ en:
         -
           name: resource_name[query][attribute_name]
           format: depends on the attribute format
-          desc: Should return only those resources which declare certain value for `attribute_name`.
+          desc: Should return only those resources which declare a certain value for `attribute_name`.
       request: |-
         GET /api/v1/plant_lines?plant_line[query][plant_line_name]=WINFRED HTTP/1.1
         Content-Type: application/json
@@ -99,8 +99,8 @@ en:
           name: resource_name[fetch]
           format: string
           desc: |
-            Given a term it should return all the resources of a given type that have attribute
-            values matching (at least partially) the search term.
+            Given a term, it should return all resources of a given type whose attribute
+            values match (at least partially) the search term.
       request: |-
         GET /api/v1/plant_lines?plant_line[fetch]=WINFRED HTTP/1.1
         Content-Type: application/json
@@ -175,9 +175,9 @@ en:
         comments:
           desc: Additional note from the person who published this data
         confirmed_by_whom:
-          desc: The person that accepted this BIP database entry
+          desc: The person who accepted this BIP database entry
         data_owned_by:
-          desc: Name of the legal entity that published this data
+          desc: Name of the legal entity which published this data
         data_provenance:
           desc: Additional information regarding the origin of this data
         date_entered:
@@ -187,7 +187,7 @@ en:
           desc: The name of the person who published this data
         taxonomy_term_id:
           format: int
-          desc: BIP identifier of a Taxonomy Term entry, related with this record
+          desc: BIP identifier of a Taxonomy Term entry related to this record
       show:
         example: |-
           GET %{url} HTTP/1.1
@@ -209,18 +209,18 @@ en:
         -
           name: plant_line_name
           create: required, Q
-          desc: Unique name of this Plant Line given by the person when submitting data
+          desc: Unique name of this Plant Line provided by the person who submitted the data
         -
           name: common_name
           create: Q
-          desc: A common name of this Plant Line, that is widely recognized by the breeders community
+          desc: Common name of this Plant Line that is widely recognized by the breeder community
         -
           name: named_by_whom
-          desc: Either a person or a legal entity that given the name
+          desc: Individual or legal entity which gave the line its name
         -
           name: organisation
           create: Q
-          desc: The legal entity that owns this Plant Line
+          desc: Legal entity which owns this Plant Line
         -
           name: genetic_status
           create: Q
@@ -228,7 +228,7 @@ en:
         -
           name: previous_line_name
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Old name of the Plant Line, if changed
         -
           name: comments
         -
@@ -246,23 +246,23 @@ en:
         -
           name: plant_variety_id
           format: int
-          desc: BIP identifier of the Plant Variety that this Plant Line is classified as
+          desc: BIP identifier of the Plant Variety which this Plant Line is classified as
         -
           name: fathered_descendants_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Lines descending from this entry on male side
+          desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the male line
         -
           name: mothered_descendants_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Lines descending from this entry on female side
+          desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the female line
         -
           name: plant_accessions_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of related Plant Accessions
+          desc: Zero or more BIP identifiers of related Plant Accessions
         -
           name: plant_populations_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Populations bred in this Plant Line
+          desc: Zero or more BIP identifiers of Plant Populations bred in this Plant Line
 
       create:
         example: |-
@@ -285,7 +285,7 @@ en:
         -
           name: name
           create: required, Q
-          desc: Unique name of this Plant Population given by the person when submitting data
+          desc: Unique name of this Plant Population provided when submitting data
         -
           name: data_owned_by
         -
@@ -294,7 +294,7 @@ en:
           desc: Additional information about the type of this population
         -
           name: description
-          desc: Important ree text information given by the data publisher regarding this population
+          desc: Textual description of the population,provided by the data publisher
         -
           name: date_established
           format: date
@@ -307,7 +307,7 @@ en:
           desc: TODO FIXME ASK TGAC
         -
           name: population_owned_by
-          desc: Name of the legal organization that owns this population
+          desc: Name of the legal entity which owns this population
         -
           name: comments
         -
@@ -329,27 +329,27 @@ en:
         -
           name: male_parent_line_id
           format: int
-          desc: BIP identifier of the Plant Line that this population descends from on the male side
+          desc: BIP identifier of the Plant Line which this population descends from in the male line
         -
           name: female_parent_line_id
           format: int
-          desc: BIP identifier of the Plant Line that this population descends from on the female side
+          desc: BIP identifier of the Plant Line which this population descends from in the female line
         -
           name: linkage_maps_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Linkage Maps defined for this population
+          desc: Zero or more BIP identifiers of Linkage Maps defined for this population
         -
           name: population_loci_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Population Loci published up to now for this population
+          desc: Zero or more BIP identifiers of Population Loci published for this population up until the present date
         -
           name: plant_trials_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of trait Plant Trials performed so far for this population
+          desc: Zero or more BIP identifiers of trait Plant Trials performed for this population until the present date
         -
           name: plant_lines_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Lines that this population is associated with
+          desc: Zero or more BIP identifiers of Plant Lines that this population is associated with
 
       create:
         example: |-
@@ -372,7 +372,7 @@ en:
         -
           name: plant_variety_name
           create: Q
-          desc: The name of this veriety given by either data submitting person or the database curator
+          desc: The name of this variety provided either by the person submitting the data or the database curator
         -
           name: crop_type
           create: Q
@@ -392,19 +392,19 @@ en:
         -
           name: year_registered
           create: Q
-          desc: Year (or sometimes years) when this variety was officially registered
+          desc: Year (or years) when this variety was officially registered
         -
           name: breeders_variety_code
           create: Q
-          desc: Code given to this variety by plant breeders
+          desc: Code assigned to this variety by plant breeders
         -
           name: owner
           create: Q
-          desc: Name of a legal organization that introduced that variety
+          desc: Name of the legal organization which introduced this variety
         -
           name: quoted_parentage
           create: Q
-          desc: Parentage information for this variety as given by literature or the database curator
+          desc: Parentage information for this variety as given in literature or provided by the database curator
         -
           name: female_parent
           create: Q
@@ -416,15 +416,15 @@ en:
         -
           name: countries_of_origin
           format: object[]
-          desc: Zero or more of JSON documents listing countries that this variety originated from
+          desc: Zero or more JSON documents listing countries that this variety originates from
         -
           name: countries_registered
           format: object[]
-          desc: Zero or more of JSON documents listing countries that this variety is registered in
+          desc: Zero or more JSON documents listing countries that this variety is registered in
         -
           name: plant_lines_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Lines classified under this plant variety
+          desc: Zero or more BIP identifiers of Plant Lines classified under this plant variety
 
     taxonomy_term:
       attrs:
@@ -439,23 +439,23 @@ en:
         -
           name: taxonomy_term_id
           format: int
-          desc: BIP identifier of a parent Taxonomy Term (not given for root terms)
+          desc: BIP identifier of the parent Taxonomy Term (not present for root terms)
         -
           name: canonical
           format: boolean
-          desc: Set to true if the term is defined in Gramene Taxonomy, false otherwise
+          desc: Set to true if the term is defined in Gramene Taxonomy; false otherwise
         -
           name: plant_lines_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Lines classified under this term
+          desc: Zero or more BIP identifiers of Plant Lines classified under this term
         -
           name: plant_populations_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Populations classified under this term
+          desc: Zero or more BIP identifiers of Plant Populations classified under this term
         -
           name: probes_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Probes classified under this term
+          desc: Zero or more BIP identifiers of Probes classified under this term
 
     linkage_group:
       attrs:
@@ -465,7 +465,7 @@ en:
         -
           name: linkage_group_label
           create: Q
-          desc: The label given to this linkage group by the datatbase curator
+          desc: The label given to this linkage group by the database curator
         -
           name: linkage_group_name
           create: Q
@@ -485,7 +485,7 @@ en:
         -
           name: consensus_group_orientation
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Consensus orientation of the linkage group on the target chromosome
         -
           name: comments
         -
@@ -501,19 +501,19 @@ en:
         -
           name: linkage_maps_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Linkage Maps related to this group
+          desc: Zero or more BIP identifiers of Linkage Maps related to this group
         -
           name: map_positions_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Map Positions related to this group
+          desc: Zero or more BIP identifiers of Map Positions related to this group
         -
           name: map_locus_hits_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Map Locus Hits related to this group
+          desc: Zero or more BIP identifiers of Map Locus Hits related to this group
         -
           name: qtls_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Quantitative Trait Loci related to this group
+          desc: Zero or more BIP identifiers of Quantitative Trait Loci related to this group
 
     linkage_map:
       attrs:
@@ -523,7 +523,7 @@ en:
         -
           name: linkage_map_label
           create: Q
-          desc: The label given to this linkage map by the datatbase curator
+          desc: Label assigned to this linkage map by the database curator
         -
           name: linkage_map_name
           create: Q
@@ -531,12 +531,12 @@ en:
         -
           name: map_version_no
           create: Q
-          desc: Descriptive of the version of this linkage map
+          desc: Descriptive number of this linkage map's version
         -
           name: map_version_date
           format: date
           create: Q
-          desc: Day when this linkage map was prepared
+          desc: Date on which this linkage map was prepared
         -
           name: mapping_software
           desc: Description of the software package used to create this linkage map
@@ -545,7 +545,7 @@ en:
           desc: Description of the algorithm used to create this linkage map
         -
           name: map_author
-          desc: The person who created this linkage map
+          desc: Person who created this linkage map
         -
           name: comments
         -
@@ -560,7 +560,7 @@ en:
           name: confirmed_by_whom
         -
           name: pubmed_id
-          desc: The PubMed identifier of the publication where this linkage map was published
+          desc: PubMed identifier of the publication where this linkage map was published
         -
           name: plant_population_id
           format: int
@@ -568,11 +568,11 @@ en:
         -
           name: linkage_groups_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Linkage Groups related to this map
+          desc: Zero or more BIP identifiers of Linkage Groups related to this map
         -
           name: map_locus_hits_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Map Locus Hits related to this map
+          desc: Zero or more BIP identifiers of Map Locus Hits related to this map
 
     map_locus_hit:
       attrs:
@@ -598,11 +598,11 @@ en:
         -
           name: atg_hit_seq_id
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Associated identifier in the e!ensembl portal
         -
           name: atg_hit_seq_source
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Indication about the source of the sequence (usually the e!ensembl portal)
         -
           name: bac_hit_seq_id
           create: Q
@@ -610,7 +610,7 @@ en:
         -
           name: bac_hit_seq_source
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Indication about the source of the sequence (usually NCBI services)
         -
           name: bac_hit_name
           create: Q
@@ -668,7 +668,7 @@ en:
         -
           name: map_locus_hits_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Map Locus Hits related to this position
+          desc: Zero or more BIP identifiers of Map Locus Hits related to this position
 
     marker_assay:
       attrs:
@@ -678,7 +678,7 @@ en:
         -
           name: marker_assay_name
           create: Q
-          desc: Unique name given to this marker assay by data contributor or database curator
+          desc: Unique name assigned to this marker assay by the data contributor or database curator
         -
           name: canonical_marker_name
           create: Q
@@ -686,11 +686,11 @@ en:
         -
           name: marker_type
           create: Q
-          desc: What kind of marker is represented by this data
+          desc: The type of marker represented by this data
         -
           name: separation_system
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Separation system applied in this marker assay
         -
           name: comments
         -
@@ -718,7 +718,7 @@ en:
         -
           name: population_loci_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Population Locus related to this marker
+          desc: Zero or more BIP identifiers of Population Locus related to this marker assay
 
     plant_accession:
       attrs:
@@ -736,20 +736,20 @@ en:
         -
           name: accession_originator
           create: Q
-          desc: The person who requested this plant accession
+          desc: Person who requested this accession
         -
           name: originating_organisation
           create: Q
-          desc: The name of the legal entity that requested this plant accession
+          desc: Name of the legal entity that requested this accession
         -
           name: year_produced
           create: Q
-          desc: What year this plant was produced
+          desc: Year the plant was produced in
         -
           name: date_harvested
           format: date
           create: Q
-          desc: Day when this plant was harvested
+          desc: Day the plant was harvested on
         -
           name: comments
         -
@@ -769,7 +769,7 @@ en:
         -
           name: plant_scoring_units_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Scoring Units performed for this plant
+          desc: Zero or more BIP identifiers of Plant Scoring Units performed for this plant
 
     plant_scoring_unit:
       attrs:
@@ -779,7 +779,7 @@ en:
         -
           name: scoring_unit_name
           create: Q
-          desc: Unique name given to this scoring unit by data submitting person
+          desc: Unique name assigned to this scoring unit by the person who submitted the data
         -
           name: number_units_scored
           create: Q
@@ -796,7 +796,7 @@ en:
           name: date_planted
           format: date
           create: Q
-          desc: Day when the population scored in this unit was planted
+          desc: Day on which the population scored in this unit was planted
         -
           name: comments
         -
@@ -812,7 +812,7 @@ en:
         -
           name: design_factor
           format: object
-          desc: Additional information about the design of the population experiment
+          desc: Additional information concerning the design of the population experiment
         -
           name: plant_part
           format: object
@@ -828,7 +828,7 @@ en:
         -
           name: trait_scores_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Trait Scores recorded during this scoring unit
+          desc: Zero or more BIP identifiers of Trait Scores recorded in this scoring unit
 
     plant_trial:
       attrs:
@@ -838,7 +838,7 @@ en:
         -
           name: plant_trial_name
           create: Q
-          desc: Unique name given to this scoring trial given by the person submitting data
+          desc: Unique name assigned to this scoring trial by the person who submitted the data
         -
           name: project_descriptor
           create: Q
@@ -846,11 +846,11 @@ en:
         -
           name: plant_trial_description
           create: Q
-          desc: Some more descriptive information about the trial
+          desc: Additional descriptive information concerning the trial
         -
           name: trial_year
           create: Q
-          desc: The year (or years) the trial took place
+          desc: Year (or years) the trial took place
         -
           name: institute_id
           create: Q
@@ -858,41 +858,41 @@ en:
         -
           name: trial_location_site_name
           create: Q
-          desc: The site where the plant trial was performed
+          desc: Site where the plant trial was performed
         -
           name: place_name
-          desc: The place where the plant trial was performed
+          desc: Place where the plant trial was performed
         -
           name: country
           format: object
-          desc: The country where the plant trial took place
+          desc: Country where the plant trial took place
         -
           name: latitude
-          desc: The latitude coordinate of the exact location where this trial took place
+          desc: Geographical latitude of the exact location where this trial took place
         -
           name: longitude
-          desc: The longitude coordinate of the exact location where this trial took place
+          desc: Geographical longitude of the exact location where this trial took place
         -
           name: altitude
-          desc: The altitude of the exact location where this trial took place
+          desc: Altitude of the exact location where this trial took place
         -
           name: terrain
           desc: Description of the environment of the cultivation process (e.g. what type of glasshouse was used)
         -
           name: soil_type
-          desc: What kind of soil was used in the cultivatin process
+          desc: Type of soil was used in the cultivation process
         -
           name: contact_person
-          desc: Contact information to a person connected with the trial project
+          desc: Contact information for this trial
         -
           name: design_type
-          desc: How the cultivation and the trial was designed
+          desc: How the cultivation and the trial were designed
         -
           name: statistical_factors
-          desc: The factors that influence the trial outcome statistical analysis
+          desc: Factors which influenced statistical analysis of the trial's outcome
         -
           name: design_factors
-          desc: Additional information about the design factors involved in the process of plant trial
+          desc: Additional information about the design factors involved in the plant trial
         -
           name: comments
         -
@@ -907,15 +907,15 @@ en:
           name: confirmed_by_whom
         -
           name: pubmed_id
-          desc: The PubMed identifier of the publication where this plant trial was published
+          desc: PubMed identifier of the publication where this plant trial was published
         -
           name: plant_population_id
           format: int
-          desc: BIP identifier of the plant population that was the subject of the trial
+          desc: BIP identifier of the plant population that was the subject of this trial
         -
           name: plant_scoring_units_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Scoring Units recorded during this trial project
+          desc: Zero or more BIP identifiers of Plant Scoring Units recorded during this trial
 
     population_locus:
       attrs:
@@ -925,7 +925,7 @@ en:
         -
           name: mapping_locus
           create: Q
-          desc: Unique name given to this population locus by the data submitter
+          desc: Unique name assigned to this population locus by the person submitting the data
         -
           name: defined_by_whom
           create: Q
@@ -943,7 +943,7 @@ en:
         -
           name: plant_population_id
           format: int
-          desc: BIP identifier of the plant population that the locus is found for
+          desc: BIP identifier of the plant population for which the locus was identified
         -
           name: marker_assay_id
           format: int
@@ -951,11 +951,11 @@ en:
         -
           name: map_positions_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of map positions associated with this locus
+          desc: Zero or more BIP identifiers of map positions associated with this locus
         -
           name: map_locus_hits_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Map Locus Hits associated with this locus
+          desc: Zero or more BIP identifiers of Map Locus Hits associated with this locus
 
     primer:
       attrs:
@@ -965,7 +965,7 @@ en:
         -
           name: primer
           create: Q
-          desc: The primer
+          desc: Unique name that identifies this primer
         -
           name: sequence
           create: Q
@@ -973,7 +973,7 @@ en:
         -
           name: description
           create: Q
-          desc: Additional description of the primer given by the person providing the data
+          desc: Additional description of the primer provided by the person who submitted the data
         -
           name: comments
         -
@@ -987,11 +987,11 @@ en:
         -
           name: marker_assays_a_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of marker assays related to that primer (5` end)
+          desc: Zero or more BIP identifiers of marker assays related to that primer (5` end)
         -
           name: marker_assays_b_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of marker assays related to that primer (3` end)
+          desc: Zero or more BIP identifiers of marker assays related to that primer (3` end)
 
     probe:
       attrs:
@@ -1013,12 +1013,12 @@ en:
         -
           name: sequence_source_acronym
           create: Q
-          desc: The name of the source database where the probe sequence could be obtained
+          desc: Name of the source database where the probe sequence can be obtained
         -
           name: date_described
           format: date
           create: Q
-          desc: Day when this probe was described
+          desc: Day on which this probe was described
         -
           name: comments
         -
@@ -1032,7 +1032,7 @@ en:
         -
           name: marker_assays_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of marker assays related to that probe
+          desc: Zero or more BIP identifiers of marker assays related to this probe
 
     qtl:
       attrs:
@@ -1046,7 +1046,7 @@ en:
         -
           name: map_qtl_label
           create: Q
-          desc: The alabel given to this QTL
+          desc: Label assigned to this QTL
         -
           name: outer_interval_start
           create: Q
@@ -1066,11 +1066,11 @@ en:
         -
           name: qtl_mid_position
           create: Q
-          desc: The position used for mapping this QTL
+          desc: Position used for mapping this QTL
         -
           name: peak_value
           create: Q
-          desc: The peak likelihood value within QTL intervals
+          desc: Peak probability value for the QTL intervals represented by this record
         -
           name: peak_p_value
           create: Q
@@ -1103,15 +1103,15 @@ en:
           name: data_provenance
         -
           name: pubmed_id
-          desc: The PubMed identifier of the publication where this QTL was published
+          desc: PubMed identifier of the publication where this QTL was published
         -
           name: qtl_job_id
           format: int
-          desc: BIP identifier of the Qtl Job that describes method used to obtain this QTL
+          desc: BIP identifier of the QTL Job that describes the method used to obtain this QTL
         -
           name: linkage_group_id
           format: int
-          desc: BIP identifier of the Linkage Group that this QTL was associated with
+          desc: BIP identifier of the Linkage Group that this QTL is associated with
 
     qtl_job:
       attrs:
@@ -1121,15 +1121,15 @@ en:
         -
           name: qtl_job_name
           create: Q
-          desc: Name given to this QTL job run by the database curator
+          desc: Name assigned to this QTL job by the database curator
         -
           name: qtl_software
           create: Q
-          desc: What software was used to obtain the associated QTLs in this QTL job
+          desc: Software used to obtain the associated QTLs in this QTL job
         -
           name: qtl_method
           create: Q
-          desc: What kind of algorithm was used to map QTL intervals
+          desc: Algorithm used to map QTL intervals
         -
           name: threshold_specification_method
           create: Q
@@ -1137,27 +1137,27 @@ en:
         -
           name: interval_type
           create: Q
-          desc: What type of interval(s) was measured in this QTL job
+          desc: Type of interval(s) measured in this QTL job
         -
           name: inner_confidence_threshold
           create: Q
-          desc: Confidence level for QTL inner interval
+          desc: Confidence level for the QTL inner interval
         -
           name: outer_confidence_threshold
           create: Q
-          desc: Confidence level for QTL outer interval
+          desc: Confidence level for the QTL outer interval
         -
           name: qtl_statistic_type
           create: Q
-          desc: What kind of statistics was used for computing QTL interval boundaries
+          desc: Statistical method used for computing QTL interval boundaries
         -
           name: described_by_whom
-          desc: The person who performed the QTL job execution
+          desc: Person who executed this QTL job
         -
           name: date_run
           format: date
           create: Q
-          desc: Day the QTL job execution was performed
+          desc: Day on which the QTL job was executed
         -
           name: comments
         -
@@ -1171,7 +1171,7 @@ en:
         -
           name: qtls_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of QTLs that were defined as a result of this QTL job execution
+          desc: Zero or more BIP identifiers of QTLs that were defined as a result of this QTL job execution
 
     trait_descriptor:
       attrs:
@@ -1179,44 +1179,44 @@ en:
           name: id
         -
           name: descriptor_label
-          desc: Unique label given to this descriptor by the database curator
+          desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
-          desc: What category of plant trait this descriptor describes
+          desc: Plant trait category described by this this descriptor
         -
           name: descriptor_name
-          desc: Common name to describe the trait
+          desc: Common name used to describe the trait
         -
           name: units_of_measurements
-          desc: How the trait is being measured
+          desc: How the trait is measured
         -
           name: trait_grades
           format: object[]
-          desc: If given, show what descriptive grades could be used to score this trait
+          desc: Optional descriptive grades which can be applied to score this trait
         -
           name: where_to_score
           desc: Where the trait is measured
         -
           name: scoring_method
-          desc: The method used to obtain the trait measure
+          desc: Method used to obtain the trait measure
         -
           name: when_to_score
           desc: When in the cultivation process the trait is measured
         -
           name: stage_scored
-          desc: In what stage of plant growth the trait is being scored
+          desc: At what stage of plant growth the trait is scored
         -
           name: precautions
-          desc: Special conditions that are taken into account when scoring the trait
+          desc: Special conditions taken into account when scoring the trait
         -
           name: materials
-          desc: What materials are needed for proper scoring
+          desc: Materials required for proper scoring
         -
           name: instrumentation_required
-          desc: What instruments are needed for proper scoring
+          desc: Instruments required for proper scoring
         -
           name: controls
-          desc: What control group (data) was used in the scoring experiment
+          desc: Control group (data) used in the scoring experiment
         -
           name: calibrated_against
           desc: How the instruments should be calibrated for the scoring experiment
@@ -1228,17 +1228,17 @@ en:
           desc: Environmental interactions that should be taken into account when scoring
         -
           name: score_type
-          desc: What is the nature of the final score (e.g., is it direct score, is it calculated)
+          desc: Nature of the final score (direct or otherwise, computation methods applied, etc.)
         -
           name: contact_person
           desc: Person to be contacted regarding further information about scoring this trait
         -
           name: authorities
-          desc: Institution of people who should be referred to regarding the method of scoring this trait
+          desc: Institutions or individuals who should be referred to regarding the method of scoring this trait
         -
           name: date_method_agreed
           format: date
-          desc: Day when this scoring method was published
+          desc: Day on which this scoring method was published
         -
           name: comments
         -
@@ -1254,7 +1254,7 @@ en:
         -
           name: trait_scores_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Trait Scores measured for this plant trait in various projects
+          desc: Zero or more BIP identifiers of Trait Scores measured for this plant trait in various projects
 
     trait_score:
       attrs:
@@ -1264,16 +1264,16 @@ en:
         -
           name: score_value
           create: Q
-          desc: The value measured and recorded in the trial
+          desc: Value measured and recorded in the trial
         -
           name: value_type
           create: Q
-          desc: What type is the score value given
+          desc: Meaning of the score value
         -
           name: scoring_date
           format: date
           create: Q
-          desc: Day the score measurement was performed
+          desc: Day on which the scoring was performed
         -
           name: comments
         -
@@ -1293,7 +1293,7 @@ en:
         -
           name: trait_descriptor_id
           format: int
-          desc: BIP identifier of the Trait Descriptor that gives more information about the scored trait
+          desc: BIP identifier of the Trait Descriptor that provides more information about the scored trait
 
     population_type:
       attrs:
@@ -1301,14 +1301,14 @@ en:
           name: id
         -
           name: population_type
-          desc: The textual description of the population type
+          desc: Textual description of the population type
         -
           name: population_class
-          desc: What class of populations that type belong to
+          desc: Class of populations this type belongs to
         -
           name: assigned_by_whom
-          desc: The name of the popultion type assigning party
+          desc: Assignee of this population type
         -
           name: plant_populations_ids
           format: "int[]"
-          desc: Zero or more of BIP identifiers of Plant Populations that are of this population type
+          desc: Zero or more BIP identifiers of Plant Populations that are of this population type
