@@ -44,7 +44,7 @@ module Submissions
     end
 
     def plant_line_exists?(name)
-      PlantLine.where(plant_line_name: name).exists?
+      PlantLine.where("plant_line_name ILIKE ?", name).exists?
     end
 
     def self.permitted_properties
