@@ -1,7 +1,6 @@
 class LinkageGroup < ActiveRecord::Base
 
-  has_many :linkage_maps, through: :map_linkage_group_lists
-  has_many :map_linkage_group_lists
+  belongs_to :linkage_map, counter_cache: true
   has_many :map_positions
   has_many :map_locus_hits
   has_many :qtls
@@ -33,6 +32,7 @@ class LinkageGroup < ActiveRecord::Base
     [
       'linkage_group_label',
       'linkage_group_name',
+      'linkage_maps.linkage_map_label',
       'total_length',
       'lod_threshold',
       'consensus_group_assignment',
@@ -42,9 +42,14 @@ class LinkageGroup < ActiveRecord::Base
 
   def self.count_columns
     [
-      'linkage_groups.map_linkage_group_lists_count AS linkage_maps_count',
       'map_positions_count',
       'map_locus_hits_count'
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'linkage_map_id'
     ]
   end
 

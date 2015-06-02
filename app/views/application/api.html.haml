@@ -3,12 +3,13 @@
 
   .row
     .col-sm-2
-      %nav.docs-sidebar{"data-offset-top" => "220", "data-spy" => "affix"}
+      %nav.docs-sidebar
         %ul.nav
           %li= link_to "General introduction", "#general-introduction"
           %li= link_to "Fetching data", "#fetching-data"
           %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
+          %li= link_to "Submitting data", "#submitting-data"
 
           - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
@@ -17,9 +18,9 @@
       %h3#general-introduction.section-heading General introduction
 
       %p
-        BIP provides HTTP REST-style API which uses JSON to represent returned
+        BIP provides a HTTP RESTful API which uses JSON to represent
         resources. Full access to the API is allowed for all registered users.
-        In order to authenticate users pass <code>X-BIP-Api-Key</code> header in
+        In order to authenticate your request, pass <code>X-BIP-Api-Key</code> header in
         each call to the API.
 
       %p
@@ -37,42 +38,23 @@
         - Api.writable_models.each do |model|
           %li= model.name
 
-      -# FIXME verify and describe date format
       %p
         All attributes are expressed as basic data types such as <code>int</code>,
         <code>string</code>, <code>date</code> or arrays of these. Most of the related
-        objects are not included in the response as a whole but as an identifier (or an array
+        objects are not directly included in the response - instead they are represented by identifiers (or arrays
         of identifiers), for instance <code>taxonomy_term_id</code> or <code>qtls_ids</code>.
-        Use these identifiers to retrieve relevant resources with subsequent API calls.
+        Use these identifiers to retrieve relevant resources with further API calls.
 
       %p
-        Related objects that are not available through dedicated API read call are, however,
-        included completely inside the parent data structure, like, for example, <code>population_type</code>.
-        Those are usually denoted with <code>object</code> format in the attribute tables.
+        Those related objects which are not available through a dedicated API read call are
+        always embedded in the parent data structure - for example, <code>population_type</code>.
+        They are usually represented by the <code>object</code> format in the attribute tables.
 
       %h4 Example
       %pre.response
         %code= t('api.general.create.examples.ok_response')
 
-      %p
-        For each resource there are attributes (described later) required
-        for create requests. Skipping any of those will result in an
-        <code>422</code> error response. Passing attributes which are not recognized by the API will also
-        result in <code>422</code> error response.
-
-      %h4 Examples
-      %ol
-        %li
-          %p Missing value for required attribute
-          %pre.response
-            %code= t('api.general.create.examples.missing_required_attrs_response')
-
-        %li
-          %p Misspelled attribute name
-          %pre.response
-            %code= t('api.general.create.examples.unknown_attrs_response')
-
-      %p Several other resources allow for fetching data only:
+      %p Several resources support fetching data only:
 
       %ul
         - Api.readonly_models.each do |model|
@@ -82,10 +64,10 @@
       %h3#fetching-data.section-heading Fetching data
 
       %p
-        Each single resource can be fetched by giving its <code>id</code>.
+        Any resource can be fetched by passing its <code>id</code>.
         Multiple resources can be fetched with or without additional parameters
-        limiting returned results. These parameters are specific for each
-        resource and will be described in detail later.
+        to filter results. These parameters are specific for each
+        resource and will be described in detail later on.
 
       %p Fetching multiple resources always yields paginated results.
 
@@ -102,38 +84,156 @@
       %pre.response
         %code= t('api.pagination.response')
 
+      %p
+        <strong>Remember</strong> to replace <code>X-BIP-Api-Key</code> with your own API key.
+
 
       %h3#filtering-data.section-heading Filtering data
 
       %p
-        Most of resources might be filtered by values of specific resource attributes.
-        Attribute tables, presented below per each resource type, indicate when a specific
-        attribute may be a subject to filtering (look for the `Q` marker). The usage pattern
-        is as follows:
+        Most resources can be filtered by selected attributes.
+        The attribute tables (listed below for each resource type) indicate when a specific
+        attribute may be subject to filtering - look for the <strong>`Q`</strong> marker.
+        The usage pattern is as follows:
 
       = api_props('Query filtering', 'filtering.params')
 
-      %h4 Example
-      %pre
-        %code= t('api.filtering.request')
+      %h4 Examples
+      %ol
+        %li
+          %p Plant Line filtering by <code>plant_line_name</code>
+          %pre
+            %code= t('api.filtering.request')
 
-      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[query][plant_line_name]=WINFRED" }
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[query][plant_line_name]=WINFRED" }
 
-      %p Applying multiple attributes in a single query is possible as well.
+        %li
+          %p
+            Multiple filtering attributes can be applied in a single query - here we filter
+            Plant Varieties by <code>owner</code> and <code>registration_year</code>
+          %pre
+            %code= t('api.filtering.multi_request')
 
-      %h4 Example
-      %pre
-        %code= t('api.filtering.multi_request')
-
-      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998" }
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998" }
 
 
       %h3#searching-for-data.section-heading Searching for data
 
-      -# TODO FIXME this section to be developed further
       %p
-        Similar generic section about how to issue full-text search calls to
-        BIP, how to adjust scope (model), what to expect as the outcome
+        It is also possible to search for a given resource by passing a term and matching it against
+        multiple attributes at once. This resembles the search capability available on the BIP front page.
+        Such queries need to be scoped by resource type.
+
+      %p
+        <i>What exactly is being sought?</i> The resource attributes that are checked for the presence of the search term
+        are basically all those marked with the <strong>`Q`</strong> tag in the attribute tables.
+        Additionally, some related resource attributes are checked - the rule of thumb is that if an attribute
+        value is visible as a column in the
+
+        = link_to 'browse data', browse_data_path
+
+        tables, it should be searchable via the <code>fetch</code> API parameter.
+
+      = api_props('Searching', 'searching.params')
+
+      %h4 Examples
+      %ol
+        %li
+          %p Plant Lines search
+          %pre
+            %code= t('api.searching.request')
+
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[fetch]=WINFRED" }
+
+        %li
+          %p
+            The result includes metadata showing how many records were found - see the
+            <code>total_count</code> value in the <code>meta</code> result document element.
+            It is therefore possible to combine filtering and pagination in a single request,
+            e.g. to retrieve further data.
+          %pre
+            %code= t('api.searching.pagination_request')
+
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_lines?plant_line[fetch]=WINFRED&per_page=2&page=2" }
+
+        %li
+          %p
+            Searching by related object attribute - the <code>name</code> of a Taxonomy Term
+          %pre
+            %code= t('api.searching.subobject_request')
+
+          = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_populations?plant_population[fetch]=oleracea&per_page=5" }
+
+      %p
+        In order to maintain consistency between successive searches, all search results are ordered
+        by their internal <code>id</code> BIP identifier. This ensures the API will return the same results
+        in the same order in two subsequent calls - provided, of course, no new data is submitted
+        in the meantime. For this reason the results of `fetch` API calls might differ slightly from
+        what can be obtained via the web search form.
+
+
+      %h3#submitting-data.section-heading Submitting new data
+
+      %p
+        The following resources can currently be submitted via API calls:
+
+      %ul
+        - Api.writable_models.each do |model|
+          %li= model.name
+
+      %p
+        Data submission is based on the JSON format, i.e., the API <code>POST</code>
+        request should pass a JSON document whose root element matches the name of the
+        target resource type (e.g. <code>plant_population</code>).
+        Each resource section below shows an example of such a <code>POST</code> API call.
+
+      %p
+        For each resource some attributes (described later) are required in create requests.
+        Skipping any of those will result in an
+        <code>422</code> error response. Passing attributes which are not recognized by the API will also
+        produce <code>422</code> errors.
+
+      %h4 Examples
+      %ol
+        %li
+          %p Missing value for required attribute
+          %pre.response
+            %code= t('api.general.create.examples.missing_required_attrs_response')
+
+        %li
+          %p Misspelled attribute name
+          %pre.response
+            %code= t('api.general.create.examples.unknown_attrs_response')
+
+      %p
+        Most of the resource attributes, as shown in the following attribute tables,
+        are textual (<code>string</code> format) - these are simply pieces of text of
+        arbitrary length, enclosed in double quote marks <code>"</code>. Attributes
+        that are of <code>int</code> format are passed without quotes.
+
+      %p
+        Dates should be entered in a textual format - several different notations are
+        recognized and accepted, although we suggest sticking to a single, consistent
+        format - <code>YYYY-MM-DD</code>. Examples are provided below:
+
+      %h4 Example
+      %pre.response
+        %code= t('api.general.create.examples.attribute_value_samples')
+
+      %p
+        Two attributes are never entered by users, but are instead automatically set by the server:
+
+      = api_props('Default attribute values', 'general.create.default_attribute_values')
+
+      %p
+        Finally, attributes marked as <code>readonly</code> in the attribute
+        tables cannot be directly set (one such example is the <code>population_type</code> of a Plant Population).
+        Instead, one should provide the BIP identifier of a related object when submitting
+        new data. For instance, when submitting a new Plant Population:
+
+      %h4 Example
+      %pre.response
+        %code= t('api.general.create.examples.wrong_vs_right_related_object')
 
 
       -# Models section follows
@@ -142,7 +242,7 @@
         .section
           %h3.section-heading{id: model.name.underscore.dasherize}= model.name
 
-          .description The following table explains the list of attributes describing this resource
+          .description The following table shows a list of attributes describing this resource
 
           = api_props('Attributes', "#{model.name.underscore}.attrs")
 

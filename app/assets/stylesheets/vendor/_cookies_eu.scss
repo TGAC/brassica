@@ -1,0 +1,12 @@
+.cookies-eu {
+  bottom: auto;
+  background-color: rgba(242, 242, 242, 0.75);
+  .cookies-eu-button-holder {
+    .cookies-eu-ok {
+      @extend .btn;
+      @extend .btn-xs;
+      @extend .btn-primary;
+      vertical-align: middle;
+    }
+  }
+}

@@ -2,8 +2,7 @@ class LinkageMap < ActiveRecord::Base
 
   belongs_to :plant_population, counter_cache: true, touch: true
 
-  has_many :linkage_groups, through: :map_linkage_group_lists
-  has_many :map_linkage_group_lists
+  has_many :linkage_groups
   has_many :genotype_matrices
   has_many :map_locus_hits
 
@@ -45,7 +44,7 @@ class LinkageMap < ActiveRecord::Base
 
   def self.count_columns
     [
-      'linkage_maps.map_linkage_group_lists_count AS linkage_groups_count',
+      'linkage_groups_count',
       'map_locus_hits_count'
     ]
   end

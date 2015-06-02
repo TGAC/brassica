@@ -33,6 +33,8 @@ gem 'hashie'
 gem 'draper', '~> 2.1.0'
 gem 'kaminari'
 
+gem 'cookies_eu'
+
 gem 'exception_notification'
 
 # bundle exec rake doc:rails generates the API under doc/api.

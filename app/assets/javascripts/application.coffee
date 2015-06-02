@@ -20,9 +20,17 @@
 #= require jquery.easypiechart
 #= require jquery.scrollTo
 #= require highlight.pack
+#= require cookies_eu
 #= require_tree .
 
 $ ->
   $('body').tooltip
     selector: '[data-toggle]'
     placement: 'top'
+
+
+  bh = $('#footer').offset()
+  $('.docs-sidebar').affix offset:
+    top: 220
+    bottom: ->
+      return @bottom = - bh.top + 320

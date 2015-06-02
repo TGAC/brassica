@@ -53,7 +53,7 @@ class SubmissionsController < ApplicationController
     elsif @submission.finalize
       redirect_to submission_path(@submission), notice: "Plant population submitted, thank you!"
     else
-      @submission.reset_step
+      @submission.reset_step(@submission.errors[:step].try(:first))
       redirect_to edit_submission_path(@submission, validate: true),
         alert: "Submission cannot be accepted. Please, review entered data and fix remaining issues."
     end

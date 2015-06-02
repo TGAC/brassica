@@ -1,5 +1,13 @@
 # Specific configurations for particular DataTables, including callbacks
 window.configs =
+  'linkage-groups':
+    columnDefs:
+      [
+        targets: 'linkage_maps_linkage_map_label_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('linkage_maps', data, full[full.length - 2])
+      ]
+
   'linkage-maps':
     columnDefs:
       [
@@ -14,6 +22,21 @@ window.configs =
         targets: 'map_positions_map_position_column'
         render: (data, type, full, meta) ->
           modelIdUrl('map_positions', data, full[full.length - 4])
+      ,
+        targets: ['map_locus_hits_associated_sequence_id_column', 'map_locus_hits_bac_hit_seq_id_column']
+        render: (data, type, full, meta) ->
+          if data && full[meta['col'] + 1].indexOf("NCBI") > -1
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+          else
+            data
+      ,
+        targets: 'map_locus_hits_atg_hit_seq_id_column'
+        render: (data, type, full, meta) ->
+          if data
+            ensemblId = data.split('.')[0]
+            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=Brassica;idx=;q=' + ensemblId + '" target="blank">' + data + '</a>'
+          else
+            ''
       ,
         targets: 'related-specific'
         render: (data, type, full, meta) ->
@@ -116,6 +139,17 @@ window.configs =
         targets: 'marker_assays_marker_assay_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('marker_assays', data, full[full.length - 2])
+      ]
+
+  'probes':
+    columnDefs:
+      [
+        targets: 'probes_sequence_id_column'
+        render: (data, type, full, meta) ->
+          if data && full[meta['col'] + 1].indexOf("NCBI") > -1
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+          else
+            data
       ]
 
   'qtl':
