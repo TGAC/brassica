@@ -44,3 +44,9 @@ en:
       traits:
       qtl:
       linkage_map:
+
+    errors:
+      population_name_missing: Please provide a name.
+      population_name_taken: A plant population with this name already exists.
+      population_type_missing: Please select a population type from the list.
+      taxonomy_term_missing: Please select a taxonomy term from the list.

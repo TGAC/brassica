@@ -4,11 +4,11 @@ module Submissions
     property :description
     property :owned_by
 
-    validates :name, presence: true
+    validates :name, presence: { message: I18n.t('submission.errors.population_name_missing')}
 
     validate do
       if PlantPopulation.where(name: name).exists?
-        errors.add(:name, :taken)
+        errors.add(:name, I18n.t('submission.errors.population_name_taken'))
       end
     end
   end
