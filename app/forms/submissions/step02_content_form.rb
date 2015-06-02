@@ -5,7 +5,7 @@ module Submissions
     property :population_type
     property :taxonomy_term
 
-    validates :taxonomy_term, inclusion: { in: TaxonomyTerm.names, message: 'Please select a taxonomy term from the list.' }
-    validates :population_type, inclusion: { in: population_types, message: 'Please select a population type from the list.' }
+    validates :taxonomy_term, inclusion: { in: TaxonomyTerm.names, message: I18n.t('submission.errors.taxonomy_term_missing') }
+    validates :population_type, inclusion: { in: population_types, message: I18n.t('submission.errors.population_type_missing') }
   end
 end
