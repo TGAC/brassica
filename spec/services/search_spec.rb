@@ -101,7 +101,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                  processed_trait_dataset: ptd2)
 
     # Special cases
-    create(:plant_line, plant_line_name: "123@456")
+    create(:plant_line, plant_line_name: "12345@67890")
 
     # FIXME without sleep ES is not able to update index in time
     sleep 1
@@ -297,10 +297,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
     context "special cases" do
       it "returns proper counts" do
-        expect(Search.new("123").counts).to include(plant_lines: 1)
-        expect(Search.new("123@").counts).to include(plant_lines: 1)
-        expect(Search.new("@456").counts).to include(plant_lines: 1)
-        expect(Search.new("123@456").counts).to include(plant_lines: 1)
+        expect(Search.new("12345").counts).to include(plant_lines: 1)
+        expect(Search.new("12345@").counts).to include(plant_lines: 1)
+        expect(Search.new("@67890").counts).to include(plant_lines: 1)
+        expect(Search.new("12345@67890").counts).to include(plant_lines: 1)
       end
     end
   end
