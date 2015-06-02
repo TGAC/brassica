@@ -10,6 +10,7 @@ services:
   - elasticsearch
 
 before_script:
+  - sleep 10
   - curl -XDELETE 'http://localhost:9200/*'
   - psql -c 'create database travis_ci_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
