@@ -176,7 +176,6 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
 
     it 'does not find MLH by inexact map_position.map_position' do
-      pending 'This test should pass if #253 is fixed'
       expect(Search.new("2.8").map_locus_hits.count).to eq 0
     end
   end

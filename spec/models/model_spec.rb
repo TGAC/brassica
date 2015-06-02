@@ -14,9 +14,9 @@ RSpec.describe ActiveRecord::Base do
     Rails.application.eager_load!
   end
 
-  it 'defines table, count and ref columns as strings only' do
+  it 'defines table, count, ref and numeric columns as strings only' do
     ActiveRecord::Base.descendants.each do |model|
-      [:table_columns, :ref_columns, :count_columns].each do |columns_type|
+      [:table_columns, :ref_columns, :count_columns, :numeric_columns].each do |columns_type|
         if model.respond_to? columns_type
           expect(model.send(columns_type)).to all be_an(String)
         end
@@ -38,7 +38,7 @@ RSpec.describe ActiveRecord::Base do
       @searchables = searchable_models
     end
 
-    it 'ensures searchable_models helper do not make fools of us' do
+    it 'ensures searchable_models helper does not make fools of us' do
       expect(@searchables).not_to be_empty
     end
 
@@ -91,5 +91,10 @@ RSpec.describe ActiveRecord::Base do
         expect(c).not_to include('(')
       end
     end
+  end
+
+  it 'includes all numeric columns in table columns' do
+    pending
+    fail
   end
 end

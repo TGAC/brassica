@@ -60,11 +60,40 @@ class Search
   end
 
   def map_locus_hits
-    MapLocusHit.search(wildcarded_query, size: MapLocusHit.count)
+    if numeric_query?
+      MapLocusHit.search(
+        filter: {
+          or: MapLocusHit.numeric_columns.map { |column|
+            if column.include?(".")
+              parts = column.split(".")
+              *tables, column = parts
+              tables = tables.map(&:singularize)
+              column = (tables | [column]).join(".")
+            end
+
+            { term: { column => query } }
+          }
+        },
+        size: MapLocusHit.count
+      )
+    else
+      MapLocusHit.search(wildcarded_query, size: MapLocusHit.count)
+    end
   end
 
   def map_positions
-    MapPosition.search(wildcarded_query, size: MapPosition.count)
+    if numeric_query?
+      MapPosition.search(
+        filter: {
+          or: MapPosition.numeric_columns.map { |column|
+            { term: { column => query } }
+          }
+        },
+        size: MapPosition.count
+      )
+    else
+      MapPosition.search(wildcarded_query, size: MapPosition.count)
+    end
   end
 
   def population_loci
