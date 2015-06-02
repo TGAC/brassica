@@ -1,9 +1,12 @@
 class Search
 
-  attr_accessor :query
+  attr_accessor :query, :wildcarded_query
 
   def initialize(query)
-    self.query = prepare_query(query.dup)
+    query = escape_query_special_chars(query.dup)
+
+    self.query = query
+    self.wildcarded_query = add_query_wildcards(query)
   end
 
   def counts
@@ -45,67 +48,73 @@ class Search
   end
 
   def plant_populations
-    PlantPopulation.search(query, size: PlantPopulation.count)
+    PlantPopulation.search(wildcarded_query, size: PlantPopulation.count)
   end
 
   def plant_lines
-    PlantLine.search(query, size: PlantLine.count)
+    PlantLine.search(wildcarded_query, size: PlantLine.count)
   end
 
   def plant_varieties
-    PlantVariety.search(query, size: PlantVariety.count)
+    PlantVariety.search(wildcarded_query, size: PlantVariety.count)
   end
 
   def map_locus_hits
-    MapLocusHit.search(query, size: MapLocusHit.count)
+    MapLocusHit.search(wildcarded_query, size: MapLocusHit.count)
   end
 
   def map_positions
-    MapPosition.search(query, size: MapPosition.count)
+    MapPosition.search(wildcarded_query, size: MapPosition.count)
   end
 
   def population_loci
-    PopulationLocus.search(query, size: PopulationLocus.count)
+    PopulationLocus.search(wildcarded_query, size: PopulationLocus.count)
   end
 
   def linkage_groups
-    LinkageGroup.search(query, size: LinkageGroup.count)
+    LinkageGroup.search(wildcarded_query, size: LinkageGroup.count)
   end
 
   def linkage_maps
-    LinkageMap.search(query, size: LinkageMap.count)
+    LinkageMap.search(wildcarded_query, size: LinkageMap.count)
   end
 
   def marker_assays
-    MarkerAssay.search(query, size: MarkerAssay.count)
+    MarkerAssay.search(wildcarded_query, size: MarkerAssay.count)
   end
 
   def primers
-    Primer.search(query, size: Primer.count)
+    Primer.search(wildcarded_query, size: Primer.count)
   end
 
   def probes
-    Probe.search(query, size: Probe.count)
+    Probe.search(wildcarded_query, size: Probe.count)
   end
 
   def plant_trials
-    PlantTrial.search(query, size: PlantTrial.count)
+    PlantTrial.search(wildcarded_query, size: PlantTrial.count)
   end
 
   def qtl
-    Qtl.search(query, size: Qtl.count)
+    if numeric_query?
+      Qtl.search(
+        filter: {
+          or: Qtl.numeric_columns.map { |column|
+            { term: { column => query } }
+          }
+        },
+        size: Qtl.count
+      )
+    else
+      Qtl.search(wildcarded_query, size: Qtl.count)
+    end
   end
 
   def trait_descriptors
-    TraitDescriptor.search(query, size: TraitDescriptor.count)
+    TraitDescriptor.search(wildcarded_query, size: TraitDescriptor.count)
   end
 
   private
-
-  def prepare_query(query)
-    query = escape_query_special_chars(query)
-    add_query_wildcards(query)
-  end
 
   def escape_query_special_chars(query)
     special_chars.each { |chr| query.gsub!(chr, "\\#{chr}") }
@@ -118,5 +127,9 @@ class Search
 
   def special_chars
     %w(: [ ] ( ) { } + - ~ < = > ^ \ / && || ! " * ?)
+  end
+
+  def numeric_query?
+    query =~ /\A-?\d+(\.\d+)?\z/
   end
 end

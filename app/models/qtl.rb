@@ -57,6 +57,23 @@ class Qtl < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'qtl_rank',
+      'outer_interval_start',
+      'inner_interval_start',
+      'qtl_mid_position',
+      'inner_interval_end',
+      'outer_interval_end',
+      'peak_value',
+      'peak_p_value',
+      'regression_p',
+      'residual_p',
+      'additive_effect',
+      'genetic_variance_explained'
+    ]
+  end
+
   def self.permitted_params
     [
       :fetch,
@@ -71,27 +88,26 @@ class Qtl < ActiveRecord::Base
 
   def self.indexed_json_structure
     {
-      only: [
-        :qtl_rank,
-        :map_qtl_label,
-        :outer_interval_start,
-        :inner_interval_start,
-        :qtl_mid_position,
-        :inner_interval_end,
-        :outer_interval_end,
-        :peak_value,
-        :peak_p_value,
-        :regression_p,
-        :residual_p,
-        :additive_effect,
-        :genetic_variance_explained
-      ],
+      only: numeric_columns.map(&:to_sym) | [:map_qtl_label],
       include: {
         processed_trait_dataset: {
           include: { trait_descriptor: { only: :descriptor_name } }
         }
       }
     }
+  end
+
+  mapping dynamic: 'false' do
+    indexes :map_qtl_label
+    indexes :processed_trait_dataset do
+      indexes :trait_descriptor do
+        indexes :descriptor_name
+      end
+    end
+
+    Qtl.numeric_columns.each do |column|
+      indexes column, include_in_all: 'false'
+    end
   end
 
   include Annotable

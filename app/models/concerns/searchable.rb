@@ -12,6 +12,10 @@ module Searchable extend ActiveSupport::Concern
 
     after_touch { __elasticsearch__.index_document }
 
+    def self.numeric_columns
+      []
+    end
+
     def self.indexed_json_structure
       return @indexed_json_structure if @indexed_json_structure
       only = table_columns.select{ |c| !c.include? '.' }.map(&:to_sym)

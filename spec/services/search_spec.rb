@@ -305,7 +305,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
   end
 
-  describe "query transformation" do
+  describe "#wildcarded_query" do
     examples = {
       'foo' => '*foo*',
       'foo@example.com' => 'foo@example.com',
@@ -315,7 +315,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     examples.each do |input_query, output_query|
       context "given #{input_query}" do
         it "transforms it to #{output_query}" do
-          expect(Search.new(input_query).query).to eq output_query
+          expect(Search.new(input_query).wildcarded_query).to eq output_query
         end
       end
     end
