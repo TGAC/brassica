@@ -50,7 +50,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         "male_parent_line_id" => plant_lines[1].id
       )
       expect(subject.plant_population.plant_lines.map(&:plant_line_name)).
-        to eq([plant_lines[0].plant_line_name] + new_plant_lines_attrs.map { |attrs| attrs[:plant_line_name] })
+        to match_array [plant_lines[0].plant_line_name] + new_plant_lines_attrs.map { |attrs| attrs[:plant_line_name] }
     end
 
     it 'records created plant population for later use' do
