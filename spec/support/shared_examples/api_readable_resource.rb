@@ -128,7 +128,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         end
 
         if model_klass.ancestors.include?(Searchable) && model_klass != TraitDescriptor  # it implements fetching without importing Filterable
-          it 'supports fetch query param' do
+          it 'supports fetch query param', :elasticsearch do
             hit_attribute = model_klass.indexed_json_structure[:only].first
             term = create(model_klass).send(hit_attribute)
             fetch_params = { fetch: term }
