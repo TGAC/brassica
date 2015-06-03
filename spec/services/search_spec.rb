@@ -185,6 +185,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(Search.new("102.8").map_positions.count).to eq 1
     end
 
+    it 'does not find MP by inexact :map_position' do
+      expect(Search.new("102").map_positions.count).to eq 0
+    end
+
     it 'finds MP by linkage_group.linkage_group_label' do
       expect(Search.new("group la").map_positions.count).to eq 1
       expect(Search.new("group").map_positions.count).to eq 2
@@ -261,6 +265,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
   describe '#qtl' do
     it 'finds QTL by :outer_interval_start' do
       expect(Search.new('347.11').qtl.count).to eq 1
+    end
+
+    it 'does not find QTL by inexact :outer_interval_start' do
+      expect(Search.new('347').qtl.count).to eq 0
     end
 
     it 'finds QTL by trait_descriptor.descriptor_name' do
