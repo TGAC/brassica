@@ -23,7 +23,7 @@ RSpec.describe Filterable do
       end
     end
 
-    let(:search) { instance_double("Search") }
+    let(:search) { object_double(Search.new("n")) }
     let(:query) { { fetch: 'n' } }
 
     it 'includes Filterable to handle search results display' do
@@ -50,7 +50,7 @@ RSpec.describe Filterable do
       @searchable.each do |searchable|
         expect(Search).to receive(:new).with('n').and_return(search)
         expect(search).
-          to receive(searchable.table_name).and_return(searchable.search('n'))
+          to receive(searchable.table_name.to_sym).and_return(searchable.search('n'))
         searchable.filter(query)
       end
     end
