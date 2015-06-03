@@ -91,6 +91,7 @@ class Qtl < ActiveRecord::Base
       only: numeric_columns.map(&:to_sym) | [:map_qtl_label],
       include: {
         processed_trait_dataset: {
+          only: [],
           include: { trait_descriptor: { only: :descriptor_name } }
         }
       }
