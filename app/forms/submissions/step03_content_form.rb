@@ -1,13 +1,13 @@
 module Submissions
-  class Step03ContentForm < BaseForm
-    extend ModelHelper
-
+  class Step03ContentForm < PlantPopulationForm
     property :female_parent_line
     property :male_parent_line
     property :plant_line_list
 
-    validates :female_parent_line, inclusion: { in: plant_lines, allow_blank: true }
-    validates :male_parent_line, inclusion: { in: plant_lines, allow_blank: true }
+    validates :female_parent_line, :male_parent_line, inclusion: {
+      in: PlantLine.pluck(:plant_line_name),
+      allow_blank: true
+    }
 
     collection :new_plant_lines do
       property :plant_line_name
@@ -28,7 +28,7 @@ module Submissions
     validate do
       new_plant_lines.each do |new_plant_line|
         if plant_line_exists?(new_plant_line.plant_line_name)
-          errors.add(:new_plant_line, "#{new_plant_line.plant_line_name} already exists in our database")
+          errors.add(:new_plant_lines, :taken, name: new_plant_line.plant_line_name)
         end
       end
     end
@@ -38,7 +38,7 @@ module Submissions
     validate do
       plant_line_list.each do |name|
         unless plant_line_exists?(name) || new_plant_lines.map(&:plant_line_name).include?(name)
-          errors.add(:plant_line_list, "#{name} is not defined")
+          errors.add(:plant_line_list, :blank, name: name)
         end
       end
     end

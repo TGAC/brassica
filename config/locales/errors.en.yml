@@ -1,0 +1,22 @@
+---
+en:
+  activerecord:
+    errors:
+      models:
+        submission:
+          attributes:
+            name:
+              blank: Please provide a name.
+              taken: A plant population with this name already exists.
+
+            population_type:
+              inclusion: Please select a population type from the list.
+
+            taxonomy_term:
+              inclusion: Please select a taxonomy term from the list.
+
+            new_plant_lines:
+              taken: "A plant line with name \"%{name}\" already exists."
+
+            plant_line_list:
+              blank: "A plant line with name \"%{name}\" is not defined."

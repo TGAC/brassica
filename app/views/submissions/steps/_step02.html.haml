@@ -11,6 +11,6 @@
 
     .form-group
       = content.label :population_type, class: 'required'
-      = content.select :population_type, @content.class.population_types, { include_blank: true }, class: 'population-type form-control', 'data-placeholder': "Select population type"
+      = content.select :population_type, PopulationType.population_types, { include_blank: true }, class: 'population-type form-control', 'data-placeholder': "Select population type"
 
   = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
