@@ -72,7 +72,7 @@ class Submission::PlantPopulationFinalizer
     end
 
     attrs.merge!(submission.content.step04.to_h)
-    attrs.delete(:owned_by) # FIXME change to :population_owned_by in the form (or remove entirely)
+    attrs.delete(:owned_by)
 
     if PlantPopulation.where(name: attrs[:name]).exists?
       rollback(0)
