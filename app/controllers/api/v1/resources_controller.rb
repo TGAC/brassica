@@ -1,8 +1,5 @@
-# FIXME extend ActionController::Metal instead as some mixins are not needed
-class Api::V1::ResourcesController < ApplicationController
+class Api::V1::ResourcesController < Api::BaseController
   include Pagination
-
-  protect_from_forgery with: :null_session
 
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
