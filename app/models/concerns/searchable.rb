@@ -34,4 +34,10 @@ module Searchable extend ActiveSupport::Concern
       as_json(self.class.indexed_json_structure)
     end
   end
+
+  def self.classes
+    ActiveRecord::Base.descendants.select { |klass|
+      klass.ancestors.include?(Searchable)
+    }
+  end
 end
