@@ -38,6 +38,12 @@ class MapPosition < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'map_position'
+    ]
+  end
+
   def self.permitted_params
     [
       :fetch,
@@ -56,6 +62,21 @@ class MapPosition < ActiveRecord::Base
       'linkage_group_id',
       'population_locus_id'
     ]
+  end
+
+  mapping dynamic: 'false' do
+    indexes :marker_assay_name
+    indexes :map_position
+    indexes :linkage_group do
+      indexes :linkage_group_label
+    end
+    indexes :population_locus do
+      indexes :mapping_locus
+    end
+
+    MapPosition.numeric_columns.each do |column|
+      indexes column, include_in_all: 'false'
+    end
   end
 
   include Annotable
