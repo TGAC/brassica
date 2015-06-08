@@ -49,9 +49,10 @@ $ ->
           else
             $(nButton).hide()
       ,
-        sExtends: 'text'
+        sExtends: if window.isSafari() then 'csv' else 'text'
         sButtonClass: 'btn-sm'
         sButtonText: '<i class="fa fa-download"></i> Export to CSV'
+        sFileName: '*.csv'
         sFieldSeperator: ','
         oSelectorOpts:
           search: 'applied'
@@ -62,20 +63,25 @@ $ ->
             api.columns().indexes().toArray().slice(0, -2)
           else
             api.columns().indexes().toArray().slice(0, -1)
-        fnClick: ( nButton, oConfig, oFlash ) ->
-          data = this.fnGetTableData(oConfig)
-          blob = new Blob([data])
-          filename = 'BIP_' + $(this.s.dt.nTable).attr('id').replace(/-/g,'_') + '.csv'
-          if window.navigator.msSaveOrOpenBlob
-            window.navigator.msSaveBlob(blob, filename)
+        fnClick:
+          if window.isSafari()
+            undefined  # Use the original flash function
           else
-            a = window.document.createElement("a")
-            a.href = window.URL.createObjectURL(blob, {type: "text/plain"})
-            a.download = filename
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
+            ( nButton, oConfig, oFlash ) ->
+              data = this.fnGetTableData(oConfig)
+              blob = new Blob([data])
+              filename = 'BIP_' + $(this.s.dt.nTable).attr('id').replace(/-/g,'_') + '.csv'
+              if window.navigator.msSaveOrOpenBlob
+                window.navigator.msSaveBlob(blob, filename)
+              else
+                a = window.document.createElement("a")
+                a.href = window.URL.createObjectURL(blob, {type: "text/plain"})
+                a.download = filename
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
       ]
+    sSwfPath: '/swf/copy_csv_xls.swf'
 
 
   $('.data-table').each (i)->
@@ -143,3 +149,6 @@ window.escapeHtml = (string) ->
   }
   String(string).replace /[&<>"'\/]/g, (s) ->
     entityMap[s]
+
+window.isSafari = ->
+  navigator.userAgent.indexOf('Safari') && !navigator.userAgent.indexOf('Chrome')
