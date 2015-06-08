@@ -3,6 +3,6 @@
 - if errors.present?
   .errors
     %ul
-      - errors.full_messages.each do |error|
-        %li= error
+      - errors.values.each do |error|
+        %li= error[0]
 

@@ -1,5 +1,5 @@
 module Submissions
-  class Step01ContentForm < BaseForm
+  class Step01ContentForm < PlantPopulationForm
     property :name
     property :description
     property :owned_by

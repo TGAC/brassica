@@ -1,11 +1,9 @@
 module Submissions
-  class Step02ContentForm < BaseForm
-    extend ModelHelper
-
+  class Step02ContentForm < PlantPopulationForm
     property :population_type
     property :taxonomy_term
 
-    validates :population_type, inclusion: { in: population_types }
     validates :taxonomy_term, inclusion: { in: TaxonomyTerm.names }
+    validates :population_type, inclusion: { in: PopulationType.population_types }
   end
 end
