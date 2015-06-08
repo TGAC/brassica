@@ -42,6 +42,20 @@ class Api::V1::ResourcesController < Api::BaseController
     end
   end
 
+  def destroy
+    resource = model_klass.find_by(id: params[:id])
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.user != @api_key.user
+      render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
+    elsif resource.published?
+      render json: { reason: 'This resource is already published and irrevocable' }, status: :forbidden
+    else
+      resource.destroy
+      head :no_content
+    end
+  end
+
   private
 
   def authenticate_api_key!

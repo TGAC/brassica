@@ -11,6 +11,7 @@ RSpec.describe "API V1" do
   Api.writable_models.each do |model_klass|
     describe model_klass do
       it_behaves_like "API-writable resource", model_klass
+      it_behaves_like "API-deletable resource", model_klass
     end
   end
 
