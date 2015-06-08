@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150522090211) do
+ActiveRecord::Schema.define(version: 20150608102750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -228,22 +228,24 @@ ActiveRecord::Schema.define(version: 20150522090211) do
   add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
 
   create_table "plant_lines", force: :cascade do |t|
-    t.text    "plant_line_name",    default: "", null: false
-    t.text    "common_name"
-    t.text    "plant_variety_name"
-    t.text    "named_by_whom"
-    t.text    "organisation"
-    t.text    "genetic_status"
-    t.text    "previous_line_name"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "data_owned_by"
-    t.text    "confirmed_by_whom"
-    t.integer "taxonomy_term_id"
-    t.integer "plant_variety_id"
-    t.integer "user_id"
+    t.text     "plant_line_name",    default: "", null: false
+    t.text     "common_name"
+    t.text     "plant_variety_name"
+    t.text     "named_by_whom"
+    t.text     "organisation"
+    t.text     "genetic_status"
+    t.text     "previous_line_name"
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_provenance"
+    t.text     "data_owned_by"
+    t.text     "confirmed_by_whom"
+    t.integer  "taxonomy_term_id"
+    t.integer  "plant_variety_id"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "plant_lines", ["plant_line_name"], name: "plant_lines_plant_line_name_idx", using: :btree
@@ -279,30 +281,32 @@ ActiveRecord::Schema.define(version: 20150522090211) do
   add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
 
   create_table "plant_populations", force: :cascade do |t|
-    t.text    "name",                         default: "",            null: false
-    t.text    "population_type"
-    t.text    "canonical_population_name",    default: "unspecified"
-    t.text    "description"
-    t.date    "date_established"
-    t.text    "established_by_whom"
-    t.text    "establishing_organisation"
-    t.text    "population_owned_by"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_owned_by"
-    t.text    "data_provenance"
-    t.text    "confirmed_by_whom"
-    t.text    "assigned_population_name"
-    t.integer "taxonomy_term_id"
-    t.integer "male_parent_line_id"
-    t.integer "female_parent_line_id"
-    t.integer "population_type_id"
-    t.integer "plant_population_lists_count", default: 0,             null: false
-    t.integer "linkage_maps_count",           default: 0,             null: false
-    t.integer "plant_trials_count",           default: 0,             null: false
-    t.integer "population_loci_count",        default: 0,             null: false
-    t.integer "user_id"
+    t.text     "name",                         default: "",            null: false
+    t.text     "population_type"
+    t.text     "canonical_population_name",    default: "unspecified"
+    t.text     "description"
+    t.date     "date_established"
+    t.text     "established_by_whom"
+    t.text     "establishing_organisation"
+    t.text     "population_owned_by"
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_owned_by"
+    t.text     "data_provenance"
+    t.text     "confirmed_by_whom"
+    t.text     "assigned_population_name"
+    t.integer  "taxonomy_term_id"
+    t.integer  "male_parent_line_id"
+    t.integer  "female_parent_line_id"
+    t.integer  "population_type_id"
+    t.integer  "plant_population_lists_count", default: 0,             null: false
+    t.integer  "linkage_maps_count",           default: 0,             null: false
+    t.integer  "plant_trials_count",           default: 0,             null: false
+    t.integer  "population_loci_count",        default: 0,             null: false
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "plant_populations", ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree

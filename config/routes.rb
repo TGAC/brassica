@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       get ":plural_model_name", to: 'resources#index', constraints: get_constraints
       get ":plural_model_name/:id", to: 'resources#show', constraints: get_constraints
       post ":plural_model_name", to: 'resources#create', constraints: post_constraints
+      delete ":plural_model_name/:id", to: 'resources#destroy', constraints: post_constraints
     end
   end
 end

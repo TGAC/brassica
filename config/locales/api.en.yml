@@ -167,6 +167,39 @@ en:
           }
         }
 
+    delete:
+      request: |-
+        DELETE /api/v1/plant_populations/5555 HTTP/1.1
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+      examples:
+        ok_response: |-
+          HTTP/1.1 204 No Content
+
+        no_record_found: |-
+          HTTP/1.1 404 Not Found
+          Content-Type: application/json
+
+          {
+            "reason": "Resource not found"
+          }
+
+        wrong_owner: |-
+          HTTP/1.1 401 Unauthorized
+          Content-Type: application/json
+
+          {
+            "reason": "API key owner and resource owner mismatch"
+          }
+
+        already_published: |-
+          HTTP/1.1 403 Forbidden
+          Content-Type: application/json
+
+          {
+            "reason": "This resource is already published and irrevocable"
+          }
+
     default:
       attrs:
         id:

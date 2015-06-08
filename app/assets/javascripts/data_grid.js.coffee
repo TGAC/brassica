@@ -111,6 +111,8 @@ $ ->
           content += metadataElement('Comments', response['comments'])
           content += metadataElement('Entered by', response['entered_by_whom'])
           content += metadataElement('Entry date', response['date_entered'])
+          unless response['published?']
+            content += '<i>This entry is still pending confirmation. Please do not quote it yet.</i>'
           content += pubmedLink(response['pubmed_id'])
           content = 'No annotations' if content == ''
           $(this).data('bs.popover').options.content = content

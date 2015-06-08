@@ -10,6 +10,7 @@
           %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
           %li= link_to "Submitting data", "#submitting-data"
+          %li= link_to "Deleting data", "#deleting-data"
 
           - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
@@ -234,6 +235,52 @@
       %h4 Example
       %pre.response
         %code= t('api.general.create.examples.wrong_vs_right_related_object')
+
+
+      %h3#deleting-data.section-heading Deleting submitted data
+
+      %p
+        The basic data management policy of BIP is that after you submit your data, it
+        becomes public and could be cited as a public resource by other users. However,
+        in reality, mistakes are possible when submitting data, thus this ability to
+        delete submitted resources.
+
+      %p
+        The rule of thumb is that after a successful submission you have exactly <strong>one week</strong>
+        to delete your data. So please take that time to check if all information was
+        delivered correctly. Afterwards, the data is blocked as irrevocably published.
+        In case you'd like to revert such older changes, please contact BIP support
+        team directly.
+
+      %h4 Example
+      %pre
+        %code= t('api.delete.request')
+
+      %p
+        This example shows how to <i>delete</i> the Plant Population with the internal
+        BIP <code>id</code> equal 5555. This may result in several different responses:
+
+      %h4 Examples
+      %ol
+        %li
+          %p Wrong, nonexistent Plant Population
+          %pre.response
+            %code= t('api.delete.examples.no_record_found')
+
+        %li
+          %p API key owner and resource owner are not the same user
+          %pre.response
+            %code= t('api.delete.examples.wrong_owner')
+
+        %li
+          %p The requested resource is already past its revocation period and cannot be deleted anymore
+          %pre.response
+            %code= t('api.delete.examples.already_published')
+
+        %li
+          %p The call was a success, the resource was deleted
+          %pre.response
+            %code= t('api.delete.examples.ok_response')
 
 
       -# Models section follows
