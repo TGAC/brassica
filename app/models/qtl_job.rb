@@ -27,8 +27,6 @@ class QtlJob < ActiveRecord::Base
   def self.table_columns
     [
       'qtl_job_name',
-      # TODO FIXME this has to await fixing #205
-      # 'linkage_map_id',
       'qtl_software',
       'qtl_method',
       'threshold_specification_method',

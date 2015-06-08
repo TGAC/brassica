@@ -30,9 +30,6 @@ class PlantAccession < ActiveRecord::Base
       'originating_organisation',
       'year_produced',
       'date_harvested'
-      # TODO FIXME these two have to wait for #204 fix
-      # 'female_parent_plant_id"
-      # 'male_parent_plant_id"
     ]
   end
 

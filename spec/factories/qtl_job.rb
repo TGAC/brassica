@@ -1,8 +1,6 @@
 FactoryGirl.define do
   factory :qtl_job do
     sequence(:qtl_job_name) {|n| "#{Faker::Lorem.characters(11)}_#{n}"}
-    # TODO FIXME this has to await fixing #205
-    # 'linkage_map_id',
     qtl_software { Faker::Lorem.word }
     qtl_method { Faker::Lorem.word }
     threshold_specification_method { Faker::Lorem.sentence }
