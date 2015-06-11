@@ -9,9 +9,12 @@ class PlantPopulation < ActiveRecord::Base
   belongs_to :user
 
   has_many :plant_population_lists
-  has_many :linkage_maps
-  has_many :population_loci
-  has_many :plant_trials
+  has_many :linkage_maps,
+           dependent: :nullify
+  has_many :population_loci,
+           dependent: :nullify
+  has_many :plant_trials,
+           dependent: :nullify
 
   has_and_belongs_to_many :plant_lines,
                           join_table: 'plant_population_lists'
