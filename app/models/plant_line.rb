@@ -6,10 +6,13 @@ class PlantLine < ActiveRecord::Base
 
   has_many :plant_population_lists
   has_many :fathered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'male_parent_line_id'
+           foreign_key: 'male_parent_line_id',
+           dependent: :nullify
   has_many :mothered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'female_parent_line_id'
-  has_many :plant_accessions
+           foreign_key: 'female_parent_line_id',
+           dependent: :nullify
+  has_many :plant_accessions,
+           dependent: :nullify
 
   has_and_belongs_to_many :plant_populations,
                           join_table: 'plant_population_lists'
