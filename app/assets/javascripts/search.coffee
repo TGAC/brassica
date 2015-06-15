@@ -4,21 +4,26 @@ class Search
     @$results = $(results)
     @$examples = $(examples)
 
-  bind: =>
+  prepare: =>
     @$form.on 'submit', (event) =>
       event.preventDefault()
-
-      term = $.trim(@$form.find('input[type=text]').val())
-
-      return if @term == term
-      return unless term.length >= 2
-
-      @performSearch(term)
+      @triggerSearch()
 
     @$examples.on 'click', (event) =>
+      event.preventDefault()
       exampleTerm = $(event.currentTarget).data('term')
       @$form.find('input[type=text]').val(exampleTerm)
       @$form.submit()
+
+    @triggerSearch()
+
+  triggerSearch: =>
+    term = $.trim(@$form.find('input[type=text]').val())
+
+    return if @term == term
+    return unless term.length >= 2
+
+    @performSearch(term)
 
   performSearch: (term) =>
     @term = term
@@ -38,9 +43,14 @@ class Search
 
       success: (response) =>
         @$results.html(response)
+        @updateHistory(term)
 
-      complete:
+      complete: =>
         @ajax = null
 
+  updateHistory: (term) =>
+    if window.location.search != "?search=#{term}"
+      window?.history?.pushState(null, null, "/?search=#{term}")
+
 $ ->
-  new Search('.search', '.search-results', '.search-example').bind()
+  new Search('.search', '.search-results', '.search-example').prepare()
