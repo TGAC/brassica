@@ -19,7 +19,13 @@
       %form.search{ action: "/search" }
         .form-group
           .input-group
-            %input.form-control.form-negative(type="text" placeholder="Search for..." autofocus autocomplete='off')
+            %input.form-control.form-negative(  |
+              type="text"                       |
+              value=@term                       |
+              placeholder="Search for..."       |
+              autofocus autocomplete='off'      |
+            )                                   |
+
             %span.input-group-btn
               %button.btn.btn-primary(type="submit") Search
       %em.search-examples.pull-left

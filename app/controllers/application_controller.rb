@@ -5,13 +5,13 @@ class ApplicationController < ActionController::Base
 
   def index
     @submissions = Submission.finalized.recent_first.take(5)
-
     @statistics = [
       PlantPopulation.count,
       TraitScore.count,
       TaxonomyTerm.count,
       PlantLine.count
     ]
+    @term = params[:search]
   end
 
   def about; end
