@@ -353,7 +353,6 @@ div[class*="col-"] > .form-group {
 //fix IE11 long lines inside table
 @media all and (-ms-high-contrast:none) {
   .table {
-    table-layout: fixed;
     width: 100% !important;
 
     th, td {
