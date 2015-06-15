@@ -1,9 +1,11 @@
 .api-live-example
   - if user_signed_in?
     %button.btn.btn-default{type: 'button', data: { url: url } } Try it!
-    .url
-    %pre.response.hidden
-      %code
+
+    .result.hidden
+      .description Result of the call:
+      %pre.response
+        %code
 
   - else
     .alert.alert-info Sign in to try it in your browser!
