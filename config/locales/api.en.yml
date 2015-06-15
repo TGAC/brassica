@@ -257,7 +257,7 @@ en:
         -
           name: genetic_status
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Design method used to obtain this population line (i.e. open pollinated, inbred, substitution lines)
         -
           name: previous_line_name
           create: Q
@@ -331,13 +331,13 @@ en:
         -
           name: date_established
           format: date
-          desc: TODO FIXME ASK TGAC
+          desc: Year of population introduction
         -
           name: established_by_whom
-          desc: TODO FIXME ASK TGAC
+          desc: The person, if known, who introduced this population
         -
           name: establishing_organisation
-          desc: TODO FIXME ASK TGAC
+          desc: Legal entity that introduced this population
         -
           name: population_owned_by
           desc: Name of the legal entity which owns this population
@@ -409,7 +409,7 @@ en:
         -
           name: crop_type
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Crop type of this variety (e.g. kale, swede, rape etc.)
         -
           name: comments
         -
@@ -506,15 +506,15 @@ en:
         -
           name: total_length
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Total length of this linkage group in centimorgan (cM)
         -
           name: lod_threshold
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: The threshold of LOD score of similarity for this linkage group
         -
           name: consensus_group_assignment
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Consensus group identification (e.g. A01, C09) in accordance with community naming standards
         -
           name: consensus_group_orientation
           create: Q
@@ -615,19 +615,19 @@ en:
         -
           name: consensus_group_assignment
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Consensus group identification (e.g. A01, C09) in accordance with community naming standards
         -
           name: canonical_marker_name
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Marker assay related to this map locus hit
         -
           name: associated_sequence_id
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Identifier of the nucleotide sequence related to this hit in external database
         -
           name: sequence_source_acronym
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Name of the external database where to look for the associated nucleotide sequence
         -
           name: atg_hit_seq_id
           create: Q
@@ -639,15 +639,15 @@ en:
         -
           name: bac_hit_seq_id
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Identification of sequence obtained with bacterial artificial chromosome (BAC) method
         -
           name: bac_hit_seq_source
           create: Q
-          desc: Indication about the source of the sequence (usually NCBI services)
+          desc: Indication about the source of the BAC sequence (usually NCBI services)
         -
           name: bac_hit_name
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Brassica BAC clone identifier as used in the linked external database
         -
           name: linkage_map_id
           format: int
@@ -765,7 +765,7 @@ en:
         -
           name: plant_accession_derivation
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: What is the source of plant accession information (for instance, an experiment)
         -
           name: accession_originator
           create: Q
@@ -816,15 +816,15 @@ en:
         -
           name: number_units_scored
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Number of units scored for this particual scoring scenario
         -
           name: scoring_unit_sample_size
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: The size of the scored unit
         -
           name: scoring_unit_frame_size
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: The size of the scored unit
         -
           name: date_planted
           format: date
@@ -1038,7 +1038,7 @@ en:
         -
           name: clone_name
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Clone type (e.g. genomic survey sequence GSS, expressed sequence tag EST,  or similar)
         -
           name: sequence_id
           create: Q
@@ -1075,7 +1075,7 @@ en:
         -
           name: qtl_rank
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Order of QTL on an associated linkage group
         -
           name: map_qtl_label
           create: Q
@@ -1103,27 +1103,27 @@ en:
         -
           name: peak_value
           create: Q
-          desc: Peak probability value for the QTL intervals represented by this record
+          desc: Peak probability value for the QTL intervals represented by this record (QTL curve peak value)
         -
           name: peak_p_value
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: regression_p
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: residual_p
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: additive_effect
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: genetic_variance_explained
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: comments
         -
