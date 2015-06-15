@@ -1,7 +1,8 @@
 class Search
-  constructor: (form, results) ->
+  constructor: (form, results, examples) ->
     @$form = $(form)
     @$results = $(results)
+    @$examples = $(examples)
 
   bind: =>
     @$form.on 'submit', (event) =>
@@ -13,6 +14,11 @@ class Search
       return unless term.length >= 2
 
       @performSearch(term)
+
+    @$examples.on 'click', (event) =>
+      exampleTerm = $(event.currentTarget).data('term')
+      @$form.find('input[type=text]').val(exampleTerm)
+      @$form.submit()
 
   performSearch: (term) =>
     @term = term
@@ -26,7 +32,8 @@ class Search
       data:
         search: term
 
-      before:
+      beforeSend: =>
+        $('.search-examples').hide()
         @$results.html("<i class='fa fa-2x fa-spin fa-circle-o-notch'></i>")
 
       success: (response) =>
@@ -36,5 +43,4 @@ class Search
         @ajax = null
 
 $ ->
-  new Search('.search', '.search-results').bind()
-
+  new Search('.search', '.search-results', '.search-example').bind()

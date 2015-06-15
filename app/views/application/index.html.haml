@@ -22,6 +22,10 @@
             %input.form-control.form-negative(type="text" placeholder="Search for..." autofocus autocomplete='off')
             %span.input-group-btn
               %button.btn.btn-primary(type="submit") Search
+      %em.search-examples.pull-left
+        Examples:
+        - ['oleracea', '73.3', 'pX129'].each do |term|
+          = link_to term, '#', class: 'search-example', data: { term: term }
 
     .col-md-1
       %span.text-negative - or -

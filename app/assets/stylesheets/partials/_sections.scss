@@ -37,6 +37,17 @@
   .form-group {
     margin: 0;
   }
+
+  .search-examples {
+    color: $text-color-negative;
+    margin-top: 8px;
+    line-height: normal;
+
+    .search-example {
+      color: $text-color-negative;
+      text-decoration: underline;
+    }
+  }
 }
 
 .section-actions {
