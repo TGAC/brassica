@@ -21,7 +21,9 @@ FactoryGirl.define do
         plant_population_registry.plant_trials =
           build_list(:plant_trial, 2, plant_population_id: evaluator.id)
 
-        plant_population_registry.plant_lines = build_list(:plant_line, 4)
+        # plant_population_registry.plant_lines = build_list(:plant_line, 4)
+        plant_population_registry.plant_population_lists =
+          build_list(:plant_population_list, 4, plant_population_id: evaluator.id)
       end
     end
   end

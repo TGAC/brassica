@@ -5,5 +5,9 @@ FactoryGirl.define do
     sequence_source_acronym { Faker::Lorem.word }
     description { Faker::Lorem.sentence }
     annotable
+
+    after(:build) do |primer_registry, _|
+      primer_registry.sequence = 'GATTACA'
+    end
   end
 end
