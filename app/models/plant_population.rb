@@ -16,8 +16,9 @@ class PlantPopulation < ActiveRecord::Base
   has_many :plant_trials,
            dependent: :nullify
 
-  has_and_belongs_to_many :plant_lines,
-                          join_table: 'plant_population_lists'
+  has_many :plant_population_lists
+  has_many :plant_lines,
+           through: :plant_population_lists
 
   validates :name,
             presence: true,

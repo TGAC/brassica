@@ -14,8 +14,9 @@ class PlantLine < ActiveRecord::Base
   has_many :plant_accessions,
            dependent: :nullify
 
-  has_and_belongs_to_many :plant_populations,
-                          join_table: 'plant_population_lists'
+  has_many :plant_population_lists
+  has_many :plant_populations,
+           through: :plant_population_lists
 
   after_update { mothered_descendants.each(&:touch) }
   after_update { fathered_descendants.each(&:touch) }

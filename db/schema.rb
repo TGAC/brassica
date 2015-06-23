@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623161154) do
+ActiveRecord::Schema.define(version: 20150623222816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -269,15 +269,18 @@ ActiveRecord::Schema.define(version: 20150623161154) do
 
   add_index "plant_parts", ["plant_part"], name: "plant_parts_plant_part_idx", using: :btree
 
-  create_table "plant_population_lists", id: false, force: :cascade do |t|
-    t.text    "sort_order",          default: "unspecified", null: false
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "confirmed_by_whom"
-    t.integer "plant_line_id"
-    t.integer "plant_population_id"
+  create_table "plant_population_lists", force: :cascade do |t|
+    t.text     "sort_order",          default: "unspecified", null: false
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_provenance"
+    t.text     "confirmed_by_whom"
+    t.integer  "plant_line_id"
+    t.integer  "plant_population_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "plant_population_lists", ["plant_line_id"], name: "plant_population_lists_plant_line_id_idx", using: :btree
