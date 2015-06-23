@@ -1,14 +1,17 @@
-class DroppingAllDefaults < ActiveRecord::Migration
+class DropAllDefaults < ActiveRecord::Migration
   def up
     change_column_default :countries, :country_code, nil
+
     change_column_default :design_factors, :design_factor_name, nil
     change_column_default :design_factors, :institute_id, nil
     change_column_default :design_factors, :trial_location_name, nil
     change_column_default :design_factors, :design_unit_counter, nil
+
     change_column_default :genotype_matrices, :matrix_compiled_by, nil
     change_column_default :genotype_matrices, :original_file_name, nil
     change_column_default :genotype_matrices, :number_markers_in_matrix, nil
     change_column_default :genotype_matrices, :number_lines_in_matrix, nil
+
     change_column_default :linkage_groups, :linkage_group_label, nil
     change_column_default :linkage_groups, :linkage_group_name, nil
     change_column_default :linkage_groups, :consensus_group_assignment, nil

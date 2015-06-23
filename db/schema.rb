@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150623225601) do
+ActiveRecord::Schema.define(version: 20150623225602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -270,7 +270,7 @@ ActiveRecord::Schema.define(version: 20150623225601) do
   add_index "plant_parts", ["plant_part"], name: "plant_parts_plant_part_idx", using: :btree
 
   create_table "plant_population_lists", force: :cascade do |t|
-    t.text     "sort_order",          null: false
+    t.text     "sort_order"
     t.text     "comments"
     t.text     "entered_by_whom"
     t.date     "date_entered"
