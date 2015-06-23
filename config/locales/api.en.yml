@@ -298,6 +298,7 @@ en:
         -
           name: plant_populations_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Populations bred in this Plant Line
 
       create:
@@ -389,6 +390,7 @@ en:
         -
           name: plant_lines_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines that this population is associated with
 
       create:
