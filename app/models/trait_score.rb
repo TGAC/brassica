@@ -2,6 +2,10 @@ class TraitScore < ActiveRecord::Base
 
   belongs_to :plant_scoring_unit, counter_cache: true
   belongs_to :trait_descriptor, counter_cache: true
+  belongs_to :user
+
+  validates :score_value,
+            presence: true
 
   include Filterable
   include Pluckable
@@ -36,6 +40,10 @@ class TraitScore < ActiveRecord::Base
           'id'
         ]
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

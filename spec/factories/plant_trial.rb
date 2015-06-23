@@ -11,6 +11,7 @@ FactoryGirl.define do
     confirmed_by_whom { Faker::Internet.user_name }
     country
     plant_population
+    user
     annotable
   end
 end

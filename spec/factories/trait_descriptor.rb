@@ -17,6 +17,7 @@ FactoryGirl.define do
     contact_person { Faker::Internet.user_name }
     date_method_agreed { Faker::Date.backward }
     confirmed_by_whom { Faker::Internet.user_name }
+    user
     annotable
   end
 end

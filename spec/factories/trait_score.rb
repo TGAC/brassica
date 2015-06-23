@@ -4,8 +4,9 @@ FactoryGirl.define do
     value_type { Faker::Lorem.sentence }
     scoring_date { rand(1..100).days.ago }
     confirmed_by_whom { Faker::Internet.user_name }
-    annotable
     plant_scoring_unit
+    user
     trait_descriptor
+    annotable
   end
 end

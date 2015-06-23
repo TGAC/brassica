@@ -228,14 +228,21 @@
 
       %p
         Finally, attributes marked as <code>readonly</code> in the attribute
-        tables cannot be directly set (one such example is the <code>population_type</code> of a Plant Population).
-        Instead, one should provide the BIP identifier of a related object when submitting
+        tables cannot be directly set. These include single related resources
+        (one such example is the <code>population_type</code> of a Plant Population).
+        In this case, one should provide the BIP identifier of a related object when submitting
         new data. For instance, when submitting a new Plant Population:
 
       %h4 Example
       %pre.response
         %code= t('api.general.create.examples.wrong_vs_right_related_object')
 
+      %p
+        Another case of a <code>readonly</code> attributes may be multiple related
+        resources - for instance, <code>plant_trials_ids</code> of a Plant Population.
+        In such a case, one sets correct relationship when submitting the corresponding
+        resource (i.e., in a reverse fashion). That is, when submitting a new Plant Trial,
+        a correct value of <code>plant_population_id</code> will set the relationship.
 
       %h3#deleting-data.section-heading Deleting submitted data
 

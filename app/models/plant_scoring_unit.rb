@@ -4,6 +4,7 @@ class PlantScoringUnit < ActiveRecord::Base
   belongs_to :plant_trial, counter_cache: true
   belongs_to :plant_accession, counter_cache: true
   belongs_to :plant_part
+  belongs_to :user
 
   has_many :trait_scores
 
@@ -60,6 +61,10 @@ class PlantScoringUnit < ActiveRecord::Base
 
   def self.json_options
     { include: [:design_factor, :plant_part] }
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

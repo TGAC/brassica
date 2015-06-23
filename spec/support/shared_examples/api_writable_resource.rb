@@ -1,6 +1,17 @@
 RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
   let(:parsed_response) { JSON.parse(response.body) }
+  let(:required_attrs) { required_attributes(model_klass) - [:user]}
+
+  it 'has all required attributes described correctly in docs' do
+    props = I18n.t("api.#{model_klass.name.underscore}.attrs")
+    required_props = props.select{ |p| p[:create] && p[:create].include?('required') }
+    expect(required_props.map{ |rp| rp[:name].to_sym }).to match_array required_attrs
+  end
+
+  it 'belongs to user' do
+    expect(model_klass.reflect_on_all_associations(:belongs_to).map(&:name)).to include :user
+  end
 
   context "with no api key" do
     describe "POST /api/v1/#{model_name.pluralize}" do
@@ -35,8 +46,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
   context "with valid api key" do
     let(:api_key) { create(:api_key) }
-
-    let(:required_attrs) { required_attributes(model_klass) - [:user]}
 
     describe "POST /api/v1/#{model_name.pluralize}" do
       context "with valid attributes" do
@@ -125,7 +134,9 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
   end
 
   def required_attributes(model_klass)
-    model_klass.validators.map(&:attributes).flatten.uniq
+    presence_validators = model_klass.validators.select do |v|
+      v.instance_of? ActiveRecord::Validations::PresenceValidator
+    end
+    presence_validators.map(&:attributes).flatten.uniq
   end
-
 end

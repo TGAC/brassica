@@ -8,6 +8,7 @@ FactoryGirl.define do
     date_harvested { Faker::Date.backward }
     confirmed_by_whom { Faker::Internet.user_name }
     plant_line
+    user
     annotable
   end
 end

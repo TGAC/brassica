@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150608102750) do
+ActiveRecord::Schema.define(version: 20150623161154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,22 +206,25 @@ ActiveRecord::Schema.define(version: 20150608102750) do
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
 
   create_table "plant_accessions", force: :cascade do |t|
-    t.text    "plant_accession",            default: "", null: false
-    t.text    "plant_accession_derivation"
-    t.text    "accession_originator"
-    t.text    "originating_organisation"
-    t.text    "year_produced"
-    t.date    "date_harvested"
-    t.text    "female_parent_plant_id"
-    t.text    "male_parent_plant_id"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "data_owned_by"
-    t.text    "confirmed_by_whom"
-    t.integer "plant_line_id"
-    t.integer "plant_scoring_units_count",  default: 0,  null: false
+    t.text     "plant_accession",            default: "", null: false
+    t.text     "plant_accession_derivation"
+    t.text     "accession_originator"
+    t.text     "originating_organisation"
+    t.text     "year_produced"
+    t.date     "date_harvested"
+    t.text     "female_parent_plant_id"
+    t.text     "male_parent_plant_id"
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_provenance"
+    t.text     "data_owned_by"
+    t.text     "confirmed_by_whom"
+    t.integer  "plant_line_id"
+    t.integer  "plant_scoring_units_count",  default: 0,  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
@@ -317,23 +320,26 @@ ActiveRecord::Schema.define(version: 20150608102750) do
   add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
 
   create_table "plant_scoring_units", force: :cascade do |t|
-    t.text    "scoring_unit_name",        default: "", null: false
-    t.text    "number_units_scored"
-    t.text    "scoring_unit_sample_size"
-    t.text    "scoring_unit_frame_size"
-    t.date    "date_planted"
-    t.text    "described_by_whom"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "data_owned_by"
-    t.text    "confirmed_by_whom"
-    t.integer "plant_accession_id"
-    t.integer "plant_trial_id"
-    t.integer "design_factor_id"
-    t.integer "plant_part_id"
-    t.integer "trait_scores_count",       default: 0,  null: false
+    t.text     "scoring_unit_name",        default: "", null: false
+    t.text     "number_units_scored"
+    t.text     "scoring_unit_sample_size"
+    t.text     "scoring_unit_frame_size"
+    t.date     "date_planted"
+    t.text     "described_by_whom"
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_provenance"
+    t.text     "data_owned_by"
+    t.text     "confirmed_by_whom"
+    t.integer  "plant_accession_id"
+    t.integer  "plant_trial_id"
+    t.integer  "design_factor_id"
+    t.integer  "plant_part_id"
+    t.integer  "trait_scores_count",       default: 0,  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "plant_scoring_units", ["design_factor_id"], name: "plant_scoring_units_design_factor_id_idx", using: :btree
@@ -343,52 +349,58 @@ ActiveRecord::Schema.define(version: 20150608102750) do
   add_index "plant_scoring_units", ["scoring_unit_name"], name: "plant_scoring_units_scoring_unit_name_idx", using: :btree
 
   create_table "plant_trials", force: :cascade do |t|
-    t.text    "plant_trial_name",          default: "",            null: false
-    t.text    "project_descriptor",        default: "unspecified", null: false
-    t.text    "plant_trial_description",                           null: false
-    t.text    "trial_year"
-    t.text    "institute_id",              default: "unspecified", null: false
-    t.text    "trial_location_site_name",  default: "unspecified", null: false
-    t.text    "place_name",                default: "unspecified", null: false
-    t.text    "latitude",                  default: "unspecified", null: false
-    t.text    "longitude",                 default: "unspecified", null: false
-    t.text    "altitude"
-    t.text    "terrain"
-    t.text    "soil_type"
-    t.text    "contact_person",            default: "unspecified", null: false
-    t.text    "design_type"
-    t.text    "statistical_factors"
-    t.text    "design_factors"
-    t.text    "design_layout_matrix"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "data_owned_by"
-    t.text    "confirmed_by_whom"
-    t.integer "country_id"
-    t.integer "plant_population_id"
-    t.integer "pubmed_id"
-    t.integer "plant_scoring_units_count", default: 0,             null: false
+    t.text     "plant_trial_name",          default: "",            null: false
+    t.text     "project_descriptor",        default: "unspecified", null: false
+    t.text     "plant_trial_description"
+    t.text     "trial_year"
+    t.text     "institute_id"
+    t.text     "trial_location_site_name"
+    t.text     "place_name"
+    t.text     "latitude"
+    t.text     "longitude"
+    t.text     "altitude"
+    t.text     "terrain"
+    t.text     "soil_type"
+    t.text     "contact_person"
+    t.text     "design_type"
+    t.text     "statistical_factors"
+    t.text     "design_factors"
+    t.text     "design_layout_matrix"
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_provenance"
+    t.text     "data_owned_by"
+    t.text     "confirmed_by_whom"
+    t.integer  "country_id"
+    t.integer  "plant_population_id"
+    t.integer  "pubmed_id"
+    t.integer  "plant_scoring_units_count", default: 0,             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
   add_index "plant_trials", ["plant_trial_name"], name: "plant_trials_plant_trial_name_idx", using: :btree
 
   create_table "plant_varieties", force: :cascade do |t|
-    t.string "plant_variety_name"
-    t.string "crop_type"
-    t.string "comments"
-    t.text   "entered_by_whom"
-    t.date   "date_entered"
-    t.string "data_provenance"
-    t.string "data_attribution"
-    t.string "year_registered"
-    t.string "breeders_variety_code"
-    t.string "owner"
-    t.string "quoted_parentage"
-    t.string "female_parent"
-    t.string "male_parent"
+    t.string   "plant_variety_name"
+    t.string   "crop_type"
+    t.string   "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.string   "data_provenance"
+    t.string   "data_attribution"
+    t.string   "year_registered"
+    t.string   "breeders_variety_code"
+    t.string   "owner"
+    t.string   "quoted_parentage"
+    t.string   "female_parent"
+    t.string   "male_parent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   create_table "plant_variety_country_of_origin", id: false, force: :cascade do |t|
@@ -572,34 +584,37 @@ ActiveRecord::Schema.define(version: 20150608102750) do
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
   create_table "trait_descriptors", force: :cascade do |t|
-    t.text    "descriptor_label",         default: "",            null: false
-    t.text    "category",                 default: "unspecified", null: false
-    t.text    "descriptor_name",          default: "unspecified", null: false
-    t.text    "units_of_measurements"
-    t.text    "where_to_score",                                   null: false
-    t.text    "scoring_method"
-    t.text    "when_to_score"
-    t.text    "stage_scored"
-    t.text    "precautions"
-    t.text    "materials"
-    t.text    "controls"
-    t.text    "calibrated_against"
-    t.text    "instrumentation_required"
-    t.text    "likely_ambiguities"
-    t.text    "contact_person"
-    t.date    "date_method_agreed"
-    t.text    "score_type"
-    t.text    "related_trait_ids"
-    t.text    "related_characters"
-    t.text    "possible_interactions"
-    t.text    "authorities"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "data_owned_by"
-    t.text    "confirmed_by_whom"
-    t.integer "trait_scores_count",       default: 0,             null: false
+    t.text     "descriptor_label"
+    t.text     "category",                 default: "unspecified", null: false
+    t.text     "descriptor_name",          default: "unspecified", null: false
+    t.text     "units_of_measurements"
+    t.text     "where_to_score"
+    t.text     "scoring_method"
+    t.text     "when_to_score"
+    t.text     "stage_scored"
+    t.text     "precautions"
+    t.text     "materials"
+    t.text     "controls"
+    t.text     "calibrated_against"
+    t.text     "instrumentation_required"
+    t.text     "likely_ambiguities"
+    t.text     "contact_person"
+    t.date     "date_method_agreed"
+    t.text     "score_type"
+    t.text     "related_trait_ids"
+    t.text     "related_characters"
+    t.text     "possible_interactions"
+    t.text     "authorities"
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_provenance"
+    t.text     "data_owned_by"
+    t.text     "confirmed_by_whom"
+    t.integer  "trait_scores_count",       default: 0,             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "trait_descriptors", ["category"], name: "idx_144197_category", using: :btree
@@ -620,18 +635,21 @@ ActiveRecord::Schema.define(version: 20150608102750) do
   add_index "trait_grades", ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
 
   create_table "trait_scores", force: :cascade do |t|
-    t.text    "score_value"
-    t.text    "value_type"
-    t.text    "comments"
-    t.text    "entered_by_whom"
-    t.date    "date_entered"
-    t.text    "data_provenance"
-    t.text    "data_owned_by"
-    t.text    "confirmed_by_whom"
-    t.integer "plant_scoring_unit_id"
-    t.integer "scoring_occasion_id"
-    t.integer "trait_descriptor_id"
-    t.date    "scoring_date"
+    t.text     "score_value"
+    t.text     "value_type"
+    t.text     "comments"
+    t.text     "entered_by_whom"
+    t.date     "date_entered"
+    t.text     "data_provenance"
+    t.text     "data_owned_by"
+    t.text     "confirmed_by_whom"
+    t.integer  "plant_scoring_unit_id"
+    t.integer  "scoring_occasion_id"
+    t.integer  "trait_descriptor_id"
+    t.date     "scoring_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
   end
 
   add_index "trait_scores", ["plant_scoring_unit_id"], name: "trait_scores_plant_scoring_unit_id_idx", using: :btree

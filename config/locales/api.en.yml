@@ -283,14 +283,17 @@ en:
         -
           name: fathered_descendants_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the male line
         -
           name: mothered_descendants_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the female line
         -
           name: plant_accessions_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of related Plant Accessions
         -
           name: plant_populations_ids
@@ -323,7 +326,8 @@ en:
           name: data_owned_by
         -
           name: population_type
-          format: object, readonly
+          format: object
+          create: readonly
           desc: Additional information about the type of this population
         -
           name: description
@@ -370,14 +374,17 @@ en:
         -
           name: linkage_maps_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Linkage Maps defined for this population
         -
           name: population_loci_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Population Loci published for this population up until the present date
         -
           name: plant_trials_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of trait Plant Trials performed for this population until the present date
         -
           name: plant_lines_ids
@@ -404,7 +411,7 @@ en:
           create: Q
         -
           name: plant_variety_name
-          create: Q
+          create: required, Q
           desc: The name of this variety provided either by the person submitting the data or the database curator
         -
           name: crop_type
@@ -457,7 +464,21 @@ en:
         -
           name: plant_lines_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines classified under this plant variety
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_variety": {
+              "plant_variety_name": "BIPrassica"
+            }
+          }
 
     taxonomy_term:
       attrs:
@@ -760,8 +781,8 @@ en:
           create: Q
         -
           name: plant_accession
-          create: Q
-          desc: Unique name given to this accession by the database curator
+          create: required, Q
+          desc: Unique name given to this accession
         -
           name: plant_accession_derivation
           create: Q
@@ -802,7 +823,21 @@ en:
         -
           name: plant_scoring_units_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units performed for this plant
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_accession": {
+              "plant_accession": "Accession1"
+            }
+          }
 
     plant_scoring_unit:
       attrs:
@@ -811,7 +846,7 @@ en:
           create: Q
         -
           name: scoring_unit_name
-          create: Q
+          create: required, Q
           desc: Unique name assigned to this scoring unit by the person who submitted the data
         -
           name: number_units_scored
@@ -861,7 +896,21 @@ en:
         -
           name: trait_scores_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Trait Scores recorded in this scoring unit
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_scoring_unit": {
+              "scoring_unit_name": "Scoring2_2016"
+            }
+          }
 
     plant_trial:
       attrs:
@@ -870,11 +919,11 @@ en:
           create: Q
         -
           name: plant_trial_name
-          create: Q
+          create: required, Q
           desc: Unique name assigned to this scoring trial by the person who submitted the data
         -
           name: project_descriptor
-          create: Q
+          create: required, Q
           desc: Name of the project that undertook the trial
         -
           name: plant_trial_description
@@ -948,7 +997,22 @@ en:
         -
           name: plant_scoring_units_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units recorded during this trial
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_trial": {
+              "plant_trial_name": "BIPrassica Trial Spring 2016",
+              "project_descriptor": "BIPrassica Project"
+            }
+          }
 
     population_locus:
       attrs:
@@ -1215,9 +1279,11 @@ en:
           desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
+          create: required, Q
           desc: Plant trait category described by this this descriptor
         -
           name: descriptor_name
+          create: required, Q
           desc: Common name used to describe the trait
         -
           name: units_of_measurements
@@ -1287,7 +1353,22 @@ en:
         -
           name: trait_scores_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Trait Scores measured for this plant trait in various projects
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "trait_descriptor": {
+              "descriptor_name": "Invisible trait",
+              "category": "Metaphysical"
+            }
+          }
 
     trait_score:
       attrs:
@@ -1296,7 +1377,7 @@ en:
           create: Q
         -
           name: score_value
-          create: Q
+          create: required, Q
           desc: Value measured and recorded in the trial
         -
           name: value_type
@@ -1327,6 +1408,19 @@ en:
           name: trait_descriptor_id
           format: int
           desc: BIP identifier of the Trait Descriptor that provides more information about the scored trait
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "trait_score": {
+              "score_value": "1000"
+            }
+          }
 
     population_type:
       attrs:

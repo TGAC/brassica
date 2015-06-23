@@ -29,7 +29,16 @@ class Api
   end
 
   def self.writable_models
-    [PlantLine, PlantPopulation]
+    [
+      PlantAccession,
+      PlantLine,
+      PlantPopulation,
+      PlantScoringUnit,
+      PlantTrial,
+      PlantVariety,
+      TraitDescriptor,
+      TraitScore
+    ]
   end
 
   def self.readonly_models
