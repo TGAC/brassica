@@ -149,7 +149,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           { foo: "bar" }
         }
 
-        it "returns errors" do
+        it "returns errors on wrong model attribute name" do
           expect {
             post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.not_to change {
@@ -160,6 +160,19 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           expect(parsed_response).to have_key("errors")
           expect(parsed_response['errors'].first).
             to eq('attribute' => 'foo', 'message' => 'Unrecognized attribute name')
+        end
+
+        it "returns error on wrong model name" do
+          expect {
+            post "/api/v1/#{model_name.pluralize}", { "wrong_name" => { "does" => "not matter" } }, { "X-BIP-Api-Key" => api_key.token }
+          }.not_to change {
+            model_klass.count
+          }
+
+          expect(response.status).to eq 422
+          expect(parsed_response).to have_key("errors")
+          expect(parsed_response['errors']).
+            to eq('attribute' => model_name, 'message' => "param is missing or the value is empty: #{model_name}")
         end
       end
     end

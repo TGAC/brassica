@@ -11,6 +11,10 @@ class Api::V1::ResourcesController < Api::BaseController
     render json: { errors: { attribute: attribute, message: message } }, status: 422
   end
 
+  rescue_from ActionController::ParameterMissing do |exception|
+    render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
+  end
+
   def index
     filter_params = params[model_name].presence
 
