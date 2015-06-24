@@ -438,10 +438,12 @@ en:
         -
           name: plant_population_id
           format: int
+          create: required
           desc: BIP identifier of the Plant Population related to this list
         -
           name: plant_line_id
           format: int
+          create: required
           desc: BIP identifier of the Plant Line related to this list
 
       create:

@@ -2,6 +2,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
   let(:parsed_response) { JSON.parse(response.body) }
   let(:required_attrs) { required_attributes(model_klass) - [:user]}
+  let(:related_models) { all_belongs_to(model_klass) - [:user] }
 
   it 'has all required attributes described correctly in docs' do
     props = I18n.t("api.#{model_klass.name.underscore}.attrs")
@@ -52,7 +53,11 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         let(:model_attrs) {
           {}.tap do |attrs|
             required_attrs.each do |attr|
-              attrs[attr] = "Foo"
+              if related_models.include? attr.to_s.gsub('_id','').to_sym
+                attrs[attr] = create(attr.to_s.gsub('_id','')).id
+              else
+                attrs[attr] = "Foo"
+              end
             end
           end
         }
@@ -113,8 +118,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
       end
 
       context "with wrong foreign key params" do
-        let(:related_models) { all_belongs_to(model_klass) - [:user] }
-
         let(:model_attrs) {
           {}.tap do |attrs|
             required_attrs.each do |attr|
