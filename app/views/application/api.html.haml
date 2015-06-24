@@ -238,6 +238,12 @@
         %code= t('api.general.create.examples.wrong_vs_right_related_object')
 
       %p
+        If the identifier you provide does not exist in the BIP database, the following error will be returned:
+
+      %pre.response
+        %code= t('api.general.create.examples.invalid_foreign_key')
+
+      %p
         Another case of a <code>readonly</code> attributes may be multiple related
         resources - for instance, <code>plant_trials_ids</code> of a Plant Population.
         In such a case, one sets correct relationship when submitting the corresponding

@@ -89,7 +89,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         end
       end
 
-      context "with invalid params" do
+      context "with lack of required params" do
         let(:model_attrs) {
           {}.tap do |attrs|
             required_attrs.each do |attr|
@@ -109,6 +109,38 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           expect(parsed_response).to have_key("errors")
           expect(parsed_response['errors'].first).
             to eq('attribute' => required_attrs.first.to_s, 'message' => "Can't be blank")
+        end
+      end
+
+      context "with wrong foreign key params" do
+        let(:related_models) { all_belongs_to(model_klass) - [:user] }
+
+        let(:model_attrs) {
+          {}.tap do |attrs|
+            required_attrs.each do |attr|
+              attrs[attr] = "Foo"
+            end
+            related_models.each do |attr|
+              attrs["#{attr}_id"] = 555555
+            end
+          end
+        }
+
+        it "returns errors" do
+          if related_models.present?
+            expect {
+              post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+            }.not_to change {
+              model_klass.count
+            }
+
+            expect(response.status).to eq 422
+            expect(parsed_response).to have_key("errors")
+            attribute = parsed_response['errors']['attribute']
+            expect(related_models).to include(attribute[0..-4].to_sym)
+            expect(parsed_response['errors']['message']).
+              to start_with "DETAIL:  Key (#{attribute})=(555555) is not present in table"
+          end
         end
       end
 

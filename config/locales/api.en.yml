@@ -64,6 +64,19 @@ en:
               }
             }
 
+          invalid_foreign_key: |-
+            HTTP/1.1 422 Unprocessable Entity
+            Content-Type: application/json
+
+            {
+              "errors": [
+                {
+                  "attribute": "plant_population_id",
+                  "message": "DETAIL:  Key (plant_population_id)=(1000000) is not present in table \"plant_populations\"."
+                }
+              ]
+            }
+
 
         default_attribute_values:
           -
@@ -411,7 +424,6 @@ en:
       attrs:
         -
           name: sort_order
-          create: required
           desc: ???
         -
           name: comments

@@ -14,6 +14,7 @@ class Api::BaseController < ActionController::Metal
   include ActionController::Instrumentation
   include ActionController::ParamsWrapper
   include ActionController::StrongParameters
+  include ActionController::Rescue
 
   include Rails.application.routes.url_helpers
 end
