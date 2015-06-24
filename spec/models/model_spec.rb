@@ -33,6 +33,28 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
+  it 'nullifies all belongs_to relations on destroy' do
+    Api.writable_models.each do |model_klass|
+      instance = create(model_klass)
+      (all_belongs_to(model_klass) - [:user]).each do |belongs_to|
+        unless instance.send("#{belongs_to}_id").nil?
+          instance.send(belongs_to).destroy
+          expect(instance.reload.send("#{belongs_to}_id")).to be_nil
+        end
+      end
+    end
+  end
+
+  it 'prevents assignment of invalid foreign keys' do
+    Api.writable_models.each do |model_klass|
+      instance = create(model_klass)
+      all_belongs_to(model_klass).each do |belongs_to|
+        expect{ instance.update("#{belongs_to}_id" => 555666) }.
+          to raise_error ActiveRecord::InvalidForeignKey
+      end
+    end
+  end
+
   context 'when model supports elastic search' do
     before(:all) do
       @searchables = searchable_models

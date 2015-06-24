@@ -51,4 +51,8 @@ module CommonHelpers
       model.included_modules.include? Relatable
     end
   end
+
+  def all_belongs_to(model_klass)
+    model_klass.reflect_on_all_associations(:belongs_to).map(&:name)
+  end
 end

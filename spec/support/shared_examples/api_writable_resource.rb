@@ -10,7 +10,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
   end
 
   it 'belongs to user' do
-    expect(model_klass.reflect_on_all_associations(:belongs_to).map(&:name)).to include :user
+    expect(all_belongs_to(model_klass)).to include :user
   end
 
   context "with no api key" do
