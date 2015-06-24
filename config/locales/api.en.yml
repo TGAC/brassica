@@ -498,10 +498,12 @@ en:
         -
           name: countries_of_origin
           format: object[]
+          create: readonly
           desc: Zero or more JSON documents listing countries that this variety originates from
         -
           name: countries_registered
           format: object[]
+          create: readonly
           desc: Zero or more JSON documents listing countries that this variety is registered in
         -
           name: plant_lines_ids
