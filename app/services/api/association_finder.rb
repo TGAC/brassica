@@ -7,29 +7,39 @@ class Api::AssociationFinder
   end
 
   def has_many_associations
-    klass.reflections.map do |association, reflection|
-      next if reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection)
-      next if blacklisted_has_many_association?(association)
-      next if klass.respond_to?(:json_options) && klass.json_options[:include].include?(association.to_sym)
+    association_reflections(:has_many).map do |association_name, reflection|
+      association_data(association_name, reflection)
+    end
+  end
 
-      association_klass = (reflection.options[:class_name] || association.classify).constantize
-      primary_key = reflection.options[:primary_key] || association_klass.primary_key
-
-      next unless primary_key # Skip associations with join tables used by HABTM
-
-      OpenStruct.new(
-        name: association,
-        primary_key: primary_key,
-        param: "#{association}_#{primary_key.to_s.pluralize}",
-        class_name: association_klass.name
-
-      )
-    end.compact
+  def has_and_belongs_to_many_associations
+    association_reflections(:has_and_belongs_to_many).map do |association_name, reflection|
+      association_data(association_name, reflection)
+    end
   end
 
   private
 
-  def blacklisted_has_many_association?(name)
-    %w(User Submission ApiKey).include?(name.classify)
+  def association_reflections(type)
+    klass.reflections.select do |association_name, reflection|
+      !blacklisted_association?(association_name) &&
+        reflection.is_a?("ActiveRecord::Reflection::#{type.to_s.classify}Reflection".constantize)
+    end
+  end
+
+  def association_data(association_name, reflection)
+    association_klass = (reflection.options[:class_name] || association_name.singularize.classify).constantize
+    primary_key = reflection.options[:primary_key] || association_klass.primary_key
+
+    OpenStruct.new(
+      name: association_name,
+      primary_key: primary_key,
+      param: "#{association_name}_#{primary_key.to_s.pluralize}",
+      klass: association_klass
+    )
+  end
+
+  def blacklisted_association?(association_name)
+    %w(User Submission ApiKey).include?(association_name.singularize.classify)
   end
 end

@@ -18,7 +18,7 @@ class Api::V1::ResourcesController < Api::BaseController
   def index
     filter_params = params[model_name].presence
 
-    resources = Api::Index.new(model_klass).where(filter_params).order(:id)
+    resources = Api::Index.new(model_name).where(filter_params).order(:id)
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
@@ -103,9 +103,7 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def require_strictly_correct_params
-    model_attrs = model_klass.attribute_names
-    misnamed_attrs = (params[model_name].try(:keys) || []) - model_attrs
-
+    misnamed_attrs = Api::CreateParams.new(model_name, params).misnamed_attrs
     if misnamed_attrs.present?
       errors = misnamed_attrs.map do |attr|
         { attribute: attr, message: "Unrecognized attribute name" }
@@ -133,11 +131,7 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def create_params
-    blacklisted_attrs = %w(id user_id created_at updated_at date_entered entered_by_whom)
-    model_attrs = model_klass.attribute_names
-    permitted_attrs =  model_attrs - blacklisted_attrs
-
-    params.require(model_name).permit(permitted_attrs)
+    Api::CreateParams.new(model_name, params).permitted
   end
 
 end

@@ -2,8 +2,8 @@ class Api::Index
 
   attr_accessor :model_klass
 
-  def initialize(model_klass)
-    self.model_klass = model_klass
+  def initialize(model_name)
+    self.model_klass = model_name.classify.constantize
   end
 
   def where(filter_params)
