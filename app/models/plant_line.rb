@@ -4,7 +4,6 @@ class PlantLine < ActiveRecord::Base
   belongs_to :taxonomy_term
   belongs_to :user
 
-  has_many :plant_population_lists
   has_many :fathered_descendants, class_name: 'PlantPopulation',
            foreign_key: 'male_parent_line_id',
            dependent: :nullify
@@ -14,8 +13,9 @@ class PlantLine < ActiveRecord::Base
   has_many :plant_accessions,
            dependent: :nullify
 
-  has_and_belongs_to_many :plant_populations,
-                          join_table: 'plant_population_lists'
+  has_many :plant_population_lists, dependent: :delete_all
+  has_many :plant_populations,
+           through: :plant_population_lists
 
   after_update { mothered_descendants.each(&:touch) }
   after_update { fathered_descendants.each(&:touch) }

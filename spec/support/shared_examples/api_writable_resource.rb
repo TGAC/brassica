@@ -2,6 +2,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
   let(:parsed_response) { JSON.parse(response.body) }
   let(:required_attrs) { required_attributes(model_klass) - [:user]}
+  let(:related_models) { all_belongs_to(model_klass) - [:user] }
 
   it 'has all required attributes described correctly in docs' do
     props = I18n.t("api.#{model_klass.name.underscore}.attrs")
@@ -10,7 +11,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
   end
 
   it 'belongs to user' do
-    expect(model_klass.reflect_on_all_associations(:belongs_to).map(&:name)).to include :user
+    expect(all_belongs_to(model_klass)).to include :user
   end
 
   context "with no api key" do
@@ -52,7 +53,11 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         let(:model_attrs) {
           {}.tap do |attrs|
             required_attrs.each do |attr|
-              attrs[attr] = "Foo"
+              if related_models.include? attr.to_s.gsub('_id','').to_sym
+                attrs[attr] = create(attr.to_s.gsub('_id','')).id
+              else
+                attrs[attr] = "Foo"
+              end
             end
           end
         }
@@ -89,7 +94,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         end
       end
 
-      context "with invalid params" do
+      context "with lack of required params" do
         let(:model_attrs) {
           {}.tap do |attrs|
             required_attrs.each do |attr|
@@ -112,12 +117,42 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         end
       end
 
+      context "with wrong foreign key params" do
+        let(:model_attrs) {
+          {}.tap do |attrs|
+            required_attrs.each do |attr|
+              attrs[attr] = "Foo"
+            end
+            related_models.each do |attr|
+              attrs["#{attr}_id"] = 555555
+            end
+          end
+        }
+
+        it "returns errors" do
+          if related_models.present?
+            expect {
+              post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+            }.not_to change {
+              model_klass.count
+            }
+
+            expect(response.status).to eq 422
+            expect(parsed_response).to have_key("errors")
+            attribute = parsed_response['errors']['attribute']
+            expect(related_models).to include(attribute[0..-4].to_sym)
+            expect(parsed_response['errors']['message']).
+              to start_with "DETAIL:  Key (#{attribute})=(555555) is not present in table"
+          end
+        end
+      end
+
       context "with misnamed params" do
         let(:model_attrs) {
           { foo: "bar" }
         }
 
-        it "returns errors" do
+        it "returns errors on wrong model attribute name" do
           expect {
             post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.not_to change {
@@ -128,6 +163,19 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           expect(parsed_response).to have_key("errors")
           expect(parsed_response['errors'].first).
             to eq('attribute' => 'foo', 'message' => 'Unrecognized attribute name')
+        end
+
+        it "returns error on wrong model name" do
+          expect {
+            post "/api/v1/#{model_name.pluralize}", { "wrong_name" => { "does" => "not matter" } }, { "X-BIP-Api-Key" => api_key.token }
+          }.not_to change {
+            model_klass.count
+          }
+
+          expect(response.status).to eq 422
+          expect(parsed_response).to have_key("errors")
+          expect(parsed_response['errors']).
+            to eq('attribute' => model_name, 'message' => "param is missing or the value is empty: #{model_name}")
         end
       end
     end

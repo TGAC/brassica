@@ -64,6 +64,19 @@ en:
               }
             }
 
+          invalid_foreign_key: |-
+            HTTP/1.1 422 Unprocessable Entity
+            Content-Type: application/json
+
+            {
+              "errors": [
+                {
+                  "attribute": "plant_population_id",
+                  "message": "DETAIL:  Key (plant_population_id)=(1000000) is not present in table \"plant_populations\"."
+                }
+              ]
+            }
+
 
         default_attribute_values:
           -
@@ -298,6 +311,7 @@ en:
         -
           name: plant_populations_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Populations bred in this Plant Line
 
       create:
@@ -389,6 +403,7 @@ en:
         -
           name: plant_lines_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines that this population is associated with
 
       create:
@@ -401,6 +416,47 @@ en:
           {
             "plant_population": {
               "name": "My new population"
+            }
+          }
+
+
+    plant_population_list:
+      attrs:
+        -
+          name: sort_order
+          desc: '-'
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: plant_population_id
+          format: int
+          create: required
+          desc: BIP identifier of the Plant Population related to this list
+        -
+          name: plant_line_id
+          format: int
+          create: required
+          desc: BIP identifier of the Plant Line related to this list
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_population_list": {
+              "plant_population_id": 5,
+              "plant_line_id": 78
             }
           }
 
@@ -456,10 +512,12 @@ en:
         -
           name: countries_of_origin
           format: object[]
+          create: readonly
           desc: Zero or more JSON documents listing countries that this variety originates from
         -
           name: countries_registered
           format: object[]
+          create: readonly
           desc: Zero or more JSON documents listing countries that this variety is registered in
         -
           name: plant_lines_ids

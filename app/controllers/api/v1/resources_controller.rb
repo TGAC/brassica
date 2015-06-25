@@ -5,6 +5,16 @@ class Api::V1::ResourcesController < Api::BaseController
   before_filter :require_allowed_model
   before_filter :require_strictly_correct_params, only: :create
 
+  rescue_from 'ActiveRecord::InvalidForeignKey' do |exception|
+    message = exception.message.split("\n").try(:second)
+    attribute = message ? message[14..-1].split(')')[0] : ''
+    render json: { errors: { attribute: attribute, message: message } }, status: 422
+  end
+
+  rescue_from ActionController::ParameterMissing do |exception|
+    render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
+  end
+
   def index
     filter_params = params[model_name].presence
 
