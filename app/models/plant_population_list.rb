@@ -5,7 +5,8 @@ class PlantPopulationList < ActiveRecord::Base
   belongs_to :user
 
   validates :plant_line_id,
-            presence: true
+            presence: true,
+            uniqueness: { scope: :plant_population }
 
   validates :plant_population_id,
             presence: true

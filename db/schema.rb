@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150624125215) do
+ActiveRecord::Schema.define(version: 20150625104617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -283,6 +283,7 @@ ActiveRecord::Schema.define(version: 20150624125215) do
     t.integer  "user_id"
   end
 
+  add_index "plant_population_lists", ["plant_line_id", "plant_population_id"], name: "unique_ppl_idx", unique: true, using: :btree
   add_index "plant_population_lists", ["plant_line_id"], name: "plant_population_lists_plant_line_id_idx", using: :btree
   add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
 
