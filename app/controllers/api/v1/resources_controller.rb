@@ -131,7 +131,7 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def create_params
-    Api::CreateParams.new(model_name, params).permitted
+    Api::CreateParams.new(model_name, params).permitted_params
   end
 
 end

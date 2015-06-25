@@ -8,11 +8,14 @@ class Api::CreateParams
     self.request_params = request_params
   end
 
-  def permitted
-    permitted_attrs = model_attrs - blacklisted_attrs
-    permitted_attrs.append Hash[habtm_attrs.zip([[]] * habtm_attrs.size)]
+  def permitted_params
+    request_params.require(model_name).permit(permissions)
+  end
 
-    request_params.require(model_name).permit(permitted_attrs)
+  def permissions
+    perms = model_attrs - blacklisted_attrs
+    perms.append(Hash[habtm_attrs.zip([[]] * habtm_attrs.size)]) if habtm_attrs.present?
+    perms
   end
 
   def misnamed_attrs
