@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150625104617) do
+ActiveRecord::Schema.define(version: 20150625113612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -413,6 +413,7 @@ ActiveRecord::Schema.define(version: 20150625104617) do
   end
 
   add_index "plant_variety_country_of_origin", ["country_id"], name: "plant_variety_country_of_origin_country_id_idx", using: :btree
+  add_index "plant_variety_country_of_origin", ["plant_variety_id", "country_id"], name: "unique_pv_coo_idx", unique: true, using: :btree
   add_index "plant_variety_country_of_origin", ["plant_variety_id"], name: "plant_variety_country_of_origin_plant_variety_id_idx", using: :btree
 
   create_table "plant_variety_country_registered", id: false, force: :cascade do |t|
@@ -421,6 +422,7 @@ ActiveRecord::Schema.define(version: 20150625104617) do
   end
 
   add_index "plant_variety_country_registered", ["country_id"], name: "plant_variety_country_registered_country_id_idx", using: :btree
+  add_index "plant_variety_country_registered", ["plant_variety_id", "country_id"], name: "unique_pv_cr_idx", unique: true, using: :btree
   add_index "plant_variety_country_registered", ["plant_variety_id"], name: "plant_variety_country_registered_plant_variety_id_idx", using: :btree
 
   create_table "pop_type_lookup", force: :cascade do |t|
