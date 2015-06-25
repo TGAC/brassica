@@ -424,7 +424,7 @@ en:
       attrs:
         -
           name: sort_order
-          desc: ???
+          desc: '-'
         -
           name: comments
         -
