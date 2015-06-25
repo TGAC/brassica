@@ -1,4 +1,5 @@
 require 'rails_helper'
+nullify_exclusions = [PlantPopulationList]
 
 RSpec::Matchers.define :display_column do |expected|
   match do |actual|
@@ -35,6 +36,7 @@ RSpec.describe ActiveRecord::Base do
 
   it 'nullifies all belongs_to relations on destroy' do
     Api.writable_models.each do |model_klass|
+      next if nullify_exclusions.include? model_klass # Some classes are not expect to follow this rule.
       instance = create(model_klass)
       (all_belongs_to(model_klass) - [:user]).each do |belongs_to|
         unless instance.send("#{belongs_to}_id").nil?
