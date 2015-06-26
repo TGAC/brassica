@@ -7,7 +7,7 @@ class Api::AssociationFinder
   end
 
   def has_many_associations
-    association_reflections(:has_many).map do |association_name, reflection|
+    association_reflections(:has_many, :through).map do |association_name, reflection|
       association_data(association_name, reflection)
     end
   end
@@ -20,10 +20,11 @@ class Api::AssociationFinder
 
   private
 
-  def association_reflections(type)
+  def association_reflections(*types)
     klass.reflections.select do |association_name, reflection|
-      !blacklisted_association?(association_name) &&
+      !blacklisted_association?(association_name) && types.any? do |type|
         reflection.is_a?("ActiveRecord::Reflection::#{type.to_s.classify}Reflection".constantize)
+      end
     end
   end
 

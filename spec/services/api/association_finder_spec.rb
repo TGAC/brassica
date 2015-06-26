@@ -14,9 +14,8 @@ RSpec.describe Api::AssociationFinder do
         klass: PlantLine
       )
 
-      # FIXME add plant_lines when HMT associations are handled too
       expect(pp_assocs.map(&:name)).to match_array %w(linkage_maps population_loci
-        plant_trials plant_population_lists)
+        plant_trials plant_population_lists plant_lines)
     end
   end
 

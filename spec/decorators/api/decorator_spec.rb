@@ -14,8 +14,7 @@ RSpec.describe Api::Decorator do
         expect(json['fathered_descendant_ids']).to eq object.fathered_descendants.pluck(:id)
         expect(json['mothered_descendant_ids']).to eq object.mothered_descendants.pluck(:id)
         expect(json['plant_accession_ids']).to eq object.plant_accessions.pluck(:id)
-        # FIXME PlantLine#plant_populations is a HMT association - not handled yet
-        # expect(json['plant_populations_ids']).to eq object.plant_populations.pluck(:id)
+        expect(json['plant_population_ids']).to eq object.plant_populations.pluck(:id)
       end
     end
 
@@ -40,8 +39,7 @@ RSpec.describe Api::Decorator do
       let!(:object) { create :plant_population, :with_has_many_associations }
 
       it "includes has_many associations" do
-        # FIXME PlantPopulation#plant_lines is a HMT association - not handled yet
-        # expect(json['plant_line_ids']).to eq object.plant_lines.pluck(:id)
+        expect(json['plant_line_ids']).to eq object.plant_lines.pluck(:id)
         expect(json['plant_trial_ids']).to eq object.plant_trials.pluck(:id)
         expect(json['population_locus_ids']).to eq object.population_loci.pluck(:id)
         expect(json['linkage_map_ids']).to eq object.linkage_maps.pluck(:id)
