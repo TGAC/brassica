@@ -314,7 +314,7 @@ en:
           create: readonly
           desc: Zero or more BIP identifiers of Plant Populations bred in this Plant Line
         -
-          name: plant_population_lists_ids
+          name: plant_population_list_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
@@ -411,7 +411,7 @@ en:
           create: readonly
           desc: Zero or more BIP identifiers of Plant Lines that this population is associated with
         -
-          name: plant_population_lists_ids
+          name: plant_population_list_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
@@ -525,10 +525,20 @@ en:
           create: readonly
           desc: Zero or more JSON documents listing countries that this variety originates from
         -
+          name: countries_of_origin_ids
+          format: int[]
+          create: writeonly
+          desc: Zero or more BIP identifiers of countries that this variety originates from
+        -
           name: countries_registered
           format: object[]
           create: readonly
           desc: Zero or more JSON documents listing countries that this variety is registered in
+        -
+          name: countries_registered_ids
+          format: int[]
+          create: writeonly
+          desc: Zero or more BIP identifiers of countries that this variety is registered in
         -
           name: plant_line_ids
           format: "int[]"
