@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Api::AssociationFinder do
+RSpec.describe Api::Model do
   describe '#has_many_associations' do
     it "returns association data" do
-      pv_assocs = described_class.new(Api::Model.new("plant_variety")).has_many_associations
-      pp_assocs = described_class.new(Api::Model.new("plant_population")).has_many_associations
+      pv_assocs = Api::Model.new("plant_variety").has_many_associations
+      pp_assocs = Api::Model.new("plant_population").has_many_associations
 
       expect(pv_assocs.map(&:name)).to match_array %w(plant_lines)
       expect(pv_assocs.first.to_h).to include(
@@ -21,8 +21,8 @@ RSpec.describe Api::AssociationFinder do
 
   describe '#has_and_belongs_to_many_associations' do
     it "returns association data" do
-      pv_assocs = described_class.new(Api::Model.new("plant_variety")).has_and_belongs_to_many_associations
-      pp_assocs = described_class.new(Api::Model.new("plant_population")).has_and_belongs_to_many_associations
+      pv_assocs = Api::Model.new("plant_variety").has_and_belongs_to_many_associations
+      pp_assocs = Api::Model.new("plant_population").has_and_belongs_to_many_associations
 
       expect(pv_assocs.map(&:name)).to match_array %w(countries_registered
         countries_of_origin)

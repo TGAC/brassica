@@ -13,8 +13,8 @@ class Api::Decorator < Draper::Decorator
     {}.tap do |json|
       model = Api::Model.new(object.class.name.underscore)
       associations = [
-        Api::AssociationFinder.new(model).has_many_associations,
-        Api::AssociationFinder.new(model).has_and_belongs_to_many_associations
+        model.has_many_associations,
+        model.has_and_belongs_to_many_associations
       ].flatten
 
       associations.each do |association|

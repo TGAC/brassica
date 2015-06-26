@@ -3,7 +3,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
   model = Api::Model.new(model_name)
   let(:parsed_response) { JSON.parse(response.body) }
   let(:required_attrs) { required_attributes(model_klass) - [:user]}
-  let(:habtm_assocs) { habtm_associations(model) }
+  let(:habtm_assocs) { model.has_and_belongs_to_many_associations }
   let(:related_models) { all_belongs_to(model_klass) - [:user] }
 
   it 'has all required attributes described correctly in docs' do
@@ -206,9 +206,5 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
       v.instance_of? ActiveRecord::Validations::PresenceValidator
     end
     presence_validators.map(&:attributes).flatten.uniq
-  end
-
-  def habtm_associations(model)
-    Api::AssociationFinder.new(model).has_and_belongs_to_many_associations
   end
 end

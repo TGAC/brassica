@@ -31,8 +31,7 @@ class Api::CreateParams
   end
 
   def habtm_attrs
-    finder = Api::AssociationFinder.new(model)
-    finder.has_and_belongs_to_many_associations.map(&:param)
+    model.has_and_belongs_to_many_associations.map(&:param)
   end
 
   def blacklisted_attrs
