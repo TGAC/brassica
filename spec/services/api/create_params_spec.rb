@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::CreateParams do
   describe "#permissions" do
     it "allows scalar model attributes" do
-      pl_permissions = Api::CreateParams.new('plant_line', {}).permissions
+      pl_permissions = Api::CreateParams.new(Api::Model.new('plant_line'), {}).permissions
       # FIXME plant_variety_name - shouldn't it be removed?
       expect(pl_permissions).to match_array %w(plant_line_name common_name
         organisation genetic_status previous_line_name comments named_by_whom
@@ -12,13 +12,13 @@ RSpec.describe Api::CreateParams do
     end
 
     it "allows arrays of ids for HABTM associations" do
-      pv_permissions = Api::CreateParams.new('plant_variety', {}).permissions
+      pv_permissions = Api::CreateParams.new(Api::Model.new('plant_variety'), {}).permissions
       expect(pv_permissions).to include(
         'countries_registered_ids' => [],
         'countries_of_origin_ids' => []
       )
 
-      pl_permissions = Api::CreateParams.new('plant_line', {}).permissions
+      pl_permissions = Api::CreateParams.new(Api::Model.new('plant_line'), {}).permissions
       expect(pl_permissions.count { |p| p.is_a?(Hash) }).to eq 0
     end
 
@@ -30,7 +30,7 @@ RSpec.describe Api::CreateParams do
           'plant_line_name' => 'Foo'
         } }
         request_params = ActionController::Parameters.new(pl_attrs)
-        permitted_params = Api::CreateParams.new('plant_line', request_params).permitted_params
+        permitted_params = Api::CreateParams.new(Api::Model.new('plant_line'), request_params).permitted_params
 
         expect(permitted_params).to eq('plant_line_name' => 'Foo')
       end
@@ -44,7 +44,7 @@ RSpec.describe Api::CreateParams do
           'kwak' => false
         } }
         request_params = ActionController::Parameters.new(pl_attrs)
-        misnamed_attrs = Api::CreateParams.new('plant_line', request_params).misnamed_attrs
+        misnamed_attrs = Api::CreateParams.new(Api::Model.new('plant_line'), request_params).misnamed_attrs
 
         expect(misnamed_attrs).to match_array ['kwak', 'burumburum']
       end

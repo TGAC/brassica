@@ -1,24 +1,24 @@
 class Api::Index
 
-  attr_accessor :model_klass
+  attr_accessor :model
 
-  def initialize(model_name)
-    self.model_klass = model_name.classify.constantize
+  def initialize(model)
+    self.model = model
   end
 
   def where(filter_params)
     if filter_params.present? && filterable?
-      model_klass.filter(filter_params)
+      model.klass.filter(filter_params)
     elsif filter_params.present? && !filterable?
-      raise "#{model_klass} does not support #{filter_params.keys}"
+      raise "#{model.klass} does not support #{filter_params.keys}"
     else
-      model_klass.all
+      model.klass.all
     end
   end
 
   private
 
   def filterable?
-    model_klass.ancestors.include?(Filterable)
+    model.klass.ancestors.include?(Filterable)
   end
 end

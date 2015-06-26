@@ -1,9 +1,9 @@
 class Api::AssociationFinder
 
-  attr_accessor :klass
+  attr_accessor :model
 
-  def initialize(klass)
-    self.klass = klass
+  def initialize(model)
+    self.model = model
   end
 
   def has_many_associations
@@ -21,7 +21,7 @@ class Api::AssociationFinder
   private
 
   def association_reflections(*types)
-    klass.reflections.select do |association_name, reflection|
+    model.klass.reflections.select do |association_name, reflection|
       !blacklisted_association?(association_name) && types.any? do |type|
         reflection.is_a?("ActiveRecord::Reflection::#{type.to_s.classify}Reflection".constantize)
       end
