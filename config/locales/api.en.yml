@@ -313,6 +313,11 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Populations bred in this Plant Line
+        -
+          name: plant_population_lists_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
 
       create:
         example: |-
@@ -405,6 +410,11 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Lines that this population is associated with
+        -
+          name: plant_population_lists_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
 
       create:
         example: |-
