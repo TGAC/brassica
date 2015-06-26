@@ -294,6 +294,10 @@ en:
           format: int
           desc: BIP identifier of the Plant Variety which this Plant Line is classified as
         -
+          name: plant_variety_name
+          create: readonly
+          desc: Legacy Plant Variety name (pending curation)
+        -
           name: fathered_descendant_ids
           format: "int[]"
           create: readonly

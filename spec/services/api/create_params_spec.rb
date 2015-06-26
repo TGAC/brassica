@@ -4,7 +4,6 @@ RSpec.describe Api::CreateParams do
   describe "#permissions" do
     it "allows scalar model attributes" do
       pl_permissions = Api::CreateParams.new(Api::Model.new('plant_line'), {}).permissions
-      # FIXME plant_variety_name - shouldn't it be removed?
       expect(pl_permissions).to match_array %w(plant_line_name common_name
         organisation genetic_status previous_line_name comments named_by_whom
         data_provenance data_owned_by confirmed_by_whom taxonomy_term_id
