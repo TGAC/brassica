@@ -19,7 +19,7 @@ en:
                   ...
                 },
                 ...
-                "linkage_maps_ids": [8]
+                "linkage_map_ids": [8]
               }
             }
 
@@ -294,22 +294,22 @@ en:
           format: int
           desc: BIP identifier of the Plant Variety which this Plant Line is classified as
         -
-          name: fathered_descendants_ids
+          name: fathered_descendant_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the male line
         -
-          name: mothered_descendants_ids
+          name: mothered_descendant_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the female line
         -
-          name: plant_accessions_ids
+          name: plant_accession_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of related Plant Accessions
         -
-          name: plant_populations_ids
+          name: plant_population_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Populations bred in this Plant Line
@@ -391,22 +391,22 @@ en:
           format: int
           desc: BIP identifier of the Plant Line which this population descends from in the female line
         -
-          name: linkage_maps_ids
+          name: linkage_map_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Linkage Maps defined for this population
         -
-          name: population_loci_ids
+          name: population_locus_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Population Loci published for this population up until the present date
         -
-          name: plant_trials_ids
+          name: plant_trial_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of trait Plant Trials performed for this population until the present date
         -
-          name: plant_lines_ids
+          name: plant_line_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Lines that this population is associated with
@@ -530,7 +530,7 @@ en:
           create: readonly
           desc: Zero or more JSON documents listing countries that this variety is registered in
         -
-          name: plant_lines_ids
+          name: plant_line_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Lines classified under this plant variety
@@ -567,15 +567,15 @@ en:
           format: boolean
           desc: Set to true if the term is defined in Gramene Taxonomy; false otherwise
         -
-          name: plant_lines_ids
+          name: plant_line_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Lines classified under this term
         -
-          name: plant_populations_ids
+          name: plant_population_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Populations classified under this term
         -
-          name: probes_ids
+          name: probe_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Probes classified under this term
 
@@ -621,19 +621,19 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: linkage_maps_ids
+          name: linkage_map_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Linkage Maps related to this group
         -
-          name: map_positions_ids
+          name: map_position_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Map Positions related to this group
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Map Locus Hits related to this group
         -
-          name: qtls_ids
+          name: qtl_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Quantitative Trait Loci related to this group
 
@@ -688,11 +688,11 @@ en:
           format: int
           desc: BIP identifier of the Plant Population for which this linkage map was created
         -
-          name: linkage_groups_ids
+          name: linkage_group_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Linkage Groups related to this map
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Map Locus Hits related to this map
 
@@ -788,7 +788,7 @@ en:
           format: int
           desc: BIP identifier of the Population Locus for this map position
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Map Locus Hits related to this position
 
@@ -838,7 +838,7 @@ en:
           format: int
           desc: BIP identifier of the Primer associated with this marker assay (3` end)
         -
-          name: population_loci_ids
+          name: population_locus_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Population Locus related to this marker assay
 
@@ -889,7 +889,7 @@ en:
           format: int
           desc: BIP identifier of the associated Plant Line
         -
-          name: plant_scoring_units_ids
+          name: plant_scoring_unit_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units performed for this plant
@@ -962,7 +962,7 @@ en:
           format: int
           desc: BIP identifier of the Plant Trial in the scope of which this plant scoring took place
         -
-          name: trait_scores_ids
+          name: trait_score_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Trait Scores recorded in this scoring unit
@@ -1063,7 +1063,7 @@ en:
           format: int
           desc: BIP identifier of the plant population that was the subject of this trial
         -
-          name: plant_scoring_units_ids
+          name: plant_scoring_unit_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units recorded during this trial
@@ -1114,11 +1114,11 @@ en:
           format: int
           desc: BIP identifier of the marker assay associated with this locus
         -
-          name: map_positions_ids
+          name: map_position_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of map positions associated with this locus
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Map Locus Hits associated with this locus
 
@@ -1195,7 +1195,7 @@ en:
           format: int
           desc: BIP identifier of the Taxonomy Term this probe is related to
         -
-          name: marker_assays_ids
+          name: marker_assay_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of marker assays related to this probe
 
@@ -1334,7 +1334,7 @@ en:
         -
           name: data_provenance
         -
-          name: qtls_ids
+          name: qtl_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of QTLs that were defined as a result of this QTL job execution
 
@@ -1419,7 +1419,7 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: trait_scores_ids
+          name: trait_score_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Trait Scores measured for this plant trait in various projects
@@ -1504,6 +1504,6 @@ en:
           name: assigned_by_whom
           desc: Assignee of this population type
         -
-          name: plant_populations_ids
+          name: plant_population_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Populations that are of this population type

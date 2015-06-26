@@ -100,13 +100,15 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         end
 
         it "assigns HABTM associations" do
-          post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+          if habtm_assocs.present?
+            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
 
-          expect(response).to be_success
+            expect(response).to be_success
 
-          habtm_assocs.each do |assoc|
-            expect(model_klass.last.send(assoc.name).pluck(assoc.primary_key)).
-              to match_array(model_attrs[assoc.param])
+            habtm_assocs.each do |assoc|
+              expect(model_klass.last.send(assoc.name).pluck(assoc.primary_key)).
+                to match_array(model_attrs[assoc.param])
+            end
           end
         end
       end

@@ -10,7 +10,7 @@ RSpec.describe Api::AssociationFinder do
       expect(pv_assocs.first.to_h).to include(
         name: 'plant_lines',
         primary_key: 'id',
-        param: 'plant_lines_ids',
+        param: 'plant_line_ids',
         klass: PlantLine
       )
 

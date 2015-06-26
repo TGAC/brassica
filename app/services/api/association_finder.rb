@@ -34,7 +34,7 @@ class Api::AssociationFinder
     OpenStruct.new(
       name: association_name,
       primary_key: primary_key,
-      param: "#{association_name}_#{primary_key.to_s.pluralize}",
+      param: "#{association_name.singularize}_#{primary_key.to_s.pluralize}",
       klass: association_klass
     )
   end
