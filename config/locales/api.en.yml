@@ -247,6 +247,33 @@ en:
           Accept: application/json
           X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
+    country:
+      attrs:
+        -
+          name: id
+          format: int
+          desc: Unique BIP database identifier
+        -
+          name: country_code
+          format: string
+          desc: ISO 3166-1 alpha-3 code of this Country
+        -
+          name: country_name
+          format: string
+          desc: Name of this Country in English
+        -
+          name: plant_trial_ids
+          format: int[]
+          desc: Zero or more BIP identifiers of Plant Trials which took place in this Country
+        -
+          name: originating_plant_variety_ids
+          format: int[]
+          desc: Zero or more BIP identifiers of Plant Varieties originating in this Country
+        -
+          name: registered_plant_variety_ids
+          format: int[]
+          desc: Zero or more BIP identifiers of Plant Varieties registered in this Country
+
     plant_line:
       attrs:
         -
