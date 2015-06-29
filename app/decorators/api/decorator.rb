@@ -11,8 +11,14 @@ class Api::Decorator < Draper::Decorator
 
   def associations_as_json
     {}.tap do |json|
-      associations = Api::AssociationFinder.new(object.class).has_many_associations
+      model = Api::Model.new(object.class.name.underscore)
+      associations = [
+        model.has_many_associations,
+        model.has_and_belongs_to_many_associations
+      ].flatten
+
       associations.each do |association|
+        next if expanded_association?(association)
         json[association.param] = object.send(association.name).pluck(association.primary_key)
       end
     end
@@ -22,6 +28,11 @@ class Api::Decorator < Draper::Decorator
 
   def blacklisted_attrs
     %w(user_id created_at updated_at)
+  end
+
+  def expanded_association?(association)
+    object.class.respond_to?(:json_options) &&
+      object.class.json_options[:include].include?(association.name.to_sym)
   end
 
 end

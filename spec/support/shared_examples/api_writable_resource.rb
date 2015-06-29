@@ -1,7 +1,9 @@
 RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
+  model = Api::Model.new(model_name)
   let(:parsed_response) { JSON.parse(response.body) }
   let(:required_attrs) { required_attributes(model_klass) - [:user]}
+  let(:habtm_assocs) { model.has_and_belongs_to_many_associations }
   let(:related_models) { all_belongs_to(model_klass) - [:user] }
 
   it 'has all required attributes described correctly in docs' do
@@ -59,6 +61,11 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
                 attrs[attr] = "Foo"
               end
             end
+            habtm_assocs.each do |assoc|
+              attrs[assoc.param] = [
+                create(assoc.klass.name.underscore.to_sym).id
+              ]
+            end
           end
         }
 
@@ -91,6 +98,19 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           expect(response).to be_success
           expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
           expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
+        end
+
+        it "assigns HABTM associations" do
+          if habtm_assocs.present?
+            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+
+            expect(response).to be_success
+
+            habtm_assocs.each do |assoc|
+              expect(model_klass.last.send(assoc.name).pluck(assoc.primary_key)).
+                to match_array(model_attrs[assoc.param])
+            end
+          end
         end
       end
 

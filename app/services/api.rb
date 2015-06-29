@@ -5,6 +5,7 @@ class Api
 
   def self.readable_models
     [
+      Country,
       LinkageGroup,
       LinkageMap,
       MapLocusHit,
