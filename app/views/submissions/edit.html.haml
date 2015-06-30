@@ -20,4 +20,4 @@
 
     %p= t("submission.steps.#{@submission.submission_type}.#{@submission.step}.body")
 
-  = render partial: "submissions/steps/#{@submission.step}", locals: { submission: @submission }
+  = render partial: "submissions/steps/step", locals: { submission: @submission }

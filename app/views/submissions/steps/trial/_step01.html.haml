@@ -1,0 +1,12 @@
+.form-group
+  = content.label :plant_trial_name, "Trial name", class: 'required'
+  = content.text_field :plant_trial_name, class: 'form-control'
+  %small.help-block Please, provide convenient <b>name</b> for this scoring trial.
+
+.form-group
+  = content.label :project_descriptor, "Project name"
+  = content.text_field :project_descriptor, class: 'form-control'
+
+-# TODO FIXME Add looking for and setting related PlantPopulation
+
+-# TODO FIXME Add all other relevant input fields

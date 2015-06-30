@@ -2,7 +2,7 @@ class Submission < ActiveRecord::Base
 
   STEPS = %w(step01 step02 step03 step04)
 
-  enum submission_type: %i(population traits qtl linkage_map)
+  enum submission_type: %i(population trial qtl linkage_map)
 
   belongs_to :user
 
@@ -50,7 +50,15 @@ class Submission < ActiveRecord::Base
 
   def finalize
     raise CantFinalize unless last_step?
-    PlantPopulationFinalizer.new(self).call
+    case submission_type
+    when 'population'
+      PlantPopulationFinalizer.new(self).call
+    when 'trial'
+      PlantTrialFinalizer.new(self).call
+    else
+      raise CantFinalize
+    end
+
   end
 
   def submitted_object
@@ -69,8 +77,8 @@ class Submission < ActiveRecord::Base
     case submission_type
     when 'population'
       PlantPopulation
-    when 'traits'
-      PlantScoringUnit
+    when 'trial'
+      PlantTrial
     when 'qtl'
       Qtl
     when 'linkage_map'

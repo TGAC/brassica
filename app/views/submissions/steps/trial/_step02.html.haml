@@ -1,0 +1,37 @@
+.alert.alert-info
+  Select one or more <b>Trait descriptors</b> from the database. They should describe the traits
+  that were scored in the scope of this Plant trial.<br/>
+  If suitable <b>Trait descriptor</b> does not seem to exist in our
+  database you are welcome to add it with your submission.
+
+.form-group
+  = content.label :trait_descriptor_list
+  = content.select :trait_descriptor_list, @content.trait_descriptor_list || [], {}, multiple: true, class: 'trait-descriptor-list form-control', 'data-placeholder': "Select trait descriptors"
+
+-# TODO FIXME Make the below work properly (code in js)
+
+%button.btn.btn-default.new-trait-descriptor-for-list{ type: :button } Add new Trait descriptor
+
+.panel.panel-info.new-trait-descriptor-for-list.hidden
+  .panel-heading
+    %h4 Add new <b>Trait descriptor</b>
+
+  .panel-body
+    .form-group
+      = label_tag :descriptor_name, nil, class: 'required'
+      = text_field_tag :descriptor_name, nil, class: 'form-control required', placeholder: 'Enter new trait name'
+
+    .form-group
+      = label_tag :category, 'Trait category'
+      = text_field_tag :category, nil, class: 'form-control'
+
+    = render partial: "submissions/annotations", locals: { model: TraitDescriptor }
+
+    .action-buttons
+      %button.btn.btn-default.cancel-new-trait-descriptor-for-list{type: 'button'} Cancel
+      %button.btn.btn-primary.add-new-trait-descriptor-for-list{type: 'button'} Confirm
+
+- @content.new_trait_descriptors.each do |trait_descriptor|
+  %div{id: "new-trait-descriptor-#{trait_descriptor.descriptor_name.split.join('-').downcase}"}
+    - %w(descriptor_name category).each do |attr|
+      = hidden_field_tag "submission[content][new_trait_descriptors][][#{attr}]", trait_descriptor.send(attr)

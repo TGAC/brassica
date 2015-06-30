@@ -26,7 +26,7 @@ RSpec.describe Submission do
     let(:submission) { build(:submission) }
 
     it 'allows only certain submission type values' do
-      %w(population traits qtl linkage_map).each do |t|
+      %w(population trial qtl linkage_map).each do |t|
         submission.submission_type = t
         expect(submission.valid?).to be_truthy
         expect(submission.send(t+'?')).to be_truthy
@@ -48,7 +48,7 @@ RSpec.describe Submission do
       expect(Submission.qtl.count).to eq 2
       expect(Submission.population.count).to eq 1
       expect(Submission.linkage_map.count).to eq 0
-      expect(Submission.traits.count).to eq 0
+      expect(Submission.trial.count).to eq 0
     end
   end
 

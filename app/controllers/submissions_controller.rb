@@ -8,12 +8,12 @@ class SubmissionsController < ApplicationController
 
   def show
     submission = current_user.submissions.find(params[:id])
-    @submission = PlantPopulationSubmissionDecorator.decorate(submission)
+    @submission = decorator(submission)
   end
 
   def edit
     @submission = current_user.submissions.find(params[:id])
-    @content = step_content_form(@submission.step, @submission.content[@submission.step])
+    @content = step_content_form(@submission, @submission.content[@submission.step])
     @content.valid? if params[:validate]
   end
 
@@ -27,7 +27,7 @@ class SubmissionsController < ApplicationController
 
   def update
     @submission = current_user.submissions.find(params[:id])
-    @content = step_content_form(@submission.step)
+    @content = step_content_form(@submission)
 
     if params[:back]
       @submission.step_back
@@ -67,8 +67,8 @@ class SubmissionsController < ApplicationController
 
   private
 
-  def step_content_form(step, step_content_params = nil)
-    klass_name = "Submissions::#{step.to_s.classify}ContentForm"
+  def step_content_form(submission, step_content_params = nil)
+    klass_name = "Submissions::#{submission.submission_type.capitalize}::#{submission.step.to_s.classify}ContentForm"
     klass = klass_name.constantize
     step_content_params ||= submission_content_params.permit(klass.permitted_properties)
     klass.new(Hashie::Mash.new(step_content_params || {}))
@@ -85,5 +85,16 @@ class SubmissionsController < ApplicationController
 
   def submission_content_params
     submission_params.require(:content)
+  end
+
+  def decorator(submission)
+    case submission.submission_type
+      when 'population'
+        PlantPopulationSubmissionDecorator.decorate(submission)
+      when 'trial'
+        PlantTrialSubmissionDecorator.decorate(submission)
+      else
+        nil
+    end
   end
 end

@@ -1,0 +1,11 @@
+= form_for submission do |f|
+
+  = render partial: '/errors', locals: { errors: submission.errors }
+  = render partial: '/errors', locals: { errors: @content.errors }
+
+  = f.fields_for :content, @content do |content|
+
+    = render partial: "submissions/steps/#{submission.submission_type}/#{submission.step}",
+             locals: { submission: submission, content: content }
+
+  = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }

@@ -38,6 +38,13 @@ module SubmissionsHelper
   private
 
   def decorator(submission)
-    PlantPopulationSubmissionDecorator.decorate(submission)
+    case submission.submission_type
+    when 'population'
+      PlantPopulationSubmissionDecorator.decorate(submission)
+    when 'trial'
+      PlantTrialSubmissionDecorator.decorate(submission)
+    else
+      nil
+    end
   end
 end

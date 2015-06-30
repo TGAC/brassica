@@ -1,0 +1,12 @@
+.form-group
+  = content.label :name, "Population name", class: 'required'
+  = content.text_field :name, class: 'form-control'
+  %small.help-block Please, provide <b>population name</b>
+
+.form-group
+  = content.label :description
+  = content.text_area :description, class: 'form-control'
+
+.form-group
+  = content.label :owned_by, "Population owned by"
+  = content.text_field :owned_by, class: 'form-control'

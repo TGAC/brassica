@@ -1,0 +1,26 @@
+- if @submission.plant_trial_name
+  %li.list-group-item
+    %strong Plant trial name
+    = @submission.plant_trial_name
+
+- if @submission.project_descriptor
+  %li.list-group-item
+    %strong Project
+    = @submission.project_descriptor
+
+-# TODO FIXME add all other relevant information
+
+- if @submission.data_owned_by
+  %li.list-group-item
+    %strong Data owned by
+    = @submission.data_owned_by
+
+- if @submission.data_provenance
+  %li.list-group-item
+    %strong Data provenance
+    = @submission.data_provenance
+
+- if @submission.comments
+  %li.list-group-item
+    %strong Comments
+    = @submission.comments

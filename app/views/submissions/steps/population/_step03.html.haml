@@ -1,0 +1,72 @@
+.form-group
+  = content.label :female_parent_line
+  = content.select :female_parent_line, [@content.female_parent_line], {}, class: 'female-parent-line form-control', 'data-placeholder': "Select plant line"
+
+.form-group
+  = content.label :male_parent_line
+  = content.select :male_parent_line, [@content.male_parent_line], {}, class: 'male-parent-line form-control', 'data-placeholder': "Select plant line"
+
+%hr
+
+.alert.alert-info
+  Select one or more <b>Plant lines</b> from the database.<br/>
+  If suitable <b>Plant line</b> does not seem to exist in our
+  database you are welcome to add it with your submission.
+
+.form-group
+  = content.label :plant_line_list
+  = content.select :plant_line_list, @content.plant_line_list || [], {}, multiple: true, class: 'plant-line-list form-control', 'data-placeholder': "Select plant line"
+
+%button.btn.btn-default.new-plant-line-for-list{ type: :button } Add new Plant line
+
+.panel.panel-info.new-plant-line-for-list.hidden
+  .panel-heading
+    %h4 Add new <b>Plant line</b>
+
+  .panel-body
+    .form-group
+      = label_tag :plant_line_name, nil, class: 'required'
+      = text_field_tag :plant_line_name, nil, class: 'form-control required', placeholder: 'Enter new plant line name'
+
+    .form-group
+      = label_tag :taxonomy_term, nil, class: 'required'
+      = select_tag :taxonomy_term, options_for_select(TaxonomyTerm.names), include_blank: true, class: 'taxonomy-term form-control required', 'data-placeholder': 'Select term'
+
+    .form-group
+      = label_tag :common_name, 'Common name'
+      = text_field_tag :common_name, nil, class: 'form-control'
+
+    .form-group.previous-line-name-wrapper
+      .previous-line-name-select
+        = label_tag :previous_line_name
+        = select_tag :previous_line_name, [], class: 'previous-line-name form-control', 'data-placeholder': "Select existing plant line"
+
+      .previous-line-name-alternative or
+      .previous-line-name-input
+        = text_field_tag :previous_line_name, nil, class: 'form-control', placeholder: "Enter new plant line name"
+        %a.clear-input.hidden{href: '#'} ×
+
+    .form-group.genetic-status-wrapper
+      .genetic-status-select
+        = label_tag :genetic_status, 'Genetic status'
+        = select_tag :genetic_status, options_for_select(PlantLine.genetic_statuses), prompt: '', class: 'genetic-status form-control', data: { placeholder: "Select existing status" }
+
+      .genetic-status-alternative or
+      .genetic-status-input
+        = text_field_tag :genetic_status, nil, class: 'form-control', placeholder: "Enter new status"
+        %a.clear-input.hidden{href: '#'} ×
+
+    .form-group
+      = label_tag :plant_variety_name
+      = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
+
+    = render partial: "submissions/annotations", locals: { model: PlantLine }
+
+    .action-buttons
+      %button.btn.btn-default.cancel-new-plant-line-for-list{type: 'button'} Cancel
+      %button.btn.btn-primary.add-new-plant-line-for-list{type: 'button'} Confirm
+
+- @content.new_plant_lines.each do |plant_line|
+  %div{id: "new-plant-line-#{plant_line.plant_line_name.split.join('-').downcase}"}
+    - %w(plant_line_name taxonomy_term common_name previous_line_name genetic_status plant_variety_name).each do |attr|
+      = hidden_field_tag "submission[content][new_plant_lines][][#{attr}]", plant_line.send(attr)

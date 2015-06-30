@@ -21,6 +21,7 @@ class Submission
   plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
   plantLineListSelectOptions: $.extend(@makeAjaxSelectOptions('/plant_lines', 'plant_line_name'), multiple: true)
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
+  traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'descriptor_name'), multiple: true)
 
   constructor: (el) ->
     @$el = $(el)
@@ -33,8 +34,10 @@ class Submission
     @$('.male-parent-line, .female-parent-line').select2(@plantLineSelectOptions)
     @$('.population-type').select2(@defaultSelectOptions)
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
+    @$('.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
 
     @bindNewPlantLineControls()
+    # TODO FIXME Add bindNewTraitDescriptorControls()
 
   bindNewPlantLineControls: =>
     @$('.plant-line-list').on 'select2:unselect', (event) =>
