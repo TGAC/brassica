@@ -19,19 +19,17 @@ class Submission
     templateResult: (item) -> item.text
     templateSelection: (item) -> item.text
 
-  defaultSelectOptions: { allowClear: true }
-  plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
-  plantLineListSelectOptions: $.extend(@makeAjaxSelectOptions('/plant_lines', 'plant_line_name'), multiple: true)
-  plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
-
-  plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
-  traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'descriptor_name'), multiple: true)
-
   constructor: (el) ->
     @$el = $(el)
 
   $: (args) =>
     @$el.find(args)
+
+class PopulationSubmission extends Submission
+  defaultSelectOptions: { allowClear: true }
+  plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
+  plantLineListSelectOptions: $.extend(@makeAjaxSelectOptions('/plant_lines', 'plant_line_name'), multiple: true)
+  plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
 
   bind: =>
     @$('.taxonomy-term').select2(@defaultSelectOptions)
@@ -39,11 +37,7 @@ class Submission
     @$('.population-type').select2(@defaultSelectOptions)
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
 
-    @$('select.plant-population').select2(@plantPopulationSelectOptions)
-    @$('.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
-
     @bindNewPlantLineControls()
-    # TODO FIXME Add bindNewTraitDescriptorControls()
 
   bindNewPlantLineControls: =>
     @$('.plant-line-list').on 'select2:unselect', (event) =>
@@ -117,6 +111,17 @@ class Submission
   removeNewPlantLineFromList: (plant_line_name) =>
     $("##{@newPlantLineForListContainerId(plant_line_name)}").remove()
 
+class TrialSubmission extends Submission
+  plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
+  traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'descriptor_name'), multiple: true)
+
+  bind: =>
+    @$('select.plant-population').select2(@plantPopulationSelectOptions)
+    @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
+
+    # TODO FIXME Add bindNewTraitDescriptorControls()
+
 $ ->
-  new Submission('.edit_submission').bind()
+  new PopulationSubmission('.edit-population-submission').bind()
+  new TrialSubmission('.edit-trial-submission').bind()
 
