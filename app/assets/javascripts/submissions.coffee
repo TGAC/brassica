@@ -119,7 +119,79 @@ class TrialSubmission extends Submission
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
 
-    # TODO FIXME Add bindNewTraitDescriptorControls()
+    @bindNewTraitDescriptorControls()
+
+  bindNewTraitDescriptorControls: =>
+    @$('.trait-descriptor-list').on 'select2:unselect', (event) =>
+      @removeNewTraitDescriptorFromList(event.params.data.id)
+
+    @$('button.new-trait-descriptor-for-list').on 'click', (event) =>
+      $(event.target).hide()
+      @initNewTraitDescriptorForm()
+
+    @$('.add-new-trait-descriptor-for-list').on 'click', (event) =>
+      @validateNewTraitDescriptorForList(@appendToSelectedTraitDescriptorLists)
+
+    @$('.cancel-new-trait-descriptor-for-list').on 'click', (event) =>
+      @$('div.new-trait-descriptor-for-list').hide()
+      @$('button.new-trait-descriptor-for-list').show()
+
+  initNewTraitDescriptorForm: =>
+    @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
+
+    # @$('.previous-line-name').select2(@plantLineSelectOptions)
+    # @$('.previous-line-name-wrapper').inputOrSelect()
+    # @$('.genetic-status').select2(@defaultSelectOptions)
+    # @$('.genetic-status-wrapper').inputOrSelect()
+    # @$('.new-trait-descriptor-for-list input[type=text]').on 'keydown', (event) =>
+    #   if event.keyCode == 13 # Enter key
+    #     event.preventDefault() # Prevent form submission
+
+    # @$('.plant-variety-name').select2(@plantVarietySelectOptions)
+
+  validateNewTraitDescriptorForList: (onValidData) =>
+    $form = @$('.new-trait-descriptor-for-list')
+
+    [data, errors] = Errors.validate($form)
+
+    if errors.length > 0
+      Errors.hideAll()
+      Errors.showAll(errors)
+    else
+      Errors.hideAll()
+
+      onValidData(data)
+
+      @$('div.new-trait-descriptor-for-list').hide()
+      @$('button.new-trait-descriptor-for-list').show()
+
+  appendToSelectedTraitDescriptorLists: (data) =>
+    $select = @$('.trait-descriptor-list')
+    selectedValues = $select.val() || []
+
+    $option = $('<option></option>').attr(value: data.descriptor_name).text(data.descriptor_name)
+    $select.append($option)
+
+    selectedValues.push(data.descriptor_name)
+    $select.val(selectedValues)
+    $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
+
+    # add all PL attributes to DOM so it can be sent with form
+    $form = @$el
+    $container = $('<div></div').attr(id: @newTraitDescriptorForListContainerId(data.descriptor_name))
+    $container.appendTo($form)
+
+    $.each(data, (attr, val) =>
+      $input = $("<input type='hidden' name='submission[content][new_trait_descriptors][][" + attr + "]' />")
+      $input.val(val)
+      $input.appendTo($container)
+    )
+
+  removeNewTraitDescriptorFromList: (descriptor_name) =>
+    $("##{@newTraitDescriptorForListContainerId(descriptor_name)}").remove()
+
+  newTraitDescriptorForListContainerId: (descriptor_name) =>
+    'new-trait-descriptor-' + descriptor_name.split(/\s+/).join('-').toLowerCase()
 
 $ ->
   new PopulationSubmission('.edit-population-submission').bind()
