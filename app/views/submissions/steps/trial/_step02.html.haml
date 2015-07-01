@@ -8,8 +8,6 @@
   = content.label :trait_descriptor_list
   = content.select :trait_descriptor_list, @content.trait_descriptor_list || [], {}, multiple: true, class: 'trait-descriptor-list form-control', 'data-placeholder': "Select trait descriptors"
 
--# TODO FIXME Make the below work properly (code in js)
-
 %button.btn.btn-default.new-trait-descriptor-for-list{ type: :button } Add new Trait descriptor
 
 .panel.panel-info.new-trait-descriptor-for-list.hidden
@@ -22,8 +20,8 @@
       = text_field_tag :descriptor_name, nil, class: 'form-control required', placeholder: 'Enter new trait name'
 
     .form-group
-      = label_tag :category, 'Trait category'
-      = text_field_tag :category, nil, class: 'form-control'
+      = label_tag :category, 'Trait category', class: 'required'
+      = text_field_tag :category, nil, class: 'form-control required'
 
     = render partial: "submissions/annotations", locals: { model: TraitDescriptor }
 
