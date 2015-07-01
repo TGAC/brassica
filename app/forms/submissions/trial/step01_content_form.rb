@@ -6,6 +6,7 @@ module Submissions
       property :plant_population_id
 
       validates :plant_trial_name, presence: true
+      validates :project_descriptor, presence: true
       validates :plant_population_id, presence: true
 
       validate do
