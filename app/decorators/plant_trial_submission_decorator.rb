@@ -32,18 +32,17 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   end
 
   def species_name
-    plant_population.try(:taxonomy_term)
+    plant_population.try(:taxonomy_term).try(:name)
   end
 
   def plant_population
-    # TODO FIXME this needs to be adjusted to step01 PP selection
-    # return @plant_population if defined?(@plant_population)
-    # return if ! name
-    # @plant_population = PlantPopulation.find_by(name: name)
+    return @plant_population if defined?(@plant_population)
+    return if ! object.content.step01.plant_population_id
+    @plant_population = PlantPopulation.find(object.content.step01.plant_population_id)
   end
 
   def trait_descriptors
-    object.content.step02.trait_descriptor_list.select(&:present?)
+    object.content.step02.trait_descriptor_list.try(:select, &:present?)
   end
 
   # def trait_names

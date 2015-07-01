@@ -8,6 +8,11 @@
     %strong Project
     = @submission.project_descriptor
 
+- if @submission.species_name
+  %li.list-group-item
+    %strong Species
+    = @submission.species_name
+
 -# TODO FIXME add all other relevant information
 
 - if @submission.data_owned_by
