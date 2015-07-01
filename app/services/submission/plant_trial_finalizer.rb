@@ -47,10 +47,13 @@ class Submission::PlantTrialFinalizer
       user: submission.user
     }
 
-    # TODO FIXME Assign chosen PlantPopulation
-    # if plant_population = PlantPopulation.find_by(name: submission.content.step01.name)
-    #   attrs.merge!(name: plant_population)
-    # end
+    if plant_population = PlantPopulation.find_by(id: submission.content.step01.plant_population_id)
+      attrs.merge!(plant_population_id: plant_population.id)
+    else
+      submission.content.update(:step01, submission.content.step01.to_h.except('plant_population_id'))
+      submission.save!
+      rollback(0)
+    end
 
     attrs.merge!(submission.content.step04.to_h)
 
