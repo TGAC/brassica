@@ -89,12 +89,12 @@ class SubmissionsController < ApplicationController
 
   def decorator(submission)
     case submission.submission_type
-      when 'population'
-        PlantPopulationSubmissionDecorator.decorate(submission)
-      when 'trial'
-        PlantTrialSubmissionDecorator.decorate(submission)
-      else
-        nil
+    when 'population'
+      PlantPopulationSubmissionDecorator.decorate(submission)
+    when 'trial'
+      PlantTrialSubmissionDecorator.decorate(submission)
+    else
+      nil
     end
   end
 end
