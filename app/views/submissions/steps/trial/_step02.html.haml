@@ -6,7 +6,12 @@
 
 .form-group
   = content.label :trait_descriptor_list
-  = content.select :trait_descriptor_list, @content.trait_descriptor_list || [], {}, multiple: true, class: 'trait-descriptor-list form-control', 'data-placeholder': "Select trait descriptors"
+  - options = options_for_submission_select(@content.existing_trait_descriptors, :descriptor_name)
+  - options.concat options_for_submission_select(@content.new_trait_descriptors, :descriptor_name, id: false)
+  = content.select :trait_descriptor_list, options, {},
+    { multiple: true,
+      class: 'trait-descriptor-list form-control',
+      'data-placeholder': "Select trait descriptors" }
 
 %button.btn.btn-default.new-trait-descriptor-for-list{ type: :button } Add new Trait descriptor
 

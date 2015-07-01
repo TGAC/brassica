@@ -35,9 +35,20 @@ module SubmissionsHelper
     decorator(submission).further_details.html_safe
   end
 
-  def options_for_submission_select(record, text_attr)
-    return [] unless record
-    options_from_collection_for_select([record], :id, text_attr, record.id)
+  # Turns a collection of model objects (AR or otherwise) into options HTML
+  def options_for_submission_select(collection, text_attr, options = {})
+    collection = Array(collection)
+
+    if collection.map(&:class).uniq.size > 1
+      raise ArgumentError, "Mixed-type collection not supported"
+    end
+
+    return [] unless collection.present?
+
+    id_attr = options[:id] == false ? text_attr : :id
+    selected = collection.map(&id_attr)
+
+    options_from_collection_for_select(collection, id_attr, text_attr, selected)
   end
 
   private

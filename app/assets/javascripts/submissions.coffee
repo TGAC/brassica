@@ -113,7 +113,7 @@ class PopulationSubmission extends Submission
 
 class TrialSubmission extends Submission
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
-  traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'descriptor_name'), multiple: true)
+  traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'id', 'descriptor_name'), multiple: true)
 
   bind: =>
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
