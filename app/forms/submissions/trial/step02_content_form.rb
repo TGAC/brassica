@@ -6,6 +6,21 @@ module Submissions
       collection :new_trait_descriptors do
         property :descriptor_name
         property :category
+
+        property :units_of_measurements
+        property :where_to_score
+        property :scoring_method
+        property :when_to_score
+        property :stage_scored
+        property :precautions
+        property :materials
+        property :controls
+        property :calibrated_against
+        property :instrumentation_required
+        property :likely_ambiguities
+        property :score_type
+        property :possible_interactions
+
         property :data_owned_by
         property :data_provenance
         property :comments
@@ -46,14 +61,31 @@ module Submissions
         [
           {
             :trait_descriptor_list => [],
-            :new_trait_descriptors => [
-              :descriptor_name,
-              :category,
-              :data_owned_by,
-              :data_provenance,
-              :comments
-            ]
+            :new_trait_descriptors => new_trait_descriptor_properties
           }
+        ]
+      end
+
+      def self.new_trait_descriptor_properties
+        [
+          :descriptor_name,
+          :category,
+          :units_of_measurements,
+          :where_to_score,
+          :scoring_method,
+          :when_to_score,
+          :stage_scored,
+          :precautions,
+          :materials,
+          :controls,
+          :calibrated_against,
+          :instrumentation_required,
+          :likely_ambiguities,
+          :score_type,
+          :possible_interactions,
+          :data_owned_by,
+          :data_provenance,
+          :comments
         ]
       end
 

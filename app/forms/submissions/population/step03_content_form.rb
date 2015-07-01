@@ -53,18 +53,22 @@ module Submissions
           :female_parent_line, :male_parent_line,
           {
             :plant_line_list => [],
-            :new_plant_lines => [
-              :plant_line_name,
-              :taxonomy_term,
-              :common_name,
-              :previous_line_name,
-              :genetic_status,
-              :plant_variety_name,
-              :data_owned_by,
-              :data_provenance,
-              :comments,
-            ]
+            :new_plant_lines => new_plant_line_properties
           }
+        ]
+      end
+
+      def self.new_plant_line_properties
+        [
+          :plant_line_name,
+          :taxonomy_term,
+          :common_name,
+          :previous_line_name,
+          :genetic_status,
+          :plant_variety_name,
+          :data_owned_by,
+          :data_provenance,
+          :comments,
         ]
       end
 

@@ -26,7 +26,7 @@ class Submission::PlantTrialFinalizer
   attr_accessor :submission
 
   def create_new_trait_descriptors
-    @new_trait_descriptors = (submission.content.step03.new_trait_descriptors || []).map do |attrs|
+    @new_trait_descriptors = (submission.content.step02.new_trait_descriptors || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       attrs = attrs.merge(
         entered_by_whom: submission.user.full_name,
