@@ -35,6 +35,11 @@ module SubmissionsHelper
     decorator(submission).further_details.html_safe
   end
 
+  def options_for_submission_select(record, text_attr)
+    return [] unless record
+    options_from_collection_for_select([record], :id, text_attr, record.id)
+  end
+
   private
 
   def decorator(submission)

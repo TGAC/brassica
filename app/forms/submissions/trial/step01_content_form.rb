@@ -14,6 +14,11 @@ module Submissions
           errors.add(:plant_trial_name, :taken)
         end
       end
+
+      def plant_population
+        return unless plant_population_id.present?
+        PlantPopulation.find_by(id: plant_population_id)
+      end
     end
   end
 end
