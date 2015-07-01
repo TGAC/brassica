@@ -7,6 +7,10 @@
   = content.label :project_descriptor, "Project name"
   = content.text_field :project_descriptor, class: 'form-control'
 
--# TODO FIXME Add looking for and setting related PlantPopulation
+.form-group
+  = content.label :plant_population_id, "Plant population", class: 'required'
+
+  -# TODO FIXME tidy up and refactor
+  = content.select :plant_population_id, [options_from_collection_for_select(PlantPopulation.where(id: @content.plant_population_id), :id, :name, @content.plant_population_id)], { include_blank: true }, class: 'form-control plant-population', data: { placeholder: 'Select plant population' }
 
 -# TODO FIXME Add all other relevant input fields

@@ -1,5 +1,7 @@
 class Submission
-  @makeAjaxSelectOptions: (url, id_attr) =>
+  @makeAjaxSelectOptions: (url, id_attr, text_attr) =>
+    text_attr ||= id_attr
+
     allowClear: true
     minimumInputLength: 2
     ajax:
@@ -7,12 +9,12 @@ class Submission
       dataType: 'json'
       data: (params) ->
         search = {}
-        search[id_attr] = params.term
+        search[text_attr] = params.term
 
         search: search
         page: params.page
       processResults: (data, page) ->
-        results: $.map(data, (row) -> { id: row[id_attr], text: row[id_attr] })
+        results: $.map(data, (row) -> { id: row[id_attr], text: row[text_attr] })
     escapeMarkup: (markup) -> markup
     templateResult: (item) -> item.text
     templateSelection: (item) -> item.text
@@ -21,6 +23,8 @@ class Submission
   plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
   plantLineListSelectOptions: $.extend(@makeAjaxSelectOptions('/plant_lines', 'plant_line_name'), multiple: true)
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
+
+  plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
   traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'descriptor_name'), multiple: true)
 
   constructor: (el) ->
@@ -34,6 +38,8 @@ class Submission
     @$('.male-parent-line, .female-parent-line').select2(@plantLineSelectOptions)
     @$('.population-type').select2(@defaultSelectOptions)
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
+
+    @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
 
     @bindNewPlantLineControls()
