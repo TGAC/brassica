@@ -35,6 +35,17 @@ module SubmissionsHelper
     decorator(submission).further_details.html_safe
   end
 
+  def submission_form(submission, &block)
+    options = {
+      builder: Submissions::FormBuilder,
+      html: {
+        class: "edit-submission edit-#{submission.submission_type}-submission"
+      }
+    }
+
+    form_for submission, options, &block
+  end
+
   # Turns a collection of model objects (AR or otherwise) into options HTML
   def options_for_submission_select(collection, text_attr, options = {})
     collection = Array(collection)
