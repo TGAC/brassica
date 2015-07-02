@@ -119,6 +119,7 @@ class TrialSubmission extends Submission
   bind: =>
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
+    @$('select.country-id').select2(@defaultSelectOptions)
 
     fields = [
       'institute-id'

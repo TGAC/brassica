@@ -1,6 +1,4 @@
 class Submissions::FormBuilder < ActionView::Helpers::FormBuilder
-  include ActionView::Helpers::TagHelper
-
   alias_method :default_text_field, :text_field
   alias_method :default_text_area, :text_area
 
@@ -17,7 +15,7 @@ class Submissions::FormBuilder < ActionView::Helpers::FormBuilder
     required = options.delete(:required)
     help = options.delete(:help)
 
-    options[:class] ||= 'form-control'
+    options[:class] ||= "form-control #{attr.to_s.dasherize}"
 
     "".tap do |html|
       unless label == false
@@ -25,8 +23,28 @@ class Submissions::FormBuilder < ActionView::Helpers::FormBuilder
       end
       html << send(:"default_#{field}", attr, options)
       if help
-        html << content_tag(:small, help.html_safe, class: 'help-block')
+        html << @template.content_tag(:small, help.html_safe, class: 'help-block')
       end
+    end.html_safe
+  end
+
+  def country_select(attr, options = {})
+    options = { include_blank: true }.merge(options)
+    label = options.delete(:label)
+    required = options.delete(:required)
+    selected = @object.send(attr)
+    country_options_html = @template.options_from_collection_for_select(Country.all, :id, :country_name, selected)
+
+    html_options = {
+      class: "form-control #{attr.to_s.dasherize}",
+      data: { placeholder: options[:placeholder] }
+    }
+
+    "".tap do |html|
+      unless label == false
+        html << label(attr, label, class: "#{'required' if required}")
+      end
+      html << select(attr, country_options_html, options, html_options)
     end.html_safe
   end
 end

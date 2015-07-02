@@ -27,8 +27,7 @@
   %legend Location
 
   .form-group
-    -# FIXME TODO change into country select
-    = content.text_field :country_id
+    = content.country_select :country_id, placeholder: 'Select a country'
 
   - %w(trial_location_site_name place_name latitude longitude).each do |attr|
     .form-group= content.text_field attr
