@@ -1,0 +1,16 @@
+- base_class = attr.dasherize
+
+%div{class: "#{base_class}-wrapper"}
+  %div{class: "#{base_class}-select"}
+    = label_tag attr
+    = select_tag attr, options,
+      prompt: '', class: "#{base_class} form-control",
+      data: { placeholder: "Select existing #{attr.humanize.downcase}" }
+
+  %div{class: "#{base_class}-alternative"} or
+  %div{class: "#{base_class}-input"}
+    = text_field_tag attr, nil,
+      class: 'form-control',
+      placeholder: "Enter new #{attr.humanize.downcase}"
+
+    %a.clear-input.hidden{href: '#'} ×

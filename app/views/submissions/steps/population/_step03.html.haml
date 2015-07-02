@@ -46,15 +46,9 @@
         = text_field_tag :previous_line_name, nil, class: 'form-control', placeholder: "Enter new plant line name"
         %a.clear-input.hidden{href: '#'} ×
 
-    .form-group.genetic-status-wrapper
-      .genetic-status-select
-        = label_tag :genetic_status, 'Genetic status'
-        = select_tag :genetic_status, options_for_select(PlantLine.genetic_statuses), prompt: '', class: 'genetic-status form-control', data: { placeholder: "Select existing status" }
-
-      .genetic-status-alternative or
-      .genetic-status-input
-        = text_field_tag :genetic_status, nil, class: 'form-control', placeholder: "Enter new status"
-        %a.clear-input.hidden{href: '#'} ×
+    .form-group
+      = render partial: "submissions/input_or_select",
+               locals: { attr: 'genetic_status', options: options_for_select(PlantLine.genetic_statuses) }
 
     .form-group
       = label_tag :plant_variety_name
