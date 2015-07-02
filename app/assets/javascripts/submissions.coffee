@@ -120,6 +120,18 @@ class TrialSubmission extends Submission
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
 
+    fields = [
+      'institute-id'
+      'terrain'
+      'soil-type'
+      'statistical-factors'
+      'design-factors'
+    ]
+
+    $.each fields, (_, field) =>
+      @$(".#{field}").select2(@defaultSelectOptions)
+      @$(".#{field}-wrapper").inputOrSelect()
+
     @bindNewTraitDescriptorControls()
 
   bindNewTraitDescriptorControls: =>

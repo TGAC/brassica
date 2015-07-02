@@ -18,6 +18,7 @@ class PlantTrial < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include AttributeValues
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all

@@ -1,11 +1,9 @@
 .form-group
-  = content.label :plant_trial_name, "Trial name", class: 'required'
-  = content.text_field :plant_trial_name, class: 'form-control'
-  %small.help-block Please, provide convenient <b>name</b> for this scoring trial.
+  = content.text_field :plant_trial_name, required: true,
+    help: 'Please, provide convenient <b>name</b> for this scoring trial'
 
 .form-group
-  = content.label :project_descriptor, "Project name", class: 'required'
-  = content.text_field :project_descriptor, class: 'form-control'
+  = content.text_field :project_descriptor, required: true, label: 'Project name'
 
 .form-group
   = content.label :plant_population_id, "Plant population", class: 'required'
@@ -13,4 +11,27 @@
   = content.select :plant_population_id, options, { include_blank: true },
     { class: 'form-control plant-population', data: { placeholder: 'Select plant population' } }
 
--# TODO FIXME Add all other relevant input fields
+.form-group
+  = content.text_area :plant_trial_description, label: 'Trial description'
+
+.form-group
+  = content.text_field :trial_year
+
+- %w(institute_id terrain soil_type statistical_factors design_factors).each do |attr|
+  .form-group
+    = render partial: "submissions/input_or_select",
+             locals: { attr: attr,
+                       options: options_for_select(PlantTrial.attribute_values(attr)) }
+
+%fieldset
+  %legend Location
+
+  .form-group
+    -# FIXME TODO change into country select
+    = content.text_field :country_id
+
+  - %w(trial_location_site_name place_name latitude longitude).each do |attr|
+    .form-group= content.text_field attr
+
+  .form-group= content.text_field :altitude, help: 'Expressed in meters'
+

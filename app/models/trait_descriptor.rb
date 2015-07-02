@@ -11,6 +11,7 @@ class TraitDescriptor < ActiveRecord::Base
   after_update { processed_trait_datasets.each(&:touch) }
 
   include Searchable
+  include AttributeValues
 
   def self.table_data(params = nil)
     trait_descriptor_query = ''
@@ -68,12 +69,6 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.json_options
     { include: [:trait_grades] }
-  end
-
-  def self.attribute_values(attr)
-    raise ArgumentError, "Invalid attr: #{attr}" unless attribute_names.include?(attr)
-
-    TraitDescriptor.where("#{attr} IS NOT NULL").pluck("DISTINCT #{attr}")
   end
 
   def published?
