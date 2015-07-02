@@ -28,29 +28,23 @@
       = label_tag :category, 'Trait category', class: 'required'
       = text_field_tag :category, nil, class: 'form-control required'
 
-    - %i(units_of_measurements where_to_score when_to_score scoring_method).each do |attr|
+    - %w(units_of_measurements score_type where_to_score).each do |attr|
+      .form-group
+        = render partial: "submissions/input_or_select",
+                 locals: { attr: attr,
+                           options: options_for_select(TraitDescriptor.attribute_values(attr)) }
+
+    - %w(when_to_score scoring_method).each do |attr|
       .form-group
         = label_tag attr
         = text_field_tag attr, nil, class: 'form-control'
 
-    .form-group
-      = label_tag :precautions
-      = text_area_tag :precautions, nil, class: 'form-control'
-
-    .form-group
-      = label_tag :materials
-      = text_area_tag :materials, nil, class: 'form-control'
-
-    - %i(controls calibrated_agains).each do |attr|
+    - %w(precautions materials instrumentation_required).each do |attr|
       .form-group
         = label_tag attr
-        = text_field_tag attr, nil, class: 'form-control'
+        = text_area_tag attr, nil, class: 'form-control'
 
-    .form-group
-      = label_tag :instrumentation_required
-      = text_area_tag :instrumentation_required, nil, class: 'form-control'
-
-    - %i(likely_ambiguities score_type possible_interactions).each do |attr|
+    - %w(controls calibrated_against likely_ambiguities possible_interactions).each do |attr|
       .form-group
         = label_tag attr
         = text_field_tag attr, nil, class: 'form-control'

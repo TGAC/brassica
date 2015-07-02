@@ -70,6 +70,12 @@ class TraitDescriptor < ActiveRecord::Base
     { include: [:trait_grades] }
   end
 
+  def self.attribute_values(attr)
+    raise ArgumentError, "Invalid attr: #{attr}" unless attribute_names.include?(attr)
+
+    TraitDescriptor.where("#{attr} IS NOT NULL").pluck("DISTINCT #{attr}")
+  end
+
   def published?
     updated_at < Time.now - 1.week
   end

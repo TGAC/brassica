@@ -54,7 +54,8 @@ module Submissions
       end
 
       def existing_trait_descriptors
-        TraitDescriptor.where(id: trait_descriptor_list.map(&:to_i))
+        ids = trait_descriptor_list.try(:map, &:to_i)
+        TraitDescriptor.where(id: ids)
       end
 
       def self.permitted_properties

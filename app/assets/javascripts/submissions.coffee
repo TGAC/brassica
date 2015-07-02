@@ -112,6 +112,7 @@ class PopulationSubmission extends Submission
     $("##{@newPlantLineForListContainerId(plant_line_name)}").remove()
 
 class TrialSubmission extends Submission
+  defaultSelectOptions: { allowClear: true }
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
   traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'id', 'descriptor_name'), multiple: true)
 
@@ -139,15 +140,19 @@ class TrialSubmission extends Submission
   initNewTraitDescriptorForm: =>
     @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
 
-    # @$('.previous-line-name').select2(@plantLineSelectOptions)
-    # @$('.previous-line-name-wrapper').inputOrSelect()
-    # @$('.genetic-status').select2(@defaultSelectOptions)
-    # @$('.genetic-status-wrapper').inputOrSelect()
-    # @$('.new-trait-descriptor-for-list input[type=text]').on 'keydown', (event) =>
-    #   if event.keyCode == 13 # Enter key
-    #     event.preventDefault() # Prevent form submission
+    fields = [
+      'units-of-measurements'
+      'score-type'
+      'where-to-score'
+    ]
 
-    # @$('.plant-variety-name').select2(@plantVarietySelectOptions)
+    $.each fields, (_, field) =>
+      @$(".#{field}").select2(@defaultSelectOptions)
+      @$(".#{field}-wrapper").inputOrSelect()
+
+    @$('.new-trait-descriptor-for-list input[type=text]').on 'keydown', (event) =>
+      if event.keyCode == 13 # Enter key
+        event.preventDefault() # Prevent form submission
 
   validateNewTraitDescriptorForList: (onValidData) =>
     $form = @$('.new-trait-descriptor-for-list')
