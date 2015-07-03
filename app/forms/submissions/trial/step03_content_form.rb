@@ -2,6 +2,7 @@ module Submissions
   module Trial
     class Step03ContentForm < PlantTrialForm
       property :trait_score_list
+      property :upload_id
 
       # plant_scoring_unit ???
       # trait_descriptor ???
@@ -14,6 +15,7 @@ module Submissions
 
       def self.permitted_properties
         [
+          :upload_id,
           {
             :trait_score_list => [],
             :new_trait_scores => [
@@ -29,6 +31,10 @@ module Submissions
 
       def new_trait_scores
         super || []
+      end
+
+      def upload
+        Submission::Upload.where(upload_type: 'trait_scores', id: upload_id).first
       end
     end
   end

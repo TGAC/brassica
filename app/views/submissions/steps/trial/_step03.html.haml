@@ -1,10 +1,6 @@
-.alert.alert-info
-  Please upload file with... TODO FIXME Add
-
 -# TODO FIXME Here we will try to list information about uploaded and parsed file contents
 
-.form-group
-  -# TODO FIXME Add form to upload a file, no other inputs are needed
-  -# Below code is temporary just to make the wizard pass that step
-  = content.label :trait_score_list
-  = content.select :trait_score_list, @content.trait_score_list || [], {}, multiple: true, class: 'trait-score-list form-control', 'data-placeholder': "Select trait score"
+- if @content.upload_id
+  = @content.upload.file_file_name
+
+= content.hidden_field :upload_id

@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   get 'about', to: 'application#about'
   get 'api_documentation', to: 'application#api'
 
-  resources :submissions
+  resources :submissions do
+    resources :uploads, controller: 'submissions/uploads', only: [:create]
+  end
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]
   resources :plant_populations, only: [:index]

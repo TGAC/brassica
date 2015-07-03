@@ -1,0 +1,11 @@
+.alert.alert-info
+  Please upload file with... TODO FIXME Add
+
+= form_tag submission_uploads_path(submission), multipart: true, method: :post do
+
+  = hidden_field_tag "submission_upload[upload_type]", "trait_scores"
+
+  .form-group
+    = label_tag :upload
+    = file_field_tag "submission_upload[file]", class: 'trait-scores-upload'
+

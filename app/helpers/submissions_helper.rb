@@ -45,12 +45,10 @@ module SubmissionsHelper
   def submission_form(submission, &block)
     options = {
       builder: Submissions::FormBuilder,
-      html: {
-        class: "edit-submission edit-#{submission.submission_type}-submission"
-      }
+      html: { class: "edit-submission" }
     }
 
-    form_for submission, options, &block
+    form_for(submission, options, &block)
   end
 
   # Turns a collection of model objects (AR or otherwise) into options HTML

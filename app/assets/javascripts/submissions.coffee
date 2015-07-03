@@ -133,7 +133,26 @@ class TrialSubmission extends Submission
       @$(".#{field}").select2(@defaultSelectOptions)
       @$(".#{field}-wrapper").inputOrSelect()
 
+    @bindUpload()
     @bindNewTraitDescriptorControls()
+
+  bindUpload: =>
+    @$('.trait-scores-upload').fileupload
+      data_type: 'json'
+
+      add: (event, data) =>
+        console.log('add')
+        # TODO maybe show preview using FileReader API
+
+        data.submit() # temp
+
+      done: (event, data) =>
+        console.log 'done'
+
+        @$('#submission_content_upload_id').val(data.result.id)
+
+      progressall: (event, data) =>
+        console.log('progressall')
 
   bindNewTraitDescriptorControls: =>
     @$('.trait-descriptor-list').on 'select2:unselect', (event) =>

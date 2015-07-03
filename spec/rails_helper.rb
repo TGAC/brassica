@@ -89,6 +89,10 @@ RSpec.configure do |config|
       model.import force: true, refresh: true
     end
   end
+
+  config.after :suite do
+    FileUtils.rm_rf(Dir["#{Rails.root}/spec/uploads/"])
+  end
 end
 
 OmniAuth.config.test_mode = true
