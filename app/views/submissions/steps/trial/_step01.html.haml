@@ -29,8 +29,10 @@
   .form-group
     = content.country_select :country_id, placeholder: 'Select a country'
 
-  - %w(trial_location_site_name place_name latitude longitude).each do |attr|
+  - %w(trial_location_site_name place_name).each do |attr|
     .form-group= content.text_field attr
 
+  .form-group= content.text_field :latitude, help: 'Expressed in degrees, eg. 48.86'
+  .form-group= content.text_field :longitude, help: 'Expressed in degrees, eg. 2.30'
   .form-group= content.text_field :altitude, help: 'Expressed in meters'
 
