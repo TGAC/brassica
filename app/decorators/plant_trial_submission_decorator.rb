@@ -49,6 +49,62 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   #   trait_descriptors.map(&:descriptor_name)
   # end
 
+  def plant_trial_description
+    object.content.step01.plant_trial_description
+  end
+
+  def trial_year
+    object.content.step01.trial_year
+  end
+
+  def country_name
+    country_id = object.content.step01.country_id
+    return unless country_id.present?
+    Country.find(country_id).country_name
+  end
+
+  def institute_id
+    object.content.step01.institute_id
+  end
+
+  def trial_location_site_name
+    object.content.step01.trial_location_site_name
+  end
+
+  def place_name
+    object.content.step01.place_name
+  end
+
+  def latitude
+    object.content.step01.latitude
+  end
+
+  def longitude
+    object.content.step01.longitude
+  end
+
+  def altitude
+    alt = object.content.step01.altitude
+    return unless alt.present?
+    "#{alt} m"
+  end
+
+  def terrain
+    object.content.step01.terrain
+  end
+
+  def soil_type
+    object.content.step01.soil_type
+  end
+
+  def statistical_factors
+    object.content.step01.statistical_factors
+  end
+
+  def design_factors
+    object.content.step01.design_factors
+  end
+
   def data_owned_by
     object.content.step04.data_owned_by.presence
   end

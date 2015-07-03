@@ -1,31 +1,19 @@
-- if @submission.plant_trial_name
-  %li.list-group-item
-    %strong Plant trial name
-    = @submission.plant_trial_name
-
-- if @submission.project_descriptor
-  %li.list-group-item
-    %strong Project
-    = @submission.project_descriptor
-
-- if @submission.species_name
-  %li.list-group-item
-    %strong Species
-    = @submission.species_name
-
--# TODO FIXME add all other relevant information
-
-- if @submission.data_owned_by
-  %li.list-group-item
-    %strong Data owned by
-    = @submission.data_owned_by
-
-- if @submission.data_provenance
-  %li.list-group-item
-    %strong Data provenance
-    = @submission.data_provenance
-
-- if @submission.comments
-  %li.list-group-item
-    %strong Comments
-    = @submission.comments
+= submission_value @submission, :plant_trial_name
+= submission_value @submission, :project_descriptor, 'Project'
+= submission_value @submission, :species_name, 'Species'
+= submission_value @submission, :plant_trial_description, 'Trial description'
+= submission_value @submission, :trial_year
+= submission_value @submission, :country_name, 'Country'
+= submission_value @submission, :institute_id
+= submission_value @submission, :trial_location_site_name, 'Site'
+= submission_value @submission, :place_name
+= submission_value @submission, :latitude
+= submission_value @submission, :longitude
+= submission_value @submission, :altitude
+= submission_value @submission, :terrain
+= submission_value @submission, :soil_type
+= submission_value @submission, :statistical_factors
+= submission_value @submission, :design_factors
+= submission_value @submission, :data_owned_by
+= submission_value @submission, :data_provenance
+= submission_value @submission, :comments

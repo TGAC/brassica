@@ -18,7 +18,6 @@ module SubmissionsHelper
     )
   end
 
-
   def submission_details_path(submission)
     decorator(submission).details_path
   end
@@ -33,6 +32,14 @@ module SubmissionsHelper
 
   def submission_details(submission)
     decorator(submission).further_details.html_safe
+  end
+
+  def submission_value(submission, attr, label = nil)
+    value = decorator(submission).send(attr)
+    label ||= attr.to_s.humanize
+
+    render partial: "submissions/show/value",
+           locals: { value: value, label: label }
   end
 
   def submission_form(submission, &block)
@@ -65,13 +72,15 @@ module SubmissionsHelper
   private
 
   def decorator(submission)
+    return submission if submission.is_a?(SubmissionDecorator)
+
     case submission.submission_type
     when 'population'
       PlantPopulationSubmissionDecorator.decorate(submission)
     when 'trial'
       PlantTrialSubmissionDecorator.decorate(submission)
     else
-      nil
+      raise ArgumentError, "Unknown submission type: #{submission.submission_type}"
     end
   end
 end
