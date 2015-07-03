@@ -5,6 +5,7 @@ class Submission < ActiveRecord::Base
   enum submission_type: %i(population trial qtl linkage_map)
 
   belongs_to :user
+  has_many :uploads, class_name: 'Submission::Upload'
 
   validates :user, presence: true
   validates :submission_type, presence: true

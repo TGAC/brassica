@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150625113612) do
+ActiveRecord::Schema.define(version: 20150703125103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -561,6 +561,19 @@ ActiveRecord::Schema.define(version: 20150625113612) do
     t.text "data_provenance"
   end
 
+  create_table "submission_uploads", force: :cascade do |t|
+    t.integer  "submission_id",     null: false
+    t.integer  "upload_type",       null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+  end
+
+  add_index "submission_uploads", ["submission_id"], name: "index_submission_uploads_on_submission_id", using: :btree
+
   create_table "submissions", force: :cascade do |t|
     t.integer  "user_id",                             null: false
     t.string   "step",                                null: false
@@ -725,6 +738,7 @@ ActiveRecord::Schema.define(version: 20150625113612) do
   add_foreign_key "qtl", "linkage_groups", on_delete: :nullify
   add_foreign_key "qtl", "processed_trait_datasets", on_delete: :nullify
   add_foreign_key "qtl", "qtl_jobs", on_delete: :nullify
+  add_foreign_key "submission_uploads", "submissions", on_update: :cascade, on_delete: :restrict
   add_foreign_key "trait_descriptors", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_grades", "trait_descriptors", on_delete: :nullify
   add_foreign_key "trait_scores", "plant_scoring_units", on_delete: :nullify
