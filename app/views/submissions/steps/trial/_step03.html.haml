@@ -1,6 +1,8 @@
 -# TODO FIXME Here we will try to list information about uploaded and parsed file contents
 
-- if @content.upload_id
-  = @content.upload.file_file_name
+.submission-upload
+  - if @content.upload
+    %span.file-name= @content.upload.file_file_name
+    = delete_submission_upload_button(@content.upload)
 
 = content.hidden_field :upload_id

@@ -9,6 +9,8 @@ class Submissions::UploadsController < ApplicationController
 
       # TODO process uploaded file
 
+      upload = SubmissionUploadDecorator.decorate(upload)
+
       render json: upload.as_json, status: :created
     else
       errors = upload.errors.messages.map do |attr, messages|
@@ -19,6 +21,13 @@ class Submissions::UploadsController < ApplicationController
 
       render json: { errors: errors }, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    upload = submission.uploads.find(params[:id])
+    upload.destroy
+
+    render json: {}, status: :success
   end
 
   private

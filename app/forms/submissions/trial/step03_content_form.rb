@@ -34,7 +34,7 @@ module Submissions
       end
 
       def upload
-        Submission::Upload.where(upload_type: 'trait_scores', id: upload_id).first
+        Submission::Upload.trait_scores.where(id: upload_id).first
       end
     end
   end

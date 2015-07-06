@@ -142,14 +142,17 @@ class TrialSubmission extends Submission
 
       add: (event, data) =>
         console.log('add')
-        # TODO maybe show preview using FileReader API
-
         data.submit() # temp
 
       done: (event, data) =>
         console.log 'done'
 
         @$('#submission_content_upload_id').val(data.result.id)
+        @$('.submission-upload').html('').append """
+        <span class='file-name'>#{data.result.file_file_name}</span>
+        <a href='#{data.result.delete_url}' class='btn btn-default delete-submission-upload'
+          data-remote=true data-method='delete'>Delete</a>
+        """
 
       progressall: (event, data) =>
         console.log('progressall')

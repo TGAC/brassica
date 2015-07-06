@@ -67,6 +67,13 @@ module SubmissionsHelper
     options_from_collection_for_select(collection, id_attr, text_attr, selected)
   end
 
+  def delete_submission_upload_button(upload)
+    url = submission_upload_path(upload.submission, upload.id)
+    link_to "Delete", url, class: 'btn btn-default delete-submission-upload',
+                           remote: true,
+                           method: :delete
+  end
+
   private
 
   def decorator(submission)
