@@ -36,19 +36,15 @@
       = label_tag :common_name, 'Common name'
       = text_field_tag :common_name, nil, class: 'form-control'
 
-    .form-group.previous-line-name-wrapper
-      .previous-line-name-select
-        = label_tag :previous_line_name
-        = select_tag :previous_line_name, [], class: 'previous-line-name form-control', 'data-placeholder': "Select existing plant line"
-
-      .previous-line-name-alternative or
-      .previous-line-name-input
-        = text_field_tag :previous_line_name, nil, class: 'form-control', placeholder: "Enter new plant line name"
-        %a.clear-input.hidden{href: '#'} ×
+    .form-group
+      = combo_field_tag :previous_line_name, nil, nil,
+        class: 'previous-line-name',
+        select_placeholder: "Select existing plant line",
+        input_placeholder: "Enter new plant line name"
 
     .form-group
-      = render partial: "submissions/input_or_select",
-               locals: { attr: 'genetic_status', options: options_for_select(PlantLine.genetic_statuses) }
+      - option_tags = options_for_select(PlantLine.genetic_statuses)
+      = combo_field_tag :genetic_status, nil, option_tags, class: 'genetic-status'
 
     .form-group
       = label_tag :plant_variety_name

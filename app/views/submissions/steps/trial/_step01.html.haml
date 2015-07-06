@@ -22,9 +22,9 @@
 
 - %w(institute_id terrain soil_type statistical_factors design_factors).each do |attr|
   .form-group
-    = render partial: "submissions/input_or_select",
-             locals: { attr: attr,
-                       options: options_for_select(PlantTrial.attribute_values(attr)) }
+    - options = options_for_select(PlantTrial.attribute_values(attr), @content.send(attr))
+    = content.combo_field attr, options
+
 
 %fieldset
   %legend Location

@@ -58,9 +58,9 @@ class PopulationSubmission extends Submission
     @$('div.new-plant-line-for-list').removeClass('hidden').show()
 
     @$('.previous-line-name').select2(@plantLineSelectOptions)
-    @$('.previous-line-name-wrapper').inputOrSelect()
+    @$('.previous-line-name-wrapper').comboField()
     @$('.genetic-status').select2(@defaultSelectOptions)
-    @$('.genetic-status-wrapper').inputOrSelect()
+    @$('.genetic-status-wrapper').comboField()
     @$('.new-plant-line-for-list input[type=text]').on 'keydown', (event) =>
       if event.keyCode == 13 # Enter key
         event.preventDefault() # Prevent form submission
@@ -131,7 +131,7 @@ class TrialSubmission extends Submission
 
     $.each fields, (_, field) =>
       @$(".#{field}").select2(@defaultSelectOptions)
-      @$(".#{field}-wrapper").inputOrSelect()
+      @$(".#{field}-wrapper").comboField()
 
     @bindUpload()
     @bindNewTraitDescriptorControls()
@@ -182,7 +182,7 @@ class TrialSubmission extends Submission
 
     $.each fields, (_, field) =>
       @$(".#{field}").select2(@defaultSelectOptions)
-      @$(".#{field}-wrapper").inputOrSelect()
+      @$(".#{field}-wrapper").comboField()
 
     @$('.new-trait-descriptor-for-list input[type=text]').on 'keydown', (event) =>
       if event.keyCode == 13 # Enter key

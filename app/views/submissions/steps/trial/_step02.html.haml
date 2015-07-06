@@ -30,9 +30,8 @@
 
     - %w(units_of_measurements score_type where_to_score).each do |attr|
       .form-group
-        = render partial: "submissions/input_or_select",
-                 locals: { attr: attr,
-                           options: options_for_select(TraitDescriptor.attribute_values(attr)) }
+        - option_tags = options_for_select(TraitDescriptor.attribute_values(attr))
+        = combo_field_tag attr, nil, option_tags, class: attr.dasherize
 
     - %w(when_to_score).each do |attr|
       .form-group
