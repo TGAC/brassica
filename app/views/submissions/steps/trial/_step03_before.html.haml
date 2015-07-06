@@ -1,5 +1,39 @@
 .alert.alert-info
-  Please upload file with... TODO FIXME Add
+  %p
+    Please upload file with score values. The required format is simple and features <b>unique</b> plant
+    identification in the first column and trait scores in column two, three and so forth. The
+    number of columns depends on how many Traits you have chosen in the second step of this submission.
+    All values should be separated by <code>TAB</code>s.
+
+  %p
+    For instance, if in the second step, you've picked two traits, <i>oleic acid content</i>and
+    <i>seed mature time</i>, you should provide a file like this:
+
+  %pre
+    :preserve
+      Plant id    oleic acid content    seed mature time
+      assay_09    56,98    249,00
+      assay_08    57,24    252,00
+      assay_98    18,48    255,00
+      assay_97    20,40
+      assay_96    50,82    254,00
+      assay_93    58,50
+      assay_94        252,00
+
+  %p
+    There should be a single <code>TAB</code> between each value. The last line has two consecutive
+    <code>TAB</code>s due to the first trait score missing.
+
+  %p
+    The first line will be treated as a header. Specific values will be stored as scoring for the
+    trait that's name matches the corresponding column header. If no match is found, the score will
+    be stored by column index, sorting traits by names. That is, unmatched third column header will
+    cause all third column values counted as scoring of the second trait (again, when sorted by trait
+    names) defined during the second step.
+
+  %p
+    Surplus columns (with index larged than the number of chosen traits) will be ignored. When values
+    in the first column are not unique, the behaviour is undefined.
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
 
@@ -8,4 +42,3 @@
   .form-group
     = label_tag :upload
     = file_field_tag "submission_upload[file]", class: 'trait-scores-upload'
-
