@@ -1,8 +1,10 @@
 -# TODO FIXME Here we will try to list information about uploaded and parsed file contents
 
-.submission-upload
-  - if @content.upload
-    %span.file-name= @content.upload.file_file_name
-    = delete_submission_upload_button(@content.upload)
+.uploaded-trait-scores{ class: "#{'hidden' unless @content.upload}" }
+  = label_tag :upload, 'Uploaded file'
+  %div
+    %span.file-name= @content.upload.try(:file_file_name)
+    = delete_submission_upload_button(@content.upload,
+      class: 'btn btn-default delete-trait-scores-upload')
 
 = content.hidden_field :upload_id

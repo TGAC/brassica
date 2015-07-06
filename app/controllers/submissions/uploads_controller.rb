@@ -27,7 +27,7 @@ class Submissions::UploadsController < ApplicationController
     upload = submission.uploads.find(params[:id])
     upload.destroy
 
-    render json: {}, status: :success
+    render json: {}
   end
 
   private

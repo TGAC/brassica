@@ -141,21 +141,20 @@ class TrialSubmission extends Submission
       data_type: 'json'
 
       add: (event, data) =>
-        console.log('add')
-        data.submit() # temp
+        @$('.fileinput-button').addClass('disabled')
+        data.submit()
 
       done: (event, data) =>
-        console.log 'done'
-
         @$('#submission_content_upload_id').val(data.result.id)
-        @$('.submission-upload').html('').append """
-        <span class='file-name'>#{data.result.file_file_name}</span>
-        <a href='#{data.result.delete_url}' class='btn btn-default delete-submission-upload'
-          data-remote=true data-method='delete'>Delete</a>
-        """
 
-      progressall: (event, data) =>
-        console.log('progressall')
+        @$('.fileinput-button').removeClass('disabled').addClass('hidden')
+        @$('.uploaded-trait-scores').removeClass('hidden')
+        @$('.uploaded-trait-scores .file-name').text(data.result.file_file_name)
+        @$('.uploaded-trait-scores .delete-trait-scores-upload').attr(href: data.result.delete_url)
+
+    @$('.delete-trait-scores-upload').on 'ajax:success', (data, status, xhr) =>
+      @$('.fileinput-button').removeClass('hidden')
+      @$('.uploaded-trait-scores').addClass('hidden')
 
   bindNewTraitDescriptorControls: =>
     @$('.trait-descriptor-list').on 'select2:unselect', (event) =>

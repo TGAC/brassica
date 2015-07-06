@@ -40,5 +40,6 @@
   = hidden_field_tag "submission_upload[upload_type]", "trait_scores"
 
   .form-group
-    = label_tag :upload
-    = file_field_tag "submission_upload[file]", class: 'trait-scores-upload'
+    .btn.btn-primary.fileinput-button{ class: "#{'hidden' if @content.upload}" }
+      %span Choose a file...
+      = file_field_tag "submission_upload[file]", class: 'trait-scores-upload'
