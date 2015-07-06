@@ -98,7 +98,7 @@ class PopulationSubmission extends Submission
     $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
     # add all PL attributes to DOM so it can be sent with form
-    $form = @$el
+    $form = @$el.find('form')
     $container = $('<div></div').attr(id: @newPlantLineForListContainerId(data.plant_line_name))
     $container.appendTo($form)
 
@@ -217,7 +217,7 @@ class TrialSubmission extends Submission
     $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
     # add all PL attributes to DOM so it can be sent with form
-    $form = @$el
+    $form = @$el.find('form')
     $container = $('<div></div').attr(id: @newTraitDescriptorForListContainerId(data.descriptor_name))
     $container.appendTo($form)
 
