@@ -26,3 +26,24 @@ en:
 
             trait_descriptor_list:
               blank: "A trait descriptor with name \"%{name}\" is not defined."
+
+            plant_trial_name:
+              blank: Please provide a trial name.
+
+            project_descriptor:
+              blank: Please provide a project name.
+
+            plant_population_id:
+              blank: Plase select a plant population.
+
+            trial_year:
+              not_an_integer: Please provide a valid trial year.
+
+            longitude:
+              not_a_number: Please provide a valid longitude in degrees.
+
+            latitude:
+              not_a_number: Please provide a valid latitude in degrees.
+
+            altitude:
+              not_a_number: Please provide a valid altitude in meters.
