@@ -1,6 +1,6 @@
 .form-group
   = content.text_field :plant_trial_name, required: true,
-    help: 'Please, provide convenient <b>name</b> for this scoring trial'
+    help: 'Please, provide convenient <b>name</b> for this scoring trial. It has to be <b>unique</b>.'
 
 .form-group
   = content.text_field :project_descriptor, required: true, label: 'Project name'
@@ -10,6 +10,9 @@
   - options = options_for_submission_select(@content.plant_population, :name)
   = content.select :plant_population_id, options, { include_blank: true },
     { class: 'form-control plant-population', data: { placeholder: 'Select plant population' } }
+  %small.help-block
+    If the trial was performed for a population that is not listed in BIP, plese use Plant Population
+    submission to upload information about that population first.
 
 .form-group
   = content.text_area :plant_trial_description, label: 'Trial description'
@@ -26,12 +29,9 @@
 %fieldset
   %legend Location
 
-  .form-group
-    = content.country_select :country_id, placeholder: 'Select a country'
-
-  - %w(trial_location_site_name place_name).each do |attr|
-    .form-group= content.text_field attr
-
+  .form-group= content.country_select :country_id, placeholder: 'Select a country'
+  .form-group= content.text_field :place_name, help: 'Geographical name, for instance a town'
+  .form-group= content.text_field :trial_location_site_name, help: 'Name of the field, glasshouse or growth room used for planting'
   .form-group= content.text_field :latitude, help: 'Expressed in degrees, eg. 48.86'
   .form-group= content.text_field :longitude, help: 'Expressed in degrees, eg. 2.30'
   .form-group= content.text_field :altitude, help: 'Expressed in meters'
