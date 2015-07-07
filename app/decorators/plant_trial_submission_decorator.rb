@@ -17,8 +17,16 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     ''.tap do |l|
       l << h.content_tag(:span, project_descriptor, class: 'details')
       if trait_descriptors.present?
-        l << h.content_tag(:span, 'Traits scored: ', class: 'text')
-        l << h.content_tag(:span, trait_descriptors.join(" | "), class: 'details')
+        icon = h.content_tag(:i, nil, class: 'fa fa-info-circle')
+        popover = h.content_tag(:strong, 'Traits scored: ')
+        popover.concat h.content_tag(:span, h.html_escape(trait_descriptors.join(", ")))
+        l << h.content_tag(:button, icon,
+                           type: 'button',
+                           class: 'btn btn-xs btn-info trait-descriptors',
+                           data: {
+                             toggle: 'popover',
+                             content: popover
+                           })
       end
     end.strip
   end

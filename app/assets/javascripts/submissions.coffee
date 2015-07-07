@@ -237,3 +237,8 @@ $ ->
   new PopulationSubmission('.edit-population-submission').bind()
   new TrialSubmission('.edit-trial-submission').bind()
 
+  $('.submissions [data-toggle="popover"]').popover(
+    trigger: 'hover',
+    html: true
+  )
+

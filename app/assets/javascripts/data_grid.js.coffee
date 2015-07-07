@@ -95,7 +95,7 @@ $ ->
     $(this).DataTable specificConfig
 
 
-  $('body').popover
+  $('.data-table').popover
     selector: '[data-popover-source]'
     placement: 'left'
     trigger: 'focus'
