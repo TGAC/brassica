@@ -32,6 +32,17 @@
     names) defined during the second step.
 
   %p
+    In particular case of this submission, columns should be provided as follows:
+
+  - @trait_names = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
+  %pre
+    :preserve
+      Plant id    #{@trait_names.join('    ')}
+      plant_1    #{@trait_names.map{|_| 'value'}.join('    ')}
+      plant_2    #{@trait_names.map{|_| 'value'}.join('    ')}
+      ...
+
+  %p
     Surplus columns (with index larged than the number of chosen traits) will be ignored. When values
     in the first column are not unique, the behaviour is undefined.
 
