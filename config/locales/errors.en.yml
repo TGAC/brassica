@@ -47,3 +47,6 @@ en:
 
             altitude:
               not_a_number: Please provide a valid altitude in meters.
+
+            country_id:
+              blank: Please select a country from the list.

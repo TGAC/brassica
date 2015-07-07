@@ -29,7 +29,7 @@
 %fieldset
   %legend Location
 
-  .form-group= content.country_select :country_id, placeholder: 'Select a country'
+  .form-group= content.country_select :country_id, placeholder: 'Select a country', required: true
   .form-group= content.text_field :place_name, help: 'Geographical name, for instance a town'
   .form-group= content.text_field :trial_location_site_name, help: 'Name of the field, glasshouse or growth room used for planting'
   .form-group= content.text_field :latitude, help: 'Expressed in degrees, eg. 48.86'
