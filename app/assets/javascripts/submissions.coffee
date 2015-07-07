@@ -175,6 +175,7 @@ class TrialSubmission extends Submission
     @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
 
     fields = [
+      'category'
       'units-of-measurements'
       'score-type'
       'where-to-score'

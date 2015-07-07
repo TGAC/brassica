@@ -3,14 +3,15 @@ module ComboFieldTagHelper
     select_placeholder = options[:select_placeholder] || "Select existing value"
     input_placeholder = options[:input_placeholder] || "Enter new value"
     klass = options[:class] || 'combo-field'
+    required = options[:required]
 
     unless options[:label] == false
-      label_html = label_tag(options[:label] || name)
+      label_html = label_tag(options[:label] || name, nil, class: "#{'required' if required}")
     end
 
     select_html = select_tag name, option_tags,
       prompt: '',
-      class: "#{klass} form-control",
+      class: "#{klass} form-control #{'required' if required}",
       data: { placeholder: select_placeholder }
 
     text_field_html = text_field_tag name, value,

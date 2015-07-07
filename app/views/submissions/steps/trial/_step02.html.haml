@@ -25,8 +25,8 @@
       = text_field_tag :descriptor_name, nil, class: 'form-control required', placeholder: 'Enter new trait name'
 
     .form-group
-      = label_tag :category, 'Trait category', class: 'required'
-      = text_field_tag :category, nil, class: 'form-control required'
+      - option_tags = options_for_select(TraitDescriptor.attribute_values(:category))
+      = combo_field_tag :category, nil, option_tags, required: true, label: 'Trait category', class: 'category'
 
     - %w(units_of_measurements score_type where_to_score).each do |attr|
       .form-group
