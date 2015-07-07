@@ -6,8 +6,7 @@ class Submissions::UploadsController < ApplicationController
   def create
     upload = Submission::Upload.create(upload_params.merge(submission_id: submission.id))
     if upload.valid?
-
-      # TODO process uploaded file
+      Submission::TraitScoreParser.new(upload).call
 
       upload = SubmissionUploadDecorator.decorate(upload)
 

@@ -3,6 +3,7 @@ module Submissions
     class Step03ContentForm < PlantTrialForm
       property :trait_score_list
       property :upload_id
+      property :trait_mapping
 
       # plant_scoring_unit ???
       # trait_descriptor ???
@@ -16,6 +17,7 @@ module Submissions
       def self.permitted_properties
         [
           :upload_id,
+          :trait_mapping,
           {
             :trait_score_list => [],
             :new_trait_scores => [

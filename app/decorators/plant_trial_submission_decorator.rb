@@ -48,9 +48,20 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     non_numeric_tds | TraitDescriptor.where(id: numeric_tds).pluck(:descriptor_name)
   end
 
-  # def trait_names
-  #   trait_descriptors.map(&:descriptor_name)
-  # end
+  # Takes new TD names and hits the DB for old TDs for their names; sorts
+  def sorted_trait_names
+    return @sorted_trait_names if @sorted_trait_names
+    trait_list = object.content.step02.trait_descriptor_list || []
+    logger.debug trait_list
+    @sorted_trait_names = trait_list.compact.map do |trait_item|
+      if trait_item.to_i == 0
+        trait_item
+      else
+        trait = TraitDescriptor.where(id: trait_item).first
+        trait ? trait.descriptor_name : nil
+      end
+    end.sort
+  end
 
   def plant_trial_description
     object.content.step01.plant_trial_description
