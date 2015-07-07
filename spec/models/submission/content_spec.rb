@@ -22,6 +22,11 @@ RSpec.describe Submission::Content do
       expect(submission.content.step02.plant_line).to eq 'Baz'
     end
 
+    it "skips blank values in arrays" do
+      content.update(:step02, plant_line_list: ['', 'Baz', 'Blah'])
+      expect(submission.content.step02.plant_line_list).to eq ['Baz', 'Blah']
+    end
+
     it "raises with invalid step" do
       expect { content.update(:step_fiz, {}) }.to raise_error(Submission::InvalidStep, "No step step_fiz")
     end

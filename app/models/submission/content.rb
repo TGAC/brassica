@@ -10,9 +10,18 @@ class Submission::Content < OpenStruct
 
   def update(step, step_content)
     raise Submission::InvalidStep, "No step #{step}" unless submission.steps.include?(step.to_s)
-    submission.content = submission.read_attribute(:content).merge(step => step_content.to_h)
+    step_content = sanitize(step_content.to_h)
+    submission.content = submission.read_attribute(:content).merge(step => step_content)
   end
 
   private
   attr_accessor :submission
+
+  def sanitize(step_content)
+    step_content.each do |attr, val|
+      if val.is_a?(Array)
+        step_content[attr] = val.select(&:present?)
+      end
+    end
+  end
 end
