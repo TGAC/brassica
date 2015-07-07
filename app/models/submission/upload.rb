@@ -11,4 +11,11 @@ class Submission::Upload < ActiveRecord::Base
   # TODO FIXME can we validate?
   do_not_validate_attachment_file_type :file
 
+  # NOTE, WARNING: @logs will contain user-provided data; do NOT interpret is as html
+  attr_reader :logs
+
+  def log(string)
+    @logs ||= []
+    @logs << string
+  end
 end

@@ -1,10 +1,23 @@
--# TODO FIXME Here we will try to list information about uploaded and parsed file contents
-
 .uploaded-trait-scores{ class: "#{'hidden' unless @content.upload}" }
-  = label_tag :upload, 'Uploaded file'
-  %div
-    %span.file-name= @content.upload.try(:file_file_name)
-    = delete_submission_upload_button(@content.upload,
-      class: 'btn btn-default delete-trait-scores-upload')
+  %pre.parser-logs.alert.alert-warning
+  %pre.parser-errors.alert.alert-danger.hidden
+  %pre.parser-summary.alert.alert-success.hidden
+
+  .alert.alert-primary
+    = label_tag :upload, 'Uploaded file'
+    %div
+      %span.file-name= @content.upload.try(:file_file_name)
+      = delete_submission_upload_button(@content.upload,
+        class: 'btn btn-default delete-trait-scores-upload')
+
+  .parser-note.alert.alert-info
+    %p
+      Please review the above parsing logs. If there were any critical errors during the process,
+      the red section will try to give some hints regarding their nature. You may then try to fix
+      the file accordingly, delete the current upload and re-upload the fixed file.
+
+    %p
+      Otherwise, if you think the parsing went properly, use the <b>NEXT</b> button to confirm
+      these changes and proceed with further steps of submission.
 
 = content.hidden_field :upload_id
