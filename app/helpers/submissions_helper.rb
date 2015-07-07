@@ -59,7 +59,7 @@ module SubmissionsHelper
       raise ArgumentError, "Mixed-type collection not supported"
     end
 
-    return [] unless collection.present?
+    return '' unless collection.present?
 
     id_attr = options[:id] == false ? text_attr : :id
     selected = collection.map(&id_attr)
