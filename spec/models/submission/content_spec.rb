@@ -30,5 +30,11 @@ RSpec.describe Submission::Content do
     it "raises with invalid step" do
       expect { content.update(:step_fiz, {}) }.to raise_error(Submission::InvalidStep, "No step step_fiz")
     end
+
+    it 'preserves older keys with no new values' do
+      content.update(:step01, description: 'New, updated value')
+      expect(submission.content.step01.name).to eq 'Bar'
+      expect(submission.content.step01.description).to eq 'New, updated value'
+    end
   end
 end
