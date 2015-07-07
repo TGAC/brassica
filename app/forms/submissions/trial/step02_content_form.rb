@@ -29,6 +29,8 @@ module Submissions
         validates :category, presence: true
       end
 
+      validates :trait_descriptor_list, length: { minimum: 1 }
+
       # NOTE While descriptor_name is not required by current model to be unique
       #      we should treat it like it is for the purpose of future submissions.
       validate do
