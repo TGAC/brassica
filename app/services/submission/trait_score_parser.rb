@@ -1,5 +1,7 @@
 class Submission::TraitScoreParser
 
+  attr_reader :trait_mapping, :trait_scores
+
   def initialize(upload)
     @upload = upload
   end
@@ -57,7 +59,7 @@ class Submission::TraitScoreParser
         @trait_scores[plant_id] = {}
         plant_count += 1
         values.each_with_index do |value, col_index|
-          unless value.blank?
+          unless value.blank? || (@trait_names && (col_index >= @trait_names.size))
             @trait_scores[plant_id][col_index] = value
             score_count += 1
           end

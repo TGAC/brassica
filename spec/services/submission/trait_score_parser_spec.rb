@@ -77,13 +77,13 @@ RSpec.describe Submission::TraitScoreParser do
     it 'does nothing with empty input' do
       input_is ''
       subject.send(:parse_scores)
-      expect(subject.scores).to eq({})
+      expect(subject.trait_scores).to eq({})
     end
 
     it 'does not ignore no-score rows' do
       input_is "plant 1\nplant 2"
       subject.send(:parse_scores)
-      expect(subject.scores).
+      expect(subject.trait_scores).
         to eq({ 'plant 1' => {},
                 'plant 2' => {} })
     end
@@ -91,7 +91,7 @@ RSpec.describe Submission::TraitScoreParser do
     it 'records simple scores' do
       input_is "plant 1\t1  \nplant 2\t 2"
       subject.send(:parse_scores)
-      expect(subject.scores).
+      expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1'},
                 'plant 2' => {0 => '2'} })
     end
@@ -99,7 +99,7 @@ RSpec.describe Submission::TraitScoreParser do
     it 'records multiple sparse scores' do
       input_is "plant 1\t1\t2\nplant 2\t\t 3\nplant 3\t4"
       subject.send(:parse_scores)
-      expect(subject.scores).
+      expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1', 1 => '2'},
                 'plant 2' => {1 => '3'},
                 'plant 3' => {0 => '4'} })
@@ -108,7 +108,7 @@ RSpec.describe Submission::TraitScoreParser do
     it 'handles empty newlines properly' do
       input_is "plant 1\t1  \n\nplant X\t\nplant 2\t 2\n\n"
       subject.send(:parse_scores)
-      expect(subject.scores).
+      expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1'},
                 'plant 2' => {0 => '2'},
                 'plant X' => {} })
@@ -121,6 +121,16 @@ RSpec.describe Submission::TraitScoreParser do
       input_is ''
       subject.call
       expect(upload.submission.content.step03.trait_scores).to be_nil
+    end
+
+    it 'ignores any score in index grater than traits number' do
+      upload.submission.content.update(:step02, trait_descriptor_list: ['trait',])
+      input_is "id\ttrait\nplant 1\t1\t2"
+      subject.call
+      expect(subject.trait_mapping).
+        to eq({0 => 0})
+      expect(subject.trait_scores).
+        to eq({ 'plant 1' => {0 => '1'} })
     end
   end
 
