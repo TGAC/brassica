@@ -1,30 +1,29 @@
 class Submission::TraitScoreParser
 
-  attr_reader :trait_mapping
-
   def initialize(upload)
     @upload = upload
   end
 
   def call
     @upload.log "Starting Trait Scores file parsing [file name: #{@upload.file_file_name}]"
-    # TODO FIXME remove all step03 content so we do not "stack" too many TraitScores
+
+    @upload.submission.content.update(:step03, trait_mapping: nil, trait_scores: nil)
+    @upload.submission.save!
 
     begin
       map_headers_to_traits
+      parse_scores if @upload.errors.empty?
     rescue EOFError => e
       @upload.log "Input file finished"
     end
 
-    Rails.logger.debug @upload.errors[:file]
-
     if @upload.errors.empty?
-      @upload.submission.content.update(:step03, trait_mapping: @trait_mapping)
-    else
-      Rails.logger.debug @upload.errors[:file]
+      @upload.submission.content.update(:step03,
+                                        trait_mapping: @trait_mapping,
+                                        trait_scores: @trait_scores)
+      @upload.submission.save!
+      @upload.submission.content.save!
     end
-
-    Rails.logger.debug @upload.logs.join('\n')
   end
 
   private
@@ -45,6 +44,27 @@ class Submission::TraitScoreParser
     if @trait_mapping.values.uniq.length != @trait_mapping.values.length
       @upload.errors.add(:file, 'Detected non unique column headers mapping to traits. Please check the column names.')
     end
+  end
+
+  def parse_scores
+    @upload.log "Parsing scores for traits"
+    plant_count = 0
+    score_count = 0
+    @trait_scores = {}
+    input.each do |score_line|
+      plant_id, *values = score_line.split("\t").map(&:strip)
+      unless plant_id.strip.blank?
+        @trait_scores[plant_id] = {}
+        plant_count += 1
+        values.each_with_index do |value, col_index|
+          unless value.blank?
+            @trait_scores[plant_id][col_index] = value
+            score_count += 1
+          end
+        end
+      end
+    end
+    @upload.log "Parsed #{score_count} scores for #{plant_count} plants, in total."
   end
 
   def input

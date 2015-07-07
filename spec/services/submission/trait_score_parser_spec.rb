@@ -73,6 +73,57 @@ RSpec.describe Submission::TraitScoreParser do
     end
   end
 
+  describe '#parse_scores' do
+    it 'does nothing with empty input' do
+      input_is ''
+      subject.send(:parse_scores)
+      expect(subject.scores).to eq({})
+    end
+
+    it 'does not ignore no-score rows' do
+      input_is "plant 1\nplant 2"
+      subject.send(:parse_scores)
+      expect(subject.scores).
+        to eq({ 'plant 1' => {},
+                'plant 2' => {} })
+    end
+
+    it 'records simple scores' do
+      input_is "plant 1\t1  \nplant 2\t 2"
+      subject.send(:parse_scores)
+      expect(subject.scores).
+        to eq({ 'plant 1' => {0 => '1'},
+                'plant 2' => {0 => '2'} })
+    end
+
+    it 'records multiple sparse scores' do
+      input_is "plant 1\t1\t2\nplant 2\t\t 3\nplant 3\t4"
+      subject.send(:parse_scores)
+      expect(subject.scores).
+        to eq({ 'plant 1' => {0 => '1', 1 => '2'},
+                'plant 2' => {1 => '3'},
+                'plant 3' => {0 => '4'} })
+    end
+
+    it 'handles empty newlines properly' do
+      input_is "plant 1\t1  \n\nplant X\t\nplant 2\t 2\n\n"
+      subject.send(:parse_scores)
+      expect(subject.scores).
+        to eq({ 'plant 1' => {0 => '1'},
+                'plant 2' => {0 => '2'},
+                'plant X' => {} })
+    end
+  end
+
+  describe '#call' do
+    it 'resets step03 data when called' do
+      upload.submission.content.update(:step03, trait_scores: { 'plant' => { 1 => '5' }})
+      input_is ''
+      subject.call
+      expect(upload.submission.content.step03.trait_scores).to be_nil
+    end
+  end
+
   def input_is(string)
     allow(subject).to receive(:input).and_return(StringIO.new(string))
   end

@@ -151,7 +151,7 @@ class TrialSubmission extends Submission
         @$('.uploaded-trait-scores').removeClass('hidden')
         @$('.uploaded-trait-scores .file-name').text(data.result.file_file_name)
         @$('.uploaded-trait-scores .delete-trait-scores-upload').attr(href: data.result.delete_url)
-        console.log data.result
+        @$('.uploaded-trait-scores .parser-logs').removeClass('hidden')
         @$('.uploaded-trait-scores .parser-logs').text(data.result.logs.join('\n'))
         if data.result.errors.length > 0
           @$('.uploaded-trait-scores .parser-errors').removeClass('hidden')

@@ -1,7 +1,10 @@
 .uploaded-trait-scores{ class: "#{'hidden' unless @content.upload}" }
-  %pre.parser-logs.alert.alert-warning
+  %pre.parser-logs.alert.alert-warning.hidden
   %pre.parser-errors.alert.alert-danger.hidden
-  %pre.parser-summary.alert.alert-success.hidden
+
+  %pre.parser-summary.alert.alert-success{ class: "#{'hidden' unless @content.upload}" }
+    - if @content.upload
+      = raw SubmissionUploadDecorator.decorate(@content.upload).parser_summary.join('</br>')
 
   .alert.alert-primary
     = label_tag :upload, 'Uploaded file'

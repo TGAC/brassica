@@ -1,38 +1,16 @@
 module Submissions
   module Trial
     class Step03ContentForm < PlantTrialForm
-      property :trait_score_list
+      property :trait_scores, writeable: false
       property :upload_id
-      property :trait_mapping
-
-      # plant_scoring_unit ???
-      # trait_descriptor ???
-
-      collection :new_trait_scores do
-        property :score_value
-
-        validates :score_value, presence: true
-      end
+      property :trait_mapping, writeable: false
 
       def self.permitted_properties
         [
           :upload_id,
           :trait_mapping,
-          {
-            :trait_score_list => [],
-            :new_trait_scores => [
-              :score_value
-            ]
-          }
+          :trait_scores
         ]
-      end
-
-      def trait_score_list
-        super.try { |tsl| tsl.select(&:present?) }
-      end
-
-      def new_trait_scores
-        super || []
       end
 
       def upload
