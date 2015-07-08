@@ -4,41 +4,86 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
   let(:submission) { create(:submission, :trial) }
   let(:plant_population) { create(:plant_population, user: submission.user) }
+  let(:old_trait_descriptor) { create(:trait_descriptor) }
 
   subject { described_class.new(submission) }
 
   context 'given submission with valid content' do
-    let(:plant_trial_attrs) { attributes_for(:plant_trial).merge(
-      plant_population_id: plant_population.id
-    ) }
+    let(:plant_trial_attrs) {
+      attributes_for(:plant_trial).merge(plant_population_id: plant_population.id)
+    }
     let(:new_trait_descriptors_attrs) {
-      attributes_for_list(:trait_descriptor, 2).map { |attrs|
-        attrs.slice(:descriptor_name, :category)
-      }
+      attributes_for_list(:trait_descriptor, 2)
     }
 
     before do
-      submission.content.update(:step01, plant_trial_attrs.slice(
-        :plant_trial_name, :project_descriptor, :plant_population_id,
-        :country_id))
+      submission.content.update(:step01, plant_trial_attrs)
       submission.content.update(:step02,
+        trait_descriptor_list: new_trait_descriptors_attrs.map{ |td| td[:descriptor_name] } + [old_trait_descriptor.id],
         new_trait_descriptors: new_trait_descriptors_attrs)
-      submission.content.update(:step03, {})
+      submission.content.update(:step03,
+        trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
+        trait_scores: {
+          'p1' => {},
+          'p2' => { 1 => 'x' },
+          'p3' => { 0 => 'y', 2 => 'z' },
+          'p4' => { 2 => '' }
+        }
+      )
       submission.content.update(:step04, plant_trial_attrs.slice(
         :data_owned_by, :data_provenance, :comments))
     end
 
     it 'creates new trait descriptors' do
-      subject.call
+      expect{ subject.call }.to change{ TraitDescriptor.count }.by(2)
 
       expect(subject.new_trait_descriptors.size).to eq 2
       subject.new_trait_descriptors.each_with_index do |trait_descriptor, idx|
         expect(trait_descriptor).to be_persisted
         expect(trait_descriptor.attributes).to include(
           'descriptor_name' => new_trait_descriptors_attrs[idx][:descriptor_name],
-          'category' => new_trait_descriptors_attrs[idx][:category]
+          'category' => new_trait_descriptors_attrs[idx][:category],
+          'likely_ambiguities' => new_trait_descriptors_attrs[idx][:likely_ambiguities]
         )
       end
+    end
+
+    it 'creates plant trial' do
+      expect{ subject.call }.to change{ PlantTrial.count }.by(1)
+
+      expect(PlantTrial.last.plant_trial_name).to eq plant_trial_attrs[:plant_trial_name]
+      expect(PlantTrial.last.comments).to eq plant_trial_attrs[:comments]
+      expect(PlantTrial.last.entered_by_whom).to eq submission.user.full_name
+    end
+
+    it 'associates created plant trial with plant population' do
+      subject.call
+
+      expect(PlantTrial.last.plant_population).to eq plant_population
+    end
+
+    it 'creates plant scoring units' do
+      expect{ subject.call }.to change{ PlantScoringUnit.count }.by(4)
+
+      expect(PlantScoringUnit.pluck(:scoring_unit_name)).to match_array %w(p1 p2 p3 p4)
+      expect(PlantScoringUnit.pluck(:entered_by_whom).uniq).to eq [submission.user.full_name]
+      expect(PlantScoringUnit.pluck(:plant_trial_id).uniq).to eq [plant_population.plant_trials.first.id]
+    end
+
+    it 'creates trait scores for adequate trait descriptors' do
+      expect{ subject.call }.to change{ TraitScore.count }.by(3)
+
+      expect(TraitScore.pluck(:score_value)).to match_array %w(x y z)
+      expect(TraitScore.pluck(:entered_by_whom).uniq).to eq [submission.user.full_name]
+      expect(TraitScore.find_by(score_value: 'x').trait_descriptor.descriptor_name).
+        to eq new_trait_descriptors_attrs[1][:descriptor_name]
+      expect(TraitScore.find_by(score_value: 'x').plant_scoring_unit.scoring_unit_name).to eq 'p2'
+      expect(TraitScore.find_by(score_value: 'y').trait_descriptor.descriptor_name).
+        to eq old_trait_descriptor.descriptor_name
+      expect(TraitScore.find_by(score_value: 'y').plant_scoring_unit.scoring_unit_name).to eq 'p3'
+      expect(TraitScore.find_by(score_value: 'z').trait_descriptor.descriptor_name).
+        to eq new_trait_descriptors_attrs[0][:descriptor_name]
+      expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
     end
   end
 end
