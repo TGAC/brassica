@@ -4,7 +4,7 @@ class PlantTrial < ActiveRecord::Base
   belongs_to :country
   belongs_to :user
 
-  has_many :plant_scoring_units
+  has_many :plant_scoring_units, dependent: :destroy
   has_many :processed_trait_datasets
 
   validates :plant_trial_name,
