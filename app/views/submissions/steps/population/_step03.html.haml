@@ -1,10 +1,10 @@
 .form-group
   = content.label :female_parent_line
-  = content.select :female_parent_line, [@content.female_parent_line], {}, class: 'female-parent-line form-control', 'data-placeholder': "Select plant line"
+  = content.select :female_parent_line, [@content.female_parent_line], { include_blank: true }, class: 'female-parent-line form-control', 'data-placeholder': "Select plant line"
 
 .form-group
   = content.label :male_parent_line
-  = content.select :male_parent_line, [@content.male_parent_line], {}, class: 'male-parent-line form-control', 'data-placeholder': "Select plant line"
+  = content.select :male_parent_line, [@content.male_parent_line], { include_blank: true }, class: 'male-parent-line form-control', 'data-placeholder': "Select plant line"
 
 %hr
 
