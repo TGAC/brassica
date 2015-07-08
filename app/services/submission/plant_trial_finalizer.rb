@@ -34,18 +34,19 @@ class Submission::PlantTrialFinalizer
     trait_mapping = submission.content.step03.trait_mapping
 
     @new_plant_scoring_units = (submission.content.step03.trait_scores || {}).map do |plant_id, scores|
+      new_plant_scoring_unit = PlantScoringUnit.create!(
+        user_data.merge(scoring_unit_name: plant_id)
+      )
       new_trait_scores = (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
           TraitScore.create!(
             user_data.merge(trait_descriptor: get_nth_trait_descriptor(trait_mapping[col_index]),
-                            score_value: value)
+                            score_value: value,
+                            plant_scoring_unit_id: new_plant_scoring_unit.id)
           )
       end
-      PlantScoringUnit.create!(
-        user_data.merge(scoring_unit_name: plant_id,
-                        trait_scores: new_trait_scores)
-      )
+      new_plant_scoring_unit
     end
   end
 

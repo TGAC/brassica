@@ -9,8 +9,7 @@ class PlantScoringUnit < ActiveRecord::Base
   has_many :trait_scores
 
   validates :scoring_unit_name,
-            presence: true,
-            uniqueness: true
+            presence: true
 
   include Relatable
   include Filterable
