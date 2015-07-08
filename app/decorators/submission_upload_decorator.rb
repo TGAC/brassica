@@ -22,7 +22,23 @@ class SubmissionUploadDecorator < Draper::Decorator
 
         summary << " - parsed #{trait_scores.size} plant(s) with unique identification"
         histogram.each do |scoring_number, plants|
-          summary << " - #{plants.size} plant(s) have #{scoring_number} trait score(s) recorded"
+          summary << "  - #{plants.size} plant(s) have #{scoring_number} trait score(s) recorded"
+        end
+      end
+
+      trait_names = PlantTrialSubmissionDecorator.decorate(object.submission).sorted_trait_names
+      trait_mapping = object.submission.content.step03.trait_mapping
+      if trait_names && trait_scores
+        histogram = trait_scores.
+          values.
+          map(&:keys).
+          flatten.
+          group_by{ |col_index| col_index }.
+          sort_by(&:first)
+
+        summary << " - parsed scores for #{histogram.size} trait(s)"
+        histogram.each do |col_index, scores|
+          summary << "  - #{scores.size} score(s) recorded for trait #{trait_names[trait_mapping[col_index]]}"
         end
       end
     end

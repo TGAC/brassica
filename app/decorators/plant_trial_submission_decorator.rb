@@ -52,7 +52,6 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   def sorted_trait_names
     return @sorted_trait_names if @sorted_trait_names
     trait_list = object.content.step02.trait_descriptor_list || []
-    logger.debug trait_list
     @sorted_trait_names = trait_list.compact.map do |trait_item|
       if trait_item.to_i == 0
         trait_item
