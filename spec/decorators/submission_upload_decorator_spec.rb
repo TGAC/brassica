@@ -31,9 +31,9 @@ RSpec.describe SubmissionUploadDecorator do
           '  - 2 plant(s) have 1 trait score(s) recorded',
           '  - 1 plant(s) have 0 trait score(s) recorded',
           ' - parsed scores for 3 trait(s)',
-          '  - 1 score(s) recorded for trait traitZ',
           '  - 1 score(s) recorded for trait traitY',
-          '  - 2 score(s) recorded for trait traitX'
+          '  - 1 score(s) recorded for trait traitX',
+          '  - 2 score(s) recorded for trait traitZ'
         ]
     end
   end

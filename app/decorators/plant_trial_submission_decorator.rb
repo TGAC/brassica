@@ -59,7 +59,7 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
         trait = TraitDescriptor.where(id: trait_item).first
         trait ? trait.descriptor_name : nil
       end
-    end.sort
+    end
   end
 
   def plant_trial_description

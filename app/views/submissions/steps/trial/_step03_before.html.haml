@@ -27,9 +27,8 @@
   %p
     The first line will be treated as a header. Specific values will be stored as scoring for the
     trait that's name matches the corresponding column header. If no match is found, the score will
-    be stored by column index, sorting traits by names. That is, unmatched third column header will
-    cause all third column values counted as scoring of the second trait (again, when sorted by trait
-    names) defined during the second step.
+    be stored by column index. That is, unmatched third column header will cause all third column
+    values counted as scoring of the second trait (in the order of input) defined during the second step.
 
   %p
     In particular case of this submission, columns should be provided as follows:
@@ -43,7 +42,7 @@
       ...
 
   %p
-    Surplus columns (with index larged than the number of chosen traits) will be ignored. When values
+    Surplus columns (with index larger than the number of chosen traits) will be ignored. When values
     in the first column are not unique, the behaviour is undefined.
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do

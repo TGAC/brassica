@@ -35,12 +35,12 @@ RSpec.describe Submission::TraitScoreParser do
           to eq({0 => 1, 1 => 0})
       end
 
-      it 'honors proper trait sorting by name' do
+      it 'honors proper trait sorting by index' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['Ctrait', 'Atrait', 'Btrait'])
         input_is "id\tBtrait\tAtrait\tCtrait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
-          to eq({0 => 1, 1 => 0, 2 => 2})
+          to eq({0 => 2, 1 => 1, 2 => 0})
       end
 
       it 'uses natural ordering when no by-name mapping found' do
@@ -54,7 +54,7 @@ RSpec.describe Submission::TraitScoreParser do
       it 'works regardless traits are old or new' do
         td = create(:trait_descriptor, descriptor_name: 'old trait')
         upload.submission.content.update(:step02, trait_descriptor_list: [td.id, 'new trait'])
-        input_is "id\t#{td.descriptor_name}\tnew trait"
+        input_is "id\tnew trait\told trait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 1, 1 => 0})

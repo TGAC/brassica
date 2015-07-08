@@ -17,12 +17,6 @@ RSpec.describe PlantTrialSubmissionDecorator do
       expect(sd.sorted_trait_names).to eq []
     end
 
-    it 'returns sorted trait names' do
-      tds = create_list(:trait_descriptor, 3)
-      sd.object.content.update(:step02, trait_descriptor_list: tds.map(&:id))
-      expect(sd.sorted_trait_names).to eq tds.map(&:descriptor_name).sort
-    end
-
     it 'works for both old and new traits' do
       tds = create_list(:trait_descriptor, 2)
       sd.object.content.update(:step02, trait_descriptor_list: tds.map(&:id) + ['a new trait'])
