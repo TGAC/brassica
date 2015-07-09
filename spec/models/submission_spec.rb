@@ -23,7 +23,7 @@ RSpec.describe Submission do
   end
 
   describe '#submission_type' do
-    let(:submission) { build(:submission) }
+    let(:submission) { build(:submission, :population) }
 
     it 'allows only certain submission type values' do
       %w(population trial qtl linkage_map).each do |t|
@@ -41,8 +41,7 @@ RSpec.describe Submission do
     end
 
     it 'provides handy scopes to query certain types' do
-      # submission.submission_type = :population
-      create(:submission)
+      create(:submission, submission_type: :population)
       create(:submission, submission_type: :qtl)
       create(:submission, submission_type: :qtl)
       expect(Submission.qtl.count).to eq 2
@@ -54,7 +53,7 @@ RSpec.describe Submission do
 
   describe '#submitted_object' do
     it 'behaves bad with unexpected submission type' do
-      submission = create(:finalized_submission)
+      submission = create(:finalized_submission, :population)
       submission.update_column(:submission_type, 'unexpected')
       expect{ submission.submitted_object }.
         to raise_error NoMethodError
@@ -65,7 +64,7 @@ RSpec.describe Submission do
     end
 
     it 'returns associated object for finalized submissions' do
-      expect(create(:finalized_submission).submitted_object).
+      expect(create(:finalized_submission, :population).submitted_object).
         to eq PlantPopulation.first
     end
   end
@@ -95,7 +94,7 @@ RSpec.describe Submission do
   end
 
   describe '#step_forward' do
-    let(:submission) { create(:submission) }
+    let(:submission) { create(:submission, :population) }
 
     it 'moves one step forward' do
       expect { submission.step_forward }.to change { submission.step }.from('step01').to('step02')
@@ -121,7 +120,7 @@ RSpec.describe Submission do
   end
 
   describe '#finalize' do
-    let(:submission) { create(:submission, finalized: false) }
+    let(:submission) { create(:submission, :population, finalized: false) }
 
     before do
       allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
