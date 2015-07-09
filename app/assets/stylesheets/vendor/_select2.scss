@@ -241,14 +241,14 @@ $s2-border-radius: 2px;
 
       .new-item-for-list-selection {
         display: inline-block;
-        height: 20px;
+        height: 100%;
         padding: 0 5px 0 20px;
         background-color: lighten($accent-color-2, 25%);
       }
 
       .existing-item-for-list-selection {
         display: inline-block;
-        height: 20px;
+        height: 100%;
         padding: 0 5px 0 20px;
       }
     }
@@ -260,7 +260,7 @@ $s2-border-radius: 2px;
       top: 0;
       left: 0;
       width: 20px;
-      height: 20px;
+      height: 100%;
       font-weight: bold;
       background-color: transparent;
       text-align: center;
