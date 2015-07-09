@@ -15,7 +15,9 @@
 
 .form-group
   = content.label :plant_line_list
-  = content.select :plant_line_list, @content.plant_line_list || [], {}, multiple: true, class: 'plant-line-list form-control', 'data-placeholder': "Select plant line"
+  - option_tags = options_for_submission_select(@content.existing_plant_lines, :plant_line_name)
+  - option_tags.concat options_for_submission_select(@content.new_plant_lines, :plant_line_name, id: false)
+  = content.select :plant_line_list, option_tags.html_safe, {}, multiple: true, class: 'plant-line-list form-control', 'data-placeholder': "Select plant line"
 
 %button.btn.btn-default.new-plant-line-for-list{ type: :button } Add new Plant line
 

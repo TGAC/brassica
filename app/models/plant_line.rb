@@ -31,6 +31,9 @@ class PlantLine < ActiveRecord::Base
             presence: { on: :create }
 
   scope :by_name, -> { order(:plant_line_name) }
+  scope :where_id_or_name, ->(id_or_name) {
+    where("id=:id OR plant_line_name ILIKE :name", id: id_or_name.to_i, name: id_or_name.to_s)
+  }
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all

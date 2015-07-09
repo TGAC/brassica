@@ -35,7 +35,7 @@ module Submissions
       #      we should treat it like it is for the purpose of future submissions.
       validate do
         new_trait_descriptors.each do |new_trait_descriptor|
-          if trait_descriptor_exists?(descriptor_name: new_trait_descriptor.descriptor_name)
+          if trait_descriptor_exists?("descriptor_name ILIKE ?", new_trait_descriptor.descriptor_name)
             errors.add(:new_trait_descriptors, :taken, name: new_trait_descriptor.descriptor_name)
           end
         end
@@ -62,8 +62,8 @@ module Submissions
         end
       end
 
-      def trait_descriptor_exists?(attrs)
-        TraitDescriptor.where(attrs).exists?
+      def trait_descriptor_exists?(*attrs)
+        TraitDescriptor.where(*attrs).exists?
       end
 
       def existing_trait_descriptors

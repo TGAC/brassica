@@ -28,7 +28,7 @@ module Submissions
       # Do not allow :new_plant_lines to include existing :plant_line_name
       validate do
         new_plant_lines.each do |new_plant_line|
-          if plant_line_exists?(new_plant_line.plant_line_name)
+          if plant_line_exists?("plant_line_name ILIKE ?", new_plant_line.plant_line_name)
             errors.add(:new_plant_lines, :taken, name: new_plant_line.plant_line_name)
           end
         end
@@ -48,15 +48,20 @@ module Submissions
       # Ensure all items in :plant_line_list either exist or have
       # valid entries in :new_plant_lines
       validate do
-        plant_line_list.each do |name|
-          unless plant_line_exists?(name) || new_plant_lines.map(&:plant_line_name).include?(name)
-            errors.add(:plant_line_list, :blank, name: name)
+        plant_line_list.each do |id_or_name|
+          unless plant_line_exists?(id: id_or_name) || new_plant_lines.map(&:plant_line_name).include?(id_or_name)
+            errors.add(:plant_line_list, :blank, name: id_or_name)
           end
         end
       end
 
-      def plant_line_exists?(name)
-        PlantLine.where("plant_line_name ILIKE ?", name).exists?
+      def plant_line_exists?(*attrs)
+        PlantLine.where(*attrs).exists?
+      end
+
+      def existing_plant_lines
+        ids = plant_line_list.try(:map, &:to_i)
+        PlantLine.where(id: ids)
       end
 
       def self.permitted_properties

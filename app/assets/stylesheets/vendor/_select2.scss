@@ -234,16 +234,36 @@ $s2-border-radius: 2px;
       border-radius: $s2-border-radius;
       cursor: default;
       float: left;
+      position: relative;
       margin-right: 5px;
       margin-top: 5px;
-      padding: 0 5px;
+      padding: 0;
+
+      .new-item-for-list-selection {
+        display: inline-block;
+        height: 20px;
+        padding: 0 5px 0 20px;
+        background-color: lighten($accent-color-2, 25%);
+      }
+
+      .existing-item-for-list-selection {
+        display: inline-block;
+        height: 20px;
+        padding: 0 5px 0 20px;
+      }
     }
     .select2-selection__choice__remove {
       color: #999999;
       cursor: pointer;
       display: inline-block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
       font-weight: bold;
-      margin-right: 2px;
+      background-color: transparent;
+      text-align: center;
       &:hover {
         color: #333333;
       }
