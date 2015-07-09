@@ -16,5 +16,6 @@ FactoryGirl.define do
     linkage_group
     qtl_job
     processed_trait_dataset
+    user
   end
 end

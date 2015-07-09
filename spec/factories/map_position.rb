@@ -6,6 +6,7 @@ FactoryGirl.define do
     confirmed_by_whom { Faker::Internet.user_name }
     linkage_group
     population_locus
+    user
     annotable
   end
 end

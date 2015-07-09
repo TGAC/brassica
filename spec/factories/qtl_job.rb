@@ -10,6 +10,7 @@ FactoryGirl.define do
     qtl_statistic_type { Faker::Lorem.word }
     date_run { Faker::Date.backward }
     linkage_map_id { 1 }
+    user
     annotable
   end
 end

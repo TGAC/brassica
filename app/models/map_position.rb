@@ -2,13 +2,11 @@ class MapPosition < ActiveRecord::Base
 
   belongs_to :linkage_group, counter_cache: true
   belongs_to :population_locus, counter_cache: true
+  belongs_to :user
 
   has_many :map_locus_hits
 
   validates :marker_assay_name,
-            presence: true
-
-  validates :mapping_locus,
             presence: true
 
   after_update { map_locus_hits.each(&:touch) }
@@ -77,6 +75,10 @@ class MapPosition < ActiveRecord::Base
     MapPosition.numeric_columns.each do |column|
       indexes column, include_in_all: 'false'
     end
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

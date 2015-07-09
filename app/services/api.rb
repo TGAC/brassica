@@ -32,6 +32,12 @@ class Api
 
   def self.writable_models
     [
+      LinkageGroup,
+      LinkageMap,
+      MapLocusHit,
+      MapPosition,
+      MarkerAssay,
+
       PlantAccession,
       PlantLine,
       PlantPopulation,
@@ -40,7 +46,13 @@ class Api
       PlantTrial,
       PlantVariety,
       TraitDescriptor,
-      TraitScore
+      TraitScore,
+
+      PopulationLocus,
+      Primer,
+      Probe,
+      Qtl,
+      QtlJob
     ]
   end
 

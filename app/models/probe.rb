@@ -1,6 +1,7 @@
 class Probe < ActiveRecord::Base
 
   belongs_to :taxonomy_term
+  belongs_to :user
 
   has_many :marker_assays
 
@@ -56,6 +57,10 @@ class Probe < ActiveRecord::Base
           'id'
         ]
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable
