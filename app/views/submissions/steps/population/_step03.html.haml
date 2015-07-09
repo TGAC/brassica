@@ -26,7 +26,10 @@
   .panel-body
     .form-group
       = label_tag :plant_line_name, nil, class: 'required'
-      = text_field_tag :plant_line_name, nil, class: 'form-control required', placeholder: 'Enter new plant line name'
+      = text_field_tag :plant_line_name, nil,
+        class: 'form-control required',
+        placeholder: 'Enter new plant line name',
+        autocomplete: 'off'
 
     .form-group
       = label_tag :taxonomy_term, nil, class: 'required'

@@ -20,6 +20,7 @@ en:
 
             plant_line_list:
               blank: "A plant line with name \"%{name}\" is not defined."
+              duplicated: "A plant line with name \"%{name}\" is defined more than once."
 
             new_trait_descriptors:
               taken: "A trait descriptor with name \"%{name}\" already exists."

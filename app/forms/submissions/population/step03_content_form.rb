@@ -34,6 +34,17 @@ module Submissions
         end
       end
 
+      validate do
+        duplicated_plant_lines =
+          Hash[plant_line_list.map { |pl| [pl, plant_line_list.count(pl)] }].
+          select { |pl, count| count > 1 }.
+          keys
+
+        duplicated_plant_lines.each do |plant_line|
+          errors.add(:plant_line_list, :duplicated, name: plant_line)
+        end
+      end
+
       # Ensure all items in :plant_line_list either exist or have
       # valid entries in :new_plant_lines
       validate do
