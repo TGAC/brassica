@@ -6,8 +6,6 @@ class DropEvenMoreNullConstraints < ActiveRecord::Migration
     execute "ALTER TABLE qtl ALTER COLUMN additive_effect DROP NOT NULL"
 
     execute "ALTER TABLE map_positions ALTER COLUMN mapping_locus DROP NOT NULL"
-
-    execute "ALTER TABLE qtl_jobs ALTER COLUMN linkage_map_id DROP NOT NULL"
   end
 
   def down

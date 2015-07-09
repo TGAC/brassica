@@ -750,6 +750,11 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Map Locus Hits related to this map
+        -
+          name: qtl_job_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Qtl Jobs that computed elements of this map
 
       create:
         example: |-
@@ -939,6 +944,11 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Population Locus related to this marker assay
+        -
+          name: map_position_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Map Positions related to this marker assay
 
       create:
         example: |-
