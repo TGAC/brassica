@@ -2,11 +2,9 @@ class MapPosition < ActiveRecord::Base
 
   belongs_to :linkage_group, counter_cache: true
   belongs_to :population_locus, counter_cache: true
+  belongs_to :marker_assay, counter_cache: true
 
   has_many :map_locus_hits
-
-  validates :marker_assay_name,
-            presence: true
 
   validates :mapping_locus,
             presence: true
@@ -25,7 +23,7 @@ class MapPosition < ActiveRecord::Base
 
   def self.table_columns
     [
-      'marker_assay_name',
+      'marker_assays.marker_assay_name',
       'map_position',
       'linkage_groups.linkage_group_label',
       'population_loci.mapping_locus'
@@ -49,6 +47,7 @@ class MapPosition < ActiveRecord::Base
       :fetch,
       query: [
         'marker_assay_name',
+        'marker_assays.id',
         'map_position',
         'linkage_groups.id',
         'population_loci.id',
@@ -59,14 +58,17 @@ class MapPosition < ActiveRecord::Base
 
   def self.ref_columns
     [
+      'marker_assay_id',
       'linkage_group_id',
       'population_locus_id'
     ]
   end
 
   mapping dynamic: 'false' do
-    indexes :marker_assay_name
     indexes :map_position
+    indexes :marker_assay do
+      indexes :marker_assay_name
+    end
     indexes :linkage_group do
       indexes :linkage_group_label
     end

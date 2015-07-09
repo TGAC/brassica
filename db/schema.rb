@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150709161527) do
+ActiveRecord::Schema.define(version: 20150709154415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(version: 20150709161527) do
     t.integer "primer_b_id"
     t.integer "probe_id"
     t.integer "population_loci_count",         default: 0, null: false
+    t.integer "map_positions_count",           default: 0, null: false
   end
 
   add_index "marker_assays", ["canonical_marker_name"], name: "marker_assays_canonical_marker_name_idx", using: :btree
@@ -536,7 +537,7 @@ ActiveRecord::Schema.define(version: 20150709161527) do
 
   create_table "qtl_jobs", force: :cascade do |t|
     t.text    "qtl_job_name",                               null: false
-    t.text    "linkage_map_label"
+    t.text    "linkage_map_id",                             null: false
     t.text    "qtl_software",                               null: false
     t.text    "qtl_method",                                 null: false
     t.text    "threshold_specification_method"
@@ -552,12 +553,9 @@ ActiveRecord::Schema.define(version: 20150709161527) do
     t.text    "data_provenance"
     t.text    "data_owned_by"
     t.integer "qtls_count",                     default: 0, null: false
-    t.integer "linkage_map_id"
   end
 
-  add_index "qtl_jobs", ["linkage_map_id"], name: "qtl_jobs_linkage_map_id_idx", using: :btree
-  add_index "qtl_jobs", ["linkage_map_label"], name: "idx_144140_linkage_map_id", using: :btree
-  add_index "qtl_jobs", ["linkage_map_label"], name: "qtl_jobs_linkage_map_label_idx", using: :btree
+  add_index "qtl_jobs", ["linkage_map_id"], name: "idx_144140_linkage_map_id", using: :btree
   add_index "qtl_jobs", ["qtl_job_name"], name: "qtl_jobs_qtl_job_name_idx", using: :btree
   add_index "qtl_jobs", ["qtl_software", "qtl_method"], name: "idx_144140_qtl_software", using: :btree
 
@@ -682,58 +680,58 @@ ActiveRecord::Schema.define(version: 20150709161527) do
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
 
   add_foreign_key "api_keys", "users", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "genotype_matrices", "linkage_maps", on_delete: :nullify
-  add_foreign_key "linkage_groups", "linkage_maps", on_delete: :nullify
-  add_foreign_key "linkage_maps", "plant_populations", on_delete: :nullify
-  add_foreign_key "map_locus_hits", "linkage_groups", on_delete: :nullify
-  add_foreign_key "map_locus_hits", "linkage_maps", on_delete: :nullify
-  add_foreign_key "map_locus_hits", "map_positions", on_delete: :nullify
-  add_foreign_key "map_locus_hits", "population_loci", on_delete: :nullify
-  add_foreign_key "map_positions", "linkage_groups", on_delete: :nullify
-  add_foreign_key "map_positions", "population_loci", on_delete: :nullify
-  add_foreign_key "marker_assays", "marker_sequence_assignments", on_delete: :nullify
-  add_foreign_key "marker_assays", "primers", column: "primer_a_id", on_delete: :nullify
-  add_foreign_key "marker_assays", "primers", column: "primer_b_id", on_delete: :nullify
-  add_foreign_key "marker_assays", "probes", on_delete: :nullify
-  add_foreign_key "marker_assays", "restriction_enzymes", column: "restriction_enzyme_a_id", on_delete: :nullify
-  add_foreign_key "marker_assays", "restriction_enzymes", column: "restriction_enzyme_b_id", on_delete: :nullify
-  add_foreign_key "plant_accessions", "plant_lines", on_delete: :nullify
+  add_foreign_key "genotype_matrices", "linkage_maps", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "linkage_groups", "linkage_maps", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "linkage_maps", "plant_populations", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "map_locus_hits", "linkage_groups", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "map_locus_hits", "linkage_maps", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "map_locus_hits", "map_positions", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "map_locus_hits", "population_loci", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "map_positions", "linkage_groups", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "map_positions", "population_loci", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "marker_assays", "marker_sequence_assignments", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "marker_assays", "primers", column: "primer_a_id", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "marker_assays", "primers", column: "primer_b_id", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "marker_assays", "probes", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "marker_assays", "restriction_enzymes", column: "restriction_enzyme_a_id", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "marker_assays", "restriction_enzymes", column: "restriction_enzyme_b_id", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_accessions", "plant_lines", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_accessions", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "plant_lines", "plant_varieties", on_delete: :nullify
-  add_foreign_key "plant_lines", "taxonomy_terms", on_delete: :nullify
+  add_foreign_key "plant_lines", "plant_varieties", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_lines", "taxonomy_terms", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_lines", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "plant_population_lists", "plant_lines", on_delete: :nullify
-  add_foreign_key "plant_population_lists", "plant_populations", on_delete: :nullify
+  add_foreign_key "plant_population_lists", "plant_lines", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_population_lists", "plant_populations", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_population_lists", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "plant_populations", "plant_lines", column: "female_parent_line_id", on_delete: :nullify
-  add_foreign_key "plant_populations", "plant_lines", column: "male_parent_line_id", on_delete: :nullify
-  add_foreign_key "plant_populations", "pop_type_lookup", column: "population_type_id", on_delete: :nullify
-  add_foreign_key "plant_populations", "taxonomy_terms", on_delete: :nullify
+  add_foreign_key "plant_populations", "plant_lines", column: "female_parent_line_id", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_populations", "plant_lines", column: "male_parent_line_id", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_populations", "pop_type_lookup", column: "population_type_id", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_populations", "taxonomy_terms", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_populations", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "plant_scoring_units", "design_factors", on_delete: :nullify
-  add_foreign_key "plant_scoring_units", "plant_accessions", on_delete: :nullify
-  add_foreign_key "plant_scoring_units", "plant_parts", on_delete: :nullify
-  add_foreign_key "plant_scoring_units", "plant_trials", on_delete: :nullify
+  add_foreign_key "plant_scoring_units", "design_factors", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_scoring_units", "plant_accessions", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_scoring_units", "plant_parts", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_scoring_units", "plant_trials", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "plant_trials", "countries", on_delete: :nullify
-  add_foreign_key "plant_trials", "plant_populations", on_delete: :nullify
+  add_foreign_key "plant_trials", "countries", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_trials", "plant_populations", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_trials", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_varieties", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "plant_variety_country_of_origin", "countries", on_delete: :nullify
-  add_foreign_key "plant_variety_country_of_origin", "plant_varieties", on_delete: :nullify
-  add_foreign_key "plant_variety_country_registered", "countries", on_delete: :nullify
-  add_foreign_key "plant_variety_country_registered", "plant_varieties", on_delete: :nullify
-  add_foreign_key "population_loci", "marker_assays", on_delete: :nullify
-  add_foreign_key "population_loci", "plant_populations", on_delete: :nullify
-  add_foreign_key "probes", "taxonomy_terms", on_delete: :nullify
-  add_foreign_key "processed_trait_datasets", "plant_trials", on_delete: :nullify
-  add_foreign_key "processed_trait_datasets", "trait_descriptors", on_delete: :nullify
-  add_foreign_key "qtl", "linkage_groups", on_delete: :nullify
-  add_foreign_key "qtl", "processed_trait_datasets", on_delete: :nullify
-  add_foreign_key "qtl", "qtl_jobs", on_delete: :nullify
+  add_foreign_key "plant_variety_country_of_origin", "countries", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_variety_country_of_origin", "plant_varieties", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_variety_country_registered", "countries", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_variety_country_registered", "plant_varieties", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "population_loci", "marker_assays", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "population_loci", "plant_populations", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "probes", "taxonomy_terms", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "processed_trait_datasets", "plant_trials", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "processed_trait_datasets", "trait_descriptors", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "qtl", "linkage_groups", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "qtl", "processed_trait_datasets", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "qtl", "qtl_jobs", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_descriptors", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "trait_grades", "trait_descriptors", on_delete: :nullify
-  add_foreign_key "trait_scores", "plant_scoring_units", on_delete: :nullify
-  add_foreign_key "trait_scores", "trait_descriptors", on_delete: :nullify
+  add_foreign_key "trait_grades", "trait_descriptors", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "trait_scores", "plant_scoring_units", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "trait_scores", "trait_descriptors", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_scores", "users", on_update: :cascade, on_delete: :nullify
 end
