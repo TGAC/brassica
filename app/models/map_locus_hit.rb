@@ -4,6 +4,7 @@ class MapLocusHit < ActiveRecord::Base
   belongs_to :linkage_group, counter_cache: true
   belongs_to :map_position, counter_cache: true
   belongs_to :population_locus, counter_cache: true
+  belongs_to :user
 
   validates :consensus_group_assignment,
             presence: true
@@ -88,5 +89,9 @@ class MapLocusHit < ActiveRecord::Base
     indexes :map_position, include_in_all: 'false' do
       indexes :map_position
     end
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 end

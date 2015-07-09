@@ -66,6 +66,7 @@ RSpec.describe Annotable do
 
   it 'makes sure all API-writable models return published?' do
     Api.writable_models.each do |model_klass|
+      next unless annotable_tables.include?(model_klass.table_name)
       instance = create(model_klass)
       expect(instance.annotations_as_json.keys).to include 'published?'
     end

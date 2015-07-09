@@ -16,6 +16,11 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
     expect(all_belongs_to(model_klass)).to include :user
   end
 
+  it 'has both date_entered and entered_by_whom attributes' do
+    expect(model_klass.column_names).to include('entered_by_whom')
+    expect(model_klass.column_names).to include('date_entered')
+  end
+
   context "with no api key" do
     describe "POST /api/v1/#{model_name.pluralize}" do
       it "returns 401" do

@@ -7,6 +7,7 @@ FactoryGirl.define do
     linkage_group
     population_locus
     marker_assay
+    user
     annotable
   end
 end

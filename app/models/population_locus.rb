@@ -2,12 +2,10 @@ class PopulationLocus < ActiveRecord::Base
 
   belongs_to :plant_population, counter_cache: true
   belongs_to :marker_assay, counter_cache: true
+  belongs_to :user
 
   has_many :map_positions
   has_many :map_locus_hits
-
-  validates :plant_population,
-            presence: true
 
   validates :mapping_locus,
             presence: true
@@ -59,6 +57,10 @@ class PopulationLocus < ActiveRecord::Base
       'plant_population_id',
       'marker_assay_id'
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable
