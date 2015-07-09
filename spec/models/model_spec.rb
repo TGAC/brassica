@@ -1,5 +1,5 @@
 require 'rails_helper'
-nullify_exclusions = [PlantPopulationList]
+nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit]
 
 RSpec::Matchers.define :display_column do |expected|
   match do |actual|
