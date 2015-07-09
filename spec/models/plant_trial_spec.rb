@@ -50,7 +50,7 @@ RSpec.describe PlantTrial do
     end
   end
 
-  it 'destroys trait scores when parent object is destroyed' do
+  it 'destroys plant scoring units when parent object is destroyed' do
     psu = create(:plant_scoring_unit)
     ptr = create(:plant_trial, plant_scoring_units: [psu])
     expect { ptr.destroy }.to change { PlantScoringUnit.count }.by(-1)
