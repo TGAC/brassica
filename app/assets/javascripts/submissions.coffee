@@ -19,6 +19,16 @@ class Submission
     templateResult: (item) -> item.text
     templateSelection: (item) -> item.text
 
+  @makeAjaxListSelectOptions: (url, id_attr, text_attr) =>
+    $.extend(@makeAjaxSelectOptions(url, id_attr, text_attr),
+      multiple: true
+      templateSelection: (item) ->
+        if item.id != item.text || ! item.selected
+          "<span class='existing-item-for-list-selection'>#{item.text}</span>"
+        else
+          "<span class='new-item-for-list-selection'>#{item.text}</span>"
+    )
+
   constructor: (el) ->
     @$el = $(el)
 
@@ -28,7 +38,7 @@ class Submission
 class PopulationSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
   plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
-  plantLineListSelectOptions: $.extend(@makeAjaxSelectOptions('/plant_lines', 'plant_line_name'), multiple: true)
+  plantLineListSelectOptions: @makeAjaxListSelectOptions('/plant_lines', 'id', 'plant_line_name')
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
 
   bind: =>
@@ -114,7 +124,7 @@ class PopulationSubmission extends Submission
 class TrialSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
-  traitDescriptorListSelectOptions: $.extend(@makeAjaxSelectOptions('/trait_descriptors', 'id', 'descriptor_name'), multiple: true)
+  traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name')
 
   bind: =>
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
