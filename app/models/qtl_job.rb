@@ -1,13 +1,12 @@
 class QtlJob < ActiveRecord::Base
 
+  belongs_to :linkage_map
+
   has_many :qtls
 
   validates :qtl_job_name,
             presence: true,
             uniqueness: true
-
-  validates :linkage_map_id,
-            presence: true
 
   validates :qtl_software,
             presence: true

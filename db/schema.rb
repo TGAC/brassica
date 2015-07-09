@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150625113612) do
+ActiveRecord::Schema.define(version: 20150709161527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -151,12 +151,15 @@ ActiveRecord::Schema.define(version: 20150625113612) do
     t.integer "linkage_group_id"
     t.integer "population_locus_id"
     t.integer "map_locus_hits_count", default: 0, null: false
+    t.integer "marker_assay_id"
   end
 
   add_index "map_positions", ["linkage_group_id"], name: "map_positions_linkage_group_id_idx", using: :btree
   add_index "map_positions", ["map_position"], name: "idx_143597_map_position", using: :btree
   add_index "map_positions", ["mapping_locus"], name: "idx_143597_mapping_locus", using: :btree
   add_index "map_positions", ["mapping_locus"], name: "map_positions_mapping_locus_idx", using: :btree
+  add_index "map_positions", ["marker_assay_id"], name: "map_positions_marker_assay_id_idx", using: :btree
+  add_index "map_positions", ["marker_assay_name"], name: "map_positions_marker_assay_name_idx", using: :btree
   add_index "map_positions", ["population_locus_id"], name: "map_positions_population_locus_id_idx", using: :btree
 
   create_table "marker_assays", force: :cascade do |t|
@@ -533,7 +536,7 @@ ActiveRecord::Schema.define(version: 20150625113612) do
 
   create_table "qtl_jobs", force: :cascade do |t|
     t.text    "qtl_job_name",                               null: false
-    t.text    "linkage_map_id",                             null: false
+    t.text    "linkage_map_label"
     t.text    "qtl_software",                               null: false
     t.text    "qtl_method",                                 null: false
     t.text    "threshold_specification_method"
@@ -549,9 +552,12 @@ ActiveRecord::Schema.define(version: 20150625113612) do
     t.text    "data_provenance"
     t.text    "data_owned_by"
     t.integer "qtls_count",                     default: 0, null: false
+    t.integer "linkage_map_id"
   end
 
-  add_index "qtl_jobs", ["linkage_map_id"], name: "idx_144140_linkage_map_id", using: :btree
+  add_index "qtl_jobs", ["linkage_map_id"], name: "qtl_jobs_linkage_map_id_idx", using: :btree
+  add_index "qtl_jobs", ["linkage_map_label"], name: "idx_144140_linkage_map_id", using: :btree
+  add_index "qtl_jobs", ["linkage_map_label"], name: "qtl_jobs_linkage_map_label_idx", using: :btree
   add_index "qtl_jobs", ["qtl_job_name"], name: "qtl_jobs_qtl_job_name_idx", using: :btree
   add_index "qtl_jobs", ["qtl_software", "qtl_method"], name: "idx_144140_qtl_software", using: :btree
 
