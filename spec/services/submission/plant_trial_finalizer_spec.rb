@@ -85,5 +85,23 @@ RSpec.describe Submission::PlantTrialFinalizer do
         to eq new_trait_descriptors_attrs[0][:descriptor_name]
       expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
     end
+
+    context 'when encountered broken data' do
+      it 'rollbacks when no Population is found' do
+        plant_population.destroy
+        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect(submission.finalized?).to be_falsey
+      end
+
+      it 'rollbacks when no Trait Descriptor is found' do
+        old_trait_descriptor.destroy
+        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect(submission.finalized?).to be_falsey
+      end
+
+      def related_object_count
+        PlantTrial.count + TraitScore.count + PlantScoringUnit.count + TraitDescriptor.count
+      end
+    end
   end
 end

@@ -40,8 +40,11 @@ class Submission::PlantTrialFinalizer
       new_trait_scores = (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
+          trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
+          rollback(1) unless trait_descriptor
+
           TraitScore.create!(
-            user_data.merge(trait_descriptor: get_nth_trait_descriptor(trait_mapping[col_index]),
+            user_data.merge(trait_descriptor: trait_descriptor,
                             score_value: value,
                             plant_scoring_unit_id: new_plant_scoring_unit.id)
           )
