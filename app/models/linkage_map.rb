@@ -6,6 +6,7 @@ class LinkageMap < ActiveRecord::Base
   has_many :linkage_groups
   has_many :genotype_matrices
   has_many :map_locus_hits
+  has_many :qtl_jobs
 
   validates :linkage_map_label,
             presence: true,

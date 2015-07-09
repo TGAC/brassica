@@ -1,7 +1,8 @@
 class QtlJob < ActiveRecord::Base
 
+  belongs_to :linkage_map
   belongs_to :user
-
+  
   has_many :qtls
 
   validates :qtl_job_name,

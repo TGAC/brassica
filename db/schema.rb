@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150709134708) do
+ActiveRecord::Schema.define(version: 20150709154415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,10 +27,8 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_index "api_keys", ["token"], name: "index_api_keys_on_token", using: :btree
 
   create_table "countries", force: :cascade do |t|
-    t.string   "country_code", limit: 3, null: false
-    t.text     "country_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "country_code", limit: 3, null: false
+    t.text   "country_name"
   end
 
   add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
@@ -75,73 +73,64 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_index "genotype_matrices", ["linkage_map_id"], name: "genotype_matrices_linkage_map_id_idx", using: :btree
 
   create_table "linkage_groups", force: :cascade do |t|
-    t.text     "linkage_group_label",                     null: false
-    t.text     "linkage_group_name",                      null: false
-    t.text     "total_length"
-    t.text     "lod_threshold"
-    t.text     "consensus_group_assignment",              null: false
-    t.text     "consensus_group_orientation"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.text     "confirmed_by_whom"
-    t.integer  "map_positions_count",         default: 0, null: false
-    t.integer  "map_locus_hits_count",        default: 0, null: false
-    t.integer  "linkage_map_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "linkage_group_label",                     null: false
+    t.text    "linkage_group_name",                      null: false
+    t.text    "total_length"
+    t.text    "lod_threshold"
+    t.text    "consensus_group_assignment",              null: false
+    t.text    "consensus_group_orientation"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.text    "confirmed_by_whom"
+    t.integer "map_positions_count",         default: 0, null: false
+    t.integer "map_locus_hits_count",        default: 0, null: false
+    t.integer "linkage_map_id"
   end
 
   add_index "linkage_groups", ["linkage_group_label"], name: "linkage_groups_linkage_group_label_idx", using: :btree
   add_index "linkage_groups", ["linkage_group_name"], name: "idx_143534_linkage_group_name", using: :btree
 
   create_table "linkage_maps", force: :cascade do |t|
-    t.text     "linkage_map_label",                          null: false
-    t.text     "linkage_map_name",                           null: false
-    t.string   "map_version_no",       limit: 3
-    t.date     "map_version_date"
-    t.text     "mapping_software"
-    t.text     "mapping_function"
-    t.text     "map_author"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.text     "confirmed_by_whom"
-    t.integer  "plant_population_id"
-    t.integer  "pubmed_id"
-    t.integer  "map_locus_hits_count",           default: 0, null: false
-    t.integer  "linkage_groups_count",           default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "linkage_map_label",                          null: false
+    t.text    "linkage_map_name",                           null: false
+    t.string  "map_version_no",       limit: 3
+    t.date    "map_version_date"
+    t.text    "mapping_software"
+    t.text    "mapping_function"
+    t.text    "map_author"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.text    "confirmed_by_whom"
+    t.integer "plant_population_id"
+    t.integer "pubmed_id"
+    t.integer "map_locus_hits_count",           default: 0, null: false
+    t.integer "linkage_groups_count",           default: 0, null: false
   end
 
   add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", using: :btree
   add_index "linkage_maps", ["plant_population_id"], name: "linkage_maps_plant_population_id_idx", using: :btree
 
   create_table "map_locus_hits", force: :cascade do |t|
-    t.text     "consensus_group_assignment", null: false
-    t.text     "canonical_marker_name",      null: false
-    t.text     "map_position"
-    t.text     "associated_sequence_id",     null: false
-    t.text     "sequence_source_acronym",    null: false
-    t.text     "atg_hit_seq_id"
-    t.text     "atg_hit_seq_source"
-    t.text     "bac_hit_seq_id"
-    t.text     "bac_hit_seq_source"
-    t.text     "bac_hit_name"
-    t.integer  "linkage_map_id"
-    t.integer  "linkage_group_id"
-    t.integer  "population_locus_id"
-    t.integer  "map_position_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "consensus_group_assignment", null: false
+    t.text    "canonical_marker_name",      null: false
+    t.text    "map_position"
+    t.text    "associated_sequence_id",     null: false
+    t.text    "sequence_source_acronym",    null: false
+    t.text    "atg_hit_seq_id"
+    t.text    "atg_hit_seq_source"
+    t.text    "bac_hit_seq_id"
+    t.text    "bac_hit_seq_source"
+    t.text    "bac_hit_name"
+    t.integer "linkage_map_id"
+    t.integer "linkage_group_id"
+    t.integer "population_locus_id"
+    t.integer "map_position_id"
   end
 
   add_index "map_locus_hits", ["linkage_group_id"], name: "map_locus_hits_linkage_group_id_idx", using: :btree
@@ -150,52 +139,50 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_index "map_locus_hits", ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
 
   create_table "map_positions", force: :cascade do |t|
-    t.text     "marker_assay_name",                null: false
-    t.text     "mapping_locus"
-    t.text     "map_position"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.text     "confirmed_by_whom"
-    t.integer  "linkage_group_id"
-    t.integer  "population_locus_id"
-    t.integer  "map_locus_hits_count", default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "marker_assay_name",                null: false
+    t.text    "mapping_locus",                    null: false
+    t.text    "map_position"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.text    "confirmed_by_whom"
+    t.integer "linkage_group_id"
+    t.integer "population_locus_id"
+    t.integer "map_locus_hits_count", default: 0, null: false
+    t.integer "marker_assay_id"
   end
 
   add_index "map_positions", ["linkage_group_id"], name: "map_positions_linkage_group_id_idx", using: :btree
   add_index "map_positions", ["map_position"], name: "idx_143597_map_position", using: :btree
   add_index "map_positions", ["mapping_locus"], name: "idx_143597_mapping_locus", using: :btree
   add_index "map_positions", ["mapping_locus"], name: "map_positions_mapping_locus_idx", using: :btree
+  add_index "map_positions", ["marker_assay_id"], name: "map_positions_marker_assay_id_idx", using: :btree
+  add_index "map_positions", ["marker_assay_name"], name: "map_positions_marker_assay_name_idx", using: :btree
   add_index "map_positions", ["population_locus_id"], name: "map_positions_population_locus_id_idx", using: :btree
 
   create_table "marker_assays", force: :cascade do |t|
-    t.text     "marker_assay_name",                         null: false
-    t.text     "canonical_marker_name",                     null: false
-    t.text     "marker_type"
-    t.text     "primer_a_name"
-    t.text     "primer_b_name"
-    t.text     "separation_system"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.text     "confirmed_by_whom"
-    t.integer  "restriction_enzyme_a_id"
-    t.integer  "marker_sequence_assignment_id"
-    t.integer  "restriction_enzyme_b_id"
-    t.integer  "primer_a_id"
-    t.integer  "primer_b_id"
-    t.integer  "probe_id"
-    t.integer  "population_loci_count",         default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "marker_assay_name",                         null: false
+    t.text    "canonical_marker_name",                     null: false
+    t.text    "marker_type"
+    t.text    "primer_a_name"
+    t.text    "primer_b_name"
+    t.text    "separation_system"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.text    "confirmed_by_whom"
+    t.integer "restriction_enzyme_a_id"
+    t.integer "marker_sequence_assignment_id"
+    t.integer "restriction_enzyme_b_id"
+    t.integer "primer_a_id"
+    t.integer "primer_b_id"
+    t.integer "probe_id"
+    t.integer "population_loci_count",         default: 0, null: false
+    t.integer "map_positions_count",           default: 0, null: false
   end
 
   add_index "marker_assays", ["canonical_marker_name"], name: "marker_assays_canonical_marker_name_idx", using: :btree
@@ -443,30 +430,25 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_index "plant_variety_country_registered", ["plant_variety_id"], name: "plant_variety_country_registered_plant_variety_id_idx", using: :btree
 
   create_table "pop_type_lookup", force: :cascade do |t|
-    t.text     "population_type",  null: false
-    t.text     "population_class", null: false
-    t.text     "assigned_by_whom"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.text "population_type",  null: false
+    t.text "population_class", null: false
+    t.text "assigned_by_whom"
   end
 
   add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
 
   create_table "population_loci", force: :cascade do |t|
-    t.text     "mapping_locus",                    null: false
-    t.text     "defined_by_whom"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.integer  "plant_population_id"
-    t.integer  "marker_assay_id"
-    t.integer  "map_locus_hits_count", default: 0, null: false
-    t.integer  "map_positions_count",  default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "mapping_locus",                    null: false
+    t.text    "defined_by_whom"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.integer "plant_population_id"
+    t.integer "marker_assay_id"
+    t.integer "map_locus_hits_count", default: 0, null: false
+    t.integer "map_positions_count",  default: 0, null: false
   end
 
   add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
@@ -475,39 +457,33 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
 
   create_table "primers", force: :cascade do |t|
-    t.text     "primer",                              null: false
-    t.text     "sequence",                            null: false
-    t.text     "sequence_id"
-    t.text     "sequence_source_acronym"
-    t.text     "description"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.integer  "marker_assays_a_count",   default: 0, null: false
-    t.integer  "marker_assays_b_count",   default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "primer",                              null: false
+    t.text    "sequence",                            null: false
+    t.text    "sequence_id",                         null: false
+    t.text    "sequence_source_acronym",             null: false
+    t.text    "description"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.integer "marker_assays_a_count",   default: 0, null: false
+    t.integer "marker_assays_b_count",   default: 0, null: false
   end
 
   add_index "primers", ["primer"], name: "primers_primer_idx", using: :btree
 
   create_table "probes", force: :cascade do |t|
-    t.text     "probe_name",                          null: false
-    t.text     "clone_name",                          null: false
-    t.date     "date_described"
-    t.text     "sequence_id",                         null: false
-    t.text     "sequence_source_acronym",             null: false
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.text     "data_provenance"
-    t.integer  "taxonomy_term_id"
-    t.integer  "marker_assays_count",     default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "probe_name",                          null: false
+    t.text    "clone_name",                          null: false
+    t.date    "date_described"
+    t.text    "sequence_id",                         null: false
+    t.text    "sequence_source_acronym",             null: false
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.text    "data_provenance"
+    t.integer "taxonomy_term_id"
+    t.integer "marker_assays_count",     default: 0, null: false
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
@@ -531,31 +507,28 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_index "processed_trait_datasets", ["trait_descriptor_id"], name: "processed_trait_datasets_trait_descriptor_id_idx", using: :btree
 
   create_table "qtl", force: :cascade do |t|
-    t.text     "qtl_rank",                   null: false
-    t.text     "map_qtl_label"
-    t.text     "outer_interval_start"
-    t.text     "inner_interval_start"
-    t.text     "qtl_mid_position",           null: false
-    t.text     "inner_interval_end"
-    t.text     "outer_interval_end"
-    t.text     "peak_value"
-    t.text     "peak_p_value"
-    t.text     "regression_p"
-    t.text     "residual_p"
-    t.text     "additive_effect"
-    t.text     "genetic_variance_explained"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.integer  "processed_trait_dataset_id"
-    t.integer  "qtl_job_id"
-    t.integer  "linkage_group_id"
-    t.integer  "pubmed_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "qtl_rank",                   null: false
+    t.text    "map_qtl_label"
+    t.text    "outer_interval_start"
+    t.text    "inner_interval_start"
+    t.text    "qtl_mid_position",           null: false
+    t.text    "inner_interval_end"
+    t.text    "outer_interval_end"
+    t.text    "peak_value"
+    t.text    "peak_p_value"
+    t.text    "regression_p"
+    t.text    "residual_p"
+    t.text    "additive_effect",            null: false
+    t.text    "genetic_variance_explained"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.integer "processed_trait_dataset_id"
+    t.integer "qtl_job_id"
+    t.integer "linkage_group_id"
+    t.integer "pubmed_id"
   end
 
   add_index "qtl", ["linkage_group_id"], name: "qtl_linkage_group_id_idx", using: :btree
@@ -563,26 +536,23 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_index "qtl", ["qtl_job_id"], name: "qtl_qtl_job_id_idx", using: :btree
 
   create_table "qtl_jobs", force: :cascade do |t|
-    t.text     "qtl_job_name",                               null: false
-    t.text     "linkage_map_id"
-    t.text     "qtl_software",                               null: false
-    t.text     "qtl_method",                                 null: false
-    t.text     "threshold_specification_method"
-    t.text     "interval_type"
-    t.text     "inner_confidence_threshold"
-    t.text     "outer_confidence_threshold"
-    t.text     "qtl_statistic_type"
-    t.text     "described_by_whom"
-    t.date     "date_run"
-    t.text     "comments"
-    t.text     "entered_by_whom"
-    t.date     "date_entered"
-    t.text     "data_provenance"
-    t.text     "data_owned_by"
-    t.integer  "qtls_count",                     default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
+    t.text    "qtl_job_name",                               null: false
+    t.text    "linkage_map_id",                             null: false
+    t.text    "qtl_software",                               null: false
+    t.text    "qtl_method",                                 null: false
+    t.text    "threshold_specification_method"
+    t.text    "interval_type"
+    t.text    "inner_confidence_threshold"
+    t.text    "outer_confidence_threshold"
+    t.text    "qtl_statistic_type"
+    t.text    "described_by_whom"
+    t.date    "date_run"
+    t.text    "comments"
+    t.text    "entered_by_whom"
+    t.date    "date_entered"
+    t.text    "data_provenance"
+    t.text    "data_owned_by"
+    t.integer "qtls_count",                     default: 0, null: false
   end
 
   add_index "qtl_jobs", ["linkage_map_id"], name: "idx_144140_linkage_map_id", using: :btree
@@ -594,19 +564,6 @@ ActiveRecord::Schema.define(version: 20150709134708) do
     t.text "recognition_site",   null: false
     t.text "data_provenance"
   end
-
-  create_table "submission_uploads", force: :cascade do |t|
-    t.integer  "submission_id",     null: false
-    t.integer  "upload_type",       null: false
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.string   "file_file_name"
-    t.string   "file_content_type"
-    t.integer  "file_file_size"
-    t.datetime "file_updated_at"
-  end
-
-  add_index "submission_uploads", ["submission_id"], name: "index_submission_uploads_on_submission_id", using: :btree
 
   create_table "submissions", force: :cascade do |t|
     t.integer  "user_id",                             null: false
@@ -725,24 +682,19 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_foreign_key "api_keys", "users", on_update: :cascade, on_delete: :cascade
   add_foreign_key "genotype_matrices", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "linkage_groups", "linkage_maps", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "linkage_groups", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "linkage_maps", "plant_populations", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "linkage_maps", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_locus_hits", "linkage_groups", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_locus_hits", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_locus_hits", "map_positions", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_locus_hits", "population_loci", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "map_locus_hits", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_positions", "linkage_groups", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_positions", "population_loci", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "map_positions", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "marker_sequence_assignments", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "primers", column: "primer_a_id", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "primers", column: "primer_b_id", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "probes", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "restriction_enzymes", column: "restriction_enzyme_a_id", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "restriction_enzymes", column: "restriction_enzyme_b_id", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "marker_assays", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_accessions", "plant_lines", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_accessions", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_lines", "plant_varieties", on_update: :cascade, on_delete: :nullify
@@ -771,18 +723,12 @@ ActiveRecord::Schema.define(version: 20150709134708) do
   add_foreign_key "plant_variety_country_registered", "plant_varieties", on_update: :cascade, on_delete: :nullify
   add_foreign_key "population_loci", "marker_assays", on_update: :cascade, on_delete: :nullify
   add_foreign_key "population_loci", "plant_populations", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "population_loci", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "primers", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "probes", "taxonomy_terms", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "probes", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "processed_trait_datasets", "plant_trials", on_update: :cascade, on_delete: :nullify
   add_foreign_key "processed_trait_datasets", "trait_descriptors", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl", "linkage_groups", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl", "processed_trait_datasets", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl", "qtl_jobs", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "qtl", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "qtl_jobs", "users", on_update: :cascade, on_delete: :nullify
-  add_foreign_key "submission_uploads", "submissions", on_update: :cascade, on_delete: :restrict
   add_foreign_key "trait_descriptors", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_grades", "trait_descriptors", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_scores", "plant_scoring_units", on_update: :cascade, on_delete: :nullify
