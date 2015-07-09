@@ -164,6 +164,10 @@ class TrialSubmission extends Submission
           @$('.uploaded-trait-scores .parser-summary').removeClass('hidden')
           @$('.uploaded-trait-scores .parser-summary').text(data.result.summary.join('\n'))
 
+      fail: (event, data) =>
+        if data.jqXHR.status == 401
+          window.location.reload()
+
     @$('.delete-trait-scores-upload').on 'ajax:success', (data, status, xhr) =>
       @$('.fileinput-button').removeClass('hidden')
       @$('.uploaded-trait-scores').addClass('hidden')

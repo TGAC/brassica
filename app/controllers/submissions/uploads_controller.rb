@@ -1,6 +1,6 @@
 class Submissions::UploadsController < ApplicationController
 
-  before_filter :authenticate_user!
+  prepend_before_filter :authenticate_user!
   before_filter :require_submission_owner
 
   def create
@@ -30,6 +30,14 @@ class Submissions::UploadsController < ApplicationController
   end
 
   private
+
+  def authenticate_user!
+    if request.xhr?
+      render json: {}, status: :unauthorized unless user_signed_in?
+    else
+      super
+    end
+  end
 
   def require_submission_owner
     unless current_user.submission_ids.include?(params[:submission_id].to_i)

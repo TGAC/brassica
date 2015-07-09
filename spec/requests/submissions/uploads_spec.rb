@@ -6,10 +6,14 @@ RSpec.describe "Submission uploads" do
 
   context "with no user signed in" do
     describe "POST /submissions/:submission_id/uploads" do
-      it "does nothing" do
+      it "redirects for non-xhr request" do
         post "/submissions/#{submission.id}/uploads"
-        pending
-        fail
+        expect(response).to redirect_to('/')
+      end
+
+      it "returns 401 for xhr request" do
+        xhr :post, "/submissions/#{submission.id}/uploads"
+        expect(response.status).to be 401
       end
     end
   end
