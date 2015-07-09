@@ -21,6 +21,7 @@ class MarkerAssay < ActiveRecord::Base
   belongs_to :probe, counter_cache: true
 
   has_many :population_loci
+  has_many :map_positions
 
   validates :marker_assay_name,
             presence: true,

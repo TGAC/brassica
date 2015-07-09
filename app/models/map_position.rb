@@ -2,11 +2,9 @@ class MapPosition < ActiveRecord::Base
 
   belongs_to :linkage_group, counter_cache: true
   belongs_to :population_locus, counter_cache: true
+  belongs_to :marker_assay
 
   has_many :map_locus_hits
-
-  validates :marker_assay_name,
-            presence: true
 
   validates :mapping_locus,
             presence: true
