@@ -30,11 +30,12 @@ RSpec.describe MapPosition do
       table_data = MapPosition.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
-        mp.marker_assay_name,
+        mp.marker_assay.marker_assay_name,
         mp.map_position,
         mp.linkage_group.linkage_group_label,
         mp.population_locus.mapping_locus,
         2,
+        mp.marker_assay.id,
         mp.linkage_group.id,
         mp.population_locus.id,
         mp.id

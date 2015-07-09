@@ -57,7 +57,8 @@ class MarkerAssay < ActiveRecord::Base
 
   def self.count_columns
     [
-      'population_loci_count'
+      'population_loci_count',
+      'map_positions_count'
     ]
   end
 
