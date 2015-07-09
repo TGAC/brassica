@@ -27,6 +27,7 @@ en:
             trait_descriptor_list:
               blank: "A trait descriptor with name \"%{name}\" is not defined."
               too_short: "Plase select or add at least one trait descriptor."
+              duplicated: "A trait descriptor with name \"%{name}\" is defined more than once."
 
             plant_trial_name:
               blank: Please provide a trial name.

@@ -22,7 +22,10 @@
   .panel-body
     .form-group
       = label_tag :descriptor_name, nil, class: 'required'
-      = text_field_tag :descriptor_name, nil, class: 'form-control required', placeholder: 'Enter new trait name'
+      = text_field_tag :descriptor_name, nil,
+        class: 'form-control required',
+        placeholder: 'Enter new trait name',
+        autocomplete: 'off'
 
     .form-group
       - option_tags = options_for_select(TraitDescriptor.attribute_values(:category))

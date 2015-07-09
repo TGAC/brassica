@@ -41,6 +41,17 @@ module Submissions
         end
       end
 
+      validate do
+        duplicated_trait_descriptors =
+          Hash[trait_descriptor_list.map { |td| [td, trait_descriptor_list.count(td)] }].
+          select { |td, count| count > 1 }.
+          keys
+
+        duplicated_trait_descriptors.each do |trait_descriptor|
+          errors.add(:trait_descriptor_list, :duplicated, name: trait_descriptor)
+        end
+      end
+
       # Ensure all items in :trait_descriptor_list either exist or have
       # valid entries in :new_trait_descriptors
       validate do
