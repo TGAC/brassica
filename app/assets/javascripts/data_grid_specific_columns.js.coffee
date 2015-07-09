@@ -56,6 +56,10 @@ window.configs =
   'map-positions':
     columnDefs:
       [
+        targets: 'marker_assays_marker_assay_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('marker_assays', data, full[full.length - 4])
+      ,
         targets: 'linkage_groups_linkage_group_label_column'
         render: (data, type, full, meta) ->
           modelIdUrl('linkage_groups', data, full[full.length - 3])
