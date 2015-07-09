@@ -7,6 +7,9 @@ class MapPosition < ActiveRecord::Base
 
   has_many :map_locus_hits
 
+  validates :map_position,
+            presence: true
+
   after_update { map_locus_hits.each(&:touch) }
 
   include Relatable

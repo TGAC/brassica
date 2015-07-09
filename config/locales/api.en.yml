@@ -850,7 +850,7 @@ en:
           name: id
         -
           name: map_position
-          create: Q
+          create: required, Q
           desc: Position identifier
         -
           name: comments

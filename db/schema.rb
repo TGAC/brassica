@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150709161527) do
+ActiveRecord::Schema.define(version: 20150709173827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -142,6 +142,8 @@ ActiveRecord::Schema.define(version: 20150709161527) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.string   "entered_by_whom"
+    t.date     "date_entered"
   end
 
   add_index "map_locus_hits", ["linkage_group_id"], name: "map_locus_hits_linkage_group_id_idx", using: :btree
@@ -150,7 +152,7 @@ ActiveRecord::Schema.define(version: 20150709161527) do
   add_index "map_locus_hits", ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
 
   create_table "map_positions", force: :cascade do |t|
-    t.text     "marker_assay_name",                null: false
+    t.text     "marker_assay_name"
     t.text     "mapping_locus"
     t.text     "map_position"
     t.text     "comments"
@@ -512,6 +514,7 @@ ActiveRecord::Schema.define(version: 20150709161527) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.date     "date_entered"
   end
 
   add_index "probes", ["probe_name"], name: "probes_probe_name_idx", using: :btree
@@ -728,6 +731,7 @@ ActiveRecord::Schema.define(version: 20150709161527) do
   add_foreign_key "map_locus_hits", "population_loci", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_locus_hits", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_positions", "linkage_groups", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "map_positions", "marker_assays", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_positions", "population_loci", on_update: :cascade, on_delete: :nullify
   add_foreign_key "map_positions", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "marker_sequence_assignments", on_update: :cascade, on_delete: :nullify
@@ -775,6 +779,7 @@ ActiveRecord::Schema.define(version: 20150709161527) do
   add_foreign_key "qtl", "processed_trait_datasets", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl", "qtl_jobs", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "qtl_jobs", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl_jobs", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_descriptors", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_grades", "trait_descriptors", on_update: :cascade, on_delete: :nullify
