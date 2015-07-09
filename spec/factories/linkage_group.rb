@@ -8,6 +8,7 @@ FactoryGirl.define do
     consensus_group_orientation { Faker::Lorem.word }
     confirmed_by_whom { Faker::Internet.user_name }
     linkage_map
+    user
     annotable
   end
 end

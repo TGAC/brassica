@@ -1,13 +1,13 @@
 class QtlJob < ActiveRecord::Base
 
+  belongs_to :linkage_map
+  belongs_to :user
+  
   has_many :qtls
 
   validates :qtl_job_name,
             presence: true,
             uniqueness: true
-
-  validates :linkage_map_id,
-            presence: true
 
   validates :qtl_software,
             presence: true
@@ -51,6 +51,10 @@ class QtlJob < ActiveRecord::Base
           'id'
         ]
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

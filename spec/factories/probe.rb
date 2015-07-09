@@ -6,6 +6,7 @@ FactoryGirl.define do
     date_described { Faker::Date.backward }
     sequence_id { Faker::Number.number(7).to_s }
     taxonomy_term
-    annotable_no_owner_no_date
+    user
+    annotable_no_owner
   end
 end

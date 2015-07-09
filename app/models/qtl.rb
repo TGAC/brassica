@@ -4,6 +4,7 @@ class Qtl < ActiveRecord::Base
   belongs_to :processed_trait_dataset
   belongs_to :linkage_group
   belongs_to :qtl_job, counter_cache: true
+  belongs_to :user
 
   validates :qtl_rank,
             presence: true
@@ -12,9 +13,6 @@ class Qtl < ActiveRecord::Base
             presence: true
 
   validates :qtl_mid_position,
-            presence: true
-
-  validates :additive_effect,
             presence: true
 
   include Filterable
@@ -109,6 +107,10 @@ class Qtl < ActiveRecord::Base
     Qtl.numeric_columns.each do |column|
       indexes column, include_in_all: 'false'
     end
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

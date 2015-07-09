@@ -9,7 +9,8 @@ FactoryGirl.define do
     outer_confidence_threshold { Faker::Number.number(1).to_s }
     qtl_statistic_type { Faker::Lorem.word }
     date_run { Faker::Date.backward }
-    linkage_map_id { 1 }
+    linkage_map
+    user
     annotable
   end
 end

@@ -10,6 +10,7 @@ FactoryGirl.define do
     pubmed_id { Faker::Number.number(7) }
     confirmed_by_whom { Faker::Internet.user_name }
     annotable
+    user
     plant_population
   end
 end

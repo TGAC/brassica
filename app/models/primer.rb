@@ -1,5 +1,7 @@
 class Primer < ActiveRecord::Base
 
+  belongs_to :user
+
   has_many :marker_assays_a,
            class_name: 'MarkerAssay',
            foreign_key: 'primer_a_id'
@@ -12,12 +14,6 @@ class Primer < ActiveRecord::Base
             uniqueness: true
 
   validates :sequence,
-            presence: true
-
-  validates :sequence_id,
-            presence: true
-
-  validates :sequence_source_acronym,
             presence: true
 
   def marker_assays
@@ -62,6 +58,10 @@ class Primer < ActiveRecord::Base
           'id'
         ]
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

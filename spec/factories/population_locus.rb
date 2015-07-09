@@ -4,6 +4,7 @@ FactoryGirl.define do
     defined_by_whom { Faker::Internet.user_name }
     plant_population
     marker_assay
+    user
     annotable
   end
 end

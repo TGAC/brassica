@@ -6,7 +6,7 @@ class PlantScoringUnit < ActiveRecord::Base
   belongs_to :plant_part
   belongs_to :user
 
-  has_many :trait_scores
+  has_many :trait_scores, dependent: :destroy
 
   validates :scoring_unit_name,
             presence: true

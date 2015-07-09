@@ -1,6 +1,8 @@
 class LinkageGroup < ActiveRecord::Base
 
   belongs_to :linkage_map, counter_cache: true
+  belongs_to :user
+
   has_many :map_positions
   has_many :map_locus_hits
   has_many :qtls
@@ -62,6 +64,10 @@ class LinkageGroup < ActiveRecord::Base
           'id'
         ]
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

@@ -1,10 +1,12 @@
 class LinkageMap < ActiveRecord::Base
 
   belongs_to :plant_population, counter_cache: true, touch: true
+  belongs_to :user
 
   has_many :linkage_groups
   has_many :genotype_matrices
   has_many :map_locus_hits
+  has_many :qtl_jobs
 
   validates :linkage_map_label,
             presence: true,
@@ -83,6 +85,10 @@ class LinkageMap < ActiveRecord::Base
         }
       }
     }
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable
