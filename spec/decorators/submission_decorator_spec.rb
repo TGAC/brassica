@@ -32,11 +32,13 @@ RSpec.describe SubmissionDecorator do
       expect(sd.details_path).to eq '#'
     end
 
-    it 'provides correct datatables path for finalized submission' do
-      submission = create(:finalized_submission)
-      sd = SubmissionDecorator.decorate(submission)
-      expect(sd.details_path).
-        to include 'data_tables?model=plant_populations'
+    %i(population trial).each do |submission_type|
+      it "provides correct datatables path for finalized #{submission_type} submission" do
+        submission = create(:finalized_submission, submission_type)
+        sd = SubmissionDecorator.decorate(submission)
+        expect(sd.details_path).
+          to include "data_tables?model=plant_#{submission_type}s"
+      end
     end
   end
 end

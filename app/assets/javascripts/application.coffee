@@ -21,6 +21,9 @@
 #= require jquery.scrollTo
 #= require highlight.pack
 #= require cookies_eu
+#= require jquery.ui.widget
+#= require jquery.iframe-transport
+#= require jquery.fileupload
 #= require_tree .
 
 $ ->

@@ -82,8 +82,8 @@ class Submission::PlantPopulationFinalizer
   end
 
   def create_plant_population_lists
-    @plant_population_lists = submission.content.step03.plant_line_list.select(&:present?).map do |plant_line_name|
-      plant_line = PlantLine.find_by!(plant_line_name: plant_line_name)
+    @plant_population_lists = submission.content.step03.plant_line_list.select(&:present?).map do |id_or_name|
+      plant_line = PlantLine.where_id_or_name(id_or_name).first!
       PlantPopulationList.create!(
         plant_population: plant_population,
         plant_line: plant_line,

@@ -81,6 +81,11 @@ class PlantPopulation < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
+      search: [
+        'name',
+        'canonical_population_name',
+        'description'
+      ],
       query: [
         'id',
         'name',

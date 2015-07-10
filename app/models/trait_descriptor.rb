@@ -6,15 +6,12 @@ class TraitDescriptor < ActiveRecord::Base
   has_many :trait_scores
   has_many :processed_trait_datasets
 
-  validates :category,
-            presence: true
-
-  validates :descriptor_name,
-            presence: true
+  validates :descriptor_name, :category, presence: true
 
   after_update { processed_trait_datasets.each(&:touch) }
 
   include Searchable
+  include AttributeValues
 
   def self.table_data(params = nil)
     trait_descriptor_query = ''

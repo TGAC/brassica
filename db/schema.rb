@@ -605,6 +605,19 @@ ActiveRecord::Schema.define(version: 20150709173827) do
     t.text "data_provenance"
   end
 
+  create_table "submission_uploads", force: :cascade do |t|
+    t.integer  "submission_id",     null: false
+    t.integer  "upload_type",       null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+  end
+
+  add_index "submission_uploads", ["submission_id"], name: "index_submission_uploads_on_submission_id", using: :btree
+
   create_table "submissions", force: :cascade do |t|
     t.integer  "user_id",                             null: false
     t.string   "step",                                null: false
@@ -781,6 +794,7 @@ ActiveRecord::Schema.define(version: 20150709173827) do
   add_foreign_key "qtl", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl_jobs", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "qtl_jobs", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "submission_uploads", "submissions", on_update: :cascade, on_delete: :restrict
   add_foreign_key "trait_descriptors", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_grades", "trait_descriptors", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_scores", "plant_scoring_units", on_update: :cascade, on_delete: :nullify

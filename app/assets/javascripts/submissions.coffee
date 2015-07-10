@@ -1,5 +1,7 @@
 class Submission
-  @makeAjaxSelectOptions: (url, id_attr) =>
+  @makeAjaxSelectOptions: (url, id_attr, text_attr) =>
+    text_attr ||= id_attr
+
     allowClear: true
     minimumInputLength: 2
     ajax:
@@ -7,26 +9,37 @@ class Submission
       dataType: 'json'
       data: (params) ->
         search = {}
-        search[id_attr] = params.term
+        search[text_attr] = params.term
 
         search: search
         page: params.page
       processResults: (data, page) ->
-        results: $.map(data, (row) -> { id: row[id_attr], text: row[id_attr] })
+        results: $.map(data, (row) -> { id: row[id_attr], text: row[text_attr] })
     escapeMarkup: (markup) -> markup
     templateResult: (item) -> item.text
     templateSelection: (item) -> item.text
 
-  defaultSelectOptions: { allowClear: true }
-  plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
-  plantLineListSelectOptions: $.extend(@makeAjaxSelectOptions('/plant_lines', 'plant_line_name'), multiple: true)
-  plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
+  @makeAjaxListSelectOptions: (url, id_attr, text_attr) =>
+    $.extend(@makeAjaxSelectOptions(url, id_attr, text_attr),
+      multiple: true
+      templateSelection: (item) ->
+        if item.id != item.text || ! item.selected
+          "<span class='existing-item-for-list-selection'>#{item.text}</span>"
+        else
+          "<span class='new-item-for-list-selection'>#{item.text}</span>"
+    )
 
   constructor: (el) ->
     @$el = $(el)
 
   $: (args) =>
     @$el.find(args)
+
+class PopulationSubmission extends Submission
+  defaultSelectOptions: { allowClear: true }
+  plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
+  plantLineListSelectOptions: @makeAjaxListSelectOptions('/plant_lines', 'id', 'plant_line_name')
+  plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
 
   bind: =>
     @$('.taxonomy-term').select2(@defaultSelectOptions)
@@ -55,9 +68,9 @@ class Submission
     @$('div.new-plant-line-for-list').removeClass('hidden').show()
 
     @$('.previous-line-name').select2(@plantLineSelectOptions)
-    @$('.previous-line-name-wrapper').inputOrSelect()
+    @$('.previous-line-name-wrapper').comboField()
     @$('.genetic-status').select2(@defaultSelectOptions)
-    @$('.genetic-status-wrapper').inputOrSelect()
+    @$('.genetic-status-wrapper').comboField()
     @$('.new-plant-line-for-list input[type=text]').on 'keydown', (event) =>
       if event.keyCode == 13 # Enter key
         event.preventDefault() # Prevent form submission
@@ -95,7 +108,7 @@ class Submission
     $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
     # add all PL attributes to DOM so it can be sent with form
-    $form = @$el
+    $form = @$el.find('form')
     $container = $('<div></div').attr(id: @newPlantLineForListContainerId(data.plant_line_name))
     $container.appendTo($form)
 
@@ -108,6 +121,145 @@ class Submission
   removeNewPlantLineFromList: (plant_line_name) =>
     $("##{@newPlantLineForListContainerId(plant_line_name)}").remove()
 
+class TrialSubmission extends Submission
+  defaultSelectOptions: { allowClear: true }
+  plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
+  traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name')
+
+  bind: =>
+    @$('select.plant-population').select2(@plantPopulationSelectOptions)
+    @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
+    @$('select.country-id').select2(@defaultSelectOptions)
+
+    fields = [
+      'institute-id'
+      'terrain'
+      'soil-type'
+      'statistical-factors'
+      'design-factors'
+    ]
+
+    $.each fields, (_, field) =>
+      @$(".#{field}").select2(@defaultSelectOptions)
+      @$(".#{field}-wrapper").comboField()
+
+    @bindUpload()
+    @bindNewTraitDescriptorControls()
+
+  bindUpload: =>
+    @$('.trait-scores-upload').fileupload
+      data_type: 'json'
+
+      add: (event, data) =>
+        @$('.fileinput-button').addClass('disabled')
+        data.submit()
+
+      done: (event, data) =>
+        @$('#submission_content_upload_id').val(data.result.id)
+
+        @$('.fileinput-button').removeClass('disabled').addClass('hidden')
+        @$('.uploaded-trait-scores').removeClass('hidden')
+        @$('.uploaded-trait-scores .file-name').text(data.result.file_file_name)
+        @$('.uploaded-trait-scores .delete-trait-scores-upload').attr(href: data.result.delete_url)
+        @$('.uploaded-trait-scores .parser-logs').removeClass('hidden')
+        @$('.uploaded-trait-scores .parser-logs').text(data.result.logs.join('\n'))
+        if data.result.errors.length > 0
+          @$('.uploaded-trait-scores .parser-errors').removeClass('hidden')
+          @$('.uploaded-trait-scores .parser-errors').text(data.result.errors.join('\n'))
+          @$('.uploaded-trait-scores .parser-summary').addClass('hidden')
+          @$('.uploaded-trait-scores .parser-summary').text('')
+        else
+          @$('.uploaded-trait-scores .parser-errors').addClass('hidden')
+          @$('.uploaded-trait-scores .parser-errors').text('')
+          @$('.uploaded-trait-scores .parser-summary').removeClass('hidden')
+          @$('.uploaded-trait-scores .parser-summary').text(data.result.summary.join('\n'))
+
+      fail: (event, data) =>
+        if data.jqXHR.status == 401
+          window.location.reload()
+
+    @$('.delete-trait-scores-upload').on 'ajax:success', (data, status, xhr) =>
+      @$('.fileinput-button').removeClass('hidden')
+      @$('.uploaded-trait-scores').addClass('hidden')
+
+  bindNewTraitDescriptorControls: =>
+    @$('.trait-descriptor-list').on 'select2:unselect', (event) =>
+      @removeNewTraitDescriptorFromList(event.params.data.id)
+
+    @$('button.new-trait-descriptor-for-list').on 'click', (event) =>
+      $(event.target).hide()
+      @initNewTraitDescriptorForm()
+
+    @$('.add-new-trait-descriptor-for-list').on 'click', (event) =>
+      @validateNewTraitDescriptorForList(@appendToSelectedTraitDescriptorLists)
+
+    @$('.cancel-new-trait-descriptor-for-list').on 'click', (event) =>
+      @$('div.new-trait-descriptor-for-list').hide()
+      @$('button.new-trait-descriptor-for-list').show()
+
+  initNewTraitDescriptorForm: =>
+    @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
+
+    fields = [
+      'category'
+      'units-of-measurements'
+      'score-type'
+      'where-to-score'
+    ]
+
+    $.each fields, (_, field) =>
+      @$(".#{field}").select2(@defaultSelectOptions)
+      @$(".#{field}-wrapper").comboField()
+
+    @$('.new-trait-descriptor-for-list input[type=text]').on 'keydown', (event) =>
+      if event.keyCode == 13 # Enter key
+        event.preventDefault() # Prevent form submission
+
+  validateNewTraitDescriptorForList: (onValidData) =>
+    $form = @$('.new-trait-descriptor-for-list')
+
+    [data, errors] = Errors.validate($form)
+
+    if errors.length > 0
+      Errors.hideAll()
+      Errors.showAll(errors)
+    else
+      Errors.hideAll()
+
+      onValidData(data)
+
+      @$('div.new-trait-descriptor-for-list').hide()
+      @$('button.new-trait-descriptor-for-list').show()
+
+  appendToSelectedTraitDescriptorLists: (data) =>
+    $select = @$('.trait-descriptor-list')
+    selectedValues = $select.val() || []
+
+    $option = $('<option></option>').attr(value: data.descriptor_name).text(data.descriptor_name)
+    $select.append($option)
+
+    selectedValues.push(data.descriptor_name)
+    $select.val(selectedValues)
+    $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
+
+    # add all PL attributes to DOM so it can be sent with form
+    $form = @$el.find('form')
+    $container = $('<div></div').attr(id: @newTraitDescriptorForListContainerId(data.descriptor_name))
+    $container.appendTo($form)
+
+    $.each(data, (attr, val) =>
+      $input = $("<input type='hidden' name='submission[content][new_trait_descriptors][][" + attr + "]' />")
+      $input.val(val)
+      $input.appendTo($container)
+    )
+
+  removeNewTraitDescriptorFromList: (descriptor_name) =>
+    $("##{@newTraitDescriptorForListContainerId(descriptor_name)}").remove()
+
+  newTraitDescriptorForListContainerId: (descriptor_name) =>
+    'new-trait-descriptor-' + descriptor_name.split(/\s+/).join('-').toLowerCase()
+
 $ ->
-  new Submission('.edit_submission').bind()
+  new PopulationSubmission('.edit-population-submission').bind()
+  new TrialSubmission('.edit-trial-submission').bind()
 

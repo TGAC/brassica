@@ -27,3 +27,6 @@ config/database.yml
 
 # Capistrano metrics
 /.capistrano
+
+# Paperclip uploads
+/public/system
