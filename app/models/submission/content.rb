@@ -17,6 +17,13 @@ class Submission::Content < OpenStruct
       merge(step => current_step_content.merge(step_content))
   end
 
+  def clear(step)
+    raise Submission::InvalidStep, "No step #{step}" unless submission.steps.include?(step.to_s)
+    submission.content = submission.
+      read_attribute(:content).
+      merge(step => {})
+  end
+
   private
   attr_accessor :submission
 

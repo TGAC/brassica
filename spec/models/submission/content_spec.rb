@@ -37,4 +37,15 @@ RSpec.describe Submission::Content do
       expect(submission.content.step01.description).to eq 'New, updated value'
     end
   end
+
+  context "#clear" do
+    it "updates submission" do
+      content.clear(:step01)
+      expect(submission.content.step01.to_h).to eq({})
+    end
+
+    it "raises with invalid step" do
+      expect { content.clear(:step_fiz) }.to raise_error(Submission::InvalidStep, "No step step_fiz")
+    end
+  end
 end
