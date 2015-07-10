@@ -13,6 +13,7 @@ class Submission < ActiveRecord::Base
   validates :submitted_object_id, presence: true, uniqueness: true, if: 'finalized?'
 
   before_validation :set_defaults, on: :create
+  before_save :apply_content_adjustments
 
   scope :finalized, -> { where(finalized: true) }
   scope :recent_first, -> { order(updated_at: :desc) }
@@ -94,6 +95,21 @@ class Submission < ActiveRecord::Base
   def set_defaults
     self.step = STEPS.first
     self.content = Hash[STEPS.zip(STEPS.count.times.map {})] if content.blank?
+  end
+
+  def apply_content_adjustments
+    return unless trial?
+    return unless content_changed?
+
+    step02_was = content_was[:step02] || {}
+    step02 = content[:step02] || {}
+
+    old_trait_descriptor_list = (step02_was[:trait_descriptor_list] || []).map(&:to_s).sort
+    new_trait_descriptor_list = (step02[:trait_descriptor_list] || []).map(&:to_s).sort
+
+    if old_trait_descriptor_list != new_trait_descriptor_list
+      content.clear(:step03)
+    end
   end
 
   CantStepForward = Class.new(RuntimeError)
