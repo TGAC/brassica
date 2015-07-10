@@ -104,8 +104,8 @@ class Submission < ActiveRecord::Base
     step02_was = content_was[:step02] || {}
     step02 = content[:step02] || {}
 
-    old_trait_descriptor_list = (step02_was[:trait_descriptor_list] || []).map(&:to_s).sort
-    new_trait_descriptor_list = (step02[:trait_descriptor_list] || []).map(&:to_s).sort
+    old_trait_descriptor_list = (step02_was[:trait_descriptor_list] || []).map(&:to_s)
+    new_trait_descriptor_list = (step02[:trait_descriptor_list] || []).map(&:to_s)
 
     if old_trait_descriptor_list != new_trait_descriptor_list
       content.clear(:step03)
