@@ -1,17 +1,10 @@
 # Brassica Information Portal
 
-TODO:
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
 
 ## Dependencies
 
-* MRI 2.2.0
-* postgresql, libpq-dev
+* MRI 2.2.x
+* PostgreSQL
 * Elasticsearch 1.4.3, Java 7
 
 
