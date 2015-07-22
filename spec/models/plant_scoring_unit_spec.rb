@@ -24,4 +24,11 @@ RSpec.describe PlantScoringUnit do
         ]
     end
   end
+
+  it 'destroys trait scores when parent object is destroyed' do
+    ts = create(:trait_score)
+    t = create(:plant_scoring_unit, trait_scores: [ts])
+    expect { t.destroy }.to change { TraitScore.count }.by(-1)
+  end
+
 end

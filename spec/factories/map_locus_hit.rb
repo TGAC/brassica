@@ -13,5 +13,6 @@ FactoryGirl.define do
     linkage_map
     population_locus
     map_position
+    user
   end
 end

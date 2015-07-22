@@ -5,6 +5,7 @@ class Api
 
   def self.readable_models
     [
+      Country,
       LinkageGroup,
       LinkageMap,
       MapLocusHit,
@@ -13,6 +14,7 @@ class Api
       PlantAccession,
       PlantLine,
       PlantPopulation,
+      PlantPopulationList,
       PlantScoringUnit,
       PlantTrial,
       PlantVariety,
@@ -29,7 +31,29 @@ class Api
   end
 
   def self.writable_models
-    [PlantLine, PlantPopulation]
+    [
+      LinkageGroup,
+      LinkageMap,
+      MapLocusHit,
+      MapPosition,
+      MarkerAssay,
+
+      PlantAccession,
+      PlantLine,
+      PlantPopulation,
+      PlantPopulationList,
+      PlantScoringUnit,
+      PlantTrial,
+      PlantVariety,
+      TraitDescriptor,
+      TraitScore,
+
+      PopulationLocus,
+      Primer,
+      Probe,
+      Qtl,
+      QtlJob
+    ]
   end
 
   def self.readonly_models

@@ -1,0 +1,16 @@
+Assay Name	oleic acid content	seed mature time
+assay_df_hzau_1809	56,98	249,00
+assay_df_hzau_1808	57,24	252,00
+assay_df_hzau_1807	21,43	253,00
+assay_df_hzau_1806	26,74	252,00
+assay_df_hzau_1805	19,17	252,00
+assay_df_hzau_1804	14,72	252,00
+assay_df_hzau_1698	18,48	255,00
+assay_df_hzau_1697	20,40	
+assay_df_hzau_1696	50,82	254,00
+assay_df_hzau_1693	58,50	
+assay_df_hzau_1692	29,09	254,00
+assay_df_hzau_1493		215,00
+assay_df_hzau_1492		219,00
+assay_df_hzau_1803	56,75	253,00
+

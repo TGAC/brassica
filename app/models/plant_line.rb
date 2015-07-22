@@ -4,15 +4,18 @@ class PlantLine < ActiveRecord::Base
   belongs_to :taxonomy_term
   belongs_to :user
 
-  has_many :plant_population_lists
   has_many :fathered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'male_parent_line_id'
+           foreign_key: 'male_parent_line_id',
+           dependent: :nullify
   has_many :mothered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'female_parent_line_id'
-  has_many :plant_accessions
+           foreign_key: 'female_parent_line_id',
+           dependent: :nullify
+  has_many :plant_accessions,
+           dependent: :nullify
 
-  has_and_belongs_to_many :plant_populations,
-                          join_table: 'plant_population_lists'
+  has_many :plant_population_lists, dependent: :delete_all
+  has_many :plant_populations,
+           through: :plant_population_lists
 
   after_update { mothered_descendants.each(&:touch) }
   after_update { fathered_descendants.each(&:touch) }
@@ -28,6 +31,9 @@ class PlantLine < ActiveRecord::Base
             presence: { on: :create }
 
   scope :by_name, -> { order(:plant_line_name) }
+  scope :where_id_or_name, ->(id_or_name) {
+    where("id=:id OR plant_line_name ILIKE :name", id: id_or_name.to_i, name: id_or_name.to_s)
+  }
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -70,6 +76,10 @@ class PlantLine < ActiveRecord::Base
     [
       'plant_variety_id'
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

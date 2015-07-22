@@ -176,7 +176,6 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
 
     it 'does not find MLH by inexact map_position.map_position' do
-      pending 'This test should pass if #253 is fixed'
       expect(Search.new("2.8").map_locus_hits.count).to eq 0
     end
   end
@@ -184,6 +183,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
   describe '#map_positions' do
     it 'finds MP by :map_position' do
       expect(Search.new("102.8").map_positions.count).to eq 1
+    end
+
+    it 'does not find MP by inexact :map_position' do
+      expect(Search.new("102").map_positions.count).to eq 0
     end
 
     it 'finds MP by linkage_group.linkage_group_label' do
@@ -264,6 +267,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(Search.new('347.11').qtl.count).to eq 1
     end
 
+    it 'does not find QTL by inexact :outer_interval_start' do
+      expect(Search.new('347').qtl.count).to eq 0
+    end
+
     it 'finds QTL by trait_descriptor.descriptor_name' do
       expect(Search.new("leafy").qtl.count).to eq 1
     end
@@ -305,7 +312,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
   end
 
-  describe "query transformation" do
+  describe "#wildcarded_query" do
     examples = {
       'foo' => '*foo*',
       'foo@example.com' => 'foo@example.com',
@@ -315,7 +322,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     examples.each do |input_query, output_query|
       context "given #{input_query}" do
         it "transforms it to #{output_query}" do
-          expect(Search.new(input_query).query).to eq output_query
+          expect(Search.new(input_query).wildcarded_query).to eq output_query
         end
       end
     end

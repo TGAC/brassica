@@ -37,6 +37,17 @@
   .form-group {
     margin: 0;
   }
+
+  .search-examples {
+    color: $text-color-negative;
+    margin-top: 8px;
+    line-height: normal;
+
+    .search-example {
+      color: $text-color-negative;
+      text-decoration: underline;
+    }
+  }
 }
 
 .section-actions {
@@ -81,8 +92,11 @@
       margin-top: 0;
     }
   }
-  p {
+  p, ul {
     margin-bottom: 20px;
+  }
+  .description {
+    margin-bottom: 12px;
   }
   ol {
     counter-reset: li;
@@ -142,8 +156,10 @@
     display: block;
     max-height: 350px;
     overflow: auto;
+    margin-bottom: 20px;
   }
 }
+
 .docs-sidebar {
   @include max-screen($break-small) {
     display: none;

@@ -1,0 +1,84 @@
+.alert.alert-info
+  Select one or more <b>Trait descriptors</b> from the database. They should describe the traits
+  that were scored in the scope of this Plant trial.<br/>
+  If suitable <b>Trait descriptor</b> does not seem to exist in our
+  database you are welcome to add it with your submission.
+
+.form-group
+  = content.label :trait_descriptor_list
+  - options = options_for_submission_select(@content.existing_trait_descriptors, :descriptor_name)
+  - options.concat options_for_submission_select(@content.new_trait_descriptors, :descriptor_name, id: false)
+  = content.select :trait_descriptor_list, options.html_safe, {},
+    { multiple: true,
+      class: 'trait-descriptor-list form-control',
+      'data-placeholder': "Select trait descriptors" }
+
+%button.btn.btn-default.new-trait-descriptor-for-list{ type: :button } Add new Trait descriptor
+
+.panel.panel-info.new-trait-descriptor-for-list.hidden
+  .panel-heading
+    %h4 Add new <b>Trait descriptor</b>
+
+  .panel-body
+    .form-group
+      = label_tag :descriptor_name, nil, class: 'required'
+      = text_field_tag :descriptor_name, nil,
+        class: 'form-control required',
+        placeholder: 'Enter new trait name',
+        autocomplete: 'off'
+
+    .form-group
+      - option_tags = options_for_select(TraitDescriptor.attribute_values(:category))
+      = combo_field_tag :category, nil, option_tags, required: true, label: 'Trait category', class: 'category'
+
+    - %w(units_of_measurements score_type where_to_score).each do |attr|
+      .form-group
+        - option_tags = options_for_select(TraitDescriptor.attribute_values(attr))
+        = combo_field_tag attr, nil, option_tags, class: attr.dasherize
+
+    - %w(when_to_score).each do |attr|
+      .form-group
+        = label_tag attr
+        = text_field_tag attr, nil, class: 'form-control'
+
+    .form-group
+      = label_tag :scoring_method
+      = text_area_tag :scoring_method, nil, class: 'form-control'
+      %small.help-block Describe in detail how the measurement is to be performed.
+
+    .form-group
+      = label_tag :precautions
+      = text_area_tag :precautions, nil, class: 'form-control'
+      %small.help-block Tell what special precautions should be taken in order to have the trait properly scored.
+
+    .form-group
+      = label_tag :metarials
+      = text_area_tag :materials, nil, class: 'form-control'
+      %small.help-block Materials required for scoring.
+
+    - %w(instrumentation_required).each do |attr|
+      .form-group
+        = label_tag attr
+        = text_area_tag attr, nil, class: 'form-control'
+
+    .form-group
+      = label_tag :controls
+      = text_field_tag :controls, nil, class: 'form-control'
+      %small.help-block
+        What kind of control (e.g. a reference) should be used in order to adequately measure the score value.
+
+    - %w(calibrated_against likely_ambiguities possible_interactions).each do |attr|
+      .form-group
+        = label_tag attr
+        = text_field_tag attr, nil, class: 'form-control'
+
+    = render partial: "submissions/annotations", locals: { model: TraitDescriptor }
+
+    .action-buttons
+      %button.btn.btn-default.cancel-new-trait-descriptor-for-list{type: 'button'} Cancel
+      %button.btn.btn-primary.add-new-trait-descriptor-for-list{type: 'button'} Confirm
+
+- @content.new_trait_descriptors.each do |trait_descriptor|
+  %div{id: "new-trait-descriptor-#{trait_descriptor.descriptor_name.split.join('-').downcase}"}
+    - @content.class.new_trait_descriptor_properties.each do |attr|
+      = hidden_field_tag "submission[content][new_trait_descriptors][][#{attr}]", trait_descriptor.send(attr)

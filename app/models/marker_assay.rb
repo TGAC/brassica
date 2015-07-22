@@ -19,8 +19,10 @@ class MarkerAssay < ActiveRecord::Base
              counter_cache: 'marker_assays_b_count'
 
   belongs_to :probe, counter_cache: true
+  belongs_to :user
 
   has_many :population_loci
+  has_many :map_positions
 
   validates :marker_assay_name,
             presence: true,
@@ -56,7 +58,8 @@ class MarkerAssay < ActiveRecord::Base
 
   def self.count_columns
     [
-      'population_loci_count'
+      'population_loci_count',
+      'map_positions_count'
     ]
   end
 
@@ -95,6 +98,10 @@ class MarkerAssay < ActiveRecord::Base
       'primer_b_id',
       'probe_id'
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

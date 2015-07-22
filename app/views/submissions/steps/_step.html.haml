@@ -1,0 +1,17 @@
+%div{ class: "edit-#{submission.submission_type}-submission" }
+  = render partial: '/errors', locals: { errors: submission.errors }
+  = render partial: '/errors', locals: { errors: @content.errors }
+
+  - suppress(ActionView::MissingTemplate) do
+    = render partial: "submissions/steps/#{submission.submission_type}/#{submission.step}_before",
+             locals: { submission: submission }
+
+  = submission_form(submission) do |f|
+
+    = f.fields_for :content, @content do |content|
+
+      = render partial: "submissions/steps/#{submission.submission_type}/#{submission.step}",
+               locals: { submission: submission, content: content }
+
+    = render partial: 'submissions/steps/buttons', locals: { f: f, submission: submission }
+

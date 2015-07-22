@@ -3,7 +3,7 @@ en:
     empty_label: "(empty label)"
     submission_type:
       population: Population
-      traits: Trait scoring
+      trial: Plant scoring trial
       qtl: Quantitative Trait Loci
       linkage_map: Linkage maps
 
@@ -18,12 +18,12 @@ en:
         Brassica population. Apart from species information you may indicate
         the parent Brassica lines and the list of (possibly new) plant lines
         connected with this population.
-      traits: |
-        TODO FIXME Introduction to Trait scoring submission process.
-      qtl: |
-        TODO FIXME Introduction to Quantitative Trait Loci submission process.
-      linkage_map: |
-        TODO FIXME Introduction to Linkage maps submission process.
+      trial: |
+        With Trail submission you are able to upload new trait scoring information to BIP.
+        The process lets you describe trial conditions and environment, to indicate
+        what traits were scored and how, and finally to upload the list of scoring.
+      qtl:
+      linkage_map:
 
     steps:
       population:
@@ -41,6 +41,18 @@ en:
         step04:
           heading: Provenance.
           body: Identify the owner of the submitted data and describe its provenance.
-      traits:
+      trial:
+        step01:
+          heading: Trial information.
+          body: Provide detailed description about the performed plant trial. Give as much information as possible.
+        step02:
+          heading: Traits.
+          body: Choose plant traits that were scored in the course of this trial, or define new trait descriptors.
+        step03:
+          heading: Scoring.
+          body: Upload tabular list of scores given to plants per each trait scored.
+        step04:
+          heading: Provenance.
+          body: Identify the owner of the submitted data and describe its provenance.
       qtl:
       linkage_map:

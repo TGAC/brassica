@@ -2,9 +2,10 @@ class Submission < ActiveRecord::Base
 
   STEPS = %w(step01 step02 step03 step04)
 
-  enum submission_type: %i(population traits qtl linkage_map)
+  enum submission_type: %i(population trial qtl linkage_map)
 
   belongs_to :user
+  has_many :uploads, class_name: 'Submission::Upload'
 
   validates :user, presence: true
   validates :submission_type, presence: true
@@ -12,6 +13,7 @@ class Submission < ActiveRecord::Base
   validates :submitted_object_id, presence: true, uniqueness: true, if: 'finalized?'
 
   before_validation :set_defaults, on: :create
+  before_save :apply_content_adjustments
 
   scope :finalized, -> { where(finalized: true) }
   scope :recent_first, -> { order(updated_at: :desc) }
@@ -50,7 +52,15 @@ class Submission < ActiveRecord::Base
 
   def finalize
     raise CantFinalize unless last_step?
-    PlantPopulationFinalizer.new(self).call
+    case submission_type
+    when 'population'
+      PlantPopulationFinalizer.new(self).call
+    when 'trial'
+      PlantTrialFinalizer.new(self).call
+    else
+      raise CantFinalize
+    end
+
   end
 
   def submitted_object
@@ -69,8 +79,8 @@ class Submission < ActiveRecord::Base
     case submission_type
     when 'population'
       PlantPopulation
-    when 'traits'
-      PlantScoringUnit
+    when 'trial'
+      PlantTrial
     when 'qtl'
       Qtl
     when 'linkage_map'
@@ -85,6 +95,21 @@ class Submission < ActiveRecord::Base
   def set_defaults
     self.step = STEPS.first
     self.content = Hash[STEPS.zip(STEPS.count.times.map {})] if content.blank?
+  end
+
+  def apply_content_adjustments
+    return unless trial?
+    return unless content_changed?
+
+    step02_was = content_was[:step02] || {}
+    step02 = content[:step02] || {}
+
+    old_trait_descriptor_list = (step02_was[:trait_descriptor_list] || []).map(&:to_s)
+    new_trait_descriptor_list = (step02[:trait_descriptor_list] || []).map(&:to_s)
+
+    if old_trait_descriptor_list != new_trait_descriptor_list
+      content.clear(:step03)
+    end
   end
 
   CantStepForward = Class.new(RuntimeError)

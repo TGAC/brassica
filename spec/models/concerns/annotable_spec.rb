@@ -29,6 +29,8 @@ RSpec.describe Annotable do
           instance.has_attribute?('date_entered') ? { 'date_entered' => instance.date_entered } : {}
         ).merge(
           instance.has_attribute?('pubmed_id') ? { 'pubmed_id' => instance.pubmed_id } : {}
+        ).merge(
+          instance.respond_to?('published?') ? { 'published?' => instance.published? } : {}
         )
         expect(instance.annotations_as_json).to eq test_hash
         expect(test_hash.values.map(&:nil?)).to all be_falsey
@@ -59,6 +61,14 @@ RSpec.describe Annotable do
       if model.column_names.include? 'pubmed_id'
         expect(annotable_tables).to include model.table_name
       end
+    end
+  end
+
+  it 'makes sure all API-writable models return published?' do
+    Api.writable_models.each do |model_klass|
+      next unless annotable_tables.include?(model_klass.table_name)
+      instance = create(model_klass)
+      expect(instance.annotations_as_json.keys).to include 'published?'
     end
   end
 

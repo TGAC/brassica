@@ -1,17 +1,20 @@
 # Brassica Information Portal
 
-TODO:
+The Brassica Information Portal is a web repository for population and trait 
+scoring information used by the Brassica breeding community. It is a Rails
+web application and was created by [eSpectrum company](http://espectrum.pl/it)
+on a contract with [The Genome Analysis Centre](http://www.tgac.ac.uk/)
+but it is released as an open source project (see the LICENSE.txt file).
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Apart from the LICENSE, TGAC explicitly requests any party that wishes to
+deploy a copy (modified or not) of BIP on their own servers, to contact,
+and obtain permission to do so,
+[TGAC representatives](http://www.tgac.ac.uk/contact-us/).
 
 ## Dependencies
 
-* MRI 2.2.0
-* postgresql, libpq-dev
+* MRI 2.2.x
+* PostgreSQL
 * Elasticsearch 1.4.3, Java 7
 
 

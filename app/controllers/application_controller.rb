@@ -5,17 +5,20 @@ class ApplicationController < ActionController::Base
 
   def index
     @submissions = Submission.finalized.recent_first.take(5)
-
     @statistics = [
       PlantPopulation.count,
       TraitScore.count,
       TaxonomyTerm.count,
       PlantLine.count
     ]
+    @term = params[:search]
   end
 
   def about; end
   def api; end
+  def make_me_an_error
+    10/0
+  end
 
   # TODO FIXME Just for deployment testing, remove later
   def make_me_an_error

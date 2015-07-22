@@ -21,6 +21,9 @@
 #= require jquery.scrollTo
 #= require highlight.pack
 #= require cookies_eu
+#= require jquery.ui.widget
+#= require jquery.iframe-transport
+#= require jquery.fileupload
 #= require_tree .
 
 $ ->
@@ -34,3 +37,10 @@ $ ->
     top: 220
     bottom: ->
       return @bottom = - bh.top + 320
+
+  console.log('CHANGE')
+#  # Handles navigation through history states originating from client-side
+#  # (e.g. search results)
+#  $(window).on 'popstate', ->
+#    window.location.replace window.location.href
+

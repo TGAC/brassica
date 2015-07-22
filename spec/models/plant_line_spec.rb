@@ -128,7 +128,7 @@ RSpec.describe PlantLine do
 
     it 'orders plant lines by plant line name' do
       pp = create(:plant_population)
-      pls = create_list(:plant_line, 3, plant_populations: [pp])
+      pls = create_list(:plant_population_list, 3, plant_population: pp).map(&:plant_line)
       td = PlantLine.table_data(query: { 'plant_populations.id': pp.id })
       expect(td.map(&:second)).to eq pls.map(&:plant_line_name).sort
     end

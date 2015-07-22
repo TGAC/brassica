@@ -1,30 +1,37 @@
-# FIXME extend ActionController::Metal instead as some mixins are not needed
-class Api::V1::ResourcesController < ApplicationController
+class Api::V1::ResourcesController < Api::BaseController
   include Pagination
-
-  protect_from_forgery with: :null_session
 
   before_filter :authenticate_api_key!
   before_filter :require_allowed_model
   before_filter :require_strictly_correct_params, only: :create
 
-  def index
-    filter_params = params[model_name].presence
+  rescue_from 'ActiveRecord::InvalidForeignKey' do |exception|
+    message = exception.message.split("\n").try(:second)
+    attribute = message ? message[14..-1].split(')')[0] : ''
+    render json: { errors: { attribute: attribute, message: message } }, status: 422
+  end
 
-    resources = Api::Index.new(model_klass).where(filter_params).order(:id)
+  rescue_from ActionController::ParameterMissing do |exception|
+    render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
+  end
+
+  def index
+    filter_params = params[model.name].presence
+
+    resources = Api::Index.new(model).where(filter_params).order(:id)
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
-    render json: { model_name.pluralize => resources, :meta => resources.meta }
+    render json: { model.name.pluralize => resources, :meta => resources.meta }
   end
 
   def show
-    resource = model_klass.find(params[:id])
-    render json: { model_name => decorate(resource) }
+    resource = model.klass.find(params[:id])
+    render json: { model.name => decorate(resource) }
   end
 
   def create
-    resource = model_klass.new(
+    resource = model.klass.new(
       create_params.merge(
         :user_id => api_key.user_id,
         :date_entered => Date.today,
@@ -33,7 +40,7 @@ class Api::V1::ResourcesController < ApplicationController
     )
 
     if resource.save
-      render json: { model_name => decorate(resource) }, status: :created
+      render json: { model.name => decorate(resource) }, status: :created
     else
       errors = resource.errors.messages.map do |attr, messages|
         messages.map do |msg|
@@ -42,6 +49,20 @@ class Api::V1::ResourcesController < ApplicationController
       end.flatten
 
       render json: { errors: errors }, status: 422
+    end
+  end
+
+  def destroy
+    resource = model.klass.find_by(id: params[:id])
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.user != @api_key.user
+      render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
+    elsif resource.published?
+      render json: { reason: 'This resource is already published and irrevocable' }, status: :forbidden
+    else
+      resource.destroy
+      head :no_content
     end
   end
 
@@ -73,18 +94,16 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def require_allowed_model
-    if request.request_method_symbol == :get && !Api.readable_model?(model_name)
+    if request.request_method_symbol == :get && !Api.readable_model?(model.name)
       raise ActionController::RoutingError.new('Not Found')
     end
-    if request.request_method_symbol != :get && !Api.writable_model?(model_name)
+    if request.request_method_symbol != :get && !Api.writable_model?(model.name)
       raise ActionController::RoutingError.new('Not Found')
     end
   end
 
   def require_strictly_correct_params
-    model_attrs = model_klass.attribute_names
-    misnamed_attrs = (params[model_name].try(:keys) || []) - model_attrs
-
+    misnamed_attrs = Api::CreateParams.new(model, params).misnamed_attrs
     if misnamed_attrs.present?
       errors = misnamed_attrs.map do |attr|
         { attribute: attr, message: "Unrecognized attribute name" }
@@ -95,12 +114,8 @@ class Api::V1::ResourcesController < ApplicationController
     true
   end
 
-  def model_name
-    @model_name ||= params.fetch(:plural_model_name).singularize
-  end
-
-  def model_klass
-    @model_klass ||= model_name.classify.constantize
+  def model
+    @model ||= Api::Model.new(params.fetch(:plural_model_name).singularize)
   end
 
   def decorate_collection(resources)
@@ -112,11 +127,7 @@ class Api::V1::ResourcesController < ApplicationController
   end
 
   def create_params
-    blacklisted_attrs = %w(id user_id created_at updated_at date_entered entered_by_whom)
-    model_attrs = model_klass.attribute_names
-    permitted_attrs =  model_attrs - blacklisted_attrs
-
-    params.require(model_name).permit(permitted_attrs)
+    Api::CreateParams.new(model, params).permitted_params
   end
 
 end

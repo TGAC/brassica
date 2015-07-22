@@ -10,6 +10,7 @@
           %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
           %li= link_to "Submitting data", "#submitting-data"
+          %li= link_to "Deleting data", "#deleting-data"
 
           - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
@@ -227,13 +228,72 @@
 
       %p
         Finally, attributes marked as <code>readonly</code> in the attribute
-        tables cannot be directly set (one such example is the <code>population_type</code> of a Plant Population).
-        Instead, one should provide the BIP identifier of a related object when submitting
+        tables cannot be directly set. These include single related resources
+        (one such example is the <code>population_type</code> of a Plant Population).
+        In this case, one should provide the BIP identifier of a related object when submitting
         new data. For instance, when submitting a new Plant Population:
 
       %h4 Example
       %pre.response
         %code= t('api.general.create.examples.wrong_vs_right_related_object')
+
+      %p
+        If the identifier you provide does not exist in the BIP database, the following error will be returned:
+
+      %pre.response
+        %code= t('api.general.create.examples.invalid_foreign_key')
+
+      %p
+        Another case of a <code>readonly</code> attributes may be multiple related
+        resources - for instance, <code>plant_trials_ids</code> of a Plant Population.
+        In such a case, one sets correct relationship when submitting the corresponding
+        resource (i.e., in a reverse fashion). That is, when submitting a new Plant Trial,
+        a correct value of <code>plant_population_id</code> will set the relationship.
+
+      %h3#deleting-data.section-heading Deleting submitted data
+
+      %p
+        The basic data management policy of BIP is that after you submit your data, it
+        becomes public and could be cited as a public resource by other users. However,
+        in reality, mistakes are possible when submitting data, thus this ability to
+        delete submitted resources.
+
+      %p
+        The rule of thumb is that after a successful submission you have exactly <strong>one week</strong>
+        to delete your data. So please take that time to check if all information was
+        delivered correctly. Afterwards, the data is blocked as irrevocably published.
+        In case you'd like to revert such older changes, please contact BIP support
+        team directly.
+
+      %h4 Example
+      %pre
+        %code= t('api.delete.request')
+
+      %p
+        This example shows how to <i>delete</i> the Plant Population with the internal
+        BIP <code>id</code> equal 5555. This may result in several different responses:
+
+      %h4 Examples
+      %ol
+        %li
+          %p Wrong, nonexistent Plant Population
+          %pre.response
+            %code= t('api.delete.examples.no_record_found')
+
+        %li
+          %p API key owner and resource owner are not the same user
+          %pre.response
+            %code= t('api.delete.examples.wrong_owner')
+
+        %li
+          %p The requested resource is already past its revocation period and cannot be deleted anymore
+          %pre.response
+            %code= t('api.delete.examples.already_published')
+
+        %li
+          %p The call was a success, the resource was deleted
+          %pre.response
+            %code= t('api.delete.examples.ok_response')
 
 
       -# Models section follows
@@ -242,7 +302,7 @@
         .section
           %h3.section-heading{id: model.name.underscore.dasherize}= model.name
 
-          .description The following table shows a list of attributes describing this resource
+          .description The following table shows a list of attributes describing this resource:
 
           = api_props('Attributes', "#{model.name.underscore}.attrs")
 

@@ -1,29 +1,17 @@
 class TraitDescriptor < ActiveRecord::Base
 
+  belongs_to :user
+
   has_many :trait_grades
   has_many :trait_scores
   has_many :processed_trait_datasets
 
-  validates :descriptor_label,
-            presence: true,
-            uniqueness: true
-
-  validates :category,
-            presence: true
-
-  validates :descriptor_name,
-            presence: true
-
-  validates :where_to_score,
-            presence: true
-
-  validates :trait_scores_count,
-            presence: true,
-            numericality: true
+  validates :descriptor_name, :category, presence: true
 
   after_update { processed_trait_datasets.each(&:touch) }
 
   include Searchable
+  include AttributeValues
 
   def self.table_data(params = nil)
     trait_descriptor_query = ''
@@ -81,6 +69,10 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.json_options
     { include: [:trait_grades] }
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

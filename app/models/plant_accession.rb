@@ -1,6 +1,7 @@
 class PlantAccession < ActiveRecord::Base
 
   belongs_to :plant_line
+  belongs_to :user
 
   has_many :plant_scoring_units
 
@@ -9,8 +10,8 @@ class PlantAccession < ActiveRecord::Base
             uniqueness: true
 
   validates :year_produced,
-            presence: true,
-            length: { is: 4 }
+            length: { is: 4 },
+            allow_blank: true
 
   include Relatable
   include Filterable
@@ -30,9 +31,6 @@ class PlantAccession < ActiveRecord::Base
       'originating_organisation',
       'year_produced',
       'date_harvested'
-      # TODO FIXME these two have to wait for #204 fix
-      # 'female_parent_plant_id"
-      # 'male_parent_plant_id"
     ]
   end
 
@@ -55,6 +53,10 @@ class PlantAccession < ActiveRecord::Base
     [
       'plant_line_id'
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

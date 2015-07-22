@@ -4,6 +4,7 @@ class MapLocusHit < ActiveRecord::Base
   belongs_to :linkage_group, counter_cache: true
   belongs_to :map_position, counter_cache: true
   belongs_to :population_locus, counter_cache: true
+  belongs_to :user
 
   validates :consensus_group_assignment,
             presence: true
@@ -41,6 +42,12 @@ class MapLocusHit < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'map_positions.map_position'
+    ]
+  end
+
   def self.permitted_params
     [
       :fetch,
@@ -66,5 +73,25 @@ class MapLocusHit < ActiveRecord::Base
 
   def self.json_options
     { except: :map_position }
+  end
+
+  mapping dynamic: 'false' do
+    indexes :consensus_group_assignment
+    indexes :canonical_marker_name
+    indexes :associated_sequence_id
+    indexes :sequence_source_acronym
+    indexes :atg_hit_seq_id
+    indexes :atg_hit_seq_source
+    indexes :bac_hit_seq_id
+    indexes :bac_hit_seq_source
+    indexes :bac_hit_nameindexes
+
+    indexes :map_position, include_in_all: 'false' do
+      indexes :map_position
+    end
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 end

@@ -23,10 +23,10 @@ RSpec.describe Submission do
   end
 
   describe '#submission_type' do
-    let(:submission) { build(:submission) }
+    let(:submission) { build(:submission, :population) }
 
     it 'allows only certain submission type values' do
-      %w(population traits qtl linkage_map).each do |t|
+      %w(population trial qtl linkage_map).each do |t|
         submission.submission_type = t
         expect(submission.valid?).to be_truthy
         expect(submission.send(t+'?')).to be_truthy
@@ -41,20 +41,19 @@ RSpec.describe Submission do
     end
 
     it 'provides handy scopes to query certain types' do
-      # submission.submission_type = :population
-      create(:submission)
+      create(:submission, submission_type: :population)
       create(:submission, submission_type: :qtl)
       create(:submission, submission_type: :qtl)
       expect(Submission.qtl.count).to eq 2
       expect(Submission.population.count).to eq 1
       expect(Submission.linkage_map.count).to eq 0
-      expect(Submission.traits.count).to eq 0
+      expect(Submission.trial.count).to eq 0
     end
   end
 
   describe '#submitted_object' do
     it 'behaves bad with unexpected submission type' do
-      submission = create(:finalized_submission)
+      submission = create(:finalized_submission, :population)
       submission.update_column(:submission_type, 'unexpected')
       expect{ submission.submitted_object }.
         to raise_error NoMethodError
@@ -65,7 +64,7 @@ RSpec.describe Submission do
     end
 
     it 'returns associated object for finalized submissions' do
-      expect(create(:finalized_submission).submitted_object).
+      expect(create(:finalized_submission, :population).submitted_object).
         to eq PlantPopulation.first
     end
   end
@@ -95,7 +94,7 @@ RSpec.describe Submission do
   end
 
   describe '#step_forward' do
-    let(:submission) { create(:submission) }
+    let(:submission) { create(:submission, :population) }
 
     it 'moves one step forward' do
       expect { submission.step_forward }.to change { submission.step }.from('step01').to('step02')
@@ -121,7 +120,7 @@ RSpec.describe Submission do
   end
 
   describe '#finalize' do
-    let(:submission) { create(:submission, finalized: false) }
+    let(:submission) { create(:submission, :population, finalized: false) }
 
     before do
       allow_any_instance_of(Submission::PlantPopulationFinalizer).to receive(:call)
@@ -156,5 +155,35 @@ RSpec.describe Submission do
     end
   end
 
+  describe "#save" do
+    let(:submission) { create(:submission, :trial, finalized: false) }
+
+    before do
+      submission.content.update(:step03, upload_id: 7)
+      submission.content.update(:step04, comments: "Very important comment")
+      submission.save!
+    end
+
+    it "clears step03 of trial submission if step02 content is changed" do
+      expect(submission.content.step03.to_h).not_to be_blank
+      submission.content.update(:step02, trait_descriptor_list: ["trait X"])
+      submission.save!
+      expect(submission.reload.content.step03.to_h).to be_blank
+    end
+
+    it "does not clear step03 of trial submission if step02 content is not changed" do
+      expect(submission.content.step03.to_h).not_to be_blank
+      submission.content.update(:step02, trait_descriptor_list: [])
+      submission.save!
+      expect(submission.reload.content.step03.to_h).not_to be_blank
+    end
+
+    it "leaves step04 of trial submission intact if step02 content is changed" do
+      expect(submission.content.step04.to_h).not_to be_blank
+      submission.content.update(:step02, trait_descriptor_list: ["trait X"])
+      submission.save!
+      expect(submission.reload.content.step04.to_h).not_to be_blank
+    end
+  end
 
 end

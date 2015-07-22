@@ -242,7 +242,11 @@ Devise.setup do |config|
   config.warden do |manager|
     manager.failure_app = Class.new(Devise::FailureApp) do
       def redirect_url
-        request.referrer || root_path
+        if request.referrer.to_s.include?(new_submission_path)
+          request.referrer
+        else
+          root_path
+        end
       end
     end
   end

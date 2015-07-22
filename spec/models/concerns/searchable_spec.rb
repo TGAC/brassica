@@ -6,10 +6,10 @@ RSpec.describe Searchable do
       # Chosen three examples
       proper = {
         only: [
-          :marker_assay_name,
           :map_position
         ],
         include: {
+          marker_assay: { only: [:marker_assay_name] },
           population_locus: { only: [:mapping_locus] },
           linkage_group: { only: [:linkage_group_label] }
         }

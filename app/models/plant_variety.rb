@@ -1,5 +1,7 @@
 class PlantVariety < ActiveRecord::Base
 
+  belongs_to :user
+
   has_and_belongs_to_many :countries_of_origin,
                           class_name: 'Country',
                           join_table: 'plant_variety_country_of_origin'
@@ -53,6 +55,10 @@ class PlantVariety < ActiveRecord::Base
     {
       include: [:countries_of_origin, :countries_registered]
     }
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

@@ -22,8 +22,30 @@ RSpec.describe Submission::Content do
       expect(submission.content.step02.plant_line).to eq 'Baz'
     end
 
+    it "skips blank values in arrays" do
+      content.update(:step02, plant_line_list: ['', 'Baz', 'Blah'])
+      expect(submission.content.step02.plant_line_list).to eq ['Baz', 'Blah']
+    end
+
     it "raises with invalid step" do
       expect { content.update(:step_fiz, {}) }.to raise_error(Submission::InvalidStep, "No step step_fiz")
+    end
+
+    it 'preserves older keys with no new values' do
+      content.update(:step01, description: 'New, updated value')
+      expect(submission.content.step01.name).to eq 'Bar'
+      expect(submission.content.step01.description).to eq 'New, updated value'
+    end
+  end
+
+  context "#clear" do
+    it "updates submission" do
+      content.clear(:step01)
+      expect(submission.content.step01.to_h).to eq({})
+    end
+
+    it "raises with invalid step" do
+      expect { content.clear(:step_fiz) }.to raise_error(Submission::InvalidStep, "No step step_fiz")
     end
   end
 end

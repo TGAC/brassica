@@ -8,13 +8,16 @@ class PlantPopulation < ActiveRecord::Base
              foreign_key: 'female_parent_line_id'
   belongs_to :user
 
-  has_many :plant_population_lists
-  has_many :linkage_maps
-  has_many :population_loci
-  has_many :plant_trials
+  has_many :linkage_maps,
+           dependent: :nullify
+  has_many :population_loci,
+           dependent: :nullify
+  has_many :plant_trials,
+           dependent: :nullify
 
-  has_and_belongs_to_many :plant_lines,
-                          join_table: 'plant_population_lists'
+  has_many :plant_population_lists, dependent: :delete_all
+  has_many :plant_lines,
+           through: :plant_population_lists
 
   validates :name,
             presence: true,
@@ -78,6 +81,11 @@ class PlantPopulation < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
+      search: [
+        'name',
+        'canonical_population_name',
+        'description'
+      ],
       query: [
         'id',
         'name',
@@ -92,6 +100,10 @@ class PlantPopulation < ActiveRecord::Base
       'female_parent_line_id',
       'male_parent_line_id'
     ]
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

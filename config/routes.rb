@@ -11,13 +11,15 @@ Rails.application.routes.draw do
   root 'application#index'
   get 'about', to: 'application#about'
   get 'api_documentation', to: 'application#api'
-
-  # TODO FIXME Just for deployment testing, remove later
   get 'make_me_an_error', to: 'application#make_me_an_error'
 
-  resources :submissions
+  resources :submissions do
+    resources :uploads, controller: 'submissions/uploads', only: [:create, :destroy]
+  end
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]
+  resources :plant_populations, only: [:index]
+  resources :trait_descriptors, only: [:index]
   resources :data_tables, only: [:index, :show]
 
   get 'search', to: 'searches#counts'
@@ -42,6 +44,7 @@ Rails.application.routes.draw do
       get ":plural_model_name", to: 'resources#index', constraints: get_constraints
       get ":plural_model_name/:id", to: 'resources#show', constraints: get_constraints
       post ":plural_model_name", to: 'resources#create', constraints: post_constraints
+      delete ":plural_model_name/:id", to: 'resources#destroy', constraints: post_constraints
     end
   end
 end

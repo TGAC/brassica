@@ -14,7 +14,10 @@ FactoryGirl.define do
         plant_line_registry.fathered_descendants = build_list(:plant_population, 2, male_parent_line_id: evaluator.id)
         plant_line_registry.mothered_descendants = build_list(:plant_population, 2, female_parent_line_id: evaluator.id)
         plant_line_registry.plant_accessions = build_list(:plant_accession, 2, plant_line_id: evaluator.id)
-        plant_line_registry.plant_populations = build_list(:plant_population, 2)
+        # plant_line_registry.plant_populations = build_list(:plant_population, 2)
+
+        plant_line_registry.plant_population_lists =
+          build_list(:plant_population_list, 2, plant_line_id: evaluator.id)
       end
     end
   end

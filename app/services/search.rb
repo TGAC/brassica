@@ -1,110 +1,86 @@
 class Search
 
-  attr_accessor :query
+  attr_accessor :query, :wildcarded_query
 
-  def initialize(query)
-    self.query = prepare_query(query.dup)
+  def self.searchables
+    return @searchables if defined?(@searchables)
+    @searchables = {}.tap do |searchables|
+      Searchable.classes.each do |klass|
+        searchables[klass.table_name.to_sym] = klass
+      end
+    end
   end
 
-  def counts
-    {
-      plant_populations: plant_populations.count,
-      plant_lines: plant_lines.count,
-      plant_varieties: plant_varieties.count,
-      map_locus_hits: map_locus_hits.count,
-      map_positions: map_positions.count,
-      population_loci: population_loci.count,
-      linkage_maps: linkage_maps.count,
-      linkage_groups: linkage_groups.count,
-      marker_assays: marker_assays.count,
-      primers: primers.count,
-      probes: probes.count,
-      plant_trials: plant_trials.count,
-      qtl: qtl.count,
-      trait_descriptors: trait_descriptors.count
-    }
+  def initialize(query)
+    query = escape_query_special_chars(query.dup)
+
+    self.query = query
+    self.wildcarded_query = add_query_wildcards(query)
   end
 
   def all
-    {
-      plant_populations: plant_populations,
-      plant_lines: plant_lines,
-      plant_varieties: plant_varieties,
-      map_locus_hits: map_locus_hits,
-      map_positions: map_positions,
-      population_loci: population_loci,
-      linkage_maps: linkage_maps,
-      linkage_groups: linkage_groups,
-      marker_assays: marker_assays,
-      primers: primers,
-      probes: probes,
-      plant_trials: plant_trials,
-      qtl: qtl,
-      trait_descriptors: trait_descriptors
-    }
+    {}.tap do |all|
+      self.class.searchables.keys.each do |table|
+        all[table] = results(table)
+      end
+    end
   end
 
-  def plant_populations
-    PlantPopulation.search(query, size: PlantPopulation.count)
+  def counts
+    {}.tap do |counts|
+      self.class.searchables.keys.each do |table|
+        counts[table] = results(table).count
+      end
+    end
   end
 
-  def plant_lines
-    PlantLine.search(query, size: PlantLine.count)
+  def results(table)
+    if numeric_query? && numeric_columns?(table)
+      filter(table)
+    else
+      search(table)
+    end
   end
 
-  def plant_varieties
-    PlantVariety.search(query, size: PlantVariety.count)
+  def search(table)
+    klass = self.class.searchables[table]
+    klass.search(wildcarded_query, size: klass.count)
   end
 
-  def map_locus_hits
-    MapLocusHit.search(query, size: MapLocusHit.count)
-  end
+  def filter(table)
+    klass = self.class.searchables[table]
 
-  def map_positions
-    MapPosition.search(query, size: MapPosition.count)
-  end
+    klass.search(
+      filter: {
+        or: klass.numeric_columns.map { |column|
+          if column.include?(".")
+            parts = column.split(".")
+            *tables, column = parts
+            # NOTE this is only valid for *-1 relationships (not for 1-* or *-*)
+            tables = tables.map(&:singularize)
+            column = (tables | [column]).join(".")
+          end
 
-  def population_loci
-    PopulationLocus.search(query, size: PopulationLocus.count)
-  end
-
-  def linkage_groups
-    LinkageGroup.search(query, size: LinkageGroup.count)
-  end
-
-  def linkage_maps
-    LinkageMap.search(query, size: LinkageMap.count)
-  end
-
-  def marker_assays
-    MarkerAssay.search(query, size: MarkerAssay.count)
-  end
-
-  def primers
-    Primer.search(query, size: Primer.count)
-  end
-
-  def probes
-    Probe.search(query, size: Probe.count)
-  end
-
-  def plant_trials
-    PlantTrial.search(query, size: PlantTrial.count)
-  end
-
-  def qtl
-    Qtl.search(query, size: Qtl.count)
-  end
-
-  def trait_descriptors
-    TraitDescriptor.search(query, size: TraitDescriptor.count)
+          { term: { column => query } }
+        }
+      },
+      size: klass.count
+    )
   end
 
   private
 
-  def prepare_query(query)
-    query = escape_query_special_chars(query)
-    add_query_wildcards(query)
+  def method_missing(name, *args, &block)
+    if self.class.searchables.keys.include?(name.to_sym)
+      raise ArgumentError, "No args expected" if args.present?
+      results(name.to_sym)
+    else
+      super
+    end
+  end
+
+  def respond_to_missing?(name, include_private = false)
+    self.class.searchables.keys.include?(name.to_sym) or super
   end
 
   def escape_query_special_chars(query)
@@ -118,5 +94,13 @@ class Search
 
   def special_chars
     %w(: [ ] ( ) { } + - ~ < = > ^ \ / && || ! " * ?)
+  end
+
+  def numeric_query?
+    query =~ /\A-?\d+(\.\d+)?\z/
+  end
+
+  def numeric_columns?(table)
+    self.class.searchables[table].numeric_columns.present?
   end
 end

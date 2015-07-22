@@ -11,6 +11,7 @@ FactoryGirl.define do
     design_factor
     plant_part
     plant_accession
+    user
     annotable
   end
 end

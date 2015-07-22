@@ -47,6 +47,9 @@ module ApplicationHelper
         prop[:format] = I18n.t("api.default.attrs.#{prop[:name]}.format", default: 'string')
       end
       prop[:desc] = I18n.t("api.default.attrs.#{prop[:name]}.desc") unless prop[:desc]
+      unless prop[:create]
+        prop[:create] = I18n.t("api.default.attrs.#{prop[:name]}.create", default: '')
+      end
     end
 
     if interpolations

@@ -19,7 +19,7 @@ en:
                   ...
                 },
                 ...
-                "linkage_maps_ids": [8]
+                "linkage_map_ids": [8]
               }
             }
 
@@ -62,6 +62,19 @@ en:
                 "population_type_id": 1,  # RIGHT
                 ...
               }
+            }
+
+          invalid_foreign_key: |-
+            HTTP/1.1 422 Unprocessable Entity
+            Content-Type: application/json
+
+            {
+              "errors": [
+                {
+                  "attribute": "plant_population_id",
+                  "message": "DETAIL:  Key (plant_population_id)=(1000000) is not present in table \"plant_populations\"."
+                }
+              ]
             }
 
 
@@ -167,10 +180,44 @@ en:
           }
         }
 
+    delete:
+      request: |-
+        DELETE /api/v1/plant_populations/5555 HTTP/1.1
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+      examples:
+        ok_response: |-
+          HTTP/1.1 204 No Content
+
+        no_record_found: |-
+          HTTP/1.1 404 Not Found
+          Content-Type: application/json
+
+          {
+            "reason": "Resource not found"
+          }
+
+        wrong_owner: |-
+          HTTP/1.1 401 Unauthorized
+          Content-Type: application/json
+
+          {
+            "reason": "API key owner and resource owner mismatch"
+          }
+
+        already_published: |-
+          HTTP/1.1 403 Forbidden
+          Content-Type: application/json
+
+          {
+            "reason": "This resource is already published and irrevocable"
+          }
+
     default:
       attrs:
         id:
           format: int
+          create: readonly, Q
           desc: Unique BIP database identifier
         comments:
           desc: Additional note from the person who published this data
@@ -201,11 +248,35 @@ en:
           Accept: application/json
           X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
+    country:
+      attrs:
+        -
+          name: id
+        -
+          name: country_code
+          format: string
+          desc: ISO 3166-1 alpha-3 code of this Country
+        -
+          name: country_name
+          format: string
+          desc: Name of this Country in English
+        -
+          name: plant_trial_ids
+          format: int[]
+          desc: Zero or more BIP identifiers of Plant Trials which took place in this Country
+        -
+          name: originating_plant_variety_ids
+          format: int[]
+          desc: Zero or more BIP identifiers of Plant Varieties originating in this Country
+        -
+          name: registered_plant_variety_ids
+          format: int[]
+          desc: Zero or more BIP identifiers of Plant Varieties registered in this Country
+
     plant_line:
       attrs:
         -
           name: id
-          create: Q
         -
           name: plant_line_name
           create: required, Q
@@ -224,7 +295,7 @@ en:
         -
           name: genetic_status
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Design method used to obtain this population line (i.e. open pollinated, inbred, substitution lines)
         -
           name: previous_line_name
           create: Q
@@ -248,21 +319,34 @@ en:
           format: int
           desc: BIP identifier of the Plant Variety which this Plant Line is classified as
         -
-          name: fathered_descendants_ids
+          name: plant_variety_name
+          create: readonly
+          desc: Legacy Plant Variety name (pending curation)
+        -
+          name: fathered_descendant_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the male line
         -
-          name: mothered_descendants_ids
+          name: mothered_descendant_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the female line
         -
-          name: plant_accessions_ids
+          name: plant_accession_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of related Plant Accessions
         -
-          name: plant_populations_ids
+          name: plant_population_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Populations bred in this Plant Line
+        -
+          name: plant_population_list_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
 
       create:
         example: |-
@@ -281,7 +365,6 @@ en:
       attrs:
         -
           name: id
-          create: Q
         -
           name: name
           create: required, Q
@@ -290,7 +373,8 @@ en:
           name: data_owned_by
         -
           name: population_type
-          format: object, readonly
+          format: object
+          create: readonly
           desc: Additional information about the type of this population
         -
           name: description
@@ -298,13 +382,13 @@ en:
         -
           name: date_established
           format: date
-          desc: TODO FIXME ASK TGAC
+          desc: Year of population introduction
         -
           name: established_by_whom
-          desc: TODO FIXME ASK TGAC
+          desc: The person, if known, who introduced this population
         -
           name: establishing_organisation
-          desc: TODO FIXME ASK TGAC
+          desc: Legal entity that introduced this population
         -
           name: population_owned_by
           desc: Name of the legal entity which owns this population
@@ -335,21 +419,30 @@ en:
           format: int
           desc: BIP identifier of the Plant Line which this population descends from in the female line
         -
-          name: linkage_maps_ids
+          name: linkage_map_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Linkage Maps defined for this population
         -
-          name: population_loci_ids
+          name: population_locus_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Population Loci published for this population up until the present date
         -
-          name: plant_trials_ids
+          name: plant_trial_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of trait Plant Trials performed for this population until the present date
         -
-          name: plant_lines_ids
+          name: plant_line_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines that this population is associated with
+        -
+          name: plant_population_list_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
 
       create:
         example: |-
@@ -364,19 +457,59 @@ en:
             }
           }
 
+
+    plant_population_list:
+      attrs:
+        -
+          name: sort_order
+          desc: '-'
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: plant_population_id
+          format: int
+          create: required
+          desc: BIP identifier of the Plant Population related to this list
+        -
+          name: plant_line_id
+          format: int
+          create: required
+          desc: BIP identifier of the Plant Line related to this list
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_population_list": {
+              "plant_population_id": 5,
+              "plant_line_id": 78
+            }
+          }
+
     plant_variety:
       attrs:
         -
           name: id
-          create: Q
         -
           name: plant_variety_name
-          create: Q
+          create: required, Q
           desc: The name of this variety provided either by the person submitting the data or the database curator
         -
           name: crop_type
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Crop type of this variety (e.g. kale, swede, rape etc.)
         -
           name: comments
         -
@@ -416,15 +549,41 @@ en:
         -
           name: countries_of_origin
           format: object[]
+          create: readonly
           desc: Zero or more JSON documents listing countries that this variety originates from
+        -
+          name: countries_of_origin_ids
+          format: int[]
+          create: writeonly
+          desc: Zero or more BIP identifiers of countries that this variety originates from
         -
           name: countries_registered
           format: object[]
+          create: readonly
           desc: Zero or more JSON documents listing countries that this variety is registered in
         -
-          name: plant_lines_ids
+          name: countries_registered_ids
+          format: int[]
+          create: writeonly
+          desc: Zero or more BIP identifiers of countries that this variety is registered in
+        -
+          name: plant_line_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Lines classified under this plant variety
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_variety": {
+              "plant_variety_name": "BIPrassica"
+            }
+          }
 
     taxonomy_term:
       attrs:
@@ -445,15 +604,15 @@ en:
           format: boolean
           desc: Set to true if the term is defined in Gramene Taxonomy; false otherwise
         -
-          name: plant_lines_ids
+          name: plant_line_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Lines classified under this term
         -
-          name: plant_populations_ids
+          name: plant_population_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Populations classified under this term
         -
-          name: probes_ids
+          name: probe_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Probes classified under this term
 
@@ -461,27 +620,26 @@ en:
       attrs:
         -
           name: id
-          create: Q
         -
           name: linkage_group_label
-          create: Q
+          create: required, Q
           desc: The label given to this linkage group by the database curator
         -
           name: linkage_group_name
-          create: Q
+          create: required, Q
           desc: Unique name of this linkage group
         -
           name: total_length
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Total length of this linkage group in centimorgan (cM)
         -
           name: lod_threshold
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: The threshold of LOD score of similarity for this linkage group
         -
           name: consensus_group_assignment
-          create: Q
-          desc: TODO FIXME ASK TGAC
+          create: required, Q
+          desc: Consensus group identification (e.g. A01, C09) in accordance with community naming standards
         -
           name: consensus_group_orientation
           create: Q
@@ -499,38 +657,55 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: linkage_maps_ids
-          format: "int[]"
-          desc: Zero or more BIP identifiers of Linkage Maps related to this group
+          name: linkage_map_id
+          format: "int"
+          desc: BIP identifier of the Linkage Maps this group belongs to
         -
-          name: map_positions_ids
+          name: map_position_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Map Positions related to this group
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Map Locus Hits related to this group
         -
-          name: qtls_ids
+          name: qtl_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Quantitative Trait Loci related to this group
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "linkage_group": {
+              "linkage_group_label": "2015_group1",
+              "linkage_group_name": "NG2",
+              "consensus_group_assignment": "C02"
+            }
+          }
 
     linkage_map:
       attrs:
         -
           name: id
-          create: Q
         -
           name: linkage_map_label
-          create: Q
+          create: required, Q
           desc: Label assigned to this linkage map by the database curator
         -
           name: linkage_map_name
-          create: Q
+          create: required, Q
           desc: Unique name of this linkage map
         -
           name: map_version_no
-          create: Q
+          create: required, Q
           desc: Descriptive number of this linkage map's version
         -
           name: map_version_date
@@ -566,35 +741,56 @@ en:
           format: int
           desc: BIP identifier of the Plant Population for which this linkage map was created
         -
-          name: linkage_groups_ids
+          name: linkage_group_ids
           format: "int[]"
-          desc: Zero or more BIP identifiers of Linkage Groups related to this map
+          create: readonly
+          desc: Zero or more BIP identifiers of Linkage Groups belonging to this map
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Map Locus Hits related to this map
+        -
+          name: qtl_job_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Qtl Jobs that computed elements of this map
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "linkage_map": {
+              "linkage_map_label": "2015_group1",
+              "linkage_map_name": "B rapa map 2015",
+              "map_version_no": "2"
+            }
+          }
 
     map_locus_hit:
       attrs:
         -
           name: id
-          create: Q
         -
           name: consensus_group_assignment
-          create: Q
-          desc: TODO FIXME ASK TGAC
+          create: required, Q
+          desc: Consensus group identification (e.g. A01, C09) in accordance with community naming standards
         -
           name: canonical_marker_name
-          create: Q
-          desc: TODO FIXME ASK TGAC
+          create: required, Q
+          desc: Marker assay related to this map locus hit
         -
           name: associated_sequence_id
-          create: Q
-          desc: TODO FIXME ASK TGAC
+          create: required, Q
+          desc: Identifier of the nucleotide sequence related to this hit in external database
         -
           name: sequence_source_acronym
-          create: Q
-          desc: TODO FIXME ASK TGAC
+          create: required, Q
+          desc: Name of the external database where to look for the associated nucleotide sequence
         -
           name: atg_hit_seq_id
           create: Q
@@ -606,15 +802,15 @@ en:
         -
           name: bac_hit_seq_id
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Identification of sequence obtained with bacterial artificial chromosome (BAC) method
         -
           name: bac_hit_seq_source
           create: Q
-          desc: Indication about the source of the sequence (usually NCBI services)
+          desc: Indication about the source of the BAC sequence (usually NCBI services)
         -
           name: bac_hit_name
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Brassica BAC clone identifier as used in the linked external database
         -
           name: linkage_map_id
           format: int
@@ -632,19 +828,30 @@ en:
           format: int
           desc: BIP identifier of the Map Position of this locus hit
 
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "map_locus_hit": {
+              "consensus_group_assignment": "C02",
+              "canonical_marker_name": "PW177",
+              "associated_sequence_id": "1",
+              "sequence_source_acronym": "NCBI_GSS"
+            }
+          }
+
     map_position:
       attrs:
         -
           name: id
-          create: Q
         -
           name: map_position
-          create: Q
+          create: required, Q
           desc: Position identifier
-        -
-          name: marker_assay_name
-          create: Q
-          desc: Associated name of a marker assay as assigned by the database curator
         -
           name: comments
         -
@@ -658,6 +865,10 @@ en:
         -
           name: confirmed_by_whom
         -
+          name: marker_assay_id
+          format: int
+          desc: BIP identifier of the associated Marker Assay
+        -
           name: linkage_group_id
           format: int
           desc: BIP identifier of the Linkage Group this map position is listed in
@@ -666,22 +877,35 @@ en:
           format: int
           desc: BIP identifier of the Population Locus for this map position
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Map Locus Hits related to this position
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "map_position": {
+              "map_position": "102.5"
+            }
+          }
 
     marker_assay:
       attrs:
         -
           name: id
-          create: Q
         -
           name: marker_assay_name
-          create: Q
+          create: required, Q
           desc: Unique name assigned to this marker assay by the data contributor or database curator
         -
           name: canonical_marker_name
-          create: Q
+          create: required, Q
           desc: Canonical name for this assay as assigned by the database curator
         -
           name: marker_type
@@ -716,23 +940,42 @@ en:
           format: int
           desc: BIP identifier of the Primer associated with this marker assay (3` end)
         -
-          name: population_loci_ids
+          name: population_locus_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Population Locus related to this marker assay
+        -
+          name: map_position_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Map Positions related to this marker assay
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "marker_assay": {
+              "marker_assay_name": "My marker assay name",
+              "canonical_marker_name": "Mma"
+            }
+          }
 
     plant_accession:
       attrs:
         -
           name: id
-          create: Q
         -
           name: plant_accession
-          create: Q
-          desc: Unique name given to this accession by the database curator
+          create: required, Q
+          desc: Unique name given to this accession
         -
           name: plant_accession_derivation
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: What is the source of plant accession information (for instance, an experiment)
         -
           name: accession_originator
           create: Q
@@ -767,31 +1010,44 @@ en:
           format: int
           desc: BIP identifier of the associated Plant Line
         -
-          name: plant_scoring_units_ids
+          name: plant_scoring_unit_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units performed for this plant
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_accession": {
+              "plant_accession": "Accession1"
+            }
+          }
 
     plant_scoring_unit:
       attrs:
         -
           name: id
-          create: Q
         -
           name: scoring_unit_name
-          create: Q
+          create: required, Q
           desc: Unique name assigned to this scoring unit by the person who submitted the data
         -
           name: number_units_scored
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: Number of units scored for this particual scoring scenario
         -
           name: scoring_unit_sample_size
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: The size of the scored unit
         -
           name: scoring_unit_frame_size
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: The size of the scored unit
         -
           name: date_planted
           format: date
@@ -826,22 +1082,35 @@ en:
           format: int
           desc: BIP identifier of the Plant Trial in the scope of which this plant scoring took place
         -
-          name: trait_scores_ids
+          name: trait_score_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Trait Scores recorded in this scoring unit
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_scoring_unit": {
+              "scoring_unit_name": "Scoring2_2016"
+            }
+          }
 
     plant_trial:
       attrs:
         -
           name: id
-          create: Q
         -
           name: plant_trial_name
-          create: Q
+          create: required, Q
           desc: Unique name assigned to this scoring trial by the person who submitted the data
         -
           name: project_descriptor
-          create: Q
+          create: required, Q
           desc: Name of the project that undertook the trial
         -
           name: plant_trial_description
@@ -913,18 +1182,32 @@ en:
           format: int
           desc: BIP identifier of the plant population that was the subject of this trial
         -
-          name: plant_scoring_units_ids
+          name: plant_scoring_unit_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units recorded during this trial
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "plant_trial": {
+              "plant_trial_name": "BIPrassica Trial Spring 2016",
+              "project_descriptor": "BIPrassica Project"
+            }
+          }
 
     population_locus:
       attrs:
         -
           name: id
-          create: Q
         -
           name: mapping_locus
-          create: Q
+          create: required, Q
           desc: Unique name assigned to this population locus by the person submitting the data
         -
           name: defined_by_whom
@@ -949,26 +1232,40 @@ en:
           format: int
           desc: BIP identifier of the marker assay associated with this locus
         -
-          name: map_positions_ids
+          name: map_position_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of map positions associated with this locus
         -
-          name: map_locus_hits_ids
+          name: map_locus_hit_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Map Locus Hits associated with this locus
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "population_locus": {
+              "mapping_locus": "A07.790"
+            }
+          }
 
     primer:
       attrs:
         -
           name: id
-          create: Q
         -
           name: primer
-          create: Q
+          create: required, Q
           desc: Unique name that identifies this primer
         -
           name: sequence
-          create: Q
+          create: required, Q
           desc: Exact sequence of the primer
         -
           name: description
@@ -987,32 +1284,47 @@ en:
         -
           name: marker_assays_a_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of marker assays related to that primer (5` end)
         -
           name: marker_assays_b_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of marker assays related to that primer (3` end)
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "primer": {
+              "primer": "pr3_ENA3",
+              "sequence": "GTCAAGTTTCTCTCCACACC"
+            }
+          }
 
     probe:
       attrs:
         -
           name: id
-          create: Q
         -
           name: probe_name
-          create: Q
+          create: required, Q
           desc: Unique name that identifies this probe
         -
           name: clone_name
-          create: Q
-          desc: TODO FIXME ASK TGAC
+          create: required, Q
+          desc: Clone type (e.g. genomic survey sequence GSS, expressed sequence tag EST,  or similar)
         -
           name: sequence_id
-          create: Q
+          create: required, Q
           desc: Identifier of the probe sequence
         -
           name: sequence_source_acronym
-          create: Q
+          create: required, Q
           desc: Name of the source database where the probe sequence can be obtained
         -
           name: date_described
@@ -1030,22 +1342,38 @@ en:
           format: int
           desc: BIP identifier of the Taxonomy Term this probe is related to
         -
-          name: marker_assays_ids
+          name: marker_assay_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of marker assays related to this probe
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "probe": {
+              "probe_name": "pR60",
+              "clone_name": "pR60",
+              "sequence_id": "70814396",
+              "sequence_source_acronym": "NCBI_GSS"
+            }
+          }
 
     qtl:
       attrs:
         -
           name: id
-          create: Q
         -
           name: qtl_rank
-          create: Q
-          desc: TODO FIXME ASK TGAC
+          create: required, Q
+          desc: Order of QTL on an associated linkage group
         -
           name: map_qtl_label
-          create: Q
+          create: required, Q
           desc: Label assigned to this QTL
         -
           name: outer_interval_start
@@ -1065,32 +1393,32 @@ en:
           desc: End location of the mapped inner QTL interval (interpretation depends on the used interval mapping method)
         -
           name: qtl_mid_position
-          create: Q
+          create: required, Q
           desc: Position used for mapping this QTL
         -
           name: peak_value
           create: Q
-          desc: Peak probability value for the QTL intervals represented by this record
+          desc: Peak probability value for the QTL intervals represented by this record (QTL curve peak value)
         -
           name: peak_p_value
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: regression_p
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: residual_p
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: additive_effect
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: genetic_variance_explained
           create: Q
-          desc: TODO FIXME ASK TGAC
+          desc: '-'
         -
           name: comments
         -
@@ -1113,22 +1441,36 @@ en:
           format: int
           desc: BIP identifier of the Linkage Group that this QTL is associated with
 
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "qtl": {
+              "qtl_rank": "7",
+              "map_qtl_label": "Mg-f-mr",
+              "qtl_mid_position": "52.96"
+            }
+          }
+
     qtl_job:
       attrs:
         -
           name: id
-          create: Q
         -
           name: qtl_job_name
-          create: Q
+          create: required, Q
           desc: Name assigned to this QTL job by the database curator
         -
           name: qtl_software
-          create: Q
+          create: required, Q
           desc: Software used to obtain the associated QTLs in this QTL job
         -
           name: qtl_method
-          create: Q
+          create: required, Q
           desc: Algorithm used to map QTL intervals
         -
           name: threshold_specification_method
@@ -1169,9 +1511,29 @@ en:
         -
           name: data_provenance
         -
-          name: qtls_ids
+          name: linkage_map_id
+          format: int
+          desc: BIP identifier of the Linkage Map computed using this algorithm execution
+        -
+          name: qtl_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of QTLs that were defined as a result of this QTL job execution
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "qtl_job": {
+              "qtl_job_name": "My first QTL run",
+              "qtl_software": "QTL Cafe",
+              "qtl_method": "Marker regression"
+            }
+          }
 
     trait_descriptor:
       attrs:
@@ -1182,9 +1544,11 @@ en:
           desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
+          create: required, Q
           desc: Plant trait category described by this this descriptor
         -
           name: descriptor_name
+          create: required, Q
           desc: Common name used to describe the trait
         -
           name: units_of_measurements
@@ -1252,18 +1616,32 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: trait_scores_ids
+          name: trait_score_ids
           format: "int[]"
+          create: readonly
           desc: Zero or more BIP identifiers of Trait Scores measured for this plant trait in various projects
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "trait_descriptor": {
+              "descriptor_name": "Invisible trait",
+              "category": "Metaphysical"
+            }
+          }
 
     trait_score:
       attrs:
         -
           name: id
-          create: Q
         -
           name: score_value
-          create: Q
+          create: required, Q
           desc: Value measured and recorded in the trial
         -
           name: value_type
@@ -1295,6 +1673,19 @@ en:
           format: int
           desc: BIP identifier of the Trait Descriptor that provides more information about the scored trait
 
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "trait_score": {
+              "score_value": "1000"
+            }
+          }
+
     population_type:
       attrs:
         -
@@ -1309,6 +1700,6 @@ en:
           name: assigned_by_whom
           desc: Assignee of this population type
         -
-          name: plant_populations_ids
+          name: plant_population_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Populations that are of this population type

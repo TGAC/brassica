@@ -2,8 +2,9 @@ class PlantTrial < ActiveRecord::Base
 
   belongs_to :plant_population, counter_cache: true
   belongs_to :country
+  belongs_to :user
 
-  has_many :plant_scoring_units
+  has_many :plant_scoring_units, dependent: :destroy
   has_many :processed_trait_datasets
 
   validates :plant_trial_name,
@@ -13,35 +14,11 @@ class PlantTrial < ActiveRecord::Base
   validates :project_descriptor,
             presence: true
 
-  validates :plant_trial_description,
-            presence: true
-
-  validates :trial_year,
-            presence: true,
-            length: { is: 4 }
-
-  validates :institute_id,
-            presence: true
-
-  validates :trial_location_site_name,
-            presence: true
-
-  validates :place_name,
-            presence: true
-
-  validates :latitude,
-            presence: true
-
-  validates :longitude,
-            presence: true
-
-  validates :contact_person,
-            presence: true
-
   include Relatable
   include Filterable
   include Pluckable
   include Searchable
+  include AttributeValues
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -87,6 +64,10 @@ class PlantTrial < ActiveRecord::Base
 
   def self.json_options
     { include: [:country] }
+  end
+
+  def published?
+    updated_at < Time.now - 1.week
   end
 
   include Annotable

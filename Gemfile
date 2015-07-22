@@ -32,6 +32,7 @@ gem 'obo'
 gem 'hashie'
 gem 'draper', '~> 2.1.0'
 gem 'kaminari'
+gem 'paperclip', '~> 4.2.0'
 
 gem 'cookies_eu'
 
@@ -56,6 +57,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'pry-nav'
+  gem 'thin'
 end
 
 group :test do

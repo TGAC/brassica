@@ -1,4 +1,5 @@
 require 'rails_helper'
+nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit]
 
 RSpec::Matchers.define :display_column do |expected|
   match do |actual|
@@ -14,9 +15,9 @@ RSpec.describe ActiveRecord::Base do
     Rails.application.eager_load!
   end
 
-  it 'defines table, count and ref columns as strings only' do
+  it 'defines table, count, ref and numeric columns as strings only' do
     ActiveRecord::Base.descendants.each do |model|
-      [:table_columns, :ref_columns, :count_columns].each do |columns_type|
+      [:table_columns, :ref_columns, :count_columns, :numeric_columns].each do |columns_type|
         if model.respond_to? columns_type
           expect(model.send(columns_type)).to all be_an(String)
         end
@@ -33,12 +34,35 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
+  it 'nullifies all belongs_to relations on destroy' do
+    Api.writable_models.each do |model_klass|
+      next if nullify_exclusions.include? model_klass # Some classes are not expected to follow this rule.
+      instance = create(model_klass)
+      (all_belongs_to(model_klass) - [:user]).each do |belongs_to|
+        unless instance.send("#{belongs_to}_id").nil?
+          instance.send(belongs_to).destroy
+          expect(instance.reload.send("#{belongs_to}_id")).to be_nil
+        end
+      end
+    end
+  end
+
+  it 'prevents assignment of invalid foreign keys' do
+    Api.writable_models.each do |model_klass|
+      instance = create(model_klass)
+      all_belongs_to(model_klass).each do |belongs_to|
+        expect{ instance.update("#{belongs_to}_id" => 555666) }.
+          to raise_error ActiveRecord::InvalidForeignKey
+      end
+    end
+  end
+
   context 'when model supports elastic search' do
     before(:all) do
       @searchables = searchable_models
     end
 
-    it 'ensures searchable_models helper do not make fools of us' do
+    it 'ensures searchable_models helper does not make fools of us' do
       expect(@searchables).not_to be_empty
     end
 
@@ -91,5 +115,10 @@ RSpec.describe ActiveRecord::Base do
         expect(c).not_to include('(')
       end
     end
+  end
+
+  it 'includes all numeric columns in table columns' do
+    pending
+    fail
   end
 end

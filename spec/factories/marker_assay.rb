@@ -5,6 +5,7 @@ FactoryGirl.define do
     separation_system { Faker::Lorem.words(3) }
     marker_type { Faker::Lorem.word }
     annotable
+    user
     probe
     association :primer_a, factory: :primer
     association :primer_b, factory: :primer
