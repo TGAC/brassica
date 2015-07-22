@@ -93,7 +93,9 @@ module Submissions
       end
 
       def new_plant_lines
-        super || []
+        (super || []).select do |plant_line|
+          plant_line_list.include?(plant_line.plant_line_name)
+        end
       end
     end
   end
