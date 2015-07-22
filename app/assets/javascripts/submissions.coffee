@@ -1,5 +1,5 @@
 class Submission
-  @makeAjaxSelectOptions: (url, id_attr, text_attr) =>
+  @makeAjaxSelectOptions: (url, id_attr, text_attr, small_text_attr) =>
     text_attr ||= id_attr
 
     allowClear: true
@@ -14,9 +14,12 @@ class Submission
         search: search
         page: params.page
       processResults: (data, page) ->
-        results: $.map(data, (row) -> { id: row[id_attr], text: row[text_attr] })
+        results: $.map(data, (row) -> { id: row[id_attr], text: row[text_attr], small_text: row[small_text_attr] })
     escapeMarkup: (markup) -> markup
-    templateResult: (item) -> item.text
+    templateResult: (item) ->
+      result = item.text
+      result += "<br/><small>#{item.small_text}</small>" if item.small_text
+      result
     templateSelection: (item) -> item.text
 
   @makeAjaxListSelectOptions: (url, id_attr, text_attr) =>
@@ -37,9 +40,9 @@ class Submission
 
 class PopulationSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
-  plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name')
-  plantLineListSelectOptions: @makeAjaxListSelectOptions('/plant_lines', 'id', 'plant_line_name')
-  plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name')
+  plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name', 'plant_line_name', 'common_name')
+  plantLineListSelectOptions: @makeAjaxListSelectOptions('/plant_lines', 'id', 'plant_line_name', 'common_name')
+  plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name', 'plant_variety_name', 'crop_type')
 
   bind: =>
     @$('.taxonomy-term').select2(@defaultSelectOptions)
@@ -123,7 +126,7 @@ class PopulationSubmission extends Submission
 
 class TrialSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
-  plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name')
+  plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name', 'description')
   traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name')
 
   bind: =>
