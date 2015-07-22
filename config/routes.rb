@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   root 'application#index'
   get 'about', to: 'application#about'
   get 'api_documentation', to: 'application#api'
+  get 'make_me_an_error', to: 'application#make_me_an_error'
 
   resources :submissions do
     resources :uploads, controller: 'submissions/uploads', only: [:create, :destroy]
