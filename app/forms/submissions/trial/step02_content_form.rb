@@ -108,7 +108,9 @@ module Submissions
       end
 
       def new_trait_descriptors
-        super || []
+        (super || []).select do |trait_descriptor|
+          trait_descriptor_list.include?(trait_descriptor.descriptor_name)
+        end
       end
     end
   end
