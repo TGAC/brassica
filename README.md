@@ -1,5 +1,16 @@
 # Brassica Information Portal
 
+The Brassica Information Portal is a web repository for population and trait 
+scoring information used by the Brassica breeding community. It is a Rails
+web application and was created by
+
+[eSpectrum company](http://espectrum.pl/it)
+
+on a contract with
+
+[The Genome Analysis Centre](http://www.tgac.ac.uk/)
+
+but it is released as an open source project (see the LICENSE file).
 
 ## Dependencies
 
