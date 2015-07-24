@@ -8,11 +8,12 @@
     Additional Annotations
     %i.fa.fa-caret-down
 
-%div{ id: target, class: collapsible ? 'collapse well' : '' }
-  - attrs.each do |attr|
-    .form-group
-      - if form
-        = form.text_area attr, label: attr.humanize.capitalize
-      - else
-        = label_tag attr, attr.humanize.capitalize
-        = text_area_tag attr, nil, class: 'form-control'
+%div{ id: target, class: collapsible ? 'collapse' : '' }
+  .well.annotations-inner
+    - attrs.each do |attr|
+      .form-group
+        - if form
+          = form.text_area attr, label: attr.humanize.capitalize
+        - else
+          = label_tag attr, attr.humanize.capitalize
+          = text_area_tag attr, nil, class: 'form-control'
