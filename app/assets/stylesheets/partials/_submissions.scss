@@ -79,6 +79,11 @@
       position: relative;
       padding-right: 0;
 
+      ::-ms-clear {
+        width: 0;
+        height: 0;
+      }
+
       @media (max-width: $screen-md-min) {
         padding-left: 0;
       }
