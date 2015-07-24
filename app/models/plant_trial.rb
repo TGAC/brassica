@@ -9,11 +9,11 @@ class PlantTrial < ActiveRecord::Base
 
   validates :plant_trial_name, presence: true, uniqueness: true
   validates :project_descriptor, presence: true
-  validates :latitude, allow_nil: true, numericality: {
+  validates :latitude, allow_blank: true, numericality: {
     greater_than_or_equal_to: -90,
     less_than_or_equal_to: 90
   }
-  validates :longitude, allow_nil: true, numericality: {
+  validates :longitude, allow_blank: true, numericality: {
     greater_than_or_equal_to: -180,
     less_than_or_equal_to: 180
   }
