@@ -23,7 +23,15 @@ module Submissions
       validates :project_descriptor, presence: true
       validates :plant_population_id, presence: true
       validates :country_id, presence: true
-      validates :latitude, :longitude, :altitude, numericality: true, allow_blank: true
+      validates :latitude, allow_blank: true, numericality: {
+        greater_than_or_equal_to: -90,
+        less_than_or_equal_to: 90
+      }
+      validates :longitude, allow_blank: true, numericality: {
+        greater_than_or_equal_to: -180,
+        less_than_or_equal_to: 180
+      }
+      validates :altitude, numericality: true, allow_blank: true
       validates :trial_year, numericality: { only_integer: true }, allow_blank: true
 
       validate do
