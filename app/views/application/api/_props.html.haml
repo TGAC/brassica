@@ -5,8 +5,8 @@
   %table.table
     - props.each do |prop|
       %tr
-        %td.prop= prop[:name]
+        %td.prop= raw prop[:name]
         %td.format= prop[:format]
         %td.create= prop[:create]
-        %td.desc= prop[:desc]
+        %td.desc= raw prop[:desc]
 

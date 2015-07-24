@@ -92,9 +92,9 @@ en:
     filtering:
       params:
         -
-          name: resource_name[query][attribute_name]
+          name: "<em class='placeholder'>resource_name</em>[query][<em class='placeholder'>attribute_name</em>]"
           format: depends on the attribute format
-          desc: Should return only those resources which declare a certain value for `attribute_name`.
+          desc: "Should return only those resources which declare a certain value for <em class='placeholder'>attribute_name</em>."
       request: |-
         GET /api/v1/plant_lines?plant_line[query][plant_line_name]=WINFRED HTTP/1.1
         Content-Type: application/json
@@ -109,7 +109,7 @@ en:
     searching:
       params:
         -
-          name: resource_name[fetch]
+          name: "<em class='placeholder'>resource_name</em>[fetch]"
           format: string
           desc: |
             Given a term, it should return all resources of a given type whose attribute
