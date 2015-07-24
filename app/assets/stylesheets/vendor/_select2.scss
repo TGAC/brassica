@@ -82,6 +82,9 @@ $s2-border-radius: 2px;
   &[aria-selected] {
     cursor: pointer;
   }
+  small {
+    color: $mono-color-1;
+  }
 }
 
 .select2-container--open {
@@ -357,6 +360,10 @@ $s2-border-radius: 2px;
   .select2-results__option--highlighted[aria-selected] {
     background-color: #5897fb;
     color: white;
+
+    small {
+      color: $text-color-negative;
+    }
   }
   .select2-results__group {
     cursor: default;
