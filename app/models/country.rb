@@ -13,4 +13,6 @@ class Country < ActiveRecord::Base
   validates :country_code,
             presence: true,
             uniqueness: true
+
+  default_scope -> { order :country_name }
 end
