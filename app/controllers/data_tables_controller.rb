@@ -6,9 +6,15 @@ class DataTablesController < ApplicationController
         model_param
       end
       format.json do
-        objects = model_param.singularize.camelize.constantize.table_data(params)
-        grid_data = ApplicationDecorator.decorate(objects)
-        render json: grid_data.as_grid_data
+        cache_key = params.reject{ |k,_| %w(_ controller action).include? k }
+        cache_key[:latest_change] = params[:model].singularize.camelize.constantize.maximum('updated_at')
+        cache_key[:count] = params[:model].singularize.camelize.constantize.count
+        logger.debug "CACHE KEY: #{cache_key}"
+        grid_data = Rails.cache.fetch(cache_key, expires_in: 300.days) do
+          logger.debug 'MISS MISS MISS'
+          prepare_grid_data.to_json
+        end
+        render json: grid_data
       end
     end
   end
@@ -19,6 +25,11 @@ class DataTablesController < ApplicationController
   end
 
   private
+
+  def prepare_grid_data
+    objects = model_param.singularize.camelize.constantize.table_data(params)
+    ApplicationDecorator.decorate(objects).as_grid_data
+  end
 
   def model_param
     if params[:model].present? && !allowed_models.include?(params[:model])
