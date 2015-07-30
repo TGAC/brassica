@@ -13,8 +13,10 @@ class Submission
 
         search: search
         page: params.page
-      processResults: (data, page) ->
-        results: $.map(data, (row) -> { id: row[id_attr], text: row[text_attr], small_text: row[small_text_attr] })
+      processResults: (data, params) ->
+        results: $.map(data.results, (row) -> { id: row[id_attr], text: row[text_attr], small_text: row[small_text_attr] })
+        pagination:
+          more: data.page * data.per_page < data.total_count
     escapeMarkup: (markup) -> markup
     templateResult: (item) ->
       result = item.text

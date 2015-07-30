@@ -28,10 +28,10 @@ RSpec.describe Api::Decorator do
       it "expands has_many associations" do
         expect(json['countries_of_origin_ids']).to eq nil
         expect(json['countries_registered_ids']).to eq nil
-        expect(json['countries_of_origin'].map{ |c| c['country_code'] }).
-          to eq object.countries_of_origin.pluck(:country_code)
-        expect(json['countries_registered'].map{ |c| c['country_code'] }).
-          to eq object.countries_registered.pluck(:country_code)
+        expect(json['countries_of_origin'].map { |c| c['country_code'] }).
+          to match_array object.countries_of_origin.pluck(:country_code)
+        expect(json['countries_registered'].map { |c| c['country_code'] }).
+          to match_array object.countries_registered.pluck(:country_code)
       end
     end
 
