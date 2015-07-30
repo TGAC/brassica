@@ -7,11 +7,11 @@ class DataTablesController < ApplicationController
       end
       format.json do
         cache_key = params.reject{ |k,_| %w(_ controller action).include? k }
-        cache_key[:latest_change] = params[:model].singularize.camelize.constantize.maximum('updated_at')
-        cache_key[:count] = params[:model].singularize.camelize.constantize.count
-        logger.debug "CACHE KEY: #{cache_key}"
+        cache_key[:latest_change] = model_klass.maximum('updated_at')
+        cache_key[:count] = model_klass.count
+        logger.info "CACHE KEY: #{cache_key}"
         grid_data = Rails.cache.fetch(cache_key, expires_in: 300.days) do
-          logger.debug 'MISS MISS MISS'
+          logger.info 'MISS MISS MISS'
           prepare_grid_data.to_json
         end
         render json: grid_data
@@ -20,14 +20,14 @@ class DataTablesController < ApplicationController
   end
 
   def show
-    object = model_param.singularize.camelize.constantize.find(params[:id])
+    object = model_klass.find(params[:id])
     render json: object.annotations_as_json
   end
 
   private
 
   def prepare_grid_data
-    objects = model_param.singularize.camelize.constantize.table_data(params)
+    objects = model_klass.table_data(params)
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 
@@ -36,6 +36,10 @@ class DataTablesController < ApplicationController
       raise ActionController::RoutingError.new('Not Found')
     end
     params.require(:model)
+  end
+
+  def model_klass
+    model_param.singularize.camelize.constantize
   end
 
   def allowed_models
