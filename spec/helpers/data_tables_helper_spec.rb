@@ -25,11 +25,11 @@ RSpec.describe DataTablesHelper do
   describe '#datatables_source' do
     it 'passes model, fetch and query params intact' do
       allow(self).to receive(:params).and_return(model: 'model_name')
-      expect(datatables_source).to eq data_tables_path(model: 'model_name')
+      expect(datatables_source).to eq data_tables_path(model: 'model_name', format: 'json')
       allow(self).to receive(:params).and_return(model: 'model_name', query: { a: 'b' })
-      expect(datatables_source).to eq data_tables_path(model: 'model_name', query: { a: 'b' })
+      expect(datatables_source).to eq data_tables_path(model: 'model_name', query: { a: 'b' }, format: 'json')
       allow(self).to receive(:params).and_return(model: 'model_name', fetch: 'n')
-      expect(datatables_source).to eq data_tables_path(model: 'model_name', fetch: 'n')
+      expect(datatables_source).to eq data_tables_path(model: 'model_name', fetch: 'n', format: 'json')
     end
   end
 
