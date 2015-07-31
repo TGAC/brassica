@@ -1,7 +1,14 @@
 class PlantLinesController < ApplicationController
 
   def index
-    render json: PlantLine.filter(params)
+    page = params[:page] || 1
+    plant_lines = PlantLine.filter(params).order(:plant_line_name)
+    render json: {
+      results: plant_lines.page(page),
+      page: page,
+      per_page: Kaminari.config.default_per_page,
+      total_count: plant_lines.count
+    }
   end
 
 end

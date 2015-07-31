@@ -25,7 +25,7 @@ module ComboFieldTagHelper
       <div class='combo-field-alternative'>or</div>
       <div class='combo-field-input #{klass}-input'>
         #{text_field_html}
-        <a href='#' class='clear-input hidden'>×</a>
+        <a href='#' class='clear-input hidden'>&times;</a>
       </div>
     </div>
     HTML

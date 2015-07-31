@@ -151,4 +151,4 @@ window.escapeHtml = (string) ->
     entityMap[s]
 
 window.isSafari = ->
-  navigator.userAgent.indexOf('Safari') && !navigator.userAgent.indexOf('Chrome')
+  navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1

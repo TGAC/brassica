@@ -36,18 +36,67 @@
     margin-top: 4em;
   }
 
+  .collapse .annotations-inner {
+    margin-bottom: 0 !important;
+  }
+
   .combo-field-wrapper {
+    @extend .container-fluid;
+    padding: 0;
+
+    label {
+      display: block;
+    }
+
+    .combo-field-select {
+      @extend .col-md-5;
+      padding-left: 0;
+
+      @media (max-width: $screen-md-min) {
+        padding-right: 0;
+      }
+    }
+
+    .combo-field-alternative {
+      @extend .col-md-2;
+      @extend .label, .label-default;
+      text-align: center;
+      padding: 12px 0;
+      color: $text-color;
+      background-color: $mono-color-2;
+
+      @media (max-width: $screen-md-min) {
+        display: block;
+        width: 100%;
+        padding: 6px 0;
+        text-align: left;
+        background: none;
+      }
+    }
+
     .combo-field-input {
+      @extend .col-md-5;
       position: relative;
+      padding-right: 0;
+
+      ::-ms-clear {
+        width: 0;
+        height: 0;
+      }
+
+      @media (max-width: $screen-md-min) {
+        padding-left: 0;
+      }
 
       .clear-input {
+        @extend .close;
         position: absolute;
         top: 0;
         right: 0;
         display: inline-block;
         width: 1.25em;
-        height: 2.5em;
-        padding: 0.5em 1.5em 0.5em 1em;
+        height: 1.5em;
+        padding: 0.25em 1.0em 0.25em 0.5em;
         cursor: pointer;
         color: $gray-base;
         &:hover {

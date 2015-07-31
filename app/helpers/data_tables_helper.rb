@@ -3,7 +3,8 @@ module DataTablesHelper
     data_tables_path(
       query: params[:query],
       fetch: params[:fetch],
-      model: model_param
+      model: model_param,
+      format: :json
     )
   end
 
@@ -12,7 +13,12 @@ module DataTablesHelper
       :table,
       class: 'table table-condensed table-browse table-hover data-table',
       id: model_param.dasherize,
-      data: { ajax: datatables_source }
+      data: {
+        ajax: {
+          url: datatables_source,
+          cache: true
+        }
+      }
     ) do
       content_tag(:thead) do
         content_tag(:tr) do

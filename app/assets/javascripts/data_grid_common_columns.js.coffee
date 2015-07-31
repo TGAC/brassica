@@ -43,7 +43,7 @@ window.baseColumnDefs = (baseModel) ->
     render: (data, type, full, meta) ->
       objectId = full[full.length - 1]
       if objectId
-        '<button class="btn btn-xs btn-info" data-popover-source="data_tables/' + objectId + '?model=' + baseModel + '" title="Metadata" data-toggle="tooltip"><i class="fa fa-info-circle fa-lg"></i></button>'
+        '<a tabindex="0" role="button" class="btn btn-xs btn-info" data-popover-source="data_tables/' + objectId + '?model=' + baseModel + '" title="Metadata" data-toggle="tooltip"><i class="fa fa-info-circle fa-lg"></i></a>'
       else
         ''
   ,

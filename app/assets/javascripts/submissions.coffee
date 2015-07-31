@@ -13,8 +13,10 @@ class Submission
 
         search: search
         page: params.page
-      processResults: (data, page) ->
-        results: $.map(data, (row) -> { id: row[id_attr], text: row[text_attr], small_text: row[small_text_attr] })
+      processResults: (data, params) ->
+        results: $.map(data.results, (row) -> { id: row[id_attr], text: row[text_attr], small_text: row[small_text_attr] })
+        pagination:
+          more: data.page * data.per_page < data.total_count
     escapeMarkup: (markup) -> markup
     templateResult: (item) ->
       result = item.text
@@ -22,8 +24,8 @@ class Submission
       result
     templateSelection: (item) -> item.text
 
-  @makeAjaxListSelectOptions: (url, id_attr, text_attr) =>
-    $.extend(@makeAjaxSelectOptions(url, id_attr, text_attr),
+  @makeAjaxListSelectOptions: (url, id_attr, text_attr, small_text_attr) =>
+    $.extend(@makeAjaxSelectOptions(url, id_attr, text_attr, small_text_attr),
       multiple: true
       templateSelection: (item) ->
         if item.id != item.text || ! item.selected
@@ -127,7 +129,7 @@ class PopulationSubmission extends Submission
 class TrialSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name', 'description')
-  traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name')
+  traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name', 'descriptor_label')
 
   bind: =>
     @$('select.plant-population').select2(@plantPopulationSelectOptions)

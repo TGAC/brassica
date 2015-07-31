@@ -136,6 +136,11 @@
     td.create {
       width: 12%;
     }
+
+    .placeholder {
+      font-style: normal;
+      color: $accent-color-2;
+    }
   }
   code {
     background-color: whitesmoke;

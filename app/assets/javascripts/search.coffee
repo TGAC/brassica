@@ -50,7 +50,7 @@ class Search
 
   updateHistory: (term) =>
     if window.location.search != "?search=#{term}"
-      window?.history?.pushState(null, null, "/?search=#{term}")
+      window?.history?.pushState({ cause: 'search' }, null, "/?search=#{term}")
 
 $ ->
   new Search('.search', '.search-results', '.search-example').prepare()
