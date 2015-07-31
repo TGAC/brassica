@@ -6,7 +6,7 @@ class DataTablesController < ApplicationController
         model_param
       end
       format.json do
-        cache_key = params.reject{ |k,_| %w(_ controller action).include? k }
+        cache_key = params.reject{ |k,_| %w(_ controller action format).include? k }
         cache_key[:latest_change] = model_klass.maximum('updated_at')
         cache_key[:count] = model_klass.count
         logger.info "CACHE KEY: #{cache_key}"
