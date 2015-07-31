@@ -7,8 +7,8 @@ RSpec.describe PlantLinesController do
       get :index, format: :json, search: { plant_line_name: plns[0][1..-2] }
       expect(response.content_type).to eq 'application/json'
       json = JSON.parse(response.body)
-      expect(json.size).to eq 1
-      expect(json[0]['plant_line_name']).to eq plns[0]
+      expect(json['results'].size).to eq 1
+      expect(json['results'][0]['plant_line_name']).to eq plns[0]
     end
   end
 end

@@ -38,7 +38,12 @@ $ ->
     bottom: ->
       return @bottom = - bh.top + 320
 
-#  # Handles navigation through history states originating from client-side
-#  # (e.g. search results)
-#  $(window).on 'popstate', ->
-#    window.location.replace window.location.href
+  # Handles navigation through history states originating from client-side
+  # (e.g. search results)
+  if window.isSafari()
+    $(window).on 'popstate', (e) ->
+      if e.originalEvent.state != null
+        window.location.replace window.location.href
+  else
+    $(window).on 'popstate', ->
+      window.location.replace window.location.href
