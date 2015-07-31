@@ -36,6 +36,8 @@ gem 'paperclip', '~> 4.2.0'
 
 gem 'cookies_eu'
 
+gem 'exception_notification'
+
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 
