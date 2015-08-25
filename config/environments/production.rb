@@ -64,7 +64,15 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'bip.tgac.ac.uk' }
 
   # Further mailer options used by exception notifier
-  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    user_name: ENV['GMAIL_SMTP_USER'],
+    password: ENV['GMAIL_SMTP_PASSWORD'],
+    authentication: 'plain'
+  }
+
   config.action_mailer.perform_deliveries = true
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
