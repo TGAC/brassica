@@ -99,6 +99,6 @@ Rails.application.configure do
     email: {
       email_prefix: "[BIP ERROR] ",
       sender_address: %{"notifier" <notifier@bip.tgac.ac.uk>},
-      exception_recipients: [ENV['ADMIN_MAIL_PRIMARY'], ENV['ADMIN_MAIL_SECONDARY']]
+      exception_recipients: ENV['ADMIN_EMAILS'].try(:split, ',') || []
     }
 end
