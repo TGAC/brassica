@@ -66,10 +66,10 @@ Rails.application.configure do
   # Further mailer options used by exception notifier
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    user_name: ENV['GMAIL_SMTP_USER'],
-    password: ENV['GMAIL_SMTP_PASSWORD'],
+    address: ENV['SMTP_HOST'],
+    port: ENV['SMTP_PORT'],
+    user_name: ENV['SMTP_USER'],
+    password: ENV['SMTP_PASSWORD'],
     authentication: 'plain'
   }
 
