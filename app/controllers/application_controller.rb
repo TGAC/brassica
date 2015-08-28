@@ -16,9 +16,6 @@ class ApplicationController < ActionController::Base
 
   def about; end
   def api; end
-  def make_me_an_error
-    10/0
-  end
 
   private
 
