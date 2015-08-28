@@ -70,7 +70,8 @@ Rails.application.configure do
     port: ENV['SMTP_PORT'],
     user_name: ENV['SMTP_USER'],
     password: ENV['SMTP_PASSWORD'],
-    authentication: 'plain'
+    authentication: 'plain',
+    openssl_verify_mode: 'none'
   }
 
   config.action_mailer.perform_deliveries = true
@@ -98,7 +99,7 @@ Rails.application.configure do
       ExceptionNotifier.ignored_exceptions,
     email: {
       email_prefix: "[BIP ERROR] ",
-      sender_address: %{"notifier" <notifier@bip.tgac.ac.uk>},
+      sender_address: ENV['ERROR_NOTIFICATION_SENDER'],
       exception_recipients: ENV['ADMIN_EMAILS'].try(:split, ',') || []
     }
 end
