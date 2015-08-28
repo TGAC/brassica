@@ -64,7 +64,16 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'bip.tgac.ac.uk' }
 
   # Further mailer options used by exception notifier
-  config.action_mailer.delivery_method = :sendmail
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV['SMTP_HOST'],
+    port: ENV['SMTP_PORT'],
+    user_name: ENV['SMTP_USER'],
+    password: ENV['SMTP_PASSWORD'],
+    authentication: 'plain',
+    openssl_verify_mode: 'none'
+  }
+
   config.action_mailer.perform_deliveries = true
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -90,7 +99,7 @@ Rails.application.configure do
       ExceptionNotifier.ignored_exceptions,
     email: {
       email_prefix: "[BIP ERROR] ",
-      sender_address: %{"notifier" <notifier@bip.tgac.ac.uk>},
-      exception_recipients: [ENV['ADMIN_MAIL_PRIMARY'], ENV['ADMIN_MAIL_SECONDARY']]
+      sender_address: ENV['ERROR_NOTIFICATION_SENDER'],
+      exception_recipients: ENV['ADMIN_EMAILS'].try(:split, ',') || []
     }
 end
