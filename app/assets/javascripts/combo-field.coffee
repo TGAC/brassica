@@ -28,7 +28,7 @@ class ComboField
 
     return unless val.length > 0
 
-    $option = @$select.find("[value='#{val}']")
+    $option = @$select.find("[value='#{window.escapeHtml(val)}']")
 
     if $option.length > 0
       @clearInput()

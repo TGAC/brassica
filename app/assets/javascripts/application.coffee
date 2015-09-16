@@ -26,6 +26,18 @@
 #= require jquery.fileupload
 #= require_tree .
 
+window.escapeHtml = (string) ->
+  entityMap = {
+    "&": "&amp;"
+    "<": "&lt;"
+    ">": "&gt;"
+    '"': '&quot;'
+    "'": '&#39;'
+    "/": '&#x2F;'
+  }
+  String(string).replace /[&<>"'\/]/g, (s) ->
+    entityMap[s]
+
 $ ->
   $('body').tooltip
     selector: '[data-toggle]'

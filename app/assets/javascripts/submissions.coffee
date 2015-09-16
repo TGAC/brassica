@@ -19,19 +19,30 @@ class Submission
           more: data.page * data.per_page < data.total_count
     escapeMarkup: (markup) -> markup
     templateResult: (item) ->
-      result = item.text
-      result += "<br/><small>#{item.small_text}</small>" if item.small_text
-      result
-    templateSelection: (item) -> item.text
+      $result = $("<span></span>")
+      $result.text(item.text)
+      if item.small_text
+        $small = $("<small></small>")
+        $small.text (item.small_text)
+        $result.append("<br/>").append($small)
+      $result
+    templateSelection: (item) ->
+      $result = $("<span></span>")
+      $result.text(item.text)
 
   @makeAjaxListSelectOptions: (url, id_attr, text_attr, small_text_attr) =>
     $.extend(@makeAjaxSelectOptions(url, id_attr, text_attr, small_text_attr),
       multiple: true
       templateSelection: (item) ->
+        $result = $("<span></span>")
+        $result.text(item.text)
+
         if item.id != item.text || ! item.selected
-          "<span class='existing-item-for-list-selection'>#{item.text}</span>"
+          $result.addClass('existing-item-for-list-selection')
         else
-          "<span class='new-item-for-list-selection'>#{item.text}</span>"
+          $result.addClass('new-item-for-list-selection')
+
+        $result
     )
 
   constructor: (el) ->

@@ -138,17 +138,5 @@ window.pubmedLink = (value) ->
   else
     ''
 
-window.escapeHtml = (string) ->
-  entityMap = {
-    "&": "&amp;"
-    "<": "&lt;"
-    ">": "&gt;"
-    '"': '&quot;'
-    "'": '&#39;'
-    "/": '&#x2F;'
-  }
-  String(string).replace /[&<>"'\/]/g, (s) ->
-    entityMap[s]
-
 window.isSafari = ->
   navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1
