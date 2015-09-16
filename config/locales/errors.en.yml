@@ -40,6 +40,7 @@ en:
               blank: Plase select a plant population.
 
             trial_year:
+              not_a_number: Please provide a valid trial year.
               not_an_integer: Please provide a valid trial year.
 
             longitude:
