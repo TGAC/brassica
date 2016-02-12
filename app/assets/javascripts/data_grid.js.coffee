@@ -98,7 +98,7 @@ $ ->
   $('body').popover
     selector: '[data-popover-source]'
     placement: 'left'
-    trigger: 'focus'
+    trigger: 'click'
     html: 'true'
     title: ->
       $('body').on 'click', '.metadata-close', =>
