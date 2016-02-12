@@ -18,6 +18,7 @@ RSpec.describe LinkageGroup do
         lg.consensus_group_orientation,
         lg.map_positions.count,
         lg.map_locus_hits.count,
+        lg.qtls.count,
         lg.linkage_map.id,
         lg.id
       ]

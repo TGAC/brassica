@@ -19,6 +19,7 @@ class LinkageGroup < ActiveRecord::Base
 
   after_update { map_positions.each(&:touch) }
   after_update { map_locus_hits.each(&:touch) }
+  after_update { qtls.each(&:touch) }
 
   include Relatable
   include Filterable
@@ -45,7 +46,8 @@ class LinkageGroup < ActiveRecord::Base
   def self.count_columns
     [
       'map_positions_count',
-      'map_locus_hits_count'
+      'map_locus_hits_count',
+      'qtls_count'
     ]
   end
 

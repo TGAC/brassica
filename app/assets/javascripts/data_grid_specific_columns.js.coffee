@@ -159,6 +159,10 @@ window.configs =
   'qtl':
     columnDefs:
       [
+        targets: 'linkage_groups_linkage_group_label_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('linkage_groups', data, full[full.length - 7])
+      ,
         targets: 'qtl_jobs_qtl_job_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('qtl_jobs', data, full[full.length - 6])
@@ -223,6 +227,22 @@ window.configs =
   'trait-scores':
     columnDefs:
       [
+        targets: 'plant_populations_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_populations', data, full[full.length - 6])
+      ,
+        targets: 'plant_lines_plant_line_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_lines', data, full[full.length - 5])
+      ,
+        targets: 'plant_trials_plant_trial_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_trials', data, full[full.length - 4])
+      ,
+        targets: 'trait_descriptors_descriptor_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('trait_descriptors', data, full[full.length - 3])
+      ,
         targets: 'plant_scoring_units_scoring_unit_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_scoring_units', data, full[full.length - 2])

@@ -21,7 +21,6 @@ module CommonHelpers
       qtl
       qtl_jobs
       trait_descriptors
-      trait_scores
 
       plant_population_lists
       plant_varieties
