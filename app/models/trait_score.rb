@@ -20,10 +20,10 @@ class TraitScore < ActiveRecord::Base
 
   def self.table_columns
     [
-      'trait_descriptors.descriptor_name',
       'plant_trials.plant_trial_name',
       'plant_populations.name',
       'plant_lines.plant_line_name',
+      'trait_descriptors.descriptor_name',
       'score_value',
       'value_type',
       'scoring_date',
