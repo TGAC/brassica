@@ -51,7 +51,7 @@ class SubmissionsController < ApplicationController
       @submission.step_forward
       redirect_to edit_submission_path(@submission)
     elsif @submission.finalize
-      redirect_to submission_path(@submission), notice: "Plant population submitted, thank you!"
+      redirect_to submission_path(@submission), notice: I18n.t("submission.submission_type.#{@submission.submission_type}") + " submitted. Thank you!"
     else
       @submission.reset_step(@submission.errors[:step].try(:first))
       redirect_to edit_submission_path(@submission, validate: true),

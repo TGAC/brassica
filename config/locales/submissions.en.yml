@@ -2,7 +2,7 @@ en:
   submission:
     empty_label: "(empty label)"
     submission_type:
-      population: Population
+      population: Plant population
       trial: Plant scoring trial
       qtl: Quantitative Trait Loci
       linkage_map: Linkage maps
