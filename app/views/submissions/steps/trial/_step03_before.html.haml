@@ -27,11 +27,11 @@
   %p
     The first line will be treated as a header. Specific values will be stored as scoring for the
     trait that's name matches the corresponding column header. If no match is found, the score will
-    be stored by column index. That is, unmatched third column header will cause all third column
+    be stored by column index. That is, an unmatched third column header will cause all third column
     values counted as scoring of the second trait (in the order of input) defined during the second step.
 
   %p
-    In particular case of this submission, columns should be provided as follows:
+    In the particular case of this submission, columns should be provided as follows:
 
   - @trait_names = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
   %pre
