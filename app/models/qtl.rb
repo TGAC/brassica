@@ -32,7 +32,6 @@ class Qtl < ActiveRecord::Base
       'trait_descriptors.descriptor_name',
       'qtl_rank',
       'map_qtl_label',
-      'linkage_groups.linkage_group_label',
       'outer_interval_start',
       'inner_interval_start',
       'qtl_mid_position',
@@ -49,7 +48,7 @@ class Qtl < ActiveRecord::Base
 
   def self.ref_columns
     [
-      'linkage_group_id',
+      'linkage_groups.id',
       'qtl_jobs.id',
       'plant_populations.id',
       'linkage_maps.id',
