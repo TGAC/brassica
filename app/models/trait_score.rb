@@ -25,6 +25,7 @@ class TraitScore < ActiveRecord::Base
       'plant_lines.plant_line_name',
       'trait_descriptors.descriptor_name',
       'score_value',
+      'trait_descriptors.units_of_measurements',
       'value_type',
       'scoring_date',
       'plant_scoring_units.scoring_unit_name'

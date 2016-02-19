@@ -148,6 +148,7 @@ en:
       descriptor_name: Trait
       trait_scores: Trait scores
       qtl: QTL
+      units_of_measurements: Unit
     trait_scores:
       scoring_date: Scored on
       score_value: Value
