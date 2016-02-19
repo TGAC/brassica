@@ -27,7 +27,6 @@ class PlantScoringUnit < ActiveRecord::Base
       'scoring_unit_sample_size',
       'scoring_unit_frame_size',
       'date_planted',
-      'design_factors.design_factor_name',
       'plant_trials.plant_trial_name',
       'plant_parts.plant_part',
       'plant_accessions.plant_accession'
