@@ -150,6 +150,6 @@ en:
       qtl: QTL
       units_of_measurements: Unit
     trait_scores:
-      scoring_date: Scored on
+      scoring_date: Scoring date
       score_value: Value
       value_type: Value type
