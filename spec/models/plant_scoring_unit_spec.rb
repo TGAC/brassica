@@ -13,7 +13,6 @@ RSpec.describe PlantScoringUnit do
           psc.scoring_unit_sample_size,
           psc.scoring_unit_frame_size,
           psc.date_planted,
-          psc.design_factor.design_factor_name,
           psc.plant_trial.plant_trial_name,
           psc.plant_part.plant_part,
           psc.plant_accession.plant_accession,

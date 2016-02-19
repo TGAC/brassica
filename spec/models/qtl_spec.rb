@@ -11,7 +11,6 @@ RSpec.describe Qtl do
         qtl.processed_trait_dataset.trait_descriptor.descriptor_name,
         qtl.qtl_rank,
         qtl.map_qtl_label,
-        qtl.linkage_group.linkage_group_label,
         qtl.outer_interval_start,
         qtl.inner_interval_start,
         qtl.qtl_mid_position,
