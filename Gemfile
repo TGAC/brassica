@@ -49,6 +49,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano3-puma'
   gem 'capistrano-chruby'
+  gem 'railroady'
 end
 
 group :development, :test do
