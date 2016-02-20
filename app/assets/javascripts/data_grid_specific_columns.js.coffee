@@ -159,6 +159,10 @@ window.configs =
   'qtl':
     columnDefs:
       [
+        targets: 'linkage_groups_linkage_group_label_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('linkage_groups', data, full[full.length - 7])
+      ,
         targets: 'qtl_jobs_qtl_job_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('qtl_jobs', data, full[full.length - 6])
@@ -183,7 +187,6 @@ window.configs =
             '<span class="caret"></span>' +
             '</button>' +
             '<ul class="dropdown-menu" role="menu">' +
-            createRelatedLink('linkage_groups', full[full.length - 7]) +
             createRelatedLink('linkage_maps', full[full.length - 4]) +
             createRelatedLink('plant_populations', full[full.length - 5]) +
             createRelatedLink('qtl_jobs', full[full.length - 6]) +

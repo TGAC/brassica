@@ -30,8 +30,8 @@ class Qtl < ActiveRecord::Base
   def self.table_columns
     [
       'trait_descriptors.descriptor_name',
-      'qtl_rank',
       'map_qtl_label',
+      'linkage_groups.linkage_group_label',
       'outer_interval_start',
       'inner_interval_start',
       'qtl_mid_position',
