@@ -1068,10 +1068,12 @@ en:
         -
           name: design_factor
           format: object
+          create: readonly
           desc: Additional information concerning the design of the population experiment
         -
           name: plant_part
           format: object
+          create: readonly
           desc: Description of the plant part that was scored
         -
           name: plant_accession_id
