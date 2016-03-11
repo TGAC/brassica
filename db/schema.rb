@@ -20,19 +20,17 @@ ActiveRecord::Schema.define(version: 20160311121620) do
   create_table "api_keys", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "token",                     null: false
-    t.integer  "user_id",                   null: false
-    t.boolean  "published",  default: true, null: false
+    t.string   "token",      null: false
+    t.integer  "user_id",    null: false
   end
 
   add_index "api_keys", ["token"], name: "index_api_keys_on_token", using: :btree
 
   create_table "countries", force: :cascade do |t|
-    t.string   "country_code", limit: 3,                null: false
+    t.string   "country_code", limit: 3, null: false
     t.text     "country_name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "published",              default: true, null: false
   end
 
   add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
@@ -753,17 +751,16 @@ ActiveRecord::Schema.define(version: 20160311121620) do
   add_index "trait_scores", ["trait_descriptor_id"], name: "trait_scores_trait_descriptor_id_idx", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "login",                             null: false
+    t.string   "login",                          null: false
     t.string   "email"
     t.string   "full_name"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.integer  "sign_in_count",      default: 0,    null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "sign_in_count",      default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.boolean  "published",          default: true, null: false
   end
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree

@@ -1,7 +1,5 @@
 class AddPublishedFlagToDbColumns < ActiveRecord::Migration
   @@dbtables = [
-    :api_keys,
-    :countries,
     :design_factors,
     :genotype_matrices,
     :linkage_groups,
@@ -34,7 +32,6 @@ class AddPublishedFlagToDbColumns < ActiveRecord::Migration
     :trait_descriptors,
     :trait_grades,
     :trait_scores,
-    :users
   ]
 
   def up
