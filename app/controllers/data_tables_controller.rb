@@ -10,10 +10,11 @@ class DataTablesController < ApplicationController
         cache_key[:latest_change] = model_klass.maximum('updated_at')
         cache_key[:count] = model_klass.count
         logger.info "CACHE KEY: #{cache_key}"
-        grid_data = Rails.cache.fetch(cache_key, expires_in: 300.days) do
-          logger.info 'MISS MISS MISS'
-          prepare_grid_data.to_json
-        end
+        # grid_data = Rails.cache.fetch(cache_key, expires_in: 300.days) do
+        #   logger.info 'MISS MISS MISS'
+        #   prepare_grid_data.to_json
+        # end
+        grid_data = prepare_grid_data.to_json # TODO: Remove before flight
         render json: grid_data
       end
     end

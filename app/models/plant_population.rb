@@ -34,13 +34,24 @@ class PlantPopulation < ActiveRecord::Base
   include Searchable
 
   scope :by_name, -> { order('plant_populations.name') }
+  scope :visible, -> { where(PlantPopulation.arel_table[:user_id].eq(User.current_user_id).
+                                 or(PlantPopulation.arel_table[:published].eq(true))) }
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    pp = PlantPopulation.arel_table
+    fpl = PlantLine.arel_table
+    mpl = Arel::Table.new(:male_parent_lines_plant_populations)
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.
-      includes(:female_parent_line, :male_parent_line, :taxonomy_term, :population_type).
-      by_name.
-      pluck(*(table_columns + count_columns + ref_columns))
+    query = query.
+      includes(:female_parent_line).where(fpl[:user_id].eq(uid).or(fpl[:published].eq(true))).
+      includes(:male_parent_line).where(mpl[:user_id].eq(uid).or(mpl[:published].eq(true))).
+      includes(:taxonomy_term).where(TaxonomyTerm.arel_table[:published].eq(true)).
+      includes(:population_type).where(PopulationType.arel_table[:published].eq(true)).
+      where(pp[:user_id].eq(uid).or(pp[:published].eq(true)))
+    query = query.by_name
+    query.pluck(*(table_columns + count_columns + ref_columns))
   end
 
   def self.table_columns

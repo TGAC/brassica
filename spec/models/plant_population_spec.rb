@@ -87,5 +87,20 @@ RSpec.describe PlantPopulation do
       ]
       expect(gd[0]).to eq data
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pp1 = create(:plant_population, user: u, published: true)
+      pp2 = create(:plant_population, user: u, published: false)
+
+      gd = PlantPopulation.table_data
+      expect(gd.count).to eq 1
+
+      User.current_user_id = u.id
+
+      gd = PlantPopulation.table_data
+      expect(gd.count).to eq 2
+    end
+
   end
 end
