@@ -19,7 +19,9 @@ class DropScoringOccasions < ActiveRecord::Migration
     'occ_PRT7_UN0000_003': '17'}
 
     scoring_links.each do |k,v|
-      execute "UPDATE trait_scores SET scoring_occasion_id = #{v} WHERE scoring_occasion_name = '#{k}'"
+      if column_exists?(:trait_scores, :scoring_occasion_name)
+        execute "UPDATE trait_scores SET scoring_occasion_id = #{v} WHERE scoring_occasion_name = '#{k}'"
+      end
     end
 
     unless column_exists?(:trait_scores, :scoring_date)
@@ -34,7 +36,7 @@ class DropScoringOccasions < ActiveRecord::Migration
         end
       end
       execute "DROP TABLE scoring_occasions"
-      execute "ALTER TABLE trait_scores DROP COLUMN scoring_occasion_name"
+      execute "ALTER TABLE trait_scores DROP COLUMN IF EXISTS scoring_occasion_name"
     end
   end
 
