@@ -30,7 +30,8 @@ class Submission::PlantPopulationFinalizer
         taxonomy_term_id: taxonomy_term.id,
         entered_by_whom: submission.user.full_name,
         date_entered: Date.today,
-        user: submission.user
+        user: submission.user,
+        published: publish?
       )
 
       if attrs[:plant_variety_name].present?
@@ -52,7 +53,8 @@ class Submission::PlantPopulationFinalizer
       population_owned_by: submission.content.step01.owned_by,
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
-      user: submission.user
+      user: submission.user,
+      published: publish?
     }
 
     %i[female_parent_line male_parent_line].each do |parent_line_attr|
@@ -89,7 +91,8 @@ class Submission::PlantPopulationFinalizer
         plant_line: plant_line,
         date_entered: Date.today,
         data_provenance: submission.content.step04.data_provenance,
-        entered_by_whom: submission.user.login
+        entered_by_whom: submission.user.login,
+        published: publish?
       )
     end
   end
@@ -104,5 +107,9 @@ class Submission::PlantPopulationFinalizer
   def rollback(to_step)
     submission.errors.add(:step, to_step)
     raise ActiveRecord::Rollback
+  end
+
+  def publish?
+    @publish ||= submission.content.step04.visibility == :published
   end
 end
