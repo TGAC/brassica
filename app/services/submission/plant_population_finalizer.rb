@@ -65,7 +65,7 @@ class Submission::PlantPopulationFinalizer
       attrs.merge!(population_type: population_type)
     end
 
-    attrs.merge!(submission.content.step04.to_h)
+    attrs.merge!(submission.content.step04.to_h.except(:visibility))
     attrs.delete(:owned_by)
 
     if PlantPopulation.where(name: attrs[:name]).exists?
@@ -91,6 +91,7 @@ class Submission::PlantPopulationFinalizer
   def update_submission
     submission.update_attributes!(
       finalized: true,
+      publishable: publish?,
       submitted_object_id: @plant_population.id
     )
   end
@@ -100,13 +101,17 @@ class Submission::PlantPopulationFinalizer
     raise ActiveRecord::Rollback
   end
 
+  def publish?
+    @publish ||= submission.content.step04.visibility.to_s == 'published'
+  end
+
   def common_data
     {
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
       user: submission.user,
-      published: true,
-      published_on: Time.now
+      published: publish?,
+      published_on: (Time.now if publish?)
     }
   end
 end

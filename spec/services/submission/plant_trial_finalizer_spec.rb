@@ -31,7 +31,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       )
       submission.content.update(:step04, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments))
+        :data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
     end
 
     it 'creates new trait descriptors' do
@@ -93,6 +93,35 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(TraitScore.find_by(score_value: 'z').trait_descriptor.descriptor_name).
         to eq new_trait_descriptors_attrs[0][:descriptor_name]
       expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
+    end
+
+    it 'makes submission and created objects published' do
+      subject.call
+
+      expect(TraitDescriptor.all).to all be_published
+      expect(TraitScore.all).to all be_published
+      expect(PlantScoringUnit.all).to all be_published
+      expect(PlantTrial.all).to all be_published
+      expect(submission).to be_publishable
+    end
+
+    context 'when visibility set to private' do
+      before do
+        submission.content.update(:step04, visibility: 'private')
+      end
+
+      it 'makes submission and created objects private' do
+        subject.call
+
+        plant_trial = submission.submitted_object
+        plant_scoring_units = plant_trial.plant_scoring_units
+        trait_scores = plant_trial.plant_scoring_units.map(&:trait_scores).flatten
+
+        expect(submission).not_to be_publishable
+        expect(plant_trial).not_to be_published
+        expect(plant_scoring_units.map(&:published?)).to all be_falsey
+        expect(trait_scores.map(&:published?)).to all be_falsey
+      end
     end
 
     context 'when encountered broken data' do
