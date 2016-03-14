@@ -8,6 +8,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
 
     unless column_exists?(:processed_trait_datasets, :id)
       execute "ALTER TABLE processed_trait_datasets DROP CONSTRAINT IF EXISTS idx_144089_primary"
+      execute "ALTER TABLE processed_trait_datasets DROP CONSTRAINT IF EXISTS processed_trait_datasets_pkey"
       if column_exists?(:processed_trait_datasets, :processed_trait_dataset_id)
         execute("ALTER TABLE processed_trait_datasets RENAME COLUMN processed_trait_dataset_id \
           TO processed_trait_dataset_name")
@@ -32,6 +33,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
 
     unless column_exists?(:qtl_jobs, :id)
       execute "ALTER TABLE qtl_jobs DROP CONSTRAINT IF EXISTS idx_144140_primary"
+      execute "ALTER TABLE qtl_jobs DROP CONSTRAINT IF EXISTS qtl_jobs_pkey"
       if column_exists?(:qtl_jobs, :qtl_job_id)
         execute("ALTER TABLE qtl_jobs RENAME COLUMN qtl_job_id TO qtl_job_name")
       end
@@ -53,6 +55,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
     #==============qtl=============#
 
     unless column_exists?(:qtl, :id)
+      execute "ALTER TABLE qtl DROP CONSTRAINT IF EXISTS qtl_pkey"
       add_column :qtl, :id, :primary_key
     else
       puts "Table qtl already contains column with name 'id'. Skipping."
@@ -62,6 +65,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
 
     unless column_exists?(:genotype_matrices, :id)
       execute "ALTER TABLE genotype_matrices DROP CONSTRAINT IF EXISTS idx_143519_primary"
+      execute "ALTER TABLE genotype_matrices DROP CONSTRAINT IF EXISTS genotype_matrices_pkey"
       add_column :genotype_matrices, :id, :primary_key
     else
       puts "Table genotype_matrices already contains column with name 'id'. Skipping."
@@ -77,6 +81,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
 
     unless column_exists?(:linkage_maps, :id)
       execute "ALTER TABLE linkage_maps DROP CONSTRAINT IF EXISTS idx_143550_primary"
+      execute "ALTER TABLE linkage_maps DROP CONSTRAINT IF EXISTS linkage_maps_pkey"
       if column_exists?(:linkage_maps, :linkage_map_id)
         execute("ALTER TABLE linkage_maps RENAME COLUMN linkage_map_id TO linkage_map_label")
       end
@@ -86,9 +91,8 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
     end
 
     # Replace FK in map_linkage_group_lists
-    if column_exists?(:map_linkage_group_lists, :linkage_map_id) and
-        MapLinkageGroupList.column_for_attribute('linkage_map_id').type == :text
-      puts "linkage_map FK in map_linkage_group_lists is of type text. Exchanging."
+    if column_exists?(:map_linkage_group_lists, :linkage_map_id)
+      puts "linkage_map FK in map_linkage_group_lists exists. Exchanging."
       execute("ALTER TABLE map_linkage_group_lists RENAME COLUMN linkage_map_id TO linkage_map_label")
       replace_fk('map_linkage_group_lists', 'linkage_maps', 'linkage_map_label',
                  'linkage_map_id', 'linkage_map_label')
@@ -122,6 +126,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
 
     unless column_exists?(:linkage_groups, :id)
       execute "ALTER TABLE linkage_groups DROP CONSTRAINT IF EXISTS idx_143534_primary"
+      execute "ALTER TABLE linkage_groups DROP CONSTRAINT IF EXISTS linkage_groups_pkey"
       if column_exists?(:linkage_groups, :linkage_group_id)
         execute("ALTER TABLE linkage_groups RENAME COLUMN linkage_group_id TO linkage_group_label")
       end
@@ -131,9 +136,8 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
     end
 
     # Replace FK in map_linkage_group_lists
-    if column_exists?(:map_linkage_group_lists, :linkage_group_id) and
-        MapLinkageGroupList.column_for_attribute('linkage_group_id').type == :text
-      puts "linkage_map FK in map_linkage_group_lists is of type text. Exchanging."
+    if column_exists?(:map_linkage_group_lists, :linkage_group_id)
+      puts "linkage_map FK in map_linkage_group_lists exists. Exchanging."
       execute("ALTER TABLE map_linkage_group_lists RENAME COLUMN linkage_group_id TO linkage_group_label")
       replace_fk('map_linkage_group_lists', 'linkage_groups', 'linkage_group_label',
                  'linkage_group_id', 'linkage_group_label')
@@ -178,6 +182,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
 
     unless column_exists?(:population_loci, :id)
       execute "ALTER TABLE population_loci DROP CONSTRAINT IF EXISTS idx_143961_primary"
+      execute "ALTER TABLE population_loci DROP CONSTRAINT IF EXISTS population_loci_pkey"
       add_column :population_loci, :id, :primary_key
     else
       puts "Table linkage_groups already contains column with name 'id'. Skipping."
@@ -206,6 +211,7 @@ class AddIdsToOrangeAndYellowModels < ActiveRecord::Migration
     #==============map_positions=============#
 
     unless column_exists?(:map_positions, :id)
+      execute "ALTER TABLE map_positions DROP CONSTRAINT IF EXISTS map_positions_pkey"
       add_column :map_positions, :id, :primary_key
     end
 

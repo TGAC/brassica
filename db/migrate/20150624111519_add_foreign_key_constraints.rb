@@ -24,7 +24,9 @@ class AddForeignKeyConstraints < ActiveRecord::Migration
     add_foreign_key :plant_accessions, :plant_lines, on_delete: :nullify, on_update: :cascade
 
     add_foreign_key :plant_lines, :taxonomy_terms, on_delete: :nullify, on_update: :cascade
-    add_foreign_key :plant_lines, :plant_varieties, on_delete: :nullify, on_update: :cascade
+    if column_exists?(:plant_lines, :plant_variety_id)
+      add_foreign_key :plant_lines, :plant_varieties, on_delete: :nullify, on_update: :cascade
+    end
 
     add_foreign_key :plant_population_lists, :plant_lines, on_delete: :nullify, on_update: :cascade
     add_foreign_key :plant_population_lists, :plant_populations, on_delete: :nullify, on_update: :cascade
@@ -62,7 +64,9 @@ class AddForeignKeyConstraints < ActiveRecord::Migration
 
     add_foreign_key :trait_grades, :trait_descriptors, on_delete: :nullify, on_update: :cascade
 
-    add_foreign_key :trait_scores, :plant_scoring_units, on_delete: :nullify, on_update: :cascade
+    if column_exists?(:trait_scores, :plant_scoring_unit_id)
+      add_foreign_key :trait_scores, :plant_scoring_units, on_delete: :nullify, on_update: :cascade
+    end
     add_foreign_key :trait_scores, :trait_descriptors, on_delete: :nullify, on_update: :cascade
   end
 end

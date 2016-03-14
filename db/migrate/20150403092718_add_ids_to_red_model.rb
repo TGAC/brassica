@@ -8,6 +8,7 @@ class AddIdsToRedModel < ActiveRecord::Migration
 
     unless column_exists?(:plant_trials, :id)
       execute "ALTER TABLE plant_trials DROP CONSTRAINT IF EXISTS idx_143862_primary"
+      execute "ALTER TABLE plant_trials DROP CONSTRAINT IF EXISTS plant_trials_pkey"
       if column_exists?(:plant_trials, :plant_trial_id)
         execute("ALTER TABLE plant_trials RENAME COLUMN plant_trial_id TO plant_trial_name")
       end
@@ -39,6 +40,7 @@ class AddIdsToRedModel < ActiveRecord::Migration
 
     unless column_exists?(:design_factors, :id)
       execute "ALTER TABLE design_factors DROP CONSTRAINT IF EXISTS idx_143500_primary"
+      execute "ALTER TABLE design_factors DROP CONSTRAINT IF EXISTS design_factors_pkey"
       if column_exists?(:design_factors, :design_factor_id)
         execute("ALTER TABLE design_factors RENAME COLUMN design_factor_id TO design_factor_name")
       end
@@ -75,6 +77,7 @@ class AddIdsToRedModel < ActiveRecord::Migration
 
     unless column_exists?(:plant_scoring_units, :id)
       execute "ALTER TABLE plant_scoring_units DROP CONSTRAINT IF EXISTS idx_143842_primary"
+      execute "ALTER TABLE plant_scoring_units DROP CONSTRAINT IF EXISTS plant_scoring_units_pkey"
       if column_exists?(:plant_scoring_units, :scoring_unit_id)
         execute("ALTER TABLE plant_scoring_units RENAME COLUMN scoring_unit_id TO scoring_unit_name")
       end
@@ -96,6 +99,7 @@ class AddIdsToRedModel < ActiveRecord::Migration
 
     unless column_exists?(:scoring_occasions, :id)
       execute "ALTER TABLE scoring_occasions DROP CONSTRAINT IF EXISTS idx_144184_primary"
+      execute "ALTER TABLE scoring_occasions DROP CONSTRAINT IF EXISTS scoring_occasions_pkey"
       if column_exists?(:scoring_occasions, :scoring_occasion_id)
         execute("ALTER TABLE scoring_occasions RENAME COLUMN scoring_occasion_id TO scoring_occasion_name")
       end
@@ -117,6 +121,7 @@ class AddIdsToRedModel < ActiveRecord::Migration
 
     unless column_exists?(:trait_descriptors, :id)
       execute "ALTER TABLE trait_descriptors DROP CONSTRAINT IF EXISTS idx_144197_primary"
+      execute "ALTER TABLE trait_descriptors DROP CONSTRAINT IF EXISTS trait_descriptors_pkey"
       if column_exists?(:trait_descriptors, :trait_descriptor_id)
         execute("ALTER TABLE trait_descriptors RENAME COLUMN trait_descriptor_id TO descriptor_label")
       end
@@ -158,11 +163,13 @@ class AddIdsToRedModel < ActiveRecord::Migration
 
     #=====================trait_grades===================#
     unless column_exists?(:trait_grades, :id)
+      execute "ALTER TABLE trait_grades DROP CONSTRAINT IF EXISTS trait_grades_pkey"
       add_column :trait_grades, :id, :primary_key
     end
 
     #=====================trait_scores===================#
     unless column_exists?(:trait_scores, :id)
+      execute "ALTER TABLE trait_scores DROP CONSTRAINT IF EXISTS trait_scores_pkey"
       add_column :trait_scores, :id, :primary_key
     end
 

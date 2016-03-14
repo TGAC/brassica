@@ -25,10 +25,14 @@ class DropAllDefaults < ActiveRecord::Migration
     change_column_default :map_locus_hits, :sequence_source_acronym, nil
 
     change_column_default :map_positions, :marker_assay_name, nil
-    change_column_default :map_positions, :mapping_locus, nil
+    if column_exists?(:map_positions, :mapping_locus)
+      change_column_default :map_positions, :mapping_locus, nil
+    end
 
     change_column_default :marker_assays, :marker_assay_name, nil
-    change_column_default :marker_assays, :canonical_marker_name, nil
+    if column_exists?(:marker_assays, :canonical_marker_name)
+      change_column_default :marker_assays, :canonical_marker_name, nil
+    end
 
     change_column_default :marker_sequence_assignments, :marker_set, nil
     change_column_default :marker_sequence_assignments, :canonical_marker_name, nil

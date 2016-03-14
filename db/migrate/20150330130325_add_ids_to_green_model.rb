@@ -73,6 +73,7 @@ class AddIdsToGreenModel < ActiveRecord::Migration
     unless column_exists?(:plant_populations, :name)
       execute("ALTER TABLE plant_populations DROP CONSTRAINT IF EXISTS idx_143808_primary")
       execute("ALTER TABLE plant_populations RENAME COLUMN plant_population_id TO name")
+      execute("ALTER TABLE plant_populations DROP CONSTRAINT IF EXISTS plant_populations_pkey")
       add_column :plant_populations, :id, :primary_key
     end
 
