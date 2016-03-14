@@ -38,7 +38,8 @@ class Submission::PlantTrialFinalizer
       new_plant_scoring_unit = PlantScoringUnit.create!(
         user_data.merge(scoring_unit_name: plant_id, published: publish?)
       )
-      new_trait_scores = (scores || {}).
+
+      (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
@@ -66,7 +67,7 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    attrs.merge!(submission.content.step04.to_h)
+    attrs.merge!(submission.content.step04.to_h.except(:visibility))
     attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
     attrs.merge!(published: publish?)
 
@@ -80,6 +81,7 @@ class Submission::PlantTrialFinalizer
   def update_submission
     submission.update_attributes!(
       finalized: true,
+      published: publish?,
       submitted_object_id: @plant_trial.id
     )
   end
@@ -107,6 +109,6 @@ class Submission::PlantTrialFinalizer
   end
 
   def publish?
-    @publish ||= submission.content.step04.visibility == :published
+    @publish ||= submission.content.step04.visibility.to_s == 'published'
   end
 end
