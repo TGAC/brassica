@@ -40,6 +40,7 @@ RSpec.describe Searchable do
           :common_name,
           :previous_line_name,
           :genetic_status,
+          :sequence_identifier,
           :data_owned_by,
           :organisation
         ],
