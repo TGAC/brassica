@@ -90,8 +90,4 @@ class MapLocusHit < ActiveRecord::Base
       indexes :map_position
     end
   end
-
-  def published?
-    updated_at < Time.now - 1.week
-  end
 end

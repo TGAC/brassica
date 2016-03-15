@@ -11,9 +11,5 @@ class PlantPopulationList < ActiveRecord::Base
   validates :plant_population_id,
             presence: true
 
-  def published?
-    updated_at < Time.now - 1.week
-  end
-
   include Annotable
 end

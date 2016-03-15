@@ -61,9 +61,5 @@ class PlantScoringUnit < ActiveRecord::Base
     { include: [:design_factor, :plant_part] }
   end
 
-  def published?
-    updated_at < Time.now - 1.week
-  end
-
   include Annotable
 end
