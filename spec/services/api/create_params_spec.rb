@@ -5,9 +5,9 @@ RSpec.describe Api::CreateParams do
     it "allows scalar model attributes" do
       pl_permissions = Api::CreateParams.new(Api::Model.new('plant_line'), {}).permissions
       expect(pl_permissions).to match_array %w(plant_line_name common_name
-        organisation genetic_status previous_line_name comments named_by_whom
-        data_provenance data_owned_by confirmed_by_whom taxonomy_term_id
-        plant_variety_id plant_variety_name published)
+        organisation sequence_identifier genetic_status previous_line_name
+        comments named_by_whom data_provenance data_owned_by confirmed_by_whom
+        taxonomy_term_id plant_variety_id plant_variety_name published)
     end
 
     it "allows arrays of ids for HABTM associations" do

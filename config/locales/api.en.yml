@@ -297,6 +297,10 @@ en:
           create: Q
           desc: Design method used to obtain this population line (i.e. open pollinated, inbred, substitution lines)
         -
+          name: sequence_identifier
+          create: Q
+          desc: Identifier of the line sequence, in an external database, like NCBI SRA. Identifiers starting with SR will be automatically recognized as SRA submissions.
+        -
           name: previous_line_name
           create: Q
           desc: Old name of the Plant Line, if changed
