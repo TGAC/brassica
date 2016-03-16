@@ -39,7 +39,7 @@
 
     .form-group
       = label_tag :common_name, 'Common name'
-      = text_field_tag :common_name, nil, class: 'form-control'
+      = text_field_tag :common_name, nil, class: 'form-control', placeholder: "Enter common name"
 
     .form-group
       = combo_field_tag :previous_line_name, nil, nil,
@@ -54,6 +54,15 @@
     .form-group
       = label_tag :plant_variety_name
       = select_tag :plant_variety_name, [], class: 'plant-variety-name form-control', 'data-placeholder': "Select plant variety"
+
+    .form-group
+      = label_tag :sequence_identifier
+      = text_field_tag :sequence_identifier, nil, class: 'form-control', placeholder: "Enter sequence identifier"
+
+      %small.help-block
+        Provide the identifier of the plant line sequence, in an external database,
+        like #{link_to "SRA", "http://www.ncbi.nlm.nih.gov/sra/"}. Identifiers
+        starting with SR (like SRX1491141) will be automatically recognized as SRA submissions.
 
     = render partial: "submissions/annotations", locals: { model: PlantLine }
 
