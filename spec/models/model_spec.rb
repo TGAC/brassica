@@ -117,6 +117,25 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
+  it 'contains published column in all tables except those belonging to a specified set' do
+    omitted_tables = [
+      'api_keys',
+      'countries',
+      'schema_migrations',
+      'submission_uploads',
+      'submissions',
+      'users'
+    ]
+
+    tables = ActiveRecord::Base.connection.tables
+    tables.reject!{|t| omitted_tables.include? t}
+
+    tables.each do |t|
+      expect(ActiveRecord::Base.connection.column_exists?(t, :published)).to be_truthy
+    end
+
+  end
+
   it 'includes all numeric columns in table columns' do
     pending
     fail

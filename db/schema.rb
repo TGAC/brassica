@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315155837) do
+ActiveRecord::Schema.define(version: 20160317135309) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -634,15 +634,14 @@ ActiveRecord::Schema.define(version: 20160315155837) do
   end
 
   create_table "submission_uploads", force: :cascade do |t|
-    t.integer  "submission_id",                    null: false
-    t.integer  "upload_type",                      null: false
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.integer  "submission_id",     null: false
+    t.integer  "upload_type",       null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.string   "file_file_name"
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
-    t.boolean  "published",         default: true, null: false
   end
 
   add_index "submission_uploads", ["submission_id"], name: "index_submission_uploads_on_submission_id", using: :btree
@@ -656,7 +655,7 @@ ActiveRecord::Schema.define(version: 20160315155837) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.integer  "submitted_object_id"
-    t.boolean  "published",           default: true,  null: false
+    t.boolean  "publishable",         default: true,  null: false
   end
 
   add_index "submissions", ["finalized"], name: "index_submissions_on_finalized", using: :btree
