@@ -6,6 +6,7 @@ FactoryGirl.define do
     organisation { Faker::Company.name }
     genetic_status { Faker::Lorem.word }
     taxonomy_term
+    sequence_identifier { Faker::Lorem.word }
     user
     annotable
 
