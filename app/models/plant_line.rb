@@ -52,6 +52,7 @@ class PlantLine < ActiveRecord::Base
       'plant_varieties.plant_variety_name',
       'previous_line_name',
       'genetic_status',
+      'sequence_identifier',
       'data_owned_by',
       'organisation'
     ]

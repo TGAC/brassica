@@ -56,6 +56,7 @@ en:
       data_owned_by: Data owner
       organisation: Organisation
       genetic_status: Genetic status
+      sequence_identifier: Sequence
     plant_parts:
       plant_part: Plant part
     plant_populations:

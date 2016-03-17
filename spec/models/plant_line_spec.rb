@@ -113,6 +113,7 @@ RSpec.describe PlantLine do
         pl.plant_variety.plant_variety_name,
         pl.previous_line_name,
         pl.genetic_status,
+        pl.sequence_identifier,
         pl.data_owned_by,
         pl.organisation,
         pl.plant_variety.id,
