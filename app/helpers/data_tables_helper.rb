@@ -32,8 +32,10 @@ module DataTablesHelper
     case model_param
       when 'plant_populations', 'plant_lines', 'plant_varieties', 'plant_accessions'
         :plant_populations
-      when 'plant_trials', 'trait_descriptors', 'trait_scores', 'plant_scoring_units'
+      when 'trait_descriptors'
         :trait_descriptors
+      when 'plant_trials', 'trait_scores', 'plant_scoring_units'
+        :plant_trials
       when 'linkage_maps', 'linkage_groups', 'population_loci', 'map_positions', 'map_locus_hits'
         :linkage_maps
       when 'qtl', 'qtl_jobs'
@@ -57,6 +59,7 @@ module DataTablesHelper
     {
       plant_populations: data_tables_path(model: :plant_populations),
       trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
+      plant_trials: data_tables_path(model: :plant_trials),
       linkage_maps: data_tables_path(model: :linkage_maps),
       qtl: data_tables_path(model: :qtl),
       marker_assays: data_tables_path(model: :marker_assays)
