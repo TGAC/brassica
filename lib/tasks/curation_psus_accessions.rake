@@ -20,22 +20,24 @@ namespace :curate do
     processed = 0
     conflicts = 0
     psus.each do |psu|
-      psu_acc = psu.plant_accession.plant_accession
-      psu_cs_acc = cs[psu.scoring_unit_name]
-
       processed += 1
 
-      if psu_acc != psu_cs_acc
-        conflicts += 1
-        # Find correct plant accession
-        pas = PlantAccession.where(plant_accession: cs[psu.scoring_unit_name]).all
-        if pas.length > 1
-          puts "ERROR: ambiguous plant accession name: #{cs[psu.scoring_unit_name]}: #{pas.length} records detected."
-        elsif pas.length == 0
-          puts "ERROR: plant accession #{cs[psu.scoring_unit_name]} not present in database."
-        else
-          psu.plant_accession = pas.first
-          psu.save
+      unless psu.plant_accession.nil?
+        psu_acc = psu.plant_accession.plant_accession
+        psu_cs_acc = cs[psu.scoring_unit_name]
+
+        if psu_acc != psu_cs_acc
+          conflicts += 1
+          # Find correct plant accession
+          pas = PlantAccession.where(plant_accession: cs[psu.scoring_unit_name]).all
+          if pas.length > 1
+            puts "ERROR: ambiguous plant accession name: #{cs[psu.scoring_unit_name]}: #{pas.length} records detected."
+          elsif pas.length == 0
+            puts "ERROR: plant accession #{cs[psu.scoring_unit_name]} not present in database."
+          else
+            psu.plant_accession = pas.first
+            psu.save
+          end
         end
       end
 
