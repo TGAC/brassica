@@ -73,6 +73,7 @@ en:
       scoring_unit_frame_size: Frame size
       date_planted: Date planted
     plant_trials:
+      id: Scoring
       plant_trial_name: Trial name
       plant_trial_description: Trial
       project_descriptor: Project

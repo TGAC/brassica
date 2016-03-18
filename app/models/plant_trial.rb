@@ -56,7 +56,8 @@ class PlantTrial < ActiveRecord::Base
       'trial_year',
       'trial_location_site_name',
       'countries.country_name',
-      'institute_id'
+      'institute_id',
+      'id'
     ]
   end
 
