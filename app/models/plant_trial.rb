@@ -29,6 +29,24 @@ class PlantTrial < ActiveRecord::Base
     query.order(:trial_year).pluck_columns
   end
 
+  # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
+  def scoring_table_data(trait_descriptor_ids)
+    all_scores = TraitScore.
+      includes(:plant_scoring_unit).
+      includes(:trait_descriptor).
+      where(plant_scoring_units: { plant_trial_id: self.id }).
+      order('plant_scoring_units.scoring_unit_name asc, trait_descriptors.id asc').
+      group_by(&:plant_scoring_unit)
+
+    plant_scoring_units.order('scoring_unit_name asc').map do |unit|
+      scores = all_scores[unit] || []
+      [unit.scoring_unit_name] + trait_descriptor_ids.map do |td_id|
+        ts = scores.detect{ |s| s.trait_descriptor_id == td_id.to_i}
+        ts ? ts.score_value : '-'
+      end
+    end
+  end
+
   def self.table_columns
     [
       'plant_trial_name',

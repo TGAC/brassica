@@ -34,7 +34,7 @@ module DataTablesHelper
         :plant_populations
       when 'trait_descriptors'
         :trait_descriptors
-      when 'plant_trials', 'trait_scores', 'plant_scoring_units'
+      when 'plant_trials', 'trait_scores', 'plant_scoring_units', 'trial_scoring'
         :plant_trials
       when 'linkage_maps', 'linkage_groups', 'population_loci', 'map_positions', 'map_locus_hits'
         :linkage_maps

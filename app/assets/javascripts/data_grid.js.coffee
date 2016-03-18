@@ -61,6 +61,8 @@ $ ->
           api = new $.fn.dataTable.Api(dt)
           if $(dt.nTHead).find('th.related').length
             api.columns().indexes().toArray().slice(0, -2)
+          else if dt.sInstance == 'trial-scoring'
+            api.columns().indexes().toArray()
           else
             api.columns().indexes().toArray().slice(0, -1)
         fnClick:
