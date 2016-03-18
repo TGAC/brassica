@@ -99,6 +99,13 @@ window.configs =
         targets: 'plant_varieties_plant_variety_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_varieties', data, full[full.length - 2])
+      ,
+        targets: 'plant_lines_sequence_identifier_column'
+        render: (data, type, full, meta) ->
+          if data && data.indexOf("SR") == 0
+            '<a href="http://www.ncbi.nlm.nih.gov/sra/' + data + '" target="blank">' + data + '</a>'
+          else
+            data
       ]
 
   'plant-populations':

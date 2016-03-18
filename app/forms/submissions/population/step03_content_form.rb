@@ -17,6 +17,7 @@ module Submissions
         property :previous_line_name
         property :genetic_status
         property :plant_variety_name
+        property :sequence_identifier
         property :data_owned_by
         property :data_provenance
         property :comments
@@ -82,6 +83,7 @@ module Submissions
           :previous_line_name,
           :genetic_status,
           :plant_variety_name,
+          :sequence_identifier,
           :data_owned_by,
           :data_provenance,
           :comments,

@@ -31,7 +31,7 @@ class AddPublishedFlagToDbColumns < ActiveRecord::Migration
     :taxonomy_terms,
     :trait_descriptors,
     :trait_grades,
-    :trait_scores,
+    :trait_scores
   ]
 
   def up
