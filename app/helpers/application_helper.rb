@@ -12,7 +12,7 @@ module ApplicationHelper
           else
             :home
         end
-      when 'data_tables'
+      when 'data_tables', 'plant_trials'
         :browse
       when 'submissions'
         :submit
