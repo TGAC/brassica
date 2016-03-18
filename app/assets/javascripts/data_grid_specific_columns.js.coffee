@@ -141,7 +141,7 @@ window.configs =
       ,
         targets: 'plant_trials_id_column'
         render: (data, type, full, meta) ->
-          '<a href="plant_trials/' + data + '">Show</a>'
+          '<a href="trial_scorings/' + data + '">Show</a>'
       ]
 
   'population-loci':

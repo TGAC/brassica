@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PlantTrialsController do
+RSpec.describe TrialScoringsController do
   let(:plant_trial) { create(:plant_trial) }
 
   context '#show' do

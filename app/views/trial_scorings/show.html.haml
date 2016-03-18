@@ -11,7 +11,7 @@
 
   = back_button
 
-  - url = plant_trial_path(id: @plant_trial.id, trait_descriptor_ids: @trait_descriptors.map(&:id))
+  - url = trial_scoring_path(id: @plant_trial.id, trait_descriptor_ids: @trait_descriptors.map(&:id))
   %table.table.table-condensed.table-browse.table-hover.data-table#trial-scoring{ data: { ajax: url }}
     %thead
       %tr

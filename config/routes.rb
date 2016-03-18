@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   resources :plant_varieties, only: [:index]
   resources :plant_populations, only: [:index]
   resources :trait_descriptors, only: [:index]
-  resources :plant_trials, only: [:show]
+  resources :trial_scorings, only: [:show]
   resources :data_tables, only: [:index, :show]
 
   get 'search', to: 'searches#counts'

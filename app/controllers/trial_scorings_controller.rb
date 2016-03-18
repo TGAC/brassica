@@ -1,4 +1,4 @@
-class PlantTrialsController < ApplicationController
+class TrialScoringsController < ApplicationController
   def show
     @plant_trial = PlantTrial.find(params[:id])
     @trait_scores = @plant_trial
