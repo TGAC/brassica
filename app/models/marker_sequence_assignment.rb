@@ -1,4 +1,5 @@
 class MarkerSequenceAssignment < ActiveRecord::Base
+  include ActiveModel::Validations
 
   has_many :marker_assays
 
@@ -7,6 +8,8 @@ class MarkerSequenceAssignment < ActiveRecord::Base
 
   validates :canonical_marker_name,
             presence: true
+
+  validates_with PublicationValidator
 
   include Annotable
 end

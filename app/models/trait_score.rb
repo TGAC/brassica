@@ -1,4 +1,5 @@
 class TraitScore < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :plant_scoring_unit, counter_cache: true
   belongs_to :trait_descriptor, counter_cache: true
@@ -6,6 +7,8 @@ class TraitScore < ActiveRecord::Base
 
   validates :score_value,
             presence: true
+
+  validates_with PublicationValidator
 
   include Filterable
   include Pluckable

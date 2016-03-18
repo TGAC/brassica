@@ -1,4 +1,5 @@
 class RestrictionEnzyme < ActiveRecord::Base
+  include ActiveModel::Validations
 
   has_many :marker_assays_a, class_name: 'MarkerAssay',
              foreign_key: 'restriction_enzyme_a_id'
@@ -11,4 +12,7 @@ class RestrictionEnzyme < ActiveRecord::Base
 
   validates :recognition_site,
             presence: true
+
+  validates_with PublicationValidator
+
 end

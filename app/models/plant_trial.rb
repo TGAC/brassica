@@ -1,4 +1,5 @@
 class PlantTrial < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :plant_population, counter_cache: true
   belongs_to :country
@@ -17,6 +18,8 @@ class PlantTrial < ActiveRecord::Base
     greater_than_or_equal_to: -180,
     less_than_or_equal_to: 180
   }
+
+  validates_with PublicationValidator
 
   include Relatable
   include Filterable

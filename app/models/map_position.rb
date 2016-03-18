@@ -1,4 +1,5 @@
 class MapPosition < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :linkage_group, counter_cache: true
   belongs_to :population_locus, counter_cache: true
@@ -9,6 +10,8 @@ class MapPosition < ActiveRecord::Base
 
   validates :map_position,
             presence: true
+
+  validates_with PublicationValidator
 
   after_update { map_locus_hits.each(&:touch) }
 

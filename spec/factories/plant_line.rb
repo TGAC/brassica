@@ -7,6 +7,7 @@ FactoryGirl.define do
     genetic_status { Faker::Lorem.word }
     taxonomy_term
     sequence_identifier { Faker::Lorem.word }
+    published_on { Date.today-8.days }
     user
     annotable
 

@@ -10,6 +10,7 @@ FactoryGirl.define do
     design_factor_4 { 'col_' + Faker::Number.number(2).to_s }
     design_factor_5 { 'plot_' + Faker::Number.number(3).to_s }
     confirmed_by_whom { Faker::Internet.user_name }
+    published_on { Date.today-8.days }
     annotable
   end
 end

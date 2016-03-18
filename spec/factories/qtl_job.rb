@@ -9,6 +9,7 @@ FactoryGirl.define do
     outer_confidence_threshold { Faker::Number.number(1).to_s }
     qtl_statistic_type { Faker::Lorem.word }
     date_run { Faker::Date.backward }
+    published_on { Date.today-8.days }
     linkage_map
     user
     annotable

@@ -5,6 +5,7 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence }
     male_parent_line { create(:plant_line) }
     female_parent_line { create(:plant_line) }
+    published_on { Date.today-8.days }
     taxonomy_term
     population_type
     user

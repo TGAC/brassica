@@ -1,4 +1,5 @@
 class TraitDescriptor < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :user
 
@@ -12,6 +13,8 @@ class TraitDescriptor < ActiveRecord::Base
 
   include Searchable
   include AttributeValues
+
+  validates_with PublicationValidator
 
   def self.table_data(params = nil)
     trait_descriptor_query = ''

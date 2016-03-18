@@ -30,7 +30,9 @@ class Submission::PlantPopulationFinalizer
         taxonomy_term_id: taxonomy_term.id,
         entered_by_whom: submission.user.full_name,
         date_entered: Date.today,
-        user: submission.user
+        user: submission.user,
+        published: true,
+        published_on: Time.now
       )
 
       if attrs[:plant_variety_name].present?
@@ -52,7 +54,9 @@ class Submission::PlantPopulationFinalizer
       population_owned_by: submission.content.step01.owned_by,
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
-      user: submission.user
+      user: submission.user,
+      published: true,
+      published_on: Time.now
     }
 
     %i[female_parent_line male_parent_line].each do |parent_line_attr|
@@ -89,7 +93,9 @@ class Submission::PlantPopulationFinalizer
         plant_line: plant_line,
         date_entered: Date.today,
         data_provenance: submission.content.step04.data_provenance,
-        entered_by_whom: submission.user.login
+        entered_by_whom: submission.user.login,
+        published: true,
+        published_on: Time.now
       )
     end
   end

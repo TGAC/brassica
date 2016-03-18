@@ -90,7 +90,9 @@ class Submission::PlantTrialFinalizer
     {
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
-      user: submission.user
+      user: submission.user,
+      published: true,
+      published_on: Time.now
     }
   end
 

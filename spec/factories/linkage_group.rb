@@ -7,6 +7,7 @@ FactoryGirl.define do
     consensus_group_assignment { Faker::Lorem.word }
     consensus_group_orientation { Faker::Lorem.word }
     confirmed_by_whom { Faker::Internet.user_name }
+    published_on { Date.today-8.days }
     linkage_map
     user
     annotable

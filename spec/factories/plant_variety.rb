@@ -8,6 +8,7 @@ FactoryGirl.define do
     female_parent { Faker::Lorem.word }
     male_parent { Faker::Lorem.word }
     quoted_parentage{ Faker::Lorem.sentence }
+    published_on { Date.today-8.days }
     user
     annotable_no_owner
 

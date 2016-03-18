@@ -7,6 +7,7 @@ FactoryGirl.define do
     year_produced { Faker::Date.backward.year.to_s }
     date_harvested { Faker::Date.backward }
     confirmed_by_whom { Faker::Internet.user_name }
+    published_on { Date.today-8.days }
     plant_line
     user
     annotable

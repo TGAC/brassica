@@ -15,6 +15,12 @@ RSpec.describe PlantPopulation do
       to raise_error ActiveRecord::RecordInvalid
   end
 
+  it 'must have publication date when published' do
+    pp = build(:plant_population, published: true, published_on: nil)
+    expect(pp.valid?).to be_falsy
+    expect(pp.errors[:published_on]).not_to be_empty
+  end
+
   describe '#filter' do
     before(:each) do
       @pp = create(:plant_population)

@@ -1,4 +1,5 @@
 class MarkerAssay < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :marker_sequence_assignment
 
@@ -30,6 +31,8 @@ class MarkerAssay < ActiveRecord::Base
 
   validates :canonical_marker_name,
             presence: true
+
+  validates_with PublicationValidator
 
   after_update { population_loci.each(&:touch) }
 

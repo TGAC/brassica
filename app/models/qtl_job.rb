@@ -1,4 +1,5 @@
 class QtlJob < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :linkage_map
   belongs_to :user
@@ -14,6 +15,8 @@ class QtlJob < ActiveRecord::Base
 
   validates :qtl_method,
             presence: true
+
+  validates_with PublicationValidator
 
   include Relatable
   include Filterable

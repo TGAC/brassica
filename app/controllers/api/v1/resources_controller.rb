@@ -35,7 +35,9 @@ class Api::V1::ResourcesController < Api::BaseController
       create_params.merge(
         :user_id => api_key.user_id,
         :date_entered => Date.today,
-        :entered_by_whom => api_key.user.full_name
+        :entered_by_whom => api_key.user.full_name,
+        :published => true,
+        :published_on => Date.today
       )
     )
 

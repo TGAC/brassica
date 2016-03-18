@@ -1,4 +1,5 @@
 class GenotypeMatrix < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :linkage_map
 
@@ -16,6 +17,8 @@ class GenotypeMatrix < ActiveRecord::Base
 
   validates :matrix,
             presence: true
+
+  validates_with PublicationValidator
 
   include Annotable
 end

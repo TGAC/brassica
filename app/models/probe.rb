@@ -1,4 +1,5 @@
 class Probe < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :taxonomy_term
   belongs_to :user
@@ -17,6 +18,8 @@ class Probe < ActiveRecord::Base
 
   validates :sequence_source_acronym,
             presence: true
+
+  validates_with PublicationValidator
 
   after_update { marker_assays.each(&:touch) }
 

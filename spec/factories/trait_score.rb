@@ -4,6 +4,7 @@ FactoryGirl.define do
     value_type { Faker::Lorem.sentence }
     scoring_date { rand(1..100).days.ago }
     confirmed_by_whom { Faker::Internet.user_name }
+    published_on { Date.today-8.days }
     plant_scoring_unit
     user
     trait_descriptor
