@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   get 'api_documentation', to: 'application#api'
 
   resources :submissions do
-    resources :uploads, controller: 'submissions/uploads', only: [:create, :destroy]
+    resources :uploads, controller: 'submissions/uploads', only: [:new, :create, :destroy]
   end
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]

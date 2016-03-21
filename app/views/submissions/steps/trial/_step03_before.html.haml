@@ -42,6 +42,11 @@
       ...
 
   %p
+    For your convenience you may want to
+    = link_to 'download the ready template', new_submission_upload_path(submission)
+    in a TSV format.
+
+  %p
     Surplus columns (with index larger than the number of chosen traits) will be ignored. When values
     in the first column are not unique, the behaviour is undefined.
 
