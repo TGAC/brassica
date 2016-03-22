@@ -1,6 +1,4 @@
 class TaxonomyTerm < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :parent,
              class_name: 'TaxonomyTerm',
              foreign_key: 'taxonomy_term_id'
@@ -13,8 +11,6 @@ class TaxonomyTerm < ActiveRecord::Base
 
   validates :name, uniqueness: true
   validates :label, presence: true
-
-  validates_with PublicationValidator
 
   scope :children_of, ->(parent_id) { where(taxonomy_term_id: parent_id) }
 

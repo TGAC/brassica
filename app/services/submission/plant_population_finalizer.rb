@@ -32,7 +32,7 @@ class Submission::PlantPopulationFinalizer
         date_entered: Date.today,
         user: submission.user,
         published: true,
-        published_on: Time.now
+        published_on: Date.today
       )
 
       if attrs[:plant_variety_name].present?

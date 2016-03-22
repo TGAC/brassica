@@ -124,7 +124,18 @@ RSpec.describe ActiveRecord::Base do
       'schema_migrations',
       'submission_uploads',
       'submissions',
-      'users'
+      'users',
+      'design_factors',
+      'genotype_matrices',
+      'pop_type_lookup',
+      'processed_trait_datasets',
+      'marker_sequence_assignments',
+      'plant_variety_country_registered',
+      'plant_variety_country_of_origin',
+      'taxonomy_terms',
+      'trait_grades',
+      'plant_parts',
+      'restriction_enzymes'
     ]
 
     tables = ActiveRecord::Base.connection.tables

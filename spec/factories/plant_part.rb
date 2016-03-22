@@ -4,7 +4,6 @@ FactoryGirl.define do
     description { Faker::Lorem.sentence }
     described_by_whom { Faker::Internet.user_name }
     confirmed_by_whom { Faker::Internet.user_name }
-    published_on { Date.today-8.days }
     annotable_no_owner
   end
 end

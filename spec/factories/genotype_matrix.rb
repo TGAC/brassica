@@ -6,7 +6,6 @@ FactoryGirl.define do
     number_markers_in_matrix { Faker::Number.number(2) }
     number_lines_in_matrix { Faker::Number.number(3) }
     matrix { Faker::Lorem.characters(200) }
-    published_on { Date.today-8.days }
     annotable
     linkage_map
   end
