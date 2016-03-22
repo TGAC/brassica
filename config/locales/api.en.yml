@@ -54,6 +54,20 @@ en:
               }
             }
 
+          created_record_sample: |-
+            HTTP/1.1 201 Created
+            Content-Type: application/json
+
+            {
+              "plant_line": {
+                "plant_line_name": "Plant line by API",
+                ...
+                "entered_by_whom": "Your User Name",
+                "date_entered": "2015-07-18"
+                "id": 25697
+              }
+            }
+
           wrong_vs_right_related_object: |-
             {
               "plant_population": {

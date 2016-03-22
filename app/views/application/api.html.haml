@@ -250,6 +250,19 @@
         resource (i.e., in a reverse fashion). That is, when submitting a new Plant Trial,
         a correct value of <code>plant_population_id</code> will set the relationship.
 
+      %p
+        If the submission is successful, you will get a JSON document in return. It
+        describes the submitted record, so it mostly contains the data you have just submitted.
+        However, it also provides the <i>internal BIP identifier</i> that was assigned to the new
+        record - see the value of the <code>id</code> attribute.
+
+      %pre.response
+        %code= t('api.general.create.examples.created_record_sample')
+
+      %p
+        You may now utilize that identifier to <i>relate</i> this newly created object with
+        other records you are about to submit (for instance, new Plant Populations).
+
       %h3#deleting-data.section-heading Deleting submitted data
 
       %p
