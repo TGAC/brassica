@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Submission uploads" do
 
-  let(:submission) { create :submission }
+  let(:submission) { create(:submission, :trial) }
 
   context "with no user signed in" do
     describe "POST /submissions/:submission_id/uploads" do
@@ -40,6 +40,31 @@ RSpec.describe "Submission uploads" do
           "file_file_name" => "score_upload.txt",
           "delete_url" => submission_upload_path(submission, submission.uploads.last)
         )
+      end
+    end
+
+    describe "GET /submissions/:submission_id/uploads/new" do
+      it 'generates a simple trait scores template' do
+        trait_descriptor = create(:trait_descriptor)
+        submission.content.update(:step02,
+                                  trait_descriptor_list: [trait_descriptor.id.to_s])
+        submission.save
+
+        get "/submissions/#{submission.id}/uploads/new"
+
+        expect(response).to be_success
+        expect(response.body.lines[0]).
+          to eq "Plant scoring unit name\t#{trait_descriptor.descriptor_name}\n"
+        expect(response.body.lines[2]).
+          to eq "sample_scoring_unit_B_name__replace_it\tsample_B_value_0__replace_it\n"
+      end
+
+      it 'does not break for no-traits submissions' do
+        get "/submissions/#{submission.id}/uploads/new"
+
+        expect(response).to be_success
+        expect(response.body.lines[0]).
+          to eq "Plant scoring unit name\t\n"
       end
     end
   end
