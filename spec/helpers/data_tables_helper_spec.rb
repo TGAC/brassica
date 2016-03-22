@@ -6,6 +6,7 @@ RSpec.describe DataTablesHelper do
       expect(browse_tabs).to eq({
         plant_populations: data_tables_path(model: :plant_populations),
         trait_descriptors: data_tables_path(model: :trait_descriptors, group: true),
+        plant_trials: data_tables_path(model: :plant_trials),
         linkage_maps: data_tables_path(model: :linkage_maps),
         qtl: data_tables_path(model: :qtl),
         marker_assays: data_tables_path(model: :marker_assays)

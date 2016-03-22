@@ -21,6 +21,7 @@ en:
   browse_tabs:
     plant_populations: Populations
     trait_descriptors: Traits
+    plant_trials: Trials
     linkage_maps: Linkage maps
     qtl: QTL
     marker_assays: Marker assays

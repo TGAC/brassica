@@ -138,6 +138,10 @@ window.configs =
         targets: 'plant_populations_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_populations', data, full[full.length - 3])
+      ,
+        targets: 'plant_trials_id_column'
+        render: (data, type, full, meta) ->
+          '<a href="trial_scorings/' + data + '">Show</a>'
       ]
 
   'population-loci':

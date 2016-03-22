@@ -1,0 +1,22 @@
+.container
+  = render 'data_tables/tabs'
+
+  .lead Plant Trial scoring
+
+  .data-filters
+    %p
+      Showing trial scoring for Plant Trial
+      %span.label.label-info
+        = @plant_trial.plant_trial_name
+
+  = back_button
+
+  - url = trial_scoring_path(id: @plant_trial.id, trait_descriptor_ids: @trait_descriptors.map(&:id))
+  %table.table.table-condensed.table-browse.table-hover.data-table#trial-scoring{ data: { ajax: url }}
+    %thead
+      %tr
+        %th.plant_scoring_units_scoring_unit_name_column
+          = t 'tables.plant_scoring_units.scoring_unit_name'
+        - @trait_descriptors.map(&:descriptor_name).each do |column|
+          %th= column
+    %tbody

@@ -10,6 +10,11 @@ class TraitScore < ActiveRecord::Base
   include Filterable
   include Pluckable
 
+  scope :of_trial, ->(plant_trial_id) {
+    joins(:plant_scoring_unit).
+    where(plant_scoring_units: { plant_trial_id: plant_trial_id })
+  }
+
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query.
