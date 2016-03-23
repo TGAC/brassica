@@ -26,6 +26,7 @@ class Submission::PlantTrialFinalizer
     @new_trait_descriptors = (submission.content.step02.new_trait_descriptors || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       attrs = attrs.merge(user_data)
+      attrs = attrs.merge(published: publish?)
       TraitDescriptor.create!(attrs)
     end
   end
@@ -35,9 +36,10 @@ class Submission::PlantTrialFinalizer
 
     @new_plant_scoring_units = (submission.content.step03.trait_scores || {}).map do |plant_id, scores|
       new_plant_scoring_unit = PlantScoringUnit.create!(
-        user_data.merge(scoring_unit_name: plant_id)
+        user_data.merge(scoring_unit_name: plant_id, published: publish?)
       )
-      new_trait_scores = (scores || {}).
+
+      (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
@@ -46,7 +48,8 @@ class Submission::PlantTrialFinalizer
           TraitScore.create!(
             user_data.merge(trait_descriptor: trait_descriptor,
                             score_value: value,
-                            plant_scoring_unit_id: new_plant_scoring_unit.id)
+                            plant_scoring_unit_id: new_plant_scoring_unit.id,
+                            published: publish?)
           )
       end
       new_plant_scoring_unit
@@ -64,8 +67,9 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    attrs.merge!(submission.content.step04.to_h)
+    attrs.merge!(submission.content.step04.to_h.except(:visibility))
     attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
+    attrs.merge!(published: publish?)
 
     if PlantTrial.where(plant_trial_name: attrs[:plant_trial_name]).exists?
       rollback(0)
@@ -77,6 +81,7 @@ class Submission::PlantTrialFinalizer
   def update_submission
     submission.update_attributes!(
       finalized: true,
+      published: publish?,
       submitted_object_id: @plant_trial.id
     )
   end
@@ -101,5 +106,9 @@ class Submission::PlantTrialFinalizer
     else
       @new_trait_descriptors.detect{ |ntd| ntd.descriptor_name == trait }
     end
+  end
+
+  def publish?
+    @publish ||= submission.content.step04.visibility.to_s == 'published'
   end
 end

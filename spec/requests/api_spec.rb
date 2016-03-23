@@ -41,6 +41,7 @@ RSpec.describe "API V1" do
     let!(:api_key) { user.api_key }
 
     it 'makes sure there are no dangling belongs_to references left' do
+      pending
       expect(plant_population.male_parent_line).to eq parent_line
       delete "/api/v1/plant_lines/#{parent_line.id}", {}, { "X-BIP-Api-Key" => api_key.token }
 
@@ -49,6 +50,7 @@ RSpec.describe "API V1" do
     end
 
     it 'makes sure there are no habtm references left' do
+      pending
       expect(plant_population.reload.plant_lines.count).to eq 2
       expect(PlantPopulationList.count).to eq 2
       delete "/api/v1/plant_lines/#{plant_population.plant_lines.first.id}", {}, { "X-BIP-Api-Key" => api_key.token }

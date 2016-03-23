@@ -79,9 +79,5 @@ class PlantLine < ActiveRecord::Base
     ]
   end
 
-  def published?
-    updated_at < Time.now - 1.week
-  end
-
   include Annotable
 end

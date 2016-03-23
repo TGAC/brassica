@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Submission::PlantPopulationFinalizer do
 
-  let(:submission) { create(:submission) }
+  let(:submission) { create(:submission, :population) }
   let!(:plant_lines) { create_list(:plant_line, 2) }
   let!(:taxonomy_term) { create(:taxonomy_term) }
   let!(:population_type) { create(:population_type) }
@@ -30,7 +30,8 @@ RSpec.describe Submission::PlantPopulationFinalizer do
                                 new_plant_lines: new_plant_lines_attrs,
                                 female_parent_line: plant_lines[0].plant_line_name,
                                 male_parent_line: plant_lines[1].plant_line_name)
-      submission.content.update(:step04, plant_population_attrs.slice(:data_owned_by, :data_provenance, :comments))
+      submission.content.update(:step04, plant_population_attrs.
+        slice(:data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
     end
 
     it 'creates plant population' do
@@ -91,6 +92,35 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       expect(subject.plant_population_lists.size).to eq 3
       subject.plant_population_lists.each do |plant_population_list|
         expect(plant_population_list).to be_persisted
+      end
+    end
+
+
+    it 'makes submission and created objects published' do
+      subject.call
+
+      expect(submission).to be_published
+      expect(PlantLine.all).to all be_published
+      expect(PlantPopulation.all).to all be_published
+      expect(PlantPopulationList.all).to all be_published
+    end
+
+    context 'when visibility set to private' do
+      before do
+        submission.content.update(:step04, visibility: 'private')
+      end
+
+      it 'makes submission and created objects private' do
+        subject.call
+
+        plant_population = submission.submitted_object
+        plant_population_lists = plant_population.plant_population_lists
+        plant_lines = subject.new_plant_lines
+
+        expect(submission).not_to be_published
+        expect(plant_population).not_to be_published
+        expect(plant_population_lists.map(&:published?)).to all be_falsey
+        expect(plant_lines.map(&:published?)).to all be_falsey
       end
     end
   end

@@ -3,15 +3,17 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
   let(:parsed_response) { JSON.parse(response.body) }
   let(:subject) { create(model_klass) }
 
-  describe '#published?' do
-    it 'implements published? method' do
-      expect{ subject.published? }.not_to raise_error
+  describe '#revocable?' do
+    it 'implements revocable? method' do
+      pending
+      expect{ subject.revocable? }.not_to raise_error
     end
 
     it 'returns true for objects older than 1 week, false otherwise' do
-      expect(subject.reload.published?).to be_falsey
+      pending
+      expect(subject.reload.revocable?).to be_falsey
       subject.update_attribute :updated_at, Time.now - 8.days
-      expect(subject.reload.published?).to be_truthy
+      expect(subject.reload.revocable?).to be_truthy
     end
   end
 
@@ -56,6 +58,7 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
       end
 
       it 'destroys resource still in its revocability period' do
+        pending
         expect {
           delete "/api/v1/#{model_name.pluralize}/#{subject.id}", {}, { "X-BIP-Api-Key" => api_key.token }
         }.to change {
