@@ -27,13 +27,8 @@ class Submission::PlantPopulationFinalizer
       attrs = attrs.with_indifferent_access
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
       attrs = attrs.merge(
-        taxonomy_term_id: taxonomy_term.id,
-        entered_by_whom: submission.user.full_name,
-        date_entered: Date.today,
-        user: submission.user,
-        published: true,
-        published_on: Time.now
-      )
+        taxonomy_term_id: taxonomy_term.id
+      ).merge(common_data)
 
       if attrs[:plant_variety_name].present?
         plant_variety = PlantVariety.find_by!(plant_variety_name: attrs.delete(:plant_variety_name))
@@ -49,15 +44,10 @@ class Submission::PlantPopulationFinalizer
   end
 
   def create_plant_population
-    attrs = {
+    attrs = common_data.merge(
       name: submission.content.step01.name,
-      population_owned_by: submission.content.step01.owned_by,
-      date_entered: Date.today,
-      entered_by_whom: submission.user.full_name,
-      user: submission.user,
-      published: true,
-      published_on: Time.now
-    }
+      population_owned_by: submission.content.step01.owned_by
+    )
 
     %i[female_parent_line male_parent_line].each do |parent_line_attr|
       if parent_line = PlantLine.find_by(plant_line_name: submission.content.step03[parent_line_attr])
@@ -89,13 +79,11 @@ class Submission::PlantPopulationFinalizer
     @plant_population_lists = submission.content.step03.plant_line_list.select(&:present?).map do |id_or_name|
       plant_line = PlantLine.where_id_or_name(id_or_name).first!
       PlantPopulationList.create!(
-        plant_population: plant_population,
-        plant_line: plant_line,
-        date_entered: Date.today,
-        data_provenance: submission.content.step04.data_provenance,
-        entered_by_whom: submission.user.login,
-        published: true,
-        published_on: Time.now
+        common_data.merge(
+          plant_population: plant_population,
+          plant_line: plant_line,
+          data_provenance: submission.content.step04.data_provenance
+        )
       )
     end
   end
@@ -110,5 +98,15 @@ class Submission::PlantPopulationFinalizer
   def rollback(to_step)
     submission.errors.add(:step, to_step)
     raise ActiveRecord::Rollback
+  end
+
+  def common_data
+    {
+      date_entered: Date.today,
+      entered_by_whom: submission.user.full_name,
+      user: submission.user,
+      published: true,
+      published_on: Time.now
+    }
   end
 end
