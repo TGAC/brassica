@@ -19,6 +19,7 @@ class PlantAccession < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
@@ -56,10 +57,6 @@ class PlantAccession < ActiveRecord::Base
     [
       'plant_line_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

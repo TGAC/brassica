@@ -28,6 +28,7 @@ class LinkageGroup < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -69,10 +70,6 @@ class LinkageGroup < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

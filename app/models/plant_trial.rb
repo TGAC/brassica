@@ -26,6 +26,7 @@ class PlantTrial < ActiveRecord::Base
   include Pluckable
   include Searchable
   include AttributeValues
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -91,10 +92,6 @@ class PlantTrial < ActiveRecord::Base
 
   def self.json_options
     { include: [:country] }
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

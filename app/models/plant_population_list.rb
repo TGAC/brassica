@@ -14,9 +14,6 @@ class PlantPopulationList < ActiveRecord::Base
 
   validates_with PublicationValidator
 
-  def published?
-    updated_at < Time.now - 1.week
-  end
-
+  include Publishable
   include Annotable
 end

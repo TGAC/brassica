@@ -35,6 +35,7 @@ class PlantPopulation < ActiveRecord::Base
   include Relatable
   include Filterable
   include Searchable
+  include Publishable
 
   scope :by_name, -> { order('plant_populations.name') }
 
@@ -103,10 +104,6 @@ class PlantPopulation < ActiveRecord::Base
       'female_parent_line_id',
       'male_parent_line_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

@@ -18,6 +18,7 @@ class PopulationLocus < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   validates_with PublicationValidator
 
@@ -60,10 +61,6 @@ class PopulationLocus < ActiveRecord::Base
       'plant_population_id',
       'marker_assay_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

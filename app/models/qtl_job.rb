@@ -3,7 +3,7 @@ class QtlJob < ActiveRecord::Base
 
   belongs_to :linkage_map
   belongs_to :user
-  
+
   has_many :qtls
 
   validates :qtl_job_name,
@@ -21,6 +21,7 @@ class QtlJob < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
@@ -54,10 +55,6 @@ class QtlJob < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

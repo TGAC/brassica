@@ -13,6 +13,7 @@ class TraitDescriptor < ActiveRecord::Base
 
   include Searchable
   include AttributeValues
+  include Publishable
 
   validates_with PublicationValidator
 
@@ -72,10 +73,6 @@ class TraitDescriptor < ActiveRecord::Base
 
   def self.json_options
     { include: [:trait_grades] }
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

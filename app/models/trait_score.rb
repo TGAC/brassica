@@ -12,6 +12,7 @@ class TraitScore < ActiveRecord::Base
 
   include Filterable
   include Pluckable
+  include Publishable
 
   scope :of_trial, ->(plant_trial_id) {
     joins(:plant_scoring_unit).
@@ -60,10 +61,6 @@ class TraitScore < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable
