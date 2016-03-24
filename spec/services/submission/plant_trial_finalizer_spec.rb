@@ -43,8 +43,13 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(trait_descriptor.attributes).to include(
           'descriptor_name' => new_trait_descriptors_attrs[idx][:descriptor_name],
           'category' => new_trait_descriptors_attrs[idx][:category],
-          'likely_ambiguities' => new_trait_descriptors_attrs[idx][:likely_ambiguities]
+          'likely_ambiguities' => new_trait_descriptors_attrs[idx][:likely_ambiguities],
+          'entered_by_whom' => submission.user.full_name,
+          'date_entered' => Date.today,
+          'published' => true,
+          'user_id' => submission.user.id
         )
+        expect(trait_descriptor.published_on).to be_within(5.seconds).of(Time.now)
       end
     end
 
@@ -54,6 +59,10 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(PlantTrial.last.plant_trial_name).to eq plant_trial_attrs[:plant_trial_name]
       expect(PlantTrial.last.comments).to eq plant_trial_attrs[:comments]
       expect(PlantTrial.last.entered_by_whom).to eq submission.user.full_name
+      expect(PlantTrial.last.date_entered).to eq Date.today
+      expect(PlantTrial.last.published).to be_truthy
+      expect(PlantTrial.last.user).to eq submission.user
+      expect(PlantTrial.last.published_on).to be_within(5.seconds).of(Time.now)
     end
 
     it 'associates created plant trial with plant population' do

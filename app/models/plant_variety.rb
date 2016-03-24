@@ -1,4 +1,5 @@
 class PlantVariety < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :user
 
@@ -15,6 +16,8 @@ class PlantVariety < ActiveRecord::Base
   validates :plant_variety_name,
             presence: true,
             uniqueness: true
+
+  validates_with PublicationValidator
 
   include Filterable
   include Pluckable

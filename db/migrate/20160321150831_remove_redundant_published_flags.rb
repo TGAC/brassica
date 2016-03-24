@@ -1,4 +1,4 @@
-class AddPublishedFlagToDbColumns < ActiveRecord::Migration
+class RemoveRedundantPublishedFlags < ActiveRecord::Migration
   @@dbtables = [
     :design_factors,
     :genotype_matrices,
@@ -24,8 +24,6 @@ class AddPublishedFlagToDbColumns < ActiveRecord::Migration
     :qtl,
     :qtl_jobs,
     :restriction_enzymes,
-    :submission_uploads,
-    :submissions,
     :taxonomy_terms,
     :trait_descriptors,
     :trait_grades,
@@ -33,9 +31,14 @@ class AddPublishedFlagToDbColumns < ActiveRecord::Migration
   ]
 
   def up
-    @@dbtables.each do |table|
-      unless column_exists?(table, :published)
-        add_column(table, :published, :boolean, null: false, default:true)
+    @@dbtables.each do |t|
+      unless column_exists?(t, :user_id)
+        if column_exists?(t, :published)
+          remove_column(t, :published)
+        end
+        if column_exists?(t, :published_on)
+          remove_column(t, :published_on)
+        end
       end
     end
   end

@@ -9,6 +9,7 @@ FactoryGirl.define do
     bac_hit_seq_id { Faker::Number.number(8).to_s }
     bac_hit_seq_source { Faker::Lorem.word }
     bac_hit_name { Faker::Lorem.word }
+    published_on { Date.today-8.days }
     linkage_group
     linkage_map
     population_locus

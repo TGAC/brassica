@@ -1,4 +1,5 @@
 class Primer < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :user
 
@@ -15,6 +16,8 @@ class Primer < ActiveRecord::Base
 
   validates :sequence,
             presence: true
+
+  validates_with PublicationValidator
 
   def marker_assays
     marker_assays_a | marker_assays_b

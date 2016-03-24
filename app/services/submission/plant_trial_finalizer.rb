@@ -25,7 +25,7 @@ class Submission::PlantTrialFinalizer
   def create_new_trait_descriptors
     @new_trait_descriptors = (submission.content.step02.new_trait_descriptors || []).map do |attrs|
       attrs = attrs.with_indifferent_access
-      attrs = attrs.merge(user_data)
+      attrs = attrs.merge(common_data)
       TraitDescriptor.create!(attrs)
     end
   end
@@ -35,7 +35,7 @@ class Submission::PlantTrialFinalizer
 
     @new_plant_scoring_units = (submission.content.step03.trait_scores || {}).map do |plant_id, scores|
       new_plant_scoring_unit = PlantScoringUnit.create!(
-        user_data.merge(scoring_unit_name: plant_id)
+        common_data.merge(scoring_unit_name: plant_id)
       )
       new_trait_scores = (scores || {}).
         select{ |_, value| value.present? }.
@@ -44,9 +44,9 @@ class Submission::PlantTrialFinalizer
           rollback(1) unless trait_descriptor
 
           TraitScore.create!(
-            user_data.merge(trait_descriptor: trait_descriptor,
-                            score_value: value,
-                            plant_scoring_unit_id: new_plant_scoring_unit.id)
+            common_data.merge(trait_descriptor: trait_descriptor,
+                              score_value: value,
+                              plant_scoring_unit_id: new_plant_scoring_unit.id)
           )
       end
       new_plant_scoring_unit
@@ -54,7 +54,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def create_plant_trial
-    attrs = submission.content.step01.to_h.merge(user_data)
+    attrs = submission.content.step01.to_h.merge(common_data)
 
     if plant_population = PlantPopulation.find_by(id: submission.content.step01.plant_population_id)
       attrs.merge!(plant_population_id: plant_population.id)
@@ -86,11 +86,13 @@ class Submission::PlantTrialFinalizer
     raise ActiveRecord::Rollback
   end
 
-  def user_data
+  def common_data
     {
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
-      user: submission.user
+      user: submission.user,
+      published: true,
+      published_on: Time.now
     }
   end
 

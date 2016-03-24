@@ -9,6 +9,7 @@ FactoryGirl.define do
     contact_person { Faker::Internet.user_name }
     pubmed_id { Faker::Number.number(7) }
     confirmed_by_whom { Faker::Internet.user_name }
+    published_on { Date.today-8.days }
     country
     plant_population
     user

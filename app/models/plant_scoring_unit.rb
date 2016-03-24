@@ -1,4 +1,5 @@
 class PlantScoringUnit < ActiveRecord::Base
+  include ActiveModel::Validations
 
   belongs_to :design_factor
   belongs_to :plant_trial, counter_cache: true
@@ -10,6 +11,8 @@ class PlantScoringUnit < ActiveRecord::Base
 
   validates :scoring_unit_name,
             presence: true
+
+  validates_with PublicationValidator
 
   include Relatable
   include Filterable

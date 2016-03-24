@@ -4,6 +4,7 @@ FactoryGirl.define do
     canonical_marker_name { Faker::Lorem.word }
     separation_system { Faker::Lorem.words(3) }
     marker_type { Faker::Lorem.word }
+    published_on { Date.today-8.days }
     annotable
     user
     probe

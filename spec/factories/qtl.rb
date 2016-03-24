@@ -12,6 +12,7 @@ FactoryGirl.define do
     additive_effect { Faker::Lorem.sentence }
     genetic_variance_explained { Faker::Lorem.sentence }
     pubmed_id { Faker::Number.number(7) }
+    published_on { Date.today-8.days }
     annotable
     linkage_group
     qtl_job
