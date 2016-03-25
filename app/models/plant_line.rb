@@ -1,6 +1,4 @@
 class PlantLine < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :plant_variety
   belongs_to :taxonomy_term
   belongs_to :user
@@ -31,8 +29,6 @@ class PlantLine < ActiveRecord::Base
             uniqueness: true
   validates :user,
             presence: { on: :create }
-
-  validates_with PublicationValidator
 
   scope :by_name, -> { order(:plant_line_name) }
   scope :where_id_or_name, ->(id_or_name) {

@@ -1,6 +1,4 @@
 class PlantPopulation < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :taxonomy_term
   belongs_to :population_type
   belongs_to :male_parent_line, class_name: 'PlantLine',
@@ -25,8 +23,6 @@ class PlantPopulation < ActiveRecord::Base
             uniqueness: true
   validates :user,
             presence: { on: :create }
-
-  validates_with PublicationValidator
 
   after_update { population_loci.each(&:touch) }
   after_update { linkage_maps.each(&:touch) }

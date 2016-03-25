@@ -1,6 +1,4 @@
 class MapLocusHit < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :linkage_map, counter_cache: true
   belongs_to :linkage_group, counter_cache: true
   belongs_to :map_position, counter_cache: true
@@ -18,8 +16,6 @@ class MapLocusHit < ActiveRecord::Base
 
   validates :sequence_source_acronym,
             presence: true
-
-  validates_with PublicationValidator
 
   include Filterable
   include Pluckable

@@ -1,6 +1,4 @@
 class TraitDescriptor < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :user
 
   has_many :trait_grades
@@ -14,8 +12,6 @@ class TraitDescriptor < ActiveRecord::Base
   include Searchable
   include AttributeValues
   include Publishable
-
-  validates_with PublicationValidator
 
   def self.table_data(params = nil)
     trait_descriptor_query = ''

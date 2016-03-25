@@ -1,6 +1,4 @@
 class Qtl < ActiveRecord::Base
-  include ActiveModel::Validations
-
   self.table_name = 'qtl'
 
   belongs_to :processed_trait_dataset
@@ -16,8 +14,6 @@ class Qtl < ActiveRecord::Base
 
   validates :qtl_mid_position,
             presence: true
-
-  validates_with PublicationValidator
 
   include Filterable
   include Searchable

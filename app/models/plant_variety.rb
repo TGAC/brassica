@@ -1,6 +1,4 @@
 class PlantVariety < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :user
 
   has_and_belongs_to_many :countries_of_origin,
@@ -16,8 +14,6 @@ class PlantVariety < ActiveRecord::Base
   validates :plant_variety_name,
             presence: true,
             uniqueness: true
-
-  validates_with PublicationValidator
 
   include Filterable
   include Pluckable

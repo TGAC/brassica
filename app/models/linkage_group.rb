@@ -1,6 +1,4 @@
 class LinkageGroup < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :linkage_map, counter_cache: true
   belongs_to :user
 
@@ -17,8 +15,6 @@ class LinkageGroup < ActiveRecord::Base
 
   validates :consensus_group_assignment,
             presence: true
-
-  validates_with PublicationValidator
 
   after_update { map_positions.each(&:touch) }
   after_update { map_locus_hits.each(&:touch) }

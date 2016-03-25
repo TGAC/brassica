@@ -1,6 +1,4 @@
 class PlantAccession < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :plant_line
   belongs_to :user
 
@@ -13,8 +11,6 @@ class PlantAccession < ActiveRecord::Base
   validates :year_produced,
             length: { is: 4 },
             allow_blank: true
-
-  validates_with PublicationValidator
 
   include Relatable
   include Filterable

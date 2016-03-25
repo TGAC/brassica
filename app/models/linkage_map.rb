@@ -1,6 +1,4 @@
 class LinkageMap < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :plant_population, counter_cache: true, touch: true
   belongs_to :user
 
@@ -19,8 +17,6 @@ class LinkageMap < ActiveRecord::Base
   validates :map_version_no,
             presence: true,
             length: { minimum: 1, maximum: 3 }
-
-  validates_with PublicationValidator
 
   after_update { map_locus_hits.each(&:touch) }
 
