@@ -40,13 +40,29 @@ class Submission
   $: (args) =>
     @$el.find(args)
 
+  init: =>
+    # TODO: make sure init is not run unless $el is present
+    @initDirtyTracker()
+
+  initDirtyTracker: =>
+    @dirtyTracker = new DirtyTracker(@$el[0]).init()
+
+    # TODO: make sure it works with keyboard and touch too
+    $('input[type=submit][name=back]').on 'click', (event) =>
+      if @dirtyTracker.isChanged()
+        # TODO: use bootstrap's confirmation dialog
+        unless confirm("Discard unsaved changes?")
+          event.preventDefault()
+
 class PopulationSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
   plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name', 'plant_line_name', 'common_name')
   plantLineListSelectOptions: @makeAjaxListSelectOptions('/plant_lines', 'id', 'plant_line_name', 'common_name')
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name', 'plant_variety_name', 'crop_type')
 
-  bind: =>
+  init: =>
+    super()
+
     @$('.taxonomy-term').select2(@defaultSelectOptions)
     @$('.male-parent-line, .female-parent-line').select2(@plantLineSelectOptions)
     @$('.population-type').select2(@defaultSelectOptions)
@@ -131,7 +147,9 @@ class TrialSubmission extends Submission
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name', 'description')
   traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name', 'descriptor_label')
 
-  bind: =>
+  init: =>
+    super()
+
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
     @$('select.country-id').select2(@defaultSelectOptions)
@@ -265,6 +283,6 @@ class TrialSubmission extends Submission
     'new-trait-descriptor-' + descriptor_name.split(/\s+/).join('-').toLowerCase()
 
 $ ->
-  new PopulationSubmission('.edit-population-submission').bind()
-  new TrialSubmission('.edit-trial-submission').bind()
+  new PopulationSubmission('.edit-population-submission').init()
+  new TrialSubmission('.edit-trial-submission').init()
 
