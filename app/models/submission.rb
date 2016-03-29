@@ -17,6 +17,7 @@ class Submission < ActiveRecord::Base
   before_validation :set_defaults, on: :create
   before_save :apply_content_adjustments
 
+  scope :publishable, -> { where(publishable: true) }
   scope :finalized, -> { where(finalized: true) }
   scope :recent_first, -> { order(updated_at: :desc) }
 
