@@ -1,6 +1,4 @@
 class PlantAccession < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :plant_line
   belongs_to :user
 
@@ -14,11 +12,10 @@ class PlantAccession < ActiveRecord::Base
             length: { is: 4 },
             allow_blank: true
 
-  validates_with PublicationValidator
-
   include Relatable
   include Filterable
   include Pluckable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && params[:query].present?) ? filter(params) : all
@@ -56,10 +53,6 @@ class PlantAccession < ActiveRecord::Base
     [
       'plant_line_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

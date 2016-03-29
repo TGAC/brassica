@@ -1,6 +1,4 @@
 class PlantLine < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :plant_variety
   belongs_to :taxonomy_term
   belongs_to :user
@@ -24,14 +22,13 @@ class PlantLine < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   validates :plant_line_name,
             presence: true,
             uniqueness: true
   validates :user,
             presence: { on: :create }
-
-  validates_with PublicationValidator
 
   scope :by_name, -> { order(:plant_line_name) }
   scope :where_id_or_name, ->(id_or_name) {
@@ -80,10 +77,6 @@ class PlantLine < ActiveRecord::Base
     [
       'plant_variety_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

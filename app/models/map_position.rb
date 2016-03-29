@@ -1,6 +1,4 @@
 class MapPosition < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :linkage_group, counter_cache: true
   belongs_to :population_locus, counter_cache: true
   belongs_to :marker_assay, counter_cache: true
@@ -11,14 +9,13 @@ class MapPosition < ActiveRecord::Base
   validates :map_position,
             presence: true
 
-  validates_with PublicationValidator
-
   after_update { map_locus_hits.each(&:touch) }
 
   include Relatable
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -83,10 +80,6 @@ class MapPosition < ActiveRecord::Base
     MapPosition.numeric_columns.each do |column|
       indexes column, include_in_all: 'false'
     end
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

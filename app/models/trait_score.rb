@@ -1,6 +1,4 @@
 class TraitScore < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :plant_scoring_unit, counter_cache: true
   belongs_to :trait_descriptor, counter_cache: true
   belongs_to :user
@@ -8,10 +6,9 @@ class TraitScore < ActiveRecord::Base
   validates :score_value,
             presence: true
 
-  validates_with PublicationValidator
-
   include Filterable
   include Pluckable
+  include Publishable
 
   scope :of_trial, ->(plant_trial_id) {
     joins(:plant_scoring_unit).
@@ -60,10 +57,6 @@ class TraitScore < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

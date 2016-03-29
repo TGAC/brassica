@@ -1,6 +1,4 @@
 class PlantTrial < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :plant_population, counter_cache: true
   belongs_to :country
   belongs_to :user
@@ -19,13 +17,12 @@ class PlantTrial < ActiveRecord::Base
     less_than_or_equal_to: 180
   }
 
-  validates_with PublicationValidator
-
   include Relatable
   include Filterable
   include Pluckable
   include Searchable
   include AttributeValues
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -91,10 +88,6 @@ class PlantTrial < ActiveRecord::Base
 
   def self.json_options
     { include: [:country] }
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

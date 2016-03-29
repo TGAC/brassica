@@ -1,6 +1,4 @@
 class PlantPopulation < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :taxonomy_term
   belongs_to :population_type
   belongs_to :male_parent_line, class_name: 'PlantLine',
@@ -26,8 +24,6 @@ class PlantPopulation < ActiveRecord::Base
   validates :user,
             presence: { on: :create }
 
-  validates_with PublicationValidator
-
   after_update { population_loci.each(&:touch) }
   after_update { linkage_maps.each(&:touch) }
   after_update { plant_trials.each(&:touch) }
@@ -35,6 +31,7 @@ class PlantPopulation < ActiveRecord::Base
   include Relatable
   include Filterable
   include Searchable
+  include Publishable
 
   scope :by_name, -> { order('plant_populations.name') }
 
@@ -103,10 +100,6 @@ class PlantPopulation < ActiveRecord::Base
       'female_parent_line_id',
       'male_parent_line_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

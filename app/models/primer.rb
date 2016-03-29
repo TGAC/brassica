@@ -1,6 +1,4 @@
 class Primer < ActiveRecord::Base
-  include ActiveModel::Validations
-
   belongs_to :user
 
   has_many :marker_assays_a,
@@ -17,8 +15,6 @@ class Primer < ActiveRecord::Base
   validates :sequence,
             presence: true
 
-  validates_with PublicationValidator
-
   def marker_assays
     marker_assays_a | marker_assays_b
   end
@@ -30,6 +26,7 @@ class Primer < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -61,10 +58,6 @@ class Primer < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable
