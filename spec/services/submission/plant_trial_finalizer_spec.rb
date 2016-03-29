@@ -31,7 +31,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       )
       submission.content.update(:step04, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
+        :data_owned_by, :data_provenance, :comments).merge(publishability: 'publishable'))
     end
 
     it 'creates new trait descriptors' do
@@ -105,9 +105,9 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(submission).to be_publishable
     end
 
-    context 'when visibility set to private' do
+    context 'when publishability set to private' do
       before do
-        submission.content.update(:step04, visibility: 'private')
+        submission.content.update(:step04, publishability: 'private')
       end
 
       it 'makes submission and created objects private' do

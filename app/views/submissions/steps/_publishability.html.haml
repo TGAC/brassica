@@ -3,13 +3,13 @@
   contact with support team.
   <br/><br/>
   By default sending your submission will make provided data publicly available.
-  You can keep your date private by changing visibility status below.
+  You can keep your data private by changing visibility status below.
 
 .form-group
-  = form.label :visibility, "Visibility status"
+  = form.label :publishability, "Visibility status"
 
   %div.checkbox
-    %label{ for: :submission_content_visibility }
-      = form.check_box :visibility, { }, 'published', 'private'
+    %label{ for: :submission_content_publishability }
+      = form.check_box :publishability, { }, 'publishable', 'private'
       Make provided data publicly available for browsing
 

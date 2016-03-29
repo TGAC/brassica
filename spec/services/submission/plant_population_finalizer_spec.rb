@@ -31,7 +31,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
                                 female_parent_line: plant_lines[0].plant_line_name,
                                 male_parent_line: plant_lines[1].plant_line_name)
       submission.content.update(:step04, plant_population_attrs.
-        slice(:data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
+        slice(:data_owned_by, :data_provenance, :comments).merge(publishability: 'publishable'))
     end
 
     it 'creates plant population' do
@@ -118,9 +118,9 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       expect(PlantPopulationList.all).to all be_published
     end
 
-    context 'when visibility set to private' do
+    context 'when publishability set to private' do
       before do
-        submission.content.update(:step04, visibility: 'private')
+        submission.content.update(:step04, publishability: 'private')
       end
 
       it 'makes submission and created objects private' do
