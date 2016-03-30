@@ -1,0 +1,15 @@
+.alert.alert-warning
+  Please, double check data correctness as further changes will require
+  contact with support team.
+  <br/><br/>
+  By default sending your submission will make provided data publicly available.
+  You can keep your data private by changing visibility status below.
+
+.form-group
+  = form.label :publishability, "Visibility status"
+
+  %div.checkbox
+    %label{ for: :submission_content_publishability }
+      = form.check_box :publishability, { }, 'publishable', 'private'
+      Make provided data publicly available for browsing
+

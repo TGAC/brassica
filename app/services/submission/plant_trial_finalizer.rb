@@ -37,7 +37,8 @@ class Submission::PlantTrialFinalizer
       new_plant_scoring_unit = PlantScoringUnit.create!(
         common_data.merge(scoring_unit_name: plant_id)
       )
-      new_trait_scores = (scores || {}).
+
+      (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
@@ -64,8 +65,9 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    attrs.merge!(submission.content.step04.to_h)
+    attrs.merge!(submission.content.step04.to_h.except(:publishability))
     attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
+    attrs.merge!(published: publishable?)
 
     if PlantTrial.where(plant_trial_name: attrs[:plant_trial_name]).exists?
       rollback(0)
@@ -77,6 +79,7 @@ class Submission::PlantTrialFinalizer
   def update_submission
     submission.update_attributes!(
       finalized: true,
+      publishable: publishable?,
       submitted_object_id: @plant_trial.id
     )
   end
@@ -86,13 +89,17 @@ class Submission::PlantTrialFinalizer
     raise ActiveRecord::Rollback
   end
 
+  def publishable?
+    @publishable ||= submission.content.step04.publishability.to_s == 'publishable'
+  end
+
   def common_data
     {
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
       user: submission.user,
-      published: true,
-      published_on: Time.now
+      published: publishable?,
+      published_on: (Time.now if publishable?)
     }
   end
 
