@@ -1,8 +1,5 @@
 class FixPlantLinesGeneticStatus < ActiveRecord::Migration
   def up
-    PlantLine.where(genetic_status: 'Open Polinated').each do |open_polinated|
-      open_polinated.genetic_status = 'Open Pollinated'
-      open_polinated.save!
-    end
+    execute("UPDATE plant_lines SET genetic_status = 'Open Pollinated' WHERE genetic_status = 'Open Polinated'")
   end
 end
