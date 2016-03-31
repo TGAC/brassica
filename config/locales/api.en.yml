@@ -379,6 +379,34 @@ en:
             }
           }
 
+    plant_part:
+      attrs:
+        -
+          name: id
+        -
+          name: plant_part
+          desc: Name of the part of a plant
+        -
+          name: description
+          desc: Longer text explaining what part of plant this record represents
+        -
+          name: described_by_whom
+          desc: The person or organization who described this dictionary entry
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: plant_scoring_unit_ids
+          format: "int[]"
+          desc: Zero or more BIP identifiers of Plant Scoring Units that were scored using this Plant Part
+
     plant_population:
       attrs:
         -
@@ -1089,10 +1117,9 @@ en:
           create: readonly
           desc: Additional information concerning the design of the population experiment
         -
-          name: plant_part
-          format: object
-          create: readonly
-          desc: Description of the plant part that was scored
+          name: plant_part_id
+          format: int
+          desc: BIP identifier of the plant part record that describes what part of plant was used for scoring
         -
           name: plant_accession_id
           format: int
