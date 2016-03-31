@@ -15,6 +15,15 @@ class Primer < ActiveRecord::Base
   validates :sequence,
             presence: true
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   def marker_assays
     marker_assays_a | marker_assays_b
   end

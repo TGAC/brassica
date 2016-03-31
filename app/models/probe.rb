@@ -17,6 +17,15 @@ class Probe < ActiveRecord::Base
   validates :sequence_source_acronym,
             presence: true
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   after_update { marker_assays.each(&:touch) }
 
   include Searchable

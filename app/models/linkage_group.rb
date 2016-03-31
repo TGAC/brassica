@@ -27,7 +27,10 @@ class LinkageGroup < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    lg = LinkageGroup.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
+    query = query.where(lg[:user_id].eq(uid).or(lg[:published].eq(true)))
     query.pluck_columns
   end
 

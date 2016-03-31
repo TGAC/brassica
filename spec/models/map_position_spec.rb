@@ -41,5 +41,19 @@ RSpec.describe MapPosition do
         mp.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      mp1 = create(:map_position, user: u, published: true)
+      mp2 = create(:map_position, user: u, published: false)
+
+      mpd = MapPosition.table_data
+      expect(mpd.count).to eq 1
+
+      User.current_user_id = u.id
+
+      mpd = MapPosition.table_data
+      expect(mpd.count).to eq 2
+    end
   end
 end

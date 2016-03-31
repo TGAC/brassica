@@ -46,5 +46,35 @@ RSpec.describe MarkerAssay do
         ma.id
       ]
     end
+
+    it 'retrieves published data only', focus: true do
+      u1 = create(:user)
+      u2 = create(:user)
+
+      pra1 = create(:primer, user: u2, published: true)
+      prb1 = create(:primer, user: u2, published: false)
+      pra2 = create(:primer, user: u1, published: true)
+      prb2 = create(:primer, user: u1, published: false)
+
+      pr1 = create(:probe, user: u2, published: true)
+      pr2 = create(:probe, user: u1, published: false)
+
+      ma1 = create(:marker_assay, primer_a: pra1, primer_b: prb1, probe: pr1, user: u1, published: true)
+      ma2 = create(:marker_assay, primer_a: pra2, primer_b: prb2, probe: pr2, user: u1, published: false)
+
+      mad = MarkerAssay.table_data
+
+      expect(mad.count).to eq 1
+      expect(mad.first[3]).to eq pra1.primer
+      expect(mad.first[4]).to be_nil
+
+      User.current_user_id = u1.id
+
+      mad = MarkerAssay.table_data
+
+      expect(mad.count).to eq 2
+      expect(mad.second[3]).to eq pra2.primer
+      expect(mad.second[4]).to eq prb2.primer
+    end
   end
 end

@@ -99,14 +99,16 @@ RSpec.describe PlantPopulation do
       pp1 = create(:plant_population, user: u, published: true)
       pp2 = create(:plant_population, user: u, published: false)
 
+      pl = create(:plant_line, user: u, published: false)
+      pp3 = create(:plant_population, male_parent_line: pl, user: u, published: true)
+
       gd = PlantPopulation.table_data
-      expect(gd.count).to eq 1
+      expect(gd.count).to eq 2
 
       User.current_user_id = u.id
 
       gd = PlantPopulation.table_data
-      expect(gd.count).to eq 2
+      expect(gd.count).to eq 3
     end
-
   end
 end

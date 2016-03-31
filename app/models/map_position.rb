@@ -18,7 +18,10 @@ class MapPosition < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    mp = MapPosition.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
+    query = query.where(mp[:user_id].eq(uid).or(mp[:published].eq(true)))
     query.pluck_columns
   end
 

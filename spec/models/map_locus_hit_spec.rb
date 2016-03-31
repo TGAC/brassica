@@ -50,5 +50,19 @@ RSpec.describe MapLocusHit do
         mlh.population_locus.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      mlh1 = create(:map_locus_hit, user: u, published: true)
+      mlh2 = create(:map_locus_hit, user: u, published: false)
+
+      mlhd = MapLocusHit.table_data
+      expect(mlhd.count).to eq 1
+
+      User.current_user_id = u.id
+
+      mlhd = MapLocusHit.table_data
+      expect(mlhd.count).to eq 2
+    end
   end
 end

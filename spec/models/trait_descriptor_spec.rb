@@ -67,5 +67,38 @@ RSpec.describe TraitDescriptor do
         td.id.to_s
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      td = create(:trait_descriptor)
+
+      pp1 = create(:plant_population, user: u, published: true)
+      pp2 = create(:plant_population, user: u, published: false)
+
+      pt1 = create(:plant_trial, user: u, plant_population: pp1, published: true)
+      pt2 = create(:plant_trial, user: u, plant_population: pp2, published: false)
+
+      ptd1 = create(:processed_trait_dataset, plant_trial: pt1, trait_descriptor: td)
+      ptd2 = create(:processed_trait_dataset, plant_trial: pt2, trait_descriptor: td)
+
+      psu1 = create(:plant_scoring_unit, plant_trial: pt1, user: u, published: true)
+      psu2 = create(:plant_scoring_unit, plant_trial: pt2, user: u, published: false)
+
+      ts1 = create(:trait_score, plant_scoring_unit: psu1, trait_descriptor: td, user: u, published: true)
+      ts2 = create(:trait_score, plant_scoring_unit: psu2, trait_descriptor: td, user: u, published: false)
+
+      qtl1 = create(:qtl, processed_trait_dataset: ptd1, user: u, published: true)
+      qtl2 = create(:qtl, processed_trait_dataset: ptd2, user: u, published: false)
+
+      gd = TraitDescriptor.table_data
+
+      expect(gd.count).to eq 1
+
+      User.current_user_id = u.id
+
+      gd = TraitDescriptor.table_data
+
+      expect(gd.count).to eq 2
+    end
   end
 end

@@ -23,5 +23,19 @@ RSpec.describe LinkageGroup do
         lg.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      lg1 = create(:linkage_group, user: u, published: true)
+      lg2 = create(:linkage_group, user: u, published: false)
+
+      lgd = LinkageGroup.table_data
+      expect(lgd.count).to eq 1
+
+      User.current_user_id = u.id
+
+      lgd = LinkageGroup.table_data
+      expect(lgd.count).to eq 2
+    end
   end
 end

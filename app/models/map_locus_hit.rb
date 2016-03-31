@@ -23,7 +23,10 @@ class MapLocusHit < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    mlh = MapLocusHit.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
+    query = query.where(mlh[:user_id].eq(uid).or(mlh[:published].eq(true)))
     query.pluck_columns
   end
 

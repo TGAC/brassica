@@ -34,6 +34,14 @@ class PlantLine < ActiveRecord::Base
   scope :where_id_or_name, ->(id_or_name) {
     where("id=:id OR plant_line_name ILIKE :name", id: id_or_name.to_i, name: id_or_name.to_s)
   }
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all

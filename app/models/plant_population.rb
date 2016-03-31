@@ -41,14 +41,18 @@ class PlantPopulation < ActiveRecord::Base
     uid = User.current_user_id
     pp = PlantPopulation.arel_table
     fpl = PlantLine.arel_table
-    mpl = Arel::Table.new(:male_parent_lines_plant_populations)
+
+    subquery = PlantLine.visible
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.
-      includes(:female_parent_line).where(fpl[:user_id].eq(uid).or(fpl[:published].eq(true))).
-      includes(:male_parent_line).where(mpl[:user_id].eq(uid).or(mpl[:published].eq(true))).
-      includes(:taxonomy_term).where(TaxonomyTerm.arel_table[:published].eq(true)).
-      includes(:population_type).where(PopulationType.arel_table[:published].eq(true)).
+      joins {[
+        subquery.as('fpls').on { female_parent_line_id == fpls.id }.outer,
+        subquery.as('mpls').on { male_parent_line_id == mpls.id }.outer,
+        taxonomy_term.outer,
+        population_type.outer
+      ]}
+    query = query.
       where(pp[:user_id].eq(uid).or(pp[:published].eq(true)))
     query = query.by_name
     query.pluck(*(table_columns + count_columns + ref_columns))
@@ -59,8 +63,8 @@ class PlantPopulation < ActiveRecord::Base
       'taxonomy_terms.name',
       'plant_populations.name',
       'canonical_population_name',
-      'plant_lines.plant_line_name AS female_parent_line',
-      'male_parent_lines_plant_populations.plant_line_name AS male_parent_line',
+      'fpls.plant_line_name AS female_parent_line',
+      'mpls.plant_line_name AS male_parent_line',
       'pop_type_lookup.population_type',
       'description'
     ]

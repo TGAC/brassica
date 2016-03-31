@@ -38,10 +38,29 @@ class MarkerAssay < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    ma = MarkerAssay.arel_table
+    pra = Primer.arel_table
+    pr = Probe.arel_table
+
+    primer_subquery = Primer.visible
+    probe_subquery = Probe.visible
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.
-      includes(:primer_a, :primer_b, :probe).
-      pluck(*(table_columns + count_columns + ref_columns))
+    query = query.
+      joins {[
+        primer_subquery.as('primer_as').on { primer_a_id == primer_as.id }.outer,
+        primer_subquery.as('primer_bs').on { primer_b_id == primer_bs.id }.outer,
+        probe_subquery.as('prb').on { probe_id == prb.id }.outer
+      ]}
+
+    # query = query.
+    #   joins{primer_a.outer}.where(pra[:user_id].eq(uid).or(pra[:published].eq(true)).or(ma[:primer_a_id].eq(nil))).
+    #   joins{primer_b.outer}.where(prb[:user_id].eq(uid).or(prb[:published].eq(true)).or(ma[:primer_b_id].eq(nil))).
+    #   joins{probe.outer}.where(pr[:user_id].eq(uid).or(pr[:published].eq(true)).or(ma[:probe_id].eq(nil))).
+    query = query.
+      where(ma[:user_id].eq(uid).or(ma[:published].eq(true)))
+    query.pluck(*(table_columns + count_columns + ref_columns))
   end
 
   def self.table_columns
@@ -49,10 +68,10 @@ class MarkerAssay < ActiveRecord::Base
       'marker_assay_name',
       'canonical_marker_name',
       'marker_type',
-      'primers.primer AS primer_a',
-      'primer_bs_marker_assays.primer AS primer_b',
+      'primer_as.primer AS primer_a',
+      'primer_bs.primer AS primer_b',
       'separation_system',
-      'probes.probe_name'
+      'prb.probe_name AS probe_name'
     ]
   end
 

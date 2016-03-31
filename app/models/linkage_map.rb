@@ -29,7 +29,10 @@ class LinkageMap < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    lm = LinkageMap.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
+    query = query.where(lm[:user_id].eq(uid).or(lm[:published].eq(true)))
     query.pluck_columns
   end
 
