@@ -1,5 +1,4 @@
 class PlantVariety < ActiveRecord::Base
-
   belongs_to :user
 
   has_and_belongs_to_many :countries_of_origin,
@@ -19,6 +18,7 @@ class PlantVariety < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   scope :by_name, -> { order(:plant_variety_name) }
 
@@ -55,10 +55,6 @@ class PlantVariety < ActiveRecord::Base
     {
       include: [:countries_of_origin, :countries_registered]
     }
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

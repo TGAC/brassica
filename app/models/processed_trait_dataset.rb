@@ -1,5 +1,4 @@
 class ProcessedTraitDataset < ActiveRecord::Base
-
   belongs_to :plant_trial
   belongs_to :trait_descriptor
 

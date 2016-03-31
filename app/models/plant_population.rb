@@ -1,5 +1,4 @@
 class PlantPopulation < ActiveRecord::Base
-
   belongs_to :taxonomy_term
   belongs_to :population_type
   belongs_to :male_parent_line, class_name: 'PlantLine',
@@ -32,6 +31,7 @@ class PlantPopulation < ActiveRecord::Base
   include Relatable
   include Filterable
   include Searchable
+  include Publishable
 
   scope :by_name, -> { order('plant_populations.name') }
   scope :visible, -> { where(PlantPopulation.arel_table[:user_id].eq(User.current_user_id).
@@ -111,10 +111,6 @@ class PlantPopulation < ActiveRecord::Base
       'female_parent_line_id',
       'male_parent_line_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

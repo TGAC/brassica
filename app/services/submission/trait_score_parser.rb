@@ -17,6 +17,8 @@ class Submission::TraitScoreParser
       parse_scores if @upload.errors.empty?
     rescue EOFError => e
       @upload.log "Input file finished"
+    rescue ArgumentError => e
+      @upload.log "Detected wrong file format - please make sure the file is not encoded (e.g. you are uploading an xls, instead of a text file)."
     end
 
     if @upload.errors.empty?

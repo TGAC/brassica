@@ -3,6 +3,15 @@ class Submissions::UploadsController < ApplicationController
   prepend_before_filter :authenticate_user!
   before_filter :require_submission_owner
 
+  def new
+    @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
+    data = render_to_string template: 'submissions/steps/trial/plant_trial_scoring_data.tsv',
+                            layout: false
+    send_data data,
+              content_type: 'text/tsv; charset=UTF-8; header=present',
+              disposition: 'attachment; filename=plant_trial_scoring_data.tsv'
+  end
+
   def create
     upload = Submission::Upload.create(upload_params.merge(submission_id: submission.id))
     if upload.valid?

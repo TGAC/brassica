@@ -4,6 +4,7 @@ FactoryGirl.define do
     mapping_locus { Faker::Lorem.word }
     map_position { Faker::Lorem.word }
     confirmed_by_whom { Faker::Internet.user_name }
+    published_on { Date.today-8.days }
     linkage_group
     population_locus
     marker_assay

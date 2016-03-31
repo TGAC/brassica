@@ -7,6 +7,7 @@ FactoryGirl.define do
     date_planted { Faker::Date.backward }
     described_by_whom { Faker::Internet.user_name }
     confirmed_by_whom { Faker::Internet.user_name }
+    published_on { Date.today-8.days }
     plant_trial
     design_factor
     plant_part

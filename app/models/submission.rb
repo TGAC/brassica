@@ -10,11 +10,14 @@ class Submission < ActiveRecord::Base
   validates :user, presence: true
   validates :submission_type, presence: true
   validates :step, inclusion: { in: STEPS }
-  validates :submitted_object_id, presence: true, uniqueness: true, if: 'finalized?'
+  validates :submitted_object_id, presence: true, if: 'finalized?'
+  validates :submitted_object_id, uniqueness: { scope: :submission_type}, if: 'finalized?'
+  validates :publishable, inclusion: { in: [true, false] }
 
   before_validation :set_defaults, on: :create
   before_save :apply_content_adjustments
 
+  scope :publishable, -> { where(publishable: true) }
   scope :finalized, -> { where(finalized: true) }
   scope :recent_first, -> { order(updated_at: :desc) }
 

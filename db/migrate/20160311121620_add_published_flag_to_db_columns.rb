@@ -16,8 +16,6 @@ class AddPublishedFlagToDbColumns < ActiveRecord::Migration
     :plant_scoring_units,
     :plant_trials,
     :plant_varieties,
-    :plant_variety_country_of_origin,
-    :plant_variety_country_registered,
     :pop_type_lookup,
     :population_loci,
     :primers,

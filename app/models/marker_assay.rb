@@ -1,5 +1,4 @@
 class MarkerAssay < ActiveRecord::Base
-
   belongs_to :marker_sequence_assignment
 
   belongs_to :restriction_enzyme_a,
@@ -36,6 +35,7 @@ class MarkerAssay < ActiveRecord::Base
   include Searchable
   include Relatable
   include Filterable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -98,10 +98,6 @@ class MarkerAssay < ActiveRecord::Base
       'primer_b_id',
       'probe_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

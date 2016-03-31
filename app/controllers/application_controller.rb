@@ -8,9 +8,9 @@ class ApplicationController < ActionController::Base
   end
 
   def index
-    @submissions = Submission.finalized.recent_first.take(5)
+    @submissions = Submission.finalized.publishable.recent_first.take(5)
     @statistics = [
-      PlantPopulation.count,
+      PlantTrial.count,
       TraitScore.count,
       TaxonomyTerm.count,
       PlantLine.count

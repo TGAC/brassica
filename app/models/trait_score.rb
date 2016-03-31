@@ -1,5 +1,4 @@
 class TraitScore < ActiveRecord::Base
-
   belongs_to :plant_scoring_unit, counter_cache: true
   belongs_to :trait_descriptor, counter_cache: true
   belongs_to :user
@@ -9,6 +8,12 @@ class TraitScore < ActiveRecord::Base
 
   include Filterable
   include Pluckable
+  include Publishable
+
+  scope :of_trial, ->(plant_trial_id) {
+    joins(:plant_scoring_unit).
+    where(plant_scoring_units: { plant_trial_id: plant_trial_id })
+  }
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -52,10 +57,6 @@ class TraitScore < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

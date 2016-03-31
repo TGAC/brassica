@@ -1,5 +1,4 @@
 class LinkageGroup < ActiveRecord::Base
-
   belongs_to :linkage_map, counter_cache: true
   belongs_to :user
 
@@ -25,6 +24,7 @@ class LinkageGroup < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -66,10 +66,6 @@ class LinkageGroup < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

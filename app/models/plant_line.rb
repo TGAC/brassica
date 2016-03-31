@@ -1,5 +1,4 @@
 class PlantLine < ActiveRecord::Base
-
   belongs_to :plant_variety
   belongs_to :taxonomy_term
   belongs_to :user
@@ -23,6 +22,7 @@ class PlantLine < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   validates :plant_line_name,
             presence: true,
@@ -77,10 +77,6 @@ class PlantLine < ActiveRecord::Base
     [
       'plant_variety_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

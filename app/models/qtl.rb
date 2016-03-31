@@ -17,6 +17,7 @@ class Qtl < ActiveRecord::Base
 
   include Filterable
   include Searchable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -110,10 +111,6 @@ class Qtl < ActiveRecord::Base
     Qtl.numeric_columns.each do |column|
       indexes column, include_in_all: 'false'
     end
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

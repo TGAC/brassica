@@ -31,7 +31,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       )
       submission.content.update(:step04, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments))
+        :data_owned_by, :data_provenance, :comments).merge(publishability: 'publishable'))
     end
 
     it 'creates new trait descriptors' do
@@ -43,8 +43,13 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(trait_descriptor.attributes).to include(
           'descriptor_name' => new_trait_descriptors_attrs[idx][:descriptor_name],
           'category' => new_trait_descriptors_attrs[idx][:category],
-          'likely_ambiguities' => new_trait_descriptors_attrs[idx][:likely_ambiguities]
+          'likely_ambiguities' => new_trait_descriptors_attrs[idx][:likely_ambiguities],
+          'entered_by_whom' => submission.user.full_name,
+          'date_entered' => Date.today,
+          'published' => true,
+          'user_id' => submission.user.id
         )
+        expect(trait_descriptor.published_on).to be_within(5.seconds).of(Time.now)
       end
     end
 
@@ -54,6 +59,10 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(PlantTrial.last.plant_trial_name).to eq plant_trial_attrs[:plant_trial_name]
       expect(PlantTrial.last.comments).to eq plant_trial_attrs[:comments]
       expect(PlantTrial.last.entered_by_whom).to eq submission.user.full_name
+      expect(PlantTrial.last.date_entered).to eq Date.today
+      expect(PlantTrial.last.published).to be_truthy
+      expect(PlantTrial.last.user).to eq submission.user
+      expect(PlantTrial.last.published_on).to be_within(5.seconds).of(Time.now)
     end
 
     it 'associates created plant trial with plant population' do
@@ -84,6 +93,35 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(TraitScore.find_by(score_value: 'z').trait_descriptor.descriptor_name).
         to eq new_trait_descriptors_attrs[0][:descriptor_name]
       expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
+    end
+
+    it 'makes submission and created objects published' do
+      subject.call
+
+      expect(TraitDescriptor.all).to all be_published
+      expect(TraitScore.all).to all be_published
+      expect(PlantScoringUnit.all).to all be_published
+      expect(PlantTrial.all).to all be_published
+      expect(submission).to be_publishable
+    end
+
+    context 'when publishability set to private' do
+      before do
+        submission.content.update(:step04, publishability: 'private')
+      end
+
+      it 'makes submission and created objects private' do
+        subject.call
+
+        plant_trial = submission.submitted_object
+        plant_scoring_units = plant_trial.plant_scoring_units
+        trait_scores = plant_trial.plant_scoring_units.map(&:trait_scores).flatten
+
+        expect(submission).not_to be_publishable
+        expect(plant_trial).not_to be_published
+        expect(plant_scoring_units.map(&:published?)).to all be_falsey
+        expect(trait_scores.map(&:published?)).to all be_falsey
+      end
     end
 
     context 'when encountered broken data' do

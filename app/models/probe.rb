@@ -1,5 +1,4 @@
 class Probe < ActiveRecord::Base
-
   belongs_to :taxonomy_term
   belongs_to :user
 
@@ -24,6 +23,7 @@ class Probe < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -55,10 +55,6 @@ class Probe < ActiveRecord::Base
           'id'
         ]
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

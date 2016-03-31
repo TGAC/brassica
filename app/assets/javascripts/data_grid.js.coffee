@@ -61,6 +61,8 @@ $ ->
           api = new $.fn.dataTable.Api(dt)
           if $(dt.nTHead).find('th.related').length
             api.columns().indexes().toArray().slice(0, -2)
+          else if dt.sInstance == 'trial-scoring'
+            api.columns().indexes().toArray()
           else
             api.columns().indexes().toArray().slice(0, -1)
         fnClick:
@@ -117,7 +119,7 @@ $ ->
           content += metadataElement('Comments', response['comments'])
           content += metadataElement('Entered by', response['entered_by_whom'])
           content += metadataElement('Entry date', response['date_entered'])
-          unless response['published?']
+          if response['revocable?']
             content += '<i>This entry is still pending confirmation. Please do not quote it yet.</i>'
           content += pubmedLink(response['pubmed_id'])
           content = 'No annotations' if content == ''

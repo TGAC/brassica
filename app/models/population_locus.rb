@@ -1,5 +1,4 @@
 class PopulationLocus < ActiveRecord::Base
-
   belongs_to :plant_population, counter_cache: true
   belongs_to :marker_assay, counter_cache: true
   belongs_to :user
@@ -17,6 +16,7 @@ class PopulationLocus < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Searchable
+  include Publishable
 
   def self.table_data(params = nil)
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -57,10 +57,6 @@ class PopulationLocus < ActiveRecord::Base
       'plant_population_id',
       'marker_assay_id'
     ]
-  end
-
-  def published?
-    updated_at < Time.now - 1.week
   end
 
   include Annotable

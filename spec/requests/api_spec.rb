@@ -18,8 +18,8 @@ RSpec.describe "API V1" do
   # A special case test
   context 'when deleting related objects' do
     let!(:user) { create(:user) }
-    let!(:parent_line) { create(:plant_line, user: user) }
-    let!(:plant_lines) { create_list(:plant_line, 2, user: user) }
+    let!(:parent_line) { create(:plant_line, user: user, published: false) }
+    let!(:plant_lines) { create_list(:plant_line, 2, user: user, published: false) }
     let!(:plant_population) do
       create(:plant_population,
              user: user,
