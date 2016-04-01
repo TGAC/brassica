@@ -34,21 +34,28 @@ class PlantPopulation < ActiveRecord::Base
   include Publishable
 
   scope :by_name, -> { order('plant_populations.name') }
-  scope :visible, -> { where(PlantPopulation.arel_table[:user_id].eq(User.current_user_id).
-                                 or(PlantPopulation.arel_table[:published].eq(true))) }
+#  scope :visible, -> { where(PlantPopulation.arel_table[:user_id].eq(User.current_user_id).
+#                                 or(PlantPopulation.arel_table[:published].eq(true))) }
+
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
 
   def self.table_data(params = nil)
     uid = User.current_user_id
     pp = PlantPopulation.arel_table
-    fpl = PlantLine.arel_table
-
     subquery = PlantLine.visible
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.
       joins {[
-        subquery.as('fpls').on { female_parent_line_id == fpls.id }.outer,
-        subquery.as('mpls').on { male_parent_line_id == mpls.id }.outer,
+        subquery.as('plant_lines').on { female_parent_line_id == plant_lines.id }.outer,
+        subquery.as('male_parent_lines_plant_populations').on { male_parent_line_id == male_parent_lines_plant_populations.id }.outer,
         taxonomy_term.outer,
         population_type.outer
       ]}
@@ -63,8 +70,8 @@ class PlantPopulation < ActiveRecord::Base
       'taxonomy_terms.name',
       'plant_populations.name',
       'canonical_population_name',
-      'fpls.plant_line_name AS female_parent_line',
-      'mpls.plant_line_name AS male_parent_line',
+      'plant_lines.plant_line_name AS female_parent_line',
+      'male_parent_lines_plant_populations.plant_line_name AS male_parent_line',
       'pop_type_lookup.population_type',
       'description'
     ]

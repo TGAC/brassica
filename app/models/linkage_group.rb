@@ -20,6 +20,15 @@ class LinkageGroup < ActiveRecord::Base
   after_update { map_locus_hits.each(&:touch) }
   after_update { qtls.each(&:touch) }
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   include Relatable
   include Filterable
   include Pluckable

@@ -41,5 +41,19 @@ RSpec.describe PopulationLocus do
         pl.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pl1 = create(:population_locus, user: u, published: true)
+      pl2 = create(:population_locus, user: u, published: false)
+
+      pld = PopulationLocus.table_data
+      expect(pld.count).to eq 1
+
+      User.current_user_id = u.id
+
+      pld = PopulationLocus.table_data
+      expect(pld.count).to eq 2
+    end
   end
 end

@@ -32,5 +32,19 @@ RSpec.describe PlantAccession do
         pa.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pa1 = create(:plant_accession, user: u, published: true)
+      pa2 = create(:plant_accession, user: u, published: false)
+
+      pad = PlantAccession.table_data
+      expect(pad.count).to eq 1
+
+      User.current_user_id = u.id
+
+      pad = PlantAccession.table_data
+      expect(pad.count).to eq 2
+    end
   end
 end

@@ -42,6 +42,20 @@ RSpec.describe PlantTrial do
           pt.id
         ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pt1 = create(:plant_trial, user: u, published: true)
+      pt2 = create(:plant_trial, user: u, published: false)
+
+      ptd = PlantTrial.table_data
+      expect(ptd.count).to eq 1
+
+      User.current_user_id = u.id
+
+      ptd = PlantTrial.table_data
+      expect(ptd.count).to eq 2
+    end
   end
 
   describe '#table_data' do

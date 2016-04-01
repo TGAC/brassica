@@ -47,7 +47,7 @@ RSpec.describe MarkerAssay do
       ]
     end
 
-    it 'retrieves published data only', focus: true do
+    it 'retrieves published data only' do
       u1 = create(:user)
       u2 = create(:user)
 
@@ -73,8 +73,8 @@ RSpec.describe MarkerAssay do
       mad = MarkerAssay.table_data
 
       expect(mad.count).to eq 2
-      expect(mad.second[3]).to eq pra2.primer
-      expect(mad.second[4]).to eq prb2.primer
+      expect(([pra1.primer, pra2.primer] & [mad.first[3], mad.second[3]]).size).to eq 2
+      expect(([prb1.primer, prb2.primer] & [mad.first[4], mad.second[4]]).size).to eq 1
     end
   end
 end

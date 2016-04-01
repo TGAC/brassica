@@ -11,7 +11,9 @@ module Joinable
           if include
             query = query.includes(relation.to_sym)
           else
-            query = query.joins(relation.to_sym)
+            subqueries = query.joins_values.select{|v| v.class == Squeel::Nodes::SubqueryJoin}
+            symbols = subqueries.collect{ |s| s.subquery.right }
+            query = query.joins(relation.to_sym) unless symbols.include? relation.pluralize
           end
         end
         query

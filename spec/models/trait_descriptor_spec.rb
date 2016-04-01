@@ -72,11 +72,12 @@ RSpec.describe TraitDescriptor do
       u = create(:user)
       td = create(:trait_descriptor)
 
-      pp1 = create(:plant_population, user: u, published: true)
+      pp1 = create(:plant_population, user: u, published: false)
       pp2 = create(:plant_population, user: u, published: false)
 
       pt1 = create(:plant_trial, user: u, plant_population: pp1, published: true)
       pt2 = create(:plant_trial, user: u, plant_population: pp2, published: false)
+      pt3 = create(:plant_trial, user: u, plant_population: pp1, published: false)
 
       ptd1 = create(:processed_trait_dataset, plant_trial: pt1, trait_descriptor: td)
       ptd2 = create(:processed_trait_dataset, plant_trial: pt2, trait_descriptor: td)
@@ -90,14 +91,35 @@ RSpec.describe TraitDescriptor do
       qtl1 = create(:qtl, processed_trait_dataset: ptd1, user: u, published: true)
       qtl2 = create(:qtl, processed_trait_dataset: ptd2, user: u, published: false)
 
-      gd = TraitDescriptor.table_data
+      gd1 = TraitDescriptor.table_data
 
-      expect(gd.count).to eq 1
+      # Expect a single record but with NULLs in place of unpublished plant population attributes
+      expect(gd1.count).to eq 1
+      expect(gd1.first[0]).to be_nil
+      expect(gd1.first[1]).to be_nil
+      expect(gd1.first[7]).to be_nil
+
+      # Change plant population to published
+      pp1.published = true
+      pp1.save
+
+      gd2 = TraitDescriptor.table_data
+
+      # Expect the same record but this time with plant population details filled in
+      expect(gd2.count).to eq 1
+      expect(gd2.first[0]).to eq pp1.taxonomy_term.name
+      expect(gd2.first[1]).to eq pp1.name
+      for i in 2..6
+        expect(gd2.first[i]).to eq gd1.first[i]
+      end
+      expect(gd2.first[7]).to eq pp1.id.to_s
+      expect(gd2.first[8]).to eq gd1.first[8]
+      expect(gd2.first[9]).to eq gd1.first[9]
 
       User.current_user_id = u.id
 
+      # This time expect 2 records
       gd = TraitDescriptor.table_data
-
       expect(gd.count).to eq 2
     end
   end

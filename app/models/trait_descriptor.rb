@@ -7,6 +7,15 @@ class TraitDescriptor < ActiveRecord::Base
 
   validates :descriptor_name, :category, presence: true
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   after_update { processed_trait_datasets.each(&:touch) }
 
   include Searchable
@@ -26,12 +35,8 @@ class TraitDescriptor < ActiveRecord::Base
 
     if uid.present?
       pub_scope = " AND td.published = true OR td.user_id = #{uid}"
-      pub_scope+= " AND pt.published = true OR pt.user_id = #{uid}"
-      pub_scope+= " AND pp.published = true OR pp.user_id = #{uid}"
     else
       pub_scope = " AND td.published = true"
-      pub_scope+= " AND pt.published = true"
-      pub_scope+= " AND pp.published = true"
     end
 
     query = <<-SQL
@@ -42,23 +47,21 @@ class TraitDescriptor < ActiveRecord::Base
           (SELECT trait_descriptor_id AS tdid, plant_trial_id AS ptid, COUNT(*) AS cnt FROM
           (
             SELECT * FROM trait_scores JOIN plant_scoring_units
-            ON trait_scores.plant_scoring_unit_id = plant_scoring_units.id
+            ON (trait_scores.plant_scoring_unit_id = plant_scoring_units.id AND (plant_scoring_units.published = true #{uid.present? ? " OR plant_scoring_units.user_id = #{uid}" : ''}))
             WHERE trait_scores.published = true #{uid.present? ? " OR trait_scores.user_id = #{uid}" : ''}
-            AND plant_scoring_units.published = true #{uid.present? ? " OR plant_scoring_units.user_id = #{uid}" : ''}
           ) AS core
           GROUP BY trait_descriptor_id, plant_trial_id) AS intable
         ON intable.tdid = td.id
-        LEFT OUTER JOIN plant_trials pt ON intable.ptid = pt.id
-        LEFT OUTER JOIN plant_populations pp ON pt.plant_population_id = pp.id
+        LEFT OUTER JOIN plant_trials pt ON (intable.ptid = pt.id AND (pt.published = true #{uid.present? ? " OR pt.user_id = #{uid}" : ''}))
+        LEFT OUTER JOIN plant_populations pp ON (pt.plant_population_id = pp.id AND (pp.published = true #{uid.present? ? " OR pp.user_id = #{uid}" : ''}))
         LEFT OUTER JOIN countries c ON pt.country_id = c.id
         LEFT OUTER JOIN taxonomy_terms tt ON pp.taxonomy_term_id = tt.id
         LEFT OUTER JOIN (
           SELECT td.id AS tdid2, COUNT(qtl.id) AS qtlcnt FROM
           trait_descriptors td
           LEFT OUTER JOIN processed_trait_datasets ptd ON ptd.trait_descriptor_id = td.id
-          LEFT OUTER JOIN qtl ON qtl.processed_trait_dataset_id = ptd.id
+          LEFT OUTER JOIN qtl ON (qtl.processed_trait_dataset_id = ptd.id AND (qtl.published = true #{uid.present? ? " OR qtl.user_id = #{uid}" : ''}))
           WHERE td.published = true #{uid.present? ? " OR td.user_id = #{uid}" : ''}
-          AND qtl.published = true #{uid.present? ? " OR qtl.user_id = #{uid}" : ''}
           GROUP BY td.id
         ) AS intable2
         ON td.id = tdid2

@@ -20,12 +20,28 @@ class Qtl < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    qtlt = Qtl.arel_table
+
+    td_subquery = TraitDescriptor.visible
+    lg_subquery = LinkageGroup.visible
+    lm_subquery = LinkageMap.visible
+    pp_subquery = PlantPopulation.visible
+    qtlj_subquery = QtlJob.visible
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.includes(processed_trait_dataset: :trait_descriptor).
-          includes(:linkage_group).
-          includes(linkage_group: { linkage_map: :plant_population }).
-          includes(:qtl_job).
-          pluck(*(table_columns + ref_columns))
+
+    query = query.
+      joins {[
+        processed_trait_dataset,
+        td_subquery.as('trait_descriptors').on { processed_trait_datasets.trait_descriptor_id == trait_descriptors.id }.outer,
+        lg_subquery.as('linkage_groups').on { linkage_group_id == linkage_groups.id }.outer,
+        lm_subquery.as('linkage_maps').on { linkage_groups.linkage_map_id == linkage_maps.id }.outer,
+        pp_subquery.as('plant_populations').on { linkage_maps.plant_population_id == plant_populations.id }.outer,
+        qtlj_subquery.as('qtl_jobs').on { qtl_job_id == qtl_jobs.id }.outer
+      ]}
+    query = query.where(qtlt[:user_id].eq(uid).or(qtlt[:published].eq(true)))
+    query.pluck(*(table_columns + ref_columns))
   end
 
   def self.table_columns

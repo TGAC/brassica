@@ -17,6 +17,15 @@ class PlantTrial < ActiveRecord::Base
     less_than_or_equal_to: 180
   }
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   include Relatable
   include Filterable
   include Pluckable
@@ -25,20 +34,33 @@ class PlantTrial < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    pt = PlantTrial.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
+    query = query.where(pt[:user_id].eq(uid).or(pt[:published].eq(true)))
     query.order(:trial_year).pluck_columns
   end
 
   # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
   def scoring_table_data(trait_descriptor_ids)
+    uid = User.current_user_id
+    ts = TraitScore.arel_table
+
+    psu_subquery = PlantScoringUnit.visible
+    td_subquery = TraitDescriptor.visible
+
     all_scores = TraitScore.
-      includes(:plant_scoring_unit).
-      includes(:trait_descriptor).
+      joins {[
+        psu_subquery.as('plant_scoring_units').on { plant_scoring_unit_id == plant_scoring_units.id }.outer,
+        td_subquery.as('trait_descriptors').on { trait_descriptor_id == trait_descriptors.id }.outer
+      ]}
+    all_scores = all_scores.
       where(plant_scoring_units: { plant_trial_id: self.id }).
+      where(ts[:user_id].eq(uid).or(ts[:published].eq(true))).
       order('plant_scoring_units.scoring_unit_name asc, trait_descriptors.id asc').
       group_by(&:plant_scoring_unit)
 
-    plant_scoring_units.order('scoring_unit_name asc').map do |unit|
+    plant_scoring_units.visible.order('scoring_unit_name asc').map do |unit|
       scores = all_scores[unit] || []
       [unit.scoring_unit_name] + trait_descriptor_ids.map do |td_id|
         ts = scores.detect{ |s| s.trait_descriptor_id == td_id.to_i}

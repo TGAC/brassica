@@ -35,7 +35,10 @@ class Probe < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    pr = Probe.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
+    query = query.where(pr[:user_id].eq(uid).or(pr[:published].eq(true)))
     query.pluck_columns
   end
 

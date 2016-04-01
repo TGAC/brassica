@@ -120,6 +120,20 @@ RSpec.describe PlantLine do
         pl.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pl1 = create(:plant_line, user: u, published: true)
+      pl2 = create(:plant_line, user: u, published: false)
+
+      pld = PlantLine.table_data
+      expect(pld.count).to eq 1
+
+      User.current_user_id = u.id
+
+      pld = PlantLine.table_data
+      expect(pld.count).to eq 2
+    end
   end
 
   describe '#table_data' do

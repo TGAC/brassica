@@ -7,6 +7,15 @@ class PlantScoringUnit < ActiveRecord::Base
 
   has_many :trait_scores, dependent: :destroy
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   validates :scoring_unit_name,
             presence: true
 
@@ -16,7 +25,10 @@ class PlantScoringUnit < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    psu = PlantScoringUnit.arel_table
     query = (params && params[:query].present?) ? filter(params) : all
+    query = query.where(psu[:user_id].eq(uid).or(psu[:published].eq(true)))
     query.pluck_columns
   end
 

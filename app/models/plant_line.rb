@@ -44,7 +44,10 @@ class PlantLine < ActiveRecord::Base
   }
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    pl = PlantLine.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
+    query = query.where(pl[:user_id].eq(uid).or(pl[:published].eq(true)))
     query.by_name.pluck_columns
   end
 

@@ -22,6 +22,15 @@ class LinkageMap < ActiveRecord::Base
 
   default_scope { includes(plant_population: :taxonomy_term) }
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   include Relatable
   include Filterable
   include Pluckable

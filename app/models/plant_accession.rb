@@ -12,13 +12,25 @@ class PlantAccession < ActiveRecord::Base
             length: { is: 4 },
             allow_blank: true
 
+  scope :visible, ->() {
+    uid = User.current_user_id
+    if uid.present?
+      where("published = 't' OR user_id = #{uid}")
+    else
+      where("published = 't'")
+    end
+  }
+
   include Relatable
   include Filterable
   include Pluckable
   include Publishable
 
   def self.table_data(params = nil)
+    uid = User.current_user_id
+    pa = PlantAccession.arel_table
     query = (params && params[:query].present?) ? filter(params) : all
+    query = query.where(pa[:user_id].eq(uid).or(pa[:published].eq(true)))
     query.pluck_columns
   end
 

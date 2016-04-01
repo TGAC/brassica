@@ -29,5 +29,19 @@ RSpec.describe Primer do
         p.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pr1 = create(:primer, user: u, published: true)
+      pr2 = create(:primer, user: u, published: false)
+
+      prd = Primer.table_data
+      expect(prd.count).to eq 1
+
+      User.current_user_id = u.id
+
+      prd = Primer.table_data
+      expect(prd.count).to eq 2
+    end
   end
 end

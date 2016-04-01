@@ -49,15 +49,10 @@ class MarkerAssay < ActiveRecord::Base
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.
       joins {[
-        primer_subquery.as('primer_as').on { primer_a_id == primer_as.id }.outer,
-        primer_subquery.as('primer_bs').on { primer_b_id == primer_bs.id }.outer,
-        probe_subquery.as('prb').on { probe_id == prb.id }.outer
+        primer_subquery.as('primers').on { primer_a_id == primers.id }.outer,
+        primer_subquery.as('primer_bs_marker_assays').on { primer_b_id == primer_bs_marker_assays.id }.outer,
+        probe_subquery.as('probes').on { probe_id == probes.id }.outer
       ]}
-
-    # query = query.
-    #   joins{primer_a.outer}.where(pra[:user_id].eq(uid).or(pra[:published].eq(true)).or(ma[:primer_a_id].eq(nil))).
-    #   joins{primer_b.outer}.where(prb[:user_id].eq(uid).or(prb[:published].eq(true)).or(ma[:primer_b_id].eq(nil))).
-    #   joins{probe.outer}.where(pr[:user_id].eq(uid).or(pr[:published].eq(true)).or(ma[:probe_id].eq(nil))).
     query = query.
       where(ma[:user_id].eq(uid).or(ma[:published].eq(true)))
     query.pluck(*(table_columns + count_columns + ref_columns))
@@ -68,10 +63,10 @@ class MarkerAssay < ActiveRecord::Base
       'marker_assay_name',
       'canonical_marker_name',
       'marker_type',
-      'primer_as.primer AS primer_a',
-      'primer_bs.primer AS primer_b',
+      'primers.primer AS primer_a',
+      'primer_bs_marker_assays.primer AS primer_b',
       'separation_system',
-      'prb.probe_name AS probe_name'
+      'probes.probe_name'
     ]
   end
 
