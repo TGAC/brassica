@@ -24,6 +24,7 @@ RSpec.describe Filterable do
     end
 
     let(:search) { object_double(Search.new("n")) }
+    let(:search_response) { instance_double("Elasticsearch::Model::Response::Response", records: OpenStruct.new(ids: [])) }
     let(:query) { { fetch: 'n' } }
 
     it 'includes Filterable to handle search results display' do
@@ -34,6 +35,10 @@ RSpec.describe Filterable do
 
     it 'permits fetch in its filter params' do
       @searchable.each do |searchable|
+        expect(Search).to receive(:new).with('n').and_return(search)
+        expect(search).
+          to receive(searchable.table_name.to_sym).and_return(search_response)
+
         expect(searchable.filter(query)).not_to eq searchable.none
       end
     end
@@ -50,7 +55,8 @@ RSpec.describe Filterable do
       @searchable.each do |searchable|
         expect(Search).to receive(:new).with('n').and_return(search)
         expect(search).
-          to receive(searchable.table_name.to_sym).and_return(searchable.search('n'))
+          to receive(searchable.table_name.to_sym).and_return(search_response)
+
         searchable.filter(query)
       end
     end
