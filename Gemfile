@@ -33,6 +33,7 @@ gem 'hashie'
 gem 'draper', '~> 2.1.0'
 gem 'kaminari'
 gem 'paperclip', '~> 4.2.0'
+gem 'typhoeus'
 
 gem 'cookies_eu'
 
@@ -68,4 +69,5 @@ group :test do
   gem 'rspec-html-matchers'
   gem 'webmock', require: false
   gem 'database_cleaner'
+  gem 'vcr'
 end
