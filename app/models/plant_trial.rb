@@ -23,13 +23,7 @@ class PlantTrial < ActiveRecord::Base
   include Searchable
   include AttributeValues
   include Publishable
-
-  def self.table_data(params = nil, uid = nil)
-    pt = PlantTrial.arel_table
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query = query.where(pt[:user_id].eq(uid).or(pt[:published].eq(true)))
-    query.order(:trial_year).pluck_columns
-  end
+  include TableData
 
   # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
   def scoring_table_data(trait_descriptor_ids, uid = nil)

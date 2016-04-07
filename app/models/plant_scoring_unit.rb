@@ -14,13 +14,7 @@ class PlantScoringUnit < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Publishable
-
-  def self.table_data(params = nil, uid = nil)
-    psu = PlantScoringUnit.arel_table
-    query = (params && params[:query].present?) ? filter(params) : all
-    query = query.where(psu[:user_id].eq(uid).or(psu[:published].eq(true)))
-    query.pluck_columns
-  end
+  include TableData
 
   def self.table_columns
     [

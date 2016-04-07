@@ -17,13 +17,7 @@ class PopulationLocus < ActiveRecord::Base
   include Pluckable
   include Searchable
   include Publishable
-
-  def self.table_data(params = nil, uid = nil)
-    pl = PopulationLocus.arel_table
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query = query.where(pl[:user_id].eq(uid).or(pl[:published].eq(true)))
-    query.pluck_columns
-  end
+  include TableData
 
   def self.table_columns
     [
