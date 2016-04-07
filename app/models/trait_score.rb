@@ -15,16 +15,15 @@ class TraitScore < ActiveRecord::Base
     where(plant_scoring_units: { plant_trial_id: plant_trial_id })
   }
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     ts = TraitScore.arel_table
 
-    psu_subquery = PlantScoringUnit.visible
-    pt_subquery = PlantTrial.visible
-    pp_subquery = PlantPopulation.visible
-    pa_subquery = PlantAccession.visible
-    pl_subquery = PlantLine.visible
-    td_subquery = TraitDescriptor.visible
+    psu_subquery = PlantScoringUnit.visible(uid)
+    pt_subquery = PlantTrial.visible(uid)
+    pp_subquery = PlantPopulation.visible(uid)
+    pa_subquery = PlantAccession.visible(uid)
+    pl_subquery = PlantLine.visible(uid)
+    td_subquery = TraitDescriptor.visible(uid)
 
     query = all
     query = query.joins {[

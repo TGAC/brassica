@@ -31,9 +31,7 @@ RSpec.describe QtlJob do
       qtljd = QtlJob.table_data
       expect(qtljd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      qtljd = QtlJob.table_data
+      qtljd = QtlJob.table_data(nil, u.id)
       expect(qtljd.count).to eq 2
     end
   end

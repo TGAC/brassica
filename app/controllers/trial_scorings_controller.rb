@@ -1,4 +1,8 @@
 class TrialScoringsController < ApplicationController
+  before_filter do |c|
+    @current_user_id = User.find(c.session[:user]).id unless c.session[:user].nil?
+  end
+
   def show
     @plant_trial = PlantTrial.find(params[:id])
     params[:model] = 'trial_scoring'
@@ -27,7 +31,7 @@ class TrialScoringsController < ApplicationController
   private
 
   def prepare_grid_data
-    objects = @plant_trial.scoring_table_data(trait_descriptor_ids)
+    objects = @plant_trial.scoring_table_data(trait_descriptor_ids, @current_user_id)
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 

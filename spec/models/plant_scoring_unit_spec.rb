@@ -31,9 +31,7 @@ RSpec.describe PlantScoringUnit do
       psud = PlantScoringUnit.table_data
       expect(psud.count).to eq 1
 
-      User.current_user_id = u.id
-
-      psud = PlantScoringUnit.table_data
+      psud = PlantScoringUnit.table_data(nil, u.id)
       expect(psud.count).to eq 2
     end
   end

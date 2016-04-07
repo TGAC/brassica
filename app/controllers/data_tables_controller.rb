@@ -1,4 +1,8 @@
 class DataTablesController < ApplicationController
+  before_filter do |c|
+    @current_user_id = User.find(c.session[:user]).id unless c.session[:user].nil?
+  end
+
   def index
     respond_to do |format|
       format.html do
@@ -10,11 +14,11 @@ class DataTablesController < ApplicationController
         cache_key[:latest_change] = model_klass.maximum('updated_at')
         cache_key[:count] = model_klass.count
         logger.info "CACHE KEY: #{cache_key}"
-        # grid_data = Rails.cache.fetch(cache_key, expires_in: 300.days) do
-        #   logger.info 'MISS MISS MISS'
-        #   prepare_grid_data.to_json
-        # end
-        grid_data = prepare_grid_data.to_json # TODO: Remove before flight
+        grid_data = Rails.cache.fetch(cache_key, expires_in: 300.days) do
+          logger.info 'MISS MISS MISS'
+          prepare_grid_data.to_json
+        end
+        # grid_data = prepare_grid_data.to_json # TODO: Remove before flight
         render json: grid_data
       end
     end
@@ -28,7 +32,7 @@ class DataTablesController < ApplicationController
   private
 
   def prepare_grid_data
-    objects = model_klass.table_data(params)
+    objects = model_klass.table_data(params, @current_user_id)
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 

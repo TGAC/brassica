@@ -19,17 +19,7 @@ class QtlJob < ActiveRecord::Base
   include Pluckable
   include Publishable
 
-  scope :visible, ->() {
-    uid = User.current_user_id
-    if uid.present?
-      where("published = 't' OR user_id = #{uid}")
-    else
-      where("published = 't'")
-    end
-  }
-
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     qtlj = QtlJob.arel_table
     query = (params && params[:query].present?) ? filter(params) : all
     query = query.where(qtlj[:user_id].eq(uid).or(qtlj[:published].eq(true)))

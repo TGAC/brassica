@@ -116,10 +116,8 @@ RSpec.describe TraitDescriptor do
       expect(gd2.first[8]).to eq gd1.first[8]
       expect(gd2.first[9]).to eq gd1.first[9]
 
-      User.current_user_id = u.id
-
-      # This time expect 2 records
-      gd = TraitDescriptor.table_data
+      # Expect 2 records when u.id is supplied
+      gd = TraitDescriptor.table_data(nil, u.id)
       expect(gd.count).to eq 2
     end
   end

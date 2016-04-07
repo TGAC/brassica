@@ -7,24 +7,14 @@ class TraitDescriptor < ActiveRecord::Base
 
   validates :descriptor_name, :category, presence: true
 
-  scope :visible, ->() {
-    uid = User.current_user_id
-    if uid.present?
-      where("published = 't' OR user_id = #{uid}")
-    else
-      where("published = 't'")
-    end
-  }
-
   after_update { processed_trait_datasets.each(&:touch) }
 
   include Searchable
   include AttributeValues
   include Publishable
 
-  def self.table_data(params = nil)
+  def self.table_data(params = nil, uid = nil)
     trait_descriptor_query = ''
-    uid = User.current_user_id
 
     if params && params[:query].present? && params[:query][:id].present?
       trait_descriptor_query = "WHERE td.id = #{params[:query][:id].to_i}"

@@ -17,15 +17,6 @@ class Probe < ActiveRecord::Base
   validates :sequence_source_acronym,
             presence: true
 
-  scope :visible, ->() {
-    uid = User.current_user_id
-    if uid.present?
-      where("published = 't' OR user_id = #{uid}")
-    else
-      where("published = 't'")
-    end
-  }
-
   after_update { marker_assays.each(&:touch) }
 
   include Searchable
@@ -34,8 +25,7 @@ class Probe < ActiveRecord::Base
   include Pluckable
   include Publishable
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     pr = Probe.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.where(pr[:user_id].eq(uid).or(pr[:published].eq(true)))

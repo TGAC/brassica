@@ -37,14 +37,13 @@ class MarkerAssay < ActiveRecord::Base
   include Filterable
   include Publishable
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     ma = MarkerAssay.arel_table
     pra = Primer.arel_table
     pr = Probe.arel_table
 
-    primer_subquery = Primer.visible
-    probe_subquery = Probe.visible
+    primer_subquery = Primer.visible(uid)
+    probe_subquery = Probe.visible(uid)
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.

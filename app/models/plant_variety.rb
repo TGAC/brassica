@@ -22,8 +22,7 @@ class PlantVariety < ActiveRecord::Base
 
   scope :by_name, -> { order(:plant_variety_name) }
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     pv = PlantVariety.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.where(pv[:user_id].eq(uid).or(pv[:published].eq(true)))

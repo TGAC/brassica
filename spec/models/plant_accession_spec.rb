@@ -41,9 +41,7 @@ RSpec.describe PlantAccession do
       pad = PlantAccession.table_data
       expect(pad.count).to eq 1
 
-      User.current_user_id = u.id
-
-      pad = PlantAccession.table_data
+      pad = PlantAccession.table_data(nil, u.id)
       expect(pad.count).to eq 2
     end
   end

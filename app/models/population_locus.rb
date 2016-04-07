@@ -18,8 +18,7 @@ class PopulationLocus < ActiveRecord::Base
   include Searchable
   include Publishable
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     pl = PopulationLocus.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.where(pl[:user_id].eq(uid).or(pl[:published].eq(true)))

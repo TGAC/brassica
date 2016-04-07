@@ -68,9 +68,7 @@ RSpec.describe MarkerAssay do
       expect(mad.first[3]).to eq pra1.primer
       expect(mad.first[4]).to be_nil
 
-      User.current_user_id = u1.id
-
-      mad = MarkerAssay.table_data
+      mad = MarkerAssay.table_data(nil, u1.id)
 
       expect(mad.count).to eq 2
       expect(([pra1.primer, pra2.primer] & [mad.first[3], mad.second[3]]).size).to eq 2

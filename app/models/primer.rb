@@ -15,15 +15,6 @@ class Primer < ActiveRecord::Base
   validates :sequence,
             presence: true
 
-  scope :visible, ->() {
-    uid = User.current_user_id
-    if uid.present?
-      where("published = 't' OR user_id = #{uid}")
-    else
-      where("published = 't'")
-    end
-  }
-
   def marker_assays
     marker_assays_a | marker_assays_b
   end
@@ -37,8 +28,7 @@ class Primer < ActiveRecord::Base
   include Pluckable
   include Publishable
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     pr = Primer.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.where(pr[:user_id].eq(uid).or(pr[:published].eq(true)))

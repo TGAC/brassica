@@ -22,23 +22,13 @@ class LinkageMap < ActiveRecord::Base
 
   default_scope { includes(plant_population: :taxonomy_term) }
 
-  scope :visible, ->() {
-    uid = User.current_user_id
-    if uid.present?
-      where("published = 't' OR user_id = #{uid}")
-    else
-      where("published = 't'")
-    end
-  }
-
   include Relatable
   include Filterable
   include Pluckable
   include Searchable
   include Publishable
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     lm = LinkageMap.arel_table
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.where(lm[:user_id].eq(uid).or(lm[:published].eq(true)))

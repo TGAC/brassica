@@ -65,9 +65,7 @@ RSpec.describe PlantVariety do
       pvd = PlantVariety.table_data
       expect(pvd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      pvd = PlantVariety.table_data
+      pvd = PlantVariety.table_data(nil, u.id)
       expect(pvd.count).to eq 2
     end
   end

@@ -19,15 +19,14 @@ class Qtl < ActiveRecord::Base
   include Searchable
   include Publishable
 
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     qtlt = Qtl.arel_table
 
-    td_subquery = TraitDescriptor.visible
-    lg_subquery = LinkageGroup.visible
-    lm_subquery = LinkageMap.visible
-    pp_subquery = PlantPopulation.visible
-    qtlj_subquery = QtlJob.visible
+    td_subquery = TraitDescriptor.visible(uid)
+    lg_subquery = LinkageGroup.visible(uid)
+    lm_subquery = LinkageMap.visible(uid)
+    pp_subquery = PlantPopulation.visible(uid)
+    qtlj_subquery = QtlJob.visible(uid)
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
 

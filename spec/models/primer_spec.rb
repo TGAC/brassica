@@ -38,9 +38,7 @@ RSpec.describe Primer do
       prd = Primer.table_data
       expect(prd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      prd = Primer.table_data
+      prd = Primer.table_data(nil, u.id)
       expect(prd.count).to eq 2
     end
   end

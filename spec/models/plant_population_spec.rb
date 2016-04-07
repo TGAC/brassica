@@ -105,9 +105,7 @@ RSpec.describe PlantPopulation do
       gd = PlantPopulation.table_data
       expect(gd.count).to eq 2
 
-      User.current_user_id = u.id
-
-      gd = PlantPopulation.table_data
+      gd = PlantPopulation.table_data(nil, u.id)
       expect(gd.count).to eq 3
     end
   end

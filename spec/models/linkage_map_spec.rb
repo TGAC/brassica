@@ -31,9 +31,7 @@ RSpec.describe LinkageMap do
       lmd = LinkageMap.table_data
       expect(lmd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      lmd = LinkageMap.table_data
+      lmd = LinkageMap.table_data(nil, u.id)
       expect(lmd.count).to eq 2
     end
   end

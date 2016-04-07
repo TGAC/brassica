@@ -59,9 +59,7 @@ RSpec.describe MapLocusHit do
       mlhd = MapLocusHit.table_data
       expect(mlhd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      mlhd = MapLocusHit.table_data
+      mlhd = MapLocusHit.table_data(nil, u.id)
       expect(mlhd.count).to eq 2
     end
   end

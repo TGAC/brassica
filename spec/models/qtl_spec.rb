@@ -40,9 +40,7 @@ RSpec.describe Qtl do
       qtld = Qtl.table_data
       expect(qtld.count).to eq 1
 
-      User.current_user_id = u.id
-
-      qtld = Qtl.table_data
+      qtld = Qtl.table_data(nil, u.id)
       expect(qtld.count).to eq 2
     end
   end

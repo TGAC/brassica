@@ -18,8 +18,6 @@ class User < ActiveRecord::Base
 
   after_create :create_api_key!
 
-  cattr_accessor :current_user_id
-
   def self.find_or_create_from_auth_hash(auth_hash)
     user = self.find_or_initialize_by(login: auth_hash['uid'])
     user.full_name = auth_hash['full_name'] if auth_hash['full_name']

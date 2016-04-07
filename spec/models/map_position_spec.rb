@@ -50,9 +50,7 @@ RSpec.describe MapPosition do
       mpd = MapPosition.table_data
       expect(mpd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      mpd = MapPosition.table_data
+      mpd = MapPosition.table_data(nil, u.id)
       expect(mpd.count).to eq 2
     end
   end

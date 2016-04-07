@@ -51,9 +51,7 @@ RSpec.describe PlantTrial do
       ptd = PlantTrial.table_data
       expect(ptd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      ptd = PlantTrial.table_data
+      ptd = PlantTrial.table_data(nil, u.id)
       expect(ptd.count).to eq 2
     end
   end

@@ -34,9 +34,7 @@ RSpec.describe TraitScore do
       tsd = TraitScore.table_data
       expect(tsd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      tsd = TraitScore.table_data
+      tsd = TraitScore.table_data(nil, u.id)
       expect(tsd.count).to eq 2
     end
   end

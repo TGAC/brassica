@@ -34,22 +34,10 @@ class PlantPopulation < ActiveRecord::Base
   include Publishable
 
   scope :by_name, -> { order('plant_populations.name') }
-#  scope :visible, -> { where(PlantPopulation.arel_table[:user_id].eq(User.current_user_id).
-#                                 or(PlantPopulation.arel_table[:published].eq(true))) }
 
-  scope :visible, ->() {
-    uid = User.current_user_id
-    if uid.present?
-      where("published = 't' OR user_id = #{uid}")
-    else
-      where("published = 't'")
-    end
-  }
-
-  def self.table_data(params = nil)
-    uid = User.current_user_id
+  def self.table_data(params = nil, uid = nil)
     pp = PlantPopulation.arel_table
-    subquery = PlantLine.visible
+    subquery = PlantLine.visible(uid)
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
     query = query.

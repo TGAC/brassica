@@ -129,9 +129,7 @@ RSpec.describe PlantLine do
       pld = PlantLine.table_data
       expect(pld.count).to eq 1
 
-      User.current_user_id = u.id
-
-      pld = PlantLine.table_data
+      pld = PlantLine.table_data(nil, u.id)
       expect(pld.count).to eq 2
     end
   end

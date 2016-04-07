@@ -32,9 +32,7 @@ RSpec.describe LinkageGroup do
       lgd = LinkageGroup.table_data
       expect(lgd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      lgd = LinkageGroup.table_data
+      lgd = LinkageGroup.table_data(nil, u.id)
       expect(lgd.count).to eq 2
     end
   end

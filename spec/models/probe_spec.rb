@@ -38,9 +38,7 @@ RSpec.describe Probe do
       prd = Probe.table_data
       expect(prd.count).to eq 1
 
-      User.current_user_id = u.id
-
-      prd = Probe.table_data
+      prd = Probe.table_data(nil, u.id)
       expect(prd.count).to eq 2
     end
   end
