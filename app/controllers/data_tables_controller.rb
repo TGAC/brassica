@@ -1,6 +1,6 @@
 class DataTablesController < ApplicationController
   before_filter do |c|
-    @current_user_id = User.find(c.session[:user]).id unless c.session[:user].nil?
+    @current_user_id = current_user.present? ? current_user.id : nil
   end
 
   def index
