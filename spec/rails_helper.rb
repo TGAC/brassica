@@ -22,6 +22,8 @@ require 'common_helpers'
 # require only the support files necessary.
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir.mkdir(Rails.root.join("tmp")) unless Dir.exists?(Rails.root.join("tmp"))
+Dir.mkdir(Rails.root.join("tmp/cache")) unless Dir.exists?(Rails.root.join("tmp/cache"))
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
