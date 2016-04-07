@@ -1,8 +1,4 @@
 class DataTablesController < ApplicationController
-  before_filter do |c|
-    @current_user_id = current_user.present? ? current_user.id : nil
-  end
-
   def index
     respond_to do |format|
       format.html do
@@ -32,7 +28,7 @@ class DataTablesController < ApplicationController
   private
 
   def prepare_grid_data
-    objects = model_klass.table_data(params, @current_user_id)
+    objects = model_klass.table_data(params, current_user.try(:id))
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 
