@@ -63,7 +63,10 @@ class Submission < ActiveRecord::Base
     else
       raise CantFinalize
     end
+  end
 
+  def depositable?
+    finalized? && !doi
   end
 
   def submitted_object
@@ -74,8 +77,20 @@ class Submission < ActiveRecord::Base
     STEPS
   end
 
-  def name
-    [I18n.l(created_at, format: :short), content.step01.try(:name)].compact.join(' ')
+  def object_name
+    case submission_type
+    when 'population' then content.step01.try(:name) || ''
+    when 'trial' then content.step01.try(:plant_trial_name) || ''
+    else ''
+    end
+  end
+
+  def object_description
+    case submission_type
+    when 'population' then content.step01.try(:description) || ''
+    when 'trial' then content.step01.try(:plant_trial_description) || ''
+    else ''
+    end
   end
 
   def associated_model

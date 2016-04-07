@@ -147,6 +147,20 @@ RSpec.describe Submission do
     end
   end
 
+  describe '#depositable?' do
+    it 'is false for unfinalized submissions' do
+      expect(build(:submission, finalized: false).depositable?).to be_falsey
+    end
+
+    it 'is false for finalized submissions with assigned doi' do
+      expect(build(:submission, :finalized, doi: 'x').depositable?).to be_falsey
+    end
+
+    it 'is true for finalized submissions without assigned doi' do
+      expect(build(:submission, :finalized).depositable?).to be_truthy
+    end
+  end
+
   describe '#recent_first' do
     it 'orders submissions by update time' do
       ids = create_list(:submission, 7).map(&:id) +
@@ -186,4 +200,57 @@ RSpec.describe Submission do
     end
   end
 
+  describe '#object_name' do
+    let(:population_submission) { create(:submission, :population) }
+    let(:trial_submission) { create(:submission, :trial) }
+
+    context 'when executed for plant population submission' do
+      it 'returns empty string when there is no population name' do
+        expect(population_submission.object_name).to eq ''
+      end
+
+      it 'returns population name' do
+        population_submission.content.update(:step01, name: 'population_name')
+        expect(population_submission.object_name).to eq 'population_name'
+      end
+    end
+
+    context 'when executed for plant trial submission' do
+      it 'returns empty string when there is no trial name' do
+        expect(trial_submission.object_name).to eq ''
+      end
+
+      it 'returns trial name' do
+        trial_submission.content.update(:step01, plant_trial_name: 'trial_name')
+        expect(trial_submission.object_name).to eq 'trial_name'
+      end
+    end
+  end
+
+  describe '#object_description' do
+    let(:population_submission) { create(:submission, :population) }
+    let(:trial_submission) { create(:submission, :trial) }
+
+    context 'when executed for plant population submission' do
+      it 'returns empty string when there is no population description' do
+        expect(population_submission.object_description).to eq ''
+      end
+
+      it 'returns population description' do
+        population_submission.content.update(:step01, description: 'population_description')
+        expect(population_submission.object_description).to eq 'population_description'
+      end
+    end
+
+    context 'when executed for plant trial submission' do
+      it 'returns empty string when there is no trial description' do
+        expect(trial_submission.object_description).to eq ''
+      end
+
+      it 'returns trial description' do
+        trial_submission.content.update(:step01, plant_trial_description: 'trial_description')
+        expect(trial_submission.object_description).to eq 'trial_description'
+      end
+    end
+  end
 end
