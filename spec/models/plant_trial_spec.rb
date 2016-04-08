@@ -42,7 +42,9 @@ RSpec.describe PlantTrial do
           pt.id
         ]
     end
+  end
 
+  describe '#table_data' do
     it 'retrieves published data only' do
       u = create(:user)
       pt1 = create(:plant_trial, user: u, published: true)
@@ -53,14 +55,6 @@ RSpec.describe PlantTrial do
 
       ptd = PlantTrial.table_data(nil, u.id)
       expect(ptd.count).to eq 2
-    end
-  end
-
-  describe '#table_data' do
-    it 'orders plant trials by trial year' do
-      ptyears = create_list(:plant_trial, 3).map(&:trial_year)
-      table_data = PlantTrial.table_data
-      expect(table_data.map{ |pt| pt[4] }).to eq ptyears.sort
     end
   end
 

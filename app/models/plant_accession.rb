@@ -16,13 +16,7 @@ class PlantAccession < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Publishable
-
-  def self.table_data(params = nil, uid = nil)
-    pa = PlantAccession.arel_table
-    query = (params && params[:query].present?) ? filter(params) : all
-    query = query.where(pa[:user_id].eq(uid).or(pa[:published].eq(true)))
-    query.pluck_columns
-  end
+  include TableData
 
   def self.table_columns
     [
