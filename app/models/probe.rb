@@ -24,11 +24,7 @@ class Probe < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Publishable
-
-  def self.table_data(params = nil)
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.pluck_columns
-  end
+  include TableData
 
   def self.table_columns
     [

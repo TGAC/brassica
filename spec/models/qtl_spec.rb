@@ -31,5 +31,17 @@ RSpec.describe Qtl do
         qtl.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      qtl1 = create(:qtl, user: u, published: true)
+      qtl2 = create(:qtl, user: u, published: false)
+
+      qtld = Qtl.table_data
+      expect(qtld.count).to eq 1
+
+      qtld = Qtl.table_data(nil, u.id)
+      expect(qtld.count).to eq 2
+    end
   end
 end

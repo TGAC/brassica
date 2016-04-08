@@ -19,13 +19,9 @@ class PlantVariety < ActiveRecord::Base
   include Pluckable
   include Searchable
   include Publishable
+  include TableData
 
-  scope :by_name, -> { order(:plant_variety_name) }
-
-  def self.table_data(params = nil)
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.by_name.pluck_columns
-  end
+  default_scope { order('plant_variety_name') }
 
   def self.table_columns
     [

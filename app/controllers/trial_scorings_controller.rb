@@ -27,7 +27,7 @@ class TrialScoringsController < ApplicationController
   private
 
   def prepare_grid_data
-    objects = @plant_trial.scoring_table_data(trait_descriptor_ids)
+    objects = @plant_trial.scoring_table_data(trait_descriptor_ids, current_user.try(:id))
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 

@@ -22,6 +22,18 @@ RSpec.describe PlantScoringUnit do
           psc.id
         ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      psu1 = create(:plant_scoring_unit, user: u, published: true)
+      psu2 = create(:plant_scoring_unit, user: u, published: false)
+
+      psud = PlantScoringUnit.table_data
+      expect(psud.count).to eq 1
+
+      psud = PlantScoringUnit.table_data(nil, u.id)
+      expect(psud.count).to eq 2
+    end
   end
 
   it 'destroys trait scores when parent object is destroyed' do

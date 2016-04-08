@@ -35,12 +35,22 @@ class PlantPopulation < ActiveRecord::Base
 
   scope :by_name, -> { order('plant_populations.name') }
 
-  def self.table_data(params = nil)
+  def self.table_data(params = nil, uid = nil)
+    pp = PlantPopulation.arel_table
+    subquery = PlantLine.visible(uid)
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.
-      includes(:female_parent_line, :male_parent_line, :taxonomy_term, :population_type).
-      by_name.
-      pluck(*(table_columns + count_columns + ref_columns))
+    query = query.
+      joins {[
+        subquery.as('plant_lines').on { female_parent_line_id == plant_lines.id }.outer,
+        subquery.as('male_parent_lines_plant_populations').on { male_parent_line_id == male_parent_lines_plant_populations.id }.outer,
+        taxonomy_term.outer,
+        population_type.outer
+      ]}
+    query = query.
+      where(pp[:user_id].eq(uid).or(pp[:published].eq(true)))
+    query = query.by_name
+    query.pluck(*(table_columns + count_columns + ref_columns))
   end
 
   def self.table_columns

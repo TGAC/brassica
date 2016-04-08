@@ -15,12 +15,29 @@ class TraitScore < ActiveRecord::Base
     where(plant_scoring_units: { plant_trial_id: plant_trial_id })
   }
 
-  def self.table_data(params = nil)
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.
-        includes(plant_scoring_unit: { plant_trial: :plant_population, plant_accession: :plant_line }).
-        includes(:trait_descriptor).
-        pluck(*(table_columns + ref_columns))
+  def self.table_data(params = nil, uid = nil)
+    ts = TraitScore.arel_table
+
+    psu_subquery = PlantScoringUnit.visible(uid)
+    pt_subquery = PlantTrial.visible(uid)
+    pp_subquery = PlantPopulation.visible(uid)
+    pa_subquery = PlantAccession.visible(uid)
+    pl_subquery = PlantLine.visible(uid)
+    td_subquery = TraitDescriptor.visible(uid)
+
+    query = all
+    query = query.joins {[
+      psu_subquery.as('plant_scoring_units').on { plant_scoring_unit_id == plant_scoring_units.id }.outer,
+      pt_subquery.as('plant_trials').on { plant_scoring_units.plant_trial_id == plant_trials.id }.outer,
+      pp_subquery.as('plant_populations').on { plant_trials.plant_population_id == plant_populations.id }.outer,
+      pa_subquery.as('plant_accessions').on { plant_scoring_units.plant_accession_id == plant_accessions.id }.outer,
+      pl_subquery.as('plant_lines').on { plant_accessions.plant_line_id == plant_lines.id }.outer,
+      td_subquery.as('trait_descriptors').on { trait_descriptor_id == trait_descriptors.id }.outer
+    ]}
+
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
+    query = query.where(ts[:user_id].eq(uid).or(ts[:published].eq(true)))
+    query.pluck(*(table_columns + ref_columns))
   end
 
   def self.table_columns

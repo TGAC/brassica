@@ -117,34 +117,45 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
-  it 'contains published column in all tables except those belonging to a specified set' do
-    omitted_tables = [
-      'api_keys',
-      'countries',
-      'schema_migrations',
-      'submission_uploads',
-      'submissions',
-      'users',
-      'design_factors',
-      'genotype_matrices',
-      'pop_type_lookup',
-      'processed_trait_datasets',
-      'marker_sequence_assignments',
-      'plant_variety_country_registered',
-      'plant_variety_country_of_origin',
-      'taxonomy_terms',
-      'trait_grades',
-      'plant_parts',
-      'restriction_enzymes'
-    ]
+  context 'publishable records' do
+    it 'contains published column in all tables except those belonging to a specified set' do
+      omitted_tables = [
+        'api_keys',
+        'countries',
+        'schema_migrations',
+        'submission_uploads',
+        'submissions',
+        'users',
+        'design_factors',
+        'genotype_matrices',
+        'pop_type_lookup',
+        'processed_trait_datasets',
+        'marker_sequence_assignments',
+        'plant_variety_country_registered',
+        'plant_variety_country_of_origin',
+        'taxonomy_terms',
+        'trait_grades',
+        'plant_parts',
+        'restriction_enzymes'
+      ]
 
-    tables = ActiveRecord::Base.connection.tables
-    tables.reject!{|t| omitted_tables.include? t}
+      tables = ActiveRecord::Base.connection.tables
+      tables.reject!{|t| omitted_tables.include? t}
 
-    tables.each do |t|
-      expect(ActiveRecord::Base.connection.column_exists?(t, :published)).to be_truthy
+      tables.each do |t|
+        expect(ActiveRecord::Base.connection.column_exists?(t, :published)).to be_truthy
+      end
     end
 
+    it 'does not allow ownerless unpublished records' do
+      ActiveRecord::Base.send(:subclasses).each do |model|
+        if (model.column_names & ['user_id', 'published']).length == 2
+          record = model.new(user: nil, published: false)
+          expect(record.valid?).to be_falsy
+          expect(record.errors[:published]).to eq ['An ownerless record must have its published flag set to true.']
+        end
+      end
+    end
   end
 
   it 'includes all numeric columns in table columns' do

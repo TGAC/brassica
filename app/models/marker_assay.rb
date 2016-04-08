@@ -37,11 +37,24 @@ class MarkerAssay < ActiveRecord::Base
   include Filterable
   include Publishable
 
-  def self.table_data(params = nil)
+  def self.table_data(params = nil, uid = nil)
+    ma = MarkerAssay.arel_table
+    pra = Primer.arel_table
+    pr = Probe.arel_table
+
+    primer_subquery = Primer.visible(uid)
+    probe_subquery = Probe.visible(uid)
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.
-      includes(:primer_a, :primer_b, :probe).
-      pluck(*(table_columns + count_columns + ref_columns))
+    query = query.
+      joins {[
+        primer_subquery.as('primers').on { primer_a_id == primers.id }.outer,
+        primer_subquery.as('primer_bs_marker_assays').on { primer_b_id == primer_bs_marker_assays.id }.outer,
+        probe_subquery.as('probes').on { probe_id == probes.id }.outer
+      ]}
+    query = query.
+      where(ma[:user_id].eq(uid).or(ma[:published].eq(true)))
+    query.pluck(*(table_columns + count_columns + ref_columns))
   end
 
   def self.table_columns

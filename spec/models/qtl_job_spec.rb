@@ -22,5 +22,17 @@ RSpec.describe QtlJob do
         qtlj.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      qtlj1 = create(:qtl_job, user: u, published: true)
+      qtlj2 = create(:qtl_job, user: u, published: false)
+
+      qtljd = QtlJob.table_data
+      expect(qtljd.count).to eq 1
+
+      qtljd = QtlJob.table_data(nil, u.id)
+      expect(qtljd.count).to eq 2
+    end
   end
 end
