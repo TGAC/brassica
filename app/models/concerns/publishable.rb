@@ -7,14 +7,10 @@ module Publishable
     validates_with PublicationValidator
 
     scope :visible, ->(uid = nil) {
-      if uid == nil
-        uid = Thread.current[:user]
-      end
-
       if uid.present?
         where("published = 't' OR user_id = #{uid}")
       else
-        where("published = 't'")
+        where("published = 't' OR user_id IS NULL")
       end
     }
 
