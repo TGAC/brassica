@@ -36,7 +36,6 @@ class PlantPopulation < ActiveRecord::Base
   scope :by_name, -> { order('plant_populations.name') }
 
   def self.table_data(params = nil, uid = nil)
-    pp = PlantPopulation.arel_table
     subquery = PlantLine.visible(uid)
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
@@ -48,7 +47,7 @@ class PlantPopulation < ActiveRecord::Base
         population_type.outer
       ]}
     query = query.
-      where(pp[:user_id].eq(uid).or(pp[:published].eq(true)))
+      where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
     query = query.by_name
     query.pluck(*(table_columns + count_columns + ref_columns))
   end

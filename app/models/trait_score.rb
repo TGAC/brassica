@@ -16,8 +16,6 @@ class TraitScore < ActiveRecord::Base
   }
 
   def self.table_data(params = nil, uid = nil)
-    ts = TraitScore.arel_table
-
     psu_subquery = PlantScoringUnit.visible(uid)
     pt_subquery = PlantTrial.visible(uid)
     pp_subquery = PlantPopulation.visible(uid)
@@ -36,7 +34,7 @@ class TraitScore < ActiveRecord::Base
     ]}
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
-    query = query.where(ts[:user_id].eq(uid).or(ts[:published].eq(true)))
+    query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
     query.pluck(*(table_columns + ref_columns))
   end
 
