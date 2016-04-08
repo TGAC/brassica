@@ -1,6 +1,5 @@
 .container
-  %h3.section-heading Submission of #{@submission.submission_type}
-  %h4= @submission.name
+  %h3.section-heading Submission of #{@submission.object_name}
 
   .panel.panel-default
 
@@ -8,3 +7,6 @@
       = render "submissions/show/#{@submission.object.submission_type}"
 
   = my_submissions_button
+
+  - if @submission.depositable?
+    = new_deposition_button

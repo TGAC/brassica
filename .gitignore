@@ -30,3 +30,6 @@ config/database.yml
 
 # Paperclip uploads
 /public/system
+
+# Specs cassettes
+/spec/support/vcr_cassettes/*

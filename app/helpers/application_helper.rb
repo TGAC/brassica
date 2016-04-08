@@ -14,7 +14,7 @@ module ApplicationHelper
         end
       when 'data_tables', 'trial_scorings'
         :browse
-      when 'submissions'
+      when 'submissions', 'depositions'
         :submit
       when 'api_keys'
         :api

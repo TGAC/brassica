@@ -1,0 +1,34 @@
+.container
+  %h3.section-heading
+    Deposition of submission #{@deposition.submission.object_name} in Zenodo.org
+
+  .alert.alert-info
+    This action will upload this <b>submission data</b> (and any other BIP
+    data directly related to it), to an external service, called
+    <b><a href='https://www.zenodo.org/' target='_blank'>Zenodo.org</a></b>.
+
+    This data will be stored there, using a common BIP service account,
+    and it will be accessible to all Zenodo visitors.
+    Your name will be mentioned as the creator of the dataset. In exchange,
+    you will get an official <b>DOI number</b> for this deposition, which
+    you would be able to quote in your works.
+
+  .alert.alert-info
+    Please, use the form below to provide a set of deposition metadata, which
+    you would like to publish along with this dataset, inside Zenodo.org.
+
+  = form_for @deposition do |f|
+
+    = f.hidden_field :submission_id, value: @deposition.submission.id
+
+    .form-group
+      = f.label :title
+      = f.text_field :title, class: 'form-control'
+
+    .form-group
+      = f.label :description
+      = f.text_area :description, class: 'form-control'
+
+    = my_submissions_button
+    = link_to 'Cancel', @deposition.submission,  class: 'btn btn-primary'
+    = f.submit class: 'btn btn-primary pull-right'
