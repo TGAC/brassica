@@ -58,7 +58,7 @@ class PlantScoringUnit < ActiveRecord::Base
   end
 
   def self.json_options
-    { include: [:design_factor, :plant_part] }
+    { include: [:design_factor] }
   end
 
   include Annotable

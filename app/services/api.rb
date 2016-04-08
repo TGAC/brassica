@@ -13,6 +13,7 @@ class Api
       MarkerAssay,
       PlantAccession,
       PlantLine,
+      PlantPart,
       PlantPopulation,
       PlantPopulationList,
       PlantScoringUnit,
