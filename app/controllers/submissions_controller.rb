@@ -66,6 +66,14 @@ class SubmissionsController < ApplicationController
     redirect_to submissions_path, notice: "Submission deleted"
   end
 
+  def publish
+    redirect_to submissions_path, notice: "Submission published"
+  end
+
+  def revoke
+    redirect_to submissions_path, notice: "Publication revoked"
+  end
+
   private
 
   def step_content_form(submission, step_content_params = nil)

@@ -15,7 +15,11 @@ module Publishable
     }
 
     def revocable?
-      !published? || (published_on > Time.now - 1.week)
+      !published? || Time.now < revocable_until
+    end
+
+    def revocable_until
+      published_on + 1.week if published?
     end
   end
 end

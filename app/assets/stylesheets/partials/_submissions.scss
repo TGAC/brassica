@@ -5,22 +5,21 @@
     @extend .list-group-item;
     .main-info {
       display: inline-block;
-      width: 70%;
+      width: 60%;
     }
     .details {
+      font-size: small;
       margin-right: 20px;
+      margin-top: 4px;
     }
-    .updated-at {
+    .status {
       display: inline-block;
-      width: 15%;
-    }
-    .finalized-at {
-      display: inline-block;
-      width: 15%;
+      width: 22%;
     }
     .actions {
       float: right;
-      width: 14%;
+      width: 17%;
+      margin-top: 6px;
       text-align: right;
       transition: none;
       form {
