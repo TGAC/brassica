@@ -50,7 +50,9 @@ class MarkerAssay < ActiveRecord::Base
       ]}
     query = query.
       where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
-    query.pluck(*(table_columns + count_columns + ref_columns))
+
+    query = join_counters(query, uid)
+    query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
   end
 
   def self.table_columns
