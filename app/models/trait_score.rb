@@ -3,8 +3,7 @@ class TraitScore < ActiveRecord::Base
   belongs_to :trait_descriptor, counter_cache: true
   belongs_to :user
 
-  validates :score_value,
-            presence: true
+  validates :score_value, presence: true
 
   include Filterable
   include Pluckable

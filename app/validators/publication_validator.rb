@@ -6,7 +6,7 @@ class PublicationValidator < ActiveModel::Validator
       end
     end
 
-    if !(record.published) and record.user_id.blank?
+    if !record.published && record.user_id.blank?
       record.errors[:published] << 'An ownerless record must have its published flag set to true.'
     end
   end
