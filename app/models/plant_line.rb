@@ -38,7 +38,7 @@ class PlantLine < ActiveRecord::Base
   }
 
   def self.genetic_statuses
-    order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
+    unscope(:order).order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
   end
 
   def self.table_columns
