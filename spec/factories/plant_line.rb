@@ -12,14 +12,20 @@ FactoryGirl.define do
     annotable
 
     trait :with_has_many_associations do
-      after(:create) do |plant_line_registry, evaluator|
-        plant_line_registry.fathered_descendants = build_list(:plant_population, 2, male_parent_line_id: evaluator.id)
-        plant_line_registry.mothered_descendants = build_list(:plant_population, 2, female_parent_line_id: evaluator.id)
-        plant_line_registry.plant_accessions = build_list(:plant_accession, 2, plant_line_id: evaluator.id)
-        # plant_line_registry.plant_populations = build_list(:plant_population, 2)
+      after(:create) do |plant_line, evaluator|
+        plant_line.fathered_descendants = build_list(:plant_population, 2, male_parent_line_id: evaluator.id)
+        plant_line.mothered_descendants = build_list(:plant_population, 2, female_parent_line_id: evaluator.id)
+        plant_line.plant_accessions = build_list(:plant_accession, 2, plant_line_id: evaluator.id)
+        # plant_line.plant_populations = build_list(:plant_population, 2)
 
-        plant_line_registry.plant_population_lists =
+        plant_line.plant_population_lists =
           build_list(:plant_population_list, 2, plant_line_id: evaluator.id)
+      end
+    end
+
+    trait :not_owned_by_user do
+      after(:create) do |plant_line, evaluator|
+        plant_line.update_column(:user_id, nil)
       end
     end
   end

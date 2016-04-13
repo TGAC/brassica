@@ -7,22 +7,15 @@ class PlantPopulation < ActiveRecord::Base
              foreign_key: 'female_parent_line_id'
   belongs_to :user
 
-  has_many :linkage_maps,
-           dependent: :nullify
-  has_many :population_loci,
-           dependent: :nullify
-  has_many :plant_trials,
-           dependent: :nullify
+  has_many :linkage_maps, dependent: :nullify
+  has_many :population_loci, dependent: :nullify
+  has_many :plant_trials, dependent: :nullify
 
   has_many :plant_population_lists, dependent: :delete_all
-  has_many :plant_lines,
-           through: :plant_population_lists
+  has_many :plant_lines, through: :plant_population_lists
 
-  validates :name,
-            presence: true,
-            uniqueness: true
-  validates :user,
-            presence: { on: :create }
+  validates :name, presence: true, uniqueness: true
+  validates :user, presence: { on: :create }
 
   after_update { population_loci.each(&:touch) }
   after_update { linkage_maps.each(&:touch) }
