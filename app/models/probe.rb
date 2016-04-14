@@ -2,22 +2,17 @@ class Probe < ActiveRecord::Base
   belongs_to :taxonomy_term
   belongs_to :user
 
+  after_update { marker_assays.each(&:touch) }
+  before_destroy { marker_assays.each(&:touch) }
+
   has_many :marker_assays
 
   validates :probe_name,
             presence: true,
             uniqueness: true
 
-  validates :clone_name,
+  validates :clone_name, :sequence_id, :sequence_source_acronym,
             presence: true
-
-  validates :sequence_id,
-            presence: true
-
-  validates :sequence_source_acronym,
-            presence: true
-
-  after_update { marker_assays.each(&:touch) }
 
   include Searchable
   include Relatable

@@ -9,6 +9,9 @@ class PlantVariety < ActiveRecord::Base
                           class_name: 'Country',
                           join_table: 'plant_variety_country_registered'
 
+  after_update { plant_lines.each(&:touch) }
+  before_destroy { plant_lines.each(&:touch) }
+
   has_many :plant_lines
 
   validates :plant_variety_name,

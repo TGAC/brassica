@@ -11,14 +11,21 @@ class MarkerAssay < ActiveRecord::Base
   belongs_to :primer_a,
              class_name: 'Primer',
              foreign_key: 'primer_a_id',
-             counter_cache: 'marker_assays_a_count'
+             counter_cache: 'marker_assays_a_count',
+             touch: true
   belongs_to :primer_b,
              class_name: 'Primer',
              foreign_key: 'primer_b_id',
-             counter_cache: 'marker_assays_b_count'
+             counter_cache: 'marker_assays_b_count',
+             touch: true
 
-  belongs_to :probe, counter_cache: true
+  belongs_to :probe, counter_cache: true, touch: true
   belongs_to :user
+
+  after_update { population_loci.each(&:touch) }
+  after_update { map_positions.each(&:touch) }
+  before_destroy { population_loci.each(&:touch) }
+  before_destroy { map_positions.each(&:touch) }
 
   has_many :population_loci
   has_many :map_positions
@@ -29,8 +36,6 @@ class MarkerAssay < ActiveRecord::Base
 
   validates :canonical_marker_name,
             presence: true
-
-  after_update { population_loci.each(&:touch) }
 
   include Searchable
   include Relatable

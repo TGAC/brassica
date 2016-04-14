@@ -1,6 +1,13 @@
 class LinkageGroup < ActiveRecord::Base
-  belongs_to :linkage_map, counter_cache: true
+  belongs_to :linkage_map, counter_cache: true, touch: true
   belongs_to :user
+
+  after_update { map_positions.each(&:touch) }
+  after_update { map_locus_hits.each(&:touch) }
+  after_update { qtls.each(&:touch) }
+  before_destroy { map_positions.each(&:touch) }
+  before_destroy { map_locus_hits.each(&:touch) }
+  before_destroy { qtls.each(&:touch) }
 
   has_many :map_positions
   has_many :map_locus_hits
@@ -15,10 +22,6 @@ class LinkageGroup < ActiveRecord::Base
 
   validates :consensus_group_assignment,
             presence: true
-
-  after_update { map_positions.each(&:touch) }
-  after_update { map_locus_hits.each(&:touch) }
-  after_update { qtls.each(&:touch) }
 
   include Relatable
   include Filterable

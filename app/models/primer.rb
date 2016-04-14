@@ -1,6 +1,11 @@
 class Primer < ActiveRecord::Base
   belongs_to :user
 
+  after_update { marker_assays_a.each(&:touch) }
+  after_update { marker_assays_b.each(&:touch) }
+  before_destroy { marker_assays_a.each(&:touch) }
+  before_destroy { marker_assays_b.each(&:touch) }
+
   has_many :marker_assays_a,
            class_name: 'MarkerAssay',
            foreign_key: 'primer_a_id'
@@ -8,19 +13,12 @@ class Primer < ActiveRecord::Base
            class_name: 'MarkerAssay',
            foreign_key: 'primer_b_id'
 
-  validates :primer,
-            presence: true,
-            uniqueness: true
-
-  validates :sequence,
-            presence: true
+  validates :primer, presence: true, uniqueness: true
+  validates :sequence, presence: true
 
   def marker_assays
     marker_assays_a | marker_assays_b
   end
-
-  after_update { marker_assays_a.each(&:touch) }
-  after_update { marker_assays_b.each(&:touch) }
 
   include Searchable
   include Relatable

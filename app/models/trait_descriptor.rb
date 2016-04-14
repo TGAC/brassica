@@ -1,13 +1,14 @@
 class TraitDescriptor < ActiveRecord::Base
   belongs_to :user
 
+  after_update { processed_trait_datasets.each(&:touch) }
+  before_destroy { processed_trait_datasets.each(&:touch) }
+
   has_many :trait_grades
   has_many :trait_scores
   has_many :processed_trait_datasets
 
   validates :descriptor_name, :category, presence: true
-
-  after_update { processed_trait_datasets.each(&:touch) }
 
   include Searchable
   include AttributeValues

@@ -1,15 +1,15 @@
 class MapPosition < ActiveRecord::Base
-  belongs_to :linkage_group, counter_cache: true
-  belongs_to :population_locus, counter_cache: true
-  belongs_to :marker_assay, counter_cache: true
+  belongs_to :linkage_group, counter_cache: true, touch: true
+  belongs_to :population_locus, counter_cache: true, touch: true
+  belongs_to :marker_assay, counter_cache: true, touch: true
   belongs_to :user
+
+  after_update { map_locus_hits.each(&:touch) }
+  before_destroy { map_locus_hits.each(&:touch) }
 
   has_many :map_locus_hits
 
-  validates :map_position,
-            presence: true
-
-  after_update { map_locus_hits.each(&:touch) }
+  validates :map_position, presence: true
 
   include Relatable
   include Filterable

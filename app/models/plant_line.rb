@@ -3,21 +3,21 @@ class PlantLine < ActiveRecord::Base
   belongs_to :taxonomy_term
   belongs_to :user
 
-  has_many :fathered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'male_parent_line_id',
-           dependent: :nullify
-  has_many :mothered_descendants, class_name: 'PlantPopulation',
-           foreign_key: 'female_parent_line_id',
-           dependent: :nullify
-  has_many :plant_accessions,
-           dependent: :nullify
-
-  has_many :plant_population_lists, dependent: :delete_all
-  has_many :plant_populations,
-           through: :plant_population_lists
-
+  before_destroy { mothered_descendants.each(&:touch) }
+  before_destroy { fathered_descendants.each(&:touch) }
+  before_destroy { plant_accessions.each(&:touch) }
   after_update { mothered_descendants.each(&:touch) }
   after_update { fathered_descendants.each(&:touch) }
+  after_update { plant_accessions.each(&:touch) }
+
+  has_many :fathered_descendants, class_name: 'PlantPopulation',
+           foreign_key: 'male_parent_line_id'
+  has_many :mothered_descendants, class_name: 'PlantPopulation',
+           foreign_key: 'female_parent_line_id'
+  has_many :plant_accessions
+
+  has_many :plant_population_lists, dependent: :delete_all
+  has_many :plant_populations, through: :plant_population_lists
 
   include Filterable
   include Pluckable

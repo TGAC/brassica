@@ -1,7 +1,7 @@
 class PlantScoringUnit < ActiveRecord::Base
   belongs_to :design_factor
-  belongs_to :plant_trial, counter_cache: true
-  belongs_to :plant_accession, counter_cache: true
+  belongs_to :plant_trial, counter_cache: true, touch: true
+  belongs_to :plant_accession, counter_cache: true, touch: true
   belongs_to :plant_part
   belongs_to :user
 
