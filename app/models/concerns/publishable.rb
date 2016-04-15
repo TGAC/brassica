@@ -17,5 +17,9 @@ module Publishable
     def revocable?
       !published? || (published_on > Time.now - 1.week)
     end
+
+    def private?
+      !(published? || user.nil?)
+    end
   end
 end
