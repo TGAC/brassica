@@ -37,6 +37,7 @@ FactoryGirl.define do
           trait_descriptor = FactoryGirl.create(:trait_descriptor)
 
           submission.content.update(:step01, plant_trial_name: random_word,
+                                             plant_trial_description: Faker::Lorem.sentence,
                                              project_descriptor: random_word,
                                              plant_population_id: plant_population.id,
                                              country_id: country.id)

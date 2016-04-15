@@ -1,0 +1,10 @@
+development:
+#  zenodo_server: https://sandbox.zenodo.org/
+  zenodo_server: https://zenodo.org/
+
+test:
+#  zenodo_server: https://sandbox.zenodo.org/
+  zenodo_server: https://zenodo.org/
+
+production:
+  zenodo_server: https://zenodo.org/
