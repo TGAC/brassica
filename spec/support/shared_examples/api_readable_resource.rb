@@ -69,6 +69,19 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
           expect(parsed_response).to have_key(model_name.pluralize)
           expect(parsed_response[model_name.pluralize].count).to eq resources.size
         end
+
+        it "filters forbidden resources out" do
+          resource = model_klass.first
+          if resource.has_attribute?(:published)
+            resource.update_attribute(:published, false)
+          end
+          get "/api/v1/#{model_name.pluralize}", { }, { "X-BIP-Api-Key" => api_key.token }
+
+          expect(response).to be_success
+          expect(parsed_response).to have_key(model_name.pluralize)
+          expect(parsed_response[model_name.pluralize].count).
+            to eq resource.has_attribute?(:published) ? resources.size - 1 : resources.size
+        end
       end
 
       describe "pagination" do
@@ -162,6 +175,16 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         expect(parsed_object).not_to have_key('user')
         expect(parsed_object).not_to have_key('created_at')
         expect(parsed_object).not_to have_key('updated_at')
+      end
+
+      it "returns blank when resource is forbidden" do
+        if resource.has_attribute?(:published)
+          resource.update_attribute(:published, false)
+        end
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+
+        expect(parsed_response).
+          to resource.has_attribute?(:published) ? be_empty : have_key(model_name)
       end
 
       context 'when run for Relatable model' do

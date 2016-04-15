@@ -19,6 +19,7 @@ class Api::V1::ResourcesController < Api::BaseController
     filter_params = params[model.name].presence
 
     resources = Api::Index.new(model).where(filter_params).order(:id)
+    resources = resources.visible(api_key.user_id) if resources.respond_to? :visible
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
@@ -26,18 +27,21 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def show
-    resource = model.klass.find(params[:id])
-    render json: { model.name => decorate(resource) }
+    resource = model.klass.where(id: params[:id])
+    resource = resource.visible(api_key.user_id) if resource.respond_to? :visible
+    resource = resource.first
+    response_json = resource ? { model.name => decorate(resource) } : {}
+    render json: response_json
   end
 
   def create
     resource = model.klass.new(
       create_params.merge(
-        :user_id => api_key.user_id,
-        :date_entered => Date.today,
-        :entered_by_whom => api_key.user.full_name,
-        :published => true,
-        :published_on => Date.today
+        user_id: api_key.user_id,
+        date_entered: Date.today,
+        entered_by_whom: api_key.user.full_name,
+        published: true,
+        published_on: Time.now
       )
     )
 
