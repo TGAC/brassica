@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160415135850) do
+ActiveRecord::Schema.define(version: 20160415142419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,6 @@ ActiveRecord::Schema.define(version: 20160415135850) do
   end
 
   add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
-  add_index "countries", ["country_code"], name: "idx_ccs_country_code", using: :btree
 
   create_table "design_factors", force: :cascade do |t|
     t.text     "design_factor_name",  null: false
@@ -185,7 +184,6 @@ ActiveRecord::Schema.define(version: 20160415135850) do
 
   add_index "map_positions", ["linkage_group_id"], name: "map_positions_linkage_group_id_idx", using: :btree
   add_index "map_positions", ["map_position"], name: "idx_143597_map_position", using: :btree
-  add_index "map_positions", ["mapping_locus"], name: "idx_143597_mapping_locus", using: :btree
   add_index "map_positions", ["mapping_locus"], name: "map_positions_mapping_locus_idx", using: :btree
   add_index "map_positions", ["marker_assay_id"], name: "map_positions_marker_assay_id_idx", using: :btree
   add_index "map_positions", ["marker_assay_name"], name: "map_positions_marker_assay_name_idx", using: :btree
@@ -242,7 +240,6 @@ ActiveRecord::Schema.define(version: 20160415135850) do
     t.datetime "updated_at"
   end
 
-  add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "idx_143632_canonical_marker_name", using: :btree
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
 
   create_table "plant_accessions", force: :cascade do |t|
@@ -511,7 +508,6 @@ ActiveRecord::Schema.define(version: 20160415135850) do
     t.datetime "published_on"
   end
 
-  add_index "population_loci", ["mapping_locus"], name: "idx_143961_mapping_locus", using: :btree
   add_index "population_loci", ["mapping_locus"], name: "population_loci_mapping_locus_idx", using: :btree
   add_index "population_loci", ["marker_assay_id"], name: "population_loci_marker_assay_id_idx", using: :btree
   add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
@@ -640,7 +636,6 @@ ActiveRecord::Schema.define(version: 20160415135850) do
   end
 
   add_index "qtl_jobs", ["linkage_map_id"], name: "qtl_jobs_linkage_map_id_idx", using: :btree
-  add_index "qtl_jobs", ["linkage_map_label"], name: "idx_144140_linkage_map_id", using: :btree
   add_index "qtl_jobs", ["linkage_map_label"], name: "qtl_jobs_linkage_map_label_idx", using: :btree
   add_index "qtl_jobs", ["qtl_job_name"], name: "qtl_jobs_qtl_job_name_idx", using: :btree
   add_index "qtl_jobs", ["qtl_software", "qtl_method"], name: "idx_144140_qtl_software", using: :btree
@@ -732,7 +727,6 @@ ActiveRecord::Schema.define(version: 20160415135850) do
   end
 
   add_index "trait_descriptors", ["category"], name: "idx_144197_category", using: :btree
-  add_index "trait_descriptors", ["descriptor_label"], name: "idx_144197_trait_descriptor_id", using: :btree
   add_index "trait_descriptors", ["descriptor_label"], name: "trait_descriptors_descriptor_label_idx", using: :btree
   add_index "trait_descriptors", ["descriptor_name"], name: "idx_144197_descriptor_name", using: :btree
 
