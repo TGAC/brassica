@@ -70,4 +70,5 @@ group :test do
   gem 'rspec-html-matchers'
   gem 'webmock', require: false
   gem 'database_cleaner'
+  gem 'vcr'
 end
