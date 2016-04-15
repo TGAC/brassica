@@ -23,9 +23,9 @@ module ApplicationHelper
     end
   end
 
-  def active_link(label)
+  def active_link(label, path)
     content_tag :li, class: 'active' do
-      link_to t("menu.#{label}"), '#'
+      link_to t("menu.#{label}"), path
     end
   end
 

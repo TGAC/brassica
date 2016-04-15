@@ -51,7 +51,7 @@ module DataTablesHelper
     active = active_tab_label == label
     html_class = active ? 'active' : ''
     content_tag :li, role: 'presentation', class: html_class do
-      link_to t("browse_tabs.#{label}"), active ? '#' : path
+      link_to t("browse_tabs.#{label}"), path
     end
   end
 
