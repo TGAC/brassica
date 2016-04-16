@@ -16,7 +16,7 @@ class Submission::PlantTrialPublisher < Submission::Publisher
   end
 
   def trait_scores
-    TraitScore.where(user_id: submission.user).of_trial(plant_trial)
+    TraitScore.where(user_id: submission.user).of_trial(plant_trial.id)
   end
 
   def trait_descriptors

@@ -9,6 +9,7 @@ class Submission::Publisher
 
   def publish
     raise ArgumentError, "Submission is published" if submission.publishable?
+
     now = Time.zone.now
     submission.transaction do
       submission.update_attributes!(publishable: true)
@@ -21,6 +22,8 @@ class Submission::Publisher
 
   def revoke
     raise ArgumentError, "Submission is not published" unless submission.publishable?
+    raise ArgumentError, "Submission is not revocable" unless submission.revocable?
+
     submission.transaction do
       submission.update_attributes!(publishable: false)
       revoke_object(submission.submitted_object)

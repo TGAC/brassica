@@ -73,6 +73,11 @@ RSpec.describe Submission::PlantPopulationPublisher do
         expect(plant_population_lists[2].reload).to be_published
       end
 
+      it "does not modify objects not associated with given submission" do
+        pending
+        fail
+      end
+
       it "does not modify objects not belonging to sumission's owner" do
         expect(plant_lines[0].reload).to be_published
       end
