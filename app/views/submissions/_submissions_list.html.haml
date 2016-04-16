@@ -14,44 +14,14 @@
           = submission_details(submission)
 
       - unless submission.finalized?
-        .status
-          %span.label.label-default Draft
-          .details
-            Modified on #{l submission.updated_at, format: :short}
+        = render partial: "/submissions/show/status", locals: { submission: submission }
 
         - unless mode == :public
-          .actions.collapse{data: { confirmation: submission.id }}
-            Sure?
-            = button_to 'Yes', submission_path(submission), method: :delete, class: 'btn btn-sm btn-warning'
-            %a.btn.btn-sm.btn-default{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-              No
-
-          .actions.collapse.in{data: { confirmation: submission.id }}
+          = confirmable_action("Delete", submission, method: :delete, btn_class: "btn-warning") do
             = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-sm btn-default'
-            %a.btn.btn-sm.btn-warning{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-              Delete
 
       - else
-        .status
-          - if submission.publishable?
-            %span.label.label-primary Submitted &#183; Published
-          - else
-            %span.label.label-info Submitted &#183; Private
-
-          .details
-            - if submission.revocable?
-              Revocable until #{l submission.revocable_until.utc, format: :short} UTC
-
-              - tooltip = capture do
-                .text-left
-                  Published data can be revoked for 7 days from the publication.<br>
-                  This submission was published on #{l submission.published_on.utc, format: :short} UTC
-
-              %span{data: {toggle: :tooltip, html: 'true'}, title: tooltip}
-                %i.fa.fa-info-circle
-
-            - else
-              Submitted on #{l submission.updated_at, format: :short}
+        = render partial: "/submissions/show/status", locals: { submission: submission }
 
         - if mode == :public
           .actions
@@ -61,24 +31,9 @@
 
         - else
           - if submission.publishable? && submission.revocable?
-            .actions.collapse{data: { confirmation: submission.id }}
-              Sure?
-              = button_to 'Yes', revoke_submission_path(submission), method: :patch, class: 'btn btn-sm btn-warning'
-              %a.btn.btn-sm.btn-default{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-                No
-
-            .actions.collapse.in{data: { confirmation: submission.id }}
-              %a.btn.btn-sm.btn-default{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-                Revoke publication
+            = confirmable_action("Revoke publication", submission,
+                url: revoke_submission_path(submission), method: :patch)
 
           - else
-            .actions.collapse{data: { confirmation: submission.id }}
-              Sure?
-              = button_to 'Yes', publish_submission_path(submission), method: :patch, class: 'btn btn-sm btn-warning'
-              %a.btn.btn-sm.btn-default{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-                No
-
-            .actions.collapse.in{data: { confirmation: submission.id }}
-              %a.btn.btn-sm.btn-primary{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-                Publish
-
+            = confirmable_action("Publish", submission,
+                url: publish_submission_path(submission), method: :patch, btn_class: "btn-primary")

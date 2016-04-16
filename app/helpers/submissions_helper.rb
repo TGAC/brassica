@@ -4,7 +4,7 @@ module SubmissionsHelper
   end
 
   def my_submissions_button
-    link_to "My submissions", submissions_path, class: 'btn btn-primary'
+    link_to "My submissions", submissions_path, class: 'btn btn-default btn-sm'
   end
 
   def submission_private_link(submission)

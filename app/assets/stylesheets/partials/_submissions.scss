@@ -21,11 +21,17 @@
       width: 17%;
       margin-top: 6px;
       text-align: right;
-      transition: none;
-      form {
-        display: inline-block;
-      }
     }
+  }
+}
+
+.show-submission {
+  .status {
+    margin-bottom: 2px;
+  }
+  .details {
+    margin-top: 2px;
+    font-size: small;
   }
 }
 
@@ -105,4 +111,3 @@
     }
   }
 }
-

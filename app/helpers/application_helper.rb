@@ -64,4 +64,14 @@ module ApplicationHelper
       title: title, props: props
     }
   end
+
+  def confirmable_action(label, object, options = {}, &blk)
+    options = options.dup
+    options[:method] ||= :post
+    options[:url] ||= url_for(object)
+    options[:btn_class] ||= "btn-default"
+    options[:other_content] ||= capture(&blk) if block_given?
+
+    render partial: "/confirmable_action", locals: options.merge(label: label, object: object)
+  end
 end
