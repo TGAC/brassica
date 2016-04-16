@@ -6,7 +6,7 @@
       %h4= @submission.name
 
     .col-sm-4.text-right
-      = render partial: "/submissions/show/status", locals: { submission: @submission }
+      = render partial: "/submissions/show/status", locals: { submission: @submission, mode: :private }
 
   .panel.panel-default
 

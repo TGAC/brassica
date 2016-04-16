@@ -1,12 +1,15 @@
+- mode = :public unless defined?(mode)
+
 .status
   - if submission.finalized?
-    - if submission.publishable?
-      %span.label.label-primary Submitted &#183; Published
-    - else
-      %span.label.label-info Submitted &#183; Private
+    - if mode == :private
+      - if submission.publishable?
+        %span.label.label-primary Submitted &#183; Published
+      - else
+        %span.label.label-info Submitted &#183; Private
 
     .details
-      - if submission.revocable?
+      - if mode == :private && submission.revocable?
         Revocable until #{l submission.revocable_until.utc, format: :short} UTC
 
         - tooltip = capture do

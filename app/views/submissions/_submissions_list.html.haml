@@ -14,14 +14,14 @@
           = submission_details(submission)
 
       - unless submission.finalized?
-        = render partial: "/submissions/show/status", locals: { submission: submission }
+        = render partial: "/submissions/show/status", locals: { submission: submission, mode: mode }
 
         - unless mode == :public
           = confirmable_action("Delete", submission, method: :delete, btn_class: "btn-warning") do
             = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-sm btn-default'
 
       - else
-        = render partial: "/submissions/show/status", locals: { submission: submission }
+        = render partial: "/submissions/show/status", locals: { submission: submission, mode: mode }
 
         - if mode == :public
           .actions
