@@ -23,7 +23,8 @@ RSpec.describe "API V1" do
     let!(:plant_population) do
       create(:plant_population,
              user: user,
-             male_parent_line: parent_line
+             male_parent_line: parent_line,
+             published: false
       )
     end
     let!(:plant_population_list_1) do

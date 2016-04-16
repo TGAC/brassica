@@ -60,7 +60,7 @@ class Api::V1::ResourcesController < Api::BaseController
       render json: { reason: 'Resource not found' }, status: :not_found
     elsif resource.user != @api_key.user
       render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
-    elsif !resource.revocable?
+    elsif resource.published? && !resource.revocable?
       render json: { reason: 'This resource is already published and irrevocable' }, status: :forbidden
     else
       resource.destroy
