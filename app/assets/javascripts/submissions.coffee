@@ -41,7 +41,7 @@ class Submission
     @$el.find(args)
 
   init: =>
-    # TODO: make sure init is not run unless $el is present
+    return unless @$el.length >= 1
     @initDirtyTracker()
 
   initDirtyTracker: =>
