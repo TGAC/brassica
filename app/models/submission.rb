@@ -25,6 +25,11 @@ class Submission < ActiveRecord::Base
     Content.new(self)
   end
 
+  def content_for?(step)
+    step = STEPS[step.to_i] if step.to_s =~ /\A\d+\z/
+    content[step].to_h.present?
+  end
+
   def step_forward
     raise CantStepForward if last_step?
     idx = STEPS.index(step)
