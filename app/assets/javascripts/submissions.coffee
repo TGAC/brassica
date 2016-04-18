@@ -48,11 +48,12 @@ class Submission
     @dirtyTracker = new DirtyTracker(@$el[0]).init()
 
     # TODO: make sure it works with keyboard and touch too
-    $('input[type=submit][name=back]').on 'click', (event) =>
+    $('input[type=submit][name=back], .step a').on 'click', (event) =>
       if @dirtyTracker.isChanged()
         # TODO: use bootstrap's confirmation dialog
         unless confirm("Discard unsaved changes?")
           event.preventDefault()
+          event.stopPropagation()
 
 class PopulationSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
@@ -70,6 +71,16 @@ class PopulationSubmission extends Submission
 
     @bindNewPlantLineControls()
 
+  initDirtyTracker: =>
+    super()
+
+    # TODO: make sure it works with keyboard and touch too
+    $('input[type=submit][name=leave], input[type=submit][name=commit]').on 'click', (event) =>
+      if @dirtyTracker.isChanged('new-plant-line')
+        unless confirm("Discard new Plant line?")
+          event.preventDefault()
+          event.stopPropagation()
+
   bindNewPlantLineControls: =>
     @$('.plant-line-list').on 'select2:unselect', (event) =>
       @removeNewPlantLineFromList(event.params.data.id)
@@ -79,11 +90,15 @@ class PopulationSubmission extends Submission
       @initNewPlantLineForm()
 
     @$('.add-new-plant-line-for-list').on 'click', (event) =>
-      @validateNewPlantLineForList(@appendToSelectedPlantLineLists)
+      @validateNewPlantLineForList((plantLineData) =>
+        @appendToSelectedPlantLineLists(plantLineData)
+        @dirtyTracker.resetContext("new-plant-line")
+      )
 
     @$('.cancel-new-plant-line-for-list').on 'click', (event) =>
       @$('div.new-plant-line-for-list').hide()
       @$('button.new-plant-line-for-list').show()
+      @dirtyTracker.resetContext("new-plant-line")
 
   initNewPlantLineForm: =>
     @$('div.new-plant-line-for-list').removeClass('hidden').show()
@@ -169,6 +184,16 @@ class TrialSubmission extends Submission
     @bindUpload()
     @bindNewTraitDescriptorControls()
 
+  initDirtyTracker: =>
+    super()
+
+    # TODO: make sure it works with keyboard and touch too
+    $('input[type=submit][name=leave], input[type=submit][name=commit]').on 'click', (event) =>
+      if @dirtyTracker.isChanged('new-trait-descriptor')
+        unless confirm("Discard new Trait descriptor?")
+          event.preventDefault()
+          event.stopPropagation()
+
   bindUpload: =>
     @$('.trait-scores-upload').fileupload
       data_type: 'json'
@@ -214,11 +239,15 @@ class TrialSubmission extends Submission
       @initNewTraitDescriptorForm()
 
     @$('.add-new-trait-descriptor-for-list').on 'click', (event) =>
-      @validateNewTraitDescriptorForList(@appendToSelectedTraitDescriptorLists)
+      @validateNewTraitDescriptorForList((traitDescriptorData) =>
+        @appendToSelectedTraitDescriptorLists(traitDescriptorData)
+        @dirtyTracker.resetContext("new-trait-descriptor")
+      )
 
     @$('.cancel-new-trait-descriptor-for-list').on 'click', (event) =>
       @$('div.new-trait-descriptor-for-list').hide()
       @$('button.new-trait-descriptor-for-list').show()
+      @dirtyTracker.resetContext("new-trait-descriptor")
 
   initNewTraitDescriptorForm: =>
     @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
