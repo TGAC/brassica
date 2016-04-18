@@ -109,4 +109,21 @@ RSpec.describe PlantPopulation do
       expect(gd.count).to eq 3
     end
   end
+
+  describe '#cascade_visibility' do
+    it 'changes visibility of all related plant population lists' do
+      pp = create(:plant_population, user: create(:user), published: false)
+      create_list(:plant_population_list, 2, plant_population: pp, user: pp.user, published: false)
+
+      expect { pp.update_attribute(:published, true) }.
+          to change { PlantPopulationList.visible(nil).count }.by(2)
+    end
+
+    it 'does nothing when there is no visibility change' do
+      expect_any_instance_of(PlantPopulationList).not_to receive(:update_attributes!)
+      pp = create(:plant_population, user: create(:user), published: false)
+      create(:plant_population_list, plant_population: pp, user: pp.user, published: false)
+      pp.update_attribute(:name, 'some other name')
+    end
+  end
 end

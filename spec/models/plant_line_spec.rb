@@ -146,4 +146,21 @@ RSpec.describe PlantLine do
       expect(td.map(&:second)).to eq pls.map(&:plant_line_name).sort
     end
   end
+
+  describe '#cascade_visibility' do
+    it 'changes visibility of all related plant population lists' do
+      pl = create(:plant_line, user: create(:user), published: false)
+      create_list(:plant_population_list, 2, plant_line: pl, user: pl.user, published: false)
+
+      expect { pl.update_attribute(:published, true) }.
+        to change { PlantPopulationList.visible(nil).count }.by(2)
+    end
+
+    it 'does nothing when there is no visibility change' do
+      expect_any_instance_of(PlantPopulationList).not_to receive(:update_attributes!)
+      pl = create(:plant_line, user: create(:user), published: false)
+      create(:plant_population_list, plant_line: pl, user: pl.user, published: false)
+      pl.update_attribute(:plant_line_name, 'some other name')
+    end
+  end
 end
