@@ -91,6 +91,9 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           expect(response).to be_success
           expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
           expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
+          expect(parsed_response[model_name]['published']).to be_truthy
+          expect(Time.parse(parsed_response[model_name]['published_on'])).
+            to be_within(10.seconds).of(Time.now)
         end
 
         it "prevents user impersonating anyone or changing dates" do
