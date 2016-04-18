@@ -52,4 +52,53 @@ RSpec.describe Searchable do
       expect(PlantLine.indexed_json_structure).to eq proper
     end
   end
+
+  describe "callbacks", :elasticsearch do
+    let(:es) { PlantLine.__elasticsearch__.client }
+    let(:index) { PlantLine.index_name }
+
+    context "after create" do
+      it "indexes record on creation if published" do
+        plant_line = create(:plant_line, published: true)
+
+        expect(es.exists(id: plant_line.id, index: index)).to be_truthy
+      end
+
+      it "does not index record on creation if not published" do
+        plant_line = create(:plant_line, published: false)
+
+        expect(es.exists(id: plant_line.id, index: index)).to be_falsey
+      end
+    end
+
+    context "after update" do
+      let!(:published_plant_line) { create(:plant_line, published: true) }
+      let!(:unpublished_plant_line) { create(:plant_line, published: false) }
+
+      it "indexes record" do
+        unpublished_plant_line.update_attribute(:published, true)
+
+        expect(es.exists(id: published_plant_line.id, index: index)).to be_truthy
+      end
+
+      it "removes record from index" do
+        published_plant_line.update_attribute(:published, false)
+
+        expect(es.exists(id: published_plant_line.id, index: index)).to be_falsey
+      end
+    end
+
+    context "after destroy" do
+      let!(:published_plant_line) { create(:plant_line, published: true) }
+      let!(:unpublished_plant_line) { create(:plant_line, published: false) }
+
+      it "removes record from index" do
+        published_plant_line.destroy
+        unpublished_plant_line.destroy
+
+        expect(es.exists(id: published_plant_line.id, index: index)).to be_falsey
+        expect(es.exists(id: unpublished_plant_line.id, index: index)).to be_falsey
+      end
+    end
+  end
 end

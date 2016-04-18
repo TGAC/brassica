@@ -6,11 +6,28 @@
 module Searchable extend ActiveSupport::Concern
   included do
     include Elasticsearch::Model
-    include Elasticsearch::Model::Callbacks
 
     index_name ['brassica', Rails.env, base_class.name.underscore.pluralize].join("_")
 
-    after_touch { __elasticsearch__.index_document }
+    after_commit(on: :create) do
+      __elasticsearch__.index_document if published?
+    end
+
+    after_commit(on: :update) do
+      if !published?
+        __elasticsearch__.delete_document
+      elsif __elasticsearch__.client.exists(id: id, index: self.class.index_name)
+        __elasticsearch__.update_document
+      else
+        __elasticsearch__.index_document
+      end
+    end
+
+    after_commit(on: :destroy) do
+      __elasticsearch__.delete_document if published?
+    end
+
+    after_touch { __elasticsearch__.index_document if published? }
 
     def self.numeric_columns
       []

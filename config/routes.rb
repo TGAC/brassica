@@ -13,6 +13,10 @@ Rails.application.routes.draw do
   get 'api_documentation', to: 'application#api'
 
   resources :submissions do
+    member do
+      patch :publish
+      patch :revoke
+    end
     resources :uploads, controller: 'submissions/uploads', only: [:new, :create, :destroy]
   end
   resources :plant_lines, only: [:index]
