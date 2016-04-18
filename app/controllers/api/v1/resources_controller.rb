@@ -27,11 +27,16 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def show
-    resource = model.klass.where(id: params[:id])
-    resource = resource.visible(api_key.user_id) if resource.respond_to? :visible
-    resource = resource.first
-    response_json = resource ? { model.name => decorate(resource) } : {}
-    render json: response_json
+    resource = model.klass.find(params[:id])
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.has_attribute?(:user_id) &&
+          resource.user_id != api_key.user_id &&
+          !resource.published?
+      render json: { reason: 'This is a private resource of another user' }, status: :unauthorized
+    else
+      render json: { model.name => decorate(resource) }
+    end
   end
 
   def create

@@ -183,8 +183,13 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         end
         get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
 
-        expect(parsed_response).
-          to resource.has_attribute?(:published) ? be_empty : have_key(model_name)
+        if resource.has_attribute?(:published)
+          expect(response.status).to eq 401
+          expect(parsed_response['reason']).
+            to eq 'This is a private resource of another user'
+        else
+          expect(parsed_response).to have_key(model_name)
+        end
       end
 
       context 'when run for Relatable model' do
