@@ -10,7 +10,7 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
 
     it 'returns true for private objects not older than 1 week, false otherwise' do
       subject.update_attributes!(published: false, published_on: nil)
-      expect(subject.reload.revocable?).to be_truthy
+      expect(subject.reload.revocable?).to be_falsey
 
       subject.update_attributes!(published: true, published_on: Time.now)
       expect(subject.reload.revocable?).to be_truthy
