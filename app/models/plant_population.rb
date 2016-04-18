@@ -21,6 +21,8 @@ class PlantPopulation < ActiveRecord::Base
   after_update { linkage_maps.each(&:touch) }
   after_update { plant_trials.each(&:touch) }
 
+  after_update :cascade_visibility
+
   include Relatable
   include Filterable
   include Searchable
@@ -107,4 +109,14 @@ class PlantPopulation < ActiveRecord::Base
   end
 
   include Annotable
+
+  private
+
+  def cascade_visibility
+    if published_changed?
+      plant_population_lists.each do |ppl|
+        ppl.update_attributes!(published: self.published?, published_on: Time.now)
+      end
+    end
+  end
 end
