@@ -706,6 +706,7 @@ ActiveRecord::Schema.define(version: 20160415142419) do
     t.datetime "updated_at",                          null: false
     t.integer  "submitted_object_id"
     t.boolean  "publishable",         default: false, null: false
+    t.string   "doi"
   end
 
   add_index "submissions", ["finalized"], name: "index_submissions_on_finalized", using: :btree
