@@ -34,6 +34,7 @@ gem 'draper', '~> 2.1.0'
 gem 'kaminari'
 gem 'paperclip', '~> 4.2.0'
 gem 'typhoeus'
+gem 'squeel'
 
 gem 'cookies_eu'
 

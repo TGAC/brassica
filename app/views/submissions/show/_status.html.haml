@@ -1,0 +1,29 @@
+- mode = :public unless defined?(mode)
+
+.status
+  - if submission.finalized?
+    - if mode == :private
+      - if submission.publishable?
+        %span.label.label-primary Submitted &#183; Published
+      - else
+        %span.label.label-info Submitted &#183; Private
+
+    .details
+      - if mode == :private && submission.revocable?
+        Revocable until #{l submission.revocable_until.utc, format: :short} UTC
+
+        - tooltip = capture do
+          .text-left
+            Published data can be revoked for 7 days from the publication.<br>
+            This submission was published on #{l submission.published_on.utc, format: :short} UTC
+
+        %span{data: {toggle: :tooltip, html: 'true'}, title: tooltip}
+          %i.fa.fa-info-circle
+
+      - else
+        Submitted on #{l submission.updated_at, format: :short}
+
+  - else
+    %span.label.label-default Draft
+    .details
+      Modified on #{l submission.updated_at, format: :short}

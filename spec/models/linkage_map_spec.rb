@@ -22,5 +22,17 @@ RSpec.describe LinkageMap do
         lm.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      lm1 = create(:linkage_map, user: u, published: true)
+      lm2 = create(:linkage_map, user: u, published: false)
+
+      lmd = LinkageMap.table_data
+      expect(lmd.count).to eq 1
+
+      lmd = LinkageMap.table_data(nil, u.id)
+      expect(lmd.count).to eq 2
+    end
   end
 end

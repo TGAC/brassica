@@ -19,10 +19,13 @@ class PlantLine < ActiveRecord::Base
   after_update { mothered_descendants.each(&:touch) }
   after_update { fathered_descendants.each(&:touch) }
 
+  after_update :cascade_visibility
+
   include Filterable
   include Pluckable
   include Searchable
   include Publishable
+  include TableData
 
   validates :plant_line_name,
             presence: true,
@@ -30,18 +33,14 @@ class PlantLine < ActiveRecord::Base
   validates :user,
             presence: { on: :create }
 
-  scope :by_name, -> { order(:plant_line_name) }
+  default_scope { order('plant_line_name') }
+
   scope :where_id_or_name, ->(id_or_name) {
     where("id=:id OR plant_line_name ILIKE :name", id: id_or_name.to_i, name: id_or_name.to_s)
   }
 
-  def self.table_data(params = nil)
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.by_name.pluck_columns
-  end
-
   def self.genetic_statuses
-    order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
+    unscope(:order).order('genetic_status').pluck('DISTINCT genetic_status').reject(&:blank?)
   end
 
   def self.table_columns
@@ -80,4 +79,14 @@ class PlantLine < ActiveRecord::Base
   end
 
   include Annotable
+
+  private
+
+  def cascade_visibility
+    if published_changed?
+      plant_population_lists.each do |ppl|
+        ppl.update_attributes!(published: self.published?, published_on: Time.now)
+      end
+    end
+  end
 end

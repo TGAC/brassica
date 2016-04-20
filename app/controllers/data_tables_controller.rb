@@ -14,6 +14,7 @@ class DataTablesController < ApplicationController
           logger.info 'MISS MISS MISS'
           prepare_grid_data.to_json
         end
+        # grid_data = prepare_grid_data.to_json # TODO: Remove before flight
         render json: grid_data
       end
     end
@@ -27,7 +28,7 @@ class DataTablesController < ApplicationController
   private
 
   def prepare_grid_data
-    objects = model_klass.table_data(params)
+    objects = model_klass.table_data(params, current_user.try(:id))
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 

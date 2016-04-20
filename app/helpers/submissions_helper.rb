@@ -4,7 +4,7 @@ module SubmissionsHelper
   end
 
   def my_submissions_button
-    link_to "Back to submissions list", submissions_path, class: 'btn btn-primary'
+    link_to "Back to submissions list", submissions_path, class: 'btn btn-default btn-sm'
   end
 
   def new_deposition_button

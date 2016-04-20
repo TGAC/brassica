@@ -93,5 +93,37 @@ RSpec.describe PlantPopulation do
       ]
       expect(gd[0]).to eq data
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pp1 = create(:plant_population, user: u, published: true)
+      pp2 = create(:plant_population, user: u, published: false)
+
+      pl = create(:plant_line, user: u, published: false)
+      pp3 = create(:plant_population, male_parent_line: pl, user: u, published: true)
+
+      gd = PlantPopulation.table_data
+      expect(gd.count).to eq 2
+
+      gd = PlantPopulation.table_data(nil, u.id)
+      expect(gd.count).to eq 3
+    end
+  end
+
+  describe '#cascade_visibility' do
+    it 'changes visibility of all related plant population lists' do
+      pp = create(:plant_population, user: create(:user), published: false)
+      create_list(:plant_population_list, 2, plant_population: pp, user: pp.user, published: false)
+
+      expect { pp.update_attribute(:published, true) }.
+          to change { PlantPopulationList.visible(nil).count }.by(2)
+    end
+
+    it 'does nothing when there is no visibility change' do
+      expect_any_instance_of(PlantPopulationList).not_to receive(:update_attributes!)
+      pp = create(:plant_population, user: create(:user), published: false)
+      create(:plant_population_list, plant_population: pp, user: pp.user, published: false)
+      pp.update_attribute(:name, 'some other name')
+    end
   end
 end

@@ -5,5 +5,9 @@ class PublicationValidator < ActiveModel::Validator
         record.errors[:published_on] << 'A published record must have a nonempty publication date.'
       end
     end
+
+    if !record.published && record.user_id.blank?
+      record.errors[:published] << 'An ownerless record must have its published flag set to true.'
+    end
   end
 end

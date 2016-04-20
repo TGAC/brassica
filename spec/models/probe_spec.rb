@@ -29,5 +29,17 @@ RSpec.describe Probe do
         p.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pr1 = create(:probe, user: u, published: true)
+      pr2 = create(:probe, user: u, published: false)
+
+      prd = Probe.table_data
+      expect(prd.count).to eq 1
+
+      prd = Probe.table_data(nil, u.id)
+      expect(prd.count).to eq 2
+    end
   end
 end

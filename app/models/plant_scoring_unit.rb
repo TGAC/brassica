@@ -7,18 +7,13 @@ class PlantScoringUnit < ActiveRecord::Base
 
   has_many :trait_scores, dependent: :destroy
 
-  validates :scoring_unit_name,
-            presence: true
+  validates :scoring_unit_name, presence: true
 
   include Relatable
   include Filterable
   include Pluckable
   include Publishable
-
-  def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
-    query.pluck_columns
-  end
+  include TableData
 
   def self.table_columns
     [
@@ -58,7 +53,7 @@ class PlantScoringUnit < ActiveRecord::Base
   end
 
   def self.json_options
-    { include: [:design_factor, :plant_part] }
+    { include: [:design_factor] }
   end
 
   include Annotable

@@ -18,11 +18,7 @@ class QtlJob < ActiveRecord::Base
   include Filterable
   include Pluckable
   include Publishable
-
-  def self.table_data(params = nil)
-    query = (params && params[:query].present?) ? filter(params) : all
-    query.pluck_columns
-  end
+  include TableData
 
   def self.table_columns
     [

@@ -14,33 +14,26 @@
           = submission_details(submission)
 
       - unless submission.finalized?
-        .updated-at
-          .text Last modification
-          .details
-            = l submission.updated_at, format: :long
+        = render partial: "/submissions/show/status", locals: { submission: submission, mode: mode }
+
         - unless mode == :public
-          .actions.collapse{data: { confirmation: submission.id }}
-            Sure?
-            = button_to 'Yes', submission_path(submission), method: :delete, class: 'btn btn-warning'
-            %a.btn.btn-default{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-              No
-          .actions.collapse.in{data: { confirmation: submission.id }}
-            = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-default'
-            %a.btn.btn-warning{href: "[data-confirmation=#{submission.id}]", data: { toggle: 'collapse' }}
-              Delete
+          = confirmable_action("Delete", submission, method: :delete, btn_class: "btn-warning") do
+            = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-sm btn-default'
 
       - else
-        .finalized-at
-          .text Submitted on
-          .details
-            = l submission.updated_at, format: :long
+        = render partial: "/submissions/show/status", locals: { submission: submission, mode: mode }
 
-        .actions
-          - if mode == :public
+        - if mode == :public
+          .actions
             = link_to 'Details',
               submission_details_path(submission),
-              class: 'btn btn-default'
+              class: 'btn btn-sm btn-default'
+
+        - else
+          - if submission.publishable? && submission.revocable?
+            = confirmable_action("Revoke publication", submission,
+                url: revoke_submission_path(submission), method: :patch)
+
           - else
-            .text-success
-              %i.fa.fa-check-circle
-              Submission finished
+            = confirmable_action("Publish", submission,
+                url: publish_submission_path(submission), method: :patch, btn_class: "btn-primary")

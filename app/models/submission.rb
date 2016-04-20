@@ -73,6 +73,18 @@ class Submission < ActiveRecord::Base
     finalized? ? associated_model.find(submitted_object_id) : nil
   end
 
+  def revocable?
+    submitted_object && submitted_object.revocable?
+  end
+
+  def revocable_until
+    submitted_object.try(:revocable_until)
+  end
+
+  def published_on
+    submitted_object.try(:published_on)
+  end
+
   def steps
     STEPS
   end

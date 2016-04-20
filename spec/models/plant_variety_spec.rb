@@ -56,5 +56,17 @@ RSpec.describe PlantVariety do
         pv.id
       ]
     end
+
+    it 'retrieves published data only' do
+      u = create(:user)
+      pv1 = create(:plant_variety, user: u, published: true)
+      pv2 = create(:plant_variety, user: u, published: false)
+
+      pvd = PlantVariety.table_data
+      expect(pvd.count).to eq 1
+
+      pvd = PlantVariety.table_data(nil, u.id)
+      expect(pvd.count).to eq 2
+    end
   end
 end

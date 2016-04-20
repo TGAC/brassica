@@ -7,26 +7,21 @@ class PlantPopulation < ActiveRecord::Base
              foreign_key: 'female_parent_line_id'
   belongs_to :user
 
-  has_many :linkage_maps,
-           dependent: :nullify
-  has_many :population_loci,
-           dependent: :nullify
-  has_many :plant_trials,
-           dependent: :nullify
+  has_many :linkage_maps, dependent: :nullify
+  has_many :population_loci, dependent: :nullify
+  has_many :plant_trials, dependent: :nullify
 
   has_many :plant_population_lists, dependent: :delete_all
-  has_many :plant_lines,
-           through: :plant_population_lists
+  has_many :plant_lines, through: :plant_population_lists
 
-  validates :name,
-            presence: true,
-            uniqueness: true
-  validates :user,
-            presence: { on: :create }
+  validates :name, presence: true, uniqueness: true
+  validates :user, presence: { on: :create }
 
   after_update { population_loci.each(&:touch) }
   after_update { linkage_maps.each(&:touch) }
   after_update { plant_trials.each(&:touch) }
+
+  after_update :cascade_visibility
 
   include Relatable
   include Filterable
@@ -35,12 +30,23 @@ class PlantPopulation < ActiveRecord::Base
 
   scope :by_name, -> { order('plant_populations.name') }
 
-  def self.table_data(params = nil)
+  def self.table_data(params = nil, uid = nil)
+    subquery = PlantLine.visible(uid)
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query.
-      includes(:female_parent_line, :male_parent_line, :taxonomy_term, :population_type).
-      by_name.
-      pluck(*(table_columns + count_columns + ref_columns))
+    query = query.
+      joins {[
+        subquery.as('plant_lines').on { female_parent_line_id == plant_lines.id }.outer,
+        subquery.as('male_parent_lines_plant_populations').on { male_parent_line_id == male_parent_lines_plant_populations.id }.outer,
+        taxonomy_term.outer,
+        population_type.outer
+      ]}
+    query = query.
+      where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
+
+    query = join_counters(query, uid)
+    query = query.by_name
+    query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
   end
 
   def self.table_columns
@@ -103,4 +109,14 @@ class PlantPopulation < ActiveRecord::Base
   end
 
   include Annotable
+
+  private
+
+  def cascade_visibility
+    if published_changed?
+      plant_population_lists.each do |ppl|
+        ppl.update_attributes!(published: self.published?, published_on: Time.now)
+      end
+    end
+  end
 end

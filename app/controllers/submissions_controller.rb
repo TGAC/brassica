@@ -66,6 +66,18 @@ class SubmissionsController < ApplicationController
     redirect_to submissions_path, notice: "Submission deleted"
   end
 
+  def publish
+    submission = current_user.submissions.find(params[:id])
+    publisher(submission).publish
+    redirect_to submissions_path, notice: "Submission published"
+  end
+
+  def revoke
+    submission = current_user.submissions.find(params[:id])
+    publisher(submission).revoke
+    redirect_to submissions_path, notice: "Publication revoked"
+  end
+
   private
 
   def step_content_form(submission, step_content_params = nil)
@@ -96,6 +108,16 @@ class SubmissionsController < ApplicationController
       PlantTrialSubmissionDecorator.decorate(submission)
     else
       nil
+    end
+  end
+
+  def publisher(submission)
+    case submission.submission_type
+    when 'population'
+      Submission::PlantPopulationPublisher.new(submission)
+    when 'trial'
+      Submission::PlantTrialPublisher.new(submission)
+    else
     end
   end
 end

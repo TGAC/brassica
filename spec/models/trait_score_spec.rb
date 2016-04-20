@@ -24,4 +24,18 @@ RSpec.describe TraitScore do
       expect(search.first).to eq tss[0]
     end
   end
+
+  describe '#table_data' do
+    it 'retrieves published data only' do
+      u = create(:user)
+      ts1 = create(:trait_score, user: u, published: true)
+      ts2 = create(:trait_score, user: u, published: false)
+
+      tsd = TraitScore.table_data
+      expect(tsd.count).to eq 1
+
+      tsd = TraitScore.table_data(nil, u.id)
+      expect(tsd.count).to eq 2
+    end
+  end
 end
