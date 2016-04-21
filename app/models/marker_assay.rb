@@ -43,8 +43,6 @@ class MarkerAssay < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil, uid = nil)
-    ma = MarkerAssay.arel_table
-
     primer_subquery = Primer.visible(uid)
     probe_subquery = Probe.visible(uid)
 
@@ -56,8 +54,10 @@ class MarkerAssay < ActiveRecord::Base
         probe_subquery.as('probes').on { probe_id == probes.id }.outer
       ]}
     query = query.
-      where(ma[:user_id].eq(uid).or(ma[:published].eq(true)))
-    query.pluck(*(table_columns + count_columns + ref_columns))
+      where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
+
+    query = join_counters(query, uid)
+    query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
   end
 
   def self.table_columns

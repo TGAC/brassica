@@ -19,6 +19,8 @@ class PlantLine < ActiveRecord::Base
   has_many :plant_population_lists, dependent: :delete_all
   has_many :plant_populations, through: :plant_population_lists
 
+  after_update :cascade_visibility
+
   include Filterable
   include Pluckable
   include Searchable
@@ -77,4 +79,14 @@ class PlantLine < ActiveRecord::Base
   end
 
   include Annotable
+
+  private
+
+  def cascade_visibility
+    if published_changed?
+      plant_population_lists.each do |ppl|
+        ppl.update_attributes!(published: self.published?, published_on: Time.now)
+      end
+    end
+  end
 end

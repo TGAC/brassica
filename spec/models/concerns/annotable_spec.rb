@@ -31,6 +31,8 @@ RSpec.describe Annotable do
           instance.has_attribute?('pubmed_id') ? { 'pubmed_id' => instance.pubmed_id } : {}
         ).merge(
           instance.respond_to?('revocable?') ? { 'revocable?' => instance.revocable? } : {}
+        ).merge(
+          instance.respond_to?('private?') ? { 'private?' => instance.private? } : {}
         )
         expect(instance.annotations_as_json).to eq test_hash
         expect(test_hash.values.map(&:nil?)).to all be_falsey

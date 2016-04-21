@@ -1,10 +1,28 @@
-.container
+.container.show-submission
   %h3.section-heading Submission of #{@submission.submission_type}
-  %h4= @submission.name
+
+  .row
+    .col-sm-8
+      %h4= @submission.name
+
+    .col-sm-4.text-right
+      = render partial: "/submissions/show/status", locals: { submission: @submission, mode: :private }
 
   .panel.panel-default
 
     %ul.list-group
       = render "submissions/show/#{@submission.object.submission_type}"
 
-  = my_submissions_button
+  .row
+    .col-sm-6
+      = my_submissions_button
+
+    .col-sm-6.text-right
+      - if @submission.finalized?
+        - if @submission.publishable? && @submission.revocable?
+          = confirmable_action("Revoke publication", @submission,
+              url: revoke_submission_path(@submission), method: :patch)
+        - else
+          = confirmable_action("Publish", @submission,
+              url: publish_submission_path(@submission), method: :patch, btn_class: "btn-primary")
+

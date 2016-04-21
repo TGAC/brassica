@@ -7,8 +7,7 @@ class PlantPopulationList < ActiveRecord::Base
             presence: true,
             uniqueness: { scope: :plant_population }
 
-  validates :plant_population_id,
-            presence: true
+  validates :plant_population_id, presence: true
 
   include Publishable
   include Annotable

@@ -14,8 +14,6 @@ class Qtl < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil, uid = nil)
-    qtlt = Qtl.arel_table
-
     td_subquery = TraitDescriptor.visible(uid)
     lg_subquery = LinkageGroup.visible(uid)
     lm_subquery = LinkageMap.visible(uid)
@@ -33,7 +31,7 @@ class Qtl < ActiveRecord::Base
         pp_subquery.as('plant_populations').on { linkage_maps.plant_population_id == plant_populations.id }.outer,
         qtlj_subquery.as('qtl_jobs').on { qtl_job_id == qtl_jobs.id }.outer
       ]}
-    query = query.where(qtlt[:user_id].eq(uid).or(qtlt[:published].eq(true)))
+    query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
     query.pluck(*(table_columns + ref_columns))
   end
 

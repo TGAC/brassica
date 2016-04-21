@@ -55,4 +55,10 @@ hr {
   background-color: $rss-color;
 }
 
-
+/* other */
+.actions {
+  transition: none;
+  form {
+    display: inline-block;
+  }
+}

@@ -6,16 +6,30 @@ module Publishable
 
     validates_with PublicationValidator
 
+    scope :published, -> { where(published: true) }
+    scope :not_published, -> { where(published: false) }
     scope :visible, ->(uid = nil) {
-      if uid.present?
-        where("published = 't' OR user_id = #{uid}")
-      else
-        where("published = 't' OR user_id IS NULL")
-      end
+      condition = "#{table_name}.user_id IS NULL OR #{table_name}.published = TRUE"
+      condition += " OR #{table_name}.user_id = #{uid}" if uid
+      where condition
+    }
+
+    scope :hidden, ->(uid = nil) {
+      condition = "#{table_name}.published = FALSE"
+      condition += " AND #{table_name}.user_id <> #{uid}" if uid
+      where condition
     }
 
     def revocable?
-      !published? || (published_on > Time.now - 1.week)
+      published? && Time.now < revocable_until
+    end
+
+    def revocable_until
+      published_on + 1.week if published?
+    end
+
+    def private?
+      !(published? || user.nil?)
     end
   end
 end

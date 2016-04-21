@@ -19,6 +19,7 @@ class Api::V1::ResourcesController < Api::BaseController
     filter_params = params[model.name].presence
 
     resources = Api::Index.new(model).where(filter_params).order(:id)
+    resources = resources.visible(api_key.user_id) if resources.respond_to? :visible
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
@@ -27,17 +28,25 @@ class Api::V1::ResourcesController < Api::BaseController
 
   def show
     resource = model.klass.find(params[:id])
-    render json: { model.name => decorate(resource) }
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.has_attribute?(:user_id) &&
+          resource.user_id != api_key.user_id &&
+          !resource.published?
+      render json: { reason: 'This is a private resource of another user' }, status: :unauthorized
+    else
+      render json: { model.name => decorate(resource) }
+    end
   end
 
   def create
     resource = model.klass.new(
       create_params.merge(
-        :user_id => api_key.user_id,
-        :date_entered => Date.today,
-        :entered_by_whom => api_key.user.full_name,
-        :published => true,
-        :published_on => Date.today
+        user_id: api_key.user_id,
+        date_entered: Date.today,
+        entered_by_whom: api_key.user.full_name,
+        published: true,
+        published_on: Time.now
       )
     )
 
@@ -60,7 +69,7 @@ class Api::V1::ResourcesController < Api::BaseController
       render json: { reason: 'Resource not found' }, status: :not_found
     elsif resource.user != @api_key.user
       render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
-    elsif !resource.revocable?
+    elsif resource.published? && !resource.revocable?
       render json: { reason: 'This resource is already published and irrevocable' }, status: :forbidden
     else
       resource.destroy

@@ -13,10 +13,16 @@ module Pluckable extend ActiveSupport::Concern
   included do
     include Joinable
 
-    def self.pluck_columns
+    def self.pluck_columns(uid = nil)
       query = self.all
-      cc = respond_to?(:count_columns) ? count_columns : []
-      columns = table_columns + cc + ref_columns
+      # Detect Relatable models
+      count_columns = if self.respond_to?(:privacy_adjusted_count_columns)
+                        query = join_counters(query, uid)
+                        privacy_adjusted_count_columns
+                      else
+                        []
+                      end
+      columns = table_columns + count_columns + ref_columns
       query = join_columns(columns, query, true)
       query.pluck(*columns)
     end

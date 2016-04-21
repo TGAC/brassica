@@ -20,7 +20,7 @@ module Annotable extend ActiveSupport::Concern
         (has_attribute?(:date_entered) ? [:date_entered] : []) +
         (has_attribute?(:data_owned_by) ? [:data_owned_by] : []) +
         (has_attribute?(:pubmed_id) ? [:pubmed_id] : []),
-        methods: :revocable?
+        methods: [:revocable?, :private?]
       )
     end
 
