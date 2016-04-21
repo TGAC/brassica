@@ -120,7 +120,7 @@ RSpec.describe DataTablesController do
           expect(json['data'][0][3]).to be_nil
         end
 
-        it 'refreshes cache when a has_many related object disappears' do
+        it 'refreshes cache when a has_many related object is destroyed' do
           pt = create(:plant_trial)
           pt.plant_population.update_column(:updated_at, Time.now - 5.seconds)
           expect(PlantPopulation).to receive(:table_data).twice.and_call_original
@@ -135,7 +135,7 @@ RSpec.describe DataTablesController do
           expect(json['data'][0][-5]).to eq 0
         end
 
-        it "refreshes cache when a has_many related object appears" do
+        it "refreshes cache when a has_many related object is created" do
           pp = create(:plant_population)
           pp.update_column(:updated_at, Time.now - 5.seconds)
 
@@ -147,6 +147,40 @@ RSpec.describe DataTablesController do
           expect(json['data'][0][-5]).to eq 0
 
           create(:plant_trial, plant_population: pp)
+
+          get :index, format: :json, model: 'plant_populations'
+          json = JSON.parse(response.body)
+          expect(json['recordsTotal']).to eq 1
+          expect(json['data'][0][-5]).to eq 1
+        end
+
+        it 'refreshes cache when a has_many related object is made private' do
+          pt = create(:plant_trial, published: true)
+          pt.plant_population.update_column(:updated_at, Time.now - 5.seconds)
+          expect(PlantPopulation).to receive(:table_data).twice.and_call_original
+          get :index, format: :json, model: 'plant_populations'
+          json = JSON.parse(response.body)
+          expect(json['recordsTotal']).to eq 1
+          expect(json['data'][0][-5]).to eq 1
+
+          pt.update_attributes!(published: false, published_on: nil)
+
+          get :index, format: :json, model: 'plant_populations'
+          json = JSON.parse(response.body)
+          expect(json['recordsTotal']).to eq 1
+          expect(json['data'][0][-5]).to eq 0
+        end
+
+        it 'refreshes cache when a has_many related object is published' do
+          pt = create(:plant_trial, published: false)
+          pt.plant_population.update_column(:updated_at, Time.now - 5.seconds)
+          expect(PlantPopulation).to receive(:table_data).twice.and_call_original
+          get :index, format: :json, model: 'plant_populations'
+          json = JSON.parse(response.body)
+          expect(json['recordsTotal']).to eq 1
+          expect(json['data'][0][-5]).to eq 0
+
+          pt.update_attributes!(published: true, published_on: Time.now)
 
           get :index, format: :json, model: 'plant_populations'
           json = JSON.parse(response.body)
