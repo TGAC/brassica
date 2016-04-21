@@ -40,7 +40,11 @@ class PlantVariety < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: params_for_filter(table_columns) + ['id'],
+      query: params_for_filter(table_columns) + [
+        'plant_populations.id',
+        'id',
+        'id' => []
+      ],
       search: [
         :plant_variety_name
       ]

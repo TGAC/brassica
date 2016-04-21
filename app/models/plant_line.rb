@@ -67,7 +67,8 @@ class PlantLine < ActiveRecord::Base
       query: params_for_filter(table_columns) +
         [
           'plant_populations.id',
-          'id'
+          'id',
+          'id' => []
         ]
     ]
   end

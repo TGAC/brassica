@@ -23,6 +23,10 @@ class Deposition
 
   after_initialize :set_default_metadata
 
+  def find_user
+    user || submission.user
+  end
+
   private
 
   def set_default_metadata
