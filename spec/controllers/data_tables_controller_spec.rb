@@ -120,7 +120,7 @@ RSpec.describe DataTablesController do
           expect(json['data'][0][3]).to be_nil
         end
 
-        it 'refreshes cache when a has_many related object disappear' do
+        it 'refreshes cache when a has_many related object disappears' do
           pt = create(:plant_trial)
           pt.plant_population.update_column(:updated_at, Time.now - 5.seconds)
           expect(PlantPopulation).to receive(:table_data).twice.and_call_original
@@ -133,6 +133,25 @@ RSpec.describe DataTablesController do
           json = JSON.parse(response.body)
           expect(json['recordsTotal']).to eq 1
           expect(json['data'][0][-5]).to eq 0
+        end
+
+        it "refreshes cache when a has_many related object appears" do
+          pp = create(:plant_population)
+          pp.update_column(:updated_at, Time.now - 5.seconds)
+
+          expect(PlantPopulation).to receive(:table_data).twice.and_call_original
+
+          get :index, format: :json, model: 'plant_populations'
+          json = JSON.parse(response.body)
+          expect(json['recordsTotal']).to eq 1
+          expect(json['data'][0][-5]).to eq 0
+
+          create(:plant_trial, plant_population: pp)
+
+          get :index, format: :json, model: 'plant_populations'
+          json = JSON.parse(response.body)
+          expect(json['recordsTotal']).to eq 1
+          expect(json['data'][0][-5]).to eq 1
         end
       end
     end

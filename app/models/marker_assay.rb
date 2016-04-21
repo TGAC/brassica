@@ -44,8 +44,6 @@ class MarkerAssay < ActiveRecord::Base
 
   def self.table_data(params = nil, uid = nil)
     ma = MarkerAssay.arel_table
-    pra = Primer.arel_table
-    pr = Probe.arel_table
 
     primer_subquery = Primer.visible(uid)
     probe_subquery = Probe.visible(uid)
