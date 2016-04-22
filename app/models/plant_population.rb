@@ -7,6 +7,13 @@ class PlantPopulation < ActiveRecord::Base
              foreign_key: 'female_parent_line_id'
   belongs_to :user
 
+  after_update { population_loci.each(&:touch) }
+  after_update { linkage_maps.each(&:touch) }
+  after_update { plant_trials.each(&:touch) }
+  before_destroy { population_loci.each(&:touch) }
+  before_destroy { linkage_maps.each(&:touch) }
+  before_destroy { plant_trials.each(&:touch) }
+
   has_many :linkage_maps, dependent: :nullify
   has_many :population_loci, dependent: :nullify
   has_many :plant_trials, dependent: :nullify
@@ -16,13 +23,6 @@ class PlantPopulation < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :user, presence: { on: :create }
-
-  after_update { population_loci.each(&:touch) }
-  after_update { linkage_maps.each(&:touch) }
-  after_update { plant_trials.each(&:touch) }
-  before_destroy { population_loci.each(&:touch) }
-  before_destroy { linkage_maps.each(&:touch) }
-  before_destroy { plant_trials.each(&:touch) }
 
   after_update :cascade_visibility
 
