@@ -1,9 +1,9 @@
 .container.show-submission
-  %h3.section-heading Submission of #{@submission.object_name}
+  %h3.section-heading Submission of #{@submission.object.submission_type}
 
   .row
     .col-sm-8
-      %h4= @submission.name
+      %h4= @submission.object_name
 
     .col-sm-4.text-right
       = render partial: "/submissions/show/status", locals: { submission: @submission, mode: :private }
