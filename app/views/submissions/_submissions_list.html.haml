@@ -30,10 +30,4 @@
               class: 'btn btn-sm btn-default'
 
         - else
-          - if submission.publishable? && submission.revocable?
-            = confirmable_action("Revoke publication", submission,
-                url: revoke_submission_path(submission), method: :patch)
-
-          - else
-            = confirmable_action("Publish", submission,
-                url: publish_submission_path(submission), method: :patch, btn_class: "btn-primary")
+          = render partial: 'publishing', locals: { submission: submission }
