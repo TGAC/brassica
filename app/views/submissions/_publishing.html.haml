@@ -1,0 +1,6 @@
+- if submission.publishable? && submission.revocable?
+  = confirmable_action("Revoke publication", submission,
+      url: revoke_submission_path(submission), method: :patch)
+- elsif !submission.publishable?
+  = confirmable_action("Publish", submission,
+      url: publish_submission_path(submission), method: :patch, btn_class: "btn-primary")
