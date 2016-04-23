@@ -35,7 +35,7 @@ class Api::CreateParams
   end
 
   def blacklisted_attrs
-    %w(id user_id created_at updated_at date_entered entered_by_whom)
+    %w(id user_id created_at updated_at date_entered entered_by_whom published_on)
   end
 
 end
