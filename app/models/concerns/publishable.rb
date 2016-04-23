@@ -31,5 +31,16 @@ module Publishable
     def private?
       !(published? || user.nil?)
     end
+
+    def publish
+      return if published?
+      update_attributes!(published: true, published_on: Time.zone.now)
+    end
+
+    def revoke
+      return unless published?
+      raise "#{self.class}##{id} cannot be revoked" unless revocable?
+      update_attributes!(published: false, published_on: nil)
+    end
   end
 end
