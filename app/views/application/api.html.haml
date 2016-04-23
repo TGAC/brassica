@@ -10,6 +10,7 @@
           %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
           %li= link_to "Submitting data", "#submitting-data"
+          %li= link_to "Publishing data", "#publishing-data"
           %li= link_to "Deleting data", "#deleting-data"
 
           - Api.models.each do |model|
@@ -267,20 +268,42 @@
         You may now utilize that identifier to <i>relate</i> this newly created object with
         other records you are about to submit (for instance, new Plant Populations).
 
-      %h3#deleting-data.section-heading Deleting submitted data
+      %h3#publishing-data.section-heading Publishing submitted data
 
       %p
         The basic data management policy of BIP is that after you submit your data, it
         becomes public and could be cited as a public resource by other users. However,
-        in reality, mistakes are possible when submitting data, thus this ability to
-        delete submitted resources.
+        you can explicitly state that you want your data to remain private.
+
+      %h4 Example
+      %pre.request
+        %code= t('api.publishing.create_private_request')
 
       %p
-        The rule of thumb is that after a successful submission you have exactly <strong>one week</strong>
-        to delete your data. So please take that time to check if all information was
-        delivered correctly. Afterwards, the data is blocked as irrevocably published.
-        In case you'd like to revert such older changes, please contact BIP support
-        team directly.
+        Data submitted as private can be published anytime later. Resources
+        to be published need to be updated one by one.
+
+      %h4 Example
+      %pre.request
+        %code= t('api.publishing.publish_request')
+
+      %p
+        The rule of thumb is that after publishing data you have exactly
+        <strong>one week</strong> to revoke publication. So please take that
+        time to check if all information was delivered correctly. Afterwards,
+        the data is blocked as irrevocably published.
+
+      %h4 Example
+      %pre
+        %code= t('api.publishing.revoke_request')
+
+      %h3#deleting-data.section-heading Deleting submitted data
+
+      %p
+        In reality, mistakes are possible when submitting data, thus this ability to
+        delete submitted resources. Only private and published, but still revocable
+        resources can be deleted. In case you'd like to delete any other data,
+        please contact BIP support team directly.
 
       %h4 Example
       %pre
