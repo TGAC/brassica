@@ -2,17 +2,11 @@ class Qtl < ActiveRecord::Base
   self.table_name = 'qtl'
 
   belongs_to :processed_trait_dataset
-  belongs_to :linkage_group, counter_cache: true
-  belongs_to :qtl_job, counter_cache: true
+  belongs_to :linkage_group, counter_cache: true, touch: true
+  belongs_to :qtl_job, counter_cache: true, touch: true
   belongs_to :user
 
-  validates :qtl_rank,
-            presence: true
-
-  validates :map_qtl_label,
-            presence: true
-
-  validates :qtl_mid_position,
+  validates :qtl_rank, :map_qtl_label, :qtl_mid_position,
             presence: true
 
   include Filterable

@@ -2,16 +2,16 @@ class QtlJob < ActiveRecord::Base
   belongs_to :linkage_map
   belongs_to :user
 
+  after_update { qtls.each(&:touch) }
+  before_destroy { qtls.each(&:touch) }
+
   has_many :qtls
 
   validates :qtl_job_name,
             presence: true,
             uniqueness: true
 
-  validates :qtl_software,
-            presence: true
-
-  validates :qtl_method,
+  validates :qtl_software, :qtl_method,
             presence: true
 
   include Relatable

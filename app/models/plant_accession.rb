@@ -2,6 +2,9 @@ class PlantAccession < ActiveRecord::Base
   belongs_to :plant_line
   belongs_to :user
 
+  after_update { plant_scoring_units.each(&:touch) }
+  before_destroy { plant_scoring_units.each(&:touch) }
+
   has_many :plant_scoring_units
 
   validates :plant_accession,

@@ -1,7 +1,9 @@
 class PlantTrial < ActiveRecord::Base
-  belongs_to :plant_population, counter_cache: true
+  belongs_to :plant_population, counter_cache: true, touch: true
   belongs_to :country
   belongs_to :user
+
+  after_update { plant_scoring_units.each(&:touch) }
 
   has_many :plant_scoring_units, dependent: :destroy
   has_many :processed_trait_datasets
