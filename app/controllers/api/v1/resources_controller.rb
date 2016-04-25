@@ -79,7 +79,6 @@ class Api::V1::ResourcesController < Api::BaseController
 
   def publish
     resource = model.klass.find_by(id: params[:id])
-    # binding.pry
     if resource.nil?
       render json: { reason: 'Resource not found' }, status: :not_found
     elsif resource.user != @api_key.user
