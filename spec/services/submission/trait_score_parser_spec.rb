@@ -7,12 +7,6 @@ RSpec.describe Submission::TraitScoreParser do
 
   describe '#map_headers_to_traits' do
     context 'provided with input of incomplete content' do
-      it 'raise error on empty input file' do
-        input_is ''
-        expect { subject.send(:map_headers_to_traits) }.
-          to raise_error EOFError
-      end
-
       it 'ignores single column header' do
         input_is 'single column name no tabs'
         subject.send(:map_headers_to_traits)
@@ -20,7 +14,7 @@ RSpec.describe Submission::TraitScoreParser do
       end
 
       it 'ignores all columns when no traits chosen' do
-        input_is "id\tfirst trait\tsecond_trait_name"
+        input_is "id,first trait,\"second,trait_name\""
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).to eq({})
       end
@@ -29,7 +23,15 @@ RSpec.describe Submission::TraitScoreParser do
     context 'provided with trait-rich submission' do
       it 'maps columns by name' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['trait 1', 'trait 2'])
-        input_is "id\ttrait 2\ttrait 1"
+        input_is "id,trait 2,trait 1"
+        subject.send(:map_headers_to_traits)
+        expect(subject.trait_mapping).
+          to eq({0 => 1, 1 => 0})
+      end
+
+      it 'recognizes names with commas and surrounding white chars' do
+        upload.submission.content.update(:step02, trait_descriptor_list: ['trait,1', 'trait 2'])
+        input_is "id,trait 2  ,\"trait,1\""
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 1, 1 => 0})
@@ -37,7 +39,7 @@ RSpec.describe Submission::TraitScoreParser do
 
       it 'honors proper trait sorting by index' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['Ctrait', 'Atrait', 'Btrait'])
-        input_is "id\tBtrait\tAtrait\tCtrait"
+        input_is "id,Btrait,Atrait,Ctrait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 2, 1 => 1, 2 => 0})
@@ -45,7 +47,7 @@ RSpec.describe Submission::TraitScoreParser do
 
       it 'uses natural ordering when no by-name mapping found' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['Atrait', 'Btrait'])
-        input_is "id\ttrait 1\ttrait 2"
+        input_is "id,trait 1,trait 2"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 0, 1 => 1})
@@ -54,7 +56,7 @@ RSpec.describe Submission::TraitScoreParser do
       it 'works regardless traits are old or new' do
         td = create(:trait_descriptor, descriptor_name: 'old trait')
         upload.submission.content.update(:step02, trait_descriptor_list: [td.id, 'new trait'])
-        input_is "id\tnew trait\told trait"
+        input_is "id,new trait,old trait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 1, 1 => 0})
@@ -62,7 +64,7 @@ RSpec.describe Submission::TraitScoreParser do
 
       it 'reports error on repetitive mapping' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['Atrait', 'Btrait'])
-        input_is "id\tXtrait\tAtrait"
+        input_is "id,Xtrait,Atrait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 0, 1 => 0})
@@ -89,7 +91,7 @@ RSpec.describe Submission::TraitScoreParser do
     end
 
     it 'records simple scores' do
-      input_is "plant 1\t1  \nplant 2\t 2"
+      input_is "plant 1,1  \nplant 2, 2"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1'},
@@ -97,7 +99,7 @@ RSpec.describe Submission::TraitScoreParser do
     end
 
     it 'records multiple sparse scores' do
-      input_is "plant 1\t1\t2\nplant 2\t\t 3\nplant 3\t4"
+      input_is "plant 1,1,2\nplant 2,, 3\nplant 3,4"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1', 1 => '2'},
@@ -106,7 +108,7 @@ RSpec.describe Submission::TraitScoreParser do
     end
 
     it 'handles empty newlines properly' do
-      input_is "plant 1\t1  \n\nplant X\t\nplant 2\t 2\n\n"
+      input_is "plant 1,1  \n\nplant X,\nplant 2, 2\n\n"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1'},
@@ -125,7 +127,7 @@ RSpec.describe Submission::TraitScoreParser do
 
     it 'ignores any score in index grater than traits number' do
       upload.submission.content.update(:step02, trait_descriptor_list: ['trait',])
-      input_is "id\ttrait\nplant 1\t1\t2"
+      input_is "id,trait\nplant 1,1,2"
       subject.call
       expect(subject.trait_mapping).
         to eq({0 => 0})
