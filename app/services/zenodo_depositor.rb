@@ -37,28 +37,27 @@ class ZenodoDepositor
     )
 
     submit_request(request) do |response|
-      # puts response.body
       remote_deposition = JSON.parse(response.body)
 
       documents_to_deposit.each do |name, contents|
         next if contents.empty?
         request = Typhoeus::Request.new(
-            query_url("/#{remote_deposition['id']}/files"),
-            method: :post,
-            headers: { 'Content-Type' => 'multipart/form-data' },
-            body: {
-                filename: "#{name}.csv",
-                file: write_file(contents, "#{name}.csv")
-                # file: File.open(Rails.root + 'Gemfile', 'r')
-                # file: StringIO.new("header1,header2\nvalue1,value2")
-            }
+          query_url("/#{remote_deposition['id']}/files"),
+          method: :post,
+          headers: { 'Content-Type' => 'multipart/form-data' },
+          body: {
+            filename: "#{name}.csv",
+            file: write_file(contents, "#{name}.csv")
+          }
         )
         submit_request(request) do |response|
+          # TODO FIXME execute 'Publish' here
+          # Currently we wait for Zenodo to be back again...
           # puts response.body
         end
       end
 
-      # TODO FIXME just a temporary generated DOI, implement actual Zenodo client later
+      # TODO FIXME just a temporary generated DOI, for UI testing
       doi = '10.5194/bg-8-2917-2011'
       if @deposition.submission
         @deposition.submission.doi = doi
@@ -71,16 +70,9 @@ class ZenodoDepositor
 
   def write_file(contents, filename)
     file = Tempfile.new(filename)
-    # file.path      # => A unique filename in the OS's temp directory,
-    #                #    e.g.: "/tmp/foo.24722.0"
-    #                #    This filename contains 'foo' in its basename.
     file.write contents
     file.rewind
     file
-    # file.read      # => "hello world"
-    # file.close
-    # file.unlink    # deletes the temp file
-    # file
   end
 
   def submit_request(request)
