@@ -66,7 +66,7 @@ class Submission < ActiveRecord::Base
   end
 
   def depositable?
-    finalized? && !doi
+    publishable? && !revocable? && !doi
   end
 
   def submitted_object

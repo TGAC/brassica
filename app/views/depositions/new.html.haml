@@ -22,11 +22,11 @@
     = f.hidden_field :submission_id, value: @deposition.submission.id
 
     .form-group
-      = f.label :title
+      = f.label :title, class: 'required'
       = f.text_field :title, class: 'form-control'
 
     .form-group
-      = f.label :description
+      = f.label :description, class: 'required'
       = f.text_area :description, class: 'form-control'
 
     = my_submissions_button

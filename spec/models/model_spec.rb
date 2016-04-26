@@ -25,11 +25,11 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
-  it 'defined permitted query params as strings only' do
+  it 'defines permitted query params as strings only' do
     ActiveRecord::Base.descendants.each do |model|
       if model.respond_to? :permitted_params
-        expect(model.send(:permitted_params).dup.extract_options![:query]).
-          to all be_an(String)
+        expect(model.send(:permitted_params).dup.extract_options![:query].map(&:class)).
+          to all be_in([String, Hash])
       end
     end
   end

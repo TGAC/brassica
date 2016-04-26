@@ -18,9 +18,21 @@ RSpec.describe ZenodoDepositor do
       to include "Zenodo service responded with invalid content. Unable to conclude data deposition."
   end
 
-  context 'when provided with correct population submission deposition' do
+  context 'when provided with population submission deposition' do
+    it 'calls deposition documents_to_deposit method' do
+      expect(population_deposition).
+        to receive(:documents_to_deposit).once.and_return({})
+      deposit(population_deposition)
+    end
+
+    it 'does nothing for deposition of submission with no data' do
+      expect_any_instance_of(Typhoeus::Request).not_to receive(:run)
+      deposit(population_deposition)
+    end
+
     it 'gets final deposition doi and saves it in submission' do
       service = deposit(population_deposition)
+      pending 'still not implemented'
       expect(population_deposition.submission.doi).not_to be_nil
       expect(service.user_log).to be_empty
     end

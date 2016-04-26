@@ -23,8 +23,12 @@ class Deposition
 
   after_initialize :set_default_metadata
 
-  def find_user
-    user || submission.user
+  # def find_user
+  #   user || submission.user
+  # end
+  #
+  def documents_to_deposit
+    submission ? document_exporter.documents : {}
   end
 
   private
@@ -36,6 +40,19 @@ class Deposition
       self.creators = [{ name: submission.user.full_name }]
     elsif user
       self.creators = [{ name: user.full_name }]
+    end
+  end
+
+  def document_exporter
+    raise ArgumentError, 'No submission to deposit.' unless submission
+    if submission.population?
+      Submission::PlantPopulationExporter.new(submission)
+    elsif submission.trial?
+      # FIXME TODO add Trial versionn
+      nil
+    else
+      raise NotImplementedError,
+            "Unable to deposit #{submission.submission_type} submission."
     end
   end
 end

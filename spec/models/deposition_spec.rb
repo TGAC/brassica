@@ -5,12 +5,12 @@ RSpec.describe Deposition do
   it { should validate_presence_of(:creators) }
   it { should validate_presence_of(:description) }
 
-  describe '.new' do
-    let(:submission) { build(:submission, :population) }
-    let(:user) { build(:user) }
-    let(:submission_deposition) { Deposition.new(submission: submission) }
-    let(:user_deposition) { Deposition.new(user: user) }
+  let(:submission) { build(:submission, :population) }
+  let(:user) { build(:user) }
+  let(:submission_deposition) { Deposition.new(submission: submission) }
+  let(:user_deposition) { Deposition.new(user: user) }
 
+  describe '.new' do
     it 'creates proper defaults when submission is present' do
       submission.content.update(:step01, name: 'population_name')
       submission.content.update(:step01, description: 'population_description')
@@ -36,6 +36,26 @@ RSpec.describe Deposition do
       expect(user_deposition.errors[:submission]).to be_empty
       expect(submission_deposition.errors[:user]).to be_empty
       expect(submission_deposition.errors[:submission]).to be_empty
+    end
+  end
+
+  describe '#documents_to_deposit' do
+    it 'returns empty hash for depositions without submission' do
+      expect(user_deposition.documents_to_deposit).to be_empty
+      pending 'Non-submission depositions not yet implemented'
+      fail
+    end
+
+    it 'throws non implemented error for unsupported submission types' do
+      submission = build(:submission, submission_type: :qtl)
+      expect{ Deposition.new(submission: submission).documents_to_deposit }.
+        to raise_error NotImplementedError
+    end
+
+    it 'calls exporter service for documents' do
+      expect_any_instance_of(Submission::PlantPopulationExporter).
+        to receive(:documents)
+      submission_deposition.documents_to_deposit
     end
   end
 end
