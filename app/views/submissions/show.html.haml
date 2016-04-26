@@ -19,4 +19,4 @@
 
     .col-sm-6.text-right
       - if @submission.finalized?
-        = render partial: 'publishing', locals: { submission: @submission }
+        = render partial: 'publishing', locals: { submission: @submission, button_size: '' }

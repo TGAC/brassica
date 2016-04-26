@@ -1,10 +1,14 @@
-.actions.collapse{data: { confirmation: object.id }}
+.actions.collapse{ data: { confirmation: object.id } }
   Sure?
-  = button_to 'Yes', url, method: method, class: 'btn btn-sm btn-warning'
-  %a.btn.btn-sm.btn-default{href: "[data-confirmation=#{object.id}]", data: { toggle: 'collapse' }}
+  = button_to 'Yes', url, method: method, class: "btn #{button_size} btn-warning"
+  %a{ href: "[data-confirmation=#{object.id}]",
+      class: "btn btn-default #{button_size}",
+      data: { toggle: 'collapse' } }
     No
 
-.actions.collapse.in{data: { confirmation: object.id }}
+.actions.collapse.in{ data: { confirmation: object.id } }
   = other_content.html_safe if defined?(other_content)
-  %a.btn.btn-sm{class: btn_class, href: "[data-confirmation=#{object.id}]", data: { toggle: 'collapse' }}
+  %a{ href: "[data-confirmation=#{object.id}]",
+      class: "btn #{btn_class} #{button_size}",
+      data: { toggle: 'collapse' } }
     = label

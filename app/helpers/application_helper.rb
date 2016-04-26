@@ -70,6 +70,7 @@ module ApplicationHelper
     options[:method] ||= :post
     options[:url] ||= url_for(object)
     options[:btn_class] ||= "btn-default"
+    options[:button_size] ||= ""
     options[:other_content] ||= capture(&blk) if block_given?
 
     render partial: "/confirmable_action", locals: options.merge(label: label, object: object)

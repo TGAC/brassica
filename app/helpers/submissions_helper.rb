@@ -4,14 +4,7 @@ module SubmissionsHelper
   end
 
   def my_submissions_button
-    link_to "Back to submissions list", submissions_path, class: 'btn btn-default btn-sm'
-  end
-
-  def new_deposition_button
-    link_to 'Deposit in Zenodo.org',
-            new_deposition_path(deposition: { submission_id: @submission.id }),
-            class: 'btn btn-primary',
-            title: 'Deposit this submission content in Zenodo.org to get official dataset DOI number.'
+    link_to "Back to submissions list", submissions_path, class: 'btn btn-default'
   end
 
   def submission_private_link(submission)

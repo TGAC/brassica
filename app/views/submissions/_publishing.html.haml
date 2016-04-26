@@ -1,6 +1,18 @@
 - if submission.publishable? && submission.revocable?
-  = confirmable_action("Revoke publication", submission,
-      url: revoke_submission_path(submission), method: :patch)
+  = confirmable_action("Revoke publication",
+                       submission,
+                       url: revoke_submission_path(submission),
+                       method: :patch,
+                       button_size: button_size)
 - elsif !submission.publishable?
-  = confirmable_action("Publish", submission,
-      url: publish_submission_path(submission), method: :patch, btn_class: "btn-primary")
+  = confirmable_action("Publish",
+                       submission,
+                       url: publish_submission_path(submission),
+                       method: :patch,
+                       button_size: button_size,
+                       btn_class: "btn-primary")
+- else
+  = link_to "Deposit in Zendo",
+            new_deposition_path(deposition: { submission_id: submission.id }),
+            class: "btn #{button_size} btn-primary pull-right",
+            title: 'Deposit this submission content in Zenodo.org to get official dataset DOI number.'
