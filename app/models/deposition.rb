@@ -23,10 +23,6 @@ class Deposition
 
   after_initialize :set_default_metadata
 
-  # def find_user
-  #   user || submission.user
-  # end
-  #
   def documents_to_deposit
     submission ? document_exporter.documents : {}
   end
@@ -48,8 +44,7 @@ class Deposition
     if submission.population?
       Submission::PlantPopulationExporter.new(submission)
     elsif submission.trial?
-      # FIXME TODO add Trial versionn
-      nil
+      Submission::PlantTrialExporter.new(submission)
     else
       raise NotImplementedError,
             "Unable to deposit #{submission.submission_type} submission."

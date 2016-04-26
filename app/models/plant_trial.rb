@@ -54,6 +54,13 @@ class PlantTrial < ActiveRecord::Base
     end
   end
 
+  def trait_descriptors
+    TraitDescriptor.
+      joins(trait_scores: :plant_scoring_unit).
+      where(plant_scoring_units: { plant_trial_id: id }).
+      order('trait_descriptors.id asc').uniq
+  end
+
   def self.table_columns
     [
       'plant_trial_name',

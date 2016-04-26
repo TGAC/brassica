@@ -52,10 +52,16 @@ RSpec.describe Deposition do
         to raise_error NotImplementedError
     end
 
-    it 'calls exporter service for documents' do
+    it 'calls exporter service for population documents' do
       expect_any_instance_of(Submission::PlantPopulationExporter).
         to receive(:documents)
       submission_deposition.documents_to_deposit
+    end
+
+    it 'calls exporter service for trial documents' do
+      expect_any_instance_of(Submission::PlantTrialExporter).
+        to receive(:documents)
+      Deposition.new(submission: build(:submission, :trial)).documents_to_deposit
     end
   end
 end

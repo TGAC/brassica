@@ -18,7 +18,11 @@ RSpec.describe "Depositions management" do
     %w(population trial).each do |submission_type|
       context "when depositing #{submission_type} submission" do
         describe "POST /depositions" do
-          let(:submission) { create :submission, :finalized, user: user, submission_type: submission_type }
+          let(:submission) { create :submission,
+                                    :finalized,
+                                    publishable: true,
+                                    user: user,
+                                    submission_type: submission_type }
 
           it "performs deposition and assigns a DOI" do
             VCR.use_cassette('zenodo') do

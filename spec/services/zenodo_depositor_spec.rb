@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ZenodoDepositor do
-  let(:population_submission) { create(:submission, :population, :finalized) }
+  let(:population_submission) { create(:submission, :population, :finalized, publishable: true) }
+  let(:private_submission) { create(:submission, :population, :finalized, publishable: false) }
   let(:population_deposition) { Deposition.new(submission: population_submission) }
+  let(:private_deposition) { Deposition.new(submission: private_submission) }
 
   it 'does nothing for broken deposition' do
     expect_any_instance_of(Typhoeus::Request).not_to receive(:run)
@@ -27,12 +29,11 @@ RSpec.describe ZenodoDepositor do
 
     it 'does nothing for deposition of submission with no data' do
       expect_any_instance_of(Typhoeus::Request).not_to receive(:run)
-      deposit(population_deposition)
+      deposit(private_deposition)
     end
 
     it 'gets final deposition doi and saves it in submission' do
       service = deposit(population_deposition)
-      pending 'still not implemented'
       expect(population_deposition.submission.doi).not_to be_nil
       expect(service.user_log).to be_empty
     end

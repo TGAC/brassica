@@ -37,7 +37,7 @@ class ZenodoDepositor
     )
 
     submit_request(request) do |response|
-      puts response.body
+      # puts response.body
       remote_deposition = JSON.parse(response.body)
 
       documents_to_deposit.each do |name, contents|
@@ -54,16 +54,16 @@ class ZenodoDepositor
             }
         )
         submit_request(request) do |response|
-          puts response.body
+          # puts response.body
         end
       end
 
       # TODO FIXME just a temporary generated DOI, implement actual Zenodo client later
-      # doi = '10.5194/bg-8-2917-2011'
-      # if @deposition.submission
-      #   @deposition.submission.doi = doi
-      #   @deposition.submission.save!
-      # end
+      doi = '10.5194/bg-8-2917-2011'
+      if @deposition.submission
+        @deposition.submission.doi = doi
+        @deposition.submission.save!
+      end
     end
   end
 

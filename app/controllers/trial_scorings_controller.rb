@@ -5,10 +5,7 @@ class TrialScoringsController < ApplicationController
 
     respond_to do |format|
       format.html do
-        @trait_descriptors = TraitDescriptor.
-          joins(trait_scores: :plant_scoring_unit).
-          where(plant_scoring_units: { plant_trial_id: params[:id].to_i }).
-          order('trait_descriptors.id asc').uniq
+        @trait_descriptors = @plant_trial.trait_descriptors
       end
       format.json do
         cache_key = params.reject{ |k,_| %w(_ controller action format).include? k }

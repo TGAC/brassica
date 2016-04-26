@@ -1,11 +1,4 @@
-require 'csv'
-
-class Submission::PlantPopulationExporter
-
-  def initialize(submission)
-    @submission = submission
-  end
-
+class Submission::PlantPopulationExporter < Submission::Exporter
   def documents
     {
       plant_population: plant_population,
@@ -17,11 +10,6 @@ class Submission::PlantPopulationExporter
   end
 
   private
-
-  def submitted_object
-    raise ArgumentError, 'Wrong submission type' unless @submission.population?
-    @submission.submitted_object
-  end
 
   def plant_population
     generate_document PlantPopulation,
@@ -49,21 +37,5 @@ class Submission::PlantPopulationExporter
   def female_parent_line
     generate_document PlantLine,
                       { id: submitted_object.female_parent_line_id }
-  end
-
-  def generate_document(klass, query)
-    data = klass.table_data(query: query).
-                 map{ |r| r[0, klass.table_columns.size] }
-    return nil if data.empty?
-    CSV.generate(headers: true) do |csv|
-      csv << humanize_columns(klass.table_columns)
-      data.each { |row| csv << row }
-    end
-  end
-
-  def humanize_columns(column_names)
-    column_names.map do |column_name|
-      column_name.split(/ as /i)[-1]
-    end
   end
 end
