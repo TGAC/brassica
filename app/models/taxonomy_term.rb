@@ -4,9 +4,7 @@ class TaxonomyTerm < ActiveRecord::Base
              foreign_key: 'taxonomy_term_id'
 
   has_many :plant_lines
-
   has_many :plant_populations
-
   has_many :probes
 
   validates :name, uniqueness: true

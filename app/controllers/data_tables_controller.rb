@@ -9,6 +9,7 @@ class DataTablesController < ApplicationController
         cache_key = params.reject{ |k,_| %w(_ controller action format).include? k }
         cache_key[:latest_change] = model_klass.maximum('updated_at')
         cache_key[:count] = model_klass.count
+        cache_key[:user_id] = current_user.try(:id)
         logger.info "CACHE KEY: #{cache_key}"
         grid_data = Rails.cache.fetch(cache_key, expires_in: 300.days) do
           logger.info 'MISS MISS MISS'

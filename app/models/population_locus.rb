@@ -1,16 +1,17 @@
 class PopulationLocus < ActiveRecord::Base
-  belongs_to :plant_population, counter_cache: true
-  belongs_to :marker_assay, counter_cache: true
+  belongs_to :plant_population, counter_cache: true, touch: true
+  belongs_to :marker_assay, counter_cache: true, touch: true
   belongs_to :user
+
+  after_update { map_positions.each(&:touch) }
+  after_update { map_locus_hits.each(&:touch) }
+  before_destroy { map_positions.each(&:touch) }
+  before_destroy { map_locus_hits.each(&:touch) }
 
   has_many :map_positions
   has_many :map_locus_hits
 
-  validates :mapping_locus,
-            presence: true
-
-  after_update { map_positions.each(&:touch) }
-  after_update { map_locus_hits.each(&:touch) }
+  validates :mapping_locus, presence: true
 
   include Relatable
   include Filterable

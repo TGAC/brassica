@@ -1,20 +1,14 @@
 class MapLocusHit < ActiveRecord::Base
-  belongs_to :linkage_map, counter_cache: true
-  belongs_to :linkage_group, counter_cache: true
-  belongs_to :map_position, counter_cache: true
-  belongs_to :population_locus, counter_cache: true
+  belongs_to :linkage_map, counter_cache: true, touch: true
+  belongs_to :linkage_group, counter_cache: true, touch: true
+  belongs_to :map_position, counter_cache: true, touch: true
+  belongs_to :population_locus, counter_cache: true, touch: true
   belongs_to :user
 
   validates :consensus_group_assignment,
-            presence: true
-
-  validates :canonical_marker_name,
-            presence: true
-
-  validates :associated_sequence_id,
-            presence: true
-
-  validates :sequence_source_acronym,
+            :canonical_marker_name,
+            :associated_sequence_id,
+            :sequence_source_acronym,
             presence: true
 
   include Filterable

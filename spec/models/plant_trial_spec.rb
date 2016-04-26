@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe PlantTrial do
+  it { should belong_to(:plant_population).touch(true) }
+
   describe '#filter' do
     it 'allow queries by project_descriptor' do
       pts = create_list(:plant_trial, 2)
