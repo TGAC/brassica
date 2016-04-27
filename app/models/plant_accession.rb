@@ -26,7 +26,6 @@ class PlantAccession < ActiveRecord::Base
       'plant_accession',
       'plant_lines.plant_line_name',
       'plant_accession_derivation',
-      'accession_originator',
       'originating_organisation',
       'year_produced',
       'date_harvested'

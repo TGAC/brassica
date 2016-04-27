@@ -23,7 +23,6 @@ RSpec.describe PlantAccession do
         pa.plant_accession,
         pa.plant_line.plant_line_name,
         pa.plant_accession_derivation,
-        pa.accession_originator,
         pa.originating_organisation,
         pa.year_produced,
         pa.date_harvested,
