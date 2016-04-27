@@ -158,6 +158,19 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
+  context 'when having includes in json_options' do
+    it 'never includes publishable models' do
+      ActiveRecord::Base.send(:subclasses).each do |model|
+        if model.respond_to?(:json_options) && model.json_options[:include].present?
+          model.json_options[:include].each do |included_relation|
+            related_model = model.reflect_on_association(included_relation).klass
+            expect(related_model.column_names).not_to include 'published'
+          end
+        end
+      end
+    end
+  end
+
   it 'includes all numeric columns in table columns' do
     pending
     fail
