@@ -43,10 +43,10 @@ class PlantTrial < ActiveRecord::Base
       where(plant_scoring_units: { plant_trial_id: self.id }).
       where(ts[:user_id].eq(uid).or(ts[:published].eq(true))).
       order('plant_scoring_units.scoring_unit_name asc, trait_descriptors.id asc').
-      group_by(&:plant_scoring_unit)
+      group_by(&:plant_scoring_unit_id)
 
     plant_scoring_units.visible(uid).order('scoring_unit_name asc').map do |unit|
-      scores = all_scores[unit] || []
+      scores = all_scores[unit.id] || []
       [unit.scoring_unit_name] + trait_descriptor_ids.map do |td_id|
         ts = scores.detect{ |s| s.trait_descriptor_id == td_id.to_i}
         ts ? ts.score_value : '-'
