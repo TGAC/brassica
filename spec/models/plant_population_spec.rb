@@ -15,10 +15,10 @@ RSpec.describe PlantPopulation do
       to raise_error ActiveRecord::RecordInvalid
   end
 
-  it 'must have publication date when published' do
+  it 'assigns publication date when published' do
     pp = build(:plant_population, published: true, published_on: nil)
-    expect(pp.valid?).to be_falsy
-    expect(pp.errors[:published_on]).not_to be_empty
+    expect(pp).to be_valid
+    expect(pp.published_on).not_to be_blank
   end
 
   describe '#filter' do

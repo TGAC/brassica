@@ -1,6 +1,7 @@
 RSpec.shared_examples "API-writable resource" do |model_klass|
   model_name = model_klass.name.underscore
   model = Api::Model.new(model_name)
+
   let(:parsed_response) { JSON.parse(response.body) }
   let(:required_attrs) { required_attributes(model_klass) - [:user]}
   let(:habtm_assocs) { model.has_and_belongs_to_many_associations }
@@ -83,6 +84,22 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
           expect(response).to be_success
           expect(parsed_response).to have_key(model_name)
+          expect(model.klass.find(parsed_response[model_name]['id'])).to be_published
+        end
+
+        if Api.publishable_model?(model.name)
+          it "creates private object" do
+            expect {
+              post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs.merge(published: false) },
+              { "X-BIP-Api-Key" => api_key.token }
+            }.to change {
+              model_klass.count
+            }.by(1)
+
+            expect(response).to be_success
+            expect(parsed_response).to have_key(model_name)
+            expect(model.klass.find(parsed_response[model_name]['id'])).not_to be_published
+          end
         end
 
         it "sets correct annotations" do

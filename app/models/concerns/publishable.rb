@@ -20,6 +20,10 @@ module Publishable
       where condition
     }
 
+    before_validation -> {
+      self.published_on ||= Time.zone.now if published?
+    }
+
     def revocable?
       published? && Time.now < revocable_until
     end
@@ -34,7 +38,7 @@ module Publishable
 
     def publish
       return if published?
-      update_attributes!(published: true, published_on: Time.zone.now)
+      update_attributes!(published: true)
     end
 
     def revoke

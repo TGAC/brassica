@@ -74,4 +74,9 @@ class Api
     @writable ||= writable_models.map { |m| m.name.underscore }
     @writable.include?(model.to_s.underscore.singularize)
   end
+
+  def self.publishable_model?(model)
+    @publishable ||= publishable_models.map { |m| m.name.underscore }
+    @publishable.include?(model.to_s.underscore.singularize)
+  end
 end
