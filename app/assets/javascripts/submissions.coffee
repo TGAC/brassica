@@ -50,8 +50,16 @@ class Submission
     # TODO: make sure it works with keyboard and touch too
     $('input[type=submit][name=back], .step a').on 'click', (event) =>
       if @dirtyTracker.isChanged()
-        # TODO: use bootstrap's confirmation dialog
-        unless confirm("Discard unsaved changes?")
+        msg = "Discard unsaved changes?"
+
+        target_step = $(event.target).attr("data-step-to")
+        current_step = @$('form').attr("data-step")
+
+        if Number(target_step) > Number(current_step)
+          msg += "\nIf you want to save your changes click the 'Next' button " +
+                 "below the form.\n"
+
+        unless confirm(msg)
           event.preventDefault()
           event.stopPropagation()
 

@@ -45,7 +45,10 @@ module SubmissionsHelper
   def submission_form(submission, &block)
     options = {
       builder: Submissions::FormBuilder,
-      html: { class: "edit-submission" }
+      html: {
+        class: "edit-submission",
+        data: { "step": submission.step_no }
+      }
     }
 
     form_for(submission, options, &block)

@@ -21,6 +21,10 @@ class Submission < ActiveRecord::Base
   scope :finalized, -> { where(finalized: true) }
   scope :recent_first, -> { order(updated_at: :desc) }
 
+  def step_no
+    STEPS.index(step) + 1
+  end
+
   def content
     Content.new(self)
   end
