@@ -170,9 +170,4 @@ RSpec.describe ActiveRecord::Base do
       end
     end
   end
-
-  it 'includes all numeric columns in table columns' do
-    pending
-    fail
-  end
 end
