@@ -87,7 +87,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           expect(model.klass.find(parsed_response[model_name]['id'])).to be_published
         end
 
-        if Api.publishable_model?(model.name)
+        if Api.publishable_models.include?(model.klass)
           it "creates private object" do
             expect {
               post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs.merge(published: false) },
