@@ -21,7 +21,7 @@ module Publishable
     }
 
     before_validation -> {
-      self.published_on ||= Time.zone.now if published?
+      self.published_on ||= Time.now if published?
     }
 
     def revocable?
