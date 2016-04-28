@@ -61,6 +61,10 @@ class Api
     readable_models - writable_models
   end
 
+  def self.publishable_models
+    writable_models.select { |m| m.include?(Publishable) }
+  end
+
   def self.readable_model?(model)
     @readable ||= readable_models.map { |m| m.name.underscore }
     @readable.include?(model.to_s.underscore.singularize)

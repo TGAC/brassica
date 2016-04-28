@@ -44,9 +44,7 @@ class Api::V1::ResourcesController < Api::BaseController
       create_params.merge(
         user_id: api_key.user_id,
         date_entered: Date.today,
-        entered_by_whom: api_key.user.full_name,
-        published: true,
-        published_on: Time.now
+        entered_by_whom: api_key.user.full_name
       )
     )
 
@@ -73,6 +71,36 @@ class Api::V1::ResourcesController < Api::BaseController
       render json: { reason: 'This resource is already published and irrevocable' }, status: :forbidden
     else
       resource.destroy
+      head :no_content
+    end
+  end
+
+  def publish
+    resource = model.klass.find_by(id: params[:id])
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.user != @api_key.user
+      render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
+    elsif resource.published?
+      render json: { reason: 'This resource is already published' }, status: :forbidden
+    else
+      resource.publish
+      head :no_content
+    end
+  end
+
+  def revoke
+    resource = model.klass.find_by(id: params[:id])
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.user != @api_key.user
+      render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
+    elsif !resource.published?
+      render json: { reason: 'This resource is not published' }, status: :forbidden
+    elsif !resource.revocable?
+      render json: { reason: 'This resource is irrevocable' }, status: :forbidden
+    else
+      resource.revoke
       head :no_content
     end
   end

@@ -15,6 +15,13 @@ RSpec.describe "API V1" do
     end
   end
 
+  Api.publishable_models.each do |model_klass|
+    describe model_klass do
+      it_behaves_like "API-publishable resource", model_klass
+      it_behaves_like "API-revocable resource", model_klass
+    end
+  end
+
   # A special case test
   context 'when deleting related objects' do
     let!(:user) { create(:user) }

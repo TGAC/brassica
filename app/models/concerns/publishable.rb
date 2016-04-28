@@ -20,6 +20,10 @@ module Publishable
       where condition
     }
 
+    before_validation -> {
+      self.published_on ||= Time.now if published?
+    }
+
     def revocable?
       published? && Time.now < revocable_until
     end
@@ -30,6 +34,17 @@ module Publishable
 
     def private?
       !(published? || user.nil?)
+    end
+
+    def publish
+      return if published?
+      update_attributes!(published: true)
+    end
+
+    def revoke
+      return unless published?
+      raise "#{self.class}##{id} cannot be revoked" unless revocable?
+      update_attributes!(published: false, published_on: nil)
     end
   end
 end
