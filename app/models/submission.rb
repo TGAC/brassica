@@ -22,7 +22,7 @@ class Submission < ActiveRecord::Base
   scope :recent_first, -> { order(updated_at: :desc) }
 
   def step_no
-    STEPS.index(step) + 1
+    STEPS.index(step)
   end
 
   def content
