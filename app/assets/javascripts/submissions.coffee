@@ -47,7 +47,6 @@ class Submission
   initDirtyTracker: =>
     @dirtyTracker = new DirtyTracker(@$el[0]).init()
 
-    # TODO: make sure it works with keyboard and touch too
     $('input[type=submit][name=back], .step a').on 'click', (event) =>
       if @dirtyTracker.isChanged()
         msg = "Discard unsaved changes?"
@@ -82,7 +81,6 @@ class PopulationSubmission extends Submission
   initDirtyTracker: =>
     super()
 
-    # TODO: make sure it works with keyboard and touch too
     $('input[type=submit][name=leave], input[type=submit][name=commit]').on 'click', (event) =>
       if @dirtyTracker.isChanged('new-plant-line')
         unless confirm("Discard new Plant line?")
