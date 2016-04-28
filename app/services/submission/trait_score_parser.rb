@@ -76,10 +76,10 @@ class Submission::TraitScoreParser
   end
 
   def csv
-    @csv || (@csv = CSV.new(input))
+    @csv ||= CSV.new(input)
   end
 
   def input
-    @input || (@input = File.open(@upload.file.path))
+    @input ||= File.open(@upload.file.path)
   end
 end
