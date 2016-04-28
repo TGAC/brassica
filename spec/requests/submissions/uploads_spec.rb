@@ -54,9 +54,9 @@ RSpec.describe "Submission uploads" do
 
         expect(response).to be_success
         expect(response.body.lines[0]).
-          to eq "Plant scoring unit name\t#{trait_descriptor.descriptor_name}\n"
+          to eq "Plant scoring unit name,#{trait_descriptor.descriptor_name}\n"
         expect(response.body.lines[2]).
-          to eq "sample_scoring_unit_B_name__replace_it\tsample_B_value_0__replace_it\n"
+          to eq "sample_scoring_unit_B_name__replace_it,sample_B_value_0__replace_it\n"
       end
 
       it 'does not break for no-traits submissions' do
@@ -64,7 +64,7 @@ RSpec.describe "Submission uploads" do
 
         expect(response).to be_success
         expect(response.body.lines[0]).
-          to eq "Plant scoring unit name\t\n"
+          to eq "Plant scoring unit name\n"
       end
     end
   end

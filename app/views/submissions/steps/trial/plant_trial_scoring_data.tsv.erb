@@ -1,5 +1,0 @@
-Plant scoring unit name<%= "\t" + @traits.join("\t") %>
-<% ['A','B'].each do |sample| %>
-<% sample_values = @traits.each_with_index.map{ |t,i| "sample_#{sample}_value_#{i}__replace_it" }.join("\t") %>
-sample_scoring_unit_<%= sample %>_name__replace_it<%= "\t" + sample_values %>
-<% end %>

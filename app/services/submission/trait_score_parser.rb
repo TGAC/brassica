@@ -34,16 +34,20 @@ class Submission::TraitScoreParser
 
   def map_headers_to_traits
     @upload.log "Mapping file header columns to Trait Descriptors"
-    header = input.readline
+    header = csv.readline
     @trait_names = PlantTrialSubmissionDecorator.decorate(@upload.submission).sorted_trait_names
     @trait_mapping = {}
-    header.split("\t")[1..-1].each_with_index do |column_name, i|
-      next if i >= @trait_names.length
-      column_name = column_name.strip
-      trait_index = @trait_names.find_index(column_name)
-      trait_index = i unless trait_index.present?
-      @trait_mapping[i] = trait_index
-      @upload.log " - Mapped column '#{column_name}' to Trait index #{trait_index} of value #{@trait_names[trait_index]}"
+    if header.blank?
+      @upload.errors.add(:file, 'No header provided.')
+    else
+      header[1..-1].each_with_index do |column_name, i|
+        next if i >= @trait_names.length
+        column_name = column_name.strip
+        trait_index = @trait_names.find_index(column_name)
+        trait_index = i unless trait_index.present?
+        @trait_mapping[i] = trait_index
+        @upload.log " - Mapped column '#{column_name}' to Trait index #{trait_index} of value #{@trait_names[trait_index]}"
+      end
     end
     if @trait_mapping.values.uniq.length != @trait_mapping.values.length
       @upload.errors.add(:file, 'Detected non unique column headers mapping to traits. Please check the column names.')
@@ -55,9 +59,9 @@ class Submission::TraitScoreParser
     plant_count = 0
     score_count = 0
     @trait_scores = {}
-    input.each do |score_line|
-      plant_id, *values = score_line.split("\t").map(&:strip)
-      unless plant_id.strip.blank?
+    csv.each do |score_line|
+      plant_id, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
+      unless plant_id.blank?
         @trait_scores[plant_id] = {}
         plant_count += 1
         values.each_with_index do |value, col_index|
@@ -71,7 +75,11 @@ class Submission::TraitScoreParser
     @upload.log "Parsed #{score_count} scores for #{plant_count} plants, in total."
   end
 
+  def csv
+    @csv ||= CSV.new(input)
+  end
+
   def input
-    @input || (@input = File.open(@upload.file.path))
+    @input ||= File.open(@upload.file.path)
   end
 end
