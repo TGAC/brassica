@@ -19,7 +19,6 @@ class TrialScoringsController < ApplicationController
           logger.info 'MISS MISS MISS'
           prepare_grid_data.to_json
         end
-        # grid_data = prepare_grid_data.to_json
         render json: grid_data
       end
     end
