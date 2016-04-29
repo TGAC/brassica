@@ -164,7 +164,7 @@ RSpec.describe ActiveRecord::Base do
         if model.respond_to?(:json_options) && model.json_options[:include].present?
           model.json_options[:include].each do |included_relation|
             related_model = model.reflect_on_association(included_relation).klass
-            expect(related_model.column_names).not_to include 'published'
+            expect(related_model.respond_to?(:published)).to be_falsey
           end
         end
       end
