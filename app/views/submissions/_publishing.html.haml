@@ -1,6 +1,10 @@
 - if submission.publishable? && submission.revocable?
+  - tooltip = capture do
+    .text-left= t('.revoke')
+
   = confirmable_action("Revoke publication", submission,
-      url: revoke_submission_path(submission), method: :patch)
+      url: revoke_submission_path(submission), method: :patch, title: tooltip)
+
 - elsif !submission.publishable?
   - tooltip = capture do
     .text-left= t('.publish')
