@@ -40,19 +40,52 @@ class Submission
   $: (args) =>
     @$el.find(args)
 
+  init: =>
+    return unless @$el.length >= 1
+    @initDirtyTracker()
+
+  initDirtyTracker: =>
+    @dirtyTracker = new DirtyTracker(@$el[0]).init()
+
+    $('input[type=submit][name=back], .step a').on 'click', (event) =>
+      if @dirtyTracker.isChanged()
+        msg = "Discard unsaved changes?"
+
+        target_step = $(event.target).attr("data-step-to")
+        current_step = @$('form').attr("data-step")
+
+        if Number(target_step) > Number(current_step)
+          msg += "\nIf you want to save your changes click the 'Next' button " +
+                 "below the form.\n"
+
+        unless confirm(msg)
+          event.preventDefault()
+          event.stopPropagation()
+
 class PopulationSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
   plantLineSelectOptions: @makeAjaxSelectOptions('/plant_lines', 'plant_line_name', 'plant_line_name', 'common_name')
   plantLineListSelectOptions: @makeAjaxListSelectOptions('/plant_lines', 'id', 'plant_line_name', 'common_name')
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name', 'plant_variety_name', 'crop_type')
 
-  bind: =>
+  init: =>
+    super()
+
     @$('.taxonomy-term').select2(@defaultSelectOptions)
     @$('.male-parent-line, .female-parent-line').select2(@plantLineSelectOptions)
     @$('.population-type').select2(@defaultSelectOptions)
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
 
     @bindNewPlantLineControls()
+
+  initDirtyTracker: =>
+    super()
+
+    $('input[type=submit][name=leave], input[type=submit][name=commit]').on 'click', (event) =>
+      if @dirtyTracker.isChanged('new-plant-line')
+        unless confirm("Discard new Plant line?")
+          event.preventDefault()
+          event.stopPropagation()
 
   bindNewPlantLineControls: =>
     @$('.plant-line-list').on 'select2:unselect', (event) =>
@@ -63,11 +96,15 @@ class PopulationSubmission extends Submission
       @initNewPlantLineForm()
 
     @$('.add-new-plant-line-for-list').on 'click', (event) =>
-      @validateNewPlantLineForList(@appendToSelectedPlantLineLists)
+      @validateNewPlantLineForList((plantLineData) =>
+        @appendToSelectedPlantLineLists(plantLineData)
+        @dirtyTracker.resetContext("new-plant-line")
+      )
 
     @$('.cancel-new-plant-line-for-list').on 'click', (event) =>
       @$('div.new-plant-line-for-list').hide()
       @$('button.new-plant-line-for-list').show()
+      @dirtyTracker.resetContext("new-plant-line")
 
   initNewPlantLineForm: =>
     @$('div.new-plant-line-for-list').removeClass('hidden').show()
@@ -131,7 +168,9 @@ class TrialSubmission extends Submission
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name', 'description')
   traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name', 'descriptor_label')
 
-  bind: =>
+  init: =>
+    super()
+
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
     @$('select.country-id').select2(@defaultSelectOptions)
@@ -150,6 +189,16 @@ class TrialSubmission extends Submission
 
     @bindUpload()
     @bindNewTraitDescriptorControls()
+
+  initDirtyTracker: =>
+    super()
+
+    # TODO: make sure it works with keyboard and touch too
+    $('input[type=submit][name=leave], input[type=submit][name=commit]').on 'click', (event) =>
+      if @dirtyTracker.isChanged('new-trait-descriptor')
+        unless confirm("Discard new Trait descriptor?")
+          event.preventDefault()
+          event.stopPropagation()
 
   bindUpload: =>
     @$('.trait-scores-upload').fileupload
@@ -196,11 +245,15 @@ class TrialSubmission extends Submission
       @initNewTraitDescriptorForm()
 
     @$('.add-new-trait-descriptor-for-list').on 'click', (event) =>
-      @validateNewTraitDescriptorForList(@appendToSelectedTraitDescriptorLists)
+      @validateNewTraitDescriptorForList((traitDescriptorData) =>
+        @appendToSelectedTraitDescriptorLists(traitDescriptorData)
+        @dirtyTracker.resetContext("new-trait-descriptor")
+      )
 
     @$('.cancel-new-trait-descriptor-for-list').on 'click', (event) =>
       @$('div.new-trait-descriptor-for-list').hide()
       @$('button.new-trait-descriptor-for-list').show()
+      @dirtyTracker.resetContext("new-trait-descriptor")
 
   initNewTraitDescriptorForm: =>
     @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
@@ -265,6 +318,6 @@ class TrialSubmission extends Submission
     'new-trait-descriptor-' + descriptor_name.split(/\s+/).join('-').toLowerCase()
 
 $ ->
-  new PopulationSubmission('.edit-population-submission').bind()
-  new TrialSubmission('.edit-trial-submission').bind()
+  new PopulationSubmission('.edit-population-submission').init()
+  new TrialSubmission('.edit-trial-submission').init()
 

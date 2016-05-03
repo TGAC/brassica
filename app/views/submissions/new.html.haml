@@ -31,17 +31,8 @@
 
           .row
             .col-sm-12
-              %ol.step-indicator
-                - Submission::STEPS.each_with_index do |step_name, step_no|
+              = render partial: "/submissions/step_indicators", locals: { submission_type: s_type }
 
-                  %li
-                    .step
-                      = step_no + 1
-                    .panel
-                      .panel-heading
-                        %h4= t("submission.steps.#{s_type}.#{step_name}.heading")
-                      .panel-body
-                        = t("submission.steps.#{s_type}.#{step_name}.body")
 
           .text-center
             = button_to 'Start!',

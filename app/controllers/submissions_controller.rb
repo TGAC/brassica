@@ -27,12 +27,16 @@ class SubmissionsController < ApplicationController
 
   def update
     @submission = current_user.submissions.find(params[:id])
-    @content = step_content_form(@submission)
 
-    if params[:back]
+    if params[:step]
+      @submission.reset_step(params[:step]) if @submission.content_for?(params[:step])
+      redirect_to edit_submission_path(@submission) and return
+    elsif params[:back]
       @submission.step_back
       redirect_to edit_submission_path(@submission) and return
     end
+
+    @content = step_content_form(@submission)
 
     unless @content.valid? || params[:leave]
       render action: :edit and return

@@ -19,7 +19,7 @@
   .panel-heading
     %h4 Add new <b>Trait descriptor</b>
 
-  .panel-body
+  .panel-body{"data-dirty-context": "new-trait-descriptor"}
     .form-group
       = label_tag :descriptor_name, nil, class: 'required'
       = text_field_tag :descriptor_name, nil,

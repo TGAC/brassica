@@ -8,7 +8,6 @@ RSpec.describe Submission do
   context "factory" do
     it "builds valid instance" do
       expect(build(:submission)).to be_valid
-
     end
 
     context "with :finalized trait" do
@@ -19,6 +18,52 @@ RSpec.describe Submission do
         expect(submission).to be_persisted
         expect(submission.submitted_object).to be_persisted
       end
+    end
+  end
+
+  describe "#content_for?" do
+    subject { create(:submission, :population) }
+
+    before do
+      subject.content.update(:step02, taxonomy_term: "foobar")
+    end
+
+    it "returns true if any content for given step is present" do
+      expect(subject.content_for?(0)).to be_falsey
+      expect(subject.content_for?(1)).to be_truthy
+      expect(subject.content_for?(2)).to be_falsey
+      expect(subject.content_for?(3)).to be_falsey
+    end
+  end
+
+  describe "#step_no" do
+    it "returns 0-based step index" do
+      expect(build(:submission, step: "step01").step_no).to eq(0)
+      expect(build(:submission, step: "step02").step_no).to eq(1)
+      expect(build(:submission, step: "step03").step_no).to eq(2)
+      expect(build(:submission, step: "step04").step_no).to eq(3)
+    end
+  end
+
+  describe "#reset_step" do
+    subject { create(:submission, step: "step02") }
+
+    it "force resets submission to any further step" do
+      subject.reset_step(2)
+      expect(subject.step).to eq("step03")
+    end
+
+    it "force resets submission to any lesser step" do
+      subject.reset_step(0)
+      expect(subject.step).to eq("step01")
+    end
+
+    it "defaults to first step if given invalid step" do
+      subject.reset_step(999)
+      expect(subject.step).to eq("step01")
+
+      subject.reset_step(-212)
+      expect(subject.step).to eq("step01")
     end
   end
 

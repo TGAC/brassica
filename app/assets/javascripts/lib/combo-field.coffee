@@ -50,6 +50,7 @@ class ComboField
 
   clearInput: =>
     @$input.val('')
+    @$input.trigger('change')
     @$select.prop(disabled: false)
     @$clear_input.addClass('hidden')
 

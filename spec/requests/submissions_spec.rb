@@ -94,6 +94,27 @@ RSpec.describe "Submission management" do
             expect(submission.reload.content.step01.unknown_property).to be nil
           end
 
+          context "with :step parameter" do
+            before do
+              submission.content.update(:step01, update_params)
+              submission.step_forward
+            end
+
+            it "resets submission step if completed step was given" do
+              expect { put "/submissions/#{submission.id}", step: 0 }.to \
+                change { submission.reload.step }.from("step02").to("step01")
+
+              expect(response).to redirect_to(edit_submission_path(submission))
+            end
+
+            it "does nothing if given step was not completed" do
+              expect { put "/submissions/#{submission.id}", step: 2 }.not_to \
+                change { submission.reload.step }.from("step02")
+
+              expect(response).to redirect_to(edit_submission_path(submission))
+            end
+          end
+
           context "unless last step" do
             it "advances submission step and redirects to edit" do
               put "/submissions/#{submission.id}", update_params

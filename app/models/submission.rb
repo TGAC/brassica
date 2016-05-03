@@ -21,8 +21,17 @@ class Submission < ActiveRecord::Base
   scope :finalized, -> { where(finalized: true) }
   scope :recent_first, -> { order(updated_at: :desc) }
 
+  def step_no
+    STEPS.index(step)
+  end
+
   def content
     Content.new(self)
+  end
+
+  def content_for?(step)
+    step = STEPS[step.to_i] if step.to_s =~ /\A\d+\z/
+    content[step].to_h.present?
   end
 
   def step_forward
