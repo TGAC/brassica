@@ -76,3 +76,16 @@ en:
     cookies_text: To be of better service to you this website makes use of cookies
     ok: Accept cookies
     learn_more: More info
+
+  submissions:
+    publishing:
+      publish: |
+        This submission is not yet visible to other users. Clicking this button will
+        immediately make it visible to everybody, but you will have one week to
+        change your mind in case of a mistake. After one week the publication becomes
+        permanent.
+
+      revoke: |
+        Revoking a publication will render all data comprising this submission
+        invisible to anyone except yourself. A revoked publication can be republished
+        at a later date, if you choose to do so.

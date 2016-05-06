@@ -6,5 +6,7 @@
 
 .actions.collapse.in{data: { confirmation: object.id }}
   = other_content.html_safe if defined?(other_content)
-  %a.btn.btn-sm{class: btn_class, href: "[data-confirmation=#{object.id}]", data: { toggle: 'collapse' }}
+  %a.btn.btn-sm{class: btn_class, href: "[data-confirmation=#{object.id}]",
+    title: title, data: { toggle: 'collapse', html: 'true' }}
+
     = label
