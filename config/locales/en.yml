@@ -79,11 +79,13 @@ en:
 
   submissions:
     publishing:
-      publish: |-
-        This submission is not yet visible to other people. Publishing will make it
-        immediately visible to everybody but you will have one week to revoke it
-        in case of a mistake. After one week publication becomes permanent.
+      publish: |
+        This submission is not yet visible to other users. Clicking this button will
+        immediately make it visible to everybody, but you will have one week to
+        change your mind in case of a mistake. After one week the publication becomes
+        permanent.
+
       revoke: |
-        Revocation makes data published in this submission inaccessible to anyone
-        besides yourself. After you revoke this publication, you will be able to
-        publish it again, if you wish to do so, at a later date.
+        Revoking a publication will render all data comprising this submission
+        invisible to anyone except yourself. A revoked publication can be republished
+        at a later date, if you choose to do so.
