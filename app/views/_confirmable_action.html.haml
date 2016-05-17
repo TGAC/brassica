@@ -1,12 +1,11 @@
-.actions.collapse{data: { confirmation: object.id }}
+.actions.replace{data: { confirmation: object.id }}
   Sure?
   = button_to 'Yes', url, method: method, class: 'btn btn-sm btn-warning'
-  %a.btn.btn-sm.btn-default{href: "[data-confirmation=#{object.id}]", data: { toggle: 'collapse' }}
+  %a.btn.btn-sm.btn-default{href: "[data-confirmation=#{object.id}]", data: { toggle: 'replace' }}
     No
 
-.actions.collapse.in{data: { confirmation: object.id }}
+.actions.replace.in{data: { confirmation: object.id }}
   = other_content.html_safe if defined?(other_content)
   %a.btn.btn-sm{class: btn_class, href: "[data-confirmation=#{object.id}]",
-    title: title, data: { toggle: 'collapse', html: 'true' }}
-
+    title: title, data: { toggle: 'replace', html: 'true' }}
     = label

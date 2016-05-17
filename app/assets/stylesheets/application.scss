@@ -36,6 +36,9 @@
 @import "bootstrap/bootstrap-custom";
 @import "bootstrap/ui-bootstrap-elements";
 
+//import other libs
+@import "lib/replace";
+
 //import general styles
 @import "partials/base";
 @import "partials/header";
