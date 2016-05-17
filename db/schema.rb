@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160415142419) do
+ActiveRecord::Schema.define(version: 20160516160911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -796,8 +796,9 @@ ActiveRecord::Schema.define(version: 20160415142419) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.boolean  "published",             default: true, null: false
+    t.boolean  "published",                  default: true, null: false
     t.datetime "published_on"
+    t.integer  "technical_replicate_number", default: 1,    null: false
   end
 
   add_index "trait_scores", ["plant_scoring_unit_id"], name: "trait_scores_plant_scoring_unit_id_idx", using: :btree

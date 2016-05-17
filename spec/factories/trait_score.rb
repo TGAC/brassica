@@ -5,6 +5,7 @@ FactoryGirl.define do
     scoring_date { rand(1..100).days.ago }
     confirmed_by_whom { Faker::Internet.user_name }
     published_on { Date.today-8.days }
+    technical_replicate_number { 1 }
     plant_scoring_unit
     user
     trait_descriptor
