@@ -15,10 +15,10 @@
     submission to upload information about that population first.
 
 .form-group
-  = content.text_area :plant_trial_description, label: 'Trial description'
+  = content.text_field :trial_year, required: true
 
 .form-group
-  = content.text_field :trial_year
+  = content.text_area :plant_trial_description, label: 'Trial description'
 
 - %w(institute_id terrain soil_type statistical_factors design_factors).each do |attr|
   .form-group
@@ -30,7 +30,7 @@
   %legend Location
 
   .form-group= content.country_select :country_id, placeholder: 'Select a country', required: true
-  .form-group= content.text_field :place_name, help: 'Geographical name, for instance a town'
+  .form-group= content.text_field :place_name, required: true, help: 'Geographical name, for instance a town'
   .form-group= content.text_field :trial_location_site_name, help: 'Name of the field, glasshouse or growth room used for planting'
   .form-group= content.text_field :latitude, help: 'Expressed in degrees, eg. 48.86'
   .form-group= content.text_field :longitude, help: 'Expressed in degrees, eg. 2.30'

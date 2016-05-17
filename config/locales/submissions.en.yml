@@ -48,6 +48,9 @@ en:
         step02:
           heading: Traits.
           body: Choose plant traits that were scored in the course of this trial, or define new trait descriptors.
+          new_trait_descriptor_attributes:
+            category: Trait category
+            units_of_measurements: Unit of measurement
         step03:
           heading: Scoring.
           body: Upload tabular list of scores given to plants per each trait scored.

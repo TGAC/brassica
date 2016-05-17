@@ -69,8 +69,10 @@ RSpec.describe "Submission management" do
                   content: {
                     plant_trial_name: "Trial A",
                     project_descriptor: "Project A",
+                    trial_year: "1999",
                     plant_population_id: plant_population.id.to_s,
-                    country_id: country.id.to_s
+                    country_id: country.id.to_s,
+                    place_name: "Really well hidden place"
                   }
                 }
               }

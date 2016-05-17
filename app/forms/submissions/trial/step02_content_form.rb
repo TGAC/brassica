@@ -6,8 +6,8 @@ module Submissions
       collection :new_trait_descriptors do
         property :descriptor_name
         property :category
-
         property :units_of_measurements
+
         property :where_to_score
         property :scoring_method
         property :when_to_score
@@ -27,6 +27,7 @@ module Submissions
 
         validates :descriptor_name, presence: true
         validates :category, presence: true
+        validates :units_of_measurements, presence: true
       end
 
       validates :trait_descriptor_list, length: { minimum: 1 }

@@ -27,11 +27,13 @@
         placeholder: 'Enter new descriptor name',
         autocomplete: 'off'
 
-    .form-group
-      - option_tags = options_for_select(TraitDescriptor.attribute_values(:category))
-      = combo_field_tag :category, nil, option_tags, required: true, label: 'Trait category', class: 'category'
+    - %w(category units_of_measurements).each do |attr|
+      .form-group
+        - option_tags = options_for_select(TraitDescriptor.attribute_values(attr))
+        = combo_field_tag attr, nil, option_tags, class: attr.dasherize, required: true,
+            label: t(attr, scope: %i(submission steps trial step02 new_trait_descriptor_attributes))
 
-    - %w(units_of_measurements score_type where_to_score).each do |attr|
+    - %w(score_type where_to_score).each do |attr|
       .form-group
         - option_tags = options_for_select(TraitDescriptor.attribute_values(attr))
         = combo_field_tag attr, nil, option_tags, class: attr.dasherize
