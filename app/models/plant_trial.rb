@@ -77,6 +77,9 @@ class PlantTrial < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
+      search: [
+        'project_descriptor',
+      ],
       query: params_for_filter(table_columns) +
         [
           'project_descriptor',
