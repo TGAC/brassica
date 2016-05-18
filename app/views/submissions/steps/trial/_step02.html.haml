@@ -29,13 +29,15 @@
 
     - %w(category units_of_measurements).each do |attr|
       .form-group
-        - option_tags = options_for_select(TraitDescriptor.attribute_values(attr))
+        - values = TraitDescriptor.visible(current_user.id).attribute_values(attr)
+        - option_tags = options_for_select(values)
         = combo_field_tag attr, nil, option_tags, class: attr.dasherize, required: true,
             label: t(attr, scope: %i(submission steps trial step02 new_trait_descriptor_attributes))
 
     - %w(score_type where_to_score).each do |attr|
       .form-group
-        - option_tags = options_for_select(TraitDescriptor.attribute_values(attr))
+        - values = TraitDescriptor.visible(current_user.id).attribute_values(attr)
+        - option_tags = options_for_select(values)
         = combo_field_tag attr, nil, option_tags, class: attr.dasherize
 
     - %w(when_to_score).each do |attr|

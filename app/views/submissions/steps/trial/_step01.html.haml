@@ -3,7 +3,8 @@
     help: 'Please, provide convenient <b>name</b> for this scoring trial. It has to be <b>unique</b>.'
 
 .form-group
-  - options = options_for_select(PlantTrial.attribute_values(:project_descriptor), @content.project_descriptor)
+  - project_descriptors = PlantTrial.visible(current_user.id).attribute_values(:project_descriptor)
+  - options = options_for_select(project_descriptors, @content.project_descriptor)
   - if options.present?
     = content.combo_field :project_descriptor, options, label: 'Project name',
         required: true
@@ -29,7 +30,8 @@
 
 - %w(institute_id terrain soil_type statistical_factors design_factors).each do |attr|
   .form-group
-    - options = options_for_select(PlantTrial.attribute_values(attr), @content.send(attr))
+    - values = PlantTrial.visible(current_user.id).attribute_values(attr)
+    - options = options_for_select(values, @content.send(attr))
     = content.combo_field attr, options
 
 
