@@ -3,7 +3,12 @@
     help: 'Please, provide convenient <b>name</b> for this scoring trial. It has to be <b>unique</b>.'
 
 .form-group
-  = content.text_field :project_descriptor, required: true, label: 'Project name'
+  - options = options_for_select(PlantTrial.attribute_values(:project_descriptor), @content.project_descriptor)
+  - if options.present?
+    = content.combo_field :project_descriptor, options, label: 'Project name',
+        required: true
+  - else
+    = content.text_field :project_descriptor, required: true, label: 'Project name'
 
 .form-group
   = content.label :plant_population_id, "Plant population", class: 'required'
