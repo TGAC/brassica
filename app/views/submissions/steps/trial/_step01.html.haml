@@ -15,7 +15,9 @@
     submission to upload information about that population first.
 
 .form-group
-  = content.text_field :trial_year, required: true
+  = content.text_field :trial_year, required: true,
+    placeholder: "Please provide information on the year the trial took place",
+    help: "Note that you can only submit trait data from one year at a time. Examples: 2004, 2005, 2016."
 
 .form-group
   = content.text_area :plant_trial_description, label: 'Trial description'
