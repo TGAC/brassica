@@ -15,12 +15,14 @@ class Submissions::FormBuilder < ActionView::Helpers::FormBuilder
     value = @object.send(attr)
     label = options[:label] || attr.to_s.humanize
     required = options[:required]
+    help = options[:help]
     options = {
       label: label,
       class: attr.to_s.dasherize,
       select_placeholder: "Select existing #{label.downcase}",
       input_placeholder: "Enter new #{label.downcase}",
-      required: required
+      required: required,
+      help: help
     }
 
     @template.combo_field_tag(name, value, option_tags, options)

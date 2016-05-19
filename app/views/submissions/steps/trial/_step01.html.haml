@@ -7,9 +7,11 @@
   - options = options_for_select(project_descriptors, @content.project_descriptor)
   - if options.present?
     = content.combo_field :project_descriptor, options, label: 'Project name',
-        required: true
+        required: true,
+        help: 'Please provide the <b>name of the project</b> the trial is part of. Either select an existing project name, or provide a new one.'
   - else
-    = content.text_field :project_descriptor, required: true, label: 'Project name'
+    = content.text_field :project_descriptor, required: true, label: 'Project name',
+      help: 'Please provide the <b>name of the project</b> the trial is part of.'
 
 .form-group
   = content.label :plant_population_id, "Plant population", class: 'required'
@@ -17,16 +19,19 @@
   = content.select :plant_population_id, options, { include_blank: true },
     { class: 'form-control plant-population', data: { placeholder: 'Select plant population' } }
   %small.help-block
-    If the trial was performed for a population that is not listed in BIP, plese use Plant Population
-    submission to upload information about that population first.
+    If the trial was performed for a
+    %b population that is not listed in BIP,
+    please use Plant Population submission to upload information about that population first.
 
 .form-group
   = content.text_field :trial_year, required: true,
     placeholder: "Please provide information on the year the trial took place",
-    help: "Note that you can only submit trait data from one year at a time. Examples: 2004, 2005, 2016."
+    help: "Note that you can only submit trait data from <b>one year at a time</b>. Examples: 2004, 2005, 2016."
 
 .form-group
-  = content.text_area :plant_trial_description, label: 'Trial description'
+  = content.text_area :plant_trial_description, label: 'Trial description',
+    help: "Please provide a brief description of the trial. It should contain the trait and population of interest,
+    the trial type and location. The Project number could be named, too. An Example of an existing trial description in the data base is: 'Seed quality assessment of the BnaTNDH population in a field trial in China'"
 
 - %w(institute_id terrain soil_type statistical_factors design_factors).each do |attr|
   .form-group
@@ -39,9 +44,13 @@
   %legend Location
 
   .form-group= content.country_select :country_id, placeholder: 'Select a country', required: true
-  .form-group= content.text_field :place_name, required: true, help: 'Geographical name, for instance a town'
-  .form-group= content.text_field :trial_location_site_name, help: 'Name of the field, glasshouse or growth room used for planting'
-  .form-group= content.text_field :latitude, help: 'Expressed in degrees, eg. 48.86'
-  .form-group= content.text_field :longitude, help: 'Expressed in degrees, eg. 2.30'
-  .form-group= content.text_field :altitude, help: 'Expressed in meters'
+  .form-group
+    = content.text_field :place_name, required: true,
+    help: 'Please provide a geographical name of the trial location, such as a town.'
+  .form-group
+    = content.text_field :trial_location_site_name,
+    help: "Please provide the name of the field, glasshouse or growth room used for the trial. Examples of place names in the database are: 'Wharf Ground' or 'unspecified glasshouse in Wellesbourne'."
+  .form-group= content.text_field :latitude, help: 'Expressed in degrees, eg. 48.86.'
+  .form-group= content.text_field :longitude, help: 'Expressed in degrees, eg. 2.30.'
+  .form-group= content.text_field :altitude, help: 'Expressed in meters.'
 
