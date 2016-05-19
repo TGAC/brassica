@@ -3,6 +3,19 @@ require 'rails_helper'
 RSpec.describe PlantTrial do
   it { should belong_to(:plant_population).touch(true) }
 
+  context "validations" do
+    it { should validate_presence_of(:plant_trial_name) }
+    it { should validate_presence_of(:project_descriptor) }
+    it { should validate_presence_of(:trial_year) }
+    it { should validate_presence_of(:place_name) }
+    it { should validate_numericality_of(:latitude).
+          is_greater_than_or_equal_to(-90).
+          is_less_than_or_equal_to(90) }
+    it { should validate_numericality_of(:longitude).
+          is_greater_than_or_equal_to(-180).
+          is_less_than_or_equal_to(180) }
+  end
+
   describe '#filter' do
     it 'allow queries by project_descriptor' do
       pts = create_list(:plant_trial, 2)

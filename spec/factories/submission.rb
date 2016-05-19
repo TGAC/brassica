@@ -39,6 +39,8 @@ FactoryGirl.define do
           submission.content.update(:step01, plant_trial_name: random_word,
                                              project_descriptor: random_word,
                                              plant_population_id: plant_population.id,
+                                             trial_year: 1999,
+                                             place_name: random_word,
                                              country_id: country.id)
           submission.content.update(:step02, trait_descriptor_list: [trait_descriptor.id.to_s])
           submission.content.update(:step04, comments: Faker::Lorem.sentence,

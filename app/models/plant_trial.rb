@@ -9,7 +9,7 @@ class PlantTrial < ActiveRecord::Base
   has_many :processed_trait_datasets
 
   validates :plant_trial_name, presence: true, uniqueness: true
-  validates :project_descriptor, presence: true
+  validates :project_descriptor, :trial_year, :place_name, presence: true
   validates :latitude, allow_blank: true, numericality: {
     greater_than_or_equal_to: -90,
     less_than_or_equal_to: 90

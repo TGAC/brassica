@@ -1216,7 +1216,7 @@ en:
           desc: Additional descriptive information concerning the trial
         -
           name: trial_year
-          create: Q
+          create: required, Q
           desc: Year (or years) the trial took place
         -
           name: institute_id
@@ -1228,6 +1228,7 @@ en:
           desc: Site where the plant trial was performed
         -
           name: place_name
+          create: required
           desc: Place where the plant trial was performed
         -
           name: country
@@ -1662,6 +1663,7 @@ en:
           desc: Common name used to describe the trait
         -
           name: units_of_measurements
+          create: required
           desc: How the trait is measured
         -
           name: trait_grades

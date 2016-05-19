@@ -8,7 +8,7 @@ class TraitDescriptor < ActiveRecord::Base
   has_many :trait_scores
   has_many :processed_trait_datasets
 
-  validates :descriptor_name, :category, presence: true
+  validates :descriptor_name, :category, :units_of_measurements, presence: true
 
   include Searchable
   include AttributeValues
