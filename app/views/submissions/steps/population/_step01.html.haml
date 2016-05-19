@@ -1,9 +1,24 @@
 .form-group
-  = content.text_field :name, required: true, label: 'Population name'
-  %small.help-block Please, provide <b>population name</b>
+  = content.text_field :name, required: true, label: 'Population name',
+  help: 'Please, provide <b>population name</b>. Examples of a population name in the database include: BnaTNDH, BolEC03.'
 
 .form-group
-  = content.text_area :description
+  = content.text_area :description,
+  help: 'Please provide a brief description of the Population. Below we provide a good example of population description.'
+
+.alert.alert-info
+  Example of description of the TNDH population, by
+  = succeed ':' do
+    = link_to 'John Innes Centre', 'https://www.jic.ac.uk/staff/ian-bancroft/mapping.html'
+  %br
+  %i
+    The TNDH mapping population was developed by Prof. Jinling Meng, at the Huazhong Agricultural University,
+    Wuhan, China in collaboration with Prof. Ian Bancroft at JIC as part of the EU-funded IMSORB project.
+    This population is derived from an F1 cross between Tapidor, a European Winter B. napus variety, and Ningyou7,
+    a Chinese semi-Winter B. napus line. These parents were selected on the basis of their genetic dissimilarity,
+    being the most divergent lines identified using RFLP markers (Meng et al., 1996) and for their contrasting
+    trait characteristics and cultivation ranges.
 
 .form-group
-  = content.text_field :owned_by, label: "Population owned by"
+  = content.text_field :owned_by, label: "Population owned by",
+  help: 'Please provide information on who owns the population. For example, the name(s) of its developer(s).'
