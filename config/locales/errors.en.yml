@@ -41,6 +41,8 @@ en:
 
             trial_year:
               not_an_integer: Please provide a valid trial year.
+              not_a_number: Please provide a valid trial year.
+              less_than_or_equal_to: Trial year cannot be greater than %{count}.
 
             longitude:
               not_a_number: Please provide a valid longitude in degrees.
@@ -54,6 +56,9 @@ en:
 
             altitude:
               not_a_number: Please provide a valid altitude in meters.
+
+            place_name:
+              blank: Please provide a place name.
 
             country_id:
               blank: Please select a country from the list.

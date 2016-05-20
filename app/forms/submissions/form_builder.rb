@@ -10,15 +10,19 @@ class Submissions::FormBuilder < ActionView::Helpers::FormBuilder
     field_with_label_and_help(:text_area, attr, options.dup)
   end
 
-  def combo_field(attr, option_tags)
-    label = attr.to_s.humanize
+  def combo_field(attr, option_tags, options = {})
     name = "submission[content][#{attr}]"
     value = @object.send(attr)
+    label = options[:label] || attr.to_s.humanize
+    required = options[:required]
+    help = options[:help]
     options = {
       label: label,
       class: attr.to_s.dasherize,
       select_placeholder: "Select existing #{label.downcase}",
-      input_placeholder: "Enter new #{label.downcase}"
+      input_placeholder: "Enter new #{label.downcase}",
+      required: required,
+      help: help
     }
 
     @template.combo_field_tag(name, value, option_tags, options)

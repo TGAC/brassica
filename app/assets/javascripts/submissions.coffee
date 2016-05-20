@@ -183,6 +183,9 @@ class TrialSubmission extends Submission
       'design-factors'
     ]
 
+    if $('.project-descriptor-select option').length > 0
+      fields.push 'project-descriptor'
+
     $.each fields, (_, field) =>
       @$(".#{field}").select2(@defaultSelectOptions)
       @$(".#{field}-wrapper").comboField()

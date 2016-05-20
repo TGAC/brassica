@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe TraitDescriptor do
+  context "validations" do
+    it { should validate_presence_of(:descriptor_name) }
+    it { should validate_presence_of(:category) }
+    it { should validate_presence_of(:units_of_measurements) }
+  end
+
   describe '#table_data' do
     it 'properly calculates associated trait score number' do
       pts = create_list(:plant_trial, 2)

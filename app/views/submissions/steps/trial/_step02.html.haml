@@ -1,8 +1,11 @@
 .alert.alert-info
-  Select one or more <b>Trait descriptors</b> from the database. They should describe the traits
-  that were scored in the scope of this Plant trial.<br/>
-  If suitable <b>Trait descriptor</b> does not seem to exist in our
-  database you are welcome to add it with your submission.
+  Before uploading your trait score sheet, please choose
+  %b plant traits
+  that were scored in the course of this trial,
+  or define
+  %b new trait descriptors.
+  Further instructions are found below.
+  Examples of plant traits in the database are: 'oleic acid content' or ' seed mature time'
 
 .form-group
   = content.label :trait_descriptor_list
@@ -27,13 +30,17 @@
         placeholder: 'Enter new descriptor name',
         autocomplete: 'off'
 
-    .form-group
-      - option_tags = options_for_select(TraitDescriptor.attribute_values(:category))
-      = combo_field_tag :category, nil, option_tags, required: true, label: 'Trait category', class: 'category'
-
-    - %w(units_of_measurements score_type where_to_score).each do |attr|
+    - %w(category units_of_measurements).each do |attr|
       .form-group
-        - option_tags = options_for_select(TraitDescriptor.attribute_values(attr))
+        - values = TraitDescriptor.visible(current_user.id).attribute_values(attr)
+        - option_tags = options_for_select(values)
+        = combo_field_tag attr, nil, option_tags, class: attr.dasherize, required: true,
+            label: t(attr, scope: %i(submission steps trial step02 new_trait_descriptor_attributes))
+
+    - %w(score_type where_to_score).each do |attr|
+      .form-group
+        - values = TraitDescriptor.visible(current_user.id).attribute_values(attr)
+        - option_tags = options_for_select(values)
         = combo_field_tag attr, nil, option_tags, class: attr.dasherize
 
     - %w(when_to_score).each do |attr|

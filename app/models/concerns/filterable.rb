@@ -19,18 +19,18 @@ module Filterable extend ActiveSupport::Concern
       params = filter_params(params)
       if params[:query].present? || params[:search].present?
 
-                Rails.logger.error "PQ: #{params[:query]}"
+        Rails.logger.error "PQ: #{params[:query]}"
 
-                query = query.where(params[:query]) if params[:query].present?
-                params[:search].each do |k,v|
-                  query = query.where("#{k} ILIKE ?", "%#{v}%")
-                end if params[:search].present?
-              elsif params[:fetch].present?
-                ids = Search.new(params[:fetch]).send(table_name).records.ids
-                query = query.where(id: ids)
-              else
-                query = none
-              end
+        query = query.where(params[:query]) if params[:query].present?
+        params[:search].each do |k,v|
+          query = query.where("#{k} ILIKE ?", "%#{v}%")
+        end if params[:search].present?
+      elsif params[:fetch].present?
+        ids = Search.new(params[:fetch]).send(table_name).records.ids
+        query = query.where(id: ids)
+      else
+        query = none
+      end
       query = join_columns(params[:query].keys, query) if params[:query].present?
       query
     end

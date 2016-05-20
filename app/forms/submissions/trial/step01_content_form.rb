@@ -32,7 +32,9 @@ module Submissions
         less_than_or_equal_to: 180
       }
       validates :altitude, numericality: true, allow_blank: true
-      validates :trial_year, numericality: { only_integer: true }, allow_blank: true
+      validates :trial_year, numericality: { only_integer: true,
+                                             less_than_or_equal_to: Date.today.year }
+      validates :place_name, presence: true
 
       validate do
         if PlantTrial.where(plant_trial_name: plant_trial_name).exists?
