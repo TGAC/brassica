@@ -93,7 +93,7 @@ class Search
   end
 
   def special_chars
-    %w(: [ ] ( ) { } + - ~ < = > ^ \ / && || ! " * ?)
+    %w(: [ ] ( ) { } + - ~ < = > ^ \\ / && || ! " * ?)
   end
 
   def numeric_query?

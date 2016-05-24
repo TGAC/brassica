@@ -316,7 +316,8 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     examples = {
       'foo' => '*foo*',
       'foo@example.com' => 'foo@example.com',
-      'foo:bar' => '*foo\:bar*'
+      'foo:bar' => '*foo\:bar*',
+      'ug/g' => '*ug\/g*'
     }
 
     examples.each do |input_query, output_query|
