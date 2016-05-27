@@ -20,7 +20,7 @@ RSpec.describe Submission::PlantPopulationPublisher do
     before { subject.publish }
 
     it "publishes submitted plant population" do
-      expect(submission.reload).to be_publishable
+      expect(submission.reload).to be_published
       expect(plant_population.reload).to be_published
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Submission::PlantPopulationPublisher do
   end
 
   context "#revoke" do
-    let(:submission) { create(:finalized_submission, :population, publishable: true) }
+    let(:submission) { create(:finalized_submission, :population, published: true) }
 
     context "for revocable submission" do
       let!(:plant_lines) { [
@@ -58,7 +58,7 @@ RSpec.describe Submission::PlantPopulationPublisher do
       before { subject.revoke }
 
       it "revokes publication of submitted plant population" do
-        expect(submission.reload).not_to be_publishable
+        expect(submission.reload).not_to be_published
         expect(plant_population.reload).not_to be_published
       end
 

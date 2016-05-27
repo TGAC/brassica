@@ -31,7 +31,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       )
       submission.content.update(:step04, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments).merge(publishability: 'publishable'))
+        :data_owned_by, :data_provenance, :comments).merge(publishability: 'published'))
     end
 
     it 'creates new trait descriptors' do
@@ -102,7 +102,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(TraitScore.all).to all be_published
       expect(PlantScoringUnit.all).to all be_published
       expect(PlantTrial.all).to all be_published
-      expect(submission).to be_publishable
+      expect(submission).to be_published
     end
 
     context 'when publishability set to private' do
@@ -117,7 +117,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         plant_scoring_units = plant_trial.plant_scoring_units
         trait_scores = plant_trial.plant_scoring_units.map(&:trait_scores).flatten
 
-        expect(submission).not_to be_publishable
+        expect(submission).not_to be_published
         expect(plant_trial).not_to be_published
         expect(plant_scoring_units.map(&:published?)).to all be_falsey
         expect(trait_scores.map(&:published?)).to all be_falsey

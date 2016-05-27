@@ -91,7 +91,7 @@ class Submission::PlantPopulationFinalizer
   def update_submission
     submission.update_attributes!(
       finalized: true,
-      publishable: publishable?,
+      published: publish?,
       submitted_object_id: @plant_population.id
     )
   end
@@ -101,8 +101,8 @@ class Submission::PlantPopulationFinalizer
     raise ActiveRecord::Rollback
   end
 
-  def publishable?
-    @publishable ||= submission.content.step04.publishability.to_s == 'publishable'
+  def publish?
+    @publish ||= submission.content.step04.publishability.to_s == 'published'
   end
 
   def common_data
@@ -110,8 +110,8 @@ class Submission::PlantPopulationFinalizer
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
       user: submission.user,
-      published: publishable?,
-      published_on: (Time.now if publishable?)
+      published: publish?,
+      published_on: (Time.now if publish?)
     }
   end
 end

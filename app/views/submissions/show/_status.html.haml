@@ -3,7 +3,7 @@
 .status
   - if submission.finalized?
     - if mode == :private
-      - if submission.publishable?
+      - if submission.published?
         %span.label.label-primary Submitted &#183; Published
       - else
         %span.label.label-info Submitted &#183; Private

@@ -30,7 +30,7 @@ RSpec.describe Submission::PlantTrialPublisher do
     before { subject.publish }
 
     it "publishes submitted plant trial" do
-      expect(submission.reload).to be_publishable
+      expect(submission.reload).to be_published
       expect(plant_trial.reload).to be_published
     end
 
@@ -48,7 +48,7 @@ RSpec.describe Submission::PlantTrialPublisher do
   end
 
   context "#revoke" do
-    let(:submission) { create(:finalized_submission, :trial, publishable: true) }
+    let(:submission) { create(:finalized_submission, :trial, published: true) }
 
     context "for revocable submission" do
       let!(:plant_scoring_units) { [
@@ -73,7 +73,7 @@ RSpec.describe Submission::PlantTrialPublisher do
       before { subject.revoke }
 
       it "revokes publication of submitted plant trial" do
-        expect(submission.reload).not_to be_publishable
+        expect(submission.reload).not_to be_published
         expect(plant_trial.reload).not_to be_published
       end
 
