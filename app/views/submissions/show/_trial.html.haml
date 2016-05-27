@@ -1,4 +1,5 @@
-= submission_value @submission, :plant_trial_name
+= submission_value @submission, :plant_trial_name, "Plant trial name",
+    data_tables_path(model: :plant_trials, query: { id: @submission.submitted_object_id })
 = submission_value @submission, :project_descriptor, 'Project'
 = submission_value @submission, :species_name, 'Species'
 = submission_value @submission, :plant_trial_description, 'Trial description'
