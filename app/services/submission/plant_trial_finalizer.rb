@@ -65,7 +65,7 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:publishability))
+    attrs.merge!(submission.content.step04.to_h.except(:visibility))
     attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
     attrs.merge!(published: publish?)
 
@@ -90,7 +90,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def publish?
-    @publish ||= submission.content.step04.publishability.to_s == 'published'
+    @publish ||= submission.content.step04.visibility.to_s == 'published'
   end
 
   def common_data

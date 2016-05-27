@@ -65,7 +65,7 @@ class Submission::PlantPopulationFinalizer
       attrs.merge!(population_type: population_type)
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:publishability))
+    attrs.merge!(submission.content.step04.to_h.except(:visibility))
     attrs.delete(:owned_by)
 
     if PlantPopulation.where(name: attrs[:name]).exists?
@@ -102,7 +102,7 @@ class Submission::PlantPopulationFinalizer
   end
 
   def publish?
-    @publish ||= submission.content.step04.publishability.to_s == 'published'
+    @publish ||= submission.content.step04.visibility.to_s == 'published'
   end
 
   def common_data
