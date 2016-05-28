@@ -4,7 +4,7 @@ RSpec.describe PlantTrialsController do
   context '#index' do
     it 'returns search results' do
       trials = create_list(:plant_trial, 2).map(&:project_descriptor)
-      get :index, format: :json, search: { project_descriptor: trials[0][1..-2] }
+      get :index, format: :json, search: { project_descriptor: trials[0][2..-1] }
       expect(response.content_type).to eq 'application/json'
       json = JSON.parse(response.body)
       expect(json['results'].size).to eq 1
