@@ -1,5 +1,5 @@
 require 'rails_helper'
-nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit]
+nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit, Trait]
 
 RSpec::Matchers.define :display_column do |expected|
   match do |actual|
@@ -27,9 +27,11 @@ RSpec.describe ActiveRecord::Base do
 
   it 'defined permitted query params as strings only' do
     ActiveRecord::Base.descendants.each do |model|
-      if model.respond_to? :permitted_params
-        expect(model.send(:permitted_params).dup.extract_options![:query]).
-          to all be_an(String)
+      if model.respond_to?(:permitted_params)
+        query = model.send(:permitted_params).detect{ |x| x.is_a?(Hash) && x[:query].present? }
+        if query
+          expect(query[:query]).to all be_an(String)
+        end
       end
     end
   end
@@ -38,7 +40,7 @@ RSpec.describe ActiveRecord::Base do
     Api.writable_models.each do |model_klass|
       next if nullify_exclusions.include? model_klass # Some classes are not expected to follow this rule.
       instance = create(model_klass)
-      (all_belongs_to(model_klass) - [:user]).each do |belongs_to|
+      (all_belongs_to(model_klass) - [:user, :trait]).each do |belongs_to|
         unless instance.send("#{belongs_to}_id").nil?
           instance.send(belongs_to).destroy
           expect(instance.reload.send("#{belongs_to}_id")).to be_nil
@@ -71,7 +73,7 @@ RSpec.describe ActiveRecord::Base do
         next if searchable == Qtl
         instance = create(searchable)
         instance.as_indexed_json.each do |k, v|
-          next if k == 'id'
+          next if k == 'id' || k == 'trait_name'  # twice the same, doesn't hurt
           if v.instance_of? Hash
             v.each do |column, value|
               if value.instance_of? Hash
@@ -136,7 +138,8 @@ RSpec.describe ActiveRecord::Base do
         'taxonomy_terms',
         'trait_grades',
         'plant_parts',
-        'restriction_enzymes'
+        'restriction_enzymes',
+        'traits'
       ]
 
       tables = ActiveRecord::Base.connection.tables

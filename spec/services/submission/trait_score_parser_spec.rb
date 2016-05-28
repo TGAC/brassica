@@ -54,7 +54,7 @@ RSpec.describe Submission::TraitScoreParser do
       end
 
       it 'works regardless traits are old or new' do
-        td = create(:trait_descriptor, descriptor_name: 'old trait')
+        td = create(:trait_descriptor, trait: create(:trait, name: 'old trait'))
         upload.submission.content.update(:step02, trait_descriptor_list: [td.id, 'new trait'])
         input_is "id,new trait,old trait"
         subject.send(:map_headers_to_traits)

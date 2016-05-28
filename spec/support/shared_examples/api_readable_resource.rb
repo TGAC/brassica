@@ -122,20 +122,22 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
           end
 
           it 'supports filtering with query param for all visible attributes' do
-            model_klass.params_for_filter(model_klass.table_columns + ['id']).each do |attribute|
-              expect(model_klass.permitted_params.dup.extract_options![:query]).
-                to include attribute
-              value = case model_klass.columns_hash[attribute].type
-                        when :date
-                          '2008-12-12'
-                        else
-                          'text default'
-                      end
-              query = { :query => { attribute => value } }
+            if model_klass.respond_to?(:table_columns)
+              model_klass.params_for_filter(model_klass.table_columns + ['id']).each do |attribute|
+                expect(model_klass.permitted_params.dup.extract_options![:query]).
+                  to include attribute
+                value = case model_klass.columns_hash[attribute].type
+                          when :date
+                            '2008-12-12'
+                          else
+                            'text default'
+                        end
+                query = { :query => { attribute => value } }
 
-              expect(model_klass).to receive(:filter).with(query).and_call_original
+                expect(model_klass).to receive(:filter).with(query).and_call_original
 
-              get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
+                get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
+              end
             end
           end
         end

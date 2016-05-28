@@ -14,7 +14,6 @@ RSpec.describe PlantScoringUnit do
           psc.scoring_unit_frame_size,
           psc.date_planted,
           psc.plant_trial.plant_trial_name,
-          psc.plant_part.plant_part,
           psc.plant_accession.plant_accession,
           psc.trait_scores_count,
           psc.plant_accession.id,

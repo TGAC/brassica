@@ -26,6 +26,7 @@ class Api
       Qtl,
       QtlJob,
       TaxonomyTerm,
+      Trait,
       TraitDescriptor,
       TraitScore
     ]

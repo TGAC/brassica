@@ -10,7 +10,6 @@ FactoryGirl.define do
     published_on { Date.today-8.days }
     plant_trial
     design_factor
-    plant_part
     plant_accession
     user
     annotable

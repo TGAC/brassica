@@ -20,7 +20,7 @@ RSpec.describe PlantTrialSubmissionDecorator do
     it 'works for both old and new traits' do
       tds = create_list(:trait_descriptor, 2)
       sd.object.content.update(:step02, trait_descriptor_list: tds.map(&:id) + ['a new trait'])
-      expect(sd.sorted_trait_names).to eq (tds.map(&:descriptor_name) + ['a new trait'])
+      expect(sd.sorted_trait_names).to eq (tds.map{ |td| td.trait.name } + ['a new trait'])
     end
   end
 end

@@ -1,6 +1,7 @@
 class AddMissingIndices < ActiveRecord::Migration
   def up
     ActiveRecord::Base.send(:subclasses).each do |model|
+      next if model.table_name == 'traits'
       if (model.column_names & ['user_id', 'published']).length == 2
         unless index_exists?(model.table_name.to_sym, :user_id)
           add_index(model.table_name.to_sym, :user_id)

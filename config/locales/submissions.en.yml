@@ -51,6 +51,9 @@ en:
           new_trait_descriptor_attributes:
             category: Trait category
             units_of_measurements: Unit of measurement
+          new_trait_descriptor_attribute_hints:
+            category: Select, or provide, the category of trait.
+            units_of_measurements: Select, or write down, the unit of measurement when scoring this trait.
         step03:
           heading: Scoring.
           body: Upload tabular list of scores given to plants per each trait scored.
