@@ -47,8 +47,8 @@
       %small.help-block Materials required for scoring.
 
     .form-group
-      = label_tag :plant_part, nil
-      = select_tag :plant_part, [], class: 'plant-part form-control', 'data-placeholder': 'Select a plant part'
+      = label_tag :plant_part_id, nil
+      = select_tag :plant_part_id, [], class: 'plant-part-id form-control', 'data-placeholder': 'Select a plant part'
       %small.help-block Select the part of plant one should use for scoring this trait.
 
     = render partial: "submissions/annotations", locals: { model: TraitDescriptor }

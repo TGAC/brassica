@@ -29,9 +29,6 @@ class Submission::PlantTrialFinalizer
       if attrs[:trait].present?
         attrs[:trait] = Trait.find_by_name(attrs['trait'])
       end
-      if attrs[:plant_part].present?
-        attrs[:plant_part] = PlantPart.find_by_plant_part(attrs['plant_part'])
-      end
       TraitDescriptor.create!(attrs)
     end
   end

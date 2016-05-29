@@ -168,7 +168,7 @@ class TrialSubmission extends Submission
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name', 'description')
   traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'trait_name', 'scoring_method')
   traitSelectOptions: @makeAjaxSelectOptions('/traits', 'name', 'name', 'description')
-  plantPartSelectOptions: @makeAjaxSelectOptions('/plant_parts', 'plant_part', 'plant_part', 'description')
+  plantPartSelectOptions: @makeAjaxSelectOptions('/plant_parts', 'id', 'plant_part', 'description')
 
   init: =>
     super()
@@ -279,7 +279,7 @@ class TrialSubmission extends Submission
         event.preventDefault() # Prevent form submission
 
     @$('.trait').select2(@traitSelectOptions)
-    @$('.plant-part').select2(@plantPartSelectOptions)
+    @$('.plant-part-id').select2(@plantPartSelectOptions)
 
   validateNewTraitDescriptorForList: (onValidData) =>
     $form = @$('.new-trait-descriptor-for-list')

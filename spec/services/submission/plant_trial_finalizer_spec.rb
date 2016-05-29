@@ -33,7 +33,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
           data_owned_by: "Bosco Inc",
           units_of_measurements: "Sunt qui suscipit quis accusantium nihil voluptas assumenda earum. (%)",
           scoring_method: "Sunt quia aliquam ullam magnam reprehenderit earum ut.",
-          plant_part: plant_part.plant_part
+          plant_part_id: plant_part.id
         }
       ]
     }
@@ -74,7 +74,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
           'user_id' => submission.user.id
         )
         expect(trait_descriptor.trait.name).to eq new_trait_descriptors_attrs[idx][:trait]
-        expect(trait_descriptor.plant_part.try(:plant_part)).to eq new_trait_descriptors_attrs[idx][:plant_part]
+        expect(trait_descriptor.plant_part.try(:id)).to eq new_trait_descriptors_attrs[idx][:plant_part_id]
         expect(trait_descriptor.published_on).to be_within(5.seconds).of(Time.now)
       end
     end
