@@ -1658,7 +1658,7 @@ en:
           desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
-          desc: Plant trait category described by this this descriptor
+          desc: Plant trait category described by this descriptor
         -
           name: units_of_measurements
           create: required
