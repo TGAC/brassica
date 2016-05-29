@@ -6,10 +6,10 @@
   You can keep your data private by changing visibility status below.
 
 .form-group
-  = form.label :publishability, "Visibility status"
+  = form.label :visibility, "Visibility status"
 
   %div.checkbox
-    %label{ for: :submission_content_publishability }
-      = form.check_box :publishability, { }, 'publishable', 'private'
+    %label{ for: :submission_content_visibility }
+      = form.check_box :visibility, { }, 'published', 'private'
       Make provided data publicly available for browsing
 

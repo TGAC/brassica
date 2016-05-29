@@ -118,8 +118,8 @@ RSpec.describe ActiveRecord::Base do
   end
 
   context 'publishable records' do
-    it 'contains published column in all tables except those belonging to a specified set' do
-      omitted_tables = [
+    let(:omitted_tables) {
+      [
         'api_keys',
         'countries',
         'schema_migrations',
@@ -138,7 +138,9 @@ RSpec.describe ActiveRecord::Base do
         'plant_parts',
         'restriction_enzymes'
       ]
+    }
 
+    it 'contains published column in all tables except those belonging to a specified set' do
       tables = ActiveRecord::Base.connection.tables
       tables.reject!{|t| omitted_tables.include? t}
 
@@ -148,13 +150,14 @@ RSpec.describe ActiveRecord::Base do
     end
 
     it 'does not allow ownerless unpublished records' do
-      ActiveRecord::Base.send(:subclasses).each do |model|
-        if (model.column_names & ['user_id', 'published']).length == 2
+      ActiveRecord::Base.send(:subclasses).
+        reject { |model| model.table_name.in?(omitted_tables) }.
+        select { |model| (model.column_names & ['user_id', 'published']).length == 2 }.
+        each do |model|
           record = model.new(user: nil, published: false)
           expect(record.valid?).to be_falsy
           expect(record.errors[:published]).to eq ['An ownerless record must have its published flag set to true.']
         end
-      end
     end
   end
 
