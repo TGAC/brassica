@@ -10,7 +10,7 @@
 .form-group
   = content.label :trait_descriptor_list
   - options = options_for_submission_select(@content.existing_trait_descriptors, :trait_name)
-  - options.concat options_for_submission_select(@content.new_trait_descriptors, :trait, id: false)
+  - options.concat options_for_submission_select(@content.new_trait_descriptors, :trait_name, id: false)
   = content.select :trait_descriptor_list, options.html_safe, {},
     { multiple: true,
       class: 'trait-descriptor-list form-control',

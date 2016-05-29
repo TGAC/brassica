@@ -5,6 +5,7 @@ module Submissions
 
       collection :new_trait_descriptors do
         property :trait
+        property :trait_name
         property :plant_part
         property :units_of_measurements
 
@@ -73,6 +74,7 @@ module Submissions
       def self.new_trait_descriptor_properties
         [
           :trait,
+          :trait_name,
           :plant_part,
           :units_of_measurements,
           :scoring_method,

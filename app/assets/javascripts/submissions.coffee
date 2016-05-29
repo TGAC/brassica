@@ -167,7 +167,7 @@ class TrialSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name', 'description')
   traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'trait_name', 'scoring_method')
-  traitSelectOptions: @makeAjaxSelectOptions('/traits', 'name', 'name', 'description')
+  traitSelectOptions: @makeAjaxSelectOptions('/traits', 'id', 'name', 'description')
   plantPartSelectOptions: @makeAjaxSelectOptions('/plant_parts', 'plant_part', 'plant_part', 'description')
 
   init: =>
@@ -251,6 +251,9 @@ class TrialSubmission extends Submission
 
     @$('.add-new-trait-descriptor-for-list').on 'click', (event) =>
       @validateNewTraitDescriptorForList((traitDescriptorData) =>
+        traitDescriptorData.trait_name =
+          @$('.new-trait-descriptor-for-list .trait option:selected').text()
+
         @appendToSelectedTraitDescriptorLists(traitDescriptorData)
         @dirtyTracker.resetContext("new-trait-descriptor")
       )
@@ -301,14 +304,14 @@ class TrialSubmission extends Submission
     $select = @$('.trait-descriptor-list')
     selectedValues = $select.val() || []
 
-    $option = $('<option></option>').attr(value: data.trait).text(data.trait)
+    $option = $('<option></option>').attr(value: data.trait).text(data.trait_name)
     $select.append($option)
 
     selectedValues.push(data.trait)
     $select.val(selectedValues)
     $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
-    # add all PL attributes to DOM so it can be sent with form
+    # add all TD attributes to DOM so it can be sent with form
     $form = @$el.find('form')
     $container = $('<div></div').attr(id: @newTraitDescriptorForListContainerId(data.trait))
     $container.appendTo($form)
