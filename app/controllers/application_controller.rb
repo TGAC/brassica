@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   def index
-    @submissions = Submission.finalized.publishable.recent_first.take(5)
+    @submissions = Submission.finalized.published.recent_first.take(5)
     @statistics = [
       PlantTrial.count,
       TraitScore.count,
