@@ -441,7 +441,7 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: trait_descriptors_ids
+          name: trait_descriptor_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Trait Descriptors that describe traits scored using this Plant Part
 
