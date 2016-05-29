@@ -111,7 +111,7 @@ class Submission::PlantTrialFinalizer
 
   def get_nth_trait_descriptor(n)
     trait = submission.content.step02.trait_descriptor_list[n]
-    if trait.to_i > 0
+    if trait.to_i.to_s == trait.to_s
       TraitDescriptor.find_by(id: trait)
     else
       @new_trait_descriptors.detect{ |ntd| ntd.trait.name == trait }
