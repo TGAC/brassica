@@ -33,6 +33,8 @@ RSpec.describe TraitDescriptor do
         td.materials,
         td.plant_part.plant_part,
         1,
+        td.trait.label,
+        td.plant_part.label,
         td.id
       ]
     end

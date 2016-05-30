@@ -52,6 +52,13 @@ class TraitDescriptor < ActiveRecord::Base
     ]
   end
 
+  def self.ref_columns
+    [
+      'traits.label',
+      'plant_parts.label'
+    ]
+  end
+
   def self.json_options
     {
       except: :descriptor_name,

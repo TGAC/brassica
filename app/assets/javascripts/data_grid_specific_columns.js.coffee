@@ -215,6 +215,20 @@ window.configs =
               '&query[plant_scoring_units.plant_trial_id]=' + full[8] + '">' + data + '</a>'
           else
             ''
+      ,
+        targets: 'traits_name_column'
+        render: (data, type, full, meta) ->
+          if data && full[7] && full[7].indexOf("TO:") > -1
+            '<a href="http://browser.planteome.org/amigo/term/' + full[7] + '" target="blank">' + data + '</a>'
+          else
+            data
+      ,
+        targets: 'plant_parts_plant_part_column'
+        render: (data, type, full, meta) ->
+          if data && full[8] && full[8].indexOf("PO:") > -1
+            '<a href="http://browser.planteome.org/amigo/term/' + full[8] + '" target="blank">' + data + '</a>'
+          else
+            data
       ]
 
   'trait-scores':
