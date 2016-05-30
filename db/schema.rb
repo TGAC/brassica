@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160527165420) do
+ActiveRecord::Schema.define(version: 20160530191144) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -455,6 +455,10 @@ ActiveRecord::Schema.define(version: 20160527165420) do
     t.integer  "user_id"
     t.boolean  "published",                 default: true, null: false
     t.datetime "published_on"
+    t.string   "layout_file_name"
+    t.string   "layout_content_type"
+    t.integer  "layout_file_size"
+    t.datetime "layout_updated_at"
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
