@@ -21,7 +21,7 @@ class PlantTrial < ActiveRecord::Base
     less_than_or_equal_to: 180
   }
 
-  validates_attachment_content_type :layout, content_type: /\Aimage\/.*\Z/
+  validates_attachment_content_type :layout, content_type: %w(image/png image/gif image/jpeg)
 
   include Relatable
   include Filterable

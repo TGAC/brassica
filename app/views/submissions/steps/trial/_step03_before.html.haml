@@ -50,6 +50,8 @@
     Surplus columns (with index larger than the number of chosen traits) will be ignored. When values
     in the first column are not unique, the behaviour is undefined.
 
+.errors.hidden
+
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
 
   = hidden_field_tag "submission_upload[upload_type]", "trait_scores"

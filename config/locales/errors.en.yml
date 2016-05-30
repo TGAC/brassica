@@ -62,3 +62,10 @@ en:
 
             country_id:
               blank: Please select a country from the list.
+
+        submission/upload:
+          attributes:
+            file:
+              no_header: 'No header provided.'
+              non_unique_mapping: 'Detected non unique column headers mapping
+                to traits. Please check the column names.'

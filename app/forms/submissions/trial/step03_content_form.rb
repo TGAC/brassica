@@ -14,7 +14,8 @@ module Submissions
       end
 
       def upload
-        Submission::Upload.trait_scores.where(id: upload_id).first
+        upload = Submission::Upload.trait_scores.find_by(id: upload_id)
+        SubmissionTraitScoresUploadDecorator.decorate(upload) if upload
       end
     end
   end
