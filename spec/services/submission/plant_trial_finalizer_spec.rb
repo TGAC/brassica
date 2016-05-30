@@ -73,7 +73,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
           'published' => true,
           'user_id' => submission.user.id
         )
-        expect(trait_descriptor.trait.name).to eq new_trait_descriptors_attrs[idx][:trait]
+        expect(trait_descriptor.trait_name).to eq new_trait_descriptors_attrs[idx][:trait]
         expect(trait_descriptor.plant_part.try(:id)).to eq new_trait_descriptors_attrs[idx][:plant_part_id]
         expect(trait_descriptor.published_on).to be_within(5.seconds).of(Time.now)
       end
@@ -110,13 +110,13 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
       expect(TraitScore.pluck(:score_value)).to match_array %w(x y z)
       expect(TraitScore.pluck(:entered_by_whom).uniq).to eq [submission.user.full_name]
-      expect(TraitScore.find_by(score_value: 'x').trait_descriptor.trait.name).
+      expect(TraitScore.find_by(score_value: 'x').trait_descriptor.trait_name).
         to eq new_trait_descriptors_attrs[1][:trait]
       expect(TraitScore.find_by(score_value: 'x').plant_scoring_unit.scoring_unit_name).to eq 'p2'
-      expect(TraitScore.find_by(score_value: 'y').trait_descriptor.trait.name).
-        to eq old_trait_descriptor.trait.name
+      expect(TraitScore.find_by(score_value: 'y').trait_descriptor.trait_name).
+        to eq old_trait_descriptor.trait_name
       expect(TraitScore.find_by(score_value: 'y').plant_scoring_unit.scoring_unit_name).to eq 'p3'
-      expect(TraitScore.find_by(score_value: 'z').trait_descriptor.trait.name).
+      expect(TraitScore.find_by(score_value: 'z').trait_descriptor.trait_name).
         to eq new_trait_descriptors_attrs[0][:trait]
       expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
     end

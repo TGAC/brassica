@@ -16,8 +16,8 @@ RSpec.describe TraitDescriptor do
       table_data = TraitDescriptor.table_data
       expect(table_data.count).to eq 2
       expect(table_data.map{ |td| [td[1], td[6]] }).to match_array [
-        [td1.trait.name, 3],
-        [td2.trait.name, 2]
+        [td1.trait_name, 3],
+        [td2.trait_name, 2]
       ]
     end
 
@@ -27,7 +27,7 @@ RSpec.describe TraitDescriptor do
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
         td.descriptor_label,
-        td.trait.name,
+        td.trait_name,
         td.units_of_measurements,
         td.scoring_method,
         td.materials,

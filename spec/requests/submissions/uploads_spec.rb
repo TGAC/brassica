@@ -54,7 +54,7 @@ RSpec.describe "Submission uploads" do
 
         expect(response).to be_success
         expect(response.body.lines[0]).
-          to eq "Plant scoring unit name,#{trait_descriptor.trait.name}\n"
+          to eq "Plant scoring unit name,#{trait_descriptor.trait_name}\n"
         expect(response.body.lines[2]).
           to eq "sample_scoring_unit_B_name__replace_it,sample_B_value_0__replace_it\n"
       end

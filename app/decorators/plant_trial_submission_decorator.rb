@@ -56,8 +56,8 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
       if trait_item.to_i.to_s != trait_item.to_s
         trait_item
       else
-        trait = TraitDescriptor.where(id: trait_item).first
-        trait ? trait.trait.name : nil
+        trait_descriptor = TraitDescriptor.where(id: trait_item).first
+        trait_descriptor ? trait_descriptor.trait_name : nil
       end
     end
   end

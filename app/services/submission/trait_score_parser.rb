@@ -72,7 +72,7 @@ class Submission::TraitScoreParser
         end
       end
     end
-    @upload.log "Parsed #{score_count} scores for #{plant_count} plants, in total."
+    @upload.log "Parsed #{score_count} scores for #{plant_count} plant scoring units, in total."
   end
 
   def csv

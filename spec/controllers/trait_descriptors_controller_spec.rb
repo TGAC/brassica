@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe TraitDescriptorsController do
   context '#index' do
     it 'returns search results' do
-      traits = create_list(:trait_descriptor, 2).map{ |td| td.trait.name }
+      traits = create_list(:trait_descriptor, 2).map(&:trait_name)
       get :index, format: :json, search: { trait_name: traits[0][1..-2] }
       expect(response.content_type).to eq 'application/json'
       json = JSON.parse(response.body)
