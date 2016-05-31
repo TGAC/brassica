@@ -10,4 +10,12 @@ namespace :curate do
       end
     end
   end
+
+  desc 'Moves relation with PlantParts from TD level down to PSU level'
+  task demote_plant_parts_to_psus: :environment do
+    TraitDescriptor.all.each do |trait_descriptor|
+      psus = trait_descriptor.trait_scores.pluck(:plant_scoring_unit_id)
+      PlantScoringUnit.where(id: psus).update_all(plant_part_id: trait_descriptor.plant_part_id)
+    end
+  end
 end
