@@ -177,9 +177,9 @@ namespace :curate do
   end
 
   def add_synonym_if_not_present(pv, synonym)
-    synonyms = pv.synonyms.split('###')
-    synonyms << synonym unless synonyms.include? synonym
-    pv.synonyms = synonyms.join('###')
+    synonyms = pv.synonyms.split(',')
+    synonyms << synonym # unless synonyms.include? synonym
+    pv.synonyms = synonyms.join(',')
     pv.save
   end
 
