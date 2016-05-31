@@ -10,20 +10,16 @@ namespace :curate do
       list[row[1]] = row[0]
     end
 
-
-
-
     pl_nov = PlantLine.where("plant_variety_id IS NULL").all
     puts "#{PlantLine.count} plant lines present (#{pl_nov.length} with no assigned variety)."
 
     pv_nol = PlantVariety.where(plant_lines: []).all
     puts "#{PlantVariety.count} plant varieties present (#{pv_nol.length} with no assigned lines)."
 
-
-
     pl_syn_created = 0
     pl_name_created = 0
     pv_syn_created = 0
+    pv_name_found = 0
 
     CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
       #puts "Processing PV #{row[1]} with synonym #{row[0]}"
@@ -107,6 +103,23 @@ namespace :curate do
       end
     end
 
+    CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
+      # Attempt to find PlantVariety with name as name
+      pvs = PlantVariety.where(plant_variety_name: row[1]).all
+      if pvs.count > 1
+        puts "WARNING! #{pvs.count} plant varieties found with #{row[1]} as name."
+      end
+      pvs.each do |pv|
+        # add synonym to this PV
+        pv.synonyms = row[0]
+        pv_name_found += 1
+        pv.save
+        unless pv.errors.blank?
+          puts "UNABLE TO SAVE PV #{row[1]} DUE TO ERRORS: #{pv.errors.inspect}"
+        end
+        delete_if_empty(pv.reload)
+      end
+    end
 
 
     # Now expunge orphaned PVs, test if all PV names listed in AME's list are represented, and check whether any other PVs (not on list) still exist with attached PLs.
@@ -139,6 +152,7 @@ namespace :curate do
     end
 
     puts "Created #{pl_syn_created} PVs for PL SYN, #{pl_name_created} PVs for PL NAME and #{pv_syn_created} PVs for PV SYN."
+    puts "Also recognized #{pv_name_found} existing PVs as new PVs."
 
     puts "#{represented_pv} AME plant varieties found in DB."
     puts "#{unrepresented_pv} AME plant varieties not found in DB."
@@ -148,8 +162,6 @@ namespace :curate do
 
     pv_nol = PlantVariety.where(plant_lines: []).all
     puts "#{PlantVariety.count} plant varieties present (#{pv_nol.length} with no assigned lines)."
-
-
 
     # Also add synonyms to all new PVs.
 
