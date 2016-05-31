@@ -26,7 +26,7 @@ window.configs =
         targets: ['map_locus_hits_associated_sequence_id_column', 'map_locus_hits_bac_hit_seq_id_column']
         render: (data, type, full, meta) ->
           if data && full[meta['col'] + 1].indexOf("NCBI") > -1
-            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="_blank">' + data + '</a>'
           else
             data
       ,
@@ -34,7 +34,7 @@ window.configs =
         render: (data, type, full, meta) ->
           if data
             ensemblId = data.split('.')[0]
-            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=Brassica;idx=;q=' + ensemblId + '" target="blank">' + data + '</a>'
+            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=Brassica;idx=;q=' + ensemblId + '" target="_blank">' + data + '</a>'
           else
             ''
       ,
@@ -103,7 +103,7 @@ window.configs =
         targets: 'plant_lines_sequence_identifier_column'
         render: (data, type, full, meta) ->
           if data && data.indexOf("SR") == 0
-            '<a href="http://www.ncbi.nlm.nih.gov/sra/' + data + '" target="blank">' + data + '</a>'
+            '<a href="http://www.ncbi.nlm.nih.gov/sra/' + data + '" target="_blank">' + data + '</a>'
           else
             data
       ]
@@ -162,7 +162,7 @@ window.configs =
         targets: 'probes_sequence_id_column'
         render: (data, type, full, meta) ->
           if data && full[meta['col'] + 1].indexOf("NCBI") > -1
-            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="_blank">' + data + '</a>'
           else
             data
       ]
@@ -219,14 +219,14 @@ window.configs =
         targets: 'traits_name_column'
         render: (data, type, full, meta) ->
           if data && full[7] && full[7].indexOf("TO:") > -1
-            '<a href="http://browser.planteome.org/amigo/term/' + full[7] + '" target="blank">' + data + '</a>'
+            '<a href="http://browser.planteome.org/amigo/term/' + full[7] + '" target="_blank">' + data + '</a>'
           else
             data
       ,
         targets: 'plant_parts_plant_part_column'
         render: (data, type, full, meta) ->
           if data && full[8] && full[8].indexOf("PO:") > -1
-            '<a href="http://browser.planteome.org/amigo/term/' + full[8] + '" target="blank">' + data + '</a>'
+            '<a href="http://browser.planteome.org/amigo/term/' + full[8] + '" target="_blank">' + data + '</a>'
           else
             data
       ]
