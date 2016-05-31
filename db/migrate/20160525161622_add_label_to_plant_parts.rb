@@ -13,7 +13,8 @@ class AddLabelToPlantParts < ActiveRecord::Migration
     remove_column :plant_parts, :canonical
 
     PlantPart.all.each do |pp|
-      pp.destroy if pp.plant_scoring_units.count == 0
+      psu_count = PlantScoringUnit.where(plant_part_id: pp.id).count
+      pp.destroy if psu_count.to_i == 0
     end
   end
 end
