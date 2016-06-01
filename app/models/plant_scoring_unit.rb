@@ -2,7 +2,6 @@ class PlantScoringUnit < ActiveRecord::Base
   belongs_to :design_factor
   belongs_to :plant_trial, counter_cache: true, touch: true
   belongs_to :plant_accession, counter_cache: true, touch: true
-  belongs_to :plant_part
   belongs_to :user
 
   has_many :trait_scores, dependent: :destroy
@@ -23,7 +22,6 @@ class PlantScoringUnit < ActiveRecord::Base
       'scoring_unit_frame_size',
       'date_planted',
       'plant_trials.plant_trial_name',
-      'plant_parts.plant_part',
       'plant_accessions.plant_accession'
     ]
   end

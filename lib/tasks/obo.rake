@@ -122,6 +122,146 @@ namespace :obo do
     puts "  Added #{cultivars_count} cultivars"
   end
 
+  task plant_parts: :environment do
+    puts "Parsing Plant Ontology as canonical PP terms."
+    part_terms = Obo::Parser.new 'db/data/po.obo'
+    total_count = 0
+    part_terms.elements.each do |term|
+      tags = term.tagvalues
+      # Pass the Header and make sure the term has an ID
+      next unless term.is_a?(Obo::Stanza) && term.name == 'Term' && tags['id'][0]
+      # Take only plant_anatomy elements
+      next unless tags['namespace'][0] == 'plant_anatomy'
+      # Take only elements that are not obsolete
+      next if tags['is_obsolete'][0]
+
+      PlantPart.find_or_create_by!(label: tags['id'][0]) do |plant_part|
+        plant_part.plant_part = tags['name'][0]
+        plant_part.description = tags['def'][0]
+        plant_part.data_provenance = 'Plant ontology v. releases/2016-05-19'
+        plant_part.canonical = true
+      end
+      total_count += 1
+    end
+    puts "Done. Parsed #{total_count} terms."
+  end
+
+  task traits: :environment do
+    puts "Phase 1: Parsing Trait Ontology as canonical Trait terms."
+    trait_terms = Obo::Parser.new 'db/data/to.obo'
+    total_new_count = 0
+    total_mapped_count = 0
+    total_old_count = 0
+    trait_terms.elements.each do |term|
+      tags = term.tagvalues
+      # Pass the Header and make sure the term has an ID
+      next unless term.is_a?(Obo::Stanza) && term.name == 'Term' && tags['id'][0]
+      # Take only elements that are not obsolete
+      next if tags['is_obsolete'][0]
+
+      Trait.find_or_create_by!(label: tags['id'][0]) do |trait|
+        trait.name = tags['name'][0]
+        trait.description = tags['def'][0]
+        trait.data_provenance = 'Trait ontology v. releases/2015-11-12'
+        trait.canonical = true
+      end
+      total_new_count += 1
+    end
+    puts "Done. Parsed and created #{total_new_count} TO terms."
+
+    puts "Phase 2: Relating TraitDescriptors to Traits with curation."
+    trait_map = {
+      'seed oil content' => 'TO:0000604',  # fat and essential oil content
+      'oleic acid content' => 'TO:0005002',
+      'shoot phosphorus content (P)' => 'TO:0001024',
+      'shoot nitrogen content (N)' => 'TO:0020093',
+      'shoot manganese content (Mn)' => 'TO:0020091',
+      'shoot iron content (Fe)' => 'TO:0020089',
+      'shoot potassium content (K)' => 'TO:0000609',
+      'shoot copper content (Cu)' => 'TO:0020092',
+      'shoot carbon content (C)' => 'TO:0000466',
+      'shoot sodium content (Na)' => 'TO:0000608',
+      'shoot zinc content (Zn)' => 'TO:0020090',
+      'phosphorus utilization efficiency (P)' => 'TO:0000627',
+      'seed mature time' => 'TO:0000469',
+      'seed yield per plant' => 'TO:0000445',
+      'seed weight' => 'TO:0000181',
+      'YIELD weight (g) - 5 plant average' => 'TO:0000371',
+      'plant height' => 'TO:0000207',
+      'flowering time' => 'TO:0000344',
+      'Early leaf chlorophyll levels' => 'TO:0000495',
+      'Early milled leaves chlorophyll a' => 'TO:0000293',
+      'Early milled leaves chlorophyll b' => 'TO:0000295',
+      'Early leaf NO3-N (ug/g)' => 'TO:0020094',
+      'PO4-P (mg/kg)' => 'TO:0020102',
+      'Seed Count - 5 sample average' => 'TO:0000445',
+      'average seed width - 5 sample average' => 'TO:0000149',
+      'average seed length - 5 sample average' => 'TO:0000395'
+    }
+    new_name_map = {
+      'erucic acid content' => 'Seed C22:1',
+      'siliquae per plant' => 'Siliquae per plant',
+      'glucosinolate content' => 'Seed glucosinolate',
+      'seed oil content' => 'Seed oil content', # !!! has a TO term, see #420
+      'oleic acid content' => 'Seed C18:1', # !!! has a TO term, see #420
+      'siliquae of main inflorescence' => 'Siliquae of main inflorescence',
+      'shoot phosphorus content	(P)' => 'Shoot P', # !!! has a TO term, see #420
+      'shoot nitrogen content (N)' => 'Shoot N', # !!! has a TO term, see #420
+      'shoot boron content (B)' => 'Shoot B',
+      'shoot manganese content (Mn)' => 'Shoot Mn', # !!! has a TO term, see #420
+      'shoot iron content (Fe)' => 'Shoot Fe', # !!! has a TO term, see #420
+      'shoot potassium content (K)' => 'Shoot K', # !!! has a TO term, see #420
+      'shoot magnesium content (Mg)' => 'Shoot Mg',
+      'shoot copper content (Cu)' => 'Shoot Cu', # !!! has a TO term, see #420
+      'shoot carbon content (C)' => 'Shoot C', # !!! has a TO term, see #420
+      'shoot sodium content (Na)' => 'Shoot Na', # !!! has a TO term, see #420
+      'shoot zinc content (Zn)' => 'Shoot Zn', # !!! has a TO term, see #420
+      'shoot calcium content (Ca)' => 'Shoot Ca',
+      'phosphorus efficiency ratio (P)' => 'PER',
+      'physiological phosphorus use efficiency (P)' => 'PPUE',
+      'agronomic phosphorus use efficiency (P)' => 'APE',
+      'phosphorus uptake efficiency (P)' => 'PUpE',
+      'phosphorus utilization efficiency (P)' => 'PUtE', # !!! has a TO term, see #420
+      'potassium uptake efficiency (K)' => 'KUpE',
+      'seed mature time' => 'Seed mature time', # !!! has a TO term, see #420
+      'number of first branch' => 'Number of first branches',
+      'seed yield per plant' => 'Seed yield', # !!! has a TO term, see #420
+      'seed weight' => 'Seed weight', # !!! has a TO term, see #420
+      'YIELD weight (g) - 5 plant average' => 'Yield', # !!! has a TO term, see #420
+      'straw yield' => 'Straw yield',
+      'plant height' => 'Plant height', # !!! has a TO term, see #420
+      'canopy leaf bagged fresh weight' => 'Canopy leaf fresh weight plus bag',
+      'shoot fresh weight' => 'Shoot fresh weight',
+      'early leaf bagged fresh weight' => 'Early leaf fresh weight plus bag',
+      'canopy leaf bagged dry weight' => 'Canopy leaf dry weight plus bag',
+      'early leaf bagged dry weight' => 'Early leaf dry weight plus bag',
+      'shoot percent dry weight' => 'Shoot dry weight',
+      'shoot dry weight' => 'Shoot dry weight',
+      'host response to Peronospora parasitica' => 'Host response to Peronospora parasitica',
+      'host response to Brevicoryne brassicae' => 'Host response to Brevicoryne brassicae',
+      'host response to Albugo candida' => 'Host response to Albugo candida',
+      'flowering time' => 'Start of flowering' # !!! has a TO term, see #420
+    }
+    TraitDescriptor.all.each do |trait_descriptor|
+      trait = if trait_map[trait_descriptor.descriptor_name]
+                trait = Trait.find_by_label(trait_map[trait_descriptor.descriptor_name.strip])
+                raise "Trait label #{trait_map[trait_descriptor.descriptor_name.strip]} not found in TO table!" unless trait
+                total_mapped_count += 1
+                trait
+              else
+                trait = Trait.find_or_create_by!(name: trait_descriptor.descriptor_name) do |trait|
+                  trait.label = 'CROPSTORE'
+                  trait.data_provenance = 'CROPSTORE'
+                  trait.canonical = false
+                end
+                total_old_count += 1
+                trait
+              end
+      trait_descriptor.update_column(:trait_id, trait.id)
+    end
+    puts "Done. Created #{total_old_count} non-canonical TO terms from TD records and mapped #{total_mapped_count} TDs to canonical TO terms."
+  end
+
 
   def variety_names(genus, species, subtaxa)
     ["#{genus} #{species} var. #{subtaxa}",

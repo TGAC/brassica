@@ -4,40 +4,29 @@ module Submissions
       property :trait_descriptor_list
 
       collection :new_trait_descriptors do
-        property :descriptor_name
-        property :category
+        property :trait
+        property :plant_part_id
         property :units_of_measurements
 
-        property :where_to_score
         property :scoring_method
-        property :when_to_score
-        property :stage_scored
-        property :precautions
         property :materials
-        property :controls
-        property :calibrated_against
-        property :instrumentation_required
-        property :likely_ambiguities
-        property :score_type
-        property :possible_interactions
 
         property :data_owned_by
         property :data_provenance
         property :comments
 
-        validates :descriptor_name, presence: true
-        validates :category, presence: true
+        validates :trait, presence: true
         validates :units_of_measurements, presence: true
+        validates :scoring_method, presence: true
       end
 
       validates :trait_descriptor_list, length: { minimum: 1 }
 
-      # NOTE While descriptor_name is not required by current model to be unique
-      #      we should treat it like it is for the purpose of future submissions.
+      # NOTE Left here for the moment we allow users to define their own trait names.
       validate do
         new_trait_descriptors.each do |new_trait_descriptor|
-          if trait_descriptor_exists?("descriptor_name ILIKE ?", new_trait_descriptor.descriptor_name)
-            errors.add(:new_trait_descriptors, :taken, name: new_trait_descriptor.descriptor_name)
+          if trait_descriptor_exists?("traits.name ILIKE ?", new_trait_descriptor.trait)
+            errors.add(:new_trait_descriptors, :taken, name: new_trait_descriptor.trait)
           end
         end
       end
@@ -57,14 +46,14 @@ module Submissions
       # valid entries in :new_trait_descriptors
       validate do
         trait_descriptor_list.each do |id_or_name|
-          unless trait_descriptor_exists?(id: id_or_name) || new_trait_descriptors.map(&:descriptor_name).include?(id_or_name)
+          unless trait_descriptor_exists?(id: id_or_name) || new_trait_descriptors.map(&:trait).include?(id_or_name)
             errors.add(:trait_descriptor_list, :blank, name: id_or_name)
           end
         end
       end
 
       def trait_descriptor_exists?(*attrs)
-        TraitDescriptor.where(*attrs).exists?
+        TraitDescriptor.includes(:trait).where(*attrs).exists?
       end
 
       def existing_trait_descriptors
@@ -83,21 +72,11 @@ module Submissions
 
       def self.new_trait_descriptor_properties
         [
-          :descriptor_name,
-          :category,
+          :trait,
+          :plant_part_id,
           :units_of_measurements,
-          :where_to_score,
           :scoring_method,
-          :when_to_score,
-          :stage_scored,
-          :precautions,
           :materials,
-          :controls,
-          :calibrated_against,
-          :instrumentation_required,
-          :likely_ambiguities,
-          :score_type,
-          :possible_interactions,
           :data_owned_by,
           :data_provenance,
           :comments
@@ -110,7 +89,7 @@ module Submissions
 
       def new_trait_descriptors
         (super || []).select do |trait_descriptor|
-          trait_descriptor_list.include?(trait_descriptor.descriptor_name)
+          trait_descriptor_list.include?(trait_descriptor.trait)
         end
       end
     end

@@ -69,9 +69,11 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                                  linkage_group_label: 'group2')
     lm1 = create(:linkage_map, linkage_map_label: 'linkage map label',
                                map_version_no: '1',
+                               map_version_date: nil,
                                plant_population: pp1)
     lm2 = create(:linkage_map, linkage_map_label: 'linkage map label 2',
                                map_version_no: '333',
+                               map_version_date: nil,
                                plant_population: pp1)
     mp1 = create(:map_position, map_position: '102.8',
                                 linkage_group: lg1,
@@ -91,8 +93,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                          plant_population: pp1)
     create(:plant_trial, project_descriptor: 'Yet Another Big Success',
                          plant_population: pp2)
-    td1 = create(:trait_descriptor, descriptor_name: 'leafy leaf')
-    td2 = create(:trait_descriptor, descriptor_name: 'uranium uptake')
+    t1 = create(:trait, name: 'leafy leaf')
+    t2 = create(:trait, name: 'uranium uptake')
+    td1 = create(:trait_descriptor, trait: t1)
+    td2 = create(:trait_descriptor, trait: t2)
     ptd1 = create(:processed_trait_dataset, trait_descriptor: td1)
     ptd2 = create(:processed_trait_dataset, trait_descriptor: td2)
     create(:qtl, outer_interval_start: '55.7',
@@ -271,13 +275,13 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(Search.new('347').qtl.count).to eq 0
     end
 
-    it 'finds QTL by trait_descriptor.descriptor_name' do
+    it 'finds QTL by trait_descriptor.trait.name' do
       expect(Search.new("leafy").qtl.count).to eq 1
     end
   end
 
   describe '#trait_descriptors' do
-    it 'finds TD by :descriptor_name' do
+    it 'finds TD by trait.name' do
       expect(Search.new("uranium").trait_descriptors.count).to eq 1
     end
   end

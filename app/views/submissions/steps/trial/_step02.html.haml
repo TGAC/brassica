@@ -1,16 +1,16 @@
 .alert.alert-info
   Before uploading your trait score sheet, please choose
-  %b plant traits
+  %b existing trait descriptors
   that were scored in the course of this trial,
   or define
   %b new trait descriptors.
   Further instructions are found below.
-  Examples of plant traits in the database are: 'oleic acid content' or ' seed mature time'
+  Examples of plant traits in the database are: 'oleic acid content' or ' seed mature time'.
 
 .form-group
   = content.label :trait_descriptor_list
-  - options = options_for_submission_select(@content.existing_trait_descriptors, :descriptor_name)
-  - options.concat options_for_submission_select(@content.new_trait_descriptors, :descriptor_name, id: false)
+  - options = options_for_submission_select(@content.existing_trait_descriptors, :trait_name)
+  - options.concat options_for_submission_select(@content.new_trait_descriptors, :trait, id: false)
   = content.select :trait_descriptor_list, options.html_safe, {},
     { multiple: true,
       class: 'trait-descriptor-list form-control',
@@ -24,60 +24,32 @@
 
   .panel-body{"data-dirty-context": "new-trait-descriptor"}
     .form-group
-      = label_tag :descriptor_name, nil, class: 'required'
-      = text_field_tag :descriptor_name, nil,
-        class: 'form-control required',
-        placeholder: 'Enter new descriptor name',
-        autocomplete: 'off'
-
-    - %w(category units_of_measurements).each do |attr|
-      .form-group
-        - values = TraitDescriptor.visible(current_user.id).attribute_values(attr)
-        - option_tags = options_for_select(values)
-        = combo_field_tag attr, nil, option_tags, class: attr.dasherize, required: true,
-            label: t(attr, scope: %i(submission steps trial step02 new_trait_descriptor_attributes))
-
-    - %w(score_type where_to_score).each do |attr|
-      .form-group
-        - values = TraitDescriptor.visible(current_user.id).attribute_values(attr)
-        - option_tags = options_for_select(values)
-        = combo_field_tag attr, nil, option_tags, class: attr.dasherize
-
-    - %w(when_to_score).each do |attr|
-      .form-group
-        = label_tag attr
-        = text_field_tag attr, nil, class: 'form-control'
+      = label_tag :trait, nil, class: 'required'
+      = select_tag :trait, [], class: 'trait form-control required', 'data-placeholder': 'Select a value'
+      %small.help-block Select the trait definition.
 
     .form-group
-      = label_tag :scoring_method
-      = text_area_tag :scoring_method, nil, class: 'form-control'
+      - values = TraitDescriptor.visible(current_user.id).attribute_values('units_of_measurements')
+      - option_tags = options_for_select(values)
+      = combo_field_tag :units_of_measurements, nil, option_tags, class: 'units-of-measurements', required: true,
+          label: t('submission.steps.trial.step02.new_trait_descriptor_attributes.units_of_measurements')
+      %small.help-block
+        = t 'submission.steps.trial.step02.new_trait_descriptor_attribute_hints.units_of_measurements'
+
+    .form-group
+      = label_tag :scoring_method, nil, class: 'required'
+      = text_area_tag :scoring_method, nil, class: 'form-control required'
       %small.help-block Describe in detail how the measurement is to be performed.
-
-    .form-group
-      = label_tag :precautions
-      = text_area_tag :precautions, nil, class: 'form-control'
-      %small.help-block Tell what special precautions should be taken in order to have the trait properly scored.
 
     .form-group
       = label_tag :metarials
       = text_area_tag :materials, nil, class: 'form-control'
       %small.help-block Materials required for scoring.
 
-    - %w(instrumentation_required).each do |attr|
-      .form-group
-        = label_tag attr
-        = text_area_tag attr, nil, class: 'form-control'
-
     .form-group
-      = label_tag :controls
-      = text_field_tag :controls, nil, class: 'form-control'
-      %small.help-block
-        What kind of control (e.g. a reference) should be used in order to adequately measure the score value.
-
-    - %w(calibrated_against likely_ambiguities possible_interactions).each do |attr|
-      .form-group
-        = label_tag attr
-        = text_field_tag attr, nil, class: 'form-control'
+      = label_tag :plant_part_id, nil
+      = select_tag :plant_part_id, [], class: 'plant-part-id form-control', 'data-placeholder': 'Select a plant part'
+      %small.help-block Select the part of plant one should use for scoring this trait.
 
     = render partial: "submissions/annotations", locals: { model: TraitDescriptor }
 
@@ -86,6 +58,6 @@
       %button.btn.btn-primary.add-new-trait-descriptor-for-list{type: 'button'} Confirm
 
 - @content.new_trait_descriptors.each do |trait_descriptor|
-  %div{id: "new-trait-descriptor-#{trait_descriptor.descriptor_name.split.join('-').downcase}"}
+  %div{id: "new-trait-descriptor-#{trait_descriptor.trait.split.join('-').downcase}"}
     - @content.class.new_trait_descriptor_properties.each do |attr|
       = hidden_field_tag "submission[content][new_trait_descriptors][][#{attr}]", trait_descriptor.send(attr)

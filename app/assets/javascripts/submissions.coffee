@@ -166,7 +166,9 @@ class PopulationSubmission extends Submission
 class TrialSubmission extends Submission
   defaultSelectOptions: { allowClear: true }
   plantPopulationSelectOptions: @makeAjaxSelectOptions('/plant_populations', 'id', 'name', 'description')
-  traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'descriptor_name', 'descriptor_label')
+  traitDescriptorListSelectOptions: @makeAjaxListSelectOptions('/trait_descriptors', 'id', 'trait_name', 'scoring_method')
+  traitSelectOptions: @makeAjaxSelectOptions('/traits', 'name', 'name', 'description')
+  plantPartSelectOptions: @makeAjaxSelectOptions('/plant_parts', 'id', 'plant_part', 'description')
 
   init: =>
     super()
@@ -276,6 +278,9 @@ class TrialSubmission extends Submission
       if event.keyCode == 13 # Enter key
         event.preventDefault() # Prevent form submission
 
+    @$('.trait').select2(@traitSelectOptions)
+    @$('.plant-part-id').select2(@plantPartSelectOptions)
+
   validateNewTraitDescriptorForList: (onValidData) =>
     $form = @$('.new-trait-descriptor-for-list')
 
@@ -296,16 +301,16 @@ class TrialSubmission extends Submission
     $select = @$('.trait-descriptor-list')
     selectedValues = $select.val() || []
 
-    $option = $('<option></option>').attr(value: data.descriptor_name).text(data.descriptor_name)
+    $option = $('<option></option>').attr(value: data.trait).text(data.trait)
     $select.append($option)
 
-    selectedValues.push(data.descriptor_name)
+    selectedValues.push(data.trait)
     $select.val(selectedValues)
     $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
     # add all PL attributes to DOM so it can be sent with form
     $form = @$el.find('form')
-    $container = $('<div></div').attr(id: @newTraitDescriptorForListContainerId(data.descriptor_name))
+    $container = $('<div></div').attr(id: @newTraitDescriptorForListContainerId(data.trait))
     $container.appendTo($form)
 
     $.each(data, (attr, val) =>
@@ -314,11 +319,11 @@ class TrialSubmission extends Submission
       $input.appendTo($container)
     )
 
-  removeNewTraitDescriptorFromList: (descriptor_name) =>
-    $("##{@newTraitDescriptorForListContainerId(descriptor_name)}").remove()
+  removeNewTraitDescriptorFromList: (trait) =>
+    $("##{@newTraitDescriptorForListContainerId(trait)}").remove()
 
-  newTraitDescriptorForListContainerId: (descriptor_name) =>
-    'new-trait-descriptor-' + descriptor_name.split(/\s+/).join('-').toLowerCase()
+  newTraitDescriptorForListContainerId: (trait) =>
+    'new-trait-descriptor-' + trait.split(/\s+/).join('-').toLowerCase()
 
 $ ->
   new PopulationSubmission('.edit-population-submission').init()

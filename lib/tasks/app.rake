@@ -9,12 +9,12 @@ namespace :app do
     recreate_db
     puts " - loading cropstore DB dump data"
     restore_cropstore_dump
-    puts " - building ES indices"
-    build_elasticsearch_indices
     puts " - run further migrations"
     silence_stdout do
       migrate_db
     end
+    puts " - building ES indices"
+    build_elasticsearch_indices
     puts " - DONE"
   end
 

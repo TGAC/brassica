@@ -45,7 +45,7 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     tds = object.content.step02.trait_descriptor_list.try(:select, &:present?) || []
     numeric_tds = tds.select { |td| td.to_s.match /\A\d+\z/ }
     non_numeric_tds = tds - numeric_tds
-    non_numeric_tds | TraitDescriptor.where(id: numeric_tds).pluck(:descriptor_name)
+    non_numeric_tds | TraitDescriptor.includes(:trait).references(:trait).where(id: numeric_tds).pluck('traits.name')
   end
 
   # Takes new TD names and hits the DB for old TDs for their names; sorts
@@ -53,11 +53,11 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     return @sorted_trait_names if @sorted_trait_names
     trait_list = object.content.step02.trait_descriptor_list || []
     @sorted_trait_names = trait_list.compact.map do |trait_item|
-      if trait_item.to_i == 0
+      if trait_item.to_i.to_s != trait_item.to_s
         trait_item
       else
-        trait = TraitDescriptor.where(id: trait_item).first
-        trait ? trait.descriptor_name : nil
+        trait_descriptor = TraitDescriptor.where(id: trait_item).first
+        trait_descriptor ? trait_descriptor.trait_name : nil
       end
     end
   end

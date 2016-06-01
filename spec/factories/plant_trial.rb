@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :plant_trial do
     sequence(:plant_trial_name) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
-    project_descriptor { Faker::Lorem.word }
+    sequence(:project_descriptor) {|n| "#{Faker::Lorem.word} #{n} #{Faker::Lorem.word}"}
     trial_location_site_name { Faker::Lorem.sentence }
     place_name { Faker::Lorem.sentence }
     trial_year { Faker::Date.backward.year.to_s }
