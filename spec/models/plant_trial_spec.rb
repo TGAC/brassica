@@ -85,7 +85,7 @@ RSpec.describe PlantTrial do
       it 'returns all plant scoring units' do
         scoring_table = plant_trial.scoring_table_data([])
         expect(scoring_table).
-          to eq plant_trial.plant_scoring_units.map{ |psu| [psu.scoring_unit_name] }.sort
+          to eq plant_trial.plant_scoring_units.map{ |psu| [psu.scoring_unit_name, psu.id] }.sort
       end
 
       context 'and they have trait scores recorded' do
