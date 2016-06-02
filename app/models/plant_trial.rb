@@ -50,7 +50,7 @@ class PlantTrial < ActiveRecord::Base
       [unit.scoring_unit_name] + trait_descriptor_ids.map do |td_id|
         ts = scores.detect{ |s| s.trait_descriptor_id == td_id.to_i}
         ts ? ts.score_value : '-'
-      end
+      end + [unit.id]
     end
   end
 
