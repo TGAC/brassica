@@ -8,8 +8,8 @@ but it is released as an open source project (see the LICENSE.txt file).
 
 Apart from the LICENSE, TGAC explicitly requests any party that wishes to
 deploy a copy (modified or not) of BIP on their own servers, to contact,
-and obtain permission to do so,
-[TGAC representatives](http://www.tgac.ac.uk/contact-us/).
+and obtain permission to do so. For that, please contact 
+<a href="mailto:bip@tgac.ac.uk">bip@tgac.ac.uk</a> .
 
 ## Dependencies
 
