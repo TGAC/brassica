@@ -50,12 +50,14 @@ RSpec.describe PlantTrial do
           pt.trial_location_site_name,
           pt.country.country_name,
           pt.institute_id,
+          pt.layout_file_name,
           pt.id,
           pt.plant_scoring_units.count,
           pt.plant_population.id,
           pt.pubmed_id,
           pt.id
         ]
+      expect(plucked[0][8]).to eq 'plant-trial-layout-example.jpg'
     end
   end
 
