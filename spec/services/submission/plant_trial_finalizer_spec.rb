@@ -46,6 +46,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         new_trait_descriptors: new_trait_descriptors_attrs)
       submission.content.update(:step03,
         trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
+        replicate_numbers: { },
         trait_scores: {
           'p1' => {},
           'p2' => { 1 => 'x' },
@@ -144,6 +145,38 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(TraitScore.find_by(score_value: 'z').trait_descriptor.trait_name).
         to eq new_trait_descriptors_attrs[0][:trait]
       expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
+    end
+
+    context 'when parsing technical replicate data' do
+      before :each do
+        submission.content.update(:step03,
+          submission.content.step03.to_h.merge(
+            trait_mapping: { 0 => 0, 1 => 0, 2 => 1, 3 => 2, 4 => 2 },
+            replicate_numbers: { 0 => 1, 1 => 2, 2 => 0, 3 => 1, 4 => 2 },
+            trait_scores: {
+              'p1' => {},
+              'p2' => { 0 => '1.1', 1 => '1.2', 2 => '1.3', 3 => '1.4', 4 => '1.5' },
+              'p3' => { 0 => '1.1', 1 => '1.2', 3 => '1.4', 4 => '1.5' },
+              'p4' => { 2 => '1.3', 3 => '1.4', 4 => '1.5' }
+            }
+          )
+        )
+      end
+
+      it 'assigns replicate numbers accordingly' do
+        subject.call
+
+        expect(PlantScoringUnit.find_by_scoring_unit_name('p1').trait_scores).to be_empty
+        p2 = PlantScoringUnit.find_by_scoring_unit_name('p2')
+        expect(p2.trait_scores.pluck(:score_value, :technical_replicate_number)).
+          to match_array [['1.1', 1], ['1.2', 2], ['1.3', 1], ['1.4', 1], ['1.5',2]]
+        p3 = PlantScoringUnit.find_by_scoring_unit_name('p3')
+        expect(p3.trait_scores.pluck(:score_value, :technical_replicate_number)).
+          to match_array [['1.1', 1], ['1.2', 2], ['1.4', 1], ['1.5',2]]
+        p4 = PlantScoringUnit.find_by_scoring_unit_name('p4')
+        expect(p4.trait_scores.pluck(:score_value, :technical_replicate_number)).
+          to match_array [['1.3', 1], ['1.4', 1], ['1.5',2]]
+      end
     end
 
     it 'makes submission and created objects published' do

@@ -36,6 +36,7 @@ class Submission::PlantTrialFinalizer
   def create_scoring
     trait_mapping = submission.content.step03.trait_mapping
     accessions = submission.content.step03.accessions
+    replicate_numbers = submission.content.step03.replicate_numbers
 
     @new_plant_scoring_units = (submission.content.step03.trait_scores || {}).map do |plant_id, scores|
       rollback(2) unless accessions[plant_id] && accessions[plant_id]['plant_accession'] && accessions[plant_id]['originating_organisation']
@@ -57,10 +58,19 @@ class Submission::PlantTrialFinalizer
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
           rollback(1) unless trait_descriptor
 
+          trait_score_attributes = common_data
+          if replicate_numbers[col_index] && replicate_numbers[col_index] > 0
+            trait_score_attributes.merge!(
+              technical_replicate_number: replicate_numbers[col_index]
+            )
+          end
+
           TraitScore.create!(
-            common_data.merge(trait_descriptor: trait_descriptor,
-                              score_value: value,
-                              plant_scoring_unit_id: new_plant_scoring_unit.id)
+            trait_score_attributes.merge(
+              trait_descriptor: trait_descriptor,
+              score_value: value,
+              plant_scoring_unit_id: new_plant_scoring_unit.id
+            )
           )
       end
       new_plant_scoring_unit
