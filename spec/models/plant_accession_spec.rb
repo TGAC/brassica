@@ -22,6 +22,7 @@ RSpec.describe PlantAccession do
       expect(plucked[0]).to eq [
         pa.plant_accession,
         pa.plant_line.plant_line_name,
+        nil,
         pa.plant_accession_derivation,
         pa.originating_organisation,
         pa.year_produced,
