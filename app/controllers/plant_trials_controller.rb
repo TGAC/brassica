@@ -13,7 +13,9 @@ class PlantTrialsController < ApplicationController
 
   def show
     plant_trial = PlantTrial.visible(current_user.try(:id)).find(params[:id])
-    send_file plant_trial.layout.path, type: plant_trial.layout_content_type
+    send_file plant_trial.layout.path,
+              type: plant_trial.layout_content_type,
+              filename: plant_trial.layout_file_name
   end
 
 end
