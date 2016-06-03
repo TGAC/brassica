@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   resources :plant_varieties, only: [:index]
   resources :plant_parts, only: [:index]
   resources :plant_populations, only: [:index]
-  resources :plant_trials, only: [:index]
+  resources :plant_trials, only: [:index, :show]
   resources :trait_descriptors, only: [:index]
   resources :traits, only: [:index]
   resources :trial_scorings, only: [:show]

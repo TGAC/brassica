@@ -68,6 +68,7 @@ class PlantTrial < ActiveRecord::Base
       'trial_location_site_name',
       'countries.country_name',
       'institute_id',
+      'layout_file_name',
       'id'
     ]
   end
