@@ -12,8 +12,11 @@ FactoryGirl.define do
     published_on { Date.today-8.days }
     country
     plant_population
-    layout { fixture_file_upload(Rails.root.join('app', 'assets', 'images', 'plant-trial-layout-example.jpg'), 'image/jpeg') }
     user
     annotable
+  end
+
+  trait :with_layout do
+    layout { fixture_file_upload(Rails.root.join('app', 'assets', 'images', 'plant-trial-layout-example.jpg'), 'image/jpeg') }
   end
 end

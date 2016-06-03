@@ -37,7 +37,7 @@ RSpec.describe PlantTrial do
 
   describe '#pluck_columns' do
     it 'gets proper data table columns' do
-      pt = create(:plant_trial)
+      pt = create(:plant_trial, :with_layout)
       plucked = PlantTrial.pluck_columns
       expect(plucked.count).to eq 1
       expect(plucked[0]).
