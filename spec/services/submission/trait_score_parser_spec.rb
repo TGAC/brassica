@@ -80,9 +80,79 @@ RSpec.describe Submission::TraitScoreParser do
           to eq ['Detected non unique column headers mapping to traits. Please check the column names.']
       end
     end
+
+    context 'provided with submission with technical replicates' do
+      before :each do
+        upload.submission.content.update(:step02, trait_descriptor_list: ['Atrait', 'Btrait'])
+      end
+
+      it 'correctly assigns well-named and ordered trait columns' do
+        input_is "id,pa,oo,Atrait rep1,Atrait rep2,Atrait rep3,Btrait rep1,Btrait rep2"
+        subject.send(:map_headers_to_traits)
+        expect(subject.trait_mapping).
+          to eq({0 => 0, 1 => 0, 2 => 0, 3 => 1, 4 => 1})
+        expect(subject.replicate_numbers).
+          to eq({0 => 1, 1 => 2, 2 => 3, 3 => 1, 4 => 2})
+      end
+
+      it 'correctly assigns well-named but misordered trait columns' do
+        input_is "id,pa,oo,Atrait rep1,Btrait rep2,Atrait rep3,Atrait rep2,Btrait rep1"
+        subject.send(:map_headers_to_traits)
+        expect(subject.trait_mapping).
+          to eq({0 => 0, 1 => 1, 2 => 0, 3 => 0, 4 => 1})
+        expect(subject.replicate_numbers).
+          to eq({0 => 1, 1 => 2, 2 => 3, 3 => 2, 4 => 1})
+      end
+
+      it 'correctly assigns, by index, misnamed trait columns' do
+        input_is "id,pa,oo,first rep1,first rep2,first rep3,second rep1,second rep2,second rep3,second rep4"
+        subject.send(:map_headers_to_traits)
+        expect(subject.trait_mapping).
+          to eq({0 => 0, 1 => 0, 2 => 0, 3 => 1, 4 => 1, 5 => 1, 6 => 1})
+        expect(subject.replicate_numbers).
+          to eq({0 => 1, 1 => 2, 2 => 3, 3 => 1, 4 => 2, 5 => 3, 6 => 4})
+      end
+
+      it 'tolerates traits with and without replicates' do
+        input_is "id,pa,oo,first rep1,first rep2,second"
+        subject.send(:map_headers_to_traits)
+        expect(subject.trait_mapping).
+          to eq({0 => 0, 1 => 0, 2 => 1})
+        expect(subject.replicate_numbers).
+          to eq({0 => 1, 1 => 2, 2 => 0})
+      end
+
+      it 'treats empty header as a no-replicate trait' do
+        input_is "id,pa,oo,first rep1,,first rep2,second"
+        subject.send(:map_headers_to_traits)
+        expect(subject.trait_mapping).
+          to eq({0 => 0, 1 => 1, 2 => 1, 3 => 2})
+        expect(subject.replicate_numbers).
+          to eq({0 => 1, 1 => 0, 2 => 2, 3 => 0})
+      end
+
+      it 'reports read replicate numbers in user log' do
+        input_is "id,pa,oo,first rep1,first rep2"
+        subject.send(:map_headers_to_traits)
+        expect(upload.logs).
+          to include "   - Detected technical replicate number 1"
+        expect(upload.logs).
+          to include "   - Detected technical replicate number 2"
+      end
+
+      it 'does not report repetitive mapping' do
+        input_is "id,pa,oo,Atrait rep1,Atrait rep2"
+        subject.send(:map_headers_to_traits)
+        expect(upload.errors[:file]).to be_empty
+      end
+    end
   end
 
   describe '#parse_scores' do
+    before :each do
+      subject.instance_variable_set(:@trait_mapping, {0 => 0, 1 => 1})
+    end
+
     it 'does nothing with empty input' do
       input_is ''
       subject.send(:parse_scores)
@@ -140,6 +210,13 @@ RSpec.describe Submission::TraitScoreParser do
       expect(subject.accessions).
         to eq({ 'plant 1' => { plant_accession: 'pa', originating_organisation: 'oo' },
                 'plant 2' => { plant_accession: 'pa2', originating_organisation: 'oo' }})
+    end
+
+    it 'ignores scores beyond number of trait columns' do
+      input_is "plant 1,pa,oo,1,2,3"
+      subject.send(:parse_scores)
+      expect(subject.trait_scores).
+        to eq({ 'plant 1' => {0 => '1', 1 => '2'} })
     end
   end
 
