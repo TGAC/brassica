@@ -655,6 +655,11 @@ en:
           create: writeonly
           desc: Zero or more BIP identifiers of countries that this variety is registered in
         -
+          name: plant_accession_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of related Plant Accessions
+        -
           name: plant_line_ids
           format: "int[]"
           create: readonly
@@ -1109,6 +1114,10 @@ en:
           name: plant_line_id
           format: int
           desc: BIP identifier of the associated Plant Line
+        -
+          name: plant_variety_id
+          format: int
+          desc: BIP identifier of the associated Plant Variety
         -
           name: plant_scoring_unit_ids
           format: "int[]"

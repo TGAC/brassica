@@ -67,4 +67,52 @@ RSpec.describe "API V1" do
     end
   end
 
+  context 'when submitting plant accessions' do
+    let!(:user) { create(:user) }
+    let!(:pl) { create(:plant_line) }
+    let!(:pv) { create(:plant_variety) }
+    let!(:api_key) { user.api_key }
+
+    let(:parsed_response) { JSON.parse(response.body) }
+
+    it 'does not accept plant accessions without PL or PV' do
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {plant_accession: 'foo', plant_line_id: nil, plant_variety_id: nil}
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].length).to eq 2
+      expect(parsed_response['errors'].first['message']).to eq 'A plant accession must be linked to either a plant line or a plant variety.'
+      expect(parsed_response['errors'].second['message']).to eq 'A plant accession must be linked to either a plant line or a plant variety.'
+    end
+
+    it 'does not accept plant accessions with both PL and PV' do
+      expect {
+        post "/api/v1/plant_accessions", {
+            plant_accession: {plant_accession: 'foo', plant_line_id: pl.id, plant_variety_id: pv.id}
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].length).to eq 2
+      expect(parsed_response['errors'].first['message']).to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+      expect(parsed_response['errors'].second['message']).to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+    end
+
+    it 'accepts plant accessions with either PL or PV but not both' do
+      expect {
+        post "/api/v1/plant_accessions", {
+            plant_accession: {plant_accession: 'foo', plant_line_id: pl.id, plant_variety_id: nil}
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(1)
+
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {plant_accession: 'bar', plant_line_id: nil, plant_variety_id: pv.id}
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(1)
+    end
+  end
 end

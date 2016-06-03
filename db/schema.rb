@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160527165420) do
+ActiveRecord::Schema.define(version: 20160603121325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,10 +274,12 @@ ActiveRecord::Schema.define(version: 20160527165420) do
     t.integer  "user_id"
     t.boolean  "published",                  default: true, null: false
     t.datetime "published_on"
+    t.integer  "plant_variety_id"
   end
 
   add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
   add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
+  add_index "plant_accessions", ["plant_variety_id"], name: "index_plant_accessions_on_plant_variety_id", using: :btree
   add_index "plant_accessions", ["published"], name: "index_plant_accessions_on_published", using: :btree
   add_index "plant_accessions", ["user_id"], name: "index_plant_accessions_on_user_id", using: :btree
 
@@ -861,6 +863,7 @@ ActiveRecord::Schema.define(version: 20160527165420) do
   add_foreign_key "marker_assays", "restriction_enzymes", column: "restriction_enzyme_b_id", on_update: :cascade, on_delete: :nullify
   add_foreign_key "marker_assays", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_accessions", "plant_lines", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_accessions", "plant_varieties", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_accessions", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_lines", "plant_varieties", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_lines", "taxonomy_terms", on_update: :cascade, on_delete: :nullify

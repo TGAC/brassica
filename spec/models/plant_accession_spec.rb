@@ -28,6 +28,7 @@ RSpec.describe PlantAccession do
         pa.date_harvested,
         pa.plant_scoring_units.count,
         pa.plant_line.id,
+        nil,
         pa.id
       ]
     end
@@ -42,6 +43,32 @@ RSpec.describe PlantAccession do
 
       pad = PlantAccession.table_data(nil, u.id)
       expect(pad.count).to eq 2
+    end
+  end
+
+  context 'linking to pl and pv' do
+    let!(:pl) { create(:plant_line) }
+    let!(:pv) { create(:plant_variety) }
+
+    it 'does not permit simultaneous linking to PL and PV' do
+      pa = build(:plant_accession, plant_line: pl, plant_variety: pv)
+      expect(pa).to_not be_valid
+      expect(pa.errors[:plant_line]).to include 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+      expect(pa.errors[:plant_variety]).to include 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+    end
+
+    it 'does not permit PL and PV to both be blank' do
+      pa = build(:plant_accession, plant_line: nil, plant_variety: nil)
+      expect(pa).to_not be_valid
+      expect(pa.errors[:plant_line]).to include 'A plant accession must be linked to either a plant line or a plant variety.'
+      expect(pa.errors[:plant_variety]).to include 'A plant accession must be linked to either a plant line or a plant variety.'
+    end
+
+    it 'permits linking to either PL or PV' do
+      pa1 = build(:plant_accession, plant_line: pl, plant_variety: nil)
+      pa2 = build(:plant_accession, plant_variety: pv, plant_line: nil)
+      expect(pa1).to be_valid
+      expect(pa2).to be_valid
     end
   end
 end
