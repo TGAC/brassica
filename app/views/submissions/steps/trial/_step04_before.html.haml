@@ -11,7 +11,10 @@
 
   = hidden_field_tag "submission_upload[upload_type]", "plant_trial_layout"
 
-  .form-group
-    .btn.btn-primary.fileinput-button{ class: "#{'hidden' if @content.layout_upload}" }
+  .form-group.fileinput{ class: "#{'hidden' if @content.layout_upload}" }
+    .btn.btn-primary.fileinput-button
       %span Choose a file...
-      = file_field_tag "submission_upload[file]", class: 'layout-upload'
+      = file_field_tag "submission_upload[file]", class: 'layout-upload',
+        accept: "image/jpeg, image/png, image/gif"
+
+    %small.help-block Accepted file formats are *.png, *.jpg and *.gif.

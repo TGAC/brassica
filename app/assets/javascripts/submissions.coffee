@@ -218,7 +218,8 @@ class TrialSubmission extends Submission
 
         @$('#submission_content_upload_id').val(data.result.id)
 
-        @$('.fileinput-button').removeClass('disabled').addClass('hidden')
+        @$('.fileinput').addClass('hidden')
+        @$('.fileinput-button').removeClass('disabled')
         @$('.uploaded-trait-scores').removeClass('hidden')
         @$('.uploaded-trait-scores .file-name').text(data.result.file_file_name)
         @$('.uploaded-trait-scores .delete-trait-scores-upload').attr(href: data.result.delete_url)
@@ -248,7 +249,7 @@ class TrialSubmission extends Submission
           )
 
     @$('.delete-trait-scores-upload').on 'ajax:success', (data, status, xhr) =>
-      @$('.fileinput-button').removeClass('hidden')
+      @$('.fileinput').removeClass('hidden')
       @$('.uploaded-trait-scores').addClass('hidden')
 
   bindLayoutUpload: =>
@@ -264,7 +265,8 @@ class TrialSubmission extends Submission
 
         @$('#submission_content_layout_upload_id').val(data.result.id)
 
-        @$('.fileinput-button').removeClass('disabled').addClass('hidden')
+        @$('.fileinput').addClass('hidden')
+        @$('.fileinput-button').removeClass('disabled')
         @$('.uploaded-layout').removeClass('hidden')
         @$('.uploaded-layout .file-name').text(data.result.file_file_name)
         @$('.uploaded-layout .delete-layout-upload').attr(href: data.result.delete_url)
@@ -285,7 +287,7 @@ class TrialSubmission extends Submission
           )
 
     @$('.delete-layout-upload').on 'ajax:success', (data, status, xhr) =>
-      @$('.fileinput-button').removeClass('hidden')
+      @$('.fileinput').removeClass('hidden')
       @$('.uploaded-layout').addClass('hidden')
 
   bindNewTraitDescriptorControls: =>
