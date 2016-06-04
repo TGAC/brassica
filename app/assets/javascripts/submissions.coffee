@@ -270,7 +270,7 @@ class TrialSubmission extends Submission
         @$('.uploaded-layout .delete-layout-upload').attr(href: data.result.delete_url)
 
         @$('.uploaded-layout .layout-image').prop(src: data.result.small_file_url)
-        @$('.uploaded-layout .layout-image').parent().prop(href: data.result.original_file_url)
+        @$('.uploaded-layout .layout-image').parent('a').prop(href: data.result.original_file_url)
 
       fail: (event, data) =>
         if data.jqXHR.status == 401
