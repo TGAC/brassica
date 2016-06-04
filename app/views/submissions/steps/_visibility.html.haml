@@ -1,9 +1,18 @@
 .alert.alert-warning
-  Please, double check data correctness as further changes will require
-  contact with support team.
-  <br/><br/>
-  By default sending your submission will make provided data publicly available.
-  You can keep your data private by changing visibility status below.
+  %p
+    Please, double check data correctness as further changes will require
+    contact with support team.
+  %p
+    By default sending your submission will make provided data
+    %strong publicly available.
+    You can keep your data private by changing
+    %strong visibility status
+    below.
+  %p
+    In case you decide to make your data public, you will have exactly
+    %strong one week of revocation period,
+    during which you may decide to revert the visibility to
+    private. After one week of being public, the submission is no longer revocable.
 
 .form-group
   = form.label :visibility, "Visibility status"
