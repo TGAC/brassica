@@ -37,8 +37,11 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       ]
     }
+    let(:layout_upload) { create(:upload, :plant_trial_layout, submission: submission) }
 
     before do
+
+      # binding.pry
       submission.content.update(:step01, plant_trial_attrs)
       submission.content.update(:step02,
         trait_descriptor_list: new_trait_descriptors_attrs.map{ |td| td[:trait] } + [old_trait_descriptor.id],
@@ -53,7 +56,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       )
       submission.content.update(:step04, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
+        :data_owned_by, :data_provenance, :comments).
+        merge(visibility: 'published', layout_upload_id: layout_upload.id))
     end
 
     it 'creates new trait descriptors' do
@@ -95,6 +99,12 @@ RSpec.describe Submission::PlantTrialFinalizer do
       subject.call
 
       expect(PlantTrial.last.plant_population).to eq plant_population
+    end
+
+    it 'assigns layout image to created plant trial' do
+      subject.call
+
+      expect(PlantTrial.last.layout.original_filename).to eq(layout_upload.file.original_filename)
     end
 
     it 'creates plant scoring units' do
