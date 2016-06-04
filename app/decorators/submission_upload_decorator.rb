@@ -8,6 +8,7 @@ class SubmissionUploadDecorator < Draper::Decorator
       )
     else
       super.merge(
+        errors: formatted_errors,
         delete_url: delete_url,
         logs: object.logs
       )
