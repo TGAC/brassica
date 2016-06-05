@@ -350,6 +350,8 @@
 
           = api_props('Attributes', "#{model.name.underscore}.attrs")
 
+          = raw t("api.#{model.name.underscore}.note", default: '')
+
           -# GET index
           = render partial: 'application/api/index', locals: { model: model }
           %hr

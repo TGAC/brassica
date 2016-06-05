@@ -655,6 +655,11 @@ en:
           create: writeonly
           desc: Zero or more BIP identifiers of countries that this variety is registered in
         -
+          name: plant_accession_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of related Plant Accessions
+        -
           name: plant_line_ids
           format: "int[]"
           create: readonly
@@ -1108,7 +1113,13 @@ en:
         -
           name: plant_line_id
           format: int
+          create: required (if no plant_variety_id)
           desc: BIP identifier of the associated Plant Line
+        -
+          name: plant_variety_id
+          format: int
+          create: required (if no plant_line_id)
+          desc: BIP identifier of the associated Plant Variety
         -
           name: plant_scoring_unit_ids
           format: "int[]"
@@ -1116,6 +1127,11 @@ en:
           desc: Zero or more BIP identifiers of Plant Scoring Units performed for this plant
         -
           name: published_on
+
+      note:
+        <b>NOTE:</b> you should link a new Plant Accession to either a Plant Line of a Plant Variety.
+        So, excatly one of <code>plant_line_id</code> and <code>plant_variety_id</code> attributes
+        should be provided (but never both).
 
       create:
         example: |-
