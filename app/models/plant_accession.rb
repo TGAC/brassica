@@ -17,6 +17,8 @@ class PlantAccession < ActiveRecord::Base
             allow_blank: true
 
   validate :plant_line_xor_plant_variety
+  validates :plant_line_id, presence: true, if: 'plant_variety_id.nil?'
+  validates :plant_variety_id, presence: true, if: 'plant_line_id.nil?'
 
   include Relatable
   include Filterable
@@ -25,16 +27,9 @@ class PlantAccession < ActiveRecord::Base
   include TableData
 
   def plant_line_xor_plant_variety
-    if plant_line_id.present?
-      if plant_variety.present?
-        errors.add(:plant_line, 'A plant accession may not be simultaneously linked to a plant line and a plant variety.')
-        errors.add(:plant_variety, 'A plant accession may not be simultaneously linked to a plant line and a plant variety.')
-      end
-    else
-      if plant_variety.blank?
-        errors.add(:plant_line, 'A plant accession must be linked to either a plant line or a plant variety.')
-        errors.add(:plant_variety, 'A plant accession must be linked to either a plant line or a plant variety.')
-      end
+    if plant_line_id.present? && plant_variety_id.present?
+      errors.add(:plant_line_id, :not_with_plant_variety)
+      errors.add(:plant_variety_id, :not_with_plant_line)
     end
   end
 

@@ -63,7 +63,9 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
             required_attrs.each do |attr|
               if related_models.include? attr.to_s.gsub('_id','').to_sym
                 # Special exception for PlantAccessions due to the fact that a PA cannot be linked both to PL and to PV
-                unless model_name == 'plant_accession' and attr == 'plant_variety_id'
+                if model_name == 'plant_accession' and attr == :plant_variety_id
+                  attrs[attr] = nil
+                else
                   attrs[attr] = create(attr.to_s.gsub('_id','')).id
                 end
               else
@@ -80,9 +82,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "creates an object" do
           expect {
-            if model_name == 'plant_accession'
-              model_attrs[:plant_line_id] = create(:plant_line).id
-            end
             post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           }.to change {
             model_klass.count
@@ -95,10 +94,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         if Api.publishable_models.include?(model.klass)
           it "creates private object" do
-            if model_name == 'plant_accession'
-              model_attrs[:plant_line_id] = create(:plant_line).id
-            end
-
             expect {
               post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs.merge(published: false) },
               { "X-BIP-Api-Key" => api_key.token }
@@ -113,9 +108,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         end
 
         it "sets correct annotations" do
-          if model_name == 'plant_accession'
-            model_attrs[:plant_line_id] = create(:plant_line).id
-          end
           post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
           expect(response).to be_success
           expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
@@ -130,9 +122,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
             :date_entered => Date.today - 3.days,
             :entered_by_whom => 'This was not me!'
           )
-          if model_name == 'plant_accession'
-            better_attrs[:plant_line_id] = create(:plant_line).id
-          end
           post "/api/v1/#{model_name.pluralize}", { model_name => better_attrs }, { "X-BIP-Api-Key" => api_key.token }
 
           expect(response).to be_success
@@ -142,9 +131,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "assigns HABTM associations" do
           if habtm_assocs.present?
-            if model_name == 'plant_accession'
-              model_attrs[:plant_line_id] = create(:plant_line).id
-            end
             post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
 
             expect(response).to be_success
@@ -187,7 +173,11 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
               attrs[attr] = "Foo"
             end
             related_models.each do |attr|
-              attrs["#{attr}_id"] = 555555
+              if model_name == 'plant_accession' && attr.to_s == 'plant_variety'
+                attrs["#{attr}_id"] = nil
+              else
+                attrs["#{attr}_id"] = 555555
+              end
             end
           end
         }

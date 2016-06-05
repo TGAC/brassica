@@ -84,8 +84,10 @@ RSpec.describe "API V1" do
 
       expect(response.status).to eq 422
       expect(parsed_response['errors'].length).to eq 2
-      expect(parsed_response['errors'].first['message']).to eq 'A plant accession must be linked to either a plant line or a plant variety.'
-      expect(parsed_response['errors'].second['message']).to eq 'A plant accession must be linked to either a plant line or a plant variety.'
+      expect(parsed_response['errors'].first['message']).
+        to eq 'A plant accession must be linked to either a plant line or a plant variety.'
+      expect(parsed_response['errors'].second['message']).
+        to eq 'A plant accession must be linked to either a plant line or a plant variety.'
     end
 
     it 'does not accept plant accessions with both PL and PV' do
@@ -97,8 +99,10 @@ RSpec.describe "API V1" do
 
       expect(response.status).to eq 422
       expect(parsed_response['errors'].length).to eq 2
-      expect(parsed_response['errors'].first['message']).to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
-      expect(parsed_response['errors'].second['message']).to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+      expect(parsed_response['errors'].first['message']).
+        to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+      expect(parsed_response['errors'].second['message']).
+        to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
     end
 
     it 'accepts plant accessions with either PL or PV but not both' do
