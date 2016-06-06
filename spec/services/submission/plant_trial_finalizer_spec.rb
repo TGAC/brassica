@@ -46,7 +46,6 @@ RSpec.describe Submission::PlantTrialFinalizer do
         new_trait_descriptors: new_trait_descriptors_attrs)
       submission.content.update(:step03,
         trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
-        replicate_numbers: { },
         trait_scores: {
           'p1' => {},
           'p2' => { 1 => 'x' },
@@ -176,6 +175,59 @@ RSpec.describe Submission::PlantTrialFinalizer do
         p4 = PlantScoringUnit.find_by_scoring_unit_name('p4')
         expect(p4.trait_scores.pluck(:score_value, :technical_replicate_number)).
           to match_array [['1.3', 1], ['1.4', 1], ['1.5',2]]
+      end
+    end
+
+    context 'when parsing design factors' do
+      before :each do
+        submission.content.update(:step03,
+          submission.content.step03.to_h.merge(
+            design_factor_names: ['polytunnel', 'rep', 'sub_block', 'pot_number'],
+            design_factors: {
+              'p1' => ['A', '1', '1', '1'],
+              'p2' => [],
+              'p3' => ['A', '2', '1'],
+              'p4' => ['B', '2', '', '2']
+            }
+          )
+        )
+      end
+
+      it 'sets correct trial design_factors value' do
+        subject.call
+        expect(PlantTrial.last.design_factors).to eq 'polytunnel / rep / sub_block / pot_number'
+      end
+
+      it 'records design factors data for plant scoring units' do
+        subject.call
+
+        p1 = PlantScoringUnit.find_by_scoring_unit_name('p1')
+        expect(p1.design_factor).not_to be_nil
+        expect(p1.design_factor.design_unit_counter).to eq '1'
+        expect(p1.design_factor.design_factor_1).to eq 'polytunnel_A'
+        expect(p1.design_factor.design_factor_2).to eq 'rep_1'
+        expect(p1.design_factor.design_factor_3).to eq 'sub_block_1'
+        expect(p1.design_factor.design_factor_4).to eq 'pot_number_1'
+        expect(p1.design_factor.design_factor_5).to be_nil
+        expect(p1.design_factor.date_entered).to eq Date.today
+        expect(p1.design_factor.entered_by_whom).to eq submission.user.full_name
+        expect(PlantScoringUnit.find_by_scoring_unit_name('p2').design_factor).to be_nil
+        p3 = PlantScoringUnit.find_by_scoring_unit_name('p3')
+        expect(p3.design_factor).not_to be_nil
+        expect(p3.design_factor.design_unit_counter).to eq '1'
+        expect(p3.design_factor.design_factor_1).to eq 'polytunnel_A'
+        expect(p3.design_factor.design_factor_2).to eq 'rep_2'
+        expect(p3.design_factor.design_factor_3).to eq 'sub_block_1'
+        expect(p3.design_factor.design_factor_4).to be_nil
+        expect(p3.design_factor.design_factor_5).to be_nil
+        p4 = PlantScoringUnit.find_by_scoring_unit_name('p4')
+        expect(p4.design_factor).not_to be_nil
+        expect(p4.design_factor.design_unit_counter).to eq '2'
+        expect(p4.design_factor.design_factor_1).to eq 'polytunnel_B'
+        expect(p4.design_factor.design_factor_2).to eq 'rep_2'
+        expect(p4.design_factor.design_factor_3).to eq 'sub_block_'
+        expect(p4.design_factor.design_factor_4).to eq 'pot_number_2'
+        expect(p4.design_factor.design_factor_5).to be_nil
       end
     end
 

@@ -6,6 +6,8 @@ module Submissions
       property :upload_id
       property :trait_mapping, writeable: false
       property :replicate_numbers, writeable: false
+      property :design_factors, writeable: false
+      property :design_factor_names, writeable: false
 
       def self.permitted_properties
         [
@@ -13,6 +15,8 @@ module Submissions
           :trait_mapping,
           :replicate_numbers,
           :trait_scores,
+          :design_factors,
+          :design_factor_names,
           :accessions
         ]
       end

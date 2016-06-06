@@ -1,6 +1,6 @@
 class Submission::TraitScoreParser
 
-  attr_reader :trait_mapping, :trait_scores, :accessions, :replicate_numbers
+  attr_reader :trait_mapping, :trait_scores, :accessions, :replicate_numbers, :design_factors, :design_factor_names
 
   def initialize(upload)
     @upload = upload
@@ -9,11 +9,16 @@ class Submission::TraitScoreParser
   def call
     @upload.log "Starting Trait Scores file parsing [file name: #{@upload.file_file_name}]"
 
-    @upload.submission.content.update(:step03, trait_mapping: nil, trait_scores: nil)
+    @upload.submission.content.update(:step03, trait_mapping: nil,
+                                               trait_scores: nil,
+                                               replicate_numbers: nil,
+                                               design_factors: nil,
+                                               design_factor_names: nil,
+                                               accessions: nil)
     @upload.submission.save!
 
     begin
-      map_headers_to_traits
+      parse_header
       parse_scores if @upload.errors.empty?
     rescue EOFError => e
       @upload.log "Input file finished"
@@ -26,6 +31,8 @@ class Submission::TraitScoreParser
                                         trait_mapping: @trait_mapping,
                                         replicate_numbers: @replicate_numbers,
                                         trait_scores: @trait_scores,
+                                        design_factors: @design_factors,
+                                        design_factor_names: @design_factor_names,
                                         accessions: @accessions)
       @upload.submission.save!
       @upload.submission.content.save!
@@ -34,16 +41,26 @@ class Submission::TraitScoreParser
 
   private
 
-  def map_headers_to_traits
-    @upload.log "Mapping file header columns to Trait Descriptors"
+  def parse_header
     header = csv.readline
     @trait_names = PlantTrialSubmissionDecorator.decorate(@upload.submission).sorted_trait_names
     @trait_mapping = {}
     @replicate_numbers = {}
+    @design_factor_names = []
     replicates_present = false
+    @number_of_design_factors = 0
     if header.blank? || header.size < 3
       @upload.errors.add(:file, 'No correct header provided. At least three columns are expected.')
+    elsif header.index('Plant accession').nil?
+      @upload.errors.add(:file, 'No correct header provided. Please provide the \"Plant accession\" column.')
     else
+      @number_of_design_factors = [header.index('Plant accession') - 1, 0].max
+      @upload.log "Interpreting design factors" if @number_of_design_factors > 0
+      header[1, @number_of_design_factors].each do |design_factor_name|
+        @design_factor_names << (design_factor_name ? design_factor_name.gsub('/','') : '')
+      end
+
+      @upload.log "Mapping file header columns to Trait Descriptors"
       replicates_present = detect_replication(header[3..-1])
       header[3..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length && !replicates_present
@@ -71,10 +88,15 @@ class Submission::TraitScoreParser
     plant_count = 0
     score_count = 0
     @trait_scores = {}
+    @design_factors = {}
     @accessions = {}
     csv.each do |score_line|
+      design_factors, score_line = score_line.partition.with_index do |_, i|
+        i >= 1 && i <= @design_factor_names.size
+      end
       plant_id, plant_accession, originating_organisation, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
       unless plant_id.blank?
+        @design_factors[plant_id] = design_factors
         if plant_accession.blank? || originating_organisation.blank?
           @upload.log "Ignored row for #{plant_id} since either Plant accession or Originating organisation is missing."
         else
@@ -105,7 +127,7 @@ class Submission::TraitScoreParser
   end
 
   def detect_replication(header_columns)
-    header_columns.any?{ |column_name| column_name.index /rep\d+$/ }
+    header_columns.any?{ |column_name| column_name && column_name.index(/rep\d+$/) }
   end
 
   def split_to_trait_and_replicate(column_name)
