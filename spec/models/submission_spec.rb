@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Submission do
 
   it { should validate_presence_of(:user) }
-  it { should validate_presence_of(:submission_type) }
 
   context "factory" do
     it "builds valid instance" do
@@ -71,7 +70,7 @@ RSpec.describe Submission do
     let(:submission) { build(:submission, :population) }
 
     it 'allows only certain submission type values' do
-      %w(population trial qtl linkage_map).each do |t|
+      %w(population trial).each do |t|
         submission.submission_type = t
         expect(submission.valid?).to be_truthy
         expect(submission.send(t+'?')).to be_truthy
@@ -87,11 +86,7 @@ RSpec.describe Submission do
 
     it 'provides handy scopes to query certain types' do
       create(:submission, submission_type: :population)
-      create(:submission, submission_type: :qtl)
-      create(:submission, submission_type: :qtl)
-      expect(Submission.qtl.count).to eq 2
       expect(Submission.population.count).to eq 1
-      expect(Submission.linkage_map.count).to eq 0
       expect(Submission.trial.count).to eq 0
     end
   end

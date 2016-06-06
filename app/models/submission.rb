@@ -1,6 +1,9 @@
 class Submission < ActiveRecord::Base
 
-  STEPS = %w(step01 step02 step03 step04)
+  STEPS = {
+    "population" => %w(step01 step02 step03 step04),
+    "trial" => %w(step01 step02 step03 step04)
+  }
 
   enum submission_type: %i(population trial qtl linkage_map)
 
@@ -9,7 +12,8 @@ class Submission < ActiveRecord::Base
 
   validates :user, presence: true
   validates :submission_type, presence: true
-  validates :step, inclusion: { in: STEPS }
+  validates :step, inclusion: { in: STEPS["population"] }, if: -> { population? }
+  validates :step, inclusion: { in: STEPS["trial"] }, if: -> { trial? }
   validates :submitted_object_id, presence: true, if: 'finalized?'
   validates :submitted_object_id, uniqueness: { scope: :submission_type }, if: 'finalized?'
   validates :published, inclusion: { in: [true, false] }
@@ -22,7 +26,7 @@ class Submission < ActiveRecord::Base
   scope :recent_first, -> { order(updated_at: :desc) }
 
   def step_no
-    STEPS.index(step)
+    steps.index(step)
   end
 
   def content
@@ -30,35 +34,35 @@ class Submission < ActiveRecord::Base
   end
 
   def content_for?(step)
-    step = STEPS[step.to_i] if step.to_s =~ /\A\d+\z/
+    step = steps[step.to_i] if step.to_s =~ /\A\d+\z/
     content[step].to_h.present?
   end
 
   def step_forward
     raise CantStepForward if last_step?
-    idx = STEPS.index(step)
-    self.step = STEPS[idx + 1]
+    idx = steps.index(step)
+    self.step = steps[idx + 1]
     save!
   end
 
   def step_back
     raise CantStepBack if first_step?
-    idx = STEPS.index(step)
-    self.step = STEPS[idx - 1]
+    idx = steps.index(step)
+    self.step = steps[idx - 1]
     save!
   end
 
   def first_step?
-    step == STEPS.first
+    step == steps.first
   end
 
   def last_step?
-    step == STEPS.last
+    step == steps.last
   end
 
   def reset_step(to_step = 0)
-    to_step = 0 if to_step.nil? || to_step.to_i >= STEPS.length || to_step.to_i < 0
-    self.step = STEPS[to_step.to_i]
+    to_step = 0 if to_step.nil? || to_step.to_i >= steps.length || to_step.to_i < 0
+    self.step = steps[to_step.to_i]
     save!
   end
 
@@ -92,7 +96,7 @@ class Submission < ActiveRecord::Base
   end
 
   def steps
-    STEPS
+    STEPS.fetch(submission_type)
   end
 
   def name
@@ -117,8 +121,8 @@ class Submission < ActiveRecord::Base
   private
 
   def set_defaults
-    self.step = STEPS.first
-    self.content = Hash[STEPS.zip(STEPS.count.times.map {})] if content.blank?
+    self.step = steps.first
+    self.content = Hash[steps.zip(steps.count.times.map {})] if content.blank?
   end
 
   def apply_content_adjustments
