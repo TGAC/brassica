@@ -132,7 +132,7 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
 
   def layout_url
     if object.submitted_object.try(:layout).present?
-      h.plant_trial_path(object)
+      h.plant_trial_path(object.submitted_object)
     end
   end
 
