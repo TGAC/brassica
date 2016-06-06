@@ -143,6 +143,13 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('plant_populations', data, full[full.length - 3])
       ,
+        targets: 'plant_trials_layout_file_name_column'
+        render: (data, type, full, meta) ->
+          if data
+            '<a href="plant_trials/' + full[full.length - 1] + '">Show</a>'
+          else
+            ''
+      ,
         targets: 'plant_trials_id_column'
         render: (data, type, full, meta) ->
           '<a href="trial_scorings/' + data + '">Show</a>'

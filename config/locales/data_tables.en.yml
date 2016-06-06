@@ -81,6 +81,7 @@ en:
       trial_location_site_name: Location site
       institute_id: Institute
       date_entered: Entry date
+      layout_file_name: Layout
     plant_varieties:
       plant_variety_name: Variety
       crop_type: Crop type

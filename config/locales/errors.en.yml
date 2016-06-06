@@ -71,3 +71,10 @@ en:
             plant_variety_id:
               not_with_plant_line: A plant accession may not be simultaneously linked to a plant line and a plant variety.
               blank: A plant accession must be linked to either a plant line or a plant variety.
+
+        submission/upload:
+          attributes:
+            file:
+              no_header: 'No header provided.'
+              non_unique_mapping: 'Detected non unique column headers mapping
+                to traits. Please check the column names.'
