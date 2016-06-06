@@ -29,6 +29,8 @@ FactoryGirl.define do
           submission.content.update(:step04, comments: Faker::Lorem.sentence,
                                              visibility: submission.published? ? 'published' : 'private')
 
+          submission.step = :step04
+
           FactoryGirl.create(:taxonomy_term, name: submission.content.step02.taxonomy_term)
           FactoryGirl.create(:population_type, population_type: submission.content.step02.population_type)
         elsif submission.trial?
@@ -43,13 +45,14 @@ FactoryGirl.define do
                                              place_name: random_word,
                                              country_id: country.id)
           submission.content.update(:step02, trait_descriptor_list: [trait_descriptor.id.to_s])
-          submission.content.update(:step04, comments: Faker::Lorem.sentence,
+          submission.content.update(:step06, comments: Faker::Lorem.sentence,
                                              visibility: submission.published? ? 'published' : 'private')
+
+          submission.step = :step06
         else
           raise "Factory does not support finalized #{submission.submission_type} submissions"
         end
 
-        submission.step = :step04
         submission.finalize
       end
     end

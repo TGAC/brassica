@@ -150,7 +150,7 @@ RSpec.describe Submission do
     let(:submission) { create(:submission) }
 
     it 'moves one step back' do
-      submission.update_attribute(:step, submission.steps.last)
+      submission.update_attribute(:step, 'step04')
       expect { submission.step_back }.to change { submission.step }.from('step04').to('step03')
     end
 

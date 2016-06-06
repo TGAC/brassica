@@ -2,7 +2,7 @@ class Submission < ActiveRecord::Base
 
   STEPS = {
     "population" => %w(step01 step02 step03 step04),
-    "trial" => %w(step01 step02 step03 step04)
+    "trial" => %w(step01 step02 step03 step04 step05 step06)
   }
 
   enum submission_type: %i(population trial qtl linkage_map)
