@@ -63,6 +63,15 @@ en:
             country_id:
               blank: Please select a country from the list.
 
+        plant_accession:
+          attributes:
+            plant_line_id:
+              not_with_plant_variety: A plant accession may not be simultaneously linked to a plant line and a plant variety.
+              blank: A plant accession must be linked to either a plant line or a plant variety.
+            plant_variety_id:
+              not_with_plant_line: A plant accession may not be simultaneously linked to a plant line and a plant variety.
+              blank: A plant accession must be linked to either a plant line or a plant variety.
+
         submission/upload:
           attributes:
             file:

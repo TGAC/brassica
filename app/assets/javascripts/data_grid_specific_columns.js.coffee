@@ -90,7 +90,11 @@ window.configs =
       [
         targets: 'plant_lines_plant_line_name_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('plant_lines', data, full[full.length - 2])
+          modelIdUrl('plant_lines', data, full[full.length - 3])
+      ,
+        targets: 'plant_varieties_plant_variety_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_varieties', data, full[full.length - 2])
       ]
 
   'plant-lines':
