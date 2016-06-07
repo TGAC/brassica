@@ -52,8 +52,7 @@ class Submission::TraitScoreParser
     if header.blank? || header.size < 3
       @upload.errors.add(:file, :no_header)
     elsif header.index('Plant accession').nil?
-      @upload.errors.add(:file, 'No correct header provided. Please provide the \"Plant accession\" column.')
-      # TODO @upload.errors.add(:file, :no_header)
+      @upload.errors.add(:file, :no_plant_accession_header)
     else
       @number_of_design_factors = [header.index('Plant accession') - 1, 0].max
       @upload.log "Interpreting design factors" if @number_of_design_factors > 0

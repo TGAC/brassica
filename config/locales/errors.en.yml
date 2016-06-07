@@ -76,5 +76,6 @@ en:
           attributes:
             file:
               no_header: 'No correct header provided. At least three columns are expected.'
+              no_plant_accession_header: 'No correct header provided. Please provide the \"Plant accession\" column.'
               non_unique_mapping: 'Detected non unique column headers mapping
                 to traits. Please check the column names.'
