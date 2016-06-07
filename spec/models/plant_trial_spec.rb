@@ -37,7 +37,7 @@ RSpec.describe PlantTrial do
 
   describe '#pluck_columns' do
     it 'gets proper data table columns' do
-      pt = create(:plant_trial)
+      pt = create(:plant_trial, :with_layout)
       plucked = PlantTrial.pluck_columns
       expect(plucked.count).to eq 1
       expect(plucked[0]).
@@ -50,12 +50,14 @@ RSpec.describe PlantTrial do
           pt.trial_location_site_name,
           pt.country.country_name,
           pt.institute_id,
+          pt.layout_file_name,
           pt.id,
           pt.plant_scoring_units.count,
           pt.plant_population.id,
           pt.pubmed_id,
           pt.id
         ]
+      expect(plucked[0][8]).to eq 'plant-trial-layout-example.jpg'
     end
   end
 

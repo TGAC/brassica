@@ -2,13 +2,18 @@ class SubmissionUploadDecorator < Draper::Decorator
   delegate_all
 
   def as_json(*)
-    super.merge(
-      delete_url: Rails.application.routes.url_helpers.
-        submission_upload_path(object.submission, object),
-      logs: object.logs,
-      errors: object.errors[:file],
-      summary: parser_summary
-    )
+    if new_record?
+      super.merge(
+        errors: formatted_errors
+      )
+    else
+      super.merge(
+        errors: formatted_errors,
+        delete_url: delete_url,
+        logs: object.logs,
+        summary: parser_summary
+      )
+    end
   end
 
   def parser_summary
@@ -49,5 +54,17 @@ class SubmissionUploadDecorator < Draper::Decorator
         end
       end
     end
+  end
+
+  def delete_url
+    Rails.application.routes.url_helpers.
+      submission_upload_path(object.submission, object)
+  end
+
+  def formatted_errors
+    errors = object.errors.dup
+    # Remove duplicated paperclip validation messages
+    errors[:file].reject! { |msg| errors[:file_content_type].include?(msg) }
+    errors.full_messages
   end
 end

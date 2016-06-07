@@ -1,11 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe SubmissionUploadDecorator do
-  let(:sd) do
-    SubmissionUploadDecorator.decorate(
-      create(:upload)
-    )
-  end
+RSpec.describe SubmissionTraitScoresUploadDecorator do
+  let(:upload) { create(:upload) }
+  let(:sd) { described_class.decorate(upload) }
 
   describe '#parser_summary' do
     it 'does not misbehave on null input' do

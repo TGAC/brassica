@@ -50,9 +50,10 @@ class Submission::TraitScoreParser
     replicates_present = false
     @number_of_design_factors = 0
     if header.blank? || header.size < 3
-      @upload.errors.add(:file, 'No correct header provided. At least three columns are expected.')
+      @upload.errors.add(:file, :no_header)
     elsif header.index('Plant accession').nil?
       @upload.errors.add(:file, 'No correct header provided. Please provide the \"Plant accession\" column.')
+      # TODO @upload.errors.add(:file, :no_header)
     else
       @number_of_design_factors = [header.index('Plant accession') - 1, 0].max
       @upload.log "Interpreting design factors" if @number_of_design_factors > 0
@@ -79,7 +80,7 @@ class Submission::TraitScoreParser
       end
     end
     if @trait_mapping.values.uniq.length != @trait_mapping.values.length && !replicates_present
-      @upload.errors.add(:file, 'Detected non unique column headers mapping to traits. Please check the column names.')
+      @upload.errors.add(:file, :non_unique_mapping)
     end
   end
 

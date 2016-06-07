@@ -90,7 +90,11 @@ window.configs =
       [
         targets: 'plant_lines_plant_line_name_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('plant_lines', data, full[full.length - 2])
+          modelIdUrl('plant_lines', data, full[full.length - 3])
+      ,
+        targets: 'plant_varieties_plant_variety_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_varieties', data, full[full.length - 2])
       ]
 
   'plant-lines':
@@ -138,6 +142,13 @@ window.configs =
         targets: 'plant_populations_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_populations', data, full[full.length - 3])
+      ,
+        targets: 'plant_trials_layout_file_name_column'
+        render: (data, type, full, meta) ->
+          if data
+            '<a href="plant_trials/' + full[full.length - 1] + '">Show</a>'
+          else
+            ''
       ,
         targets: 'plant_trials_id_column'
         render: (data, type, full, meta) ->

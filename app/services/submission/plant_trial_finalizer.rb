@@ -115,7 +115,11 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:visibility))
+    if layout_upload = Submission::Upload.find_by(id: submission.content.step04.layout_upload_id)
+      attrs.merge!(layout: layout_upload.file)
+    end
+
+    attrs.merge!(submission.content.step04.to_h.except(:visibility, :layout_upload_id))
     attrs.merge!(design_factors: describe_design_factors(design_factor_names))
     attrs.merge!(published: publish?)
 
