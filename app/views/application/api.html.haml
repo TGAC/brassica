@@ -12,6 +12,8 @@
           %li= link_to "Submitting data", "#submitting-data"
           %li= link_to "Publishing data", "#publishing-data"
           %li= link_to "Deleting data", "#deleting-data"
+          %li
+            %hr
 
           - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
@@ -20,8 +22,8 @@
       %h3#general-introduction.section-heading General introduction
 
       %p
-        BIP provides a HTTP RESTful API which uses JSON to represent
-        resources. Full access to the API is allowed for all registered users.
+        BIP provides a HTTP RESTful API which uses JSON to represent resources. Resources represent
+        database model elements (tables) which constitute BIP Schema. Full access to the API is allowed for all registered users.
         In order to authenticate your request, pass the <code>X-BIP-Api-Key</code> header in
         each call to the API.
 
@@ -34,7 +36,10 @@
 
       %p
         The API exposes several resources for which fetching and submission of
-        new entries is supported. These include:
+        new entries is supported
+        %sup
+          %a(href="#cropstore-acknowledgement") [1].
+        These include:
 
       %ul
         - Api.writable_models.each do |model|
@@ -339,6 +344,14 @@
           %pre.response
             %code= t('api.delete.examples.ok_response')
 
+      %h3#tables-introduction.section-heading Detailed model introduction
+
+      %p
+        Below, the resources (which mostly represent data base tables in the BIP data model) and their attributes
+        (which correspond, to large extent, with individual columns in data base tables) that are exposed with the API
+        are described in more detail. Use these attributes in your calls to the API. For each resource, a set of
+        examples for various API calls is given below its attributes table.
+
 
       -# Models section follows
 
@@ -364,3 +377,18 @@
           - if Api.writable_model?(model)
             = render partial: 'application/api/create', locals: { model: model }
             %hr
+
+      %h3#cropstore-acknowledgement.section-heading CropStoreDB acknowledgement
+
+      %p
+        As the BIP database Schema is based on the CropStoreDB schema, the definitions in the API documentation
+        are heavily derived from those in CropStoreDB. We would like to acknowledge the CropStoreDB team managed
+        by Graham King for the prior work this webpage draws from. Their database can be found on
+        =link_to 'CropStoreDB', 'http://www.cropstoredb.org/', target: '_blank'
+        and their resource is cited as Love et al. (2012).
+
+      %p.small
+        Love, C. G., Andongabo, A. E., Wang, J., Carion, P. W. C., Rawlings, C. J. and King, G. J. (2012),
+        InterStoreDB: A Generic Integration Resource for Genetic and Genomic Data.
+        Journal of Integrative Plant Biology, 54: 345–355. doi:
+        = link_to '10.1111/j.1744-7909.2012.01120.x', 'https://doi.org/10.1111/j.1744-7909.2012.01120.x', target: '_blank'

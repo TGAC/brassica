@@ -192,20 +192,20 @@ class TrialSubmission extends Submission
       @$(".#{field}").select2(@defaultSelectOptions)
       @$(".#{field}-wrapper").comboField()
 
-    @bindUpload()
+    @bindTraitScoresUpload()
+    @bindLayoutUpload()
     @bindNewTraitDescriptorControls()
 
   initDirtyTracker: =>
     super()
 
-    # TODO: make sure it works with keyboard and touch too
     $('input[type=submit][name=leave], input[type=submit][name=commit]').on 'click', (event) =>
       if @dirtyTracker.isChanged('new-trait-descriptor')
         unless confirm("Discard new Trait descriptor?")
           event.preventDefault()
           event.stopPropagation()
 
-  bindUpload: =>
+  bindTraitScoresUpload: =>
     @$('.trait-scores-upload').fileupload
       data_type: 'json'
 
@@ -214,9 +214,12 @@ class TrialSubmission extends Submission
         data.submit()
 
       done: (event, data) =>
+        $(".errors").addClass('hidden').text("")
+
         @$('#submission_content_upload_id').val(data.result.id)
 
-        @$('.fileinput-button').removeClass('disabled').addClass('hidden')
+        @$('.fileinput').addClass('hidden')
+        @$('.fileinput-button').removeClass('disabled')
         @$('.uploaded-trait-scores').removeClass('hidden')
         @$('.uploaded-trait-scores .file-name').text(data.result.file_file_name)
         @$('.uploaded-trait-scores .delete-trait-scores-upload').attr(href: data.result.delete_url)
@@ -236,10 +239,56 @@ class TrialSubmission extends Submission
       fail: (event, data) =>
         if data.jqXHR.status == 401
           window.location.reload()
+        else if data.jqXHR.status == 422
+          @$('.fileinput-button').removeClass('disabled')
+
+          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
+          $.each(data.jqXHR.responseJSON.errors, (_, error) =>
+            $li = $("<li></li>").text(error)
+            $errors.find("ul").append($li)
+          )
 
     @$('.delete-trait-scores-upload').on 'ajax:success', (data, status, xhr) =>
-      @$('.fileinput-button').removeClass('hidden')
+      @$('.fileinput').removeClass('hidden')
       @$('.uploaded-trait-scores').addClass('hidden')
+
+  bindLayoutUpload: =>
+    @$('.layout-upload').fileupload
+      data_type: 'json'
+
+      add: (event, data) =>
+        @$('.fileinput-button').addClass('disabled')
+        data.submit()
+
+      done: (event, data) =>
+        $(".errors").addClass('hidden').text("")
+
+        @$('#submission_content_layout_upload_id').val(data.result.id)
+
+        @$('.fileinput').addClass('hidden')
+        @$('.fileinput-button').removeClass('disabled')
+        @$('.uploaded-layout').removeClass('hidden')
+        @$('.uploaded-layout .file-name').text(data.result.file_file_name)
+        @$('.uploaded-layout .delete-layout-upload').attr(href: data.result.delete_url)
+
+        @$('.uploaded-layout .layout-image').prop(src: data.result.small_file_url)
+        @$('.uploaded-layout .layout-image').parent().prop(href: data.result.original_file_url)
+
+      fail: (event, data) =>
+        if data.jqXHR.status == 401
+          window.location.reload()
+        else if data.jqXHR.status == 422
+          @$('.fileinput-button').removeClass('disabled')
+
+          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
+          $.each(data.jqXHR.responseJSON.errors, (_, error) =>
+            $li = $("<li></li>").text(error)
+            $errors.find("ul").append($li)
+          )
+
+    @$('.delete-layout-upload').on 'ajax:success', (data, status, xhr) =>
+      @$('.fileinput').removeClass('hidden')
+      @$('.uploaded-layout').addClass('hidden')
 
   bindNewTraitDescriptorControls: =>
     @$('.trait-descriptor-list').on 'select2:unselect', (event) =>

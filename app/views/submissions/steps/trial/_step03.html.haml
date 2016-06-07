@@ -4,9 +4,9 @@
 
   %pre.parser-summary.alert.alert-success{ class: "#{'hidden' unless @content.upload}" }
     - if @content.upload
-      = raw SubmissionUploadDecorator.decorate(@content.upload).parser_summary.join('</br>')
+      = raw @content.upload.parser_summary.join('</br>')
 
-  .alert.alert-primary
+  .form-group
     = label_tag :upload, 'Uploaded file'
     %div
       %span.file-name= @content.upload.try(:file_file_name)
