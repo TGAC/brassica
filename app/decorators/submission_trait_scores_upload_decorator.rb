@@ -12,14 +12,21 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
           group_by{ |id, scores| scores.size }.
           sort{ |score1, score2| score2.first <=> score1.first }
 
-        summary << " - parsed #{trait_scores.size} plant(s) with unique identification"
+        summary << " - parsed #{trait_scores.size} plant scoring unit(s) with unique identification"
         histogram.each do |scoring_number, plants|
-          summary << "  - #{plants.size} plant(s) have #{scoring_number} trait score(s) recorded"
+          summary << "  - #{plants.size} unit(s) have #{scoring_number} trait score(s) recorded"
         end
+      end
+
+      accessions = object.submission.content.step03.accessions
+      if accessions
+        unique_accessions = accessions.values.uniq
+        summary << " - parsed #{unique_accessions.size} different accession(s)"
       end
 
       trait_names = PlantTrialSubmissionDecorator.decorate(object.submission).sorted_trait_names
       trait_mapping = object.submission.content.step03.trait_mapping
+      replicate_numbers = object.submission.content.step03.replicate_numbers
       if trait_names && trait_scores
         histogram = trait_scores.
           values.
@@ -28,10 +35,9 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
           group_by{ |col_index| col_index }.
           sort_by(&:first)
 
-        summary << " - parsed scores for #{histogram.size} trait(s)"
+        summary << " - parsed scores for #{histogram.size} trait(s), including technical replicates"
         histogram.each do |col_index, scores|
-          next unless trait_mapping[col_index]
-          summary << "  - #{scores.size} score(s) recorded for trait #{trait_names[trait_mapping[col_index]]}"
+          summary << "  - #{scores.size} score(s) recorded for trait #{trait_names[trait_mapping[col_index]]} rep#{replicate_numbers[col_index]}"
         end
       end
     end
