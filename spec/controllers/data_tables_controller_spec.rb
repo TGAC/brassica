@@ -62,6 +62,52 @@ RSpec.describe DataTablesController do
         expect(json['data'][0][-1]).to eq pps[0]
       end
 
+      it 'avoids double joins when querying qtl by publishable parameters' do
+        lg = create(:linkage_group)
+        qtl1 = create(:qtl)
+        qtl2 = create(:qtl, linkage_group: lg)
+        get :index,
+            format: :json,
+            model: 'qtl',
+            query: { 'linkage_groups.id' => lg.id }
+        expect(response.content_type).to eq 'application/json'
+        json = JSON.parse(response.body)
+        expect(json['recordsTotal']).to eq 1
+        expect(json['data'].size).to eq 1
+        expect(json['data'][0][-1]).to eq qtl2.id
+      end
+
+      it 'avoids double joins when querying trait_scores by publishable parameters' do
+        td = create(:trait_descriptor)
+        ts1 = create(:trait_score)
+        ts2 = create(:trait_score, trait_descriptor: td)
+        get :index,
+            format: :json,
+            model: 'trait_scores',
+            query: { 'trait_descriptors.id' => td.id }
+        expect(response.content_type).to eq 'application/json'
+        json = JSON.parse(response.body)
+        expect(json['recordsTotal']).to eq 1
+        expect(json['data'].size).to eq 1
+        expect(json['data'][0][-1]).to eq ts2.id
+      end
+
+      it 'avoids double joins when querying marker_assays by publishable parameters' do
+        ps = create_list(:primer, 2)
+        ma1 = create(:marker_assay)
+        ma2 = create(:marker_assay, primer_a: ps[0])
+        get :index,
+            format: :json,
+            model: 'marker_assays',
+            query: { primer_a_id: ps[0].id }
+        expect(response.content_type).to eq 'application/json'
+        json = JSON.parse(response.body)
+        expect(json['recordsTotal']).to eq 1
+        expect(json['data'].size).to eq 1
+        expect(json['data'][0][-1]).to eq ma2.id
+      end
+
+
       it 'prevents querying by unpermitted parameters' do
         create(:plant_line, named_by_whom: 'nbw')
         get :index,
