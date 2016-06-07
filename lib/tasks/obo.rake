@@ -262,6 +262,44 @@ namespace :obo do
     puts "Done. Created #{total_old_count} non-canonical TO terms from TD records and mapped #{total_mapped_count} TDs to canonical TO terms."
   end
 
+  task noncanonical_traits: :environment do
+    # This task loads trait curated by Annemarie from other sources, which are not present in the Trait Ontology
+    puts "Creating Trait records for non-TO terms provided by Annemarie."
+    total_new_count = 0
+
+    ['Straw yield', 'Flowering period', 'End of flowering', 'Adult Phradis Sp.', 'Adult Tersilochus heterocerus',
+     'Adult Tersilochus Sp. (other than heterocerus)', 'Adult Pteromalidae Sp.', 'Adult other Parasitoid', 'Pollen beetle adult', 
+     'Light leaf spot', 'Stem canker', 'Sclerotinia', 'Early leaf carotenoids', 'Canopy leaf Chl', 'Canopy leaf Chl-a', 'Canopy leaf Chl-b', 
+     'Canopy leaf carotenoids', 'Stem stiffness', 'Seed shatter', 'Pod maturity', 'Branch numbers', 'Canopy leaf NO3-', 'Seed NO3-', 'Seed Li', 
+     'Seed  Sr', 'Seed S', 'Seed Ti', 'Seed Al', 'Seed V', 'Seed Cr', 'Seed Co', 'Seed Ni', 'Seed As', 'Seed Se', 'Seed Rb', 'Seed Mo', 
+     'Seed Ag', 'Seed Cd', 'Seed Cs', 'Seed Ba', 'Seed Pb', 'Seed U', 'Seed F', 'Seed Cl', 'Seed Malate', 'Seed Sulfate', 'Seed C14:0', 
+     'Seed C16:0', 'Seed C18:0', 'Seed C18:2', 'Seed C18:3', 'Seed C20:0', 'Seed C20:1', 'Seed C20:2', 'Seed C22:0', 
+     'Pod and stem Alkane-functional group content', 'Pod and stem prim. Alkohol functional group content', 
+     'Pod and stem Fatty acids functional group content', 'Pod and stem  2dary Alkohol functional group content', 
+     'Pod and stem Ketone functional group content', 'Pod and stem branched alcyl-chain content', 'Pod and stem Aldehyde functional group content', 
+     'Pod and stem wax content', 'Seed δ-tocopherol', 'Seed γ-tocopherol', 'Seed α-tocopherol', 'Seed moisture content', 'Seed protein content', 
+     'Stem weevil count', 'Seed weevil count', 'Seed area', 'Shoot fresh weight at high N', 'Shoot fresh weight at low N', 
+     'Shoot organic N at high N', 'Shoot organic N at low N', 'Shoot Nitrate at high N', 'Shoot Nitrate at low N', 'Shoot P at high N', 
+     'Shoot P at low N', 'Shoot K at high N', 'Shoot K at low N', 'Shoot Na at high N', 'Shoot Na at low N', 'Shoot Mn at high N', 
+     'Shoot Mn at low N', 'Shoot  Ca at high N', 'Shoot Ca  at low N', 'Shoot Mg at high N', 'Shoot Mg at low N', 'Seed Brassicasterol', 
+     'Seed Campesterol diunsaturated', 'Seed Campesterol', 'Seed Stigmasterol', 'Seed β-Sitosterol', 'Seed Avenasterol', 'Seed Cycloartenol', 
+     'Seed Sterol', 'Bolting time', 'Budding time', 'Primary branch angle', 'Number of pods', 'Lower stem length', 'Pedicel angle',
+     'Pedicel length', 'Pod angle', 'Pod length', 'Pod width', 'Stem width', 'Pigeon damage', 'Flowering phenology', 'Plant weight', 'Seed P', 
+     'Seed B', 'Seed Mn', 'Seed Fe', 'Seed K', 'Seed Mg', 'Seed Cu', 'Seed Na', 'Seed Zn', 'Seed Ca', 'Canopy leaf P', 'Canopy leaf Kjeldal N', 
+     'Canopy leaf K', 'Canopy leaf Mn', 'Canopy leaf Mg', 'Canopy leaf Na', 'Canopy leaf Ca', 'Early leaf P', 'Early leaf Kjeldahl N', 
+     'Early leaf Mn', 'Early leaf K', 'Early leaf Mg', 'Early leaf Na', 'Early leaf Ca', 'Seed number'].each do |term_name|
+
+      Trait.create!(
+        name: term_name,
+        label: 'BIP/TGAC',
+        data_provenance: 'BIP/TGAC',
+        canonical: false
+      )
+      total_new_count += 1
+    end
+    puts "Done. Created #{total_new_count} non-canonical Trait terms."
+  end
+
 
   def variety_names(genus, species, subtaxa)
     ["#{genus} #{species} var. #{subtaxa}",
