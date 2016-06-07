@@ -62,7 +62,12 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
           {}.tap do |attrs|
             required_attrs.each do |attr|
               if related_models.include? attr.to_s.gsub('_id','').to_sym
-                attrs[attr] = create(attr.to_s.gsub('_id','')).id
+                # Special exception for PlantAccessions due to the fact that a PA cannot be linked both to PL and to PV
+                if model_name == 'plant_accession' and attr == :plant_variety_id
+                  attrs[attr] = nil
+                else
+                  attrs[attr] = create(attr.to_s.gsub('_id','')).id
+                end
               else
                 attrs[attr] = "Foo"
               end
@@ -104,7 +109,6 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "sets correct annotations" do
           post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
-
           expect(response).to be_success
           expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
           expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
@@ -169,7 +173,11 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
               attrs[attr] = "Foo"
             end
             related_models.each do |attr|
-              attrs["#{attr}_id"] = 555555
+              if model_name == 'plant_accession' && attr.to_s == 'plant_variety'
+                attrs["#{attr}_id"] = nil
+              else
+                attrs["#{attr}_id"] = 555555
+              end
             end
           end
         }

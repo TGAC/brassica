@@ -15,4 +15,8 @@ FactoryGirl.define do
     user
     annotable
   end
+
+  trait :with_layout do
+    layout { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'plant-trial-layout-example.jpg'), 'image/jpeg') }
+  end
 end

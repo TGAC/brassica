@@ -1,5 +1,6 @@
 class PlantAccession < ActiveRecord::Base
   belongs_to :plant_line
+  belongs_to :plant_variety
   belongs_to :user
 
   after_update { plant_scoring_units.each(&:touch) }
@@ -15,16 +16,28 @@ class PlantAccession < ActiveRecord::Base
             length: { is: 4 },
             allow_blank: true
 
+  validate :plant_line_xor_plant_variety
+  validates :plant_line_id, presence: true, if: 'plant_variety_id.nil?'
+  validates :plant_variety_id, presence: true, if: 'plant_line_id.nil?'
+
   include Relatable
   include Filterable
   include Pluckable
   include Publishable
   include TableData
 
+  def plant_line_xor_plant_variety
+    if plant_line_id.present? && plant_variety_id.present?
+      errors.add(:plant_line_id, :not_with_plant_variety)
+      errors.add(:plant_variety_id, :not_with_plant_line)
+    end
+  end
+
   def self.table_columns
     [
       'plant_accession',
       'plant_lines.plant_line_name',
+      'plant_varieties.plant_variety_name',
       'plant_accession_derivation',
       'originating_organisation',
       'year_produced',
@@ -49,7 +62,8 @@ class PlantAccession < ActiveRecord::Base
 
   def self.ref_columns
     [
-      'plant_line_id'
+      'plant_line_id',
+      'plant_variety_id'
     ]
   end
 

@@ -11,4 +11,17 @@ class PlantTrialsController < ApplicationController
     }
   end
 
+  def show
+    plant_trial = PlantTrial.visible(current_user.try(:id)).find_by(id: params[:id])
+    if plant_trial && plant_trial.layout.path
+      send_file plant_trial.layout.path,
+                type: plant_trial.layout_content_type,
+                filename: plant_trial.layout_file_name
+    elsif plant_trial
+      render nothing: true, status: :not_found
+    else
+      render nothing: true, status: :unauthorized
+    end
+  end
+
 end

@@ -129,4 +129,16 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   def comments
     object.content.step04.comments.presence
   end
+
+  def layout_url
+    if object.submitted_object.try(:layout).present?
+      h.plant_trial_path(object.submitted_object)
+    end
+  end
+
+  def layout_link
+    return unless layout_url
+    file_name = object.submitted_object.try(:layout).try(:original_filename)
+    h.link_to file_name, layout_url
+  end
 end

@@ -13,6 +13,7 @@ class PlantVariety < ActiveRecord::Base
   before_destroy { plant_lines.each(&:touch) }
 
   has_many :plant_lines
+  has_many :plant_accessions
 
   validates :plant_variety_name,
             presence: true,

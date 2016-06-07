@@ -40,6 +40,7 @@ class Submission::TraitScoreParser
     @trait_mapping = {}
     if header.blank? || header.size < 3
       @upload.errors.add(:file, 'No correct header provided. At least three columns are expected.')
+      # TODO @upload.errors.add(:file, :no_header)
     else
       header[3..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length
@@ -51,7 +52,7 @@ class Submission::TraitScoreParser
       end
     end
     if @trait_mapping.values.uniq.length != @trait_mapping.values.length
-      @upload.errors.add(:file, 'Detected non unique column headers mapping to traits. Please check the column names.')
+      @upload.errors.add(:file, :non_unique_mapping)
     end
   end
 

@@ -1,2 +1,30 @@
+.uploaded-layout{ class: "#{'hidden' unless @content.layout_upload}" }
+  .form-group
+    = label_tag :layout, 'Trial layout'
+
+    = link_to(@content.layout_upload.try(:file_url), target: "_blank") do
+      %img.layout-image{ src: @content.layout_upload.try(:file_url, :small) }
+
+    %div.alert.alert-warning
+      %p
+        Uploaded file name:
+        = succeed '.' do
+          %strong
+            %span.file-name= @content.layout_upload.try(:file_file_name)
+      %p
+        Please click the thumbnail above to see the full size version. In order to save the image in BIP,
+        you need to click either
+        %strong Save & edit later
+        or
+        %strong Send
+        button. Use the
+        %strong Delete
+        button right below to replace the image with another one.
+      %p
+        = delete_submission_upload_button(@content.layout_upload,
+          class: 'btn btn-default delete-layout-upload')
+
+= content.hidden_field :layout_upload_id
+
 = render partial: "submissions/annotations", locals: { model: PlantTrial, collapsible: false, form: content }
 = render partial: "submissions/steps/visibility", locals: { form: content }
