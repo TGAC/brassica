@@ -39,8 +39,7 @@ class Submission::TraitScoreParser
     @trait_names = PlantTrialSubmissionDecorator.decorate(@upload.submission).sorted_trait_names
     @trait_mapping = {}
     if header.blank? || header.size < 3
-      @upload.errors.add(:file, 'No correct header provided. At least three columns are expected.')
-      # TODO @upload.errors.add(:file, :no_header)
+      @upload.errors.add(:file, :no_header)
     else
       header[3..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length

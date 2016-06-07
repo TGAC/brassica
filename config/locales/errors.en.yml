@@ -75,6 +75,6 @@ en:
         submission/upload:
           attributes:
             file:
-              no_header: 'No header provided.'
+              no_header: 'No correct header provided. At least three columns are expected.'
               non_unique_mapping: 'Detected non unique column headers mapping
                 to traits. Please check the column names.'
