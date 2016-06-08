@@ -21,9 +21,7 @@ class Qtl < ActiveRecord::Base
     pp_subquery = PlantPopulation.visible(uid)
     qtlj_subquery = QtlJob.visible(uid)
 
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-
-    query = query.
+    query = all.
       joins {[
         processed_trait_dataset,
         td_subquery.as('trait_descriptors').on { processed_trait_datasets.trait_descriptor_id == trait_descriptors.id }.outer,
@@ -33,6 +31,7 @@ class Qtl < ActiveRecord::Base
         pp_subquery.as('plant_populations').on { linkage_maps.plant_population_id == plant_populations.id }.outer,
         qtlj_subquery.as('qtl_jobs').on { qtl_job_id == qtl_jobs.id }.outer
       ]}
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
     query.pluck(*(table_columns + ref_columns))
   end
