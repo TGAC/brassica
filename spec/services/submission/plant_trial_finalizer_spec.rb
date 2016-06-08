@@ -6,6 +6,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
   let(:plant_population) { create(:plant_population, user: submission.user) }
   let(:old_trait_descriptor) { create(:trait_descriptor) }
   let(:old_accession) { create(:plant_accession, plant_accession: 'old_acc', originating_organisation: 'Organisation Old') }
+  let(:old_variety) { create(:plant_variety) }
+  let(:old_line) { create(:plant_line) }
   let(:trait) { create(:trait) }
   let(:trait_other) { create(:trait) }
   let(:plant_part) { create(:plant_part) }
@@ -60,6 +62,12 @@ RSpec.describe Submission::PlantTrialFinalizer do
           'p2' => { plant_accession: old_accession.plant_accession, originating_organisation: old_accession.originating_organisation },
           'p3' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A' },
           'p4' => { plant_accession: 'new_acc2', originating_organisation: 'Organisation A' }
+        },
+        lines_or_varieties: {
+          'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' },
+          'p2' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' },
+          'p3' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' },
+          'p4' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' }
         }
       )
       submission.content.update(:step04, plant_trial_attrs.slice(
@@ -154,6 +162,58 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(TraitScore.find_by(score_value: 'z').trait_descriptor.trait_name).
         to eq new_trait_descriptors_attrs[0][:trait]
       expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
+    end
+
+    context 'when dealing with plant lines and plant varieties' do
+      it 'does nothing if no information is given' do
+        submission.content.update(:step03,
+          submission.content.step03.to_h.merge(lines_or_varieties: {})
+        )
+
+        expect{ subject.call }.not_to change{ PlantLine.count + PlantVariety.count }
+      end
+
+      it 'creates or assigns plant varieties for new accessions only' do
+        submission.content.update(:step03,
+          submission.content.step03.to_h.merge(
+            lines_or_varieties: {
+             'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety to be created' },
+             'p2' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety not to be created' },
+             'p3' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety already created' },
+             'p4' => { relation_class_name: 'PlantVariety', relation_record_name: old_variety.plant_variety_name }
+            }
+          )
+        )
+
+        expect{ subject.call }.to change{ PlantVariety.count }.by(1)
+        expect(PlantVariety.pluck(:plant_variety_name)).
+          to match_array [old_variety.plant_variety_name, 'New variety to be created']
+        expect(old_accession.reload.plant_variety).to be_nil
+        expect(PlantAccession.find_by_plant_accession('new_acc1').plant_variety.plant_variety_name).
+          to eq 'New variety to be created'
+        expect(PlantAccession.find_by_plant_accession('new_acc2').plant_variety.plant_variety_name).
+          to eq old_variety.plant_variety_name
+      end
+
+      it 'assigns plant lines for new accessions only' do
+        submission.content.update(:step03,
+          submission.content.step03.to_h.merge(
+            lines_or_varieties: {
+              'p1' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name },
+              'p2' => { relation_class_name: 'PlantLine', relation_record_name: 'New line not to be created' },
+              'p3' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name },
+              'p4' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name }
+            }
+          )
+        )
+
+        expect{ subject.call }.to change{ PlantLine.count }.by(0)
+        expect(old_accession.reload.plant_line.plant_line_name).not_to eq 'New line not to be created'
+        expect(PlantAccession.find_by_plant_accession('new_acc1').plant_line.plant_line_name).
+          to eq old_line.plant_line_name
+        expect(PlantAccession.find_by_plant_accession('new_acc2').plant_line.plant_line_name).
+          to eq old_line.plant_line_name
+      end
     end
 
     context 'when parsing technical replicate data' do
@@ -301,8 +361,40 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(submission.finalized?).to be_falsey
       end
 
+      it 'rollbacks when there is no plant line or plant variety information for new accession' do
+        submission.content.update(:step03,
+          accessions: {
+            'p1' => { plant_accession: 'new_acc1' }
+          },
+          lines_or_varieties: {}
+        )
+
+        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect(submission.finalized?).to be_falsey
+      end
+
+      it 'rollbacks when a new plant line is encountered for a new plant accession' do
+        submission.content.update(:step03,
+          accessions: {
+            'p1' => { plant_accession: 'new_acc1' }
+          },
+          lines_or_varieties: {
+            'p1' => { relation_class_name: 'PlantLine', relation_record_name: 'New line that should not be created' }
+          }
+        )
+
+        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect(submission.finalized?).to be_falsey
+      end
+
       def related_object_count
-        PlantTrial.count + TraitScore.count + PlantScoringUnit.count + TraitDescriptor.count + PlantAccession.count
+        PlantTrial.count +
+          TraitScore.count +
+          PlantScoringUnit.count +
+          TraitDescriptor.count +
+          PlantAccession.count +
+          DesignFactor.count +
+          PlantVariety.count
       end
     end
   end

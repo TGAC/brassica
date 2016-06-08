@@ -6,6 +6,10 @@ class Submissions::UploadsController < ApplicationController
   def new
     @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
 
+    # TODO FIXME Add Design factors generation
+    # TODO FIXME Add Plant line/Plant variety generation
+    # TODO FIXME Add technical replicates generation
+
     data = CSV.generate(headers: true) do |csv|
       csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation'] + @traits
 

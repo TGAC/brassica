@@ -40,14 +40,47 @@ class Submission::PlantTrialFinalizer
     replicate_numbers = submission.content.step03.replicate_numbers || {}
     design_factors = submission.content.step03.design_factors || {}
     design_factor_names = submission.content.step03.design_factor_names || []
+    lines_or_varieties = submission.content.step03.lines_or_varieties || {}
 
     @new_plant_scoring_units = trait_scores.map do |plant_id, scores|
       rollback(2) unless accessions[plant_id] && accessions[plant_id]['plant_accession'] && accessions[plant_id]['originating_organisation']
 
-      plant_accession = PlantAccession.create_with(common_data).find_or_create_by(
+      plant_accession = PlantAccession.find_or_create_by!(
         plant_accession: accessions[plant_id]['plant_accession'],
         originating_organisation: accessions[plant_id]['originating_organisation']
-      )
+      ) do |new_plant_accession|
+        # If new accession, set PL or PV
+        accession_relation = {}
+
+        if lines_or_varieties[plant_id].blank?
+          # Info on either PL or PV for a new accession is required
+          rollback(2)
+        elsif lines_or_varieties[plant_id]['relation_class_name'] == 'PlantVariety'
+          plant_variety = PlantVariety.find_or_create_by!(
+            plant_variety_name: lines_or_varieties[plant_id]['relation_record_name']
+          ) do |new_plant_variety|
+            new_plant_variety.assign_attributes(common_data)
+          end
+          accession_relation = { plant_variety: plant_variety }
+
+        elsif lines_or_varieties[plant_id]['relation_class_name'] == 'PlantLine'
+          plant_line = PlantLine.find_by(
+            plant_line_name: lines_or_varieties[plant_id]['relation_record_name']
+          )
+          if plant_line
+            accession_relation = { plant_line: plant_line }
+          else
+            #TODO Inform the user there is no PlantLine of a given name and that it should be submitted with another submission first
+            rollback(2)
+          end
+
+        else
+          # Unknown and not expected class name used for 'relation_class_name'
+          rollback(2)
+        end
+
+        new_plant_accession.assign_attributes(common_data.merge(accession_relation))
+      end
 
       design_factor = nil
       factor_values = design_factors[plant_id]

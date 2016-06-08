@@ -1,6 +1,6 @@
 class Submission::TraitScoreParser
 
-  attr_reader :trait_mapping, :trait_scores, :accessions, :replicate_numbers, :design_factors, :design_factor_names
+  attr_reader :trait_mapping, :trait_scores, :accessions, :replicate_numbers, :design_factors, :design_factor_names, :lines_or_verieties
 
   def initialize(upload)
     @upload = upload
@@ -14,7 +14,8 @@ class Submission::TraitScoreParser
                                                replicate_numbers: nil,
                                                design_factors: nil,
                                                design_factor_names: nil,
-                                               accessions: nil)
+                                               accessions: nil,
+                                               lines_or_verieties: nil)
     @upload.submission.save!
 
     begin
@@ -33,7 +34,8 @@ class Submission::TraitScoreParser
                                         trait_scores: @trait_scores,
                                         design_factors: @design_factors,
                                         design_factor_names: @design_factor_names,
-                                        accessions: @accessions)
+                                        accessions: @accessions,
+                                        lines_or_verieties: @lines_or_verieties)
       @upload.submission.save!
       @upload.submission.content.save!
     end
@@ -41,18 +43,31 @@ class Submission::TraitScoreParser
 
   private
 
+  # Assumptions regarding the header (in this order):
+  # - first column is sample id
+  # - a set of columns for with design factor names as headers
+  # - column 'Plant accession'
+  # - column 'Originating organisation'
+  # - column 'Plant line' or 'Plant variety'
+  # - trait name columns, preferably called exactly as the chosen traits
+  #  - if technical replicates are present for a given trait, heir are expected to appear in order,
+  #    denoted with the '_repX' suffix, where X starts with 1,
+  #    e.g. "Trait name_rep1, Trait name_rep2, Another trait name_rep1"
   def parse_header
     header = csv.readline
     @trait_names = PlantTrialSubmissionDecorator.decorate(@upload.submission).sorted_trait_names
     @trait_mapping = {}
     @replicate_numbers = {}
     @design_factor_names = []
+    @line_or_variety = 'PlantLine'
     replicates_present = false
     @number_of_design_factors = 0
-    if header.blank? || header.size < 3
+    if header.blank? || header.size < 4
       @upload.errors.add(:file, :no_header)
     elsif header.index('Plant accession').nil?
       @upload.errors.add(:file, :no_plant_accession_header)
+    elsif header.index('Plant line').nil? && header.index('Plant variety').nil?
+      @upload.errors.add(:file, :no_line_or_variety_header)
     else
       @number_of_design_factors = [header.index('Plant accession') - 1, 0].max
       @upload.log "Interpreting design factors" if @number_of_design_factors > 0
@@ -60,9 +75,11 @@ class Submission::TraitScoreParser
         @design_factor_names << (design_factor_name ? design_factor_name.gsub('/','') : '')
       end
 
+      @line_or_variety = 'PlantVariety' if header.index('Plant line').nil?
+
       @upload.log "Mapping file header columns to Trait Descriptors"
-      replicates_present = detect_replication(header[3..-1])
-      header[3..-1].each_with_index do |column_name, i|
+      replicates_present = detect_replication(header[4..-1])
+      header[4..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length && !replicates_present
         trait_name, replicate_number = split_to_trait_and_replicate(column_name)
         trait_index = @trait_names.find_index(trait_name)
@@ -90,19 +107,26 @@ class Submission::TraitScoreParser
     @trait_scores = {}
     @design_factors = {}
     @accessions = {}
+    @lines_or_verieties = {}
     csv.each do |score_line|
       design_factors, score_line = score_line.partition.with_index do |_, i|
         i >= 1 && i <= @design_factor_names.size
       end
-      plant_id, plant_accession, originating_organisation, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
+      plant_id, plant_accession, originating_organisation, line_name_or_variety_name, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
       unless plant_id.blank?
         @design_factors[plant_id] = design_factors
         if plant_accession.blank? || originating_organisation.blank?
           @upload.log "Ignored row for #{plant_id} since either Plant accession or Originating organisation is missing."
+        elsif line_name_or_variety_name.blank?
+          @upload.log "Ignored row for #{plant_id} since #{@line_or_variety} value is missing."
         else
           @accessions[plant_id] = {
             plant_accession: plant_accession,
             originating_organisation: originating_organisation
+          }
+          @lines_or_verieties[plant_id] = {
+            relation_class_name: @line_or_variety,
+            relation_record_name: line_name_or_variety_name
           }
           @trait_scores[plant_id] = {}
           plant_count += 1
