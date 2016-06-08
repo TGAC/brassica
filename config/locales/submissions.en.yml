@@ -62,7 +62,7 @@ en:
           body: Upload tabular list of scores given to plants per each trait scored.
         step05:
           heading: Trial layout.
-          body: ...
+          body: If available, please upload an image of the layout of your trial
         step06:
           heading: Provenance.
           body: Identify the owner of the submitted data and describe its provenance.
