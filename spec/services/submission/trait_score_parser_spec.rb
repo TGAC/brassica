@@ -7,14 +7,21 @@ RSpec.describe Submission::TraitScoreParser do
 
   describe '#map_headers_to_traits' do
     context 'provided with input of incomplete content' do
-      it 'ignores single column header' do
-        input_is 'single column name no tabs'
+      it 'reports less than three-column header as incomplete' do
+        input_is 'single column name'
+        subject.send(:map_headers_to_traits)
+        expect(upload.errors[:file]).
+          to eq ['No correct header provided. At least three columns are expected.']
+      end
+
+      it 'ignores three-column header' do
+        input_is 'single column name,pa,oo'
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).to eq({})
       end
 
       it 'ignores all columns when no traits chosen' do
-        input_is "id,first trait,\"second,trait_name\""
+        input_is "id,pa,oo,first trait,\"second,trait_name\""
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).to eq({})
       end
@@ -23,7 +30,7 @@ RSpec.describe Submission::TraitScoreParser do
     context 'provided with trait-rich submission' do
       it 'maps columns by name' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['trait 1', 'trait 2'])
-        input_is "id,trait 2,trait 1"
+        input_is "id,pa,oo,trait 2,trait 1"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 1, 1 => 0})
@@ -31,7 +38,7 @@ RSpec.describe Submission::TraitScoreParser do
 
       it 'recognizes names with commas and surrounding white chars' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['trait,1', 'trait 2'])
-        input_is "id,trait 2  ,\"trait,1\""
+        input_is "id,pa,oo,trait 2  ,\"trait,1\""
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 1, 1 => 0})
@@ -39,7 +46,7 @@ RSpec.describe Submission::TraitScoreParser do
 
       it 'honors proper trait sorting by index' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['Ctrait', 'Atrait', 'Btrait'])
-        input_is "id,Btrait,Atrait,Ctrait"
+        input_is "id,pa,oo,Btrait,Atrait,Ctrait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 2, 1 => 1, 2 => 0})
@@ -47,7 +54,7 @@ RSpec.describe Submission::TraitScoreParser do
 
       it 'uses natural ordering when no by-name mapping found' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['Atrait', 'Btrait'])
-        input_is "id,trait 1,trait 2"
+        input_is "id,pa,oo,trait 1,trait 2"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 0, 1 => 1})
@@ -56,7 +63,7 @@ RSpec.describe Submission::TraitScoreParser do
       it 'works regardless traits are old or new' do
         td = create(:trait_descriptor, trait: create(:trait, name: 'old trait'))
         upload.submission.content.update(:step02, trait_descriptor_list: [td.id, 'new trait'])
-        input_is "id,new trait,old trait"
+        input_is "id,pa,oo,new trait,old trait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 1, 1 => 0})
@@ -64,7 +71,7 @@ RSpec.describe Submission::TraitScoreParser do
 
       it 'reports error on repetitive mapping' do
         upload.submission.content.update(:step02, trait_descriptor_list: ['Atrait', 'Btrait'])
-        input_is "id,Xtrait,Atrait"
+        input_is "id,pa,oo,Xtrait,Atrait"
         subject.send(:map_headers_to_traits)
         expect(subject.trait_mapping).
           to eq({0 => 0, 1 => 0})
@@ -83,7 +90,7 @@ RSpec.describe Submission::TraitScoreParser do
     end
 
     it 'does not ignore no-score rows' do
-      input_is "plant 1\nplant 2"
+      input_is "plant 1,pa,oo\nplant 2,pa,oo"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => {},
@@ -91,7 +98,7 @@ RSpec.describe Submission::TraitScoreParser do
     end
 
     it 'records simple scores' do
-      input_is "plant 1,1  \nplant 2, 2"
+      input_is "plant 1,pa,oo,1  \nplant 2,pa,oo, 2"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1'},
@@ -99,7 +106,7 @@ RSpec.describe Submission::TraitScoreParser do
     end
 
     it 'records multiple sparse scores' do
-      input_is "plant 1,1,2\nplant 2,, 3\nplant 3,4"
+      input_is "plant 1,pa,oo,1,2\nplant 2,pa,oo,, 3\nplant 3,pa,oo,4"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1', 1 => '2'},
@@ -108,12 +115,31 @@ RSpec.describe Submission::TraitScoreParser do
     end
 
     it 'handles empty newlines properly' do
-      input_is "plant 1,1  \n\nplant X,\nplant 2, 2\n\n"
+      input_is "plant 1,pa,oo,1  \n\nplant X,pa,oo,\nplant 2,pa,oo, 2\n\n"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => {0 => '1'},
                 'plant 2' => {0 => '2'},
                 'plant X' => {} })
+    end
+
+    it 'requires every line to provide accession-related information' do
+      input_is "plant 1,pa,oo\nplant X,pa\nplant 2\n"
+      subject.send(:parse_scores)
+      expect(subject.trait_scores).
+        to eq({ 'plant 1' => {} })
+      expect(upload.logs).
+        to include 'Ignored row for plant X since either Plant accession or Originating organisation is missing.'
+      expect(upload.logs).
+        to include 'Ignored row for plant 2 since either Plant accession or Originating organisation is missing.'
+    end
+
+    it 'parses accession information to a dedicated structure' do
+      input_is "plant 1,pa,oo\nplant X,pa\nplant Y\nplant 2,pa2,oo"
+      subject.send(:parse_scores)
+      expect(subject.accessions).
+        to eq({ 'plant 1' => { plant_accession: 'pa', originating_organisation: 'oo' },
+                'plant 2' => { plant_accession: 'pa2', originating_organisation: 'oo' }})
     end
   end
 
@@ -127,7 +153,7 @@ RSpec.describe Submission::TraitScoreParser do
 
     it 'ignores any score in index grater than traits number' do
       upload.submission.content.update(:step02, trait_descriptor_list: ['trait',])
-      input_is "id,trait\nplant 1,1,2"
+      input_is "id,pa,oo,trait\nplant 1,pa,oo,1,2"
       subject.call
       expect(subject.trait_mapping).
         to eq({0 => 0})

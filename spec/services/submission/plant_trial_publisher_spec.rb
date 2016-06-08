@@ -8,11 +8,16 @@ RSpec.describe Submission::PlantTrialPublisher do
 
   context "#publish" do
     let(:submission) { create(:finalized_submission, :trial) }
+    let!(:plant_accession) { create(:plant_accession, published: false,
+                                                      user: user) }
     let!(:plant_scoring_units) { [
       create(:plant_scoring_unit, published: false,
                                   user: user,
-                                  plant_trial: plant_trial),
-      create(:plant_scoring_unit, published: false, user: user)
+                                  plant_trial: plant_trial,
+                                  plant_accession: plant_accession),
+      create(:plant_scoring_unit, published: false,
+                                  user: user,
+                                  plant_accession: plant_accession)
     ] }
     let!(:trait_descriptors) { [
       create(:trait_descriptor, published: false, user: user),
@@ -37,6 +42,7 @@ RSpec.describe Submission::PlantTrialPublisher do
     it "publishes associated objects" do
       expect(plant_trial.plant_scoring_units).to all(be_published)
       expect(plant_trial.plant_scoring_units.map(&:trait_scores).flatten).to all(be_published)
+      expect(plant_trial.plant_scoring_units.map(&:plant_accession)).to all(be_published)
       expect(trait_descriptors[0].reload).to be_published
     end
 
@@ -51,11 +57,17 @@ RSpec.describe Submission::PlantTrialPublisher do
     let(:submission) { create(:finalized_submission, :trial, published: true) }
 
     context "for revocable submission" do
+      let!(:owned_accession) { create(:plant_accession, published: false,
+                                                        user: user) }
+      let!(:public_accession) { create(:plant_accession) }
       let!(:plant_scoring_units) { [
         create(:plant_scoring_unit, published: true,
                                     user: user,
-                                    plant_trial: plant_trial),
-        create(:plant_scoring_unit, published: true, user: user)
+                                    plant_trial: plant_trial,
+                                    plant_accession: owned_accession),
+        create(:plant_scoring_unit, published: true,
+                                    user: user,
+                                    plant_accession: public_accession)
       ] }
       let!(:trait_descriptors) { [
         create(:trait_descriptor, published: true, user: user),
@@ -81,12 +93,14 @@ RSpec.describe Submission::PlantTrialPublisher do
         expect(plant_scoring_units[0].reload).not_to be_published
         expect(trait_scores[0].reload).not_to be_published
         expect(trait_descriptors[0].reload).not_to be_published
+        expect(owned_accession.reload).not_to be_published
       end
 
       it "does not modify objects not associated with given submission" do
         expect(plant_scoring_units[1].reload).to be_published
         expect(trait_descriptors[1].reload).to be_published
         expect(trait_scores[1].reload).to be_published
+        expect(public_accession.reload).to be_published
       end
     end
 

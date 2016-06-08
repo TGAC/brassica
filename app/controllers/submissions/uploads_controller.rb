@@ -7,11 +7,11 @@ class Submissions::UploadsController < ApplicationController
     @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
 
     data = CSV.generate(headers: true) do |csv|
-      csv << ['Plant scoring unit name'] + @traits
+      csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation'] + @traits
 
       ['A','B'].each do |sample|
         sample_values = @traits.map.with_index{ |_,i| "sample_#{sample}_value_#{i}__replace_it" }
-        csv << ["sample_scoring_unit_#{sample}_name__replace_it"] + sample_values
+        csv << ["Sample scoring unit #{sample} name - replace it", 'Accession identifier - replace it', 'Organisation name or acronym - replace it'] + sample_values
       end
     end
 

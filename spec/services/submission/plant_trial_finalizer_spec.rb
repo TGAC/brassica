@@ -5,6 +5,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
   let(:submission) { create(:submission, :trial) }
   let(:plant_population) { create(:plant_population, user: submission.user) }
   let(:old_trait_descriptor) { create(:trait_descriptor) }
+  let(:old_accession) { create(:plant_accession, plant_accession: 'old_acc', originating_organisation: 'Organisation Old') }
   let(:trait) { create(:trait) }
   let(:trait_other) { create(:trait) }
   let(:plant_part) { create(:plant_part) }
@@ -53,6 +54,12 @@ RSpec.describe Submission::PlantTrialFinalizer do
           'p2' => { 1 => 'x' },
           'p3' => { 0 => 'y', 2 => 'z' },
           'p4' => { 2 => '' }
+        },
+        accessions: {
+          'p1' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A' },
+          'p2' => { plant_accession: old_accession.plant_accession, originating_organisation: old_accession.originating_organisation },
+          'p3' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A' },
+          'p4' => { plant_accession: 'new_acc2', originating_organisation: 'Organisation A' }
         }
       )
       submission.content.update(:step04, plant_trial_attrs.slice(
@@ -115,6 +122,24 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(PlantScoringUnit.pluck(:plant_trial_id).uniq).to eq [plant_population.plant_trials.first.id]
     end
 
+    it 'creates new plant accessions, where no old are found' do
+      expect{ subject.call }.to change{ PlantAccession.count }.by(2)
+
+      expect(PlantAccession.pluck(:plant_accession)).
+        to match_array %w(old_acc new_acc1 new_acc2)
+      expect(PlantAccession.pluck(:originating_organisation).uniq).
+        to match_array ['Organisation Old', 'Organisation A']
+      expect(PlantAccession.where(entered_by_whom: submission.user.full_name).count).to eq 2
+    end
+
+    it 'associates new and old accessions with plant scoring units' do
+      subject.call
+
+      expect(old_accession.reload.plant_scoring_units.count).to eq 1
+      expect(PlantAccession.find_by(plant_accession: 'new_acc1').plant_scoring_units.count).to eq 2
+      expect(PlantAccession.find_by(plant_accession: 'new_acc2').plant_scoring_units.count).to eq 1
+    end
+
     it 'creates trait scores for adequate trait descriptors' do
       expect{ subject.call }.to change{ TraitScore.count }.by(3)
 
@@ -138,6 +163,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(TraitScore.all).to all be_published
       expect(PlantScoringUnit.all).to all be_published
       expect(PlantTrial.all).to all be_published
+      expect(PlantAccession.all).to all be_published
       expect(submission).to be_published
     end
 
@@ -157,6 +183,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(plant_trial).not_to be_published
         expect(plant_scoring_units.map(&:published?)).to all be_falsey
         expect(trait_scores.map(&:published?)).to all be_falsey
+        expect(PlantAccession.where.not(id: old_accession.id).map(&:published?)).to all be_falsey
       end
     end
 
@@ -173,8 +200,24 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(submission.finalized?).to be_falsey
       end
 
+      it 'rollbacks when there is missing accession data' do
+        submission.content.update(:step03,
+          trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
+          trait_scores: {
+            'p1' => { 0 => 'y', 2 => 'z' },
+            'p2' => { 0 => 'y', 2 => 'z' }
+          },
+          accessions: {
+            'p1' => { plant_accession: 'new_acc1' }
+          }
+        )
+
+        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect(submission.finalized?).to be_falsey
+      end
+
       def related_object_count
-        PlantTrial.count + TraitScore.count + PlantScoringUnit.count + TraitDescriptor.count
+        PlantTrial.count + TraitScore.count + PlantScoringUnit.count + TraitDescriptor.count + PlantAccession.count
       end
     end
   end

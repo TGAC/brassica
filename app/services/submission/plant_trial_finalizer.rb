@@ -10,9 +10,9 @@ class Submission::PlantTrialFinalizer
 
   def call
     ActiveRecord::Base.transaction do
+      create_plant_trial
       create_new_trait_descriptors
       create_scoring
-      create_plant_trial
       update_submission
     end
     submission.finalized?
@@ -35,10 +35,20 @@ class Submission::PlantTrialFinalizer
 
   def create_scoring
     trait_mapping = submission.content.step03.trait_mapping
+    accessions = submission.content.step03.accessions
 
     @new_plant_scoring_units = (submission.content.step03.trait_scores || {}).map do |plant_id, scores|
+      rollback(2) unless accessions[plant_id] && accessions[plant_id]['plant_accession'] && accessions[plant_id]['originating_organisation']
+
+      plant_accession = PlantAccession.create_with(common_data).find_or_create_by(
+        plant_accession: accessions[plant_id]['plant_accession'],
+        originating_organisation: accessions[plant_id]['originating_organisation']
+      )
+
       new_plant_scoring_unit = PlantScoringUnit.create!(
-        common_data.merge(scoring_unit_name: plant_id)
+        common_data.merge(scoring_unit_name: plant_id,
+                          plant_accession_id: plant_accession.id,
+                          plant_trial_id: @plant_trial.id)
       )
 
       (scores || {}).
@@ -73,7 +83,6 @@ class Submission::PlantTrialFinalizer
     end
 
     attrs.merge!(submission.content.step04.to_h.except(:visibility, :layout_upload_id))
-    attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
     attrs.merge!(published: publish?)
 
     if PlantTrial.where(plant_trial_name: attrs[:plant_trial_name]).exists?

@@ -1,8 +1,9 @@
 .alert.alert-info
   %p
     Please upload file with score values. The required format is simple and features <b>unique</b> plant
-    identification in the first column and trait scores in column two, three and so forth. The
-    number of columns depends on how many Traits you have chosen in the second step of this submission.
+    identification in the first column, then two columns about plant accession, and trait scores in column
+    four, five and so forth. The number of columns depends on how many Traits you have chosen in the second
+    step of this submission.
     All values should be separated by a comma (<code>,</code>).
 
   %p
@@ -11,14 +12,23 @@
 
   %pre
     :preserve
-      Plant id,oleic acid content,seed mature time
-      assay_09,56.98,249.00
-      assay_08,57.24,252.00
-      assay_98,18.48,255.00
-      assay_97,20.40
-      assay_96,50.82,254.00
-      assay_93,58.50
-      assay_94,,252.00
+      Plant scoring unit name,Plant accession,Originating organisation,oleic acid content,seed mature time
+      assay_09,myAccession1,My Institute,56.98,249.00
+      assay_08,myAccession1,My Institute,57.24,252.00
+      assay_98,myAccession2,My Institute,18.48,255.00
+      assay_97,myAccession2,My Institute,20.40
+      assay_96,myAccession2,My Institute,50.82,254.00
+      assay_93,whri2004_C20,WHRI,58.50
+      assay_94,whri2004_C20,WHRI,,252.00
+
+  %p
+    Accession-related fields (the <b>Plant accession</b> identifier - in the second column - and the
+    <b>Originating organisation</b>
+    which issued this accession number - in the third column) are mandatory. Should you not have an
+    Accession for your lines, please create one yourself (for example, using a seedbag_id).
+    It will serve as placeholder identifier for the unique genetic material you used in your trials.
+    It is therefore important, that you are able to relate back to the identifier when cross-linking
+    with the corresponding genetic data.
 
   %p
     There should be a single <code>,</code> between each value. The last line has two consecutive
@@ -36,9 +46,9 @@
   - @trait_names = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
   %pre
     :preserve
-      #{CSV.generate{ |csv| csv << ['Plant scoring unit name'] + @trait_names }}
-      plant_1,#{@trait_names.map{|_| 'value'}.join(',')}
-      plant_2,#{@trait_names.map{|_| 'value'}.join(',')}
+      #{CSV.generate{ |csv| csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation'] + @trait_names }}
+      plant_scoring_unit_1,plant_accession_number,accession_organisation,#{@trait_names.map{|_| 'value'}.join(',')}
+      plant_scoring_unit_2,plant_accession_number,accession_organisation,#{@trait_names.map{|_| 'value'}.join(',')}
       ...
 
   %p

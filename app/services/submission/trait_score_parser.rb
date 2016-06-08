@@ -1,6 +1,6 @@
 class Submission::TraitScoreParser
 
-  attr_reader :trait_mapping, :trait_scores
+  attr_reader :trait_mapping, :trait_scores, :accessions
 
   def initialize(upload)
     @upload = upload
@@ -24,7 +24,8 @@ class Submission::TraitScoreParser
     if @upload.errors.empty?
       @upload.submission.content.update(:step03,
                                         trait_mapping: @trait_mapping,
-                                        trait_scores: @trait_scores)
+                                        trait_scores: @trait_scores,
+                                        accessions: @accessions)
       @upload.submission.save!
       @upload.submission.content.save!
     end
@@ -37,10 +38,10 @@ class Submission::TraitScoreParser
     header = csv.readline
     @trait_names = PlantTrialSubmissionDecorator.decorate(@upload.submission).sorted_trait_names
     @trait_mapping = {}
-    if header.blank?
+    if header.blank? || header.size < 3
       @upload.errors.add(:file, :no_header)
     else
-      header[1..-1].each_with_index do |column_name, i|
+      header[3..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length
         column_name = column_name.strip
         trait_index = @trait_names.find_index(column_name)
@@ -59,15 +60,24 @@ class Submission::TraitScoreParser
     plant_count = 0
     score_count = 0
     @trait_scores = {}
+    @accessions = {}
     csv.each do |score_line|
-      plant_id, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
+      plant_id, plant_accession, originating_organisation, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
       unless plant_id.blank?
-        @trait_scores[plant_id] = {}
-        plant_count += 1
-        values.each_with_index do |value, col_index|
-          unless value.blank? || (@trait_names && (col_index >= @trait_names.size))
-            @trait_scores[plant_id][col_index] = value
-            score_count += 1
+        if plant_accession.blank? || originating_organisation.blank?
+          @upload.log "Ignored row for #{plant_id} since either Plant accession or Originating organisation is missing."
+        else
+          @accessions[plant_id] = {
+            plant_accession: plant_accession,
+            originating_organisation: originating_organisation
+          }
+          @trait_scores[plant_id] = {}
+          plant_count += 1
+          values.each_with_index do |value, col_index|
+            unless value.blank? || (@trait_names && (col_index >= @trait_names.size))
+              @trait_scores[plant_id][col_index] = value
+              score_count += 1
+            end
           end
         end
       end

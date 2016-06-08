@@ -3,7 +3,7 @@ class Submission::PlantTrialPublisher < Submission::Publisher
   private
 
   def associated_collections
-    [plant_scoring_units, trait_scores, trait_descriptors]
+    [plant_scoring_units, plant_accessions, trait_scores, trait_descriptors]
   end
 
   def plant_trial
@@ -13,6 +13,11 @@ class Submission::PlantTrialPublisher < Submission::Publisher
 
   def plant_scoring_units
     plant_trial.plant_scoring_units.where(user_id: submission.user)
+  end
+
+  def plant_accessions
+    PlantAccession.where(user_id: submission.user,
+                         id: plant_scoring_units.pluck("DISTINCT plant_accession_id"))
   end
 
   def trait_scores
