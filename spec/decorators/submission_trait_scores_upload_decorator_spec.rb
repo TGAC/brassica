@@ -19,7 +19,7 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
       }
       mapping = { 0 => 2, 1 => 1, 2 => 0 }
       sd.object.submission.content.update(:step02, trait_descriptor_list: traits)
-      sd.object.submission.content.update(:step03, trait_scores: scores, trait_mapping: mapping)
+      sd.object.submission.content.update(:step04, trait_scores: scores, trait_mapping: mapping)
       expect(sd.parser_summary).
         to eq [
           'Uploaded file parsing summary:',

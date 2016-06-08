@@ -136,7 +136,7 @@ class Submission < ActiveRecord::Base
     new_trait_descriptor_list = (step02[:trait_descriptor_list] || []).map(&:to_s)
 
     if old_trait_descriptor_list != new_trait_descriptor_list
-      content.clear(:step03)
+      content.clear(:step04)
     end
   end
 

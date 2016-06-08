@@ -199,30 +199,30 @@ RSpec.describe Submission do
     let(:submission) { create(:submission, :trial, finalized: false) }
 
     before do
-      submission.content.update(:step03, upload_id: 7)
-      submission.content.update(:step04, comments: "Very important comment")
+      submission.content.update(:step04, upload_id: 7)
+      submission.content.update(:step06, comments: "Very important comment")
       submission.save!
     end
 
-    it "clears step03 of trial submission if step02 content is changed" do
-      expect(submission.content.step03.to_h).not_to be_blank
-      submission.content.update(:step02, trait_descriptor_list: ["trait X"])
-      submission.save!
-      expect(submission.reload.content.step03.to_h).to be_blank
-    end
-
-    it "does not clear step03 of trial submission if step02 content is not changed" do
-      expect(submission.content.step03.to_h).not_to be_blank
-      submission.content.update(:step02, trait_descriptor_list: [])
-      submission.save!
-      expect(submission.reload.content.step03.to_h).not_to be_blank
-    end
-
-    it "leaves step04 of trial submission intact if step02 content is changed" do
+    it "clears step04 of trial submission if step02 content is changed" do
       expect(submission.content.step04.to_h).not_to be_blank
       submission.content.update(:step02, trait_descriptor_list: ["trait X"])
       submission.save!
+      expect(submission.reload.content.step04.to_h).to be_blank
+    end
+
+    it "does not clear step04 of trial submission if step02 content is not changed" do
+      expect(submission.content.step04.to_h).not_to be_blank
+      submission.content.update(:step02, trait_descriptor_list: [])
+      submission.save!
       expect(submission.reload.content.step04.to_h).not_to be_blank
+    end
+
+    it "leaves step06 of trial submission intact if step02 content is changed" do
+      expect(submission.content.step06.to_h).not_to be_blank
+      submission.content.update(:step02, trait_descriptor_list: ["trait X"])
+      submission.save!
+      expect(submission.reload.content.step06.to_h).not_to be_blank
     end
   end
 
