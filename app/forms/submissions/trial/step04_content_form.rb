@@ -1,16 +1,31 @@
 module Submissions
   module Trial
     class Step04ContentForm < PlantTrialForm
-      property :layout_upload_id
-      property :visibility, default: 'published'
-      property :data_owned_by
-      property :data_provenance
-      property :comments
+      property :trait_mapping, writeable: false
+      property :trait_scores, writeable: false
+      property :accessions, writeable: false
+      property :lines_or_varieties, writeable: false
+      property :replicate_numbers, writeable: false
+      property :design_factor_names, writeable: false
+      property :design_factors, writeable: false
+      property :upload_id
 
-      validates :visibility, inclusion: { in: %w(published private) }
+      def self.permitted_properties
+        [
+          :trait_mapping,
+          :trait_scores,
+          :accessions,
+          :lines_or_varieties,
+          :replicate_numbers,
+          :design_factor_names,
+          :design_factors,
+          :upload_id
+        ]
+      end
 
-      def layout_upload
-        Submission::Upload.plant_trial_layout.find_by(id: layout_upload_id)
+      def upload
+        upload = Submission::Upload.trait_scores.find_by(id: upload_id)
+        SubmissionTraitScoresUploadDecorator.decorate(upload) if upload
       end
     end
   end

@@ -1,20 +1,72 @@
 .alert.alert-info
-  If available, please upload an image of the layout of your trial (see
-  #{link_to "example", "/assets/plant-trial-layout-example.jpg", target: "_blank"}
-  published by the
-  #{link_to "OREGIN", "http://oregin.info/", target: "_blank"}
-  Diversity Trial project).
+  %p
+    Please upload file with score values. The required format is simple and features <b>unique</b> plant
+    identification in the first column, then two columns about plant accession, and trait scores in column
+    four, five and so forth. The number of columns depends on how many Traits you have chosen in the second
+    step of this submission.
+    All values should be separated by a comma (<code>,</code>).
+
+  %p
+    For instance, if in the second step, you've picked two traits, <i>oleic acid content</i> and
+    <i>seed mature time</i>, you should provide a file like this:
+
+  %pre
+    :preserve
+      Plant scoring unit name,Plant accession,Originating organisation,oleic acid content,seed mature time
+      assay_09,myAccession1,My Institute,56.98,249.00
+      assay_08,myAccession1,My Institute,57.24,252.00
+      assay_98,myAccession2,My Institute,18.48,255.00
+      assay_97,myAccession2,My Institute,20.40
+      assay_96,myAccession2,My Institute,50.82,254.00
+      assay_93,whri2004_C20,WHRI,58.50
+      assay_94,whri2004_C20,WHRI,,252.00
+
+  %p
+    Accession-related fields (the <b>Plant accession</b> identifier - in the second column - and the
+    <b>Originating organisation</b>
+    which issued this accession number - in the third column) are mandatory. Should you not have an
+    Accession for your lines, please create one yourself (for example, using a seedbag_id).
+    It will serve as placeholder identifier for the unique genetic material you used in your trials.
+    It is therefore important, that you are able to relate back to the identifier when cross-linking
+    with the corresponding genetic data.
+
+  %p
+    There should be a single <code>,</code> between each value. The last line has two consecutive
+    <code>,</code> characters due to the first trait score missing.
+
+  %p
+    The first line will be treated as a header. Specific values will be stored as scoring for the
+    trait that's name matches the corresponding column header. If no match is found, the score will
+    be stored by column index. That is, an unmatched third column header will cause all third column
+    values counted as scoring of the second trait (in the order of input) defined during the second step.
+
+  %p
+    In the particular case of this submission, columns should be provided as follows:
+
+  - @trait_names = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
+  %pre
+    :preserve
+      #{CSV.generate{ |csv| csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation'] + @trait_names }}
+      plant_scoring_unit_1,plant_accession_number,accession_organisation,#{@trait_names.map{|_| 'value'}.join(',')}
+      plant_scoring_unit_2,plant_accession_number,accession_organisation,#{@trait_names.map{|_| 'value'}.join(',')}
+      ...
+
+  %p
+    For your convenience you may want to
+    = link_to 'download the ready template', new_submission_upload_path(submission)
+    in a CSV format.
+
+  %p
+    Surplus columns (with index larger than the number of chosen traits) will be ignored. When values
+    in the first column are not unique, the behaviour is undefined.
 
 .errors.hidden
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
 
-  = hidden_field_tag "submission_upload[upload_type]", "plant_trial_layout"
+  = hidden_field_tag "submission_upload[upload_type]", "trait_scores"
 
-  .form-group.fileinput{ class: "#{'hidden' if @content.layout_upload}" }
+  .form-group.fileinput{ class: "#{'hidden' if @content.upload}" }
     .btn.btn-primary.fileinput-button
       %span Choose a file...
-      = file_field_tag "submission_upload[file]", class: 'layout-upload',
-        accept: "image/jpeg, image/png, image/gif"
-
-    %small.help-block Accepted file formats are *.png, *.jpg and *.gif.
+      = file_field_tag "submission_upload[file]", class: 'trait-scores-upload'
