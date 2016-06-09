@@ -3,7 +3,6 @@ class RenameSubmissionPublishableToPublished < ActiveRecord::Migration
     rename_column :submissions, :publishable, :published
 
     Submission.all.each do |submission|
-      # TODO FIXME This needs to be smarter (either step04 or step06)
       visibility =
         if submission.content.step04.publishability == "private"
           "private"
