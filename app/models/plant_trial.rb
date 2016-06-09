@@ -89,7 +89,7 @@ class PlantTrial < ActiveRecord::Base
         [
           'project_descriptor',
           'plant_populations.id',
-          'id'
+          'id' => []
         ]
     ]
   end

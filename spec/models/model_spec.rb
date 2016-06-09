@@ -30,7 +30,9 @@ RSpec.describe ActiveRecord::Base do
       if model.respond_to?(:permitted_params)
         query = model.send(:permitted_params).detect{ |x| x.is_a?(Hash) && x[:query].present? }
         if query
-          expect(query[:query]).to all be_an(String)
+          hashes, others = query[:query].partition{ |q| q.is_a?(Hash) }
+          expect(others).to all be_an(String)
+          expect(hashes.map(&:values).flatten).to all match_array []
         end
       end
     end

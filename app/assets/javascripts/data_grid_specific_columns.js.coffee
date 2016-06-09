@@ -219,14 +219,6 @@ window.configs =
   'trait-descriptors':
     columnDefs:
       [
-        targets: 'trait_descriptors_trait_scores_column'
-        render: (data, type, full, meta) ->
-          if data && full[8] && full[9]
-            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[9] +
-              '&query[plant_scoring_units.plant_trial_id]=' + full[8] + '">' + data + '</a>'
-          else
-            ''
-      ,
         targets: 'traits_name_column'
         render: (data, type, full, meta) ->
           if data && full[7] && full[7].indexOf("TO:") > -1
@@ -240,6 +232,24 @@ window.configs =
             '<a href="http://browser.planteome.org/amigo/term/' + full[8] + '" target="_blank">' + data + '</a>'
           else
             data
+      ,
+        targets: 'related-specific'
+        render: (data, type, full, meta) ->
+          if full[full.length - 2]
+            plant_trials_query = ('query[id][]=' + item for item in full[full.length - 2]).join('&')
+          '<div class="dropdown">' +
+            '<button class="btn btn-xs btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" title="Related data">' +
+              'Related ' + '<span class="caret"></span>' +
+            '</button>' +
+            '<ul class="dropdown-menu" role="menu">' +
+              createCounterLink('data_tables?model=trait_scores&query[trait_descriptors.id]=' + full[full.length - 1],
+                full[full.length - 5],
+                'trait scores') +
+              createCounterLink('data_tables?model=plant_trials&' + plant_trials_query,
+                if full[full.length - 2] then full[full.length - 2].length else 0,
+                'plant trials') +
+            '</ul>' +
+          '</div>'
       ]
 
   'trait-scores':

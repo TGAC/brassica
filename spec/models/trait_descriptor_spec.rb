@@ -35,6 +35,7 @@ RSpec.describe TraitDescriptor do
         1,
         td.trait.label,
         td.plant_part.label,
+        [PlantTrial.first.id],
         td.id
       ]
     end
