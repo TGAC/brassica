@@ -11,7 +11,6 @@ class TrialScoringsController < ApplicationController
           order('trait_descriptors.id asc').uniq
 
         @replicate_numbers = replicate_numbers
-        logger.debug @replicate_numbers
       end
       format.json do
         cache_key = params.reject{ |k,_| %w(_ controller action format).include? k }
