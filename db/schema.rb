@@ -707,7 +707,7 @@ ActiveRecord::Schema.define(version: 20160606194721) do
     t.string   "step",                                null: false
     t.json     "content",             default: {},    null: false
     t.boolean  "finalized",           default: false, null: false
-    t.integer  "submission_type",                     null: false
+    t.integer  "submission_type",     default: 0,     null: false
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.integer  "submitted_object_id"

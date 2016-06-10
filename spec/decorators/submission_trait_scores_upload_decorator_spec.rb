@@ -45,7 +45,7 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
       }
 
       sd.object.submission.content.update(:step02, trait_descriptor_list: traits)
-      sd.object.submission.content.update(:step03,
+      sd.object.submission.content.update(:step04,
         trait_scores: scores,
         trait_mapping: mapping,
         accessions: accessions,

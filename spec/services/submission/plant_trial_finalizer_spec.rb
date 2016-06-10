@@ -49,7 +49,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       submission.content.update(:step02,
         trait_descriptor_list: new_trait_descriptors_attrs.map{ |td| td[:trait] } + [old_trait_descriptor.id],
         new_trait_descriptors: new_trait_descriptors_attrs)
-      submission.content.update(:step03,
+      submission.content.update(:step04,
         trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
         trait_scores: {
           'p1' => {},
@@ -70,9 +70,10 @@ RSpec.describe Submission::PlantTrialFinalizer do
           'p4' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' }
         }
       )
-      submission.content.update(:step04, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments).
-        merge(visibility: 'published', layout_upload_id: layout_upload.id))
+      submission.content.update(:step05, layout_upload_id: layout_upload.id)
+      submission.content.update(:step06, plant_trial_attrs.slice(
+        :data_owned_by, :data_provenance, :comments).merge(visibility: 'published')
+      )
     end
 
     it 'creates new trait descriptors' do
@@ -314,7 +315,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
     context 'when visibility set to private' do
       before do
-        submission.content.update(:step04, visibility: 'private')
+        submission.content.update(:step06, visibility: 'private')
       end
 
       it 'makes submission and created objects private' do

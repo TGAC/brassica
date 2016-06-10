@@ -5,7 +5,7 @@
   - submission_type = submission.submission_type
 
 %ol.step-indicator
-  - Submission::STEPS.each_with_index do |step_name, step_no|
+  - Submission::STEPS.fetch(submission_type).each_with_index do |step_name, step_no|
 
     - if submission_step
       - klass = [(:active if step_name == submission_step), (:completed if step_name < submission_step)]

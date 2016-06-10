@@ -18,9 +18,6 @@ module Filterable extend ActiveSupport::Concern
     def self.filter(params, query = all)
       params = filter_params(params)
       if params[:query].present? || params[:search].present?
-
-        Rails.logger.error "PQ: #{params[:query]}"
-
         query = query.where(params[:query]) if params[:query].present?
         params[:search].each do |k,v|
           query = query.where("#{k} ILIKE ?", "%#{v}%")

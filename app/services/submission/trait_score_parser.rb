@@ -9,7 +9,7 @@ class Submission::TraitScoreParser
   def call
     @upload.log "Starting Trait Scores file parsing [file name: #{@upload.file_file_name}]"
 
-    @upload.submission.content.update(:step03, trait_mapping: nil,
+    @upload.submission.content.update(:step04, trait_mapping: nil,
                                                trait_scores: nil,
                                                replicate_numbers: nil,
                                                design_factors: nil,
@@ -28,7 +28,7 @@ class Submission::TraitScoreParser
     end
 
     if @upload.errors.empty?
-      @upload.submission.content.update(:step03,
+      @upload.submission.content.update(:step04,
                                         trait_mapping: @trait_mapping,
                                         replicate_numbers: @replicate_numbers,
                                         trait_scores: @trait_scores,

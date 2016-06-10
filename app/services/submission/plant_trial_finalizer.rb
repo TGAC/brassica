@@ -34,13 +34,13 @@ class Submission::PlantTrialFinalizer
   end
 
   def create_scoring
-    trait_mapping = submission.content.step03.trait_mapping
-    trait_scores = submission.content.step03.trait_scores || {}
-    accessions = submission.content.step03.accessions
-    replicate_numbers = submission.content.step03.replicate_numbers || {}
-    design_factors = submission.content.step03.design_factors || {}
-    design_factor_names = submission.content.step03.design_factor_names || []
-    lines_or_varieties = submission.content.step03.lines_or_varieties || {}
+    trait_mapping = submission.content.step04.trait_mapping
+    trait_scores = submission.content.step04.trait_scores || {}
+    accessions = submission.content.step04.accessions
+    replicate_numbers = submission.content.step04.replicate_numbers || {}
+    design_factors = submission.content.step04.design_factors || {}
+    design_factor_names = submission.content.step04.design_factor_names || []
+    lines_or_varieties = submission.content.step04.lines_or_varieties || {}
 
     @new_plant_scoring_units = trait_scores.map do |plant_id, scores|
       rollback(2) unless accessions[plant_id] && accessions[plant_id]['plant_accession'] && accessions[plant_id]['originating_organisation']
@@ -138,7 +138,7 @@ class Submission::PlantTrialFinalizer
 
   def create_plant_trial
     attrs = submission.content.step01.to_h.merge(common_data)
-    design_factor_names = submission.content.step03.design_factor_names || []
+    design_factor_names = submission.content.step04.design_factor_names || []
 
     if plant_population = PlantPopulation.find_by(id: submission.content.step01.plant_population_id)
       attrs.merge!(plant_population_id: plant_population.id)
@@ -148,11 +148,12 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    if layout_upload = Submission::Upload.find_by(id: submission.content.step04.layout_upload_id)
+    if layout_upload = Submission::Upload.find_by(id: submission.content.step05.layout_upload_id)
       attrs.merge!(layout: layout_upload.file)
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:visibility, :layout_upload_id))
+    attrs.merge!(submission.content.step06.to_h.except(:visibility))
+    attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
     attrs.merge!(design_factors: describe_design_factors(design_factor_names))
     attrs.merge!(published: publish?)
 
@@ -177,7 +178,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def publish?
-    @publish ||= submission.content.step04.visibility.to_s == 'published'
+    @publish ||= submission.content.step06.visibility.to_s == 'published'
   end
 
   def common_data

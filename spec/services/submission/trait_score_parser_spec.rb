@@ -325,17 +325,17 @@ RSpec.describe Submission::TraitScoreParser do
   end
 
   describe '#call' do
-    it 'resets step03 data when called' do
-      upload.submission.content.update(:step03, trait_scores: { 'plant' => { 1 => '5' }})
+    it 'resets step04 data when called' do
+      upload.submission.content.update(:step04, trait_scores: { 'plant' => { 1 => '5' }})
       input_is ''
       subject.call
-      expect(upload.submission.content.step03.trait_scores).to be_nil
-      expect(upload.submission.content.step03.trait_mapping).to be_nil
-      expect(upload.submission.content.step03.replicate_numbers).to be_nil
-      expect(upload.submission.content.step03.design_factors).to be_nil
-      expect(upload.submission.content.step03.design_factor_names).to be_nil
-      expect(upload.submission.content.step03.accessions).to be_nil
-      expect(upload.submission.content.step03.lines_or_verieties).to be_nil
+      expect(upload.submission.content.step04.trait_scores).to be_nil
+      expect(upload.submission.content.step04.trait_mapping).to be_nil
+      expect(upload.submission.content.step04.replicate_numbers).to be_nil
+      expect(upload.submission.content.step04.design_factors).to be_nil
+      expect(upload.submission.content.step04.design_factor_names).to be_nil
+      expect(upload.submission.content.step04.accessions).to be_nil
+      expect(upload.submission.content.step04.lines_or_verieties).to be_nil
     end
 
     it 'ignores any score in index grater than traits number' do
