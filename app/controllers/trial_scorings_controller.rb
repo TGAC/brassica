@@ -29,7 +29,6 @@ class TrialScoringsController < ApplicationController
   private
 
   def prepare_grid_data
-    @replicate_numbers = replicate_numbers
     objects = @plant_trial.scoring_table_data(
       trait_descriptor_ids, replicate_numbers, current_user.try(:id)
     )
