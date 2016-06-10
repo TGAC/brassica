@@ -153,7 +153,6 @@ class Submission::PlantTrialFinalizer
     end
 
     attrs.merge!(submission.content.step06.to_h.except(:visibility))
-    attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
     attrs.merge!(design_factors: describe_design_factors(design_factor_names))
     attrs.merge!(published: publish?)
 
