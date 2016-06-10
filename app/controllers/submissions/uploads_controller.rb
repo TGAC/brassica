@@ -17,9 +17,7 @@ class Submissions::UploadsController < ApplicationController
       'A' => design_factor_names.map{ 1 },
       'B' => design_factor_names.map{ 1 }
     }
-    if design_factors['B'].present?
-      design_factors['B'] = design_factors['B'][0..-2] + [2]
-    end
+    design_factors['B'][-1] = 2 if design_factors['B'].present?
 
     technical_replicate_numbers = submission.content.step03.technical_replicate_numbers || {}
     traits = traits.map do |trait|
