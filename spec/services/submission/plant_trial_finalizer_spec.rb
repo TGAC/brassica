@@ -166,14 +166,6 @@ RSpec.describe Submission::PlantTrialFinalizer do
     end
 
     context 'when dealing with plant lines and plant varieties' do
-      it 'does nothing if no information is given' do
-        submission.content.update(:step04,
-          submission.content.step03.to_h.merge(lines_or_varieties: {})
-        )
-
-        expect{ subject.call }.not_to change{ PlantLine.count + PlantVariety.count }
-      end
-
       it 'creates or assigns plant varieties for new accessions only' do
         submission.content.update(:step04,
           submission.content.step03.to_h.merge(
@@ -346,7 +338,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(submission.finalized?).to be_falsey
       end
 
-      it 'rollbacks when there is missing accession data' do
+      it 'raises an error when there is missing accession data' do
         submission.content.update(:step04,
           trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
           trait_scores: {
@@ -358,26 +350,45 @@ RSpec.describe Submission::PlantTrialFinalizer do
           }
         )
 
-        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect{ subject.call }.to raise_error RuntimeError, 'Misformed parsed plant accession data.'
+        expect{ subject.call rescue nil }.not_to change{ related_object_count }
         expect(submission.finalized?).to be_falsey
       end
 
-      it 'rollbacks when there is no plant line or plant variety information for new accession' do
+      it 'raises an error when there is no plant line or plant variety information for new accession' do
         submission.content.update(:step04,
           accessions: {
-            'p1' => { plant_accession: 'new_acc1' }
+            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo' }
           },
           lines_or_varieties: {}
         )
 
-        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect{ subject.call }.to raise_error RuntimeError,
+                                              'Required plant line or plant variety data not available after parsing.'
+        expect{ subject.call rescue nil }.not_to change{ related_object_count }
+        expect(submission.finalized?).to be_falsey
+      end
+
+      it 'raises an error when there is strange relation information for new accession' do
+        submission.content.update(:step04,
+          accessions: {
+            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo' }
+          },
+          lines_or_varieties: {
+            'p1' => { relation_class_name: 'PlantPopulation', relation_record_name: 'Why not?' }
+          }
+        )
+
+        expect{ subject.call }.to raise_error RuntimeError,
+                                              "Incorrect value [PlantPopulation] user for relation name for a new accession."
+        expect{ subject.call rescue nil }.not_to change{ related_object_count }
         expect(submission.finalized?).to be_falsey
       end
 
       it 'rollbacks when a new plant line is encountered for a new plant accession' do
         submission.content.update(:step04,
           accessions: {
-            'p1' => { plant_accession: 'new_acc1' }
+            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo' }
           },
           lines_or_varieties: {
             'p1' => { relation_class_name: 'PlantLine', relation_record_name: 'New line that should not be created' }

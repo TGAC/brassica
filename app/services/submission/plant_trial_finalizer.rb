@@ -43,7 +43,9 @@ class Submission::PlantTrialFinalizer
     lines_or_varieties = submission.content.step04.lines_or_varieties || {}
 
     @new_plant_scoring_units = trait_scores.map do |plant_id, scores|
-      rollback(2) unless accessions[plant_id] && accessions[plant_id]['plant_accession'] && accessions[plant_id]['originating_organisation']
+      unless accessions[plant_id] && accessions[plant_id]['plant_accession'] && accessions[plant_id]['originating_organisation']
+        raise 'Misformed parsed plant accession data.'
+      end
 
       plant_accession = PlantAccession.find_or_create_by!(
         plant_accession: accessions[plant_id]['plant_accession'],
@@ -53,8 +55,7 @@ class Submission::PlantTrialFinalizer
         accession_relation = {}
 
         if lines_or_varieties[plant_id].blank?
-          # Info on either PL or PV for a new accession is required
-          rollback(2)
+          raise 'Required plant line or plant variety data not available after parsing.'
         elsif lines_or_varieties[plant_id]['relation_class_name'] == 'PlantVariety'
           plant_variety = PlantVariety.find_or_create_by!(
             plant_variety_name: lines_or_varieties[plant_id]['relation_record_name']
@@ -75,8 +76,7 @@ class Submission::PlantTrialFinalizer
           end
 
         else
-          # Unknown and not expected class name used for 'relation_class_name'
-          rollback(2)
+          raise "Incorrect value [#{lines_or_varieties[plant_id]['relation_class_name']}] user for relation name for a new accession."
         end
 
         new_plant_accession.assign_attributes(common_data.merge(accession_relation))
