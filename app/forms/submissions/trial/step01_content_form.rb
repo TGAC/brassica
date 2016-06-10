@@ -17,7 +17,7 @@ module Submissions
       property :terrain
       property :soil_type
       property :statistical_factors
-      property :design_factors
+      property :data_status
 
       validates :plant_trial_name, presence: true
       validates :project_descriptor, presence: true
@@ -45,6 +45,10 @@ module Submissions
       def plant_population
         return unless plant_population_id.present?
         PlantPopulation.find_by(id: plant_population_id)
+      end
+
+      def raw_data?
+        data_status == 'raw_data'
       end
     end
   end

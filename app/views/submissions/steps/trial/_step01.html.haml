@@ -29,11 +29,30 @@
     help: "Note that you can only submit trait data from <b>one year at a time</b>. Examples: 2004, 2005, 2016."
 
 .form-group
+  = label_tag "Submitted trait scoring data status"
+  %br
+  = content.label :data_status, "Raw data", value: 'raw_data', class: 'radio-inline' do
+    = content.radio_button :data_status, 'raw_data', checked: true
+    Raw data
+  = content.label :data_status, "Processed data", value: 'processed_data', class: 'radio-inline' do
+    = content.radio_button :data_status, 'processed_data'
+    Processed data
+  %small.help-block
+    Please provide information on the nature of your data. Select
+    %b Raw data
+    if you plan to submit trait scoring values unprocessed in any way. You can also submit technical replicate
+    readings, if you have them, by selecting this option. Please select
+    %b Processed data
+    if you have performed some processing (e.g., mean computation, selected values exclusion) with the
+    scoring data prior to the submission. If you would like to upload both types of data set (i.e., raw and processed
+    data), please do that using two separate Trial submissions.
+
+.form-group
   = content.text_area :plant_trial_description, label: 'Trial description',
     help: "Please provide a brief description of the trial. It should contain the trait and population of interest,
     the trial type and location. The Project number could be named, too. An Example of an existing trial description in the data base is: 'Seed quality assessment of the BnaTNDH population in a field trial in China'"
 
-- %w(institute_id terrain soil_type statistical_factors design_factors).each do |attr|
+- %w(institute_id terrain soil_type statistical_factors).each do |attr|
   .form-group
     - values = PlantTrial.visible(current_user.id).attribute_values(attr)
     - options = options_for_select(values, @content.send(attr))
