@@ -34,9 +34,9 @@ class Submission::PlantTrialFinalizer
   end
 
   def create_scoring
-    trait_mapping = submission.content.step03.trait_mapping
+    trait_mapping = submission.content.step04.trait_mapping
 
-    @new_plant_scoring_units = (submission.content.step03.trait_scores || {}).map do |plant_id, scores|
+    @new_plant_scoring_units = (submission.content.step04.trait_scores || {}).map do |plant_id, scores|
       new_plant_scoring_unit = PlantScoringUnit.create!(
         common_data.merge(scoring_unit_name: plant_id)
       )
@@ -68,11 +68,11 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    if layout_upload = Submission::Upload.find_by(id: submission.content.step04.layout_upload_id)
+    if layout_upload = Submission::Upload.find_by(id: submission.content.step05.layout_upload_id)
       attrs.merge!(layout: layout_upload.file)
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:visibility, :layout_upload_id))
+    attrs.merge!(submission.content.step06.to_h.except(:visibility))
     attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
     attrs.merge!(published: publish?)
 
@@ -97,7 +97,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def publish?
-    @publish ||= submission.content.step04.visibility.to_s == 'published'
+    @publish ||= submission.content.step06.visibility.to_s == 'published'
   end
 
   def common_data

@@ -119,15 +119,15 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   end
 
   def data_owned_by
-    object.content.step04.data_owned_by.presence
+    object.content.step06.data_owned_by.presence
   end
 
   def data_provenance
-    object.content.step04.data_provenance.presence
+    object.content.step06.data_provenance.presence
   end
 
   def comments
-    object.content.step04.comments.presence
+    object.content.step06.comments.presence
   end
 
   def layout_url

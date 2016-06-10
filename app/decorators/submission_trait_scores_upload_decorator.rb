@@ -6,7 +6,7 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
   def parser_summary
     [].tap do |summary|
       summary << 'Uploaded file parsing summary:'
-      trait_scores = object.submission.content.step03.trait_scores
+      trait_scores = object.submission.content.step04.trait_scores
       if trait_scores
         histogram = trait_scores.
           group_by{ |id, scores| scores.size }.
@@ -19,7 +19,7 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
       end
 
       trait_names = PlantTrialSubmissionDecorator.decorate(object.submission).sorted_trait_names
-      trait_mapping = object.submission.content.step03.trait_mapping
+      trait_mapping = object.submission.content.step04.trait_mapping
       if trait_names && trait_scores
         histogram = trait_scores.
           values.

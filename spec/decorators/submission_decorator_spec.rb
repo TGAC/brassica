@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe SubmissionDecorator do
   describe '#submission_type' do
-    it 'handles all submission types properly' do
-      Submission.submission_types.keys.each do |submission_type|
+    it 'handles all implemented submission types properly' do
+      %i(population trial).each do |submission_type|
         submission = create(:submission, submission_type: submission_type)
         sd = SubmissionDecorator.decorate(submission)
         expect(sd.submission_type).
