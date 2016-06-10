@@ -4,9 +4,8 @@ class Submissions::UploadsController < ApplicationController
   before_filter :require_submission_owner
 
   def new
-    @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
+    traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
 
-    # TODO FIXME Add technical replicates generation
     pl_pv_name = if submission.content.step03.lines_or_varieties == 'plant_varieties'
                    'variety'
                  else
@@ -22,11 +21,28 @@ class Submissions::UploadsController < ApplicationController
       design_factors['B'] = design_factors['B'][0..-2] + [2]
     end
 
+    technical_replicate_numbers = submission.content.step03.technical_replicate_numbers || {}
+    traits = traits.map do |trait|
+      if technical_replicate_numbers[trait] && technical_replicate_numbers[trait].to_i > 1
+        reps_count = [technical_replicate_numbers[trait].to_i, 2].max
+        reps_count.times.map { |rep| "#{trait}_rep#{rep + 1}" }
+      else
+        trait
+      end
+    end.flatten
+
     data = CSV.generate(headers: true) do |csv|
-      csv << ['Plant scoring unit name'] + design_factor_names + ['Plant accession', 'Originating organisation', "Plant #{pl_pv_name}"] + @traits
+      csv << ['Plant scoring unit name'] + design_factor_names + ['Plant accession', 'Originating organisation', "Plant #{pl_pv_name}"] + traits
 
       ['A','B'].each do |sample|
-        sample_values = @traits.map.with_index{ |_,i| "sample_#{sample}_value_#{i}__replace_it" }
+        sample_values = traits.map.with_index do |trait,i|
+          if technical_replicate_numbers[trait] && technical_replicate_numbers[trait].to_i > 1
+            reps_count = [technical_replicate_numbers[trait].to_i, 2].max
+            reps_count.times.map { |rep| "sample_#{sample}_rep#{rep + 1}_value_for_#{trait}__replace_it" }
+          else
+            "sample_#{sample}_value_for_#{trait}__replace_it"
+          end
+        end
         csv << ["Sample scoring unit #{sample} name - replace it"] +
                design_factors[sample] +
                ['Accession identifier - replace it',

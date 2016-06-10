@@ -1,6 +1,8 @@
 - pl_pv_name = 'line'
 - pl_pv_name = 'variety' if submission.content.step03.lines_or_varieties == 'plant_varieties'
-- design_factor_names = submission.content.step03.design_factor_names
+- design_factor_names = submission.content.step03.design_factor_names || []
+- technical_replicate_numbers = submission.content.step03.technical_replicate_numbers || {}
+- rep_traits = technical_replicate_numbers.select{ |k,v| v.to_i > 1 }.to_a
 
 .alert.alert-info
   %h5 Trait scoring sheet structure
@@ -31,6 +33,8 @@
     %b
       = link_to 'the ready template', new_submission_upload_path(submission)
     in a CSV format, created according to the choices you have made so far in this submission.
+    Please download it, leave the header (the first line) intact, and paste your data, in columns,
+    as rows below the header (this replacing the placeholder <code>...__replace_it</code> values).
 
   %br
   %h5 Plant accession information
@@ -79,7 +83,7 @@
         in your CSV file.
 
   %br
-  %h5 Trait scores ordering
+  %h5 Trait scores ordering #{'and technical replicates' if rep_traits.present?}
   %p
     The first line will be treated as a header. Specific values for columns
     #{design_factor_names.size + 5} and further
@@ -89,13 +93,26 @@
     #{design_factor_names.size + 6}
     header will cause all column
     #{design_factor_names.size + 6}
-    values counted as scoring of the second trait (in the order of input) defined during the second step
-    of the submission.
+    values counted as scoring of the second trait (in the order of input)
+    - if rep_traits.present?
+      , or the second technical replicate of the first trait,
+    defined during the second step of the submission.
 
-  - @trait_names = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
+  - if rep_traits.present?
+    %p
+      Scoring for technical replicates should be submitted in trait-rep order. For instance, for
+      #{rep_traits[0][1]} technical replicates of #{rep_traits[0][0]} scores, the column with values
+      measured for the second technical replicate should directly follow the column with scores for
+      the first technical replicate (no other trait scores in between).
+
   %p
-    Surplus columns (with index larger than #{design_factor_names.size + 5 + @trait_names.size})
-    will be ignored. When values in the first column are not unique, the behaviour is undefined.
+    In order to avoid any ordering related issues,
+    %b please use the CSV template
+    provided to you above - this template's header has all trait name
+    - if rep_traits.present?
+      and technical replicate
+    columns in the proper order.
+
 
 .errors.hidden
 
