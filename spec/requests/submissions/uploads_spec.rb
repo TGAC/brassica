@@ -79,6 +79,21 @@ RSpec.describe "Submission uploads" do
         expect(response.body.lines[0]).
           to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant line\n"
       end
+
+      it 'adds design factors to template, if defined' do
+        submission.content.update(:step03, design_factor_names: ['polytunnel', 'rep', 'sub_block', 'pot_number'])
+        submission.save
+
+        get "/submissions/#{submission.id}/uploads/new"
+
+        expect(response).to be_success
+        expect(response.body.lines[0]).
+          to eq "Plant scoring unit name,polytunnel,rep,sub_block,pot_number,Plant accession,Originating organisation,Plant line\n"
+        expect(response.body.lines[1]).
+          to eq "Sample scoring unit A name - replace it,1,1,1,1,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+        expect(response.body.lines[2]).
+          to eq "Sample scoring unit B name - replace it,1,1,1,2,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+      end
     end
   end
 end

@@ -6,7 +6,6 @@ class Submissions::UploadsController < ApplicationController
   def new
     @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
 
-    # TODO FIXME Add Design factors generation
     # TODO FIXME Add technical replicates generation
     pl_pv_name = if submission.content.step03.lines_or_varieties == 'plant_varieties'
                    'variety'
@@ -14,15 +13,26 @@ class Submissions::UploadsController < ApplicationController
                    'line'
                  end
 
+    design_factor_names = submission.content.step03.design_factor_names || []
+    design_factors = {
+      'A' => design_factor_names.map{ 1 },
+      'B' => design_factor_names.map{ 1 }
+    }
+    if design_factors['B'].present?
+      design_factors['B'] = design_factors['B'][0..-2] + [2]
+    end
+
     data = CSV.generate(headers: true) do |csv|
-      csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation', "Plant #{pl_pv_name}"] + @traits
+      csv << ['Plant scoring unit name'] + design_factor_names + ['Plant accession', 'Originating organisation', "Plant #{pl_pv_name}"] + @traits
 
       ['A','B'].each do |sample|
         sample_values = @traits.map.with_index{ |_,i| "sample_#{sample}_value_#{i}__replace_it" }
-        csv << ["Sample scoring unit #{sample} name - replace it",
-                'Accession identifier - replace it',
+        csv << ["Sample scoring unit #{sample} name - replace it"] +
+               design_factors[sample] +
+               ['Accession identifier - replace it',
                 'Organisation name or acronym - replace it',
-                "Plant #{pl_pv_name} name - replace it"] + sample_values
+                "Plant #{pl_pv_name} name - replace it"] +
+               sample_values
       end
     end
 

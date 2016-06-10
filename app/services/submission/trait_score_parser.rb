@@ -45,7 +45,7 @@ class Submission::TraitScoreParser
 
   # Assumptions regarding the header (in this order):
   # - first column is sample id
-  # - a set of columns for with design factor names as headers
+  # - a 0+ set of columns with design factor names as headers
   # - column 'Plant accession'
   # - column 'Originating organisation'
   # - column 'Plant line' or 'Plant variety'
