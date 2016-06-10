@@ -46,10 +46,6 @@ module Submissions
         return unless plant_population_id.present?
         PlantPopulation.find_by(id: plant_population_id)
       end
-
-      def raw_data?
-        data_status == 'raw_data'
-      end
     end
   end
 end
