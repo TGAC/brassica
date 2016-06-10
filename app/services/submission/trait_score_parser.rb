@@ -79,7 +79,7 @@ class Submission::TraitScoreParser
 
       @upload.log "Mapping file header columns to Trait Descriptors"
       replicates_present = detect_replication(header[4..-1])
-      header[4..-1].each_with_index do |column_name, i|
+      header[(4 + @number_of_design_factors)..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length && !replicates_present
         trait_name, replicate_number = split_to_trait_and_replicate(column_name)
         trait_index = @trait_names.find_index(trait_name)

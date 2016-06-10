@@ -175,7 +175,7 @@ RSpec.describe Submission::TraitScoreParser do
       end
 
       it 'accepts empty design factors' do
-        input_is "id,,rep,,pot_number,Plant accession,Plant line"
+        input_is "id,,rep,,pot_number,Plant accession,Originating organisation,Plant line"
         subject.send(:parse_header)
         expect(subject.design_factor_names).to eq ['', 'rep', '', 'pot_number']
       end
