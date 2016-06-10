@@ -94,9 +94,7 @@ class Submission::PlantTrialFinalizer
                                                         end
         end
         design_factor = DesignFactor.create!(
-          common_data.delete_if{ |k,v|
-            [:user, :published, :published_on].include? k
-          }.merge(
+          common_data.except(:user, :published, :published_on).merge(
             design_unit_counter: factor_values.last
           ).merge(
             factor_attrs
