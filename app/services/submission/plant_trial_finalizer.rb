@@ -115,7 +115,7 @@ class Submission::PlantTrialFinalizer
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
           rollback(1) unless trait_descriptor
 
-          trait_score_attributes = common_data
+          trait_score_attributes = common_data.dup
           if replicate_numbers[col_index] && replicate_numbers[col_index] > 0
             trait_score_attributes.merge!(
               technical_replicate_number: replicate_numbers[col_index]
