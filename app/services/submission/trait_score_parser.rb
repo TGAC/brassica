@@ -1,6 +1,6 @@
 class Submission::TraitScoreParser
 
-  attr_reader :trait_mapping, :trait_scores, :accessions, :replicate_numbers, :design_factors, :design_factor_names, :lines_or_verieties
+  attr_reader :trait_mapping, :trait_scores, :accessions, :replicate_numbers, :design_factors, :design_factor_names, :lines_or_varieties
 
   def initialize(upload)
     @upload = upload
@@ -15,7 +15,7 @@ class Submission::TraitScoreParser
                                                design_factors: nil,
                                                design_factor_names: nil,
                                                accessions: nil,
-                                               lines_or_verieties: nil)
+                                               lines_or_varieties: nil)
     @upload.submission.save!
 
     begin
@@ -35,7 +35,7 @@ class Submission::TraitScoreParser
                                         design_factors: @design_factors,
                                         design_factor_names: @design_factor_names,
                                         accessions: @accessions,
-                                        lines_or_verieties: @lines_or_verieties)
+                                        lines_or_varieties: @lines_or_varieties)
       @upload.submission.save!
       @upload.submission.content.save!
     end
@@ -107,7 +107,7 @@ class Submission::TraitScoreParser
     @trait_scores = {}
     @design_factors = {}
     @accessions = {}
-    @lines_or_verieties = {}
+    @lines_or_varieties = {}
     csv.each do |score_line|
       design_factors, score_line = score_line.partition.with_index do |_, i|
         i >= 1 && i <= @design_factor_names.size
@@ -124,7 +124,7 @@ class Submission::TraitScoreParser
             plant_accession: plant_accession,
             originating_organisation: originating_organisation
           }
-          @lines_or_verieties[plant_id] = {
+          @lines_or_varieties[plant_id] = {
             relation_class_name: @line_or_variety,
             relation_record_name: line_name_or_variety_name
           }

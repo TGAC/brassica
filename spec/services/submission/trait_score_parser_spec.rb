@@ -278,7 +278,7 @@ RSpec.describe Submission::TraitScoreParser do
     it 'parses Plant line name information' do
       input_is "plant 1,pa,oo,pl"
       subject.send(:parse_scores)
-      expect(subject.lines_or_verieties).
+      expect(subject.lines_or_varieties).
         to eq({ 'plant 1' => { relation_class_name: 'PlantLine', relation_record_name: 'pl' }})
     end
 
@@ -286,7 +286,7 @@ RSpec.describe Submission::TraitScoreParser do
       subject.instance_variable_set(:@line_or_variety, 'PlantVariety')
       input_is "plant 1,pa,oo,pv"
       subject.send(:parse_scores)
-      expect(subject.lines_or_verieties).
+      expect(subject.lines_or_varieties).
         to eq({ 'plant 1' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' }})
     end
 
@@ -318,7 +318,7 @@ RSpec.describe Submission::TraitScoreParser do
           to eq({ 'plant 1' => { 0 => '1', 1 => '2' } })
         expect(subject.accessions).
           to eq({ 'plant 1' => { plant_accession: 'pa', originating_organisation: 'oo' } })
-        expect(subject.lines_or_verieties).
+        expect(subject.lines_or_varieties).
           to eq({ 'plant 1' => { relation_class_name: 'PlantLine', relation_record_name: 'pl' }})
       end
     end
@@ -335,7 +335,7 @@ RSpec.describe Submission::TraitScoreParser do
       expect(upload.submission.content.step04.design_factors).to be_nil
       expect(upload.submission.content.step04.design_factor_names).to be_nil
       expect(upload.submission.content.step04.accessions).to be_nil
-      expect(upload.submission.content.step04.lines_or_verieties).to be_nil
+      expect(upload.submission.content.step04.lines_or_varieties).to be_nil
     end
 
     it 'ignores any score in index grater than traits number' do

@@ -39,7 +39,7 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
         end
         old_line_names  = PlantLine.where(plant_line_name: lines.to_a).pluck(:plant_line_name)
         old_lines_count = old_line_names.count
-        old_varieties_count  = PlantVariety.count(plant_variety_name: varieties.to_a)
+        old_varieties_count  = PlantVariety.where(plant_variety_name: varieties.to_a).count
         summary << " - parsed #{unique_accessions.size} different accession(s)"
         summary << "   - out of which, #{old_accessions.count} accession(s) are present in BIP,"
         summary << "   - and #{new_accessions.count} new accession(s) will be created, for which"
