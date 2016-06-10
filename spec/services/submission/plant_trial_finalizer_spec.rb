@@ -167,7 +167,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
     context 'when dealing with plant lines and plant varieties' do
       it 'does nothing if no information is given' do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           submission.content.step03.to_h.merge(lines_or_varieties: {})
         )
 
@@ -175,13 +175,13 @@ RSpec.describe Submission::PlantTrialFinalizer do
       end
 
       it 'creates or assigns plant varieties for new accessions only' do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           submission.content.step03.to_h.merge(
             lines_or_varieties: {
-             'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety to be created' },
-             'p2' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety not to be created' },
-             'p3' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety already created' },
-             'p4' => { relation_class_name: 'PlantVariety', relation_record_name: old_variety.plant_variety_name }
+              'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety to be created' },
+              'p2' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety not to be created' },
+              'p3' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety already created' },
+              'p4' => { relation_class_name: 'PlantVariety', relation_record_name: old_variety.plant_variety_name }
             }
           )
         )
@@ -197,7 +197,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       end
 
       it 'assigns plant lines for new accessions only' do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           submission.content.step03.to_h.merge(
             lines_or_varieties: {
               'p1' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name },
@@ -219,7 +219,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
     context 'when parsing technical replicate data' do
       before :each do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           submission.content.step03.to_h.merge(
             trait_mapping: { 0 => 0, 1 => 0, 2 => 1, 3 => 2, 4 => 2 },
             replicate_numbers: { 0 => 1, 1 => 2, 2 => 0, 3 => 1, 4 => 2 },
@@ -251,7 +251,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
     context 'when parsing design factors' do
       before :each do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           submission.content.step03.to_h.merge(
             design_factor_names: ['polytunnel', 'rep', 'sub_block', 'pot_number'],
             design_factors: {
@@ -347,7 +347,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       end
 
       it 'rollbacks when there is missing accession data' do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
           trait_scores: {
             'p1' => { 0 => 'y', 2 => 'z' },
@@ -363,7 +363,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       end
 
       it 'rollbacks when there is no plant line or plant variety information for new accession' do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           accessions: {
             'p1' => { plant_accession: 'new_acc1' }
           },
@@ -375,7 +375,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       end
 
       it 'rollbacks when a new plant line is encountered for a new plant accession' do
-        submission.content.update(:step03,
+        submission.content.update(:step04,
           accessions: {
             'p1' => { plant_accession: 'new_acc1' }
           },
