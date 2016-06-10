@@ -72,7 +72,8 @@ RSpec.describe "Submission management" do
                     trial_year: "1999",
                     plant_population_id: plant_population.id.to_s,
                     country_id: country.id.to_s,
-                    place_name: "Really well hidden place"
+                    place_name: "Really well hidden place",
+                    data_status: 'plant_varieties'
                   }
                 }
               }
