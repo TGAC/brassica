@@ -17,7 +17,7 @@ module Submissions
       property :terrain
       property :soil_type
       property :statistical_factors
-      property :data_status
+      property :data_status, writeable: false
 
       validates :plant_trial_name, presence: true
       validates :project_descriptor, presence: true
