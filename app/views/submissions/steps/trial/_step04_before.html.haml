@@ -1,8 +1,17 @@
+- pl_pv_name = 'line'
+- pl_pv_name = 'variety' if submission.content.step03.lines_or_varieties == 'plant_varieties'
+- sample_names = (pl_pv_name == 'line' ? ['Heera', 'R500'] : ['York', 'Wrg 15'])
+
 .alert.alert-info
   %p
-    Please upload file with score values. The required format is simple and features <b>unique</b> plant
-    identification in the first column, then two columns about plant accession, and trait scores in column
-    four, five and so forth. The number of columns depends on how many Traits you have chosen in the second
+    Please upload file with score values. The required format is simple and features
+    %b unique plant scoring unit identification in the first column
+    (please go back to step 3 for short definition of a plant scoring unit), then
+    %b two columns about plant accession
+    (accession id and accession assigning organisation),
+    %b another column with plant #{pl_pv_name} name
+    and trait scores in column
+    five, six and so forth. The number of columns depends on how many Traits you have chosen in the second
     step of this submission.
     All values should be separated by a comma (<code>,</code>).
 
@@ -12,20 +21,20 @@
 
   %pre
     :preserve
-      Plant scoring unit name,Plant accession,Originating organisation,oleic acid content,seed mature time
-      assay_09,myAccession1,My Institute,56.98,249.00
-      assay_08,myAccession1,My Institute,57.24,252.00
-      assay_98,myAccession2,My Institute,18.48,255.00
-      assay_97,myAccession2,My Institute,20.40
-      assay_96,myAccession2,My Institute,50.82,254.00
-      assay_93,whri2004_C20,WHRI,58.50
-      assay_94,whri2004_C20,WHRI,,252.00
+      Plant scoring unit name,Plant accession,Originating organisation,Plant #{pl_pv_name},oleic acid content,seed mature time
+      assay_09,myAccession1,My Institute,#{sample_names[0]},56.98,249.00
+      assay_08,myAccession1,My Institute,#{sample_names[0]},57.24,252.00
+      assay_98,myAccession2,My Institute,#{sample_names[0]},18.48,255.00
+      assay_97,myAccession2,My Institute,#{sample_names[1]},20.40
+      assay_96,myAccession2,My Institute,#{sample_names[1]},50.82,254.00
+      assay_93,whri2004_C20,WHRI,#{sample_names[1]},58.50
+      assay_94,whri2004_C20,WHRI,#{sample_names[1]},,252.00
 
   %p
     Accession-related fields (the <b>Plant accession</b> identifier - in the second column - and the
     <b>Originating organisation</b>
     which issued this accession number - in the third column) are mandatory. Should you not have an
-    Accession for your lines, please create one yourself (for example, using a seedbag_id).
+    Accession for your plants, please create one yourself (for example, using a seedbag_id).
     It will serve as placeholder identifier for the unique genetic material you used in your trials.
     It is therefore important, that you are able to relate back to the identifier when cross-linking
     with the corresponding genetic data.
@@ -37,8 +46,9 @@
   %p
     The first line will be treated as a header. Specific values will be stored as scoring for the
     trait that's name matches the corresponding column header. If no match is found, the score will
-    be stored by column index. That is, an unmatched third column header will cause all third column
-    values counted as scoring of the second trait (in the order of input) defined during the second step.
+    be stored by column index. That is, an unmatched sixth column header will cause all sixth column
+    values counted as scoring of the second trait (in the order of input) defined during the step 2
+    of the submission.
 
   %p
     In the particular case of this submission, columns should be provided as follows:
@@ -46,9 +56,9 @@
   - @trait_names = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
   %pre
     :preserve
-      #{CSV.generate{ |csv| csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation'] + @trait_names }}
-      plant_scoring_unit_1,plant_accession_number,accession_organisation,#{@trait_names.map{|_| 'value'}.join(',')}
-      plant_scoring_unit_2,plant_accession_number,accession_organisation,#{@trait_names.map{|_| 'value'}.join(',')}
+      #{CSV.generate{ |csv| csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation', "Plant #{pl_pv_name}"] + @trait_names }}
+      plant_scoring_unit_1,plant_accession_number,accession_organisation,#{pl_pv_name}_name,#{@trait_names.map{|_| 'value'}.join(',')}
+      plant_scoring_unit_2,plant_accession_number,accession_organisation,#{pl_pv_name}_name,#{@trait_names.map{|_| 'value'}.join(',')}
       ...
 
   %p

@@ -44,7 +44,7 @@ RSpec.describe "Submission uploads" do
     end
 
     describe "GET /submissions/:submission_id/uploads/new" do
-      it 'generates a simple trait scores template' do
+      it 'generates a simple trait scores template using plant lines as default' do
         trait_descriptor = create(:trait_descriptor)
         submission.content.update(:step02,
                                   trait_descriptor_list: [trait_descriptor.id.to_s])
@@ -54,9 +54,22 @@ RSpec.describe "Submission uploads" do
 
         expect(response).to be_success
         expect(response.body.lines[0]).
-          to eq "Plant scoring unit name,Plant accession,Originating organisation,#{trait_descriptor.trait_name}\n"
+          to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant line,#{trait_descriptor.trait_name}\n"
         expect(response.body.lines[2]).
-          to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,sample_B_value_0__replace_it\n"
+          to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it,sample_B_value_0__replace_it\n"
+      end
+
+      it 'generates template for plant varieties if asked for that' do
+        submission.content.update(:step03, lines_or_varieties: 'plant_varieties')
+        submission.save
+
+        get "/submissions/#{submission.id}/uploads/new"
+
+        expect(response).to be_success
+        expect(response.body.lines[0]).
+          to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant variety\n"
+        expect(response.body.lines[2]).
+          to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant variety name - replace it\n"
       end
 
       it 'does not break for no-traits submissions' do
@@ -64,7 +77,7 @@ RSpec.describe "Submission uploads" do
 
         expect(response).to be_success
         expect(response.body.lines[0]).
-          to eq "Plant scoring unit name,Plant accession,Originating organisation\n"
+          to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant line\n"
       end
     end
   end

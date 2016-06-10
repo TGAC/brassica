@@ -7,15 +7,22 @@ class Submissions::UploadsController < ApplicationController
     @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
 
     # TODO FIXME Add Design factors generation
-    # TODO FIXME Add Plant line/Plant variety generation
     # TODO FIXME Add technical replicates generation
+    pl_pv_name = if submission.content.step03.lines_or_varieties == 'plant_varieties'
+                   'variety'
+                 else
+                   'line'
+                 end
 
     data = CSV.generate(headers: true) do |csv|
-      csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation'] + @traits
+      csv << ['Plant scoring unit name', 'Plant accession', 'Originating organisation', "Plant #{pl_pv_name}"] + @traits
 
       ['A','B'].each do |sample|
         sample_values = @traits.map.with_index{ |_,i| "sample_#{sample}_value_#{i}__replace_it" }
-        csv << ["Sample scoring unit #{sample} name - replace it", 'Accession identifier - replace it', 'Organisation name or acronym - replace it'] + sample_values
+        csv << ["Sample scoring unit #{sample} name - replace it",
+                'Accession identifier - replace it',
+                'Organisation name or acronym - replace it',
+                "Plant #{pl_pv_name} name - replace it"] + sample_values
       end
     end
 

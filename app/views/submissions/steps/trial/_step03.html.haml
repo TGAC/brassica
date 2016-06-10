@@ -1,4 +1,50 @@
 .alert.alert-info
-  Nothing to see here, move along now.
+  %p
+    BIP service assumes that each row in the trait scoring sheet, that you are going
+    to submit, represents a so-called
+    %b plant scoring unit.
+    For raw data it may simply be an individual plant in your experiment. For processed data
+    a plant scoring unit may represent a set of plants, related to each other in some way. For each
+    scoring unit we will ask you to mandatory provide
+    %b plant accession
+    information.
 
-= content.hidden_field :_i_am_fake
+  %p
+    In case you would like to check what plant accessions are currently registered in BIP, please
+    use the
+    = link_to 'plant accessions table view', data_tables_path(model: 'plant_accessions'), target: '_blank'
+    (you may filter data in that table with the
+    %b Search
+    text field).
+
+  %p
+    If you submit raw data, and you will have an option to submit technical replicate readings as
+    well as design factors (for instance, ordinal numbers for plots, reps and so forth).
+
+.form-group
+  = label_tag "Used genetic material origin"
+  %br
+  = content.label :lines_or_varieties, "Plant lines", value: 'plant_lines', class: 'radio-inline' do
+    = content.radio_button :lines_or_varieties, 'plant_lines', checked: true
+    Plant lines
+  = content.label :lines_or_varieties, "Plant varieties", value: 'plant_varieties', class: 'radio-inline' do
+    = content.radio_button :lines_or_varieties, 'plant_varieties'
+    Plant varieties
+  %small.help-block
+    Per each plant scoring unit submitted, the source of genetic material should be provided. It may either be a
+    %b plant line
+    or a
+    %b plant variety (cultivar).
+    This choice depends on the type of experiment you are conducting. You should select the
+    %b Plant lines
+    option if you
+    %ul
+      %li created new genetic material (using, for instance, crossing or mutagenesis) in the course of your project,
+      %li or you use former plant line genetic material which is not (yet) recognized as a variety or a cultivar.
+    In other cases you should probably select the the
+    %b Plant varieties
+    option.
+
+- if submission.content.step01.raw_data?
+  -# TODO technical_replicate_numbers
+  -# TODO design_factor_names
