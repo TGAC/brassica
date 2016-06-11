@@ -9,7 +9,8 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
 
   describe '#parser_summary' do
     it 'does not misbehave on null input' do
-      expect(sd.parser_summary).to eq ['Uploaded file parsing summary:']
+      expect(sd.parser_summary).
+        to eq ["Uploaded file parsing summary:", " - parsed 0 plant scoring unit(s) with unique identification", " - parsed scores for 0 trait(s), including technical replicates"]
     end
 
     it 'calculates proper histogram' do
