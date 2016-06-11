@@ -324,6 +324,27 @@ RSpec.describe Submission::TraitScoreParser do
     end
   end
 
+  describe '#split_to_trait_and_replicate' do
+    it 'returns safe blanks for broken input' do
+      expect(subject.send(:split_to_trait_and_replicate, nil)).to eq ['',0]
+      expect(subject.send(:split_to_trait_and_replicate, '')).to eq ['',0]
+    end
+
+    it 'returns original input if no replicate was found' do
+      expect(subject.send(:split_to_trait_and_replicate, 'a trait name')).
+        to eq ['a trait name', 0]
+      expect(subject.send(:split_to_trait_and_replicate, 'wrong_rep1 marker')).
+        to eq ['wrong_rep1 marker', 0]
+    end
+
+    it 'detects replicate number and strips it off the trait name' do
+      expect(subject.send(:split_to_trait_and_replicate, 'a trait namerep11')).
+        to eq ['a trait name', 11]
+      expect(subject.send(:split_to_trait_and_replicate, "trait with marker  rep0\t ")).
+        to eq ["trait with marker", 0]
+    end
+  end
+
   describe '#call' do
     it 'resets step04 data when called' do
       upload.submission.content.update(:step04, trait_scores: { 'plant' => { 1 => '5' }})

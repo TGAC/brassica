@@ -25,7 +25,7 @@ class Submission::TraitScoreTemplateGenerator
     traits = traits.map do |trait|
       if technical_replicate_numbers[trait] && technical_replicate_numbers[trait].to_i > 1
         reps_count = [technical_replicate_numbers[trait].to_i, 2].max
-        reps_count.times.map { |rep| "#{trait}_rep#{rep + 1}" }
+        reps_count.times.map { |rep| "#{trait} rep#{rep + 1}" }
       else
         trait
       end
@@ -36,12 +36,7 @@ class Submission::TraitScoreTemplateGenerator
 
       ['A','B'].each do |sample|
         sample_values = traits.map.with_index do |trait,i|
-          if technical_replicate_numbers[trait] && technical_replicate_numbers[trait].to_i > 1
-            reps_count = [technical_replicate_numbers[trait].to_i, 2].max
-            reps_count.times.map { |rep| "sample_#{sample}_rep#{rep + 1}_value_for_#{trait}__replace_it" }
-          else
-            "sample_#{sample}_value_for_#{trait}__replace_it"
-          end
+          "Value of #{trait} scored for sample #{sample} - replace_it"
         end
         csv << ["Sample scoring unit #{sample} name - replace it"] +
             design_factors[sample] +
