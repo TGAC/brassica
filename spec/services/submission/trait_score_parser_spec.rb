@@ -268,11 +268,13 @@ RSpec.describe Submission::TraitScoreParser do
                 'plant 2' => { plant_accession: 'pa2', originating_organisation: 'oo' }})
     end
 
-    it 'ignores scores beyond number of trait columns' do
+    it 'warns about ignored scores beyond number of trait columns' do
       input_is "plant 1,pa,oo,pl,1,2,3"
       subject.send(:parse_scores)
       expect(subject.trait_scores).
         to eq({ 'plant 1' => { 0 => '1', 1 => '2' } })
+      expect(upload.logs).
+        to include 'Encountered too many scoring values for plant 1. Ignoring value 3 in column 7.'
     end
 
     it 'parses Plant line name information' do

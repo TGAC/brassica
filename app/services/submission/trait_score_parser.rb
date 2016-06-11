@@ -131,9 +131,13 @@ class Submission::TraitScoreParser
           @trait_scores[plant_id] = {}
           plant_count += 1
           values.each_with_index do |value, col_index|
-            unless value.blank? || @trait_mapping[col_index].nil?
-              @trait_scores[plant_id][col_index] = value
-              score_count += 1
+            unless value.blank?
+              if @trait_mapping[col_index].nil?
+                @upload.log "Encountered too many scoring values for #{plant_id}. Ignoring value #{value} in column #{col_index + @design_factor_names.size + 5}."
+              else
+                @trait_scores[plant_id][col_index] = value
+                score_count += 1
+              end
             end
           end
         end
