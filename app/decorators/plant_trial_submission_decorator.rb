@@ -43,7 +43,7 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
 
   def trait_descriptors
     tds = object.content.step02.trait_descriptor_list.try(:select, &:present?) || []
-    numeric_tds = tds.select { |td| td.to_s.match /\A\d+\z/ }
+    numeric_tds = tds.select { |td| td.to_s.match(/\A\d+\z/) }
     non_numeric_tds = tds - numeric_tds
     non_numeric_tds | TraitDescriptor.includes(:trait).references(:trait).where(id: numeric_tds).pluck('traits.name')
   end
@@ -114,10 +114,6 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     object.content.step01.statistical_factors
   end
 
-  def design_factors
-    object.content.step01.design_factors
-  end
-
   def data_owned_by
     object.content.step06.data_owned_by.presence
   end
@@ -140,5 +136,17 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     return unless layout_url
     file_name = object.submitted_object.try(:layout).try(:original_filename)
     h.link_to file_name, layout_url
+  end
+
+  def raw_data?
+    object.content.step01.data_status == 'raw_data'
+  end
+
+  def technical_replicate_numbers
+    object.content.step03.technical_replicate_numbers.presence || []
+  end
+
+  def design_factor_names
+    object.content.step03.design_factor_names || []
   end
 end

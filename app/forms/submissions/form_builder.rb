@@ -11,8 +11,13 @@ class Submissions::FormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def combo_field(attr, option_tags, options = {})
-    name = "submission[content][#{attr}]"
-    value = @object.send(attr)
+    if attr.to_s =~ /\[\]\z/
+      attr = attr[0...-2]
+      name = "submission[content][#{attr}][]"
+    else
+      name = "submission[content][#{attr}]"
+    end
+    value = options.has_key?(:value) ? options[:value] : @object.send(attr)
     label = options[:label] || attr.to_s.humanize
     required = options[:required]
     help = options[:help]

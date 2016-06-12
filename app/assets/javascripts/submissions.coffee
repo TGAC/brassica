@@ -182,7 +182,6 @@ class TrialSubmission extends Submission
       'terrain'
       'soil-type'
       'statistical-factors'
-      'design-factors'
     ]
 
     if $('.project-descriptor-select option').length > 0
@@ -191,6 +190,9 @@ class TrialSubmission extends Submission
     $.each fields, (_, field) =>
       @$(".#{field}").select2(@defaultSelectOptions)
       @$(".#{field}-wrapper").comboField()
+
+    @$(".design-factor-names").select2(@defaultSelectOptions)
+    @$(".design-factor-names-wrapper").comboField()
 
     @bindTraitScoresUpload()
     @bindLayoutUpload()

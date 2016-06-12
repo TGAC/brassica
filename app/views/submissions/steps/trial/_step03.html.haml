@@ -45,6 +45,23 @@
     %b Plant varieties
     option.
 
-- if submission.content.step01.data_status == 'raw_data'
-  -# TODO technical_replicate_numbers
-  -# TODO design_factor_names
+- if submission.raw_data?
+  %fieldset
+    %legend Technical replicate numbers
+
+    - submission.sorted_trait_names.each_with_index do |trait_name, idx|
+      .form-group
+        = content.text_field :technical_replicate_numbers,
+            value: @submission.technical_replicate_numbers[idx] || 1,
+            label: trait_name, name: "submission[content][technical_replicate_numbers][]"
+
+  %fieldset
+    %legend Design factors
+
+    - (0...5).each do |idx|
+      .form-group
+        - value = @content.design_factor_names[idx]
+        - options = options_for_select(DesignFactor::COMMON_NAMES, value)
+        = content.combo_field "design_factor_names[]", options, value: value,
+            label: "Design factor #{idx + 1}"
+

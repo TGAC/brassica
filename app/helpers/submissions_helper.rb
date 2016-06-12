@@ -45,6 +45,7 @@ module SubmissionsHelper
   end
 
   def submission_form(submission, &block)
+    submission = submission.object if submission.is_a?(Draper::Decorator)
     options = {
       builder: Submissions::FormBuilder,
       html: {
