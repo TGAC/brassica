@@ -55,5 +55,5 @@ class ComboField
     @$clear_input.addClass('hidden')
 
 $.fn.comboField = ->
-  new ComboField(this).init()
+  $.each(this, -> new ComboField(this).init())
 
