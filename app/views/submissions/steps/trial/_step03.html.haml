@@ -57,11 +57,10 @@
 
   %fieldset
     %legend Design factors
-
+    - values = @content.design_factor_names
     - (0...5).each do |idx|
-      .form-group
-        - value = @content.design_factor_names[idx]
-        - options = options_for_select(DesignFactor::COMMON_NAMES, value)
-        = content.combo_field "design_factor_names[]", options, value: value,
+      .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
+        - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
+        = content.combo_field "design_factor_names[]", options, value: values[idx],
             label: "Design factor #{idx + 1}"
 

@@ -21,19 +21,23 @@ class ComboField
     @$select.on 'select2:select', =>
       @$input.prop(disabled: true)
       @$el.trigger('combo:change', @val())
+      @$el.trigger('combo:select', @val())
 
     @$select.on 'select2:unselect', =>
       @$input.prop(disabled: false)
       @$el.trigger('combo:change')
+      @$el.trigger('combo:unselect')
 
     @$input.on 'keyup', =>
       @onKeyup()
       @$el.trigger('combo:change', @val())
+      @$el.trigger('combo:input', @val())
 
     @$clear_input.on 'click', (event) =>
       event.preventDefault()
       @clearInput()
       @$el.trigger('combo:change')
+      @$el.trigger('combo:input')
 
   val: =>
     val = $.trim(@$select.find('option:selected').val())

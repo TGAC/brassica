@@ -191,12 +191,10 @@ class TrialSubmission extends Submission
       @$(".#{field}").select2(@defaultSelectOptions)
       @$(".#{field}-wrapper").comboField()
 
-    @$(".design-factor-names").select2(@defaultSelectOptions)
-    @$(".design-factor-names-wrapper").comboField()
-
     @bindTraitScoresUpload()
     @bindLayoutUpload()
     @bindNewTraitDescriptorControls()
+    @bindDesignFactorNameComboFields()
 
   initDirtyTracker: =>
     super()
@@ -311,6 +309,23 @@ class TrialSubmission extends Submission
       @$('button.new-trait-descriptor-for-list').show()
       @dirtyTracker.resetContext("new-trait-descriptor")
 
+  bindDesignFactorNameComboFields: =>
+    @$(".design-factor-names").select2(@defaultSelectOptions)
+    @designFactorNameComboFields = @$(".design-factor-names-wrapper").comboField()
+
+    @designFactorNameComboFields.on('combo:select combo:unselect', (ev, value) =>
+      @updateDesignFactorNameComboFields($(ev.target), value, clear: true)
+    )
+
+    @designFactorNameComboFields.on('combo:input', (ev, value) =>
+      @updateDesignFactorNameComboFields($(ev.target), value)
+    )
+
+    @designFactorNameComboFields.each (_, el) =>
+      $el = @$(el)
+      val = $el.comboField('value')
+      @updateDesignFactorNameComboFields($el, val) if val.length > 0
+
   initNewTraitDescriptorForm: =>
     @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
 
@@ -375,6 +390,26 @@ class TrialSubmission extends Submission
 
   newTraitDescriptorForListContainerId: (trait) =>
     'new-trait-descriptor-' + trait.split(/\s+/).join('-').toLowerCase()
+
+  updateDesignFactorNameComboFields: ($changed, value, options = {}) =>
+    $next = $changed.parents(".form-group").next()
+    $nextAll = $changed.parents(".form-group").nextAll()
+
+    if options.clear
+      $nextAll.find("option").prop(disabled: false, selected: false)
+      $nextAll.find("input").val("")
+
+    if value
+      $nextAll.find("option").prop(disabled: false) if $nextAll.find("option[value=#{value}]").length > 0
+      $nextAll.find("option[value=#{value}]").prop(disabled: true)
+      $nextAll.find("option[value=#{value}]").prevAll().prop(disabled: true)
+      $next.removeClass('hidden')
+
+    else
+      $nextAll.addClass('hidden')
+
+    # Reset select2 so that it sees changes in disabled options
+    $nextAll.find('select').select2(@defaultSelectOptions)
 
 $ ->
   new PopulationSubmission('.edit-population-submission').init()
