@@ -11,7 +11,7 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       expect{ call(create(:submission, :population)) }.to raise_error ArgumentError
     end
   end
-  
+
   context '#call' do
     let(:submission) { create(:submission, :trial) }
 
@@ -64,13 +64,8 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
     it 'adds proper technical replicate columns if needed' do
       tds = create_list(:trait_descriptor, 3)
       submission.content.update(:step02, trait_descriptor_list: tds.map(&:id))
-      submission.content.update(:step03,
-                                technical_replicate_numbers: {
-                                    tds[0].trait_name => 2,
-                                    tds[2].trait_name => 1
-                                }
-      )
-      submission.save
+      submission.content.update(:step03, technical_replicate_numbers: [2, nil, 1])
+      submission.save!
 
       data = call(submission)
 
