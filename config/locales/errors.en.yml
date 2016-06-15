@@ -63,6 +63,9 @@ en:
             country_id:
               blank: Please select a country from the list.
 
+            technical_replicate_numbers:
+              invalid: Technical replicate numbers must be present and greater than zero.
+
         plant_accession:
           attributes:
             plant_line_id:

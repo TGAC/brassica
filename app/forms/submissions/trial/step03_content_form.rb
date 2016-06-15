@@ -5,7 +5,24 @@ module Submissions
       collection :technical_replicate_numbers
       collection :design_factor_names
 
-      # TODO: validate technical_replicate_numbers, each > 1
+      validate do
+        all_valid = technical_replicate_numbers.all? do |number|
+          number.to_i.to_s == number && number.to_i > 0
+        end
+        errors.add(:technical_replicate_numbers, :invalid) unless all_valid
+      end
+
+      def technical_replicate_numbers
+        super || []
+      end
+
+      def technical_replicate_nummbers=(numbers)
+        super(numbers.presence || [])
+      end
+
+      def design_factor_names
+        super || []
+      end
     end
   end
 end
