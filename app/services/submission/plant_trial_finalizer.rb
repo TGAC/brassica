@@ -166,7 +166,7 @@ class Submission::PlantTrialFinalizer
     if PlantTrial.where(plant_trial_name: attrs[:plant_trial_name]).exists?
       rollback(0)
     else
-      @plant_trial = PlantTrial.create!(attrs)
+      @plant_trial = PlantTrial.create!(attrs.except(:data_status))
     end
   end
 
