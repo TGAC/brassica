@@ -12,8 +12,8 @@ class PlantVariety < ActiveRecord::Base
   after_update { plant_lines.each(&:touch) }
   before_destroy { plant_lines.each(&:touch) }
 
-  has_many :plant_lines
-  has_many :plant_accessions
+  has_many :plant_lines, dependent: :nullify
+  has_many :plant_accessions, dependent: :nullify
 
   validates :plant_variety_name,
             presence: true,

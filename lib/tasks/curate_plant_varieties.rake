@@ -4,6 +4,15 @@ namespace :curate do
   desc 'Curate names of plant varieties based on data received from TGAC'
   task plant_varieties: :environment do
 
+    # Fix some simple errors in PVs
+    pvs = PlantVariety.where("plant_variety_name LIKE '%quell%'").all
+    if pvs.count == 3
+      pvs.each do |pv|
+        pv.plant_variety_name = 'Gülzower Ölquell'
+        pv.save
+      end
+    end
+
     # Import CSV
     list = {}
     CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
@@ -126,7 +135,7 @@ namespace :curate do
 
     # Expunge orphaned PVs.
     puts "Checking for orphaned plant varieties..."
-    pvs = PlantVariety.where(plant_lines: []).all
+    pvs = PlantVariety.includes(:plant_lines).all.select{|pv| pv.plant_lines.blank?}
     puts "#{pvs.length} orphaned plant varieties found."
     pvs.each do |pv|
       pv.destroy
@@ -165,7 +174,10 @@ namespace :curate do
 
     # Also add synonyms to all new PVs.
 
+    pvs_syn_processed = 0
+
     PlantVariety.all.each do |pv|
+
       if list.keys.include? pv.plant_variety_name
         add_synonym_if_not_present(pv, list[pv.plant_variety_name])
       end
@@ -175,6 +187,12 @@ namespace :curate do
       end
 
       pv.save
+
+      pvs_syn_processed += 1
+      if pvs_syn_processed % 100 == 0
+        puts "Processed synonyms for #{pvs_syn_processed} PVs."
+      end
+
     end
 
     #puts "All done. ##{processed} records processed; #{conflicts} conflicts detected."
