@@ -1,4 +1,7 @@
 class MoveDesignFactorColumnsToArray < ActiveRecord::Migration
+  require File.expand_path('lib/migration_helper')
+  include MigrationHelper
+
   def up
     add_column :design_factors, :design_factors, :string, array: true, null: true
 
@@ -28,7 +31,7 @@ class MoveDesignFactorColumnsToArray < ActiveRecord::Migration
     design_factors = DesignFactor.all.pluck(:id, :design_factors)
     design_factors.each do |id, factor_array|
       values_string = factor_array.map.with_index do |value, i|
-        "design_factor_#{i + 1} = '#{value}'"
+        "design_factor_#{i + 1} = E'#{escape(value)}'"
       end.join(',')
       query = "UPDATE design_factors SET #{values_string} WHERE id = '#{id}';"
       execute query
