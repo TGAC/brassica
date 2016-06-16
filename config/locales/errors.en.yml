@@ -64,7 +64,9 @@ en:
               blank: Please select a country from the list.
 
             technical_replicate_numbers:
-              invalid: Technical replicate numbers must be present and greater than zero.
+              invalid: |
+                Technical replicate numbers must be present and greater than zero. Please leave the value at '1' if
+                you don't use technical replicates.
 
         plant_accession:
           attributes:
