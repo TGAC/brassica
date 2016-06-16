@@ -1,0 +1,19 @@
+(ionomics)
+
+Li7	B11	Na23	Mg25	P31	S34	K39	Ca43	Cr52	Mn55	Fe57	Co59	Ni60	Cu65	Zn66	As75	Se82	Rb85	Sr88	Mo98	Cd114	Pb208
+
+(mineral)
+
+Li (mg/kg)	B (mg/kg)	Na (mg/kg)	Mg (mg/kg)	P (mg/kg)	S (mg/kg)	K (mg/kg)	Ca (mg/kg)	Cr (mg/kg)	Mn (mg/kg)	Fe (mg/kg)	Co (mg/kg)	Ni (mg/kg)	Cu (mg/kg)	Zn (mg/kg)	As (mg/kg)	Se (mg/kg)	Rb (mg/kg)	Sr (mg/kg)	Mo (mg/kg)	Cd (mg/kg)	Pb (mg/kg)
+
+(wax)
+
+Alk ug/g	AlcI ug/g	FA ug/g	AlcII ug/g	Keto ug/g	Ald ug/g	Branched ug/g	  Total wax ug/g
+
+(sterols)
+
+ug/g	Brassicasterol	Campesterol diunsat	Campesterol	Stigmasterol	B-Sitosterol	Avenasterol	Cycloartenol	Total		% composition	Brassicasterol	Campesterol diunsat	Campesterol	Stigmasterol	B-Sitosterol	Avenasterol	Cycloartenol
+
+(tocopherols)
+
+a-toc 1st rep  	a-toc 2nd rep  	y-toc 1st rep  	y-toc 2nd rep 	d-toc 1st rep 	y-toc 2nd rep

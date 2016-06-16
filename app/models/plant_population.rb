@@ -36,14 +36,14 @@ class PlantPopulation < ActiveRecord::Base
   def self.table_data(params = nil, uid = nil)
     subquery = PlantLine.visible(uid)
 
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query = query.
+    query = PlantPopulation.
       joins {[
         subquery.as('plant_lines').on { female_parent_line_id == plant_lines.id }.outer,
         subquery.as('male_parent_lines_plant_populations').on { male_parent_line_id == male_parent_lines_plant_populations.id }.outer,
         taxonomy_term.outer,
         population_type.outer
       ]}
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.
       where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
 

@@ -21,8 +21,11 @@ Rails.application.routes.draw do
   end
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]
+  resources :plant_parts, only: [:index]
   resources :plant_populations, only: [:index]
+  resources :plant_trials, only: [:index, :show]
   resources :trait_descriptors, only: [:index]
+  resources :traits, only: [:index]
   resources :trial_scorings, only: [:show]
   resources :data_tables, only: [:index, :show]
 

@@ -81,6 +81,7 @@ en:
       trial_location_site_name: Location site
       institute_id: Institute
       date_entered: Entry date
+      layout_file_name: Layout
     plant_varieties:
       plant_variety_name: Variety
       crop_type: Crop type
@@ -146,8 +147,13 @@ en:
       date_run: Date run
     taxonomy_terms:
       name: Species
+    traits:
+      name: Trait
     trait_descriptors:
-      descriptor_name: Trait
+      descriptor_label: Label
+      category: Category
+      scoring_method: Scoring method
+      materials: Materials
       trait_scores: Trait scores
       qtl: QTL
       units_of_measurements: Unit

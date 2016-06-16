@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :plant_trial do
     sequence(:plant_trial_name) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
-    project_descriptor { Faker::Lorem.word }
+    sequence(:project_descriptor) {|n| "#{Faker::Lorem.word} #{n} #{Faker::Lorem.word}"}
     trial_location_site_name { Faker::Lorem.sentence }
     place_name { Faker::Lorem.sentence }
     trial_year { Faker::Date.backward.year.to_s }
@@ -14,5 +14,9 @@ FactoryGirl.define do
     plant_population
     user
     annotable
+  end
+
+  trait :with_layout do
+    layout { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'plant-trial-layout-example.jpg'), 'image/jpeg') }
   end
 end

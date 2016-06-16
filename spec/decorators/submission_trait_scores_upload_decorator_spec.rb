@@ -1,11 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe SubmissionUploadDecorator do
-  let(:sd) do
-    SubmissionUploadDecorator.decorate(
-      create(:upload)
-    )
-  end
+RSpec.describe SubmissionTraitScoresUploadDecorator do
+  let(:upload) { create(:upload) }
+  let(:sd) { described_class.decorate(upload) }
 
   describe '#parser_summary' do
     it 'does not misbehave on null input' do
@@ -22,7 +19,7 @@ RSpec.describe SubmissionUploadDecorator do
       }
       mapping = { 0 => 2, 1 => 1, 2 => 0 }
       sd.object.submission.content.update(:step02, trait_descriptor_list: traits)
-      sd.object.submission.content.update(:step03, trait_scores: scores, trait_mapping: mapping)
+      sd.object.submission.content.update(:step04, trait_scores: scores, trait_mapping: mapping)
       expect(sd.parser_summary).
         to eq [
           'Uploaded file parsing summary:',

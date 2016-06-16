@@ -1,4 +1,5 @@
-= submission_value @submission, :plant_trial_name
+= submission_value @submission, :plant_trial_name, "Plant trial name",
+    data_tables_path(model: :plant_trials, query: { id: @submission.submitted_object_id })
 = submission_value @submission, :project_descriptor, 'Project'
 = submission_value @submission, :species_name, 'Species'
 = submission_value @submission, :plant_trial_description, 'Trial description'
@@ -14,6 +15,7 @@
 = submission_value @submission, :soil_type
 = submission_value @submission, :statistical_factors
 = submission_value @submission, :design_factors
+= submission_value @submission, :layout_link, 'Layout image'
 = submission_value @submission, :data_owned_by
 = submission_value @submission, :data_provenance
 = submission_value @submission, :comments

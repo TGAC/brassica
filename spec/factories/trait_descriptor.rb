@@ -2,7 +2,6 @@ FactoryGirl.define do
   factory :trait_descriptor do
     sequence(:descriptor_label) { Faker::Lorem.characters(14) }
     category { Faker::Lorem.word + ' ' + Faker::Lorem.word }
-    descriptor_name { Faker::Lorem.sentence }
     units_of_measurements { Faker::Lorem.sentence + ' (%)' }
     where_to_score { Faker::Lorem.sentence }
     scoring_method { Faker::Lorem.sentence }
@@ -18,6 +17,8 @@ FactoryGirl.define do
     date_method_agreed { Faker::Date.backward }
     confirmed_by_whom { Faker::Internet.user_name }
     published_on { Date.today-8.days }
+    association :trait
+    plant_part
     user
     annotable
   end

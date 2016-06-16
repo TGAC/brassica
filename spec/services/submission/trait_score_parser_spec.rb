@@ -54,7 +54,7 @@ RSpec.describe Submission::TraitScoreParser do
       end
 
       it 'works regardless traits are old or new' do
-        td = create(:trait_descriptor, descriptor_name: 'old trait')
+        td = create(:trait_descriptor, trait: create(:trait, name: 'old trait'))
         upload.submission.content.update(:step02, trait_descriptor_list: [td.id, 'new trait'])
         input_is "id,new trait,old trait"
         subject.send(:map_headers_to_traits)
@@ -118,11 +118,11 @@ RSpec.describe Submission::TraitScoreParser do
   end
 
   describe '#call' do
-    it 'resets step03 data when called' do
-      upload.submission.content.update(:step03, trait_scores: { 'plant' => { 1 => '5' }})
+    it 'resets step04 data when called' do
+      upload.submission.content.update(:step04, trait_scores: { 'plant' => { 1 => '5' }})
       input_is ''
       subject.call
-      expect(upload.submission.content.step03.trait_scores).to be_nil
+      expect(upload.submission.content.step04.trait_scores).to be_nil
     end
 
     it 'ignores any score in index grater than traits number' do

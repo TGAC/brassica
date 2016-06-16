@@ -421,6 +421,13 @@ en:
           name: description
           desc: Longer text explaining what part of plant this record represents
         -
+          name: label
+          desc: Plant Ontology identifier, if available
+        -
+          name: canonical
+          format: boolean
+          desc: Set to true if the term is defined in Plant Ontology; false otherwise
+        -
           name: described_by_whom
           desc: The person or organization who described this dictionary entry
         -
@@ -434,9 +441,9 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: plant_scoring_unit_ids
+          name: trait_descriptor_ids
           format: "int[]"
-          desc: Zero or more BIP identifiers of Plant Scoring Units that were scored using this Plant Part
+          desc: Zero or more BIP identifiers of Trait Descriptors that describe traits scored using this Plant Part
 
     plant_population:
       attrs:
@@ -647,6 +654,11 @@ en:
           format: int[]
           create: writeonly
           desc: Zero or more BIP identifiers of countries that this variety is registered in
+        -
+          name: plant_accession_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of related Plant Accessions
         -
           name: plant_line_ids
           format: "int[]"
@@ -1101,7 +1113,13 @@ en:
         -
           name: plant_line_id
           format: int
+          create: required (if no plant_variety_id)
           desc: BIP identifier of the associated Plant Line
+        -
+          name: plant_variety_id
+          format: int
+          create: required (if no plant_line_id)
+          desc: BIP identifier of the associated Plant Variety
         -
           name: plant_scoring_unit_ids
           format: "int[]"
@@ -1109,6 +1127,11 @@ en:
           desc: Zero or more BIP identifiers of Plant Scoring Units performed for this plant
         -
           name: published_on
+
+      note:
+        <b>NOTE:</b> you should link a new Plant Accession to either a Plant Line of a Plant Variety.
+        So, excatly one of <code>plant_line_id</code> and <code>plant_variety_id</code> attributes
+        should be provided (but never both).
 
       create:
         example: |-
@@ -1166,10 +1189,6 @@ en:
           create: readonly
           desc: Additional information concerning the design of the population experiment
         -
-          name: plant_part_id
-          format: int
-          desc: BIP identifier of the plant part record that describes what part of plant was used for scoring
-        -
           name: plant_accession_id
           format: int
           desc: BIP identifier of the associated database Plant Accession
@@ -1216,7 +1235,7 @@ en:
           desc: Additional descriptive information concerning the trial
         -
           name: trial_year
-          create: Q
+          create: required, Q
           desc: Year (or years) the trial took place
         -
           name: institute_id
@@ -1228,6 +1247,7 @@ en:
           desc: Site where the plant trial was performed
         -
           name: place_name
+          create: required
           desc: Place where the plant trial was performed
         -
           name: country
@@ -1654,14 +1674,10 @@ en:
           desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
-          create: required, Q
-          desc: Plant trait category described by this this descriptor
-        -
-          name: descriptor_name
-          create: required, Q
-          desc: Common name used to describe the trait
+          desc: Plant trait category described by this descriptor
         -
           name: units_of_measurements
+          create: required
           desc: How the trait is measured
         -
           name: trait_grades
@@ -1672,6 +1688,7 @@ en:
           desc: Where the trait is measured
         -
           name: scoring_method
+          create: required
           desc: Method used to obtain the trait measure
         -
           name: when_to_score
@@ -1726,6 +1743,20 @@ en:
         -
           name: confirmed_by_whom
         -
+          name: plant_part_id
+          format: int
+          desc: BIP identifier of the plant part record that describes what part of plant was used for scoring this trait
+        -
+          name: trait_id
+          create: required
+          format: int
+          desc: BIP identifier of the record in the Trait vocabulary that defines the scored trait
+        -
+          name: trait
+          format: object
+          create: readonly
+          desc: Entry in BIP traits vocabulary this Trait Descriptor refers to; describes the scored trait in detail
+        -
           name: trait_score_ids
           format: "int[]"
           create: readonly
@@ -1742,8 +1773,9 @@ en:
 
           {
             "trait_descriptor": {
-              "descriptor_name": "Invisible trait",
-              "category": "Metaphysical"
+              "units_of_measurements": "percent total seed fatty acid (%)",
+              "category": "seed composition",
+              "trait_id": "1353"
             }
           }
 
@@ -1817,3 +1849,26 @@ en:
           name: plant_population_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Populations that are of this population type
+
+    trait:
+      attrs:
+        -
+          name: id
+        -
+          name: name
+          desc: Short textual definition of the trait
+        -
+          name: label
+          desc: Trait Ontology term id, if available
+        -
+          name: description
+          desc: Longer description of the trait, usually supplied by the ontology maintainers
+        -
+          name: canonical
+          desc: Whether this trait is defined in Trait Ontology or not
+        -
+          name: data_provenance
+        -
+          name: trait_descriptor_ids
+          format: "int[]"
+          desc: Zero or more BIP identifiers of Trait Descriptors related to this trait

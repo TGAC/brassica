@@ -14,30 +14,31 @@ class Qtl < ActiveRecord::Base
   include Publishable
 
   def self.table_data(params = nil, uid = nil)
+    t_subquery = Trait.all
     td_subquery = TraitDescriptor.visible(uid)
     lg_subquery = LinkageGroup.visible(uid)
     lm_subquery = LinkageMap.visible(uid)
     pp_subquery = PlantPopulation.visible(uid)
     qtlj_subquery = QtlJob.visible(uid)
 
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-
-    query = query.
+    query = all.
       joins {[
         processed_trait_dataset,
         td_subquery.as('trait_descriptors').on { processed_trait_datasets.trait_descriptor_id == trait_descriptors.id }.outer,
+        t_subquery.as('traits').on { trait_descriptors.trait_id == traits.id }.outer,
         lg_subquery.as('linkage_groups').on { linkage_group_id == linkage_groups.id }.outer,
         lm_subquery.as('linkage_maps').on { linkage_groups.linkage_map_id == linkage_maps.id }.outer,
         pp_subquery.as('plant_populations').on { linkage_maps.plant_population_id == plant_populations.id }.outer,
         qtlj_subquery.as('qtl_jobs').on { qtl_job_id == qtl_jobs.id }.outer
       ]}
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
     query.pluck(*(table_columns + ref_columns))
   end
 
   def self.table_columns
     [
-      'trait_descriptors.descriptor_name',
+      'traits.name',
       'map_qtl_label',
       'linkage_groups.linkage_group_label',
       'outer_interval_start',
@@ -101,7 +102,12 @@ class Qtl < ActiveRecord::Base
       include: {
         processed_trait_dataset: {
           only: [],
-          include: { trait_descriptor: { only: :descriptor_name } }
+          include: {
+            trait_descriptor: {
+              only: [],
+              include: { trait: { only: :name }}
+            }
+          }
         }
       }
     }
@@ -111,7 +117,9 @@ class Qtl < ActiveRecord::Base
     indexes :map_qtl_label
     indexes :processed_trait_dataset do
       indexes :trait_descriptor do
-        indexes :descriptor_name
+        indexes :trait do
+          indexes :name
+        end
       end
     end
 

@@ -4,6 +4,7 @@ module ComboFieldTagHelper
     input_placeholder = options[:input_placeholder] || "Enter new value"
     klass = options[:class] || 'combo-field'
     required = options[:required]
+    help = options[:help]
 
     unless options[:label] == false
       label_html = label_tag(options[:label] || name, nil, class: "#{'required' if required}")
@@ -17,6 +18,10 @@ module ComboFieldTagHelper
     text_field_html = text_field_tag name, value,
       class: "form-control",
       placeholder: input_placeholder
+
+    if help
+      select_html << content_tag(:small, help.html_safe, class: 'help-block')
+    end
 
     <<-HTML.html_safe
     <div class='combo-field-wrapper #{klass}-wrapper'>

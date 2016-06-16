@@ -2,3 +2,7 @@
   %li.list-group-item
     %strong= label
     = value
+
+    - if url
+      %a{ href: url, data: { toggle: "tooltip" }, title: "Browse" }
+        %i.fa.fa-table

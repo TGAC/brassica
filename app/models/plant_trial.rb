@@ -8,8 +8,10 @@ class PlantTrial < ActiveRecord::Base
   has_many :plant_scoring_units, dependent: :destroy
   has_many :processed_trait_datasets
 
+  has_attached_file :layout
+
   validates :plant_trial_name, presence: true, uniqueness: true
-  validates :project_descriptor, presence: true
+  validates :project_descriptor, :trial_year, :place_name, presence: true
   validates :latitude, allow_blank: true, numericality: {
     greater_than_or_equal_to: -90,
     less_than_or_equal_to: 90
@@ -18,6 +20,8 @@ class PlantTrial < ActiveRecord::Base
     greater_than_or_equal_to: -180,
     less_than_or_equal_to: 180
   }
+
+  validates_attachment_content_type :layout, content_type: %w(image/png image/gif image/jpeg)
 
   include Relatable
   include Filterable
@@ -64,6 +68,7 @@ class PlantTrial < ActiveRecord::Base
       'trial_location_site_name',
       'countries.country_name',
       'institute_id',
+      'layout_file_name',
       'id'
     ]
   end
@@ -77,11 +82,14 @@ class PlantTrial < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
+      search: [
+        'project_descriptor',
+      ],
       query: params_for_filter(table_columns) +
         [
           'project_descriptor',
           'plant_populations.id',
-          'id'
+          'id' => []
         ]
     ]
   end

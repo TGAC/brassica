@@ -27,7 +27,9 @@ FactoryGirl.define do
                                              male_parent_line: nil,
                                              plant_line_list: [])
           submission.content.update(:step04, comments: Faker::Lorem.sentence,
-                                             publishability: submission.publishable? ? 'publishable' : 'private')
+                                             visibility: submission.published? ? 'published' : 'private')
+
+          submission.step = :step04
 
           FactoryGirl.create(:taxonomy_term, name: submission.content.step02.taxonomy_term)
           FactoryGirl.create(:population_type, population_type: submission.content.step02.population_type)
@@ -39,15 +41,18 @@ FactoryGirl.define do
           submission.content.update(:step01, plant_trial_name: random_word,
                                              project_descriptor: random_word,
                                              plant_population_id: plant_population.id,
+                                             trial_year: 1999,
+                                             place_name: random_word,
                                              country_id: country.id)
           submission.content.update(:step02, trait_descriptor_list: [trait_descriptor.id.to_s])
-          submission.content.update(:step04, comments: Faker::Lorem.sentence,
-                                             publishability: submission.publishable? ? 'publishable' : 'private')
+          submission.content.update(:step06, comments: Faker::Lorem.sentence,
+                                             visibility: submission.published? ? 'published' : 'private')
+
+          submission.step = :step06
         else
           raise "Factory does not support finalized #{submission.submission_type} submissions"
         end
 
-        submission.step = :step04
         submission.finalize
       end
     end

@@ -26,14 +26,17 @@ class Submission::PlantTrialFinalizer
     @new_trait_descriptors = (submission.content.step02.new_trait_descriptors || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       attrs = attrs.merge(common_data)
+      if attrs[:trait].present?
+        attrs[:trait] = Trait.find_by_name(attrs['trait'])
+      end
       TraitDescriptor.create!(attrs)
     end
   end
 
   def create_scoring
-    trait_mapping = submission.content.step03.trait_mapping
+    trait_mapping = submission.content.step04.trait_mapping
 
-    @new_plant_scoring_units = (submission.content.step03.trait_scores || {}).map do |plant_id, scores|
+    @new_plant_scoring_units = (submission.content.step04.trait_scores || {}).map do |plant_id, scores|
       new_plant_scoring_unit = PlantScoringUnit.create!(
         common_data.merge(scoring_unit_name: plant_id)
       )
@@ -65,9 +68,13 @@ class Submission::PlantTrialFinalizer
       rollback(0)
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:publishability))
+    if layout_upload = Submission::Upload.find_by(id: submission.content.step05.layout_upload_id)
+      attrs.merge!(layout: layout_upload.file)
+    end
+
+    attrs.merge!(submission.content.step06.to_h.except(:visibility))
     attrs.merge!(plant_scoring_units: @new_plant_scoring_units)
-    attrs.merge!(published: publishable?)
+    attrs.merge!(published: publish?)
 
     if PlantTrial.where(plant_trial_name: attrs[:plant_trial_name]).exists?
       rollback(0)
@@ -79,7 +86,7 @@ class Submission::PlantTrialFinalizer
   def update_submission
     submission.update_attributes!(
       finalized: true,
-      publishable: publishable?,
+      published: publish?,
       submitted_object_id: @plant_trial.id
     )
   end
@@ -89,8 +96,8 @@ class Submission::PlantTrialFinalizer
     raise ActiveRecord::Rollback
   end
 
-  def publishable?
-    @publishable ||= submission.content.step04.publishability.to_s == 'publishable'
+  def publish?
+    @publish ||= submission.content.step06.visibility.to_s == 'published'
   end
 
   def common_data
@@ -98,17 +105,17 @@ class Submission::PlantTrialFinalizer
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
       user: submission.user,
-      published: publishable?,
-      published_on: (Time.now if publishable?)
+      published: publish?,
+      published_on: (Time.now if publish?)
     }
   end
 
   def get_nth_trait_descriptor(n)
     trait = submission.content.step02.trait_descriptor_list[n]
-    if trait.to_i > 0
+    if trait.to_i.to_s == trait.to_s
       TraitDescriptor.find_by(id: trait)
     else
-      @new_trait_descriptors.detect{ |ntd| ntd.descriptor_name == trait }
+      @new_trait_descriptors.detect{ |ntd| ntd.trait.name == trait }
     end
   end
 end

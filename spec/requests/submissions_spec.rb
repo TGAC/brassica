@@ -69,8 +69,10 @@ RSpec.describe "Submission management" do
                   content: {
                     plant_trial_name: "Trial A",
                     project_descriptor: "Project A",
+                    trial_year: "1999",
                     plant_population_id: plant_population.id.to_s,
-                    country_id: country.id.to_s
+                    country_id: country.id.to_s,
+                    place_name: "Really well hidden place"
                   }
                 }
               }
@@ -124,7 +126,8 @@ RSpec.describe "Submission management" do
           end
 
           context "if last step" do
-            before { 3.times { submission.step_forward } }
+            let(:step_count) { submission.steps.count }
+            before { (step_count - 1).times { submission.step_forward } }
 
             context "and can finalize" do
               before { allow_any_instance_of(finalizer_klass).to receive(:call).and_return(true) }

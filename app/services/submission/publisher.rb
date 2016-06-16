@@ -8,11 +8,11 @@ class Submission::Publisher
   end
 
   def publish
-    raise ArgumentError, "Submission is published" if submission.publishable?
+    raise ArgumentError, "Submission is published" if submission.published?
 
     now = Time.zone.now
     submission.transaction do
-      submission.update_attributes!(publishable: true)
+      submission.update_attributes!(published: true)
       publish_object(submission.submitted_object, now)
       associated_collections.each do |collection|
         collection.not_published.each { |instance| publish_object(instance, now) }
@@ -21,11 +21,11 @@ class Submission::Publisher
   end
 
   def revoke
-    raise ArgumentError, "Submission is not published" unless submission.publishable?
+    raise ArgumentError, "Submission is not published" unless submission.published?
     raise ArgumentError, "Submission is not revocable" unless submission.revocable?
 
     submission.transaction do
-      submission.update_attributes!(publishable: false)
+      submission.update_attributes!(published: false)
       revoke_object(submission.submitted_object)
       associated_collections.each do |collection|
         collection.each { |instance| revoke_object(instance) }

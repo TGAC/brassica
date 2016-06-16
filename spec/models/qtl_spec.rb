@@ -8,7 +8,7 @@ RSpec.describe Qtl do
       table_data = Qtl.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
-        qtl.processed_trait_dataset.trait_descriptor.descriptor_name,
+        qtl.processed_trait_dataset.trait_descriptor.trait_name,
         qtl.map_qtl_label,
         qtl.linkage_group.linkage_group_label,
         qtl.outer_interval_start,

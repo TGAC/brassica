@@ -3,6 +3,19 @@ require 'rails_helper'
 RSpec.describe PlantTrial do
   it { should belong_to(:plant_population).touch(true) }
 
+  context "validations" do
+    it { should validate_presence_of(:plant_trial_name) }
+    it { should validate_presence_of(:project_descriptor) }
+    it { should validate_presence_of(:trial_year) }
+    it { should validate_presence_of(:place_name) }
+    it { should validate_numericality_of(:latitude).
+          is_greater_than_or_equal_to(-90).
+          is_less_than_or_equal_to(90) }
+    it { should validate_numericality_of(:longitude).
+          is_greater_than_or_equal_to(-180).
+          is_less_than_or_equal_to(180) }
+  end
+
   describe '#filter' do
     it 'allow queries by project_descriptor' do
       pts = create_list(:plant_trial, 2)
@@ -24,7 +37,7 @@ RSpec.describe PlantTrial do
 
   describe '#pluck_columns' do
     it 'gets proper data table columns' do
-      pt = create(:plant_trial)
+      pt = create(:plant_trial, :with_layout)
       plucked = PlantTrial.pluck_columns
       expect(plucked.count).to eq 1
       expect(plucked[0]).
@@ -37,12 +50,14 @@ RSpec.describe PlantTrial do
           pt.trial_location_site_name,
           pt.country.country_name,
           pt.institute_id,
+          pt.layout_file_name,
           pt.id,
           pt.plant_scoring_units.count,
           pt.plant_population.id,
           pt.pubmed_id,
           pt.id
         ]
+      expect(plucked[0][8]).to eq 'plant-trial-layout-example.jpg'
     end
   end
 

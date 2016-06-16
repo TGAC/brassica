@@ -9,7 +9,7 @@ class Submission::TraitScoreParser
   def call
     @upload.log "Starting Trait Scores file parsing [file name: #{@upload.file_file_name}]"
 
-    @upload.submission.content.update(:step03, trait_mapping: nil, trait_scores: nil)
+    @upload.submission.content.update(:step04, trait_mapping: nil, trait_scores: nil)
     @upload.submission.save!
 
     begin
@@ -22,7 +22,7 @@ class Submission::TraitScoreParser
     end
 
     if @upload.errors.empty?
-      @upload.submission.content.update(:step03,
+      @upload.submission.content.update(:step04,
                                         trait_mapping: @trait_mapping,
                                         trait_scores: @trait_scores)
       @upload.submission.save!
@@ -38,7 +38,7 @@ class Submission::TraitScoreParser
     @trait_names = PlantTrialSubmissionDecorator.decorate(@upload.submission).sorted_trait_names
     @trait_mapping = {}
     if header.blank?
-      @upload.errors.add(:file, 'No header provided.')
+      @upload.errors.add(:file, :no_header)
     else
       header[1..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length
@@ -50,7 +50,7 @@ class Submission::TraitScoreParser
       end
     end
     if @trait_mapping.values.uniq.length != @trait_mapping.values.length
-      @upload.errors.add(:file, 'Detected non unique column headers mapping to traits. Please check the column names.')
+      @upload.errors.add(:file, :non_unique_mapping)
     end
   end
 
@@ -72,7 +72,7 @@ class Submission::TraitScoreParser
         end
       end
     end
-    @upload.log "Parsed #{score_count} scores for #{plant_count} plants, in total."
+    @upload.log "Parsed #{score_count} scores for #{plant_count} plant scoring units, in total."
   end
 
   def csv

@@ -17,6 +17,6 @@
       %tr
         %th.plant_scoring_units_scoring_unit_name_column
           = t 'tables.plant_scoring_units.scoring_unit_name'
-        - @trait_descriptors.map(&:descriptor_name).each do |column|
+        - @trait_descriptors.map{ |td| td.try(:trait).try(:name) }.each do |column|
           %th= column
     %tbody
