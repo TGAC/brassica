@@ -16,10 +16,6 @@ module Submissions
         super || []
       end
 
-      def technical_replicate_nummbers=(numbers)
-        super(numbers.presence || [])
-      end
-
       def design_factor_names
         super || []
       end
