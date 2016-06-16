@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe SubmissionTraitScoresUploadDecorator do
   let(:upload) { create(:upload) }
   let(:sd) { described_class.decorate(upload) }
-  let(:old_accession) { create(:plant_accession) }
-  let(:old_line) { create(:plant_line) }
-  let(:old_variety) { create(:plant_variety) }
+  let(:existing_accession) { create(:plant_accession) }
+  let(:existing_line) { create(:plant_line) }
+  let(:existing_variety) { create(:plant_variety) }
 
   describe '#parser_summary' do
     it 'does not misbehave on null input' do
@@ -25,12 +25,15 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
         'p7' => {}
       }
       accessions = {
-        'p1' => { plant_accession: old_accession.plant_accession, originating_organisation: old_accession.originating_organisation },
+        'p1' => { plant_accession: existing_accession.plant_accession,
+                  originating_organisation: existing_accession.originating_organisation },
         'p2' => { plant_accession: 'pa', originating_organisation: 'oo' },
         'p3' => { plant_accession: 'pa', originating_organisation: 'oo2' },
         'p4' => { plant_accession: 'pa2', originating_organisation: 'oo' },
-        'p5' => { plant_accession: old_accession.plant_accession, originating_organisation: old_accession.originating_organisation },
-        'p6' => { plant_accession: old_accession.plant_accession, originating_organisation: old_accession.originating_organisation },
+        'p5' => { plant_accession: existing_accession.plant_accession,
+                  originating_organisation: existing_accession.originating_organisation },
+        'p6' => { plant_accession: existing_accession.plant_accession,
+                  originating_organisation: existing_accession.originating_organisation },
         'p7' => { plant_accession: 'pa2', originating_organisation: 'oo' }
       }
       mapping = { 0 => 2, 1 => 1, 2 => 0, 3 => 0 }
@@ -38,10 +41,10 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
       lines_or_varieties = {
         'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'Variety not to be created' },
         'p2' => { relation_class_name: 'PlantVariety', relation_record_name: 'Variety to be created' },
-        'p3' => { relation_class_name: 'PlantVariety', relation_record_name: old_variety.plant_variety_name },
-        'p4' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name },
+        'p3' => { relation_class_name: 'PlantVariety', relation_record_name: existing_variety.plant_variety_name },
+        'p4' => { relation_class_name: 'PlantLine', relation_record_name: existing_line.plant_line_name },
         'p5' => { relation_class_name: 'PlantLine', relation_record_name: 'Line not to be created nor submitted' },
-        'p6' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name },
+        'p6' => { relation_class_name: 'PlantLine', relation_record_name: existing_line.plant_line_name },
         'p7' => { relation_class_name: 'PlantLine', relation_record_name: 'Line to be submitted' }
       }
 

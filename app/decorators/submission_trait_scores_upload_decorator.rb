@@ -16,18 +16,18 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
       new_line_names = []
 
       if accessions.present?
-        old_accessions, new_accessions = split_accessions
+        existing_accessions, new_accessions = split_accessions
         lines, varieties = get_lines_and_varieties
-        old_lines = find_present_plant_lines(lines)
-        old_varieties = find_present_plant_varieties(varieties)
+        existing_lines = find_present_plant_lines(lines)
+        existing_varieties = find_present_plant_varieties(varieties)
         summary << " - parsed #{unique_accessions.size} different accession(s)"
-        summary << "   - out of which, #{old_accessions.count} accession(s) are present in BIP,"
+        summary << "   - out of which, #{existing_accessions.count} accession(s) are present in BIP,"
         summary << "   - and #{new_accessions.count} new accession(s) will be created, for which"
-        summary << "     - #{old_lines.count} existing plant line(s) will be assigned"
-        summary << "     - #{old_varieties.count} existing plant variety(ies) will be assigned,"
-        summary << "     - #{varieties.size - old_varieties.count} new plant variety(ies) will be created."
+        summary << "     - #{existing_lines.count} existing plant line(s) will be assigned"
+        summary << "     - #{existing_varieties.count} existing plant variety(ies) will be assigned,"
+        summary << "     - #{varieties.size - existing_varieties.count} new plant variety(ies) will be created."
 
-        new_line_names = (lines - old_lines.map(&:plant_line_name)).to_a
+        new_line_names = (lines - existing_lines.map(&:plant_line_name)).to_a
       end
 
       summary << " - parsed scores for #{scoring_per_trait.size} trait(s), including technical replicates"
