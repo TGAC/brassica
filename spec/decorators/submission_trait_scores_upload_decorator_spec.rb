@@ -60,9 +60,9 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
         to eq [
           'Uploaded file parsing summary:',
           ' - parsed 7 plant scoring unit(s) with unique identification',
-          '  - 2 unit(s) have 2 trait score(s) recorded',
-          '  - 1 unit(s) have 1 trait score(s) recorded',
-          '  - 4 unit(s) have 0 trait score(s) recorded',
+          '   - 2 unit(s) have 2 trait score(s) recorded',
+          '   - 1 unit(s) have 1 trait score(s) recorded',
+          '   - 4 unit(s) have 0 trait score(s) recorded',
           ' - parsed 4 different accession(s)',
           '   - out of which, 1 accession(s) are present in BIP,',
           '   - and 3 new accession(s) will be created, for which',
@@ -70,13 +70,17 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
           '     - 1 existing plant variety(ies) will be assigned,',
           '     - 1 new plant variety(ies) will be created.',
           ' - parsed scores for 4 trait(s), including technical replicates',
-          '  - 1 score(s) recorded for trait traitY rep1',
-          '  - 1 score(s) recorded for trait traitX rep1',
-          '  - 2 score(s) recorded for trait traitZ rep1',
-          '  - 1 score(s) recorded for trait traitZ rep2',
+          '   - 1 score(s) recorded for trait traitY rep1',
+          '   - 1 score(s) recorded for trait traitX rep1',
+          '   - 2 score(s) recorded for trait traitZ rep1',
+          '   - 1 score(s) recorded for trait traitZ rep2',
           'There were detected 1 new plant line(s) assigned to new plant accession(s).',
-          'This submission cannot be concluded before the following new plant line(s) are successfully submitted, using the Population submission procedure:',
-          '  Line to be submitted.'
+        ]
+      expect(sd.parser_warnings).
+        to eq [
+          'This submission cannot be concluded before the following new plant line(s)',
+          'are successfully submitted, using the Population submission procedure:',
+          '  - Line to be submitted'
         ]
     end
   end

@@ -30,14 +30,14 @@ RSpec.describe Submission::TraitScoreParser do
         input_is 'id,pa,oo,pl'
         subject.send(:parse_header)
         expect(upload.errors[:file]).
-          to eq ['No correct header provided. Please provide the \"Plant accession\" column.']
+          to eq ['No correct header provided. Please provide the "Plant accession" column.']
       end
 
       it 'complains if there is neither Plant line nor Plant variety column' do
         input_is 'id,Plant accession,oo,pl'
         subject.send(:parse_header)
         expect(upload.errors[:file]).
-          to eq ['No correct header provided. Please provide either the \"Plant line\" or the \"Plant variety\" column.']
+          to eq ['No correct header provided. Please provide either the "Plant line" or the "Plant variety" column.']
       end
     end
 
