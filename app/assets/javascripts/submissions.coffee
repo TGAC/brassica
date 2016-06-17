@@ -234,6 +234,9 @@ class TrialSubmission extends Submission
           if data.result.warnings.length > 0
             @$('.uploaded-trait-scores .parser-warnings').removeClass('hidden')
             @$('.uploaded-trait-scores .parser-warnings').text(data.result.warnings.join('\n'))
+          else
+            @$('.uploaded-trait-scores .parser-warnings').addClass('hidden')
+            @$('.uploaded-trait-scores .parser-warnings').text('')
           @$('.uploaded-trait-scores .parser-errors').addClass('hidden')
           @$('.uploaded-trait-scores .parser-errors').text('')
           @$('.uploaded-trait-scores .parser-summary').removeClass('hidden')
