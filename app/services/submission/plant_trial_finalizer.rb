@@ -63,7 +63,7 @@ class Submission::PlantTrialFinalizer
           accession_relation = { plant_line: plant_line }
         else
           #TODO Inform the user there is no PlantLine of a given name and that it should be submitted with another submission first
-          rollback(2)
+          rollback(3)
         end
 
       else
