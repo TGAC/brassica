@@ -9,7 +9,7 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
       if trait_scores
         summary << " - parsed #{trait_scores.size} plant scoring unit(s) with unique identification"
         scoring_per_psu.each do |scoring_number, plants|
-          summary << "  - #{plants.size} unit(s) have #{scoring_number} trait score(s) recorded"
+          summary << "   - #{plants.size} unit(s) have #{scoring_number} trait score(s) recorded"
         end
       end
 
@@ -32,7 +32,7 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
 
       summary << " - parsed scores for #{scoring_per_trait.size} trait(s), including technical replicates"
       scoring_per_trait.each do |col_index, scores|
-        summary << "  - #{scores.size} score(s) recorded for trait #{trait_names[trait_mapping[col_index]]} rep#{replicate_numbers[col_index]}"
+        summary << "   - #{scores.size} score(s) recorded for trait #{trait_names[trait_mapping[col_index]]} rep#{replicate_numbers[col_index]}"
       end
 
       if new_line_names.present?
