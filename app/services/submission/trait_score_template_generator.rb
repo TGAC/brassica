@@ -16,10 +16,10 @@ class Submission::TraitScoreTemplateGenerator
 
     design_factor_names = @submission.content.step03.design_factor_names || []
     design_factors = {
-        'A' => design_factor_names.map{ 1 },
-        'B' => design_factor_names.map{ 1 }
+      'A' => design_factor_names.map{ '1 - replace it' },
+      'B' => design_factor_names.map{ '1 - replace it' }
     }
-    design_factors['B'][-1] = 2 if design_factors['B'].present?
+    design_factors['B'][-1] = '2 - replace it' if design_factors['B'].present?
 
     technical_replicate_numbers = @submission.content.step03.technical_replicate_numbers || {}
     traits = traits.map.with_index do |trait, idx|

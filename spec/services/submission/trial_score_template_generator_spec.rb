@@ -56,9 +56,9 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       expect(data.lines[0]).
         to eq "Plant scoring unit name,polytunnel,rep,sub_block,pot_number,Plant accession,Originating organisation,Plant line\n"
       expect(data.lines[1]).
-        to eq "Sample scoring unit A name - replace it,1,1,1,1,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+        to eq "Sample scoring unit A name - replace it,1 - replace it,1 - replace it,1 - replace it,1 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
       expect(data.lines[2]).
-        to eq "Sample scoring unit B name - replace it,1,1,1,2,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+        to eq "Sample scoring unit B name - replace it,1 - replace it,1 - replace it,1 - replace it,2 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
     end
 
     it 'adds proper technical replicate columns if needed' do
