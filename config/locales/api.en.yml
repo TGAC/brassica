@@ -1794,7 +1794,7 @@ en:
       attrs:
         -
           name: id
-          create: required
+          create: readonly
         -
           name: score_value
           create: required
