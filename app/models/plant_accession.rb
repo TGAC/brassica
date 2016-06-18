@@ -46,6 +46,12 @@ class PlantAccession < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'year_produced'
+    ]
+  end
+
   def self.count_columns
     [
       'plant_scoring_units_count'
