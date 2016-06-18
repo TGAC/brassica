@@ -89,5 +89,5 @@
       .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
         - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
         = content.combo_field "design_factor_names[]", options, value: values[idx],
-            label: "Design factor #{idx + 1}"
+            label: "Design factor #{idx + 1}", idx: idx
 
