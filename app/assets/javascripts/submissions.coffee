@@ -319,7 +319,7 @@ class TrialSubmission extends Submission
     @$(".design-factor-names").select2(@defaultSelectOptions)
     @designFactorNameComboFields = @$(".design-factor-names-wrapper").comboField()
 
-    @designFactorNameComboFields.on('combo:select combo:unselect', (ev, value) =>
+    @designFactorNameComboFields.on('combo:select combo:clear', (ev, value) =>
       @updateDesignFactorNameComboFields($(ev.target), value, clear: true)
     )
 
@@ -402,8 +402,7 @@ class TrialSubmission extends Submission
     $nextAll = $changed.parents(".form-group").nextAll()
 
     if options.clear
-      $nextAll.find("option").prop(disabled: false, selected: false)
-      $nextAll.find("input").val("")
+      $nextAll.find(".design-factor-names-wrapper").comboField('clear')
 
     if value
       $nextAll.find("option").prop(disabled: false) if $nextAll.find("option[value=#{value}]").length > 0

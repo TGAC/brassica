@@ -26,7 +26,7 @@ class ComboField
     @$select.on 'select2:unselect', =>
       @$input.prop(disabled: false)
       @$el.trigger('combo:change')
-      @$el.trigger('combo:unselect')
+      @$el.trigger('combo:clear')
 
     @$input.on 'keyup', =>
       @onKeyup()
@@ -37,12 +37,16 @@ class ComboField
       event.preventDefault()
       @clearInput()
       @$el.trigger('combo:change')
-      @$el.trigger('combo:input')
+      @$el.trigger('combo:clear')
 
   val: =>
     val = $.trim(@$select.find('option:selected').val())
     val = @$input.val() if val.length == 0
     val
+
+  clear: =>
+    @clearSelect()
+    @clearInput()
 
   handleInitialValue: =>
     val = $.trim(@$input.val())
@@ -72,8 +76,14 @@ class ComboField
   clearInput: =>
     @$input.val('')
     @$input.trigger('change')
+    @$input.prop(disabled: false)
     @$select.prop(disabled: false)
     @$clear_input.addClass('hidden')
+
+  clearSelect: =>
+    @$select.prop(disabled: false)
+    @$select.find('option').prop(disabled: false, selected: false)
+    @$select.trigger('change')
 
 $.fn.comboField = (action) ->
   if action == 'value'
@@ -82,6 +92,9 @@ $.fn.comboField = (action) ->
       values
     else
       values[0]
+
+  else if action == 'clear'
+    $.map(this, (el) -> new ComboField(el).clear())
 
   else
     $.each(this, -> new ComboField(this).init())
