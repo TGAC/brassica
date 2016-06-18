@@ -69,7 +69,7 @@ class PopulationSubmission extends Submission
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name', 'plant_variety_name', 'crop_type')
 
   init: =>
-    super()
+    return unless @$el.length >= 1
 
     @$('.taxonomy-term').select2(@defaultSelectOptions)
     @$('.male-parent-line, .female-parent-line').select2(@plantLineSelectOptions)
@@ -77,6 +77,8 @@ class PopulationSubmission extends Submission
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
 
     @bindNewPlantLineControls()
+
+    super()
 
   initDirtyTracker: =>
     super()
@@ -171,7 +173,7 @@ class TrialSubmission extends Submission
   plantPartSelectOptions: @makeAjaxSelectOptions('/plant_parts', 'id', 'plant_part', 'description')
 
   init: =>
-    super()
+    return unless @$el.length >= 1
 
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
@@ -195,6 +197,8 @@ class TrialSubmission extends Submission
     @bindLayoutUpload()
     @bindNewTraitDescriptorControls()
     @bindDesignFactorNameComboFields()
+
+    super()
 
   initDirtyTracker: =>
     super()
