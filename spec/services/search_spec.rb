@@ -112,6 +112,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                  processed_trait_dataset: ptd2)
 
     create(:qtl_job, linkage_map: lm1,
+                     inner_confidence_threshold: '77777',
                      qtl_method: 'There is method in this madness')
 
     # Special cases
@@ -311,6 +312,14 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
   describe '#qtl_jobs' do
     it 'finds QTLJob by :qtl_method' do
       expect(Search.new('madness').qtl_jobs.count).to eq 1
+    end
+
+    it 'finds QTLJob by full :inner_confidence_threshold' do
+      expect(Search.new('77777').qtl_jobs.count).to eq 1
+    end
+
+    it 'does not find QTLJob by partial :inner_confidence_threshold' do
+      expect(Search.new('7777').qtl_jobs.count).to eq 0
     end
   end
 

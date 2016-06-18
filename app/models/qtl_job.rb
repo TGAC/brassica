@@ -35,6 +35,13 @@ class QtlJob < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'inner_confidence_threshold',
+      'outer_confidence_threshold'
+    ]
+  end
+
   def self.count_columns
     [
       'qtls_count'
