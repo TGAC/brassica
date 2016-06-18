@@ -53,6 +53,8 @@ namespace :deploy do
         execute :rake, "environment elasticsearch:import:model CLASS='PlantTrial' FORCE=y"
         execute :rake, "environment elasticsearch:import:model CLASS='Qtl' FORCE=y"
         execute :rake, "environment elasticsearch:import:model CLASS='TraitDescriptor' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='PlantAccession' FORCE=y"
+        execute :rake, "environment elasticsearch:import:model CLASS='QtlJob' FORCE=y"
       end
     end
   end
