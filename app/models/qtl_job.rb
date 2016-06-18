@@ -17,6 +17,7 @@ class QtlJob < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
   include Publishable
   include TableData
 
@@ -42,6 +43,7 @@ class QtlJob < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: params_for_filter(table_columns) +
         [
           'id'
