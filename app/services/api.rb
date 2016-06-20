@@ -6,6 +6,7 @@ class Api
   def self.readable_models
     [
       Country,
+      DesignFactor,
       LinkageGroup,
       LinkageMap,
       MapLocusHit,
@@ -49,6 +50,7 @@ class Api
       PlantVariety,
       TraitDescriptor,
       TraitScore,
+      DesignFactor,
 
       PopulationLocus,
       Primer,

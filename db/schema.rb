@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160614175042) do
+ActiveRecord::Schema.define(version: 20160615173620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,15 +36,10 @@ ActiveRecord::Schema.define(version: 20160614175042) do
   add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
 
   create_table "design_factors", force: :cascade do |t|
-    t.text     "design_factor_name",  null: false
-    t.text     "institute_id",        null: false
-    t.text     "trial_location_name", null: false
-    t.text     "design_unit_counter", null: false
-    t.text     "design_factor_1"
-    t.text     "design_factor_2"
-    t.text     "design_factor_3"
-    t.text     "design_factor_4"
-    t.text     "design_factor_5"
+    t.text     "design_factor_name",                 null: false
+    t.text     "institute_id",                       null: false
+    t.text     "trial_location_name",                null: false
+    t.text     "design_unit_counter",                null: false
     t.text     "comments"
     t.text     "entered_by_whom"
     t.date     "date_entered"
@@ -53,10 +48,16 @@ ActiveRecord::Schema.define(version: 20160614175042) do
     t.text     "confirmed_by_whom"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "design_factors",                     null: false, array: true
+    t.boolean  "published",           default: true, null: false
+    t.datetime "published_on"
+    t.integer  "user_id"
   end
 
   add_index "design_factors", ["design_factor_name"], name: "design_factors_design_factor_name_idx", using: :btree
   add_index "design_factors", ["institute_id"], name: "idx_143500_institute_id", using: :btree
+  add_index "design_factors", ["published"], name: "index_design_factors_on_published", using: :btree
+  add_index "design_factors", ["user_id"], name: "index_design_factors_on_user_id", using: :btree
 
   create_table "genotype_matrices", force: :cascade do |t|
     t.text     "matrix_compiled_by",       null: false
@@ -845,6 +846,7 @@ ActiveRecord::Schema.define(version: 20160614175042) do
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
 
   add_foreign_key "api_keys", "users", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "design_factors", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "genotype_matrices", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "linkage_groups", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "linkage_groups", "users", on_update: :cascade, on_delete: :nullify
