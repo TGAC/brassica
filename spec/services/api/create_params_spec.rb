@@ -21,6 +21,16 @@ RSpec.describe Api::CreateParams do
       expect(pl_permissions.count { |p| p.is_a?(Hash) }).to eq 0
     end
 
+    it "allows arrays of values for array model attributes" do
+      df_permissions = Api::CreateParams.new(Api::Model.new('design_factor'), {}).permissions
+      expect(df_permissions).to include('design_factors' => [])
+    end
+
+    it "does not list columns of array data type as scalars" do
+      df_permissions = Api::CreateParams.new(Api::Model.new('design_factor'), {}).permissions
+      expect(df_permissions).not_to include('design_factors')
+    end
+
     describe "#permitted_params" do
       it "filters out blacklisted attributes" do
         pl_attrs = { 'plant_line' => {

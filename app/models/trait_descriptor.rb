@@ -14,13 +14,33 @@ class TraitDescriptor < ActiveRecord::Base
 
   include Relatable
   include Filterable
-  include Pluckable
   include Searchable
   include AttributeValues
   include Publishable
-  include TableData
 
   delegate :name, to: :trait, prefix: true
+
+  def self.table_data(params = nil, uid = nil)
+    pt_subquery = TraitScore.visible(uid).
+      select('trait_descriptor_id, ARRAY_AGG(DISTINCT(plant_trial_id)) as plant_trial_ids').
+      joins(:plant_scoring_unit).
+      group('trait_descriptor_id').
+      merge(PlantScoringUnit.visible(uid))
+
+    t_subquery = Trait.all
+    pp_subquery = PlantPart.all
+
+    query = all.
+      joins {[
+        pt_subquery.as('plant_trials_subquery').on { trait_descriptors.id == plant_trials_subquery.trait_descriptor_id }.outer,
+        t_subquery.as('traits').on { trait_descriptors.trait_id == traits.id }.outer,
+        pp_subquery.as('plant_parts').on { trait_descriptors.plant_part_id == plant_parts.id }.outer
+      ]}
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
+    query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
+    query = join_counters(query, uid)
+    query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
+  end
 
   def self.table_columns
     [
@@ -29,7 +49,7 @@ class TraitDescriptor < ActiveRecord::Base
       'units_of_measurements',
       'scoring_method',
       'materials',
-      'plant_parts.plant_part',
+      'plant_parts.plant_part'
     ]
   end
 
@@ -55,7 +75,8 @@ class TraitDescriptor < ActiveRecord::Base
   def self.ref_columns
     [
       'traits.label',
-      'plant_parts.label'
+      'plant_parts.label',
+      'plant_trial_ids'
     ]
   end
 

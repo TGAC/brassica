@@ -89,14 +89,23 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                            population_locus: plo2,
                            map_position: mp2,
                            linkage_map: lm2)
-    create(:plant_trial, project_descriptor: 'Project X',
-                         plant_population: pp1)
-    create(:plant_trial, project_descriptor: 'Yet Another Big Success',
-                         plant_population: pp2)
+
+    pt1 = create(:plant_trial, project_descriptor: 'Project X',
+                               plant_population: pp1)
+    pt2 = create(:plant_trial, project_descriptor: 'Yet Another Big Success',
+                               plant_trial_name: 'Trial to be remembered',
+                               plant_population: pp2)
     t1 = create(:trait, name: 'leafy leaf')
     t2 = create(:trait, name: 'uranium uptake')
     td1 = create(:trait_descriptor, trait: t1)
     td2 = create(:trait_descriptor, trait: t2)
+    create(:plant_scoring_unit, scoring_unit_frame_size: '315226 plants',
+                                plant_trial: pt1,
+                                design_factor: nil)
+    df = create(:design_factor, design_factors: ['field_1','row_4','plant_56'])
+    create(:plant_scoring_unit, scoring_unit_name: 'Y', plant_trial: pt2,
+                                design_factor: df)
+
     ptd1 = create(:processed_trait_dataset, trait_descriptor: td1)
     ptd2 = create(:processed_trait_dataset, trait_descriptor: td2)
     create(:qtl, outer_interval_start: '55.7',
@@ -266,6 +275,20 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
   end
 
+  describe '#plant_scoring_units' do
+    it 'finds PSU by :scoring_unit_frame_size' do
+      expect(Search.new("315226").plant_scoring_units.count).to eq 1
+    end
+
+    it 'finds PSU by plant_trial.plant_trial_name' do
+      expect(Search.new("remembered").plant_scoring_units.count).to eq 1
+    end
+
+    it 'finds PSU by design_factor.design_factors item value' do
+      expect(Search.new('row_4').plant_scoring_units.count).to eq 1
+    end
+  end
+
   describe '#qtl' do
     it 'finds QTL by :outer_interval_start' do
       expect(Search.new('347.11').qtl.count).to eq 1
@@ -304,6 +327,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(counts[:plant_trials]).to eq PlantTrial.count
       expect(counts[:qtl]).to eq Qtl.count
       expect(counts[:trait_descriptors]).to eq TraitDescriptor.count
+      expect(counts[:plant_scoring_units]).to eq PlantScoringUnit.count
     end
 
     context "special cases" do

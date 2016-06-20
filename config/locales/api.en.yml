@@ -1184,10 +1184,9 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: design_factor
-          format: object
-          create: readonly
-          desc: Additional information concerning the design of the population experiment
+          name: design_factor_id
+          format: int
+          desc: BIP identifier of the Design Factor object, which stores additional information concerning the design of this experiment
         -
           name: plant_accession_id
           format: int
@@ -1214,6 +1213,64 @@ en:
           {
             "plant_scoring_unit": {
               "scoring_unit_name": "Scoring2_2016"
+            }
+          }
+
+    design_factor:
+      attrs:
+        -
+          name: id
+        -
+          name: design_factor_name
+          create: required
+          desc: An optional name assigned to this design factor
+        -
+          name: institute_id
+          create: required
+          desc: Name of the institute in case which designed the experiment
+        -
+          name: trial_location_name
+          create: required
+          desc: Optional name of the location where this design was used
+        -
+          name: design_unit_counter
+          create: required
+          desc: The ordinal number of a unique design factor for a given plant trial; it is safe to set it to the number of the smallest design factors (e.g. "354")
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: design_factors
+          format: "string[]"
+          create: required
+          desc: List of values for subsequent design factors, which go from the biggest factor to the smallest one, structures as factor_number (e.g. "block_2", "row_V", "plot_354")
+        -
+          name: plant_scoring_unit_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Plant Scoring Units which have this Design Factor in a Plant Trial
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "design_factor": {
+              "design_factor_name": "New design of our institute",
+              "design_factors": ["block_2", "row_V", "plot_354"],
+              "design_unit_counter": "354"
             }
           }
 
