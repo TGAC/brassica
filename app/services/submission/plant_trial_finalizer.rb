@@ -78,19 +78,11 @@ class Submission::PlantTrialFinalizer
     design_factor = nil
     factor_values = design_factors[plant_id]
     if design_factor_names.present? && factor_values.present?
-      factor_attrs = {}
-      factor_values.each_with_index do |factor_value, i|
-        factor_attrs["design_factor_#{i+1}".to_sym] = if design_factor_names[i]
-                                                        "#{design_factor_names[i]}_#{factor_value}"
-                                                      else
-                                                        nil
-                                                      end
-      end
+      design_factors_array = factor_values.map.with_index{ |fv, i| "#{design_factor_names[i]}_#{fv}" }
       design_factor = DesignFactor.create!(
         common_data.except(:user, :published, :published_on).merge(
+          design_factors: design_factors_array,
           design_unit_counter: factor_values.last
-        ).merge(
-          factor_attrs
         )
       )
     end
