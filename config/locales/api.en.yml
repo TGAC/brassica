@@ -1250,7 +1250,7 @@ en:
           name: confirmed_by_whom
         -
           name: design_factors
-          format: array
+          format: "string[]"
           create: required
           desc: List of values for subsequent design factors, which go from the biggest factor to the smallest one, structures as factor_number (e.g. "block_2", "row_V", "plot_354")
         -
