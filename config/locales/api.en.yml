@@ -1222,15 +1222,12 @@ en:
           name: id
         -
           name: design_factor_name
-          create: required
           desc: An optional name assigned to this design factor
         -
           name: institute_id
-          create: required
           desc: Name of the institute in case which designed the experiment
         -
           name: trial_location_name
-          create: required
           desc: Optional name of the location where this design was used
         -
           name: design_unit_counter

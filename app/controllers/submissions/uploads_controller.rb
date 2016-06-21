@@ -4,18 +4,7 @@ class Submissions::UploadsController < ApplicationController
   before_filter :require_submission_owner
 
   def new
-    @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
-
-    data = CSV.generate(headers: true) do |csv|
-      csv << ['Plant scoring unit name'] + @traits
-
-      ['A','B'].each do |sample|
-        sample_values = @traits.map.with_index{ |_,i| "sample_#{sample}_value_#{i}__replace_it" }
-        csv << ["sample_scoring_unit_#{sample}_name__replace_it"] + sample_values
-      end
-    end
-
-    send_data data,
+    send_data Submission::TraitScoreTemplateGenerator.new(submission).call,
               content_type: 'text/csv; charset=UTF-8; header=present',
               disposition: 'attachment; filename=plant_trial_scoring_data.csv'
   end

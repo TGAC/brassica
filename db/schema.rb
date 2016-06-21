@@ -36,9 +36,9 @@ ActiveRecord::Schema.define(version: 20160615173620) do
   add_index "countries", ["country_code"], name: "countries_country_code_idx", using: :btree
 
   create_table "design_factors", force: :cascade do |t|
-    t.text     "design_factor_name",                 null: false
-    t.text     "institute_id",                       null: false
-    t.text     "trial_location_name",                null: false
+    t.text     "design_factor_name"
+    t.text     "institute_id"
+    t.text     "trial_location_name"
     t.text     "design_unit_counter",                null: false
     t.text     "comments"
     t.text     "entered_by_whom"

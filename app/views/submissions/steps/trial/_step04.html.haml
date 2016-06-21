@@ -6,6 +6,10 @@
     - if @content.upload
       = raw @content.upload.parser_summary.join('</br>')
 
+  %pre.parser-warnings.alert.alert-danger{ class: "#{'hidden' unless @content.upload && @content.upload.parser_warnings.present?}" }
+    - if @content.upload && @content.upload.parser_warnings.present?
+      = raw @content.upload.parser_warnings.join('</br>')
+
   .form-group
     = label_tag :upload, 'Uploaded file'
     %div

@@ -69,7 +69,7 @@ class PopulationSubmission extends Submission
   plantVarietySelectOptions: @makeAjaxSelectOptions('/plant_varieties', 'plant_variety_name', 'plant_variety_name', 'crop_type')
 
   init: =>
-    super()
+    return unless @$el.length >= 1
 
     @$('.taxonomy-term').select2(@defaultSelectOptions)
     @$('.male-parent-line, .female-parent-line').select2(@plantLineSelectOptions)
@@ -77,6 +77,8 @@ class PopulationSubmission extends Submission
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
 
     @bindNewPlantLineControls()
+
+    super()
 
   initDirtyTracker: =>
     super()
@@ -171,7 +173,7 @@ class TrialSubmission extends Submission
   plantPartSelectOptions: @makeAjaxSelectOptions('/plant_parts', 'id', 'plant_part', 'description')
 
   init: =>
-    super()
+    return unless @$el.length >= 1
 
     @$('select.plant-population').select2(@plantPopulationSelectOptions)
     @$('select.trait-descriptor-list').select2(@traitDescriptorListSelectOptions)
@@ -182,7 +184,6 @@ class TrialSubmission extends Submission
       'terrain'
       'soil-type'
       'statistical-factors'
-      'design-factors'
     ]
 
     if $('.project-descriptor-select option').length > 0
@@ -195,6 +196,9 @@ class TrialSubmission extends Submission
     @bindTraitScoresUpload()
     @bindLayoutUpload()
     @bindNewTraitDescriptorControls()
+    @bindDesignFactorNameComboFields()
+
+    super()
 
   initDirtyTracker: =>
     super()
@@ -231,6 +235,12 @@ class TrialSubmission extends Submission
           @$('.uploaded-trait-scores .parser-summary').addClass('hidden')
           @$('.uploaded-trait-scores .parser-summary').text('')
         else
+          if data.result.warnings.length > 0
+            @$('.uploaded-trait-scores .parser-warnings').removeClass('hidden')
+            @$('.uploaded-trait-scores .parser-warnings').text(data.result.warnings.join('\n'))
+          else
+            @$('.uploaded-trait-scores .parser-warnings').addClass('hidden')
+            @$('.uploaded-trait-scores .parser-warnings').text('')
           @$('.uploaded-trait-scores .parser-errors').addClass('hidden')
           @$('.uploaded-trait-scores .parser-errors').text('')
           @$('.uploaded-trait-scores .parser-summary').removeClass('hidden')
@@ -309,6 +319,23 @@ class TrialSubmission extends Submission
       @$('button.new-trait-descriptor-for-list').show()
       @dirtyTracker.resetContext("new-trait-descriptor")
 
+  bindDesignFactorNameComboFields: =>
+    @$(".design-factor-names").select2(@defaultSelectOptions)
+    @designFactorNameComboFields = @$(".design-factor-names-wrapper").comboField()
+
+    @designFactorNameComboFields.on('combo:select combo:clear', (ev, value) =>
+      @updateDesignFactorNameComboFields($(ev.target), value, clear: true)
+    )
+
+    @designFactorNameComboFields.on('combo:input', (ev, value) =>
+      @updateDesignFactorNameComboFields($(ev.target), value)
+    )
+
+    @designFactorNameComboFields.each (_, el) =>
+      $el = @$(el)
+      val = $el.comboField('value')
+      @updateDesignFactorNameComboFields($el, val) if val.length > 0
+
   initNewTraitDescriptorForm: =>
     @$('div.new-trait-descriptor-for-list').removeClass('hidden').show()
 
@@ -373,6 +400,25 @@ class TrialSubmission extends Submission
 
   newTraitDescriptorForListContainerId: (trait) =>
     'new-trait-descriptor-' + trait.split(/\s+/).join('-').toLowerCase()
+
+  updateDesignFactorNameComboFields: ($changed, value, options = {}) =>
+    $next = $changed.parents(".form-group").next()
+    $nextAll = $changed.parents(".form-group").nextAll()
+
+    if options.clear
+      $nextAll.find(".design-factor-names-wrapper").comboField('clear')
+
+    if value
+      $nextAll.find("option").prop(disabled: false) if $nextAll.find("option[value=#{value}]").length > 0
+      $nextAll.find("option[value=#{value}]").prop(disabled: true)
+      $nextAll.find("option[value=#{value}]").prevAll().prop(disabled: true)
+      $next.removeClass('hidden')
+
+    else
+      $nextAll.addClass('hidden')
+
+    # Reset select2 so that it sees changes in disabled options
+    $nextAll.find('select').select2(@defaultSelectOptions)
 
 $ ->
   new PopulationSubmission('.edit-population-submission').init()

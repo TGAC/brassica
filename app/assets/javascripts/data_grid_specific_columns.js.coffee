@@ -276,10 +276,18 @@ window.configs =
           modelIdUrl('plant_scoring_units', data, full[full.length - 2])
       ]
 
+  'trial-scoring':
+    columnDefs:
+      [
+        targets: 'plant_scoring_units_scoring_unit_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_scoring_units', data, full[full.length - 1])
+      ]
+
 
 window.modelIdUrl = (model, label, id) ->
   if model && label && id
-    '<a href="data_tables?model=' + model + '&query[id]=' + id + '">' + label + '</a>'
+    '<a href="/data_tables?model=' + model + '&query[id]=' + id + '">' + label + '</a>'
   else
     label
 
