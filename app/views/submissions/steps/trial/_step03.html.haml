@@ -1,21 +1,16 @@
 .alert.alert-info
   %p
     BIP service assumes that each row in the trait scoring sheet, that you are going
-    to submit, represents a so-called
-    %b plant scoring unit.
+    to submit, represents a so-called <b>plant scoring unit</b>.
     For raw data it may simply be an individual plant in your experiment. For processed data
     a plant scoring unit may represent a set of plants, related to each other in some way. For each
-    scoring unit we will ask you to mandatory provide
-    %b plant accession
-    information.
+    scoring unit we will ask you to mandatory provide <b>plant accession</b> information.
 
   %p
     In case you would like to check what plant accessions are currently registered in BIP, please
     use the
     = link_to 'plant accessions table view', data_tables_path(model: 'plant_accessions'), target: '_blank'
-    (you may filter data in that table with the
-    %b Search
-    text field).
+    (you may filter data in that table with the <b>Search</b> text field).
 
   %p
     If you submit raw data, you will have an option to submit technical replicate readings as
@@ -31,31 +26,23 @@
     = content.radio_button :lines_or_varieties, 'plant_varieties'
     Plant varieties
   %small.help-block
-    Per each plant scoring unit submitted, the source of genetic material should be provided. It may either be a
-    %b plant line
-    or a
-    %b plant variety (cultivar).
-    This choice depends on the type of experiment you are conducting. You should select the
-    %b Plant lines
-    option if you
+    Per each plant scoring unit submitted, the source of genetic material should be provided.
+    It may either be a <b>plant line</b> or a <b>plant variety (cultivar)</b>.
+    This choice depends on the type of experiment you are conducting. You should select
+    the <b>Plant lines</b> option if you
     %ul
       %li created new genetic material (using, for instance, crossing or mutagenesis) in the course of your project,
       %li or you use former plant line genetic material which is not (yet) recognized as a variety or a cultivar.
-    In other cases you should probably select the the
-    %b Plant varieties
-    option.
+    In other cases you should probably select the the <b>Plant varieties</b> option.
 
 - if submission.raw_data?
   %fieldset
     %legend Technical replicate numbers
     .alert.alert-info
       %p
-        If you are using
-        %i technical replicates
-        in your experiment, please set the number of replicates you are scoring per trait. Leaving
-        the value at
-        %b 1
-        means you are not using technical replicates for a given trait.
+        If you are using <i>technical replicates</i> in your experiment, please
+        set the number of replicates you are scoring per trait. Leaving the value
+        at <b>1</b> means you are not using technical replicates for a given trait.
 
       - if submission.sorted_trait_names.size > 1
         %p
@@ -87,11 +74,8 @@
     .alert.alert-info
       %p
         Please select the appropriate statistical design factors suitable for your experimental setup from
-        the drop-down fields. Start by selecting the
-        %b highest design factor first
-        and proceed with the next ones in
-        %b decreasing
-        size.
+        the drop-down fields. Start by selecting the <b>highest design factor first</b>
+        and proceed with the next ones in <b>decreasing</b> size.
 
       %p
         If your factors are not present in the list provided, please add them manually. While creating new
