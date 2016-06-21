@@ -85,7 +85,7 @@
         You are able to mix both predefined factors, from the drop-down list, and your own factor names.
 
     - values = @content.design_factor_names
-    - (0...5).each do |idx|
+    - (0...10).each do |idx|
       .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
         - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
         = content.combo_field "design_factor_names[]", options, value: values[idx],
