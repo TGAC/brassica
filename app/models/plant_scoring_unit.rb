@@ -11,6 +11,7 @@ class PlantScoringUnit < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
   include Publishable
   include TableData
 
@@ -20,6 +21,7 @@ class PlantScoringUnit < ActiveRecord::Base
       'number_units_scored',
       'scoring_unit_sample_size',
       'scoring_unit_frame_size',
+      'design_factors.design_factors',
       'date_planted',
       'plant_trials.plant_trial_name',
       'plant_accessions.plant_accession'
@@ -34,6 +36,7 @@ class PlantScoringUnit < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: params_for_filter(table_columns) +
         [
           'plant_trials.id',
@@ -48,10 +51,6 @@ class PlantScoringUnit < ActiveRecord::Base
       'plant_accessions.id',
       'plant_trials.id'
     ]
-  end
-
-  def self.json_options
-    { include: [:design_factor] }
   end
 
   include Annotable

@@ -268,30 +268,21 @@ RSpec.describe Submission::PlantTrialFinalizer do
         p1 = PlantScoringUnit.find_by_scoring_unit_name('p1')
         expect(p1.design_factor).not_to be_nil
         expect(p1.design_factor.design_unit_counter).to eq '1'
-        expect(p1.design_factor.design_factor_1).to eq 'polytunnel_A'
-        expect(p1.design_factor.design_factor_2).to eq 'rep_1'
-        expect(p1.design_factor.design_factor_3).to eq 'sub_block_1'
-        expect(p1.design_factor.design_factor_4).to eq 'pot_number_1'
-        expect(p1.design_factor.design_factor_5).to be_nil
+        expect(p1.design_factor.design_factors).
+          to eq %w(polytunnel_A rep_1 sub_block_1 pot_number_1)
         expect(p1.design_factor.date_entered).to eq Date.today
         expect(p1.design_factor.entered_by_whom).to eq submission.user.full_name
         expect(PlantScoringUnit.find_by_scoring_unit_name('p2').design_factor).to be_nil
         p3 = PlantScoringUnit.find_by_scoring_unit_name('p3')
         expect(p3.design_factor).not_to be_nil
         expect(p3.design_factor.design_unit_counter).to eq '1'
-        expect(p3.design_factor.design_factor_1).to eq 'polytunnel_A'
-        expect(p3.design_factor.design_factor_2).to eq 'rep_2'
-        expect(p3.design_factor.design_factor_3).to eq 'sub_block_1'
-        expect(p3.design_factor.design_factor_4).to be_nil
-        expect(p3.design_factor.design_factor_5).to be_nil
+        expect(p3.design_factor.design_factors).
+          to eq %w(polytunnel_A rep_2 sub_block_1)
         p4 = PlantScoringUnit.find_by_scoring_unit_name('p4')
         expect(p4.design_factor).not_to be_nil
         expect(p4.design_factor.design_unit_counter).to eq '2'
-        expect(p4.design_factor.design_factor_1).to eq 'polytunnel_B'
-        expect(p4.design_factor.design_factor_2).to eq 'rep_2'
-        expect(p4.design_factor.design_factor_3).to eq 'sub_block_'
-        expect(p4.design_factor.design_factor_4).to eq 'pot_number_2'
-        expect(p4.design_factor.design_factor_5).to be_nil
+        expect(p4.design_factor.design_factors).
+          to eq %w(polytunnel_B rep_2 sub_block_ pot_number_2)
       end
     end
 

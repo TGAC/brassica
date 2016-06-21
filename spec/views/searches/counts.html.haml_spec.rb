@@ -16,7 +16,8 @@ RSpec.describe "searches/counts.html.haml" do
       probes: 3,
       plant_trials: 32,
       qtl: 1,
-      trait_descriptors: 3
+      trait_descriptors: 3,
+      plant_scoring_units: 1
     } }
 
 
@@ -37,6 +38,7 @@ RSpec.describe "searches/counts.html.haml" do
       expect(rendered).to include "Found 32 plant trials"
       expect(rendered).to include "Found 1 quantitative trait locus"
       expect(rendered).to include "Found 3 trait descriptors"
+      expect(rendered).to include "Found 1 plant scoring unit"
     end
   end
 

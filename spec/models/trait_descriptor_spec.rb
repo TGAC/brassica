@@ -21,6 +21,21 @@ RSpec.describe TraitDescriptor do
       ]
     end
 
+    it 'properly returns associated trial ids' do
+      tds = create_list(:trait_descriptor, 4)
+      pt = create(:plant_trial)
+      tses = create_list(:trait_score, 2, trait_descriptor: tds[0], plant_scoring_unit: create(:plant_scoring_unit, plant_trial: pt))
+      create(:trait_score, trait_descriptor: tds[1], plant_scoring_unit: nil)
+      create(:trait_score, trait_descriptor: tds[2], plant_scoring_unit: create(:plant_scoring_unit, plant_trial: nil))
+      table_data = TraitDescriptor.table_data
+      expect(table_data.map{ |td| [td[9], td[10]] }).to match_array [
+        [[pt.id], tds[0].id],
+        [nil, tds[1].id],
+        [[nil], tds[2].id],
+        [nil, tds[3].id]
+      ]
+    end
+
     it 'gets proper columns' do
       td = create(:trait_score).trait_descriptor
       table_data = TraitDescriptor.table_data
@@ -35,6 +50,7 @@ RSpec.describe TraitDescriptor do
         1,
         td.trait.label,
         td.plant_part.label,
+        [PlantTrial.first.id],
         td.id
       ]
     end
