@@ -62,8 +62,7 @@ class Submission::PlantTrialFinalizer
         if plant_line
           accession_relation = { plant_line: plant_line }
         else
-          #TODO Inform the user there is no PlantLine of a given name and that it should be submitted with another submission first
-          rollback(2)
+          rollback(3)
         end
 
       else
@@ -158,7 +157,7 @@ class Submission::PlantTrialFinalizer
     if PlantTrial.where(plant_trial_name: attrs[:plant_trial_name]).exists?
       rollback(0)
     else
-      @plant_trial = PlantTrial.create!(attrs)
+      @plant_trial = PlantTrial.create!(attrs.except(:data_status))
     end
   end
 

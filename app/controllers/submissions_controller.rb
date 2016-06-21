@@ -15,6 +15,7 @@ class SubmissionsController < ApplicationController
     @submission = current_user.submissions.find(params[:id])
     @content = step_content_form(@submission, @submission.content[@submission.step])
     @content.valid? if params[:validate]
+    @submission = decorator(@submission)
   end
 
   def new
@@ -37,6 +38,7 @@ class SubmissionsController < ApplicationController
     end
 
     @content = step_content_form(@submission)
+    @submission = decorator(@submission)
 
     unless @content.valid? || params[:leave]
       render action: :edit and return

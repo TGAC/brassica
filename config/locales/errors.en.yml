@@ -63,6 +63,11 @@ en:
             country_id:
               blank: Please select a country from the list.
 
+            technical_replicate_numbers:
+              invalid: |
+                Technical replicate numbers must be present and greater than zero. Please leave the value at '1' if
+                you don't use technical replicates.
+
         plant_accession:
           attributes:
             plant_line_id:
@@ -76,7 +81,7 @@ en:
           attributes:
             file:
               no_header: 'No correct header provided. At least four columns are expected.'
-              no_plant_accession_header: 'No correct header provided. Please provide the \"Plant accession\" column.'
-              no_line_or_variety_header: 'No correct header provided. Please provide either the \"Plant line\" or the \"Plant variety\" column.'
+              no_plant_accession_header: 'No correct header provided. Please provide the "Plant accession" column.'
+              no_line_or_variety_header: 'No correct header provided. Please provide either the "Plant line" or the "Plant variety" column.'
               non_unique_mapping: 'Detected non unique column headers mapping
                 to traits. Please check the column names.'

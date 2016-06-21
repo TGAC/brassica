@@ -20,32 +20,32 @@ class DirtyTracker
     this.$('select, textarea, input[type=text]').filter(':enabled').each (_, el) =>
       $context = $(el).parents('[data-dirty-context]').first()
       context = $context.attr('data-dirty-context') || defaultContext
-      name = $(el).attr('name')
+      key = @buildKey(el)
 
       @initialState[context] ||= {}
-      @initialState[context][name] = $(el).val()
+      @initialState[context][key] = $(el).val()
 
   bind: =>
     this.$('select, textarea, input[type=text]').on 'change', (event) =>
       el = event.target
       $context = $(el).parents('[data-dirty-context]').first()
       context = $context.attr('data-dirty-context') || defaultContext
-      name = $(el).attr('name')
+      key = @buildKey(el)
       value = $(el).val()
-      initialValue = @initialState[context][name]
+      initialValue = @initialState[context][key]
 
       @changes[context] ||= {}
       @changeCounts[context] ||= 0
 
       if value == initialValue
-        @changes[context][name] = false
+        @changes[context][key] = false
         @changeCounts[context] -= 1
 
         unless context == defaultContext
           @changeCounts[defaultContext] -= 1
 
-      else if !@changes[context][name]
-        @changes[context][name] = true
+      else if !@changes[context][key]
+        @changes[context][key] = true
         @changeCounts[context] += 1
 
         unless context == defaultContext
@@ -63,8 +63,13 @@ class DirtyTracker
     @changeCounts[context] = 0
     @changeCounts[defaultContext] -= contextCount
 
-    $.each @changes[context], (name) =>
-      @changes[context][name] = false
-      @changes[defaultContext][name] = false
+    $.each @changes[context], (key) =>
+      @changes[context][key] = false
+      @changes[defaultContext][key] = false
+
+  buildKey: (el) =>
+    name = $(el).attr('name')
+    id = $(el).attr('id')
+    "#{name}/#{id}"
 
 window.DirtyTracker = DirtyTracker

@@ -4,10 +4,10 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
   let(:submission) { create(:submission, :trial) }
   let(:plant_population) { create(:plant_population, user: submission.user) }
-  let(:old_trait_descriptor) { create(:trait_descriptor) }
-  let(:old_accession) { create(:plant_accession, plant_accession: 'old_acc', originating_organisation: 'Organisation Old') }
-  let(:old_variety) { create(:plant_variety) }
-  let(:old_line) { create(:plant_line) }
+  let(:existing_trait_descriptor) { create(:trait_descriptor) }
+  let(:existing_accession) { create(:plant_accession, plant_accession: 'existing_acc', originating_organisation: 'Organisation Existing') }
+  let(:existing_variety) { create(:plant_variety) }
+  let(:existing_line) { create(:plant_line) }
   let(:trait) { create(:trait) }
   let(:trait_other) { create(:trait) }
   let(:plant_part) { create(:plant_part) }
@@ -47,7 +47,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       # binding.pry
       submission.content.update(:step01, plant_trial_attrs)
       submission.content.update(:step02,
-        trait_descriptor_list: new_trait_descriptors_attrs.map{ |td| td[:trait] } + [old_trait_descriptor.id],
+        trait_descriptor_list: new_trait_descriptors_attrs.map{ |td| td[:trait] } + [existing_trait_descriptor.id],
         new_trait_descriptors: new_trait_descriptors_attrs)
       submission.content.update(:step04,
         trait_mapping: { 0 => 2, 1 => 1, 2 => 0 },
@@ -59,7 +59,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
         },
         accessions: {
           'p1' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A' },
-          'p2' => { plant_accession: old_accession.plant_accession, originating_organisation: old_accession.originating_organisation },
+          'p2' => { plant_accession: existing_accession.plant_accession,
+                    originating_organisation: existing_accession.originating_organisation },
           'p3' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A' },
           'p4' => { plant_accession: 'new_acc2', originating_organisation: 'Organisation A' }
         },
@@ -135,16 +136,16 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect{ subject.call }.to change{ PlantAccession.count }.by(2)
 
       expect(PlantAccession.pluck(:plant_accession)).
-        to match_array %w(old_acc new_acc1 new_acc2)
+        to match_array %w(existing_acc new_acc1 new_acc2)
       expect(PlantAccession.pluck(:originating_organisation).uniq).
-        to match_array ['Organisation Old', 'Organisation A']
+        to match_array ['Organisation Existing', 'Organisation A']
       expect(PlantAccession.where(entered_by_whom: submission.user.full_name).count).to eq 2
     end
 
     it 'associates new and old accessions with plant scoring units' do
       subject.call
 
-      expect(old_accession.reload.plant_scoring_units.count).to eq 1
+      expect(existing_accession.reload.plant_scoring_units.count).to eq 1
       expect(PlantAccession.find_by(plant_accession: 'new_acc1').plant_scoring_units.count).to eq 2
       expect(PlantAccession.find_by(plant_accession: 'new_acc2').plant_scoring_units.count).to eq 1
     end
@@ -158,7 +159,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         to eq new_trait_descriptors_attrs[1][:trait]
       expect(TraitScore.find_by(score_value: 'x').plant_scoring_unit.scoring_unit_name).to eq 'p2'
       expect(TraitScore.find_by(score_value: 'y').trait_descriptor.trait_name).
-        to eq old_trait_descriptor.trait_name
+        to eq existing_trait_descriptor.trait_name
       expect(TraitScore.find_by(score_value: 'y').plant_scoring_unit.scoring_unit_name).to eq 'p3'
       expect(TraitScore.find_by(score_value: 'z').trait_descriptor.trait_name).
         to eq new_trait_descriptors_attrs[0][:trait]
@@ -173,39 +174,39 @@ RSpec.describe Submission::PlantTrialFinalizer do
               'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety to be created' },
               'p2' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety not to be created' },
               'p3' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety already created' },
-              'p4' => { relation_class_name: 'PlantVariety', relation_record_name: old_variety.plant_variety_name }
+              'p4' => { relation_class_name: 'PlantVariety', relation_record_name: existing_variety.plant_variety_name }
             }
           )
         )
 
         expect{ subject.call }.to change{ PlantVariety.count }.by(1)
         expect(PlantVariety.pluck(:plant_variety_name)).
-          to match_array [old_variety.plant_variety_name, 'New variety to be created']
-        expect(old_accession.reload.plant_variety).to be_nil
+          to match_array [existing_variety.plant_variety_name, 'New variety to be created']
+        expect(existing_accession.reload.plant_variety).to be_nil
         expect(PlantAccession.find_by_plant_accession('new_acc1').plant_variety.plant_variety_name).
           to eq 'New variety to be created'
         expect(PlantAccession.find_by_plant_accession('new_acc2').plant_variety.plant_variety_name).
-          to eq old_variety.plant_variety_name
+          to eq existing_variety.plant_variety_name
       end
 
       it 'assigns plant lines for new accessions only' do
         submission.content.update(:step04,
           submission.content.step03.to_h.merge(
             lines_or_varieties: {
-              'p1' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name },
+              'p1' => { relation_class_name: 'PlantLine', relation_record_name: existing_line.plant_line_name },
               'p2' => { relation_class_name: 'PlantLine', relation_record_name: 'New line not to be created' },
-              'p3' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name },
-              'p4' => { relation_class_name: 'PlantLine', relation_record_name: old_line.plant_line_name }
+              'p3' => { relation_class_name: 'PlantLine', relation_record_name: existing_line.plant_line_name },
+              'p4' => { relation_class_name: 'PlantLine', relation_record_name: existing_line.plant_line_name }
             }
           )
         )
 
         expect{ subject.call }.to change{ PlantLine.count }.by(0)
-        expect(old_accession.reload.plant_line.plant_line_name).not_to eq 'New line not to be created'
+        expect(existing_accession.reload.plant_line.plant_line_name).not_to eq 'New line not to be created'
         expect(PlantAccession.find_by_plant_accession('new_acc1').plant_line.plant_line_name).
-          to eq old_line.plant_line_name
+          to eq existing_line.plant_line_name
         expect(PlantAccession.find_by_plant_accession('new_acc2').plant_line.plant_line_name).
-          to eq old_line.plant_line_name
+          to eq existing_line.plant_line_name
       end
     end
 
@@ -312,7 +313,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(plant_trial).not_to be_published
         expect(plant_scoring_units.map(&:published?)).to all be_falsey
         expect(trait_scores.map(&:published?)).to all be_falsey
-        expect(PlantAccession.where.not(id: old_accession.id).map(&:published?)).to all be_falsey
+        expect(PlantAccession.where.not(id: existing_accession.id).map(&:published?)).to all be_falsey
       end
     end
 
@@ -324,7 +325,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       end
 
       it 'rollbacks when no Trait Descriptor is found' do
-        old_trait_descriptor.destroy
+        existing_trait_descriptor.destroy
         expect{ subject.call }.to change{ related_object_count }.by(0)
         expect(submission.finalized?).to be_falsey
       end

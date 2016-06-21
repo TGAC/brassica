@@ -16,15 +16,15 @@ class Submission::TraitScoreTemplateGenerator
 
     design_factor_names = @submission.content.step03.design_factor_names || []
     design_factors = {
-        'A' => design_factor_names.map{ 1 },
-        'B' => design_factor_names.map{ 1 }
+      'A' => design_factor_names.map{ '1 - replace it' },
+      'B' => design_factor_names.map{ '1 - replace it' }
     }
-    design_factors['B'][-1] = 2 if design_factors['B'].present?
+    design_factors['B'][-1] = '2 - replace it' if design_factors['B'].present?
 
     technical_replicate_numbers = @submission.content.step03.technical_replicate_numbers || {}
-    traits = traits.map do |trait|
-      if technical_replicate_numbers[trait] && technical_replicate_numbers[trait].to_i > 1
-        reps_count = [technical_replicate_numbers[trait].to_i, 2].max
+    traits = traits.map.with_index do |trait, idx|
+      if technical_replicate_numbers[idx] && technical_replicate_numbers[idx].to_i > 1
+        reps_count = [technical_replicate_numbers[idx].to_i, 2].max
         reps_count.times.map { |rep| "#{trait} rep#{rep + 1}" }
       else
         trait

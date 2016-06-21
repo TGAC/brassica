@@ -45,6 +45,49 @@
     %b Plant varieties
     option.
 
-- if submission.content.step01.data_status == 'raw_data'
-  -# TODO technical_replicate_numbers
-  -# TODO design_factor_names
+- if submission.raw_data?
+  %fieldset
+    %legend Technical replicate numbers
+    .alert.alert-info
+      %p
+        If you are using
+        %i technical replicates
+        in your experiment, please set the number of replicates you are scoring per trait. Leaving
+        the value at
+        %b 1
+        means you are not using technical replicates for a given trait.
+
+      - if submission.sorted_trait_names.size > 1
+        %p
+          You can have varying number of technical replicates for different traits.
+
+    - submission.sorted_trait_names.each_with_index do |trait_name, idx|
+      .form-group
+        = content.text_field :technical_replicate_numbers,
+            value: @content.technical_replicate_numbers[idx] || 1,
+            label: trait_name, name: "submission[content][technical_replicate_numbers][]"
+
+  %fieldset
+    %legend Design factors
+    .alert.alert-info
+      %p
+        Please select the appropriate statistical design factors suitable for your experimental setup from
+        the drop-down fields. Start by selecting the
+        %b highest design factor first
+        and proceed with the next ones in
+        %b decreasing
+        size.
+
+      %p
+        If your factors are not present in the list provided, please add them manually. While creating new
+        factors, please make sure you comply with the rule to submit them in decreasing size, so with the
+        highest missing factor (e.g. treatment) first, to lowest missing factor (e.g. plot).
+        You are able to mix both predefined factors, from the drop-down list, and your own factor names.
+
+    - values = @content.design_factor_names
+    - (0...5).each do |idx|
+      .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
+        - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
+        = content.combo_field "design_factor_names[]", options, value: values[idx],
+            label: "Design factor #{idx + 1}", idx: idx
+

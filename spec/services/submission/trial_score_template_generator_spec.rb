@@ -11,7 +11,7 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       expect{ call(create(:submission, :population)) }.to raise_error ArgumentError
     end
   end
-  
+
   context '#call' do
     let(:submission) { create(:submission, :trial) }
 
@@ -56,21 +56,16 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       expect(data.lines[0]).
         to eq "Plant scoring unit name,polytunnel,rep,sub_block,pot_number,Plant accession,Originating organisation,Plant line\n"
       expect(data.lines[1]).
-        to eq "Sample scoring unit A name - replace it,1,1,1,1,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+        to eq "Sample scoring unit A name - replace it,1 - replace it,1 - replace it,1 - replace it,1 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
       expect(data.lines[2]).
-        to eq "Sample scoring unit B name - replace it,1,1,1,2,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+        to eq "Sample scoring unit B name - replace it,1 - replace it,1 - replace it,1 - replace it,2 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
     end
 
     it 'adds proper technical replicate columns if needed' do
       tds = create_list(:trait_descriptor, 3)
       submission.content.update(:step02, trait_descriptor_list: tds.map(&:id))
-      submission.content.update(:step03,
-                                technical_replicate_numbers: {
-                                    tds[0].trait_name => 2,
-                                    tds[2].trait_name => 1
-                                }
-      )
-      submission.save
+      submission.content.update(:step03, technical_replicate_numbers: [2, nil, 1])
+      submission.save!
 
       data = call(submission)
 
