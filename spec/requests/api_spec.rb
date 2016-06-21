@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "API V1" do
+  let(:user) { create(:user) }
+  let(:api_key) { user.api_key }
+  let(:parsed_response) { JSON.parse(response.body) }
 
   Api.readable_models.each do |model_klass|
     describe model_klass do
@@ -22,9 +25,10 @@ RSpec.describe "API V1" do
     end
   end
 
-  # A special case test
+
+  # All SPECIAL CASES tests
+
   context 'when deleting related objects' do
-    let!(:user) { create(:user) }
     let!(:parent_line) { create(:plant_line, user: user, published: false) }
     let!(:plant_lines) { create_list(:plant_line, 2, user: user, published: false) }
     let!(:plant_population) do
@@ -46,7 +50,6 @@ RSpec.describe "API V1" do
                   plant_population: plant_population,
                   plant_line: plant_lines.second)
     end
-    let!(:api_key) { user.api_key }
 
     it 'makes sure there are no dangling belongs_to references left' do
       expect(plant_population.male_parent_line).to eq parent_line
@@ -68,12 +71,8 @@ RSpec.describe "API V1" do
   end
 
   context 'when submitting plant accessions' do
-    let!(:user) { create(:user) }
     let!(:pl) { create(:plant_line) }
     let!(:pv) { create(:plant_variety) }
-    let!(:api_key) { user.api_key }
-
-    let(:parsed_response) { JSON.parse(response.body) }
 
     it 'does not accept plant accessions without PL or PV' do
       expect {
@@ -117,6 +116,32 @@ RSpec.describe "API V1" do
           plant_accession: {plant_accession: 'bar', plant_line_id: nil, plant_variety_id: pv.id}
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(1)
+    end
+  end
+
+  context 'when submitting a design factor' do
+    it 'does not allow non-array value for design_factors' do
+      expect {
+        post "/api/v1/design_factors", {
+          design_factor: {design_factor_name: 'foo', institute_id: 'foo', trial_location_name: 'foo',
+                          design_unit_counter: 'foo', design_factors: 'non array value'}
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { DesignFactor.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].first['message']).to eq "Can't be blank"
+    end
+
+    it 'does not allow empty array value for design_factors' do
+      expect {
+        post "/api/v1/design_factors", {
+            design_factor: {design_factor_name: 'foo', institute_id: 'foo', trial_location_name: 'foo',
+                            design_unit_counter: 'foo', design_factors: []}
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { DesignFactor.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].first['message']).to eq "Can't be blank"
     end
   end
 end

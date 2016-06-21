@@ -68,6 +68,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
                 else
                   attrs[attr] = create(attr.to_s.gsub('_id','')).id
                 end
+              elsif model_name == 'design_factor' && attr == :design_factors
+                attrs[attr] = ["block_2", "row_V", "plot_354"]
               else
                 attrs[attr] = "Foo"
               end

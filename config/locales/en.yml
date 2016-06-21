@@ -67,6 +67,9 @@ en:
       plant_trials_count:
         one: Found %{count} plant trial
         other: Found %{count} plant trials
+      plant_scoring_units_count:
+        one: Found %{count} plant scoring units
+        other: Found %{count} plant scoring units
       qtl_count:
         one: Found %{count} quantitative trait locus
         other: Found %{count} quantitative trait loci

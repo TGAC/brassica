@@ -1,17 +1,14 @@
 module Submissions
   module Trial
     class Step04ContentForm < PlantTrialForm
-      property :trait_scores, writeable: false
+      property :trait_mapping
+      property :trait_scores
+      property :accessions
+      property :lines_or_varieties
+      property :replicate_numbers
+      property :design_factor_names
+      property :design_factors
       property :upload_id
-      property :trait_mapping, writeable: false
-
-      def self.permitted_properties
-        [
-          :upload_id,
-          :trait_mapping,
-          :trait_scores
-        ]
-      end
 
       def upload
         upload = Submission::Upload.trait_scores.find_by(id: upload_id)

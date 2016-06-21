@@ -237,6 +237,8 @@ GEM
       pry (>= 0.9.10)
     puma (2.9.2)
       rack (>= 1.1, < 2.0)
+    quiet_assets (1.0.3)
+      railties (>= 3.1, < 5.0)
     rack (1.6.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -396,6 +398,7 @@ DEPENDENCIES
   pry-nav
   pry-rails
   puma
+  quiet_assets
   railroady
   rails (= 4.2.0)
   reform (~> 1.2.6)
@@ -411,4 +414,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.10.6
+   1.12.5
