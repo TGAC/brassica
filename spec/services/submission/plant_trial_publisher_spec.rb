@@ -10,21 +10,26 @@ RSpec.describe Submission::PlantTrialPublisher do
     let(:submission) { create(:finalized_submission, :trial) }
     let(:plant_line) { create(:plant_line, published: false, user: user) }
     let(:plant_variety) { create(:plant_variety, published: false, user: user) }
+    let!(:other_design_factor) { create(:design_factor, published: false, user: user) }
     let(:plant_accessions) { [
       create(:plant_accession, published: false, user: user, plant_line: plant_line),
       create(:plant_accession, published: false, user: user, plant_variety: plant_variety, plant_line: nil)
     ] }
+    let(:design_factors) { create_list(:design_factor, 3, published: false, user: user) }
     let(:plant_scoring_units) { [
       create(:plant_scoring_unit, published: false,
                                   user: user,
                                   plant_trial: plant_trial,
+                                  design_factor: design_factors[0],
                                   plant_accession: plant_accessions[0]),
       create(:plant_scoring_unit, published: false,
                                   user: user,
                                   plant_trial: plant_trial,
+                                  design_factor: design_factors[1],
                                   plant_accession: plant_accessions[1]),
       create(:plant_scoring_unit, published: false,
                                   user: user,
+                                  design_factor: design_factors[2],
                                   plant_accession: plant_accessions[1])
     ] }
     let(:trait_descriptors) { [
@@ -51,6 +56,7 @@ RSpec.describe Submission::PlantTrialPublisher do
       expect(plant_trial.plant_scoring_units).to all(be_published)
       expect(plant_trial.plant_scoring_units.map(&:trait_scores).flatten).to all(be_published)
       expect(plant_trial.plant_scoring_units.map(&:plant_accession)).to all(be_published)
+      expect(design_factors[0,2].map(&:reload)).to all(be_published)
       expect(plant_variety.reload).to be_published
       expect(plant_line.reload).to be_published
       expect(trait_descriptors[0].reload).to be_published
@@ -60,6 +66,8 @@ RSpec.describe Submission::PlantTrialPublisher do
       expect(plant_scoring_units[2].reload).not_to be_published
       expect(trait_descriptors[1].reload).not_to be_published
       expect(trait_scores[1].reload).not_to be_published
+      expect(design_factors[2].reload).not_to be_published
+      expect(other_design_factor.reload).not_to be_published
     end
   end
 
@@ -71,6 +79,8 @@ RSpec.describe Submission::PlantTrialPublisher do
       let(:public_plant_line) { create(:plant_line) }
       let(:owned_plant_variety) { create(:plant_variety, published: true, user: user) }
       let(:public_plant_variety) { create(:plant_variety) }
+      let!(:other_design_factor) { create(:design_factor, published: true, user: user) }
+      let(:design_factors) { create_list(:design_factor, 4, published: true, user: user) }
       let(:owned_accessions) { [
         create(:plant_accession, published: true, user: user, plant_line: owned_plant_line),
         create(:plant_accession, published: true, user: user, plant_line: public_plant_line),
@@ -79,12 +89,12 @@ RSpec.describe Submission::PlantTrialPublisher do
       ] }
       let(:public_accession) { create(:plant_accession) }
       let(:plant_scoring_units) { [
-        create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: owned_accessions[0]),
+        create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: owned_accessions[0], design_factor: design_factors[0]),
         create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: owned_accessions[1]),
-        create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: owned_accessions[2]),
-        create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: owned_accessions[3]),
+        create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: owned_accessions[2], design_factor: design_factors[1]),
+        create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: owned_accessions[3], design_factor: design_factors[2]),
         create(:plant_scoring_unit, published: true, user: user, plant_trial: plant_trial, plant_accession: public_accession),
-        create(:plant_scoring_unit, published: true, user: user, plant_accession: public_accession)
+        create(:plant_scoring_unit, published: true, user: user, plant_accession: public_accession, design_factor: design_factors[3])
       ] }
       let(:trait_descriptors) { [
         create(:trait_descriptor, published: true, user: user),
@@ -110,6 +120,9 @@ RSpec.describe Submission::PlantTrialPublisher do
         plant_scoring_units[0..-2].each do |plant_scoring_unit|
           expect(plant_scoring_unit.reload).not_to be_published
         end
+        design_factors[0,3].each do |design_factor|
+          expect(design_factor.reload).not_to be_published
+        end
         expect(trait_scores[0].reload).not_to be_published
         expect(trait_descriptors[0].reload).not_to be_published
         owned_accessions.each do |owned_accession|
@@ -126,6 +139,8 @@ RSpec.describe Submission::PlantTrialPublisher do
         expect(public_accession.reload).to be_published
         expect(public_plant_line.reload).to be_published
         expect(public_plant_variety.reload).to be_published
+        expect(design_factors[3].reload).to be_published
+        expect(other_design_factor.reload).to be_published
       end
     end
 
