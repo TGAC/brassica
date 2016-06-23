@@ -74,7 +74,7 @@ class MapLocusHit < ActiveRecord::Base
     indexes :atg_hit_seq_source
     indexes :bac_hit_seq_id
     indexes :bac_hit_seq_source
-    indexes :bac_hit_nameindexes
+    indexes :bac_hit_name
 
     indexes :map_position, include_in_all: 'false' do
       indexes :map_position
