@@ -12,17 +12,24 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
     create(:plant_variety, plant_variety_name: "Pvoo")
     create(:plant_variety, plant_variety_name: "Pvoobar")
-    create(:plant_variety, plant_variety_name: "Pvoobarbaz")
+    pv = create(:plant_variety, plant_variety_name: "Pvoobarbaz")
 
-    create(:plant_line, plant_line_name: "Ploob",
-                        common_name: "Ploo cabbage",
-                        taxonomy_term: TaxonomyTerm.first)
+    pl = create(:plant_line, plant_line_name: "Ploob",
+                             common_name: "Ploo cabbage",
+                             taxonomy_term: TaxonomyTerm.first)
     create(:plant_line, plant_line_name: "Ploobar",
                         common_name: "Ploobar cabbage",
                         taxonomy_term: TaxonomyTerm.second)
     create(:plant_line, plant_line_name: "Ploobarbaz",
                         common_name: "Ploobarbaz cabbage",
                         taxonomy_term: TaxonomyTerm.second)
+    create(:plant_accession, originating_organisation: 'Belzebub $ Co.',
+                             year_produced: '1011',
+                             plant_line: pl)
+    create(:plant_accession, originating_organisation: 'Mefisto Inc.',
+                             year_produced: '2011',
+                             plant_line: nil,
+                             plant_variety: pv)
 
     pp1 = create(:plant_population, name: 'Ppoo',
                                     taxonomy_term: tt1,
@@ -113,6 +120,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     create(:qtl, outer_interval_start: '347.11',
                  processed_trait_dataset: ptd2)
 
+    create(:qtl_job, linkage_map: lm1,
+                     inner_confidence_threshold: '77777',
+                     qtl_method: 'There is method in this madness')
+
     # Special cases
     create(:plant_line, plant_line_name: "12345@67890")
 
@@ -175,6 +186,24 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
       results = Search.new(TaxonomyTerm.second.name).plant_lines
       expect(results.count).to eq 2
+    end
+  end
+
+  describe '#plant_accessions' do
+    it 'finds PA by :originating_organisation' do
+      expect(Search.new("Belzebub").plant_accessions.count).to eq 1
+    end
+
+    it 'finds PA by plant_variety.plant_variety_name' do
+      expect(Search.new("Pvoobarbaz").plant_accessions.count).to eq 1
+    end
+
+    it 'finds PA by :year_produced' do
+      expect(Search.new("1011").plant_accessions.count).to eq 1
+    end
+
+    it 'does not find PA by a portion of :year_produced' do
+      expect(Search.new("11").plant_accessions.count).to eq 0
     end
   end
 
@@ -303,6 +332,20 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
   end
 
+  describe '#qtl_jobs' do
+    it 'finds QTLJob by :qtl_method' do
+      expect(Search.new('madness').qtl_jobs.count).to eq 1
+    end
+
+    it 'finds QTLJob by full :inner_confidence_threshold' do
+      expect(Search.new('77777').qtl_jobs.count).to eq 1
+    end
+
+    it 'does not find QTLJob by partial :inner_confidence_threshold' do
+      expect(Search.new('7777').qtl_jobs.count).to eq 0
+    end
+  end
+
   describe '#trait_descriptors' do
     it 'finds TD by trait.name' do
       expect(Search.new("uranium").trait_descriptors.count).to eq 1
@@ -326,8 +369,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(counts[:probes]).to eq Probe.count
       expect(counts[:plant_trials]).to eq PlantTrial.count
       expect(counts[:qtl]).to eq Qtl.count
+      expect(counts[:qtl_jobs]).to eq QtlJob.count
       expect(counts[:trait_descriptors]).to eq TraitDescriptor.count
       expect(counts[:plant_scoring_units]).to eq PlantScoringUnit.count
+      expect(counts[:plant_accessions]).to eq PlantAccession.count
     end
 
     context "special cases" do

@@ -76,7 +76,7 @@ en:
     plant_trials:
       id: Scoring
       plant_trial_name: Trial name
-      plant_trial_description: Trial
+      plant_trial_description: Description
       project_descriptor: Project
       trial_year: Year
       trial_location_site_name: Location site

@@ -462,6 +462,7 @@ en:
           desc: Additional information about the type of this population
         -
           name: description
+          create: Q
           desc: Textual description of the population,provided by the data publisher
         -
           name: date_established
@@ -1444,6 +1445,14 @@ en:
           create: required, Q
           desc: Exact sequence of the primer
         -
+          name: sequence_id
+          create: Q
+          desc: Identifier of the primer sequence, in a source database
+        -
+          name: sequence_source_acronym
+          create: Q
+          desc: Name of the source database where the probe sequence can be obtained
+        -
           name: description
           create: Q
           desc: Additional description of the primer provided by the person who submitted the data
@@ -1725,13 +1734,14 @@ en:
           name: id
         -
           name: descriptor_label
+          create: Q
           desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
           desc: Plant trait category described by this descriptor
         -
           name: units_of_measurements
-          create: required
+          create: required, Q
           desc: How the trait is measured
         -
           name: trait_grades
@@ -1742,7 +1752,7 @@ en:
           desc: Where the trait is measured
         -
           name: scoring_method
-          create: required
+          create: required, Q
           desc: Method used to obtain the trait measure
         -
           name: when_to_score
@@ -1755,6 +1765,7 @@ en:
           desc: Special conditions taken into account when scoring the trait
         -
           name: materials
+          create: Q
           desc: Materials required for proper scoring
         -
           name: instrumentation_required
@@ -1837,18 +1848,17 @@ en:
       attrs:
         -
           name: id
+          create: readonly
         -
           name: score_value
-          create: required, Q
+          create: required
           desc: Value measured and recorded in the trial
         -
           name: value_type
-          create: Q
           desc: Meaning of the score value
         -
           name: scoring_date
           format: date
-          create: Q
           desc: Day on which the scoring was performed
         -
           name: comments

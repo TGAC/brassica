@@ -17,6 +17,7 @@ class QtlJob < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
   include Publishable
   include TableData
 
@@ -34,6 +35,13 @@ class QtlJob < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'inner_confidence_threshold',
+      'outer_confidence_threshold'
+    ]
+  end
+
   def self.count_columns
     [
       'qtls_count'
@@ -42,6 +50,7 @@ class QtlJob < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: params_for_filter(table_columns) +
         [
           'id'

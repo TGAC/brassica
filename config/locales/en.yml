@@ -37,6 +37,9 @@ en:
       plant_varieties_count:
         one: Found %{count} plant variety
         other: Found %{count} plant varieties
+      plant_accessions_count:
+        one: Found %{count} plant accession
+        other: Found %{count} plant accessions
       map_locus_hits_count:
         one: Found %{count} map locus hit
         other: Found %{count} map locus hits
@@ -70,6 +73,9 @@ en:
       qtl_count:
         one: Found %{count} quantitative trait locus
         other: Found %{count} quantitative trait loci
+      qtl_jobs_count:
+        one: Found %{count} QTL jobs
+        other: Found %{count} QTL job
       trait_descriptors_count:
         one: Found %{count} trait descriptor
         other: Found %{count} trait descriptors
