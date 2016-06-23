@@ -79,6 +79,12 @@ class PlantTrial < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'trial_year'
+    ]
+  end
+
   def self.count_columns
     [
       'plant_scoring_units_count'
