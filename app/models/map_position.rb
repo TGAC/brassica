@@ -62,7 +62,6 @@ class MapPosition < ActiveRecord::Base
   end
 
   mapping dynamic: 'false' do
-    indexes :map_position
     indexes :marker_assay do
       indexes :marker_assay_name
     end
