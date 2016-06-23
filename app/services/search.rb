@@ -58,7 +58,7 @@ class Search
             *tables, column = parts
             # NOTE this is only valid for *-1 relationships (not for 1-* or *-*)
             tables = tables.map(&:singularize)
-            column = (tables | [column]).join(".")
+            column = (tables + [column]).join(".")
           end
 
           { term: { column => query } }
