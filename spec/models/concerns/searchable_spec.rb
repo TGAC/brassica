@@ -53,25 +53,24 @@ RSpec.describe Searchable do
     end
   end
 
-  describe "callbacks", :elasticsearch do
+  describe "callbacks" do
     let(:es) { PlantLine.__elasticsearch__.client }
     let(:index) { PlantLine.index_name }
 
-    context "after create" do
-      it "indexes record on creation if published" do
-        plant_line = create(:plant_line, published: true)
+    context "after create", :elasticsearch do
+      let!(:published_plant_line) { create(:plant_line, published: true) }
+      let!(:unpublished_plant_line) { create(:plant_line, published: false) }
 
-        expect(es.exists(id: plant_line.id, index: index)).to be_truthy
+      it "indexes record on creation if published" do
+        expect(es.exists(id: published_plant_line.id, index: index)).to be_truthy
       end
 
       it "does not index record on creation if not published" do
-        plant_line = create(:plant_line, published: false)
-
-        expect(es.exists(id: plant_line.id, index: index)).to be_falsey
+        expect(es.exists(id: unpublished_plant_line.id, index: index)).to be_falsey
       end
     end
 
-    context "after update" do
+    context "after update", :elasticsearch do
       let!(:published_plant_line) { create(:plant_line, published: true) }
       let!(:unpublished_plant_line) { create(:plant_line, published: false) }
 
@@ -88,7 +87,7 @@ RSpec.describe Searchable do
       end
     end
 
-    context "after destroy" do
+    context "after destroy", :elasticsearch do
       let!(:published_plant_line) { create(:plant_line, published: true) }
       let!(:unpublished_plant_line) { create(:plant_line, published: false) }
 
