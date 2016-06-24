@@ -117,7 +117,7 @@ class Submission::TraitScoreParser
         @design_factors[plant_id] = design_factors
         if plant_accession.blank? || originating_organisation.blank?
           @upload.log "Ignored row for #{plant_id} since either Plant accession or Originating organisation is missing."
-        elsif line_name_or_variety_name.blank?
+        elsif line_name_or_variety_name.blank? && new_accession?(plant_accession, originating_organisation)
           @upload.log "Ignored row for #{plant_id} since #{@line_or_variety} value is missing."
         else
           @accessions[plant_id] = {
@@ -156,6 +156,21 @@ class Submission::TraitScoreParser
 
   def detect_replication(header_columns)
     header_columns.any?{ |column_name| column_name && column_name.index(/rep\d+$/) }
+  end
+
+  def new_accession?(plant_accession, originating_organisation)
+    @existing_plant_accessions ||= []
+    @new_plant_accessions ||= []
+    return false if @existing_plant_accessions.include? [plant_accession, originating_organisation]
+    return true if @new_plant_accessions.include? [plant_accession, originating_organisation]
+    if PlantAccession.find_by(plant_accession: plant_accession,
+                              originating_organisation: originating_organisation)
+      @existing_plant_accessions << [plant_accession, originating_organisation]
+      false
+    else
+      @new_plant_accessions << [plant_accession, originating_organisation]
+      true
+    end
   end
 
   def split_to_trait_and_replicate(column_name)
