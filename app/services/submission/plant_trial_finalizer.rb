@@ -34,7 +34,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def find_or_create_plant_variety(plant_id)
-    PlantVariety.find_or_create_by!(
+    PlantVariety.find_or_create_by(
       plant_variety_name: lines_or_varieties[plant_id]['relation_record_name']
     ) do |new_plant_variety|
       new_plant_variety.assign_attributes(common_data)
@@ -53,11 +53,13 @@ class Submission::PlantTrialFinalizer
         raise 'Required plant line or plant variety data not available after parsing.'
 
       elsif lines_or_varieties[plant_id]['relation_class_name'] == 'PlantVariety'
-        accession_relation = { plant_variety: find_or_create_plant_variety(plant_id) }
+        plant_variety = find_or_create_plant_variety(plant_id)
+        rollback(3) unless plant_variety.valid?
+        accession_relation = { plant_variety: plant_variety }
 
       elsif lines_or_varieties[plant_id]['relation_class_name'] == 'PlantLine'
         plant_line = PlantLine.find_by(
-            plant_line_name: lines_or_varieties[plant_id]['relation_record_name']
+          plant_line_name: lines_or_varieties[plant_id]['relation_record_name']
         )
         if plant_line
           accession_relation = { plant_line: plant_line }
