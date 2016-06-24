@@ -143,7 +143,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
   end
 
   after(:all) do
-    DatabaseCleaner.clean
+    DatabaseCleaner.clean_with :truncation
   end
 
   describe "#plant_populations" do
