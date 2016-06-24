@@ -68,7 +68,6 @@ class Qtl < ActiveRecord::Base
 
   def self.numeric_columns
     [
-      'qtl_rank',
       'outer_interval_start',
       'inner_interval_start',
       'qtl_mid_position',
@@ -100,6 +99,9 @@ class Qtl < ActiveRecord::Base
     {
       only: numeric_columns.map(&:to_sym) | [:map_qtl_label],
       include: {
+        linkage_group: {
+          only: :linkage_group_label
+        },
         processed_trait_dataset: {
           only: [],
           include: {
@@ -115,6 +117,9 @@ class Qtl < ActiveRecord::Base
 
   mapping dynamic: 'false' do
     indexes :map_qtl_label
+    indexes :linkage_group do
+      indexes :linkage_group_label
+    end
     indexes :processed_trait_dataset do
       indexes :trait_descriptor do
         indexes :trait do
