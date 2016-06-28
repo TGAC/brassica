@@ -292,6 +292,41 @@ RSpec.describe Submission::TraitScoreParser do
         to eq({ 'plant 1' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' }})
     end
 
+    context 'depending on existence of plant accession' do
+      before(:each) do
+        create(:plant_accession, plant_accession: 'Old PA', originating_organisation: 'oo.org')
+      end
+
+      it 'does not require PV/PL value for existing plant accessions' do
+        input_is "plant 1,Old PA,oo.org"
+        subject.send(:parse_scores)
+        expect(subject.trait_scores.size).to eq 1
+        expect(subject.lines_or_varieties).
+          to eq({ 'plant 1' => { relation_class_name: 'PlantLine', relation_record_name: nil }})
+      end
+
+      it 'ignores rows without PV/PL value for new plant accessions' do
+        input_is "plant 1,new_pa,new_oo"
+        subject.send(:parse_scores)
+        expect(subject.trait_scores.size).to eq 0
+        expect(upload.logs).
+          to include 'Ignored row for plant 1 since PlantLine value is missing.'
+      end
+
+      it 'stores encountered accessions for faster lookup' do
+        expect(PlantAccession).to receive(:find_by).twice.and_call_original
+        input_is "plant 1,Old PA,oo.org
+                  plant n1,new_pa,new_oo
+                  plant n2,new_pa,new_oo
+                  plant 2,Old PA,oo.org"
+        subject.send(:parse_scores)
+        expect(subject.trait_scores.size).to eq 2
+        expect(subject.lines_or_varieties).
+          to eq({ 'plant 1' => { relation_class_name: 'PlantLine', relation_record_name: nil },
+                  'plant 2' => { relation_class_name: 'PlantLine', relation_record_name: nil }})
+      end
+    end
+
     context 'provided with data containing design factors' do
       before :each do
         subject.instance_variable_set(:@design_factor_names, ['polytunnel', 'rep', 'sub_block', 'pot_number'])

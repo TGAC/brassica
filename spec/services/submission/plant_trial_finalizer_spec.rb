@@ -208,6 +208,43 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(PlantAccession.find_by_plant_accession('new_acc2').plant_line.plant_line_name).
           to eq existing_line.plant_line_name
       end
+
+      it 'does not mind nil PL/PV values for existing accession PSUs' do
+        submission.content.update(:step04,
+          submission.content.step03.to_h.merge(
+            trait_scores: {
+              'p1' => {}
+            },
+            accessions: {
+              'p1' => { plant_accession: existing_accession.plant_accession,
+                        originating_organisation: existing_accession.originating_organisation }
+            },
+            lines_or_varieties: {
+              'p1' => { relation_class_name: 'PlantLine', relation_record_name: nil }
+            }
+          )
+        )
+
+        expect{ subject.call }.to change{ PlantScoringUnit.count }.by(1)
+      end
+
+      it 'rollbacks when encountered nil PL/PV values for nonexisting accession PSUs' do
+        # We let nil PV/PL through the parser, for existing PA.
+        # So we need to check in the finalizer if they still exist
+        submission.content.update(:step04,
+          submission.content.step03.to_h.merge(
+            lines_or_varieties: {
+              'p1' => { relation_class_name: 'PlantVariety', relation_record_name: nil },
+              'p2' => { relation_class_name: 'PlantVariety', relation_record_name: nil },
+              'p3' => { relation_class_name: 'PlantLine', relation_record_name: nil },
+              'p4' => { relation_class_name: 'PlantLine', relation_record_name: nil }
+            }
+          )
+        )
+
+        expect{ subject.call }.to change{ related_object_count }.by(0)
+        expect(submission.finalized?).to be_falsey
+      end
     end
 
     context 'when parsing technical replicate data' do
@@ -391,15 +428,16 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect(submission.finalized?).to be_falsey
       end
 
-      def related_object_count
-        PlantTrial.count +
-          TraitScore.count +
-          PlantScoringUnit.count +
-          TraitDescriptor.count +
-          PlantAccession.count +
-          DesignFactor.count +
-          PlantVariety.count
-      end
+    end
+
+    def related_object_count
+      PlantTrial.count +
+        TraitScore.count +
+        PlantScoringUnit.count +
+        TraitDescriptor.count +
+        PlantAccession.count +
+        DesignFactor.count +
+        PlantVariety.count
     end
   end
 end
