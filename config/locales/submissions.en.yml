@@ -56,7 +56,9 @@ en:
             units_of_measurements: Select, or write down, the unit of measurement when scoring this trait.
         step03:
           heading: Scoring template design.
-          body: In order to help you upload all trait scoring data correctly, please provide us some scoring template information first.
+          body: |
+            Provide us with information important for the scoring template design. The template will then be created
+            automatically, in order to help you upload your trait data correctly.
         step04:
           heading: Scoring.
           body: Upload tabular list of scores given to plants per each trait scored.
