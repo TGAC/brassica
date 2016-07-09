@@ -16,7 +16,20 @@ class TaxonomyTerm < ActiveRecord::Base
   after_update { plant_populations.each(&:touch) }
   after_update { probes.each(&:touch) }
 
+  include Filterable
+
   def self.names
     order(:name).pluck(:name)
+  end
+
+  def self.permitted_params
+    [
+      search: [
+        'name'
+      ],
+      query: [
+        'id'
+      ]
+    ]
   end
 end

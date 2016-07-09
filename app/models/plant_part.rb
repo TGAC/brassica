@@ -11,6 +11,9 @@ class PlantPart < ActiveRecord::Base
     [
       search: [
         'plant_part'
+      ],
+      query: [
+        'id'
       ]
     ]
   end
