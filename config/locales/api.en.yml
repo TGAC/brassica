@@ -1848,7 +1848,6 @@ en:
       attrs:
         -
           name: id
-          create: readonly
         -
           name: score_value
           create: required

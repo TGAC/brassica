@@ -367,7 +367,6 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
 
     it 'finds QTL by linkage_group.linkage_group_label' do
-      Qtl.all.map{|qtl| p qtl.linkage_group.try(:linkage_group_label)}
       expect(Search.new("group2").qtl.count).to eq 1
     end
   end

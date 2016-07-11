@@ -13,6 +13,15 @@ class DesignFactor < ActiveRecord::Base
   validates :design_unit_counter, presence: true
 
   include Publishable
+  include Filterable
+
+  def self.permitted_params
+    [
+      query: [
+        'id'
+      ]
+    ]
+  end
 
   include Annotable
 end

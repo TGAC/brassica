@@ -14,6 +14,9 @@ class Trait < ActiveRecord::Base
     [
       search: [
         'name'
+      ],
+      query: [
+        'id'
       ]
     ]
   end
