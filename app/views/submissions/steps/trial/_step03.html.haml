@@ -1,14 +1,13 @@
 .alert.alert-info
   %p
-    BIP service assumes that each row in the trait scoring sheet, that you are going
-    to submit, represents a so-called <b>plant scoring unit</b>.
-    For raw data it may simply be an individual plant in your experiment. For processed data
-    a plant scoring unit may represent a set of plants, related to each other in some way. For each
-    scoring unit we will ask you to mandatory provide <b>plant accession</b> information.
+    The BIP service assumes that each row in the trait scoring sheet, that you are going to submit,
+    represents a so-called <b>plant scoring unit</b>. For raw data it may simply be an individual
+    plant in your experiment. For processed data a plant scoring unit may represent a set of plants,
+    related to each other in some way. It is mandatory to provide plant accession information
+    for each plant scoring unit in the scoring sheet to be submitted.
 
   %p
-    In case you would like to check what plant accessions are currently registered in BIP, please
-    use the
+    In case you would like to check what plant accessions are currently registered in the BIP, please use the
     = link_to 'plant accessions table view', data_tables_path(model: 'plant_accessions'), target: '_blank'
     (you may filter data in that table with the <b>Search</b> text field).
 
@@ -17,7 +16,7 @@
     well as design factors (for instance, ordinal numbers for plots, reps and so forth).
 
 .form-group
-  = label_tag "Used genetic material origin"
+  = label_tag "Origin of genetic material used in this trial"
   %br
   = content.label :lines_or_varieties, "Plant lines", value: 'plant_lines', class: 'radio-inline' do
     = content.radio_button :lines_or_varieties, 'plant_lines', checked: true
@@ -36,6 +35,27 @@
     In other cases you should probably select the the <b>Plant varieties</b> option.
 
 - if submission.raw_data?
+  %fieldset
+    %legend Design factors
+    .alert.alert-info
+      %p
+        Please select the appropriate statistical design factors suitable for your experimental setup from
+        the drop-down fields. Start by selecting the <b>highest design factor first</b>
+        and proceed with the next ones in <b>decreasing</b> size.
+
+      %p
+        If your factors are not present in the list provided, please add them manually. While creating new
+        factors, please make sure you comply with the rule to submit them in decreasing size, so with the
+        highest missing factor (e.g. treatment) first, to lowest missing factor (e.g. plot).
+        You are able to mix both predefined factors, from the drop-down list, and your own factor names.
+
+    - values = @content.design_factor_names
+    - (0...10).each do |idx|
+      .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
+        - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
+        = content.combo_field "design_factor_names[]", options, value: values[idx],
+            label: "Design factor #{idx + 1}", idx: idx
+
   %fieldset
     %legend Technical replicate numbers
     .alert.alert-info
@@ -66,25 +86,3 @@
               = content.text_field :technical_replicate_numbers,
                   value: @content.technical_replicate_numbers[idx] || 1,
                   label: false, name: "submission[content][technical_replicate_numbers][]"
-
-  %fieldset
-    %legend Design factors
-    .alert.alert-info
-      %p
-        Please select the appropriate statistical design factors suitable for your experimental setup from
-        the drop-down fields. Start by selecting the <b>highest design factor first</b>
-        and proceed with the next ones in <b>decreasing</b> size.
-
-      %p
-        If your factors are not present in the list provided, please add them manually. While creating new
-        factors, please make sure you comply with the rule to submit them in decreasing size, so with the
-        highest missing factor (e.g. treatment) first, to lowest missing factor (e.g. plot).
-        You are able to mix both predefined factors, from the drop-down list, and your own factor names.
-
-    - values = @content.design_factor_names
-    - (0...10).each do |idx|
-      .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
-        - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
-        = content.combo_field "design_factor_names[]", options, value: values[idx],
-            label: "Design factor #{idx + 1}", idx: idx
-
