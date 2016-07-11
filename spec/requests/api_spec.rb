@@ -77,7 +77,12 @@ RSpec.describe "API V1" do
     it 'does not accept plant accessions without PL or PV' do
       expect {
         post "/api/v1/plant_accessions", {
-          plant_accession: {plant_accession: 'foo', plant_line_id: nil, plant_variety_id: nil}
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: nil,
+            plant_variety_id: nil,
+            originating_organisation: 'oo'
+          }
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(0)
 
@@ -92,7 +97,12 @@ RSpec.describe "API V1" do
     it 'does not accept plant accessions with both PL and PV' do
       expect {
         post "/api/v1/plant_accessions", {
-            plant_accession: {plant_accession: 'foo', plant_line_id: pl.id, plant_variety_id: pv.id}
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: pl.id,
+            plant_variety_id: pv.id,
+            originating_organisation: 'oo'
+          }
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(0)
 
@@ -107,13 +117,23 @@ RSpec.describe "API V1" do
     it 'accepts plant accessions with either PL or PV but not both' do
       expect {
         post "/api/v1/plant_accessions", {
-            plant_accession: {plant_accession: 'foo', plant_line_id: pl.id, plant_variety_id: nil}
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: pl.id,
+            plant_variety_id: nil,
+            originating_organisation: 'oo'
+          }
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(1)
 
       expect {
         post "/api/v1/plant_accessions", {
-          plant_accession: {plant_accession: 'bar', plant_line_id: nil, plant_variety_id: pv.id}
+          plant_accession: {
+            plant_accession: 'bar',
+            plant_line_id: nil,
+            plant_variety_id: pv.id,
+            originating_organisation: 'oo'
+          }
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(1)
     end
@@ -123,8 +143,13 @@ RSpec.describe "API V1" do
     it 'does not allow non-array value for design_factors' do
       expect {
         post "/api/v1/design_factors", {
-          design_factor: {design_factor_name: 'foo', institute_id: 'foo', trial_location_name: 'foo',
-                          design_unit_counter: 'foo', design_factors: 'non array value'}
+          design_factor: {
+            design_factor_name: 'foo',
+            institute_id: 'foo',
+            trial_location_name: 'foo',
+            design_unit_counter: 'foo',
+            design_factors: 'non array value'
+          }
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { DesignFactor.count }.by(0)
 
@@ -135,8 +160,13 @@ RSpec.describe "API V1" do
     it 'does not allow empty array value for design_factors' do
       expect {
         post "/api/v1/design_factors", {
-            design_factor: {design_factor_name: 'foo', institute_id: 'foo', trial_location_name: 'foo',
-                            design_unit_counter: 'foo', design_factors: []}
+          design_factor: {
+            design_factor_name: 'foo',
+            institute_id: 'foo',
+            trial_location_name: 'foo',
+            design_unit_counter: 'foo',
+            design_factors: []
+          }
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { DesignFactor.count }.by(0)
 
