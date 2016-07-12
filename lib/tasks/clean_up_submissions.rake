@@ -2,18 +2,17 @@ namespace :curate do
   desc 'Purge all submissions and related records'
   task purge_submissions: :environment do
 
-    ss = Submission.all
-    puts "Found #{ss.length} submissions."
-
-    ss.destroy_all
-
     sus = Submission::Upload.all
     puts "Found #{sus.length} submission uploads."
 
     sus.destroy_all
 
-    models = Api.writable_models
+    ss = Submission.all
+    puts "Found #{ss.length} submissions."
 
+    ss.destroy_all
+
+    models = Api.writable_models
     models.each do |m|
       if m.column_names.include? 'user_id'
         records = m.where("user_id IS NOT NULL")
