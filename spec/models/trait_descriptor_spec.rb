@@ -23,15 +23,15 @@ RSpec.describe TraitDescriptor do
 
     it 'properly returns associated trial ids' do
       tds = create_list(:trait_descriptor, 4)
-      pt = create(:plant_trial)
-      tses = create_list(:trait_score, 2, trait_descriptor: tds[0], plant_scoring_unit: create(:plant_scoring_unit, plant_trial: pt))
-      create(:trait_score, trait_descriptor: tds[1], plant_scoring_unit: nil)
-      create(:trait_score, trait_descriptor: tds[2], plant_scoring_unit: create(:plant_scoring_unit, plant_trial: nil))
+      pts = create_list(:plant_trial, 2)
+      tses = create_list(:trait_score, 2, trait_descriptor: tds[0], plant_scoring_unit: create(:plant_scoring_unit, plant_trial: pts[0]))
+      create(:trait_score, trait_descriptor: tds[1], plant_scoring_unit: create(:plant_scoring_unit, plant_trial: pts[1]))
+      create(:trait_score, trait_descriptor: tds[2], plant_scoring_unit: create(:plant_scoring_unit, plant_trial: pts[0]))
       table_data = TraitDescriptor.table_data
       expect(table_data.map{ |td| [td[9], td[10]] }).to match_array [
-        [[pt.id], tds[0].id],
-        [nil, tds[1].id],
-        [[nil], tds[2].id],
+        [[pts[0].id], tds[0].id],
+        [[pts[1].id], tds[1].id],
+        [[pts[0].id], tds[2].id],
         [nil, tds[3].id]
       ]
     end

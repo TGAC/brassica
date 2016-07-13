@@ -1192,10 +1192,12 @@ en:
           desc: BIP identifier of the Design Factor object, which stores additional information concerning the design of this experiment
         -
           name: plant_accession_id
+          create: required
           format: int
           desc: BIP identifier of the associated database Plant Accession
         -
           name: plant_trial_id
+          create: required
           format: int
           desc: BIP identifier of the Plant Trial in the scope of which this plant scoring took place
         -
@@ -1215,7 +1217,9 @@ en:
 
           {
             "plant_scoring_unit": {
-              "scoring_unit_name": "plant_2/2016"
+              "scoring_unit_name": "plant_2/2016",
+              "plant_accession_id": 755,
+              "plant_trial_id": 1
             }
           }
 
@@ -1866,6 +1870,9 @@ en:
           name: value_type
           desc: Meaning of the score value
         -
+          name: technical_replicate_number
+          desc: Ordinal number of the technical replicate for which this score was measured
+        -
           name: scoring_date
           format: date
           desc: Day on which the scoring was performed
@@ -1883,10 +1890,12 @@ en:
           name: confirmed_by_whom
         -
           name: plant_scoring_unit_id
+          create: required
           format: int
           desc: BIP identifier of the Plant Scoring Unit that contains this trait score
         -
           name: trait_descriptor_id
+          create: required
           format: int
           desc: BIP identifier of the Trait Descriptor that provides more information about the scored trait
         -
@@ -1901,7 +1910,9 @@ en:
 
           {
             "trait_score": {
-              "score_value": "1000"
+              "score_value": "1000",
+              "plant_scoring_unit_id": 56456,
+              "trait_descriptor_id": 2
             }
           }
 
