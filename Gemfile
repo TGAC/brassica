@@ -1,12 +1,11 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.0'
+gem 'rails', '~> 4.2.0'
 gem 'pg'
 
 gem 'puma'
 
 gem 'haml-rails'
-
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'font-awesome-sass', '~> 4.3.1'
 gem 'autoprefixer-rails', '~> 5.1.5'
