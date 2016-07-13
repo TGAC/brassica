@@ -297,11 +297,11 @@ en:
           name: id
         -
           name: country_code
-          format: string
+          create: Q
           desc: ISO 3166-1 alpha-3 code of this Country
         -
           name: country_name
-          format: string
+          create: Q
           desc: Name of this Country in English
         -
           name: plant_trial_ids
