@@ -34,7 +34,7 @@ def call_bip(request)
   JSON.parse(response.body)
 end
 
-# Attempts at creating a class_name record with data. Returns created object id.
+# Attempts at creating a resource record with data. Returns created object id.
 def create_record(class_name, data)
   request = Net::HTTP::Post.new("/api/v1/#{pluralize_class class_name}", @headers)
   request.body = { class_name => data }.to_json
@@ -48,6 +48,7 @@ def create_record(class_name, data)
 end
 
 
+# You need Trait Descriptors in order to describe what traits were actually measured in your trial.
 puts '1. Finding/Creating Trait Descriptors'
 a_toc_id, y_toc_id, d_toc_id = ['Seed α-tocopherol', 'Seed γ-tocopherol', 'Seed δ-tocopherol'].map do |trait_name|
   encoded_name = URI.escape trait_name
@@ -132,6 +133,9 @@ SCORING = {
   16 => { rep: 2, td_id: d_toc_id}
 }
 
+# A helper function for:
+# - looking for varieties in the BIP, or
+# - recording varieties which are not yet present in the BIP.
 def record_plant_variety(plant_variety_name)
   puts "    - finding/creating Plant Variety #{plant_variety_name}"
 
@@ -145,12 +149,14 @@ def record_plant_variety(plant_variety_name)
 end
 
 
+# Now, parse the input scoring file and record all important information
 CSV.foreach(ARGV[0]) do |row|
   next if row[0] == 'plant_sample_id'  # the header
 
   puts "  * processing Plant Scoring Unit #{row[SAMPLE_ID]}"
   puts "    - finding/creating Plant Accession #{row[ACCESSION]}"
 
+  # Each plant scoring unit requires an accession, we need to either find it in the BIP or create a new one
   plant_accession = URI.escape(row[ACCESSION])
   request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
   response = call_bip request
@@ -168,6 +174,7 @@ CSV.foreach(ARGV[0]) do |row|
 
   puts "    - creating Plant Scoring Unit #{row[SAMPLE_ID]}"
 
+  # Design factors are important to record as they tell other users what experiment layout we used
   design_factors_array = DESIGN_FACTORS.map do |factor_name, column|
     "#{factor_name}_#{row[column].to_i}"
   end
@@ -176,6 +183,7 @@ CSV.foreach(ARGV[0]) do |row|
                                    design_unit_counter: row[DESIGN_FACTORS.last[1]]
                                   )
 
+  # New, we create a new plant scoring unit; in our sample case, it represents a single plant
   sample_id = URI.escape row[SAMPLE_ID]
   psu_id = create_record('plant_scoring_unit',
                          scoring_unit_name: sample_id,
