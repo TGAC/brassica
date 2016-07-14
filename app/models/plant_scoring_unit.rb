@@ -6,7 +6,7 @@ class PlantScoringUnit < ActiveRecord::Base
 
   has_many :trait_scores, dependent: :destroy
 
-  validates :scoring_unit_name, presence: true
+  validates :scoring_unit_name, :plant_trial_id, :plant_accession_id, presence: true
 
   include Relatable
   include Filterable

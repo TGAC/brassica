@@ -12,6 +12,9 @@ class PlantAccession < ActiveRecord::Base
             presence: true,
             uniqueness: true
 
+  validates :originating_organisation,
+            presence: true
+
   validates :year_produced,
             length: { is: 4 },
             allow_blank: true
