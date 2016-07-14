@@ -16,8 +16,7 @@ if ARGV.size < 2
   exit 1
 end
 
-@client = Net::HTTP.new('localhost', 3000)
-# client = Net::HTTP.new('bip.tgac.ac.uk', 443)
+@client = Net::HTTP.new('bip.tgac.ac.uk', 443)
 @client.use_ssl = true
 @client.verify_mode = OpenSSL::SSL::VERIFY_NONE
 @headers = {
@@ -31,7 +30,7 @@ end
 
 def call_bip(request)
   response = @client.request(request)
-  JSON.parse(response.body)
+  JSON.parse(response.body).tap{ |parsed| test_error(parsed) }
 end
 
 # Attempts at creating a resource record with data. Returns created object id.
@@ -45,6 +44,14 @@ def create_record(class_name, data)
     exit 1
   end
   response[class_name]['id']
+end
+
+def test_error(response)
+  unless response['reason'].nil?
+    STDERR.puts "Encountered the following BIP request error."
+    STDERR.puts response['reason']
+    exit 1
+  end
 end
 
 
@@ -102,7 +109,7 @@ response = call_bip request
 country_id = response['meta']['total_count'] > 0 ? response['countries'][0]['id'] : nil
 
 plant_trial_id = create_record('plant_trial',
-  plant_trial_name: 'Tocopherol seed content measurement.',
+  plant_trial_name: 'Tocopherol seed content measurement - SAMPLE DEMO TRIAL.',
   project_descriptor: 'RIPR',
   trial_year: 2016,
   place_name: 'Norwich',
