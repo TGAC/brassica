@@ -98,14 +98,13 @@ end
 
 puts ' 3. Submitting plant_lines'
 
-def record_plant_line(plant_line_name, plant_variety_id, sequence_identifier)
+def record_plant_line(plant_line_name, plant_variety_id)
   request = Net::HTTP::Get.new("/api/v1/plant_lines?plant_line[query][plant_line_name]=#{URI.escape plant_line_name}", @headers)
   response = call_bip request
   if response['meta']['total_count'] == 0
     create_record('plant_line',
       plant_line_name: plant_line_name,
-      plant_variety_id: plant_variety_id,
-      sequence_identifier: sequence_identifier
+      plant_variety_id: plant_variety_id
     )
   else
     response['plant_lines'][0]['id']
@@ -121,7 +120,7 @@ end
 
 puts '4. Submitting plant_accessions'
 
-      def record_plant_accessions(plant_accession, originating_organisation,plant_variety_id, comments)
+      def record_plant_accessions(plant_accession, originating_organisation,plant_line_id,comments)
         request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
         response = call_bip request
         plant_accession_id = if response['meta']['total_count'] == 0
@@ -129,6 +128,7 @@ puts '4. Submitting plant_accessions'
                             plant_accession: plant_accession,
                             originating_organisation: originating_organisation,
                             plant_variety_id: plant_variety_id,
+		            Plant_line_id: plant_line_id
                             comments: comments  #SRA identifier
                                      )
                              else
@@ -146,9 +146,9 @@ CSV.foreach(ARGV[0]) do |row|
   next if row[0]== 'Accession_name' # omit the header
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
   plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
-  plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id, row[SRA_IDENTIFIER])
+  plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id)
   associate_line_with_population(plant_line_id, plant_population_id)
-  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],plant_variety_id,row[SRA_IDENTIFIER])
+  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],plannt_line_id,row[SRA_IDENTIFIER])
 end
 
 puts '4. Finished'
