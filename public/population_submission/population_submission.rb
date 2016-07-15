@@ -98,17 +98,18 @@ end
 
 puts ' 3. Submitting plant_lines'
 
-      def record_plant_lines(plant_line_name, plant_variety_name)
-        request = Net::HTTP::Get.new("/api/v1/plant_linesplant_line[query][plant_line_name]=#{URI.escape plant_line_name}", @headers)
-        response = call_bip request
-        if response['meta']['total_count'] == 0
-          create_record('plant_line',
-          Plant_line_name: row[LINE_NAME],
-          plant_variety_name: row[VARIETY])
-        else
-          response['plant_lines'][0]['id']
-        end
-      end
+def record_plant_line(plant_line_name, plant_variety_id)
+  request = Net::HTTP::Get.new("/api/v1/plant_lines?plant_line[query][plant_line_name]=#{URI.escape plant_line_name}", @headers)
+  response = call_bip request
+  if response['meta']['total_count'] == 0
+    create_record('plant_line',
+      plant_line_name: plant_line_name,
+      plant_variety_id: plant_variety_id
+    )
+  else
+    response['plant_lines'][0]['id']
+  end
+end
 
 puts '4. Submitting plant_accessions'
 
@@ -137,7 +138,8 @@ puts '4. Submitting plant_accessions'
 CSV.foreach(ARGV[0]) do |row|
   next if row[0]== 'Accession_name' # omit the header
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
-  record_plant_variety(row[VARIETY], row[CROP_TYPE])
+  plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
+  plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id)
 end
 
 puts '4. Finished'
