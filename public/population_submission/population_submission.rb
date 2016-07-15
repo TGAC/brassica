@@ -128,7 +128,7 @@ puts '4. Submitting plant_accessions'
                             plant_accession: plant_accession,
                             originating_organisation: originating_organisation,
                             plant_variety_id: plant_variety_id,
-		            Plant_line_id: plant_line_id,
+		            plant_line_id: plant_line_id,
                             comments: comments  #SRA identifier
                                      )
                              else
