@@ -18,7 +18,6 @@ end
 
 @client = Net::HTTP.new('bip.tgac.ac.uk', 443)
 @client.use_ssl = true
-@client.verify_mode = OpenSSL::SSL::VERIFY_NONE
 @headers = {
   'Content-Type' => 'application/json',
   'X-BIP-Api-Key' => ARGV[1]
