@@ -72,7 +72,7 @@ end
 
 puts " 1. Creating experimental plant_population "
 
-create_record('plant_population',
+plant_population_id = create_record('plant_population',
   name: 'RIPR_test_population',
   description: '387 Brassica napus accessions used in the RIPR project for which mRNAseq data were submitted to SRA under PRJNA309367',
   establishing_organisation: 'York University',
@@ -111,6 +111,13 @@ def record_plant_line(plant_line_name, plant_variety_id)
   end
 end
 
+def associate_line_with_population(plant_line_id, plant_population_id)
+  create_record('plant_population_list',
+    plant_line_id: plant_line_id,
+    plant_population_id: plant_population_id
+  )
+end
+
 puts '4. Submitting plant_accessions'
 
       def record_plant_accessions(plant_accession, accession_originator,plant_variety_id, comments)
@@ -140,6 +147,7 @@ CSV.foreach(ARGV[0]) do |row|
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
   plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
   plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id)
+  associate_line_with_population(plant_line_id, plant_population_id)
 end
 
 puts '4. Finished'
