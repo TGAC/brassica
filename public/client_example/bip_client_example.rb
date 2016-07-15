@@ -8,7 +8,7 @@ require 'net/https'
 #  1. Creates (or finds pre-created) Trait Descriptors for the three tocopherol-related traits
 #  2. Creates a new Plant Trial object representing the submitted study
 #  3. Parses an input .csv file in search for trait scoring data
-#  4. Submits that data to BIP using provided BIP API Key
+#  4. Submits that data to BIP using the BIP API Key provided
 
 if ARGV.size < 2
   STDERR.puts 'Not enough arguments. Usage:'
@@ -33,7 +33,7 @@ def call_bip(request)
   JSON.parse(response.body).tap{ |parsed| test_error(parsed) }
 end
 
-# Attempts at creating a resource record with data. Returns created object id.
+# Attempts to create a resource record with data. Returns the created object id.
 def create_record(class_name, data)
   request = Net::HTTP::Post.new("/api/v1/#{pluralize_class class_name}", @headers)
   request.body = { class_name => data }.to_json
@@ -54,8 +54,7 @@ def test_error(response)
   end
 end
 
-
-# You need Trait Descriptors in order to describe what traits were actually measured in your trial.
+# You need Trait Descriptors to describe what traits were actually measured in your trial.
 puts '1. Finding/Creating Trait Descriptors'
 a_toc_id, y_toc_id, d_toc_id = ['Seed α-tocopherol', 'Seed γ-tocopherol', 'Seed δ-tocopherol'].map do |trait_name|
   encoded_name = URI.escape trait_name
@@ -102,7 +101,6 @@ a_toc_id, y_toc_id, d_toc_id = ['Seed α-tocopherol', 'Seed γ-tocopherol', 'See
   end
 end
 
-
 puts '2. Creating a new Plant Trial record'
 request = Net::HTTP::Get.new("/api/v1/countries?country[search][country_name]=#{URI.escape 'United Kingdom'}", @headers)
 response = call_bip request
@@ -115,7 +113,6 @@ plant_trial_id = create_record('plant_trial',
   place_name: 'Norwich',
   country_id: country_id
 )
-
 
 puts '3. Creating PSUs and recording scores'
 
@@ -130,7 +127,7 @@ DESIGN_FACTORS = [
 ACCESSION = 7
 ACCESSION_ORGANISATION = 'Nottingham name'
 VARIETY = 10
-# Mapping of column number to trait and tech repl number
+# Mapping of column number to trait and tech rep number
 SCORING = {
   11 => { rep: 1, td_id: a_toc_id},
   12 => { rep: 2, td_id: a_toc_id},
@@ -141,8 +138,8 @@ SCORING = {
 }
 
 # A helper function for:
-# - looking for varieties in the BIP, or
-# - recording varieties which are not yet present in the BIP.
+# - looking for varieties in BIP, or
+# - recording varieties which are not yet present in BIP.
 def record_plant_variety(plant_variety_name)
   puts "    - finding/creating Plant Variety #{plant_variety_name}"
 
@@ -155,7 +152,6 @@ def record_plant_variety(plant_variety_name)
   end
 end
 
-
 # Now, parse the input scoring file and record all important information
 CSV.foreach(ARGV[0]) do |row|
   next if row[0] == 'plant_sample_id'  # the header
@@ -163,7 +159,7 @@ CSV.foreach(ARGV[0]) do |row|
   puts "  * processing Plant Scoring Unit #{row[SAMPLE_ID]}"
   puts "    - finding/creating Plant Accession #{row[ACCESSION]}"
 
-  # Each plant scoring unit requires an accession, we need to either find it in the BIP or create a new one
+  # Each plant scoring unit requires an accession; we need to either find it in BIP or create a new one
   plant_accession = URI.escape(row[ACCESSION])
   request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
   response = call_bip request
