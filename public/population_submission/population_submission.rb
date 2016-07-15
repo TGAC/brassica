@@ -135,7 +135,7 @@ puts '4. Submitting plant_accessions'
 
 
 CSV.foreach(ARGV[0]) do |row|
-  next if row[0]== 'sample_name'
+  next if row[0]== 'Accession_name' # omit the header
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
 end
 
