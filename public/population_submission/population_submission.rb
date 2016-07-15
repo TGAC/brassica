@@ -121,16 +121,15 @@ end
 
 puts '4. Submitting plant_accessions'
 
-      def record_plant_accessions(plant_accession, accession_originator,plant_variety_id, comments)
+      def record_plant_accessions(plant_accession, originating_organisation,plant_variety_id, comments)
         request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
         response = call_bip request
         plant_accession_id = if response['meta']['total_count'] == 0
-                      plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
                         create_record('plant_accession',
-                            plant_accession: row[ACCESSION_NAME],
-                            originating_organisation: row[ACCESSION_SOURCE],
+                            plant_accession: plant_accession,
+                            originating_organisation: originating_organisation,
                             plant_variety_id: plant_variety_id,
-                            comments: row[SRA_IDENTIFIER] #SRA identifier
+                            comments: comments  #SRA identifier
                                      )
                              else
                        response['plant_accessions'][0]['id']
@@ -149,6 +148,7 @@ CSV.foreach(ARGV[0]) do |row|
   plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
   plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id, row[SRA_IDENTIFIER])
   associate_line_with_population(plant_line_id, plant_population_id)
+  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],plant_variety_id,row[SRA_IDENTIFIER])
 end
 
 puts '4. Finished'
