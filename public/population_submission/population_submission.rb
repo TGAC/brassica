@@ -36,10 +36,10 @@ end
 #defining input columns from CSV
 ACCESSION_NAME=0
 LINE_NAME=1
-SRA_IDENTIFIER=3
-VARIETY=4
-CROP_TYPE=5
-ACCESSION_SOURCE=6
+SRA_IDENTIFIER=2
+VARIETY=3
+CROP_TYPE=4
+ACCESSION_SOURCE=5
 
 
 
@@ -82,18 +82,18 @@ create_record('plant_population',
 
 puts ' 2. Submitting plant_varieties'
 
-       def record_plant_variety(plant_variety_name, crop_type)
-        request = Net::HTTP::Get.new("/api/v1/plant_varieties?plant_variety[query][plant_variety_name]=#{URI.escape plant_variety_name}", @headers)
-        response = call_bip request
-        if response['meta']['total_count'] == 0
-          create_record('plant_variety',
-          plant_variety_name: row[VARIETY],
-          crop_type: row[CROP_TYPE])
-        
-        else
-          response['plant_varieties'][0]['id']
-        end
-      end
+def record_plant_variety(plant_variety_name, crop_type)
+  request = Net::HTTP::Get.new("/api/v1/plant_varieties?plant_variety[query][plant_variety_name]=#{URI.escape plant_variety_name}", @headers)
+  response = call_bip request
+  if response['meta']['total_count'] == 0
+    create_record('plant_variety',
+      plant_variety_name: plant_variety_name,
+      crop_type: crop_type
+    )
+  else
+    response['plant_varieties'][0]['id']
+  end
+end
 
 
 puts ' 3. Submitting plant_lines'
@@ -137,6 +137,7 @@ puts '4. Submitting plant_accessions'
 CSV.foreach(ARGV[0]) do |row|
   next if row[0]== 'Accession_name' # omit the header
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
+  record_plant_variety(row[VARIETY], row[CROP_TYPE])
 end
 
 puts '4. Finished'
