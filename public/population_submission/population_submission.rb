@@ -72,13 +72,12 @@ end
 
 puts " 1. Creating experimental plant_population "
 
-
-   create_record('plant_population',
-   name: 'RIPR_test_population',
-   description: '387 Brassica napus accessions used in the RIPR project for which mRNAseq data were submitted to SRA under PRJNA309367',
-   establishing_organisation: 'York University',
-   taxonomy_term_id: 27  #this is Brassica napus id in BIP
-   )
+create_record('plant_population',
+  name: 'RIPR_test_population',
+  description: '387 Brassica napus accessions used in the RIPR project for which mRNAseq data were submitted to SRA under PRJNA309367',
+  establishing_organisation: 'York University',
+  taxonomy_term_id: 27  #this is Brassica napus id in BIP
+)
 
 
 puts ' 2. Submitting plant_varieties'
