@@ -101,6 +101,7 @@ class PlantTrial < ActiveRecord::Base
         [
           'project_descriptor',
           'plant_populations.id',
+          'user_id',
           'id' => []
         ]
     ]

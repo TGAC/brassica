@@ -62,6 +62,7 @@ class LinkageGroup < ActiveRecord::Base
       query: params_for_filter(table_columns) +
         [
           'linkage_maps.id',
+          'user_id',
           'id'
         ]
     ]

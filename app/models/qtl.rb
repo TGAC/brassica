@@ -90,6 +90,7 @@ class Qtl < ActiveRecord::Base
           'processed_trait_datasets.trait_descriptor_id',
           'qtl_jobs.id',
           'linkage_groups.id',
+          'user_id',
           'id'
         ]
     ]

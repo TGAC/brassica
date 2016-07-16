@@ -16,7 +16,10 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def index
-    filter_params = params[model.name].presence
+    filter_params = params[model.name].presence || {}
+    if params['only_mine']
+      filter_params[:query] = (filter_params[:query] || {}).merge(user_id: @api_key.user_id)
+    end
 
     index = Api::Index.new(model)
     resources = index.where(filter_params).order(:id)

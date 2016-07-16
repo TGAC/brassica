@@ -48,6 +48,7 @@ class MapPosition < ActiveRecord::Base
         'map_position',
         'linkage_groups.id',
         'population_loci.id',
+        'user_id',
         'id'
       ]
     ]

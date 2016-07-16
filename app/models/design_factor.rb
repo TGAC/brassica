@@ -18,6 +18,7 @@ class DesignFactor < ActiveRecord::Base
   def self.permitted_params
     [
       query: [
+        'user_id',
         'id'
       ]
     ]

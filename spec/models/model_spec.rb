@@ -133,7 +133,6 @@ RSpec.describe ActiveRecord::Base do
         'submission_uploads',
         'submissions',
         'users',
-        'design_factors',
         'genotype_matrices',
         'pop_type_lookup',
         'processed_trait_datasets',
@@ -166,6 +165,13 @@ RSpec.describe ActiveRecord::Base do
           expect(record.valid?).to be_falsy
           expect(record.errors[:published]).to eq ['An ownerless record must have its published flag set to true.']
         end
+    end
+
+    it 'allows query by user_id' do
+      Api.writable_models.each do |model|
+        query = model.send(:permitted_params).detect{ |x| x.is_a?(Hash) && x[:query].present? }[:query]
+        expect(query).to include 'user_id'
+      end
     end
   end
 

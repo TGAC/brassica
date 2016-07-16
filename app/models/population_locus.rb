@@ -44,6 +44,7 @@ class PopulationLocus < ActiveRecord::Base
         'defined_by_whom',
         'plant_populations.id',
         'marker_assays.id',
+        'user_id',
         'id'
       ]
     ]
