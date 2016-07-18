@@ -31,7 +31,7 @@ class PlantPopulation < ActiveRecord::Base
   include Searchable
   include Publishable
 
-  scope :by_name, -> { order('plant_populations.name') }
+  scope :by_name, -> { order(:name) }
 
   def self.table_data(params = nil, uid = nil)
     subquery = PlantLine.visible(uid)

@@ -25,7 +25,7 @@ class PlantVariety < ActiveRecord::Base
   include Publishable
   include TableData
 
-  default_scope { order('plant_variety_name') }
+  default_scope { order(:plant_variety_name) }
 
   def self.table_columns
     [

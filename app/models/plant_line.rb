@@ -33,7 +33,7 @@ class PlantLine < ActiveRecord::Base
   validates :user,
             presence: { on: :create }
 
-  default_scope { order('plant_line_name') }
+  default_scope { order(:plant_line_name) }
 
   scope :where_id_or_name, ->(id_or_name) {
     where("id=:id OR plant_line_name ILIKE :name", id: id_or_name.to_i, name: id_or_name.to_s)

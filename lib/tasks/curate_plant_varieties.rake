@@ -74,7 +74,8 @@ namespace :curate do
 
     # Expunge orphaned PVs.
     puts "Checking for orphaned plant varieties..."
-    pvs = PlantVariety.unscoped.includes(:plant_lines).where( plant_lines: { plant_variety_id: nil } ).where("plant_varieties.entered_by_whom != 'BIP'")
+    puts PlantVariety.includes(:plant_lines).where( plant_lines: { plant_variety_id: nil } ).where("plant_varieties.entered_by_whom != 'BIP'").to_sql
+    pvs = PlantVariety.includes(:plant_lines).where( plant_lines: { plant_variety_id: nil } ).where("plant_varieties.entered_by_whom != 'BIP'")
     puts "#{pvs.length} orphaned plant varieties found."
     pvs.destroy_all
 

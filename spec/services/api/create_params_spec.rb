@@ -14,7 +14,8 @@ RSpec.describe Api::CreateParams do
       pv_permissions = Api::CreateParams.new(Api::Model.new('plant_variety'), {}).permissions
       expect(pv_permissions).to include(
         'countries_registered_ids' => [],
-        'countries_of_origin_ids' => []
+        'countries_of_origin_ids' => [],
+        'synonyms' => []
       )
 
       pl_permissions = Api::CreateParams.new(Api::Model.new('plant_line'), {}).permissions
