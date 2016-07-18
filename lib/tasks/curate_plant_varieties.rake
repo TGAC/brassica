@@ -4,6 +4,9 @@ namespace :curate do
   desc 'Curate names of plant varieties based on data received from TGAC'
   task plant_varieties: :environment do
 
+    # Rebuild ES index for PlantVarieties to prevent errors when destroying objects
+    PlantVariety.import force: true, refresh: true
+
     # Fix some simple errors in PVs
     pvs = PlantVariety.where("plant_variety_name LIKE '%quell%'").all
     if pvs.count == 3
@@ -13,205 +16,72 @@ namespace :curate do
       end
     end
 
+    puts "#{PlantVariety.count} plant varieties registered in DB."
+
+    # Destroy all PVs except those which are linked to PlantLines
+#    pvs = PlantVariety.where(plant_lines: []).all
+    pvs = PlantVariety.unscoped.includes(:plant_lines).where( plant_lines: { plant_variety_id: nil } )
+
+    puts "Found #{pvs.count} plant varieties with no associated lines. Purging."
+    pvs.destroy_all
+
+    puts "#{PlantVariety.count} plant varieties remain."
+
     # Import CSV
-    list = {}
+    puts "Processing export file and spawning new plant variety objects..."
+    import_counter = 0
+    import_errors = 0
     CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
-      list[row[1]] = row[0]
-    end
-
-    pl_nov = PlantLine.where("plant_variety_id IS NULL").all
-    puts "#{PlantLine.count} plant lines present (#{pl_nov.length} with no assigned variety)."
-
-    pv_nol = PlantVariety.where(plant_lines: []).all
-    puts "#{PlantVariety.count} plant varieties present (#{pv_nol.length} with no assigned lines)."
-
-    pl_syn_created = 0
-    pl_name_created = 0
-    pv_syn_created = 0
-    pv_name_found = 0
-
-    CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
-      #puts "Processing PV #{row[1]} with synonym #{row[0]}"
-
-      # Attempt to find PlantLine with synonym as name
-      pls = PlantLine.where(plant_line_name: row[0]).all
-      if pls.count > 1
-        puts "WARNING! #{pls.count} plant lines found with #{row[0]} as name."
+      # Assuming row[0] is synonym; row[1] is real name
+      # upsert new proper plant_variety
+      pv = PlantVariety.find_or_create_by(plant_variety_name: row[1]) do |obj|
+      # puts "No matching PV object found for name #{row[1]}. Creating..."
+        obj.comments = 'Automatically created by PlantVariety creation script based on TGAC PV data.'
+        obj.entered_by_whom = 'BIP'
+        obj.date_entered = Date.today
+        obj.synonyms << row[0]
       end
-      pls.each do |pl|
-        # upsert proper plant_variety for this PL
-        pv = PlantVariety.find_or_create_by(plant_variety_name: row[1]) do |obj|
-          puts "No matching PV object found for name #{row[1]}. Creating..."
-          obj.comments = "Automatically created by PlantVariety creation script based on TGAC PV data."
-          obj.date_entered = Date.today
-          obj.synonyms = row[0]
-          pl_syn_created += 1
-        end
-        pv.save
-        unless pv.errors.blank?
-          puts "UNABLE TO SAVE PV #{row[1]} DUE TO ERRORS: #{pv.errors.inspect}"
-        end
-        pl.plant_variety = pv
-        pl.save
+      import_counter += 1
+
+      unless pv.errors.blank?
+        import_errors += 1
       end
-    end
 
-    CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
-
-      # Attempt to find PlantLine with name as name
+      # Look for plant_lines whose names match this plant_variety's official name
       pls = PlantLine.where(plant_line_name: row[1]).all
       if pls.count > 1
-        puts "WARNING! #{pls.count} plant lines found with #{row[1]} as name."
+        puts "#{pls.count} plant lines found with #{row[1]} as name. Reassigning to newly created PV."
       end
+
       pls.each do |pl|
-        # upsert proper plant_variety for this PL
-        pv = PlantVariety.find_or_create_by(plant_variety_name: row[1]) do |obj|
-          puts "No matching PV object found for name #{row[1]}. Creating..."
-          obj.comments = "Automatically created by PlantVariety creation script based on TGAC PV data."
-          obj.date_entered = Date.today
-          obj.synonyms = row[0]
-          pl_name_created += 1
-        end
-        pv.save
-        unless pv.errors.blank?
-          puts "UNABLE TO SAVE PV #{row[1]} DUE TO ERRORS: #{pv.errors.inspect}"
-        end
+        pl.plant_variety = pv
+        pl.save
+      end
+
+      # Look for plant_lines whose names match this plant_variety's synonym
+      pls = PlantLine.where(plant_line_name: row[0]).all
+      if pls.count > 1
+        puts "#{pls.count} plant lines found with #{row[0]} as name. Reassigning to newly created PV."
+      end
+
+      pls.each do |pl|
         pl.plant_variety = pv
         pl.save
       end
     end
 
-
-    puts "======================"
-
-
-    CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
-      #puts "Processing PV #{row[1]} with synonym #{row[0]}"
-      # Attempt to find PlantVariety with synonym as name
-      pvs = PlantVariety.where(plant_variety_name: row[0]).all
-      if pvs.count > 1
-        puts "WARNING! #{pvs.count} plant varieties found with #{row[0]} as name."
-      end
-      pvs.each do |pv|
-        # upsert proper plant_variety for this PV
-        pv_new = PlantVariety.find_or_create_by(plant_variety_name: row[1]) do |obj|
-          puts "No matching PV object found for name #{row[1]}. Creating..."
-          obj.comments = "Automatically created by PlantVariety creation script based on TGAC PV data."
-          obj.date_entered = Date.today
-          obj.synonyms = row[0]
-          pv_syn_created += 1
-        end
-        pv_new.plant_lines = pv.plant_lines
-        pv_new.save
-        unless pv_new.errors.blank?
-          puts "UNABLE TO SAVE PV #{row[1]} DUE TO ERRORS: #{pv_new.errors.inspect}"
-        end
-
-        delete_if_empty(pv.reload)
-
-      end
-    end
-
-    CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
-      # Attempt to find PlantVariety with name as name
-      pvs = PlantVariety.where(plant_variety_name: row[1]).all
-      if pvs.count > 1
-        puts "WARNING! #{pvs.count} plant varieties found with #{row[1]} as name."
-      end
-      pvs.each do |pv|
-        # add synonym to this PV
-        pv.synonyms = row[0]
-        pv_name_found += 1
-        pv.save
-        unless pv.errors.blank?
-          puts "UNABLE TO SAVE PV #{row[1]} DUE TO ERRORS: #{pv.errors.inspect}"
-        end
-        delete_if_empty(pv.reload)
-      end
-    end
-
-
-    # Now expunge orphaned PVs, test if all PV names listed in AME's list are represented, and check whether any other PVs (not on list) still exist with attached PLs.
+    puts "Import complete. #{import_counter} records processed (with #{import_errors} errors)."
 
     # Expunge orphaned PVs.
     puts "Checking for orphaned plant varieties..."
-    pvs = PlantVariety.includes(:plant_lines).all.select{|pv| pv.plant_lines.blank?}
+    pvs = PlantVariety.unscoped.includes(:plant_lines).where( plant_lines: { plant_variety_id: nil } ).where("plant_varieties.entered_by_whom != 'BIP'")
     puts "#{pvs.length} orphaned plant varieties found."
-    pvs.each do |pv|
-      pv.destroy
-    end
+    pvs.destroy_all
 
-    # Test if PVs listed in AME's list are represented
-
-    unrepresented_pv = 0
-    represented_pv = 0
-
-    CSV.foreach("db/new_cultivars.csv", {col_sep: '#'}) do |row|
-      #puts "Processing PV #{row[1]} with synonym #{row[0]}"
-
-      pv = PlantVariety.find_by(plant_variety_name: row[1])
-      if pv.blank?
-        #puts "WARNING! No plant variety with name #{row[1]} found in DB!"
-        unrepresented_pv += 1
-        new_pv = PlantVariety.new(plant_variety_name: row[1])
-        new_pv.save
-      else
-        represented_pv += 1
-      end
-    end
-
-    puts "Created #{pl_syn_created} PVs for PL SYN, #{pl_name_created} PVs for PL NAME and #{pv_syn_created} PVs for PV SYN."
-    puts "Also recognized #{pv_name_found} existing PVs as new PVs."
-
-    puts "#{represented_pv} AME plant varieties found in DB."
-    puts "#{unrepresented_pv} AME plant varieties not found in DB."
-
-    pl_nov = PlantLine.where("plant_variety_id IS NULL").all
-    puts "#{PlantLine.count} plant lines present (#{pl_nov.length} with no assigned variety)."
-
-    pv_nol = PlantVariety.where(plant_lines: []).all
-    puts "#{PlantVariety.count} plant varieties present (#{pv_nol.length} with no assigned lines)."
-
-    # Also add synonyms to all new PVs.
-
-    pvs_syn_processed = 0
-
-    PlantVariety.all.each do |pv|
-
-      if list.keys.include? pv.plant_variety_name
-        add_synonym_if_not_present(pv, list[pv.plant_variety_name])
-      end
-
-      pv.plant_lines.each do |pl|
-        add_synonym_if_not_present(pv, pl.plant_line_name)
-      end
-
-      pv.save
-
-      pvs_syn_processed += 1
-      if pvs_syn_processed % 100 == 0
-        puts "Processed synonyms for #{pvs_syn_processed} PVs."
-      end
-
-    end
-
-    #puts "All done. ##{processed} records processed; #{conflicts} conflicts detected."
+    puts "All done. #{PlantVariety.count} plant varieties now present in DB "\
+      "(#{PlantVariety.where("entered_by_whom != 'BIP'").count} existing and "\
+      "#{PlantVariety.where("entered_by_whom = 'BIP'").count} imported). "\
+      "#{PlantLine.where("plant_variety_id IS NOT NULL").count} plant lines "\
+      "(of #{PlantLine.count}) have an assigned plant variety."
   end
-
-  def delete_if_empty(pv)
-    pv.reload
-    if pv.plant_lines.count == 0
-      puts "Deleting empty pv #{pv.plant_variety_name}"
-      pv.delete
-    end
-  end
-
-  def add_synonym_if_not_present(pv, synonym)
-    synonyms = pv.synonyms.split(',')
-    synonyms << synonym # unless synonyms.include? synonym
-    pv.synonyms = synonyms.join(',')
-    pv.save
-  end
-
-
 end
