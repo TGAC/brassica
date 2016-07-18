@@ -140,9 +140,20 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
               end
             end
           end
+
+          it 'always supports filtering with id param' do
+            resource = create(model_klass)
+            query = { query: { id: resource.id } }
+
+            get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
+
+            expect(response).to be_success
+            expect(parsed_response).to have_key(model_name.pluralize)
+            expect(parsed_response[model_name.pluralize].first['id']).to eq resource.id
+          end
         end
 
-        if model_klass.ancestors.include?(Searchable) && model_klass != TraitDescriptor  # it implements fetching without importing Filterable
+        if model_klass.ancestors.include?(Searchable)
           it 'supports fetch query param', :elasticsearch do
             hit_attribute = model_klass.indexed_json_structure[:only].first
             term = create(model_klass).send(hit_attribute)

@@ -32,7 +32,7 @@ class PlantTrial < ActiveRecord::Base
   include TableData
 
   # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
-  def scoring_table_data(trait_descriptor_ids, uid = nil)
+  def scoring_table_data(trait_descriptor_ids, replicate_numbers, uid = nil)
     ts = TraitScore.arel_table
 
     psu_subquery = PlantScoringUnit.visible(uid)
@@ -51,10 +51,16 @@ class PlantTrial < ActiveRecord::Base
 
     plant_scoring_units.visible(uid).order('scoring_unit_name asc').map do |unit|
       scores = all_scores[unit.id] || []
-      [unit.scoring_unit_name] + trait_descriptor_ids.map do |td_id|
-        ts = scores.detect{ |s| s.trait_descriptor_id == td_id.to_i}
-        ts ? ts.score_value : '-'
-      end
+
+      [unit.scoring_unit_name] +
+        trait_descriptor_ids.map do |td_id|
+          scores_for_trait = scores.select{ |s| s.trait_descriptor_id == td_id.to_i}
+          (1..replicate_numbers[td_id.to_i]).map do |replicate_number|
+            replicate = scores_for_trait.detect{ |s| s.technical_replicate_number == replicate_number }
+            replicate ? replicate.score_value : '-'
+          end
+        end.flatten +
+        [unit.id]
     end
   end
 
@@ -70,6 +76,12 @@ class PlantTrial < ActiveRecord::Base
       'institute_id',
       'layout_file_name',
       'id'
+    ]
+  end
+
+  def self.numeric_columns
+    [
+      'trial_year'
     ]
   end
 

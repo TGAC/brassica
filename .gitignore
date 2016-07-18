@@ -30,3 +30,6 @@ config/database.yml
 
 # Paperclip uploads
 /public/system
+
+# Rspec config
+/.rspec

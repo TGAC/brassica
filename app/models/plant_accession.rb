@@ -12,6 +12,9 @@ class PlantAccession < ActiveRecord::Base
             presence: true,
             uniqueness: true
 
+  validates :originating_organisation,
+            presence: true
+
   validates :year_produced,
             length: { is: 4 },
             allow_blank: true
@@ -23,6 +26,7 @@ class PlantAccession < ActiveRecord::Base
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
   include Publishable
   include TableData
 
@@ -45,6 +49,12 @@ class PlantAccession < ActiveRecord::Base
     ]
   end
 
+  def self.numeric_columns
+    [
+      'year_produced'
+    ]
+  end
+
   def self.count_columns
     [
       'plant_scoring_units_count'
@@ -53,6 +63,7 @@ class PlantAccession < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: params_for_filter(table_columns) +
         [
           'id'

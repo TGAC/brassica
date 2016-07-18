@@ -1,7 +1,7 @@
 class SubmissionDecorator < Draper::Decorator
   delegate_all
 
-  def submission_type
+  def submission_type_tag
     h.content_tag(
       :span,
       I18n.t("submission.submission_type.#{object.submission_type}") + ':',

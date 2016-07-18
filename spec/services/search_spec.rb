@@ -12,26 +12,35 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
     create(:plant_variety, plant_variety_name: "Pvoo")
     create(:plant_variety, plant_variety_name: "Pvoobar")
-    create(:plant_variety, plant_variety_name: "Pvoobarbaz")
+    pv = create(:plant_variety, plant_variety_name: "Pvoobarbaz")
 
-    create(:plant_line, plant_line_name: "Ploob",
-                        common_name: "Ploo cabbage",
-                        taxonomy_term: TaxonomyTerm.first)
+    pl = create(:plant_line, plant_line_name: "Ploob",
+                             common_name: "Ploo cabbage",
+                             taxonomy_term: TaxonomyTerm.first)
     create(:plant_line, plant_line_name: "Ploobar",
                         common_name: "Ploobar cabbage",
                         taxonomy_term: TaxonomyTerm.second)
     create(:plant_line, plant_line_name: "Ploobarbaz",
                         common_name: "Ploobarbaz cabbage",
                         taxonomy_term: TaxonomyTerm.second)
+    mpl = create(:plant_line, plant_line_name: "Plantmale")
+    fpl = create(:plant_line, plant_line_name: "Plantfemale")
+    create(:plant_accession, originating_organisation: 'Belzebub $ Co.',
+                             year_produced: '1011',
+                             plant_line: pl)
+    create(:plant_accession, originating_organisation: 'Mefisto Inc.',
+                             year_produced: '2011',
+                             plant_line: nil,
+                             plant_variety: pv)
 
     pp1 = create(:plant_population, name: 'Ppoo',
                                     taxonomy_term: tt1,
-                                    male_parent_line: nil,
+                                    male_parent_line: mpl,
                                     female_parent_line: nil)
     pp2 = create(:plant_population, name: 'Ppoobar',
                                     taxonomy_term: TaxonomyTerm.second,
                                     male_parent_line: nil,
-                                    female_parent_line: nil)
+                                    female_parent_line: fpl)
     create(:plant_population, name: 'Ppoobarbaz',
                               taxonomy_term: TaxonomyTerm.second,
                               male_parent_line: nil,
@@ -75,7 +84,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
                                map_version_no: '333',
                                map_version_date: nil,
                                plant_population: pp1)
-    mp1 = create(:map_position, map_position: '102.8',
+    mp1 = create(:map_position, map_position: '102.83',
                                 linkage_group: lg1,
                                 population_locus: plo1)
     mp2 = create(:map_position, map_position: '54.2',
@@ -84,25 +93,47 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     create(:map_locus_hit, atg_hit_seq_source: 'GATTACA',
                            population_locus: plo1,
                            map_position: mp1,
+                           bac_hit_name: 'KBrB058F21',
                            linkage_map: lm1)
     create(:map_locus_hit, atg_hit_seq_source: 'TTTTTTT',
                            population_locus: plo2,
                            map_position: mp2,
+                           bac_hit_name: 'DifferentBHN',
                            linkage_map: lm2)
-    create(:plant_trial, project_descriptor: 'Project X',
-                         plant_population: pp1)
-    create(:plant_trial, project_descriptor: 'Yet Another Big Success',
-                         plant_population: pp2)
+
+    pt1 = create(:plant_trial, project_descriptor: 'Project X',
+                               trial_year: 1999,
+                               plant_population: pp1)
+    pt2 = create(:plant_trial, project_descriptor: 'Yet Another Big Success',
+                               plant_trial_name: 'Trial to be remembered',
+                               trial_year: 2011,
+                               plant_population: pp2)
     t1 = create(:trait, name: 'leafy leaf')
     t2 = create(:trait, name: 'uranium uptake')
-    td1 = create(:trait_descriptor, trait: t1)
-    td2 = create(:trait_descriptor, trait: t2)
+    td1 = create(:trait_descriptor, trait: t1,
+                                    scoring_method: 'There is method in this madness')
+    td2 = create(:trait_descriptor, trait: t2,
+                                    scoring_method: 'Secret method')
+    create(:plant_scoring_unit, scoring_unit_frame_size: '315226 plants',
+                                plant_trial: pt1,
+                                design_factor: nil)
+    df = create(:design_factor, design_factors: ['field_1','row_4','plant_56'])
+    create(:plant_scoring_unit, scoring_unit_name: 'Y', plant_trial: pt2,
+                                design_factor: df)
+
     ptd1 = create(:processed_trait_dataset, trait_descriptor: td1)
     ptd2 = create(:processed_trait_dataset, trait_descriptor: td2)
     create(:qtl, outer_interval_start: '55.7',
+                 qtl_rank: '97531',
+                 linkage_group: lg2,
                  processed_trait_dataset: ptd1)
     create(:qtl, outer_interval_start: '347.11',
+                 linkage_group: nil,
                  processed_trait_dataset: ptd2)
+
+    create(:qtl_job, linkage_map: lm1,
+                     inner_confidence_threshold: '77777',
+                     qtl_method: 'There is method in this madness')
 
     # Special cases
     create(:plant_line, plant_line_name: "12345@67890")
@@ -112,7 +143,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
   end
 
   after(:all) do
-    DatabaseCleaner.clean
+    DatabaseCleaner.clean_with :truncation
   end
 
   describe "#plant_populations" do
@@ -122,6 +153,12 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(Search.new("Ppoobarbaz").plant_populations.count).to eq 1
       expect(Search.new("Ppoobarbaz").plant_populations.first.id.to_i).
         to eq PlantPopulation.find_by!(name: 'Ppoobarbaz').id
+    end
+
+    it "finds PP by both male and female line names" do
+      expect(Search.new("lantfe").plant_populations.count).to eq 1
+      expect(Search.new("male").plant_populations.count).to eq 2
+      expect(Search.new("Plantma").plant_populations.count).to eq 1
     end
 
     it "finds PPs by taxonomy_term.name" do
@@ -169,24 +206,48 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     end
   end
 
+  describe '#plant_accessions' do
+    it 'finds PA by both whole and a portion of :originating_organisation' do
+      expect(Search.new("Belzebub").plant_accessions.count).to eq 1
+      expect(Search.new("Belzeb").plant_accessions.count).to eq 1
+    end
+
+    it 'finds PA by plant_variety.plant_variety_name' do
+      expect(Search.new("Pvoobarbaz").plant_accessions.count).to eq 1
+    end
+
+    it 'finds PA by :year_produced' do
+      expect(Search.new("1011").plant_accessions.count).to eq 1
+    end
+
+    it 'does not find PA by a portion of :year_produced' do
+      expect(Search.new("11").plant_accessions.count).to eq 0
+    end
+  end
+
   describe '#map_locus_hits' do
     it 'finds MLH by :atg_hit_seq_source' do
       expect(Search.new("TT").map_locus_hits.count).to eq 2
       expect(Search.new("ATT").map_locus_hits.count).to eq 1
     end
 
+    it 'finds MLH by :bac_hit_name' do
+      expect(Search.new("KBrB058F21").map_locus_hits.count).to eq 1
+    end
+
     it 'finds MLH by exact map_position.map_position' do
-      expect(Search.new("102.8").map_locus_hits.count).to eq 1
+      expect(Search.new("102.83").map_locus_hits.count).to eq 1
     end
 
     it 'does not find MLH by inexact map_position.map_position' do
-      expect(Search.new("2.8").map_locus_hits.count).to eq 0
+      expect(Search.new("2.83").map_locus_hits.count).to eq 0
+      expect(Search.new("83").map_locus_hits.count).to eq 0
     end
   end
 
   describe '#map_positions' do
     it 'finds MP by :map_position' do
-      expect(Search.new("102.8").map_positions.count).to eq 1
+      expect(Search.new("102.83").map_positions.count).to eq 1
     end
 
     it 'does not find MP by inexact :map_position' do
@@ -264,6 +325,28 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     it 'finds PT by plant_population.name' do
       expect(Search.new("Ppoob").plant_trials.count).to eq 1
     end
+
+    it 'finds PT by full :trail_year' do
+      expect(Search.new("1999").plant_trials.count).to eq 1
+    end
+
+    it 'does not find PT by a portion of :trial_year' do
+      expect(Search.new("999").plant_trials.count).to eq 0
+    end
+  end
+
+  describe '#plant_scoring_units' do
+    it 'finds PSU by :scoring_unit_frame_size' do
+      expect(Search.new("315226").plant_scoring_units.count).to eq 1
+    end
+
+    it 'finds PSU by plant_trial.plant_trial_name' do
+      expect(Search.new("remembered").plant_scoring_units.count).to eq 1
+    end
+
+    it 'finds PSU by design_factor.design_factors item value' do
+      expect(Search.new('row_4').plant_scoring_units.count).to eq 1
+    end
   end
 
   describe '#qtl' do
@@ -275,12 +358,38 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(Search.new('347').qtl.count).to eq 0
     end
 
-    it 'finds QTL by trait_descriptor.trait.name' do
+    it 'does not find QTL by :qtl_rank anymore' do
+      expect(Search.new('97531').qtl.count).to eq 0
+    end
+
+    it 'finds QTL by trait.name' do
       expect(Search.new("leafy").qtl.count).to eq 1
+    end
+
+    it 'finds QTL by linkage_group.linkage_group_label' do
+      expect(Search.new("group2").qtl.count).to eq 1
+    end
+  end
+
+  describe '#qtl_jobs' do
+    it 'finds QTLJob by :qtl_method' do
+      expect(Search.new('madness').qtl_jobs.count).to eq 1
+    end
+
+    it 'finds QTLJob by full :inner_confidence_threshold' do
+      expect(Search.new('77777').qtl_jobs.count).to eq 1
+    end
+
+    it 'does not find QTLJob by partial :inner_confidence_threshold' do
+      expect(Search.new('7777').qtl_jobs.count).to eq 0
     end
   end
 
   describe '#trait_descriptors' do
+    it 'finds TD by :scoring_method' do
+      expect(Search.new("madness").trait_descriptors.count).to eq 1
+    end
+
     it 'finds TD by trait.name' do
       expect(Search.new("uranium").trait_descriptors.count).to eq 1
     end
@@ -303,7 +412,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
       expect(counts[:probes]).to eq Probe.count
       expect(counts[:plant_trials]).to eq PlantTrial.count
       expect(counts[:qtl]).to eq Qtl.count
+      expect(counts[:qtl_jobs]).to eq QtlJob.count
       expect(counts[:trait_descriptors]).to eq TraitDescriptor.count
+      expect(counts[:plant_scoring_units]).to eq PlantScoringUnit.count
+      expect(counts[:plant_accessions]).to eq PlantAccession.count
     end
 
     context "special cases" do

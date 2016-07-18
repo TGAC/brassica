@@ -10,8 +10,6 @@ class User < ActiveRecord::Base
   include Nondestroyable
 
   has_many :submissions
-  has_many :plant_populations, dependent: :nullify
-  has_many :plant_lines, dependent: :nullify
   has_one :api_key
 
   validates :login, presence: true, uniqueness: { case_sensitive: false }

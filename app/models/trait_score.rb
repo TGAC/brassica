@@ -3,7 +3,7 @@ class TraitScore < ActiveRecord::Base
   belongs_to :trait_descriptor, counter_cache: true, touch: true
   belongs_to :user
 
-  validates :score_value, presence: true
+  validates :score_value, :plant_scoring_unit_id, :trait_descriptor_id, presence: true
 
   include Filterable
   include Pluckable
@@ -47,7 +47,7 @@ class TraitScore < ActiveRecord::Base
       'traits.name',
       'score_value',
       'trait_descriptors.units_of_measurements',
-      'value_type',
+      'technical_replicate_number',
       'scoring_date',
       'plant_scoring_units.scoring_unit_name'
     ]

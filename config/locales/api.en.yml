@@ -462,6 +462,7 @@ en:
           desc: Additional information about the type of this population
         -
           name: description
+          create: Q
           desc: Textual description of the population,provided by the data publisher
         -
           name: date_established
@@ -1084,11 +1085,11 @@ en:
         -
           name: accession_originator
           create: Q
-          desc: Person who requested this accession
+          desc: Person who maintains this accession
         -
           name: originating_organisation
-          create: Q
-          desc: Name of the legal entity that requested this accession
+          create: required, Q
+          desc: Name of the legal entity that maintains this accession
         -
           name: year_produced
           create: Q
@@ -1142,7 +1143,9 @@ en:
 
           {
             "plant_accession": {
-              "plant_accession": "Accession1"
+              "plant_accession": "Accession1",
+              "originating_organisation": "EI",
+              "plant_line_id": 15523
             }
           }
 
@@ -1184,16 +1187,17 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: design_factor
-          format: object
-          create: readonly
-          desc: Additional information concerning the design of the population experiment
+          name: design_factor_id
+          format: int
+          desc: BIP identifier of the Design Factor object, which stores additional information concerning the design of this experiment
         -
           name: plant_accession_id
+          create: required
           format: int
           desc: BIP identifier of the associated database Plant Accession
         -
           name: plant_trial_id
+          create: required
           format: int
           desc: BIP identifier of the Plant Trial in the scope of which this plant scoring took place
         -
@@ -1213,7 +1217,64 @@ en:
 
           {
             "plant_scoring_unit": {
-              "scoring_unit_name": "Scoring2_2016"
+              "scoring_unit_name": "plant_2/2016",
+              "plant_accession_id": 755,
+              "plant_trial_id": 1
+            }
+          }
+
+    design_factor:
+      attrs:
+        -
+          name: id
+        -
+          name: design_factor_name
+          desc: An optional name assigned to this design factor
+        -
+          name: institute_id
+          desc: Name of the institute in case which designed the experiment
+        -
+          name: trial_location_name
+          desc: Optional name of the location where this design was used
+        -
+          name: design_unit_counter
+          create: required
+          desc: The ordinal number of a unique design factor for a given plant trial; it is safe to set it to the number of the smallest design factors (e.g. "354")
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: design_factors
+          format: "string[]"
+          create: required
+          desc: List of values for subsequent design factors, which go from the biggest factor to the smallest one, structures as factor_number (e.g. "block_2", "row_V", "plot_354")
+        -
+          name: plant_scoring_unit_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Plant Scoring Units which have this Design Factor in a Plant Trial
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "design_factor": {
+              "design_factor_name": "New design of our institute",
+              "design_factors": ["block_2", "row_V", "plot_354"],
+              "design_unit_counter": "354"
             }
           }
 
@@ -1300,6 +1361,10 @@ en:
           format: int
           desc: BIP identifier of the plant population that was the subject of this trial
         -
+          name: country_id
+          format: int
+          desc: BIP identifier of the country where this trial took place
+        -
           name: plant_scoring_unit_ids
           format: "int[]"
           create: readonly
@@ -1317,7 +1382,10 @@ en:
           {
             "plant_trial": {
               "plant_trial_name": "BIPrassica Trial Spring 2016",
-              "project_descriptor": "BIPrassica Project"
+              "project_descriptor": "BIPrassica Project",
+              "trial_year": "2016",
+              "place_name": "Norwich",
+              "country_id": 107
             }
           }
 
@@ -1389,6 +1457,14 @@ en:
           name: sequence
           create: required, Q
           desc: Exact sequence of the primer
+        -
+          name: sequence_id
+          create: Q
+          desc: Identifier of the primer sequence, in a source database
+        -
+          name: sequence_source_acronym
+          create: Q
+          desc: Name of the source database where the probe sequence can be obtained
         -
           name: description
           create: Q
@@ -1671,13 +1747,14 @@ en:
           name: id
         -
           name: descriptor_label
+          create: Q
           desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
           desc: Plant trait category described by this descriptor
         -
           name: units_of_measurements
-          create: required
+          create: required, Q
           desc: How the trait is measured
         -
           name: trait_grades
@@ -1688,7 +1765,7 @@ en:
           desc: Where the trait is measured
         -
           name: scoring_method
-          create: required
+          create: required, Q
           desc: Method used to obtain the trait measure
         -
           name: when_to_score
@@ -1701,6 +1778,7 @@ en:
           desc: Special conditions taken into account when scoring the trait
         -
           name: materials
+          create: Q
           desc: Materials required for proper scoring
         -
           name: instrumentation_required
@@ -1775,7 +1853,8 @@ en:
             "trait_descriptor": {
               "units_of_measurements": "percent total seed fatty acid (%)",
               "category": "seed composition",
-              "trait_id": "1353"
+              "scoring_method": "Gas Chromatography",
+              "trait_id": 1353
             }
           }
 
@@ -1785,16 +1864,17 @@ en:
           name: id
         -
           name: score_value
-          create: required, Q
+          create: required
           desc: Value measured and recorded in the trial
         -
           name: value_type
-          create: Q
           desc: Meaning of the score value
+        -
+          name: technical_replicate_number
+          desc: Ordinal number of the technical replicate for which this score was measured
         -
           name: scoring_date
           format: date
-          create: Q
           desc: Day on which the scoring was performed
         -
           name: comments
@@ -1810,10 +1890,12 @@ en:
           name: confirmed_by_whom
         -
           name: plant_scoring_unit_id
+          create: required
           format: int
           desc: BIP identifier of the Plant Scoring Unit that contains this trait score
         -
           name: trait_descriptor_id
+          create: required
           format: int
           desc: BIP identifier of the Trait Descriptor that provides more information about the scored trait
         -
@@ -1828,7 +1910,9 @@ en:
 
           {
             "trait_score": {
-              "score_value": "1000"
+              "score_value": "1000",
+              "plant_scoring_unit_id": 56456,
+              "trait_descriptor_id": 2
             }
           }
 

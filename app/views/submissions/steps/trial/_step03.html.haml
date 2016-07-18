@@ -1,4 +1,88 @@
 .alert.alert-info
-  Nothing to see here, move along now.
+  %p
+    The BIP service assumes that each row in the trait scoring sheet, that you are going to submit,
+    represents a so-called <b>plant scoring unit</b>. For raw data it may simply be an individual
+    plant in your experiment. For processed data a plant scoring unit may represent a set of plants,
+    related to each other in some way. It is mandatory to provide plant accession information
+    for each plant scoring unit in the scoring sheet to be submitted.
 
-= content.hidden_field :_i_am_fake
+  %p
+    In case you would like to check what plant accessions are currently registered in the BIP, please use the
+    = link_to 'plant accessions table view', data_tables_path(model: 'plant_accessions'), target: '_blank'
+    (you may filter data in that table with the <b>Search</b> text field).
+
+  %p
+    If you submit raw data, you will have an option to submit technical replicate readings as
+    well as design factors (for instance, ordinal numbers for plots, reps and so forth).
+
+.form-group
+  = label_tag "Origin of genetic material used in this trial"
+  %br
+  = content.label :lines_or_varieties, "Plant lines", value: 'plant_lines', class: 'radio-inline' do
+    = content.radio_button :lines_or_varieties, 'plant_lines', checked: true
+    Plant lines
+  = content.label :lines_or_varieties, "Plant varieties", value: 'plant_varieties', class: 'radio-inline' do
+    = content.radio_button :lines_or_varieties, 'plant_varieties'
+    Plant varieties
+  %small.help-block
+    Per each plant scoring unit submitted, the source of genetic material should be provided.
+    It may either be a <b>plant line</b> or a <b>plant variety (cultivar)</b>.
+    This choice depends on the type of experiment you are conducting. You should select
+    the <b>Plant lines</b> option if you
+    %ul
+      %li created new genetic material (using, for instance, crossing or mutagenesis) in the course of your project,
+      %li or you use former plant line genetic material which is not (yet) recognized as a variety or a cultivar.
+    In other cases you should probably select the the <b>Plant varieties</b> option.
+
+- if submission.raw_data?
+  %fieldset
+    %legend Design factors
+    .alert.alert-info
+      %p
+        Please select the appropriate statistical design factors suitable for your experimental setup from
+        the drop-down fields. Start by selecting the <b>highest design factor first</b>
+        and proceed with the next ones in <b>decreasing</b> size.
+
+      %p
+        If your factors are not present in the list provided, please add them manually. While creating new
+        factors, please make sure you comply with the rule to submit them in decreasing size, so with the
+        highest missing factor (e.g. treatment) first, to lowest missing factor (e.g. plot).
+        You are able to mix both predefined factors, from the drop-down list, and your own factor names.
+
+    - values = @content.design_factor_names
+    - (0...10).each do |idx|
+      .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
+        - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
+        = content.combo_field "design_factor_names[]", options, value: values[idx],
+            label: "Design factor #{idx + 1}", idx: idx
+
+  %fieldset
+    %legend Technical replicate numbers
+    .alert.alert-info
+      %p
+        If you are using <i>technical replicates</i> in your experiment, please
+        set the number of replicates you are scoring per trait. Leaving the value
+        at <b>1</b> means you are not using technical replicates for a given trait.
+
+      - if submission.sorted_trait_names.size > 1
+        %p
+          You can have varying number of technical replicates for different traits.
+
+    - sorted_trait_names = submission.sorted_trait_names
+    - col_count = [4, sorted_trait_names.size].min
+    - col_size = 12 / col_count
+
+    - sorted_trait_names.each_slice(col_count).with_index do |trait_names, row_idx|
+      .form-group
+        .row
+          - trait_names.each do |trait_name|
+            %div{ class: "col-md-#{col_size}" }= content.label :technical_replicate_numbers, trait_name
+
+        .row
+          - trait_names.each.with_index do |trait_name, col_idx|
+            - idx = row_idx * col_count + col_idx
+
+            %div{ class: "col-md-#{col_size}", data: { idx: idx } }
+              = content.text_field :technical_replicate_numbers,
+                  value: @content.technical_replicate_numbers[idx] || 1,
+                  label: false, name: "submission[content][technical_replicate_numbers][]"

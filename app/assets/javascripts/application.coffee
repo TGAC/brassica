@@ -13,6 +13,7 @@
 #= require jquery
 #= require jquery_ujs
 #= require bootstrap-sprockets
+#= require select2
 #= require jquery.dataTables
 #= require dataTables.tableTools
 #= require dataTables.bootstrap
@@ -50,6 +51,6 @@ $ ->
 
   # Email address replacer
   $('.email-link').each ->
-    this.setAttribute('href', this.getAttribute('href').replace('ae_address', 'Annemarie.Eckes@tgac.ac.uk'))
-    this.setAttribute('href', this.getAttribute('href').replace('bip_address', 'bip@tgac.ac.uk'))
-    $(this).html($(this).html().replace('bip_address', 'bip@tgac.ac.uk'))
+    this.setAttribute('href', this.getAttribute('href').replace('sarah_address', 'sarahcdyer@gmail.com'))
+    this.setAttribute('href', this.getAttribute('href').replace('bip_address', 'bip@earlham.ac.uk'))
+    $(this).html($(this).html().replace('bip_address', 'bip@earlham.ac.uk'))
