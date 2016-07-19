@@ -5,10 +5,13 @@ require 'net/http'
 require 'net/https'
 
 # A sample Ruby client which:
-#  1. Creates (or finds pre-created) Trait Descriptors for the three tocopherol-related traits
-#  2. Creates a new Plant Trial object representing the submitted study
-#  3. Parses an input .csv file in search for trait scoring data
-#  4. Submits that data to BIP using the BIP API Key provided
+#  1. Creates plant population submission.
+#  2. Creates Plant variety submission.
+#  3. Creates Plant Lines and links them with their Plant_varieties.
+#  4. Creates Plant Accession submission and links these with Plant_lines.
+#  5. Parses an input .csv file in search for Accessions, Lines, Varieties
+#     and other input columns seen in # defining input columns from CSV
+#  6. Submits that data to BIP using the BIP API Key provided
 
 if ARGV.size < 2
   STDERR.puts 'Not enough arguments. Usage:'
@@ -40,10 +43,6 @@ SRA_IDENTIFIER=2
 VARIETY=3
 CROP_TYPE=4
 ACCESSION_SOURCE=5
-
-
-
-
 
 
 
@@ -127,8 +126,7 @@ puts '4. Submitting plant_accessions'
                         create_record('plant_accession',
                             plant_accession: plant_accession,
                             originating_organisation: originating_organisation,
-                            plant_variety_id: plant_variety_id,
-		            plant_line_id: plant_line_id,
+		                        plant_line_id: plant_line_id,
                             comments: comments  #SRA identifier
                                      )
                              else
@@ -148,7 +146,7 @@ CSV.foreach(ARGV[0]) do |row|
   plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
   plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id)
   associate_line_with_population(plant_line_id, plant_population_id)
-  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],plannt_line_id,row[SRA_IDENTIFIER])
+  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],plant_line_id,row[SRA_IDENTIFIER])
 end
 
 puts '4. Finished'
