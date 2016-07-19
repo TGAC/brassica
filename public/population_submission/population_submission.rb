@@ -6,22 +6,22 @@ require 'net/https'
 
 # A sample Ruby client which:
 #  1. Creates plant population submission.
-#  2. Creates Plant variety submission.
-#  3. Creates Plant Lines and links them with their Plant_varieties.
-#  4. Creates Plant Accession submission and links these with Plant_lines.
-#  5. Parses an input .csv file in search for Accessions, Lines, Varieties
-#     and other input columns seen in # defining input columns from CSV
-#  6. Submits that data to BIP using the BIP API Key provided
+#  2. Parses an input .csv file in search for Accessions, Lines, Varieties
+#     and other input columns seen in # defining input columns from CSV.
+#     For each line it the CSV it:
+#    2a. Creates a Plant Variety (or finds in BIP, if it exists)
+#    2b. Creates a Plant Line and links it with the Plant Variety.
+#    2c. Creates a Plant Accession and links it with the Plant Line.
+#  It submits data to BIP using the BIP API Key provided
 
 if ARGV.size < 2
   STDERR.puts 'Not enough arguments. Usage:'
-  STDERR.puts ' > ruby bip_client_example.rb input_file.csv api_key'
+  STDERR.puts ' > ruby population_submission.rb input_file.csv api_key'
   exit 1
 end
 
 @client = Net::HTTP.new('bip.tgac.ac.uk', 443)
 @client.use_ssl = true
-@client.verify_mode = OpenSSL::SSL::VERIFY_NONE
 @headers = {
   'Content-Type' => 'application/json',
   'X-BIP-Api-Key' => ARGV[1]
@@ -29,6 +29,14 @@ end
 
 def pluralize_class(class_name)
   class_name == 'plant_variety' ? 'plant_varieties' : "#{class_name}s"
+end
+
+def test_error(response)
+  unless response['reason'].nil?
+    STDERR.puts "Encountered the following BIP request error."
+    STDERR.puts response['reason']
+    exit 1
+  end
 end
 
 def call_bip(request)
@@ -60,14 +68,6 @@ def create_record(class_name, data)
   response[class_name]['id']
 end
 
-def test_error(response)
-  unless response['reason'].nil?
-    STDERR.puts "Encountered the following BIP request error."
-    STDERR.puts response['reason']
-    exit 1
-  end
-end
-
 
 puts " 1. Creating experimental plant_population "
 
@@ -79,8 +79,7 @@ plant_population_id = create_record('plant_population',
 )
 
 
-puts ' 2. Submitting plant_varieties'
-
+# Function that finds or submits plant_varieties
 def record_plant_variety(plant_variety_name, crop_type)
   request = Net::HTTP::Get.new("/api/v1/plant_varieties?plant_variety[query][plant_variety_name]=#{URI.escape plant_variety_name}", @headers)
   response = call_bip request
@@ -95,8 +94,7 @@ def record_plant_variety(plant_variety_name, crop_type)
 end
 
 
-puts ' 3. Submitting plant_lines'
-
+# Function that finds or submits plant_lines
 def record_plant_line(plant_line_name, plant_variety_id)
   request = Net::HTTP::Get.new("/api/v1/plant_lines?plant_line[query][plant_line_name]=#{URI.escape plant_line_name}", @headers)
   response = call_bip request
@@ -110,6 +108,9 @@ def record_plant_line(plant_line_name, plant_variety_id)
   end
 end
 
+
+# Function that associates a plant line with a plant population through
+# the so-called plant population lists
 def associate_line_with_population(plant_line_id, plant_population_id)
   create_record('plant_population_list',
     plant_line_id: plant_line_id,
@@ -117,29 +118,28 @@ def associate_line_with_population(plant_line_id, plant_population_id)
   )
 end
 
-puts '4. Submitting plant_accessions'
 
-      def record_plant_accessions(plant_accession, originating_organisation,plant_line_id,comments)
-        request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
-        response = call_bip request
-        plant_accession_id = if response['meta']['total_count'] == 0
-                        create_record('plant_accession',
-                            plant_accession: plant_accession,
-                            originating_organisation: originating_organisation,
-		                        plant_line_id: plant_line_id,
-                            comments: comments  #SRA identifier
-                                     )
-                             else
-                       response['plant_accessions'][0]['id']
-                     end
-      end
+# Function that finds or submits plant_accessions
 
-
-
-# Now, parse the input scoring file and record all important information
+def record_plant_accessions(plant_accession, originating_organisation, plant_line_id, comments)
+  request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
+  response = call_bip request
+  if response['meta']['total_count'] == 0
+    create_record('plant_accession',
+      plant_accession: plant_accession,
+      originating_organisation: originating_organisation,
+      plant_line_id: plant_line_id,
+      comments: comments  #SRA identifier
+    )
+  else
+    response['plant_accessions'][0]['id']
+  end
+end
 
 
+puts " 2. Parsing input CSV file and processing it line by line "
 
+# Now, parse the input CSV file and record all important information
 CSV.foreach(ARGV[0]) do |row|
   next if row[0]== 'Accession_name' # omit the header
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
@@ -149,4 +149,4 @@ CSV.foreach(ARGV[0]) do |row|
   record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],plant_line_id,row[SRA_IDENTIFIER])
 end
 
-puts '4. Finished'
+puts '3. Finished'
