@@ -32,5 +32,16 @@ namespace :curate do
       puts "#{i+1}: #{sequence_id},#{accession}"
     end
     File.write('db/data/bac_accessions.csv', bac_accessions.map{ |seq,acc| "#{seq},#{acc}" }.join)
+
+    puts "Building mapping for MLH associated sequences"
+    sequence_ids = MapLocusHit.pluck(:associated_sequence_id).uniq.compact
+    seq_accessions = {}
+    sequence_ids.each_with_index do |sequence_id, i|
+      next unless sequence_id.length >= 8
+      accession = `curl -s "http://www.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&rettype=acc&retmode=text&id=#{sequence_id}"`
+      seq_accessions[sequence_id] = accession
+      puts "#{i+1}: #{sequence_id},#{accession}"
+    end
+    File.write('db/data/mlh_accessions.csv', seq_accessions.map{ |seq,acc| "#{seq},#{acc}" }.join)
   end
 end
