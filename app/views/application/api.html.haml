@@ -12,6 +12,7 @@
           %li= link_to "Submitting data", "#submitting-data"
           %li= link_to "Publishing data", "#publishing-data"
           %li= link_to "Deleting data", "#deleting-data"
+          %li= link_to "API client example", "#client-example"
           %li
             %hr
 
@@ -343,6 +344,31 @@
           %p The call was a success, the resource was deleted
           %pre.response
             %code= t('api.delete.examples.ok_response')
+
+      %h3#client-example.section-heading API client example
+
+      %p
+        In order to demonstrate the capabilities of the API and to assist new programmers in preparing
+        their own BIP client code, we provide a fairly complex example of a client program, written in
+        Ruby (Ruby MRI interpreter version 2.2 is required to run it).
+
+      %p
+        The sample client consists of two elements:
+        %ul
+          %li= link_to 'sample trait scoring data, to be submitted', 'client_example/tocopherols.csv'
+          %li= link_to 'the actual script which submits this data.', 'client_example/bip_client_example.rb'
+
+      %p
+        You will also need your API key. Please refer to the
+        = link_to 'general introduction', '#general-introduction'
+        for instructions on how to obtain it. Additional information regarding the example is contained in
+        the script file - the code is rather self-explanatory, and we provide embedded comments.
+
+      %p
+        It should be noted that this script is not meant to be a generic, all-purpose client for the BIP API.
+        Rather, its purpose is to provide an example of how to prepare your own scripts, matching
+        specific user requirements. The sample data was generated on the basis of RIPR project data, with
+        altered (fictional) values.
 
       %h3#tables-introduction.section-heading Detailed model introduction
 
