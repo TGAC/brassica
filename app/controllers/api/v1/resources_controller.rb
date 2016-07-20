@@ -16,10 +16,8 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def index
-    index = Api::Index.new(model)
+    index = Api::Index.new(model, api_key.user)
     resources = index.where(index_params).order(:id)
-    resources = resources.visible(api_key.user_id) if resources.respond_to? :visible
-    resources = index.load_associations(resources)
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
