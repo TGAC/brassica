@@ -102,6 +102,7 @@ class MarkerAssay < ActiveRecord::Base
           'primer_a_id',
           'primer_b_id',
           'probes.id',
+          'user_id',
           'id'
         ]
     ]

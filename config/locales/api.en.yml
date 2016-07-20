@@ -118,6 +118,11 @@ en:
         Content-Type: application/json
         Accept: application/json
         X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+      only_mine_request: |-
+        GET /api/v1/plant_varieties?only_mine=true HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
 
     searching:
       params:

@@ -128,6 +128,15 @@
 
           = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998" }
 
+      %p
+        One additional special filter, called <code>only_mine</code> may be used to fetch
+        only the resources which you own (that is, which were created by you). This is how
+        you use this special filter:
+
+      %pre
+        %code= t('api.filtering.only_mine_request')
+
+      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?only_mine=true" }
 
       %h3#searching-for-data.section-heading Searching for data
 

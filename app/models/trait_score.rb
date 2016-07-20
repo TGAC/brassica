@@ -71,6 +71,7 @@ class TraitScore < ActiveRecord::Base
           'trait_descriptors.id',
           'plant_scoring_units.plant_trial_id',
           'plant_scoring_units.id',
+          'user_id',
           'id'
         ]
     ]

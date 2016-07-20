@@ -28,7 +28,7 @@ RSpec.describe PlantPopulation do
 
     it 'will only query by permitted params' do
       search = PlantPopulation.filter(
-        query: { user_id: @pp.user.id }
+        query: { published: @pp.published }
       )
       expect(search.count).to eq 0
       search = PlantPopulation.filter(

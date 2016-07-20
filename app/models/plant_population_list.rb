@@ -10,5 +10,15 @@ class PlantPopulationList < ActiveRecord::Base
   validates :plant_population_id, presence: true
 
   include Publishable
+
+  def self.permitted_params
+    [
+      query: [
+        'user_id',
+        'id'
+      ]
+    ]
+  end
+
   include Annotable
 end

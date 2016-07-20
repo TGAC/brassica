@@ -96,10 +96,11 @@ class PlantPopulation < ActiveRecord::Base
         'description'
       ],
       query: [
-        'id',
         'name',
         'canonical_population_name',
-        'description'
+        'description',
+        'user_id',
+        'id'
       ]
     ]
   end
