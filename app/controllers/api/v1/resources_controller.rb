@@ -16,13 +16,8 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def index
-    filter_params = params[model.name].presence || {}
-    if params['only_mine']
-      filter_params[:query] = (filter_params[:query] || {}).merge(user_id: @api_key.user_id)
-    end
-
     index = Api::Index.new(model)
-    resources = index.where(filter_params).order(:id)
+    resources = index.where(index_params).order(:id)
     resources = resources.visible(api_key.user_id) if resources.respond_to? :visible
     resources = index.load_associations(resources)
     resources = paginate_collection(resources)
@@ -168,6 +163,10 @@ class Api::V1::ResourcesController < Api::BaseController
 
   def decorate(resource)
     Api::Decorator.decorate(resource)
+  end
+
+  def index_params
+    Api::IndexParams.new(model, params, api_key.user).params
   end
 
   def create_params
