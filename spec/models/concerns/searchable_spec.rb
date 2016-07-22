@@ -71,7 +71,7 @@ RSpec.describe Searchable do
     end
 
     context "after update", :elasticsearch do
-      let!(:published_plant_line) { create(:plant_line, published: true) }
+      let!(:published_plant_line) { create(:plant_line, published: true, data_owned_by: "Batz and Sons") }
       let!(:unpublished_plant_line) { create(:plant_line, published: false) }
 
       it "indexes record" do
@@ -84,6 +84,23 @@ RSpec.describe Searchable do
         published_plant_line.update_attribute(:published, false)
 
         expect(es.exists(id: published_plant_line.id, index: index)).to be_falsey
+      end
+
+      it "does not remove unpublished, updated record" do
+        expect {
+          unpublished_plant_line.update_attribute(:comments, 'some text')
+        }.not_to raise_error
+      end
+
+      it "updates published, updated record" do
+        expect {
+          published_plant_line.update_attribute(:data_owned_by, 'The Great Data Owner')
+        }.to change {
+          es.get(id: published_plant_line.id, index: index)["_source"]["data_owned_by"]
+        }.
+        from("Batz and Sons").to("The Great Data Owner")
+
+        expect(es.exists(id: published_plant_line.id, index: index)).to be_truthy
       end
     end
 
