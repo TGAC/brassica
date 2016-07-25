@@ -51,6 +51,7 @@ SRA_IDENTIFIER=2
 VARIETY=3
 CROP_TYPE=4
 ACCESSION_SOURCE=5
+YEAR_PRODUCED=6
 
 
 
@@ -121,13 +122,14 @@ end
 
 # Function that finds or submits plant_accessions
 
-def record_plant_accessions(plant_accession, originating_organisation, plant_line_id, comments)
+def record_plant_accessions(plant_accession, originating_organisation,year_produced, plant_line_id, comments)
   request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
   response = call_bip request
   if response['meta']['total_count'] == 0
     create_record('plant_accession',
       plant_accession: plant_accession,
       originating_organisation: originating_organisation,
+      year_produced: year_produced,
       plant_line_id: plant_line_id,
       comments: comments  #SRA identifier
     )
@@ -146,7 +148,7 @@ CSV.foreach(ARGV[0]) do |row|
   plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
   plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id)
   associate_line_with_population(plant_line_id, plant_population_id)
-  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],plant_line_id,row[SRA_IDENTIFIER])
+  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],row[YEAR_PRODUCED],plant_line_id,row[SRA_IDENTIFIER])
 end
 
 puts '3. Finished'
