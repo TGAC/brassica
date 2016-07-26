@@ -57,9 +57,8 @@ class Submission::PlantPopulationFinalizer
 
     attrs.merge!(submission.content.step01.to_h)
     attrs.merge!(submission.content.step02.to_h)
-    if taxonomy_term = TaxonomyTerm.find_by!(name: submission.content.step02.taxonomy_term)
-      attrs.merge!(taxonomy_term: taxonomy_term)
-    end
+    taxonomy_term = TaxonomyTerm.find_by(name: submission.content.step02.taxonomy_term)
+    attrs.merge!(taxonomy_term: taxonomy_term)
 
     if population_type = PopulationType.find_by!(population_type: submission.content.step02.population_type)
       attrs.merge!(population_type: population_type)
