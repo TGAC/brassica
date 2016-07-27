@@ -19,8 +19,8 @@
           = t 'tables.plant_scoring_units.scoring_unit_name'
         - @trait_descriptors.map{ |td| [td.id, td.try(:trait).try(:name)] }.each do |id, column|
           - (1..@replicate_numbers[id]).each do |replicate_number|
-            - if replicate_number == 1 && @replicate_numbers[id] == 1
-              %th= column
-            - else
-              %th= "#{column} rep#{replicate_number}"
+            %th.trait_scores_score_value_column
+              = column
+              - unless replicate_number == 1 && @replicate_numbers[id] == 1
+                = " rep#{replicate_number}"
     %tbody
