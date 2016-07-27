@@ -2,16 +2,16 @@ class PlantScoringUnit < ActiveRecord::Base
   belongs_to :design_factor
   belongs_to :plant_trial, counter_cache: true, touch: true
   belongs_to :plant_accession, counter_cache: true, touch: true
-  belongs_to :plant_part
   belongs_to :user
 
   has_many :trait_scores, dependent: :destroy
 
-  validates :scoring_unit_name, presence: true
+  validates :scoring_unit_name, :plant_trial_id, :plant_accession_id, presence: true
 
   include Relatable
   include Filterable
   include Pluckable
+  include Searchable
   include Publishable
   include TableData
 
@@ -21,9 +21,9 @@ class PlantScoringUnit < ActiveRecord::Base
       'number_units_scored',
       'scoring_unit_sample_size',
       'scoring_unit_frame_size',
+      'design_factors.design_factors',
       'date_planted',
       'plant_trials.plant_trial_name',
-      'plant_parts.plant_part',
       'plant_accessions.plant_accession'
     ]
   end
@@ -36,10 +36,12 @@ class PlantScoringUnit < ActiveRecord::Base
 
   def self.permitted_params
     [
+      :fetch,
       query: params_for_filter(table_columns) +
         [
           'plant_trials.id',
           'plant_accessions.id',
+          'user_id',
           'id',
           'id' => []
         ]
@@ -51,10 +53,6 @@ class PlantScoringUnit < ActiveRecord::Base
       'plant_accessions.id',
       'plant_trials.id'
     ]
-  end
-
-  def self.json_options
-    { include: [:design_factor] }
   end
 
   include Annotable

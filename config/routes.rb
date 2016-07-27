@@ -22,8 +22,11 @@ Rails.application.routes.draw do
   resources :depositions, only: [:new, :create]
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]
+  resources :plant_parts, only: [:index]
   resources :plant_populations, only: [:index]
+  resources :plant_trials, only: [:index, :show]
   resources :trait_descriptors, only: [:index]
+  resources :traits, only: [:index]
   resources :trial_scorings, only: [:show]
   resources :data_tables, only: [:index, :show]
 
@@ -46,10 +49,16 @@ Rails.application.routes.draw do
         plural_model_name: /#{Api.writable_models.map { |klass| klass.name.underscore.pluralize }.join("|")}/
       }
 
+      publishable_constraints = {
+        plural_model_name: /#{Api.publishable_models.map { |klass| klass.name.underscore.pluralize }.join("|")}/
+      }
+
       get ":plural_model_name", to: 'resources#index', constraints: get_constraints
       get ":plural_model_name/:id", to: 'resources#show', constraints: get_constraints
       post ":plural_model_name", to: 'resources#create', constraints: post_constraints
       delete ":plural_model_name/:id", to: 'resources#destroy', constraints: post_constraints
+      patch ":plural_model_name/:id/publish", to: 'resources#publish', constraints: publishable_constraints
+      patch ":plural_model_name/:id/revoke", to: 'resources#revoke', constraints: publishable_constraints
     end
   end
 end

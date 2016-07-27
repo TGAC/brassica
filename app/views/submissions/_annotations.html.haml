@@ -17,3 +17,5 @@
         - else
           = label_tag attr, attr.humanize.capitalize
           = text_area_tag attr, nil, class: 'form-control'
+
+        %small.help-block= t "submission.common.#{attr}"

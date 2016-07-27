@@ -3,12 +3,10 @@ require 'rails_helper'
 RSpec.describe Submission do
 
   it { should validate_presence_of(:user) }
-  it { should validate_presence_of(:submission_type) }
 
   context "factory" do
     it "builds valid instance" do
       expect(build(:submission)).to be_valid
-
     end
 
     context "with :finalized trait" do
@@ -22,11 +20,57 @@ RSpec.describe Submission do
     end
   end
 
+  describe "#content_for?" do
+    subject { create(:submission, :population) }
+
+    before do
+      subject.content.update(:step02, taxonomy_term: "foobar")
+    end
+
+    it "returns true if any content for given step is present" do
+      expect(subject.content_for?(0)).to be_falsey
+      expect(subject.content_for?(1)).to be_truthy
+      expect(subject.content_for?(2)).to be_falsey
+      expect(subject.content_for?(3)).to be_falsey
+    end
+  end
+
+  describe "#step_no" do
+    it "returns 0-based step index" do
+      expect(build(:submission, step: "step01").step_no).to eq(0)
+      expect(build(:submission, step: "step02").step_no).to eq(1)
+      expect(build(:submission, step: "step03").step_no).to eq(2)
+      expect(build(:submission, step: "step04").step_no).to eq(3)
+    end
+  end
+
+  describe "#reset_step" do
+    subject { create(:submission, step: "step02") }
+
+    it "force resets submission to any further step" do
+      subject.reset_step(2)
+      expect(subject.step).to eq("step03")
+    end
+
+    it "force resets submission to any lesser step" do
+      subject.reset_step(0)
+      expect(subject.step).to eq("step01")
+    end
+
+    it "defaults to first step if given invalid step" do
+      subject.reset_step(999)
+      expect(subject.step).to eq("step01")
+
+      subject.reset_step(-212)
+      expect(subject.step).to eq("step01")
+    end
+  end
+
   describe '#submission_type' do
     let(:submission) { build(:submission, :population) }
 
     it 'allows only certain submission type values' do
-      %w(population trial qtl linkage_map).each do |t|
+      %w(population trial).each do |t|
         submission.submission_type = t
         expect(submission.valid?).to be_truthy
         expect(submission.send(t+'?')).to be_truthy
@@ -42,11 +86,7 @@ RSpec.describe Submission do
 
     it 'provides handy scopes to query certain types' do
       create(:submission, submission_type: :population)
-      create(:submission, submission_type: :qtl)
-      create(:submission, submission_type: :qtl)
-      expect(Submission.qtl.count).to eq 2
       expect(Submission.population.count).to eq 1
-      expect(Submission.linkage_map.count).to eq 0
       expect(Submission.trial.count).to eq 0
     end
   end
@@ -110,7 +150,7 @@ RSpec.describe Submission do
     let(:submission) { create(:submission) }
 
     it 'moves one step back' do
-      submission.update_attribute(:step, submission.steps.last)
+      submission.update_attribute(:step, 'step04')
       expect { submission.step_back }.to change { submission.step }.from('step04').to('step03')
     end
 
@@ -184,30 +224,30 @@ RSpec.describe Submission do
     let(:submission) { create(:submission, :trial, finalized: false) }
 
     before do
-      submission.content.update(:step03, upload_id: 7)
-      submission.content.update(:step04, comments: "Very important comment")
+      submission.content.update(:step04, upload_id: 7)
+      submission.content.update(:step06, comments: "Very important comment")
       submission.save!
     end
 
-    it "clears step03 of trial submission if step02 content is changed" do
-      expect(submission.content.step03.to_h).not_to be_blank
-      submission.content.update(:step02, trait_descriptor_list: ["trait X"])
-      submission.save!
-      expect(submission.reload.content.step03.to_h).to be_blank
-    end
-
-    it "does not clear step03 of trial submission if step02 content is not changed" do
-      expect(submission.content.step03.to_h).not_to be_blank
-      submission.content.update(:step02, trait_descriptor_list: [])
-      submission.save!
-      expect(submission.reload.content.step03.to_h).not_to be_blank
-    end
-
-    it "leaves step04 of trial submission intact if step02 content is changed" do
+    it "clears step04 of trial submission if step02 content is changed" do
       expect(submission.content.step04.to_h).not_to be_blank
       submission.content.update(:step02, trait_descriptor_list: ["trait X"])
       submission.save!
+      expect(submission.reload.content.step04.to_h).to be_blank
+    end
+
+    it "does not clear step04 of trial submission if step02 content is not changed" do
+      expect(submission.content.step04.to_h).not_to be_blank
+      submission.content.update(:step02, trait_descriptor_list: [])
+      submission.save!
       expect(submission.reload.content.step04.to_h).not_to be_blank
+    end
+
+    it "leaves step06 of trial submission intact if step02 content is changed" do
+      expect(submission.content.step06.to_h).not_to be_blank
+      submission.content.update(:step02, trait_descriptor_list: ["trait X"])
+      submission.save!
+      expect(submission.reload.content.step06.to_h).not_to be_blank
     end
   end
 

@@ -1,12 +1,12 @@
 module Submissions
   module Trial
     class Step04ContentForm < PlantTrialForm
-      property :publishability, default: 'publishable'
-      property :data_owned_by
-      property :data_provenance
-      property :comments
+      property :upload_id
 
-      validates :publishability, inclusion: { in: %w(publishable private) }
+      def upload
+        upload = Submission::Upload.trait_scores.find_by(id: upload_id)
+        SubmissionTraitScoresUploadDecorator.decorate(upload) if upload
+      end
     end
   end
 end

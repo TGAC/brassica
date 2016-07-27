@@ -33,6 +33,8 @@ RSpec.describe Annotable do
           instance.respond_to?('revocable?') ? { 'revocable?' => instance.revocable? } : {}
         ).merge(
           instance.respond_to?('private?') ? { 'private?' => instance.private? } : {}
+        ).merge(
+          instance.respond_to?('trait_name') ? { 'trait_name' => instance.trait_name } : {}
         )
         expect(instance.annotations_as_json).to eq test_hash
         expect(test_hash.values.map(&:nil?)).to all be_falsey

@@ -1,5 +1,7 @@
 class TraitDescriptor < ActiveRecord::Base
   belongs_to :user
+  belongs_to :trait
+  belongs_to :plant_part
 
   after_update { processed_trait_datasets.each(&:touch) }
   before_destroy { processed_trait_datasets.each(&:touch) }
@@ -8,84 +10,86 @@ class TraitDescriptor < ActiveRecord::Base
   has_many :trait_scores
   has_many :processed_trait_datasets
 
-  validates :descriptor_name, :category, presence: true
+  validates :trait_id, :units_of_measurements, :scoring_method, presence: true
 
+  include Relatable
+  include Filterable
   include Searchable
   include AttributeValues
   include Publishable
 
+  delegate :name, to: :trait, prefix: true
+
   def self.table_data(params = nil, uid = nil)
-    trait_descriptor_query = ''
+    pt_subquery = TraitScore.visible(uid).
+      select('trait_descriptor_id, ARRAY_AGG(DISTINCT(plant_trial_id)) as plant_trial_ids').
+      joins(:plant_scoring_unit).
+      group('trait_descriptor_id').
+      merge(PlantScoringUnit.visible(uid))
 
-    if params && params[:query].present? && params[:query][:id].present?
-      trait_descriptor_query = "WHERE td.id = #{params[:query][:id].to_i}"
-    elsif params && params[:fetch].present?
-      ids = Search.new(params[:fetch]).send(table_name).records.map(&:id)
-      trait_descriptor_query = "WHERE td.id IN (#{ids.join(',')})"
-    end
+    t_subquery = Trait.all
+    pp_subquery = PlantPart.all
 
-    if uid.present?
-      pub_scope = " AND td.published = true OR td.user_id = #{uid}"
-    else
-      pub_scope = " AND td.published = true"
-    end
-
-    query = <<-SQL
-      SELECT tt.name, pp.name, td.descriptor_name, pt.project_descriptor, c.country_name, cnt, qtlcnt, pp.id, pt.id, td.id
-        FROM
-        trait_descriptors td
-        LEFT OUTER JOIN
-          (SELECT trait_descriptor_id AS tdid, plant_trial_id AS ptid, COUNT(*) AS cnt FROM
-          (
-            SELECT * FROM trait_scores JOIN plant_scoring_units
-            ON (trait_scores.plant_scoring_unit_id = plant_scoring_units.id AND (plant_scoring_units.published = true #{uid.present? ? " OR plant_scoring_units.user_id = #{uid}" : ''}))
-            WHERE trait_scores.published = true #{uid.present? ? " OR trait_scores.user_id = #{uid}" : ''}
-          ) AS core
-          GROUP BY trait_descriptor_id, plant_trial_id) AS intable
-        ON intable.tdid = td.id
-        LEFT OUTER JOIN plant_trials pt ON (intable.ptid = pt.id AND (pt.published = true #{uid.present? ? " OR pt.user_id = #{uid}" : ''}))
-        LEFT OUTER JOIN plant_populations pp ON (pt.plant_population_id = pp.id AND (pp.published = true #{uid.present? ? " OR pp.user_id = #{uid}" : ''}))
-        LEFT OUTER JOIN countries c ON pt.country_id = c.id
-        LEFT OUTER JOIN taxonomy_terms tt ON pp.taxonomy_term_id = tt.id
-        LEFT OUTER JOIN (
-          SELECT td.id AS tdid2, COUNT(qtl.id) AS qtlcnt FROM
-          trait_descriptors td
-          LEFT OUTER JOIN processed_trait_datasets ptd ON ptd.trait_descriptor_id = td.id
-          LEFT OUTER JOIN qtl ON (qtl.processed_trait_dataset_id = ptd.id AND (qtl.published = true #{uid.present? ? " OR qtl.user_id = #{uid}" : ''}))
-          WHERE td.published = true #{uid.present? ? " OR td.user_id = #{uid}" : ''}
-          GROUP BY td.id
-        ) AS intable2
-        ON td.id = tdid2
-        #{trait_descriptor_query}
-        #{pub_scope}
-        ORDER BY tt.name, pt.project_descriptor;
-    SQL
-
-    connection.execute(query).values
+    query = all.
+      joins {[
+        pt_subquery.as('plant_trials_subquery').on { trait_descriptors.id == plant_trials_subquery.trait_descriptor_id }.outer,
+        t_subquery.as('traits').on { trait_descriptors.trait_id == traits.id }.outer,
+        pp_subquery.as('plant_parts').on { trait_descriptors.plant_part_id == plant_parts.id }.outer
+      ]}
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
+    query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
+    query = join_counters(query, uid)
+    query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
   end
 
   def self.table_columns
     [
-      'taxonomy_terms.name',
-      'plant_populations.name',
-      'descriptor_name',
-      'plant_trials.project_descriptor',
-      'countries.country_name',
-      'trait_scores_count',
-      'qtl_count'
+      'descriptor_label',
+      'traits.name',
+      'units_of_measurements',
+      'scoring_method',
+      'materials',
+      'plant_parts.plant_part'
     ]
   end
 
-  def self.indexed_json_structure
-    {
-      only: [
-        :descriptor_name
-      ]
-    }
+  def self.count_columns
+    [
+      'trait_scores_count'
+    ]
+  end
+
+  def self.permitted_params
+    [
+      :fetch,
+      search: [
+        'traits.name'
+      ],
+      query: params_for_filter(table_columns) +
+        [
+          'user_id',
+          'id'
+        ]
+    ]
+  end
+
+  def self.ref_columns
+    [
+      'traits.label',
+      'plant_parts.label',
+      'plant_trial_ids'
+    ]
   end
 
   def self.json_options
-    { include: [:trait_grades] }
+    {
+      except: :descriptor_name,
+      include: [:trait_grades, :trait]
+    }
+  end
+
+  def as_json(options = {})
+    super(options.merge(methods: [:trait_name] + (options[:methods] || [])))
   end
 
   include Annotable

@@ -39,18 +39,30 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
     @population_type ||= object.content.step02.population_type.presence
   end
 
-  def plant_line
-    return @plant_line if defined?(@plant_line)
-    return if ! plant_line_name
-    @plant_line = PlantLine.find_by(plant_line_name: plant_line_name)
+  def plant_lines
+    plant_line_ids = object.content.step03.plant_line_list.select { |el| el.to_i.to_s == el }
+    return [] if plant_line_ids.blank?
+    @plant_lines ||= PlantLine.visible(user_id).find(plant_line_ids)
   end
 
-  def plant_line_name
-    @plant_line_name ||= object.content.step02.plant_line.presence
+  def plant_line_names
+    @plant_line_names ||=
+      plant_lines.map(&:plant_line_name) |
+      object.content.step03.plant_line_list.reject { |el| el.to_i.to_s == el }
   end
 
   def parent_line_names
     [female_parent_line_name, male_parent_line_name].compact.select(&:present?)
+  end
+
+  def female_parent_line
+    return if female_parent_line_name.blank?
+    PlantLine.visible(user_id).find_by!(plant_line_name: female_parent_line_name)
+  end
+
+  def male_parent_line
+    return if male_parent_line_name.blank?
+    PlantLine.visible(user_id).find_by!(plant_line_name: male_parent_line_name)
   end
 
   def female_parent_line_name

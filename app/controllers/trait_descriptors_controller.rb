@@ -2,9 +2,10 @@ class TraitDescriptorsController < ApplicationController
 
   def index
     page = params[:page] || 1
-    descriptors = TraitDescriptor.where("descriptor_name ILIKE ?", "%#{params[:search][:descriptor_name]}%")
+    descriptors = TraitDescriptor.includes(:trait).references(:trait)
+    descriptors = descriptors.where("traits.name ILIKE ?", "%#{params[:search][:trait_name]}%")
     descriptors = descriptors.visible(current_user.try(:id))
-    descriptors = descriptors.order(:descriptor_name)
+    descriptors = descriptors.order('traits.name')
 
     render json: {
       results: descriptors.page(page),

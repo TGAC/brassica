@@ -5,15 +5,7 @@
 
   .row
     .col-sm-12
-      %ol.step-indicator
-        - Submission::STEPS.each_with_index do |step_name, step_no|
-
-          %li{ class:[ (:active if step_name == @submission.step), (:completed if step_name < @submission.step) ] }
-            .step
-              = step_no + 1
-            .panel
-              .panel-heading
-                %h4= t("submission.steps.#{@submission.submission_type}.#{step_name}.heading")
+      = render partial: "/submissions/step_indicators", locals: { submission: @submission }
 
   .well
     %h4= t("submission.steps.#{@submission.submission_type}.#{@submission.step}.heading")

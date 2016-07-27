@@ -1,16 +1,26 @@
-- if submission.publishable? && submission.revocable?
+- if submission.published? && submission.revocable?
+  - tooltip = capture do
+    .text-left= t('.revoke')
+
   = confirmable_action("Revoke publication",
                        submission,
                        url: revoke_submission_path(submission),
                        method: :patch,
+                       title: tooltip,
                        button_size: button_size)
-- elsif !submission.publishable?
+
+- elsif !submission.published?
+  - tooltip = capture do
+    .text-left= t('.publish')
+
   = confirmable_action("Publish",
                        submission,
                        url: publish_submission_path(submission),
                        method: :patch,
                        button_size: button_size,
-                       btn_class: "btn-primary")
+                       btn_class: "btn-primary",
+                       title: tooltip)
+
 - else
   = link_to "Deposit in Zendo",
             new_deposition_path(deposition: { submission_id: submission.id }),

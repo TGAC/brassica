@@ -16,10 +16,8 @@ class Api::V1::ResourcesController < Api::BaseController
   end
 
   def index
-    filter_params = params[model.name].presence
-
-    resources = Api::Index.new(model).where(filter_params).order(:id)
-    resources = resources.visible(api_key.user_id) if resources.respond_to? :visible
+    index = Api::Index.new(model, api_key.user)
+    resources = index.where(index_params).order(:id)
     resources = paginate_collection(resources)
     resources = decorate_collection(resources)
 
@@ -44,9 +42,7 @@ class Api::V1::ResourcesController < Api::BaseController
       create_params.merge(
         user_id: api_key.user_id,
         date_entered: Date.today,
-        entered_by_whom: api_key.user.full_name,
-        published: true,
-        published_on: Time.now
+        entered_by_whom: api_key.user.full_name
       )
     )
 
@@ -73,6 +69,36 @@ class Api::V1::ResourcesController < Api::BaseController
       render json: { reason: 'This resource is already published and irrevocable' }, status: :forbidden
     else
       resource.destroy
+      head :no_content
+    end
+  end
+
+  def publish
+    resource = model.klass.find_by(id: params[:id])
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.user != @api_key.user
+      render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
+    elsif resource.published?
+      render json: { reason: 'This resource is already published' }, status: :forbidden
+    else
+      resource.publish
+      head :no_content
+    end
+  end
+
+  def revoke
+    resource = model.klass.find_by(id: params[:id])
+    if resource.nil?
+      render json: { reason: 'Resource not found' }, status: :not_found
+    elsif resource.user != @api_key.user
+      render json: { reason: 'API key owner and resource owner mismatch' }, status: :unauthorized
+    elsif !resource.published?
+      render json: { reason: 'This resource is not published' }, status: :forbidden
+    elsif !resource.revocable?
+      render json: { reason: 'This resource is irrevocable' }, status: :forbidden
+    else
+      resource.revoke
       head :no_content
     end
   end
@@ -135,6 +161,10 @@ class Api::V1::ResourcesController < Api::BaseController
 
   def decorate(resource)
     Api::Decorator.decorate(resource)
+  end
+
+  def index_params
+    Api::IndexParams.new(model, params, api_key.user).params
   end
 
   def create_params

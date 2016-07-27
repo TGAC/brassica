@@ -46,16 +46,15 @@ class MarkerAssay < ActiveRecord::Base
     primer_subquery = Primer.visible(uid)
     probe_subquery = Probe.visible(uid)
 
-    query = (params && (params[:query] || params[:fetch])) ? filter(params) : all
-    query = query.
+    query = MarkerAssay.
       joins {[
         primer_subquery.as('primers').on { primer_a_id == primers.id }.outer,
         primer_subquery.as('primer_bs_marker_assays').on { primer_b_id == primer_bs_marker_assays.id }.outer,
         probe_subquery.as('probes').on { probe_id == probes.id }.outer
       ]}
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.
       where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
-
     query = join_counters(query, uid)
     query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
   end
@@ -103,6 +102,7 @@ class MarkerAssay < ActiveRecord::Base
           'primer_a_id',
           'primer_b_id',
           'probes.id',
+          'user_id',
           'id'
         ]
     ]

@@ -6,7 +6,7 @@ module Submissions
       property :plant_line_list
 
       validates :female_parent_line, :male_parent_line, inclusion: {
-        in: PlantLine.pluck(:plant_line_name),
+        in: :plant_line_names,
         allow_blank: true
       }
 
@@ -56,6 +56,10 @@ module Submissions
         end
       end
 
+      def plant_line_names
+        PlantLine.pluck(:plant_line_name)
+      end
+
       def plant_line_exists?(*attrs)
         PlantLine.where(*attrs).exists?
       end
@@ -91,7 +95,7 @@ module Submissions
       end
 
       def plant_line_list
-        super.try { |pll| pll.select(&:present?) }
+        super.try { |pll| pll.select(&:present?) } || []
       end
 
       def new_plant_lines

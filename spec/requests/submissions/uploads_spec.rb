@@ -44,27 +44,13 @@ RSpec.describe "Submission uploads" do
     end
 
     describe "GET /submissions/:submission_id/uploads/new" do
-      it 'generates a simple trait scores template' do
-        trait_descriptor = create(:trait_descriptor)
-        submission.content.update(:step02,
-                                  trait_descriptor_list: [trait_descriptor.id.to_s])
-        submission.save
+      it 'calls generator service with the submission as an argument' do
+        expect_any_instance_of(Submission::TraitScoreTemplateGenerator).
+          to receive(:call)
 
         get "/submissions/#{submission.id}/uploads/new"
 
         expect(response).to be_success
-        expect(response.body.lines[0]).
-          to eq "Plant scoring unit name\t#{trait_descriptor.descriptor_name}\n"
-        expect(response.body.lines[2]).
-          to eq "sample_scoring_unit_B_name__replace_it\tsample_B_value_0__replace_it\n"
-      end
-
-      it 'does not break for no-traits submissions' do
-        get "/submissions/#{submission.id}/uploads/new"
-
-        expect(response).to be_success
-        expect(response.body.lines[0]).
-          to eq "Plant scoring unit name\t\n"
       end
     end
   end

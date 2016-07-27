@@ -6,6 +6,7 @@ class Api
   def self.readable_models
     [
       Country,
+      DesignFactor,
       LinkageGroup,
       LinkageMap,
       MapLocusHit,
@@ -26,6 +27,7 @@ class Api
       Qtl,
       QtlJob,
       TaxonomyTerm,
+      Trait,
       TraitDescriptor,
       TraitScore
     ]
@@ -48,6 +50,7 @@ class Api
       PlantVariety,
       TraitDescriptor,
       TraitScore,
+      DesignFactor,
 
       PopulationLocus,
       Primer,
@@ -59,6 +62,10 @@ class Api
 
   def self.readonly_models
     readable_models - writable_models
+  end
+
+  def self.publishable_models
+    writable_models.select { |m| m.include?(Publishable) }
   end
 
   def self.readable_model?(model)

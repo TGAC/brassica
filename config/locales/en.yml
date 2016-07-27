@@ -37,6 +37,9 @@ en:
       plant_varieties_count:
         one: Found %{count} plant variety
         other: Found %{count} plant varieties
+      plant_accessions_count:
+        one: Found %{count} plant accession
+        other: Found %{count} plant accessions
       map_locus_hits_count:
         one: Found %{count} map locus hit
         other: Found %{count} map locus hits
@@ -64,9 +67,15 @@ en:
       plant_trials_count:
         one: Found %{count} plant trial
         other: Found %{count} plant trials
+      plant_scoring_units_count:
+        one: Found %{count} plant scoring units
+        other: Found %{count} plant scoring units
       qtl_count:
         one: Found %{count} quantitative trait locus
         other: Found %{count} quantitative trait loci
+      qtl_jobs_count:
+        one: Found %{count} QTL jobs
+        other: Found %{count} QTL job
       trait_descriptors_count:
         one: Found %{count} trait descriptor
         other: Found %{count} trait descriptors
@@ -76,3 +85,16 @@ en:
     cookies_text: To be of better service to you this website makes use of cookies
     ok: Accept cookies
     learn_more: More info
+
+  submissions:
+    publishing:
+      publish: |
+        This submission is not yet visible to other users. Clicking this button will
+        immediately make it visible to everybody, but you will have one week to
+        change your mind in case of a mistake. After one week the publication becomes
+        permanent.
+
+      revoke: |
+        Revoking a publication will render all data comprising this submission
+        invisible to anyone except yourself. A revoked publication can be republished
+        at a later date, if you choose to do so.

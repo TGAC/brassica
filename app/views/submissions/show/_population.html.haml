@@ -1,11 +1,15 @@
-= submission_value @submission, :population_name
+= submission_value @submission, :population_name, "Population name",
+    data_tables_path(model: :plant_populations, query: { id: @submission.submitted_object_id })
 = submission_value @submission, :description
 = submission_value @submission, :owned_by
 = submission_value @submission, :population_type
 = submission_value @submission, :species_name, 'Species'
-= submission_value @submission, :plant_line_name, 'Plant line'
-= submission_value @submission, :female_parent_line_name, 'Female parent line'
-= submission_value @submission, :male_parent_line_name, 'Male parent line'
+= submission_value @submission, :plant_line_names, 'Plant lines',
+    data_tables_path(model: :plant_lines, query: { "plant_populations.id": @submission.submitted_object_id })
+= submission_value @submission, :female_parent_line_name, 'Female parent line',
+    data_tables_path(model: :plant_lines, query: { id: @submission.female_parent_line.try(:id) })
+= submission_value @submission, :male_parent_line_name, 'Male parent line',
+    data_tables_path(model: :plant_lines, query: { id: @submission.male_parent_line.try(:id) })
 = submission_value @submission, :data_owned_by
 = submission_value @submission, :data_provenance
 = submission_value @submission, :comments

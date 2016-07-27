@@ -9,7 +9,17 @@ class PopulationType < ActiveRecord::Base
   validates :population_class,
             presence: true
 
+  include Filterable
+
   def self.population_types
     order(:population_type).pluck(:population_type)
+  end
+
+  def self.permitted_params
+    [
+      query: [
+        'id'
+      ]
+    ]
   end
 end

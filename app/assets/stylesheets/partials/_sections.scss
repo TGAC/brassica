@@ -157,6 +157,10 @@
     }
   }
 
+  .request + p {
+    margin-top: 20px;
+  }
+
   .response {
     display: block;
     max-height: 350px;
@@ -181,6 +185,13 @@
         font-size: 13px;
         font-weight: 500;
         padding: 4px 20px;
+      }
+
+      > hr {
+        font-weight: 500;
+        margin-top: 0;
+        margin-bottom: 0;
+        margin-left: 20px;
       }
     }
     > .active {

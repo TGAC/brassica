@@ -1,0 +1,24 @@
+.alert.alert-warning
+  %p
+    Please, double check data correctness as further changes will require
+    contact with support team.
+  %p
+    By default sending your submission will make provided data
+    %strong publicly available.
+    You can keep your data private by changing
+    %strong visibility status
+    below.
+  %p
+    In case you decide to make your data public, you will have exactly
+    %strong one week of revocation period,
+    during which you may decide to revert the visibility to
+    private. After one week of being public, the submission is no longer revocable.
+
+.form-group
+  = form.label :visibility, "Visibility status"
+
+  %div.checkbox
+    %label{ for: :submission_content_visibility }
+      = form.check_box :visibility, { }, 'published', 'private'
+      Make provided data publicly available for browsing
+

@@ -19,6 +19,7 @@
     .actions {
       float: right;
       width: 17%;
+      margin-top: 6px;
       text-align: right;
     }
   }
@@ -107,6 +108,13 @@
           text-decoration: none !important;
         }
       }
+    }
+  }
+
+  .uploaded-layout {
+    img.layout-image {
+      display: block;
+      margin: 0.5em 0 1em;
     }
   }
 }

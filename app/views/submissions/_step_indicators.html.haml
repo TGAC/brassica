@@ -1,0 +1,21 @@
+- submission = nil unless defined?(submission)
+
+- if submission
+  - submission_step = submission.step
+  - submission_type = submission.submission_type
+
+%ol.step-indicator
+  - Submission::STEPS.fetch(submission_type).each_with_index do |step_name, step_no|
+
+    - if submission_step
+      - klass = [(:active if step_name == submission_step), (:completed if step_name < submission_step)]
+
+    %li{ class: klass }
+      .step
+        - if submission && step_name != submission_step && submission.content_for?(step_name)
+          = link_to step_no + 1, submission_path(submission, step: step_no), method: :patch, data: { "step-to": step_no + 1 }
+        - else
+          = step_no + 1
+      .panel
+        .panel-heading
+          %h4= t("submission.steps.#{submission_type}.#{step_name}.heading")

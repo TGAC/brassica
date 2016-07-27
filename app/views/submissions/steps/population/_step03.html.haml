@@ -25,7 +25,7 @@
   .panel-heading
     %h4 Add new <b>Plant line</b>
 
-  .panel-body
+  .panel-body{"data-dirty-context": "new-plant-line"}
     .form-group
       = label_tag :plant_line_name, nil, class: 'required'
       = text_field_tag :plant_line_name, nil,

@@ -46,7 +46,7 @@ RSpec.describe Filterable do
     it 'filters when fetch param is present' do
       @searchable.each do |searchable|
         expect(searchable).
-          to receive(:filter).with(query).and_return(searchable.none)
+          to receive(:filter).with(any_args).and_return(searchable.none)
         searchable.table_data(query)
       end
     end

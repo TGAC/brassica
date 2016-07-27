@@ -34,18 +34,24 @@ module SubmissionsHelper
     decorator(submission).further_details.html_safe
   end
 
-  def submission_value(submission, attr, label = nil)
+  def submission_value(submission, attr, label = nil, url = nil)
     value = decorator(submission).send(attr)
+    value = value.join(", ") if value.is_a?(Array)
     label ||= attr.to_s.humanize
+    url = nil unless submission.finalized?
 
     render partial: "submissions/show/value",
-           locals: { value: value, label: label }
+           locals: { value: value, label: label, url: url }
   end
 
   def submission_form(submission, &block)
+    submission = submission.object if submission.is_a?(Draper::Decorator)
     options = {
       builder: Submissions::FormBuilder,
-      html: { class: "edit-submission" }
+      html: {
+        class: "edit-submission",
+        data: { "step": submission.step_no }
+      }
     }
 
     form_for(submission, options, &block)

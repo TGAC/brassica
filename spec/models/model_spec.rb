@@ -1,5 +1,5 @@
 require 'rails_helper'
-nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit]
+nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit, Trait]
 
 RSpec::Matchers.define :display_column do |expected|
   match do |actual|
@@ -27,9 +27,13 @@ RSpec.describe ActiveRecord::Base do
 
   it 'defines permitted query params as strings only' do
     ActiveRecord::Base.descendants.each do |model|
-      if model.respond_to? :permitted_params
-        expect(model.send(:permitted_params).dup.extract_options![:query].map(&:class)).
-          to all be_in([String, Hash])
+      if model.respond_to?(:permitted_params)
+        query = model.send(:permitted_params).detect{ |x| x.is_a?(Hash) && x[:query].present? }
+        if query
+          hashes, others = query[:query].partition{ |q| q.is_a?(Hash) }
+          expect(others).to all be_an(String)
+          expect(hashes.map(&:values).flatten).to all match_array []
+        end
       end
     end
   end
@@ -38,7 +42,7 @@ RSpec.describe ActiveRecord::Base do
     Api.writable_models.each do |model_klass|
       next if nullify_exclusions.include? model_klass # Some classes are not expected to follow this rule.
       instance = create(model_klass)
-      (all_belongs_to(model_klass) - [:user]).each do |belongs_to|
+      (all_belongs_to(model_klass) - [:user, :trait]).each do |belongs_to|
         unless instance.send("#{belongs_to}_id").nil?
           instance.send(belongs_to).destroy
           expect(instance.reload.send("#{belongs_to}_id")).to be_nil
@@ -49,10 +53,13 @@ RSpec.describe ActiveRecord::Base do
 
   it 'prevents assignment of invalid foreign keys' do
     Api.writable_models.each do |model_klass|
-      instance = create(model_klass)
-      all_belongs_to(model_klass).each do |belongs_to|
-        expect{ instance.update("#{belongs_to}_id" => 555666) }.
-          to raise_error ActiveRecord::InvalidForeignKey
+      # Exception created due to the fact that the custom validator present in PA interferes with this test
+      unless model_klass == PlantAccession
+        instance = create(model_klass)
+        all_belongs_to(model_klass).each do |belongs_to|
+          expect{ instance.update("#{belongs_to}_id" => 555666) }.
+            to raise_error ActiveRecord::InvalidForeignKey
+        end
       end
     end
   end
@@ -71,7 +78,7 @@ RSpec.describe ActiveRecord::Base do
         next if searchable == Qtl
         instance = create(searchable)
         instance.as_indexed_json.each do |k, v|
-          next if k == 'id'
+          next if k == 'id' || k == 'trait_name'  # twice the same, doesn't hurt
           if v.instance_of? Hash
             v.each do |column, value|
               if value.instance_of? Hash
@@ -118,15 +125,14 @@ RSpec.describe ActiveRecord::Base do
   end
 
   context 'publishable records' do
-    it 'contains published column in all tables except those belonging to a specified set' do
-      omitted_tables = [
+    let(:omitted_tables) {
+      [
         'api_keys',
         'countries',
         'schema_migrations',
         'submission_uploads',
         'submissions',
         'users',
-        'design_factors',
         'genotype_matrices',
         'pop_type_lookup',
         'processed_trait_datasets',
@@ -136,9 +142,12 @@ RSpec.describe ActiveRecord::Base do
         'taxonomy_terms',
         'trait_grades',
         'plant_parts',
-        'restriction_enzymes'
+        'restriction_enzymes',
+        'traits'
       ]
+    }
 
+    it 'contains published column in all tables except those belonging to a specified set' do
       tables = ActiveRecord::Base.connection.tables
       tables.reject!{|t| omitted_tables.include? t}
 
@@ -148,18 +157,34 @@ RSpec.describe ActiveRecord::Base do
     end
 
     it 'does not allow ownerless unpublished records' do
-      ActiveRecord::Base.send(:subclasses).each do |model|
-        if (model.column_names & ['user_id', 'published']).length == 2
+      ActiveRecord::Base.send(:subclasses).
+        reject { |model| model.table_name.in?(omitted_tables) }.
+        select { |model| (model.column_names & ['user_id', 'published']).length == 2 }.
+        each do |model|
           record = model.new(user: nil, published: false)
           expect(record.valid?).to be_falsy
           expect(record.errors[:published]).to eq ['An ownerless record must have its published flag set to true.']
         end
+    end
+
+    it 'allows query by user_id' do
+      Api.writable_models.each do |model|
+        query = model.send(:permitted_params).detect{ |x| x.is_a?(Hash) && x[:query].present? }[:query]
+        expect(query).to include 'user_id'
       end
     end
   end
 
-  it 'includes all numeric columns in table columns' do
-    pending
-    fail
+  context 'when having includes in json_options' do
+    it 'never includes publishable models' do
+      ActiveRecord::Base.send(:subclasses).each do |model|
+        if model.respond_to?(:json_options) && model.json_options[:include].present?
+          model.json_options[:include].each do |included_relation|
+            related_model = model.reflect_on_association(included_relation).klass
+            expect(related_model.respond_to?(:published)).to be_falsey
+          end
+        end
+      end
+    end
   end
 end

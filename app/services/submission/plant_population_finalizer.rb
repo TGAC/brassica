@@ -57,15 +57,14 @@ class Submission::PlantPopulationFinalizer
 
     attrs.merge!(submission.content.step01.to_h)
     attrs.merge!(submission.content.step02.to_h)
-    if taxonomy_term = TaxonomyTerm.find_by!(name: submission.content.step02.taxonomy_term)
-      attrs.merge!(taxonomy_term: taxonomy_term)
-    end
+    taxonomy_term = TaxonomyTerm.find_by(name: submission.content.step02.taxonomy_term)
+    attrs.merge!(taxonomy_term: taxonomy_term)
 
     if population_type = PopulationType.find_by!(population_type: submission.content.step02.population_type)
       attrs.merge!(population_type: population_type)
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:publishability))
+    attrs.merge!(submission.content.step04.to_h.except(:visibility))
     attrs.delete(:owned_by)
 
     if PlantPopulation.where(name: attrs[:name]).exists?
@@ -91,7 +90,7 @@ class Submission::PlantPopulationFinalizer
   def update_submission
     submission.update_attributes!(
       finalized: true,
-      publishable: publishable?,
+      published: publish?,
       submitted_object_id: @plant_population.id
     )
   end
@@ -101,8 +100,8 @@ class Submission::PlantPopulationFinalizer
     raise ActiveRecord::Rollback
   end
 
-  def publishable?
-    @publishable ||= submission.content.step04.publishability.to_s == 'publishable'
+  def publish?
+    @publish ||= submission.content.step04.visibility.to_s == 'published'
   end
 
   def common_data
@@ -110,8 +109,8 @@ class Submission::PlantPopulationFinalizer
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
       user: submission.user,
-      published: publishable?,
-      published_on: (Time.now if publishable?)
+      published: publish?,
+      published_on: (Time.now if publish?)
     }
   end
 end

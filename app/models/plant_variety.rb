@@ -13,6 +13,7 @@ class PlantVariety < ActiveRecord::Base
   before_destroy { plant_lines.each(&:touch) }
 
   has_many :plant_lines
+  has_many :plant_accessions
 
   validates :plant_variety_name,
             presence: true,
@@ -43,11 +44,13 @@ class PlantVariety < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
-      query: params_for_filter(table_columns) + [
-        'plant_populations.id',
-        'id',
-        'id' => []
-      ],
+      query: params_for_filter(table_columns) +
+        [
+          'plant_populations.id',
+          'user_id',
+          'id',
+          'id' => []
+        ],
       search: [
         :plant_variety_name
       ]

@@ -91,7 +91,6 @@ en:
               ]
             }
 
-
         default_attribute_values:
           -
             name: entered_by_whom
@@ -116,6 +115,11 @@ en:
         X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
       multi_request: |-
         GET /api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998 HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+      only_mine_request: |-
+        GET /api/v1/plant_varieties?only_mine=true HTTP/1.1
         Content-Type: application/json
         Accept: application/json
         X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
@@ -194,6 +198,32 @@ en:
           }
         }
 
+    publishing:
+      create_private_request: |-
+        POST /api/v1/trait_scores HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+        {
+          "trait_score": {
+            "published": false,
+            ...
+          }
+        }
+
+      publish_request: |-
+        PATCH /api/v1/trait_scores/:id/publish HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+      revoke_request: |-
+        PATCH /api/v1/trait_scores/:id/revoke HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
     delete:
       request: |-
         DELETE /api/v1/plant_populations/5555 HTTP/1.1
@@ -249,6 +279,10 @@ en:
         taxonomy_term_id:
           format: int
           desc: BIP identifier of a Taxonomy Term entry related to this record
+        published_on:
+          format: datetime
+          create: readonly
+          desc: The day and time the data was published
       show:
         example: |-
           GET %{url} HTTP/1.1
@@ -268,11 +302,11 @@ en:
           name: id
         -
           name: country_code
-          format: string
+          create: Q
           desc: ISO 3166-1 alpha-3 code of this Country
         -
           name: country_name
-          format: string
+          create: Q
           desc: Name of this Country in English
         -
           name: plant_trial_ids
@@ -365,6 +399,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
+        -
+          name: published_on
 
       create:
         example: |-
@@ -390,6 +426,13 @@ en:
           name: description
           desc: Longer text explaining what part of plant this record represents
         -
+          name: label
+          desc: Plant Ontology identifier, if available
+        -
+          name: canonical
+          format: boolean
+          desc: Set to true if the term is defined in Plant Ontology; false otherwise
+        -
           name: described_by_whom
           desc: The person or organization who described this dictionary entry
         -
@@ -403,9 +446,9 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: plant_scoring_unit_ids
+          name: trait_descriptor_ids
           format: "int[]"
-          desc: Zero or more BIP identifiers of Plant Scoring Units that were scored using this Plant Part
+          desc: Zero or more BIP identifiers of Trait Descriptors that describe traits scored using this Plant Part
 
     plant_population:
       attrs:
@@ -424,6 +467,7 @@ en:
           desc: Additional information about the type of this population
         -
           name: description
+          create: Q
           desc: Textual description of the population,provided by the data publisher
         -
           name: date_established
@@ -489,6 +533,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Population Lists, which serve as a join table between Plant Lines and Plant Populations
+        -
+          name: published_on
 
       create:
         example: |-
@@ -529,6 +575,8 @@ en:
           format: int
           create: required
           desc: BIP identifier of the Plant Line related to this list
+        -
+          name: published_on
 
       create:
         example: |-
@@ -613,10 +661,17 @@ en:
           create: writeonly
           desc: Zero or more BIP identifiers of countries that this variety is registered in
         -
+          name: plant_accession_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of related Plant Accessions
+        -
           name: plant_line_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Lines classified under this plant variety
+        -
+          name: published_on
 
       create:
         example: |-
@@ -721,6 +776,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Quantitative Trait Loci related to this group
+        -
+          name: published_on
 
       create:
         example: |-
@@ -801,6 +858,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Qtl Jobs that computed elements of this map
+        -
+          name: published_on
 
       create:
         example: |-
@@ -873,6 +932,8 @@ en:
           name: map_position_id
           format: int
           desc: BIP identifier of the Map Position of this locus hit
+        -
+          name: published_on
 
       create:
         example: |-
@@ -927,6 +988,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Map Locus Hits related to this position
+        -
+          name: published_on
 
       create:
         example: |-
@@ -995,6 +1058,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Map Positions related to this marker assay
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1025,11 +1090,11 @@ en:
         -
           name: accession_originator
           create: Q
-          desc: Person who requested this accession
+          desc: Person who maintains this accession
         -
           name: originating_organisation
-          create: Q
-          desc: Name of the legal entity that requested this accession
+          create: required, Q
+          desc: Name of the legal entity that maintains this accession
         -
           name: year_produced
           create: Q
@@ -1054,12 +1119,25 @@ en:
         -
           name: plant_line_id
           format: int
+          create: required (if no plant_variety_id)
           desc: BIP identifier of the associated Plant Line
+        -
+          name: plant_variety_id
+          format: int
+          create: required (if no plant_line_id)
+          desc: BIP identifier of the associated Plant Variety
         -
           name: plant_scoring_unit_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units performed for this plant
+        -
+          name: published_on
+
+      note:
+        <b>NOTE:</b> you should link a new Plant Accession to either a Plant Line of a Plant Variety.
+        So, excatly one of <code>plant_line_id</code> and <code>plant_variety_id</code> attributes
+        should be provided (but never both).
 
       create:
         example: |-
@@ -1070,7 +1148,9 @@ en:
 
           {
             "plant_accession": {
-              "plant_accession": "Accession1"
+              "plant_accession": "Accession1",
+              "originating_organisation": "EI",
+              "plant_line_id": 15523
             }
           }
 
@@ -1112,20 +1192,17 @@ en:
         -
           name: confirmed_by_whom
         -
-          name: design_factor
-          format: object
-          create: readonly
-          desc: Additional information concerning the design of the population experiment
-        -
-          name: plant_part_id
+          name: design_factor_id
           format: int
-          desc: BIP identifier of the plant part record that describes what part of plant was used for scoring
+          desc: BIP identifier of the Design Factor object, which stores additional information concerning the design of this experiment
         -
           name: plant_accession_id
+          create: required
           format: int
           desc: BIP identifier of the associated database Plant Accession
         -
           name: plant_trial_id
+          create: required
           format: int
           desc: BIP identifier of the Plant Trial in the scope of which this plant scoring took place
         -
@@ -1133,6 +1210,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Trait Scores recorded in this scoring unit
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1143,7 +1222,64 @@ en:
 
           {
             "plant_scoring_unit": {
-              "scoring_unit_name": "Scoring2_2016"
+              "scoring_unit_name": "plant_2/2016",
+              "plant_accession_id": 755,
+              "plant_trial_id": 1
+            }
+          }
+
+    design_factor:
+      attrs:
+        -
+          name: id
+        -
+          name: design_factor_name
+          desc: An optional name assigned to this design factor
+        -
+          name: institute_id
+          desc: Name of the institute in case which designed the experiment
+        -
+          name: trial_location_name
+          desc: Optional name of the location where this design was used
+        -
+          name: design_unit_counter
+          create: required
+          desc: The ordinal number of a unique design factor for a given plant trial; it is safe to set it to the number of the smallest design factors (e.g. "354")
+        -
+          name: comments
+        -
+          name: entered_by_whom
+        -
+          name: date_entered
+        -
+          name: data_owned_by
+        -
+          name: data_provenance
+        -
+          name: confirmed_by_whom
+        -
+          name: design_factors
+          format: "string[]"
+          create: required
+          desc: List of values for subsequent design factors, which go from the biggest factor to the smallest one, structures as factor_number (e.g. "block_2", "row_V", "plot_354")
+        -
+          name: plant_scoring_unit_ids
+          format: "int[]"
+          create: readonly
+          desc: Zero or more BIP identifiers of Plant Scoring Units which have this Design Factor in a Plant Trial
+
+      create:
+        example: |-
+          POST %{url} HTTP/1.1
+          Content-Type: application/json
+          Accept: application/json
+          X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
+          {
+            "design_factor": {
+              "design_factor_name": "New design of our institute",
+              "design_factors": ["block_2", "row_V", "plot_354"],
+              "design_unit_counter": "354"
             }
           }
 
@@ -1165,7 +1301,7 @@ en:
           desc: Additional descriptive information concerning the trial
         -
           name: trial_year
-          create: Q
+          create: required, Q
           desc: Year (or years) the trial took place
         -
           name: institute_id
@@ -1177,6 +1313,7 @@ en:
           desc: Site where the plant trial was performed
         -
           name: place_name
+          create: required
           desc: Place where the plant trial was performed
         -
           name: country
@@ -1229,10 +1366,16 @@ en:
           format: int
           desc: BIP identifier of the plant population that was the subject of this trial
         -
+          name: country_id
+          format: int
+          desc: BIP identifier of the country where this trial took place
+        -
           name: plant_scoring_unit_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Plant Scoring Units recorded during this trial
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1244,7 +1387,10 @@ en:
           {
             "plant_trial": {
               "plant_trial_name": "BIPrassica Trial Spring 2016",
-              "project_descriptor": "BIPrassica Project"
+              "project_descriptor": "BIPrassica Project",
+              "trial_year": "2016",
+              "place_name": "Norwich",
+              "country_id": 107
             }
           }
 
@@ -1288,6 +1434,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Map Locus Hits associated with this locus
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1315,6 +1463,14 @@ en:
           create: required, Q
           desc: Exact sequence of the primer
         -
+          name: sequence_id
+          create: Q
+          desc: Identifier of the primer sequence, in a source database
+        -
+          name: sequence_source_acronym
+          create: Q
+          desc: Name of the source database where the probe sequence can be obtained
+        -
           name: description
           create: Q
           desc: Additional description of the primer provided by the person who submitted the data
@@ -1338,6 +1494,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of marker assays related to that primer (3` end)
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1393,6 +1551,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of marker assays related to this probe
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1487,6 +1647,8 @@ en:
           name: linkage_group_id
           format: int
           desc: BIP identifier of the Linkage Group that this QTL is associated with
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1566,6 +1728,8 @@ en:
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of QTLs that were defined as a result of this QTL job execution
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1588,17 +1752,14 @@ en:
           name: id
         -
           name: descriptor_label
+          create: Q
           desc: Unique label assigned to this descriptor by the database curator
         -
           name: category
-          create: required, Q
-          desc: Plant trait category described by this this descriptor
-        -
-          name: descriptor_name
-          create: required, Q
-          desc: Common name used to describe the trait
+          desc: Plant trait category described by this descriptor
         -
           name: units_of_measurements
+          create: required, Q
           desc: How the trait is measured
         -
           name: trait_grades
@@ -1609,6 +1770,7 @@ en:
           desc: Where the trait is measured
         -
           name: scoring_method
+          create: required, Q
           desc: Method used to obtain the trait measure
         -
           name: when_to_score
@@ -1621,6 +1783,7 @@ en:
           desc: Special conditions taken into account when scoring the trait
         -
           name: materials
+          create: Q
           desc: Materials required for proper scoring
         -
           name: instrumentation_required
@@ -1663,10 +1826,26 @@ en:
         -
           name: confirmed_by_whom
         -
+          name: plant_part_id
+          format: int
+          desc: BIP identifier of the plant part record that describes what part of plant was used for scoring this trait
+        -
+          name: trait_id
+          create: required
+          format: int
+          desc: BIP identifier of the record in the Trait vocabulary that defines the scored trait
+        -
+          name: trait
+          format: object
+          create: readonly
+          desc: Entry in BIP traits vocabulary this Trait Descriptor refers to; describes the scored trait in detail
+        -
           name: trait_score_ids
           format: "int[]"
           create: readonly
           desc: Zero or more BIP identifiers of Trait Scores measured for this plant trait in various projects
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1677,8 +1856,10 @@ en:
 
           {
             "trait_descriptor": {
-              "descriptor_name": "Invisible trait",
-              "category": "Metaphysical"
+              "units_of_measurements": "percent total seed fatty acid (%)",
+              "category": "seed composition",
+              "scoring_method": "Gas Chromatography",
+              "trait_id": 1353
             }
           }
 
@@ -1688,16 +1869,17 @@ en:
           name: id
         -
           name: score_value
-          create: required, Q
+          create: required
           desc: Value measured and recorded in the trial
         -
           name: value_type
-          create: Q
           desc: Meaning of the score value
+        -
+          name: technical_replicate_number
+          desc: Ordinal number of the technical replicate for which this score was measured
         -
           name: scoring_date
           format: date
-          create: Q
           desc: Day on which the scoring was performed
         -
           name: comments
@@ -1713,12 +1895,16 @@ en:
           name: confirmed_by_whom
         -
           name: plant_scoring_unit_id
+          create: required
           format: int
           desc: BIP identifier of the Plant Scoring Unit that contains this trait score
         -
           name: trait_descriptor_id
+          create: required
           format: int
           desc: BIP identifier of the Trait Descriptor that provides more information about the scored trait
+        -
+          name: published_on
 
       create:
         example: |-
@@ -1729,7 +1915,9 @@ en:
 
           {
             "trait_score": {
-              "score_value": "1000"
+              "score_value": "1000",
+              "plant_scoring_unit_id": 56456,
+              "trait_descriptor_id": 2
             }
           }
 
@@ -1750,3 +1938,26 @@ en:
           name: plant_population_ids
           format: "int[]"
           desc: Zero or more BIP identifiers of Plant Populations that are of this population type
+
+    trait:
+      attrs:
+        -
+          name: id
+        -
+          name: name
+          desc: Short textual definition of the trait
+        -
+          name: label
+          desc: Trait Ontology term id, if available
+        -
+          name: description
+          desc: Longer description of the trait, usually supplied by the ontology maintainers
+        -
+          name: canonical
+          desc: Whether this trait is defined in Trait Ontology or not
+        -
+          name: data_provenance
+        -
+          name: trait_descriptor_ids
+          format: "int[]"
+          desc: Zero or more BIP identifiers of Trait Descriptors related to this trait

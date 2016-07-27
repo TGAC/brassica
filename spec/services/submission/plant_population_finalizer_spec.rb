@@ -31,7 +31,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
                                 female_parent_line: plant_lines[0].plant_line_name,
                                 male_parent_line: plant_lines[1].plant_line_name)
       submission.content.update(:step04, plant_population_attrs.
-        slice(:data_owned_by, :data_provenance, :comments).merge(publishability: 'publishable'))
+        slice(:data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
     end
 
     it 'creates plant population' do
@@ -55,6 +55,12 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       expect(subject.plant_population.published_on).to be_within(5.seconds).of(Time.now)
       expect(subject.plant_population.plant_lines.map(&:plant_line_name)).
         to match_array [plant_lines[0].plant_line_name] + new_plant_lines_attrs.map { |attrs| attrs[:plant_line_name] }
+    end
+
+    it 'does not require taxonomy term for plant population' do
+      submission.content.update(:step02, taxonomy_term: '')
+      subject.call
+      expect(subject.plant_population.attributes).to include( "taxonomy_term_id" => nil )
     end
 
     it 'records created plant population for later use' do
@@ -112,15 +118,15 @@ RSpec.describe Submission::PlantPopulationFinalizer do
     it 'makes submission and created objects published' do
       subject.call
 
-      expect(submission).to be_publishable
+      expect(submission).to be_published
       expect(PlantLine.all).to all be_published
       expect(PlantPopulation.all).to all be_published
       expect(PlantPopulationList.all).to all be_published
     end
 
-    context 'when publishability set to private' do
+    context 'when visibility set to private' do
       before do
-        submission.content.update(:step04, publishability: 'private')
+        submission.content.update(:step04, visibility: 'private')
       end
 
       it 'makes submission and created objects private' do
@@ -130,7 +136,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         plant_population_lists = plant_population.plant_population_lists
         plant_lines = subject.new_plant_lines
 
-        expect(submission).not_to be_publishable
+        expect(submission).not_to be_published
         expect(plant_population).not_to be_published
         expect(plant_population_lists.map(&:published?)).to all be_falsey
         expect(plant_lines.map(&:published?)).to all be_falsey

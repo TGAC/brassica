@@ -4,6 +4,7 @@ en:
       country_name: Country
     design_factors:
       design_factor_name: Design factor
+      design_factors: Design factors
     linkage_groups:
       linkage_group_label: Group label
       linkage_group_name: Group name
@@ -75,12 +76,13 @@ en:
     plant_trials:
       id: Scoring
       plant_trial_name: Trial name
-      plant_trial_description: Trial
+      plant_trial_description: Description
       project_descriptor: Project
       trial_year: Year
       trial_location_site_name: Location site
       institute_id: Institute
       date_entered: Entry date
+      layout_file_name: Layout
     plant_varieties:
       plant_variety_name: Variety
       crop_type: Crop type
@@ -146,8 +148,13 @@ en:
       date_run: Date run
     taxonomy_terms:
       name: Species
+    traits:
+      name: Trait
     trait_descriptors:
-      descriptor_name: Trait
+      descriptor_label: Label
+      category: Category
+      scoring_method: Scoring method
+      materials: Materials
       trait_scores: Trait scores
       qtl: QTL
       units_of_measurements: Unit
@@ -155,3 +162,4 @@ en:
       scoring_date: Scoring date
       score_value: Value
       value_type: Value type
+      technical_replicate_number: Technical rep

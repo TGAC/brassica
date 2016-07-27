@@ -53,26 +53,25 @@ RSpec.describe Searchable do
     end
   end
 
-  describe "callbacks", :elasticsearch do
+  describe "callbacks" do
     let(:es) { PlantLine.__elasticsearch__.client }
     let(:index) { PlantLine.index_name }
 
-    context "after create" do
-      it "indexes record on creation if published" do
-        plant_line = create(:plant_line, published: true)
+    context "after create", :elasticsearch do
+      let!(:published_plant_line) { create(:plant_line, published: true) }
+      let!(:unpublished_plant_line) { create(:plant_line, published: false) }
 
-        expect(es.exists(id: plant_line.id, index: index)).to be_truthy
+      it "indexes record on creation if published" do
+        expect(es.exists(id: published_plant_line.id, index: index)).to be_truthy
       end
 
       it "does not index record on creation if not published" do
-        plant_line = create(:plant_line, published: false)
-
-        expect(es.exists(id: plant_line.id, index: index)).to be_falsey
+        expect(es.exists(id: unpublished_plant_line.id, index: index)).to be_falsey
       end
     end
 
-    context "after update" do
-      let!(:published_plant_line) { create(:plant_line, published: true) }
+    context "after update", :elasticsearch do
+      let!(:published_plant_line) { create(:plant_line, published: true, data_owned_by: "Batz and Sons") }
       let!(:unpublished_plant_line) { create(:plant_line, published: false) }
 
       it "indexes record" do
@@ -86,9 +85,26 @@ RSpec.describe Searchable do
 
         expect(es.exists(id: published_plant_line.id, index: index)).to be_falsey
       end
+
+      it "does not remove unpublished, updated record" do
+        expect {
+          unpublished_plant_line.update_attribute(:comments, 'some text')
+        }.not_to raise_error
+      end
+
+      it "updates published, updated record" do
+        expect {
+          published_plant_line.update_attribute(:data_owned_by, 'The Great Data Owner')
+        }.to change {
+          es.get(id: published_plant_line.id, index: index)["_source"]["data_owned_by"]
+        }.
+        from("Batz and Sons").to("The Great Data Owner")
+
+        expect(es.exists(id: published_plant_line.id, index: index)).to be_truthy
+      end
     end
 
-    context "after destroy" do
+    context "after destroy", :elasticsearch do
       let!(:published_plant_line) { create(:plant_line, published: true) }
       let!(:unpublished_plant_line) { create(:plant_line, published: false) }
 

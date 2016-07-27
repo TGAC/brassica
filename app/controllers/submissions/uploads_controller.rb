@@ -4,30 +4,20 @@ class Submissions::UploadsController < ApplicationController
   before_filter :require_submission_owner
 
   def new
-    @traits = PlantTrialSubmissionDecorator.decorate(submission).sorted_trait_names
-    data = render_to_string template: 'submissions/steps/trial/plant_trial_scoring_data.tsv',
-                            layout: false
-    send_data data,
-              content_type: 'text/tsv; charset=UTF-8; header=present',
-              disposition: 'attachment; filename=plant_trial_scoring_data.tsv'
+    send_data Submission::TraitScoreTemplateGenerator.new(submission).call,
+              content_type: 'text/csv; charset=UTF-8; header=present',
+              disposition: 'attachment; filename=plant_trial_scoring_data.csv'
   end
 
   def create
     upload = Submission::Upload.create(upload_params.merge(submission_id: submission.id))
+
     if upload.valid?
-      Submission::TraitScoreParser.new(upload).call
+      process_upload(upload)
 
-      upload = SubmissionUploadDecorator.decorate(upload)
-
-      render json: upload.as_json, status: :created
+      render json: decorate_upload(upload), status: :created
     else
-      errors = upload.errors.messages.map do |attr, messages|
-        messages.map do |msg|
-          { attribute: attr, message: msg }
-        end
-      end.flatten
-
-      render json: { errors: errors }, status: :unprocessable_entity
+      render json: decorate_upload(upload), status: :unprocessable_entity
     end
   end
 
@@ -60,5 +50,20 @@ class Submissions::UploadsController < ApplicationController
 
   def upload_params
     params.require(:submission_upload).permit(:file, :upload_type)
+  end
+
+  def process_upload(upload)
+    Submission::TraitScoreParser.new(upload).call if upload.trait_scores?
+  end
+
+  def decorate_upload(upload)
+    case
+    when upload.trait_scores?
+      SubmissionTraitScoresUploadDecorator.decorate(upload)
+    when upload.plant_trial_layout?
+      SubmissionPlantTrialLayoutUploadDecorator.decorate(upload)
+    else
+      SubmissionUploadDecorator.decorate(upload)
+    end
   end
 end

@@ -15,4 +15,18 @@ class Country < ActiveRecord::Base
             uniqueness: true
 
   default_scope -> { order :country_name }
+
+  include Filterable
+
+  def self.permitted_params
+    [
+      search: [
+        'country_code',
+        'country_name'
+      ],
+      query: [
+        'id'
+      ]
+    ]
+  end
 end

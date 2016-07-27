@@ -48,11 +48,34 @@ en:
         step02:
           heading: Traits.
           body: Choose plant traits that were scored in the course of this trial, or define new trait descriptors.
+          new_trait_descriptor_attributes:
+            category: Trait category
+            units_of_measurements: Unit of measurement
+          new_trait_descriptor_attribute_hints:
+            category: Select, or provide, the category of trait.
+            units_of_measurements: Select, or write down, the unit of measurement when scoring this trait.
         step03:
+          heading: Scoring template design.
+          body: |
+            Provide us with information important for the scoring template design. The template will then be created
+            automatically, in order to help you upload your trait data correctly.
+        step04:
           heading: Scoring.
           body: Upload tabular list of scores given to plants per each trait scored.
-        step04:
+        step05:
+          heading: Trial layout.
+          body: If available, please upload an image of the layout of your trial
+        step06:
           heading: Provenance.
           body: Identify the owner of the submitted data and describe its provenance.
       qtl:
       linkage_map:
+
+    common:
+      data_owned_by: |
+        Please provide information on the owner of the data. For example, it can be a submitter, a research group,
+        an institute or the project. Ideally, please provide an email address, too.
+      data_provenance: |
+        If the current owner and the original owner differ, please provide information on the original owner of the data.
+      comments: |
+        If there are any more comments on the submission or the data ownership you would like to make, please enter them here.

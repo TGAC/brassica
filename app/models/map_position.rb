@@ -48,6 +48,7 @@ class MapPosition < ActiveRecord::Base
         'map_position',
         'linkage_groups.id',
         'population_loci.id',
+        'user_id',
         'id'
       ]
     ]
@@ -62,7 +63,6 @@ class MapPosition < ActiveRecord::Base
   end
 
   mapping dynamic: 'false' do
-    indexes :map_position
     indexes :marker_assay do
       indexes :marker_assay_name
     end

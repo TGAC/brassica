@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "API V1" do
+  let(:user) { create(:user) }
+  let(:api_key) { user.api_key }
+  let(:parsed_response) { JSON.parse(response.body) }
 
   Api.readable_models.each do |model_klass|
     describe model_klass do
@@ -15,9 +18,17 @@ RSpec.describe "API V1" do
     end
   end
 
-  # A special case test
+  Api.publishable_models.each do |model_klass|
+    describe model_klass do
+      it_behaves_like "API-publishable resource", model_klass
+      it_behaves_like "API-revocable resource", model_klass
+    end
+  end
+
+
+  # All SPECIAL CASES tests
+
   context 'when deleting related objects' do
-    let!(:user) { create(:user) }
     let!(:parent_line) { create(:plant_line, user: user, published: false) }
     let!(:plant_lines) { create_list(:plant_line, 2, user: user, published: false) }
     let!(:plant_population) do
@@ -39,7 +50,6 @@ RSpec.describe "API V1" do
                   plant_population: plant_population,
                   plant_line: plant_lines.second)
     end
-    let!(:api_key) { user.api_key }
 
     it 'makes sure there are no dangling belongs_to references left' do
       expect(plant_population.male_parent_line).to eq parent_line
@@ -60,4 +70,141 @@ RSpec.describe "API V1" do
     end
   end
 
+  context 'when submitting plant accessions' do
+    let!(:pl) { create(:plant_line) }
+    let!(:pv) { create(:plant_variety) }
+
+    it 'does not accept plant accessions without PL or PV' do
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: nil,
+            plant_variety_id: nil,
+            originating_organisation: 'oo'
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].length).to eq 2
+      expect(parsed_response['errors'].first['message']).
+        to eq 'A plant accession must be linked to either a plant line or a plant variety.'
+      expect(parsed_response['errors'].second['message']).
+        to eq 'A plant accession must be linked to either a plant line or a plant variety.'
+    end
+
+    it 'does not accept plant accessions with both PL and PV' do
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: pl.id,
+            plant_variety_id: pv.id,
+            originating_organisation: 'oo'
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].length).to eq 2
+      expect(parsed_response['errors'].first['message']).
+        to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+      expect(parsed_response['errors'].second['message']).
+        to eq 'A plant accession may not be simultaneously linked to a plant line and a plant variety.'
+    end
+
+    it 'accepts plant accessions with either PL or PV but not both' do
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: pl.id,
+            plant_variety_id: nil,
+            originating_organisation: 'oo'
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(1)
+
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {
+            plant_accession: 'bar',
+            plant_line_id: nil,
+            plant_variety_id: pv.id,
+            originating_organisation: 'oo'
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(1)
+    end
+  end
+
+  context 'when submitting a design factor' do
+    it 'does not allow non-array value for design_factors' do
+      expect {
+        post "/api/v1/design_factors", {
+          design_factor: {
+            design_factor_name: 'foo',
+            institute_id: 'foo',
+            trial_location_name: 'foo',
+            design_unit_counter: 'foo',
+            design_factors: 'non array value'
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { DesignFactor.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].first['message']).to eq "Can't be blank"
+    end
+
+    it 'does not allow empty array value for design_factors' do
+      expect {
+        post "/api/v1/design_factors", {
+          design_factor: {
+            design_factor_name: 'foo',
+            institute_id: 'foo',
+            trial_location_name: 'foo',
+            design_unit_counter: 'foo',
+            design_factors: []
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { DesignFactor.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].first['message']).to eq "Can't be blank"
+    end
+  end
+
+  describe 'only_mine index parameter' do
+    let!(:owned) { create_list(:plant_variety, 2, user: api_key.user) }
+    let!(:another) { create(:plant_variety) }
+
+    it 'returns only owned resources' do
+      expect(PlantVariety.count).to eq 3
+
+      get "/api/v1/plant_varieties?only_mine=true", {}, { "X-BIP-Api-Key" => api_key.token }
+      expect(response.status).to eq 200
+      expect(parsed_response).to have_key('plant_varieties')
+      expect(parsed_response['plant_varieties'].count).to eq 2
+      names = parsed_response['plant_varieties'].map{ |pv| pv['plant_variety_name'] }
+      expect(names).to match_array owned.map(&:plant_variety_name)
+    end
+
+    it 'can be combined with other filters' do
+      get "/api/v1/plant_varieties?only_mine=true&plant_variety[query][plant_variety_name]=#{owned[0].plant_variety_name}",
+          {}, { "X-BIP-Api-Key" => api_key.token }
+      expect(response.status).to eq 200
+      expect(parsed_response).to have_key('plant_varieties')
+      expect(parsed_response['plant_varieties'].count).to eq 1
+      expect(parsed_response['plant_varieties'][0]['plant_variety_name']).
+        to eq owned[0].plant_variety_name
+    end
+
+    it 'is turned off by default' do
+      get "/api/v1/plant_varieties", {}, { "X-BIP-Api-Key" => api_key.token }
+      expect(response.status).to eq 200
+      expect(parsed_response).to have_key('plant_varieties')
+      expect(parsed_response['plant_varieties'].count).to eq 3
+    end
+  end
 end

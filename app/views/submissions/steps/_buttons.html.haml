@@ -4,7 +4,8 @@
     .btn.btn-default.btn-wide.btn-back.disabled(name="back")
       Back
   - else
-    = f.submit "Back", class: 'btn btn-default btn-wide btn-back', name: 'back'
+    = f.submit "Back", class: 'btn btn-default btn-wide btn-back', name: 'back',
+                       data: { "step-to": submission.step_no - 1 }
 
   .pull-right
     = f.submit "Save & edit later", class: 'btn btn-default btn-leave', name: 'leave'

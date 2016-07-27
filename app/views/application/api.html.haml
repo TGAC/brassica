@@ -10,7 +10,11 @@
           %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
           %li= link_to "Submitting data", "#submitting-data"
+          %li= link_to "Publishing data", "#publishing-data"
           %li= link_to "Deleting data", "#deleting-data"
+          %li= link_to "API client example", "#client-example"
+          %li
+            %hr
 
           - Api.models.each do |model|
             %li= link_to model.name, "##{model.name.underscore.dasherize}"
@@ -19,9 +23,9 @@
       %h3#general-introduction.section-heading General introduction
 
       %p
-        BIP provides a HTTP RESTful API which uses JSON to represent
-        resources. Full access to the API is allowed for all registered users.
-        In order to authenticate your request, pass <code>X-BIP-Api-Key</code> header in
+        BIP provides a HTTP RESTful API which uses JSON to represent resources. Resources represent
+        database model elements (tables) which constitute BIP Schema. Full access to the API is allowed for all registered users.
+        In order to authenticate your request, pass the <code>X-BIP-Api-Key</code> header in
         each call to the API.
 
       %p
@@ -33,7 +37,10 @@
 
       %p
         The API exposes several resources for which fetching and submission of
-        new entries is supported. These include:
+        new entries is supported
+        %sup
+          %a(href="#cropstore-acknowledgement") [1].
+        These include:
 
       %ul
         - Api.writable_models.each do |model|
@@ -43,8 +50,8 @@
         All attributes are expressed as basic data types such as <code>int</code>,
         <code>string</code>, <code>date</code> or arrays of these. Most of the related
         objects are not directly included in the response - instead they are represented by identifiers (or arrays
-        of identifiers), for instance <code>taxonomy_term_id</code> or <code>qtl_ids</code>.
-        Use these identifiers to retrieve relevant resources with further API calls.
+        of identifiers); for instance <code>taxonomy_term_id</code> or <code>qtl_ids</code>.
+        Use these identifiers to retrieve the relevant resources with further API calls.
 
       %p
         Those related objects which are not available through a dedicated API read call are
@@ -121,6 +128,15 @@
 
           = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?plant_variety[query][owner]=Limagrain&plant_variety[query][reqistration_year]=1998" }
 
+      %p
+        One additional special filter, called <code>only_mine</code> may be used to fetch
+        only the resources which you own (that is, which were created by you). This is how
+        you use this special filter:
+
+      %pre
+        %code= t('api.filtering.only_mine_request')
+
+      = render partial: 'application/api/try_it', locals: { url: "/api/v1/plant_varieties?only_mine=true" }
 
       %h3#searching-for-data.section-heading Searching for data
 
@@ -194,7 +210,7 @@
 
       %p
         For each resource some attributes (described later) are required in create requests.
-        Skipping any of those will result in an
+        Skipping any of those will result in a
         <code>422</code> error response. Passing attributes which are not recognized by the API will also
         produce <code>422</code> errors.
 
@@ -213,7 +229,7 @@
       %p
         Most of the resource attributes, as shown in the following attribute tables,
         are textual (<code>string</code> format) - these are simply pieces of text of
-        arbitrary length, enclosed in double quote marks <code>"</code>. Attributes
+        arbitrary length, enclosed in double quotation marks <code>"</code>. Attributes
         that are of <code>int</code> format are passed without quotes.
 
       %p
@@ -242,45 +258,71 @@
         %code= t('api.general.create.examples.wrong_vs_right_related_object')
 
       %p
-        If the identifier you provide does not exist in the BIP database, the following error will be returned:
+        If the provided identifier does not exist in the BIP database, the following error will be returned:
 
       %pre.response
         %code= t('api.general.create.examples.invalid_foreign_key')
 
       %p
-        Another case of a <code>readonly</code> attributes may be multiple related
+        Another case of a <code>readonly</code> attribute involves multiple related
         resources - for instance, <code>plant_trials_ids</code> of a Plant Population.
-        In such a case, one sets correct relationship when submitting the corresponding
-        resource (i.e., in a reverse fashion). That is, when submitting a new Plant Trial,
-        a correct value of <code>plant_population_id</code> will set the relationship.
+        In such cases the correct relationship is set while submitting the corresponding
+        resource (i.e., in a reverse fashion). For example, when submitting a new Plant Trial,
+        supplying a correct value of <code>plant_population_id</code> will create the intended relationship.
 
       %p
-        If the submission is successful, you will get a JSON document in return. It
-        describes the submitted record, so it mostly contains the data you have just submitted.
-        However, it also provides the <i>internal BIP identifier</i> that was assigned to the new
+        If the submission is successful, you will get a JSON document in return. Since the document
+        describes the submitted record, it will mostly contain the data you have just submitted.
+        However, it also provides the <i>internal BIP identifier</i> assigned to the new
         record - see the value of the <code>id</code> attribute.
 
       %pre.response
         %code= t('api.general.create.examples.created_record_sample')
 
       %p
-        You may now utilize that identifier to <i>relate</i> this newly created object with
+        You may now utilize that identifier to <i>relate</i> your newly created object with
         other records you are about to submit (for instance, new Plant Populations).
+
+      %h3#publishing-data.section-heading Publishing submitted data
+
+      %p
+        The basic data management policy of BIP is that after you submit your data it
+        becomes public and can be cited as a public resource by other users. However,
+        you can explicitly state that you wish your data to remain private.
+
+      %h4 Example
+      %pre.request
+        %code= t('api.publishing.create_private_request')
+
+      %p
+        Data submitted as private can be published at a later date. Resources which are
+        to be published need to be updated one by one.
+
+      %h4 Example
+      %pre.request
+        %code= t('api.publishing.publish_request')
+
+      %p
+        The rule of thumb is that after publishing data you have exactly
+        <strong>one week</strong> to revoke publication. Please use this
+        time to check whether all information was correctly provided. After one week,
+        the publication becomes permanent and cannot be revoked.
+
+      %h4 Example
+      %pre
+        %code= t('api.publishing.revoke_request')
+
+      %p
+        This operation will not delete your data, but BIP will no longer show
+        it to other users. You can publish it again whenever you wish.
 
       %h3#deleting-data.section-heading Deleting submitted data
 
       %p
-        The basic data management policy of BIP is that after you submit your data, it
-        becomes public and could be cited as a public resource by other users. However,
-        in reality, mistakes are possible when submitting data, thus this ability to
-        delete submitted resources.
-
-      %p
-        The rule of thumb is that after a successful submission you have exactly <strong>one week</strong>
-        to delete your data. So please take that time to check if all information was
-        delivered correctly. Afterwards, the data is blocked as irrevocably published.
-        In case you'd like to revert such older changes, please contact BIP support
-        team directly.
+        Mistakes do happen and therefore we provide the ability to
+        delete submitted resources. You can only delete private resources or published resources
+        for which the revocation timer has not yet expired. Should you wish to delete any other data,
+        please contact the BIP support team directly.
 
       %h4 Example
       %pre
@@ -312,6 +354,39 @@
           %pre.response
             %code= t('api.delete.examples.ok_response')
 
+      %h3#client-example.section-heading API client example
+
+      %p
+        In order to demonstrate the capabilities of the API and to assist new programmers in preparing
+        their own BIP client code, we provide a fairly complex example of a client program, written in
+        Ruby (Ruby MRI interpreter version 2.2 is required to run it).
+
+      %p
+        The sample client consists of two elements:
+        %ul
+          %li= link_to 'sample trait scoring data, to be submitted', 'client_example/tocopherols.csv'
+          %li= link_to 'the actual script which submits this data.', 'client_example/bip_client_example.rb'
+
+      %p
+        You will also need your API key. Please refer to the
+        = link_to 'general introduction', '#general-introduction'
+        for instructions on how to obtain it. Additional information regarding the example is contained in
+        the script file - the code is rather self-explanatory, and we provide embedded comments.
+
+      %p
+        It should be noted that this script is not meant to be a generic, all-purpose client for the BIP API.
+        Rather, its purpose is to provide an example of how to prepare your own scripts, matching
+        specific user requirements. The sample data was generated on the basis of RIPR project data, with
+        altered (fictional) values.
+
+      %h3#tables-introduction.section-heading Detailed model introduction
+
+      %p
+        Below, the resources (which mostly represent data base tables in the BIP data model) and their attributes
+        (which correspond, to large extent, with individual columns in data base tables) that are exposed with the API
+        are described in more detail. Use these attributes in your calls to the API. For each resource, a set of
+        examples for various API calls is given below its attributes table.
+
 
       -# Models section follows
 
@@ -322,6 +397,8 @@
           .description The following table shows a list of attributes describing this resource:
 
           = api_props('Attributes', "#{model.name.underscore}.attrs")
+
+          = raw t("api.#{model.name.underscore}.note", default: '')
 
           -# GET index
           = render partial: 'application/api/index', locals: { model: model }
@@ -335,3 +412,18 @@
           - if Api.writable_model?(model)
             = render partial: 'application/api/create', locals: { model: model }
             %hr
+
+      %h3#cropstore-acknowledgement.section-heading CropStoreDB acknowledgement
+
+      %p
+        As the BIP database Schema is based on the CropStoreDB schema, the definitions in the API documentation
+        are heavily derived from those in CropStoreDB. We would like to acknowledge the CropStoreDB team managed
+        by Graham King for the prior work this webpage draws from. Their database can be found on
+        =link_to 'CropStoreDB', 'http://www.cropstoredb.org/', target: '_blank'
+        and their resource is cited as Love et al. (2012).
+
+      %p.small
+        Love, C. G., Andongabo, A. E., Wang, J., Carion, P. W. C., Rawlings, C. J. and King, G. J. (2012),
+        InterStoreDB: A Generic Integration Resource for Genetic and Genomic Data.
+        Journal of Integrative Plant Biology, 54: 345–355. doi:
+        = link_to '10.1111/j.1744-7909.2012.01120.x', 'https://doi.org/10.1111/j.1744-7909.2012.01120.x', target: '_blank'

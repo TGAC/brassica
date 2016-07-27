@@ -8,8 +8,10 @@ class PlantTrial < ActiveRecord::Base
   has_many :plant_scoring_units, dependent: :destroy
   has_many :processed_trait_datasets
 
+  has_attached_file :layout
+
   validates :plant_trial_name, presence: true, uniqueness: true
-  validates :project_descriptor, presence: true
+  validates :project_descriptor, :trial_year, :place_name, presence: true
   validates :latitude, allow_blank: true, numericality: {
     greater_than_or_equal_to: -90,
     less_than_or_equal_to: 90
@@ -18,6 +20,8 @@ class PlantTrial < ActiveRecord::Base
     greater_than_or_equal_to: -180,
     less_than_or_equal_to: 180
   }
+
+  validates_attachment_content_type :layout, content_type: %w(image/png image/gif image/jpeg)
 
   include Relatable
   include Filterable
@@ -28,7 +32,7 @@ class PlantTrial < ActiveRecord::Base
   include TableData
 
   # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
-  def scoring_table_data(trait_descriptor_ids, uid = nil)
+  def scoring_table_data(trait_descriptor_ids, replicate_numbers, uid = nil)
     ts = TraitScore.arel_table
 
     psu_subquery = PlantScoringUnit.visible(uid)
@@ -43,14 +47,20 @@ class PlantTrial < ActiveRecord::Base
       where(plant_scoring_units: { plant_trial_id: self.id }).
       where(ts[:user_id].eq(uid).or(ts[:published].eq(true))).
       order('plant_scoring_units.scoring_unit_name asc, trait_descriptors.id asc').
-      group_by(&:plant_scoring_unit)
+      group_by(&:plant_scoring_unit_id)
 
     plant_scoring_units.visible(uid).order('scoring_unit_name asc').map do |unit|
-      scores = all_scores[unit] || []
-      [unit.scoring_unit_name] + trait_descriptor_ids.map do |td_id|
-        ts = scores.detect{ |s| s.trait_descriptor_id == td_id.to_i}
-        ts ? ts.score_value : '-'
-      end
+      scores = all_scores[unit.id] || []
+
+      [unit.scoring_unit_name] +
+        trait_descriptor_ids.map do |td_id|
+          scores_for_trait = scores.select{ |s| s.trait_descriptor_id == td_id.to_i}
+          (1..replicate_numbers[td_id.to_i]).map do |replicate_number|
+            replicate = scores_for_trait.detect{ |s| s.technical_replicate_number == replicate_number }
+            replicate ? replicate.score_value : '-'
+          end
+        end.flatten +
+        [unit.id]
     end
   end
 
@@ -71,7 +81,14 @@ class PlantTrial < ActiveRecord::Base
       'trial_location_site_name',
       'countries.country_name',
       'institute_id',
+      'layout_file_name',
       'id'
+    ]
+  end
+
+  def self.numeric_columns
+    [
+      'trial_year'
     ]
   end
 
@@ -84,11 +101,15 @@ class PlantTrial < ActiveRecord::Base
   def self.permitted_params
     [
       :fetch,
+      search: [
+        'project_descriptor',
+      ],
       query: params_for_filter(table_columns) +
         [
           'project_descriptor',
           'plant_populations.id',
-          'id'
+          'user_id',
+          'id' => []
         ]
     ]
   end

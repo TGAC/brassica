@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe SubmissionDecorator do
-  describe '#submission_type' do
-    it 'handles all submission types properly' do
-      Submission.submission_types.keys.each do |submission_type|
+  describe '#submission_type_tag' do
+    it 'handles all implemented submission types properly' do
+      %i(population trial).each do |submission_type|
         submission = create(:submission, submission_type: submission_type)
         sd = SubmissionDecorator.decorate(submission)
-        expect(sd.submission_type).
+        expect(sd.submission_type_tag).
           to eq '<span class="text">' +
                 I18n.t("submission.submission_type.#{submission_type}") +
                 ':</span>'

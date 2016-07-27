@@ -13,21 +13,34 @@ class Api::CreateParams
 
   def permissions
     perms = scalar_attrs - blacklisted_attrs
-    if habtm_attrs.present?
+    nonscalar_attrs = habtm_attrs + array_attrs
+    if nonscalar_attrs.present?
       # Append a hash like { attr1: [], attr2: [], ... }
-      perms.append(Hash[habtm_attrs.zip([[]] * habtm_attrs.size)])
+      perms.append(Hash[nonscalar_attrs.zip([[]] * nonscalar_attrs.size)])
     end
     perms
   end
 
   def misnamed_attrs
-    (request_params[model.name].try(:keys) || []) - (scalar_attrs | habtm_attrs)
+    (request_params[model.name].try(:keys) || []) - (nonrelational_attrs | habtm_attrs)
   end
 
   private
 
-  def scalar_attrs
+  def nonrelational_attrs
     model.klass.attribute_names
+  end
+
+  def scalar_attrs
+    model.klass.attribute_names.select do |attribute_name|
+      !model.klass.columns_hash[attribute_name].array
+    end
+  end
+
+  def array_attrs
+    model.klass.attribute_names.select do |attribute_name|
+      model.klass.columns_hash[attribute_name].array
+    end
   end
 
   def habtm_attrs
@@ -35,7 +48,7 @@ class Api::CreateParams
   end
 
   def blacklisted_attrs
-    %w(id user_id created_at updated_at date_entered entered_by_whom)
+    %w(id user_id created_at updated_at date_entered entered_by_whom published_on)
   end
 
 end

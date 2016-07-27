@@ -88,7 +88,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.before :each, :elasticsearch do |example|
+  config.before :all, :elasticsearch do |example|
     WebMock.disable_net_connect!(allow_localhost: true)
     searchable_models.each do |model|
       model.import force: true, refresh: true

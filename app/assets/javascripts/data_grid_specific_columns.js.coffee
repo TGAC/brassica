@@ -26,7 +26,7 @@ window.configs =
         targets: ['map_locus_hits_associated_sequence_id_column', 'map_locus_hits_bac_hit_seq_id_column']
         render: (data, type, full, meta) ->
           if data && full[meta['col'] + 1].indexOf("NCBI") > -1
-            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="_blank">' + data + '</a>'
           else
             data
       ,
@@ -34,7 +34,7 @@ window.configs =
         render: (data, type, full, meta) ->
           if data
             ensemblId = data.split('.')[0]
-            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=Brassica;idx=;q=' + ensemblId + '" target="blank">' + data + '</a>'
+            '<a href="http://plants.ensembl.org/Multi/Search/Results?species=Brassica;idx=;q=' + ensemblId + '" target="_blank">' + data + '</a>'
           else
             ''
       ,
@@ -90,7 +90,11 @@ window.configs =
       [
         targets: 'plant_lines_plant_line_name_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('plant_lines', data, full[full.length - 2])
+          modelIdUrl('plant_lines', data, full[full.length - 3])
+      ,
+        targets: 'plant_varieties_plant_variety_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_varieties', data, full[full.length - 2])
       ]
 
   'plant-lines':
@@ -103,7 +107,7 @@ window.configs =
         targets: 'plant_lines_sequence_identifier_column'
         render: (data, type, full, meta) ->
           if data && data.indexOf("SR") == 0
-            '<a href="http://www.ncbi.nlm.nih.gov/sra/' + data + '" target="blank">' + data + '</a>'
+            '<a href="http://www.ncbi.nlm.nih.gov/sra/' + data + '" target="_blank">' + data + '</a>'
           else
             data
       ]
@@ -139,6 +143,13 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('plant_populations', data, full[full.length - 3])
       ,
+        targets: 'plant_trials_layout_file_name_column'
+        render: (data, type, full, meta) ->
+          if data
+            '<a href="plant_trials/' + full[full.length - 1] + '">Show</a>'
+          else
+            ''
+      ,
         targets: 'plant_trials_id_column'
         render: (data, type, full, meta) ->
           '<a href="trial_scorings/' + data + '">Show</a>'
@@ -162,7 +173,7 @@ window.configs =
         targets: 'probes_sequence_id_column'
         render: (data, type, full, meta) ->
           if data && full[meta['col'] + 1].indexOf("NCBI") > -1
-            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="blank">' + data + '</a>'
+            '<a href="http://www.ncbi.nlm.nih.gov/nucgss/' + data + '" target="_blank">' + data + '</a>'
           else
             data
       ]
@@ -186,7 +197,7 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('linkage_maps', data, full[full.length - 4])
       ,
-        targets: 'trait_descriptors_descriptor_name_column'
+        targets: 'traits_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('trait_descriptors', data, full[full.length - 3])
       ,
@@ -208,31 +219,37 @@ window.configs =
   'trait-descriptors':
     columnDefs:
       [
-        targets: 'plant_populations_name_column'
+        targets: 'traits_name_column'
         render: (data, type, full, meta) ->
-          modelIdUrl('plant_populations', data, full[full.length - 3])
-      ,
-        targets: 'plant_trials_project_descriptor_column'
-        render: (data, type, full, meta) ->
-          if data
-            '<a href="data_tables?model=plant_trials&query[project_descriptor]=' + data + '">' + data + '</a>'
+          if data && full[7] && full[7].indexOf("TO:") > -1
+            '<a href="http://browser.planteome.org/amigo/term/' + full[7] + '" target="_blank">' + data + '</a>'
           else
-            ''
+            data
       ,
-        targets: 'trait_descriptors_trait_scores_column'
+        targets: 'plant_parts_plant_part_column'
         render: (data, type, full, meta) ->
-          if data && full[8] && full[9]
-            '<a href="data_tables?model=trait_scores&query[trait_descriptor_id]=' + full[9] +
-              '&query[plant_scoring_units.plant_trial_id]=' + full[8] + '">' + data + '</a>'
+          if data && full[8] && full[8].indexOf("PO:") > -1
+            '<a href="http://browser.planteome.org/amigo/term/' + full[8] + '" target="_blank">' + data + '</a>'
           else
-            ''
+            data
       ,
-        targets: 'trait_descriptors_qtl_column'
+        targets: 'related-specific'
         render: (data, type, full, meta) ->
-          if data && data != "0" && full[full.length - 1]
-            '<a href="data_tables?model=qtl&query[processed_trait_datasets.trait_descriptor_id]=' + full[full.length - 1] + '">' + data + '</a>'
-          else
-            ''
+          if full[full.length - 2]
+            plant_trials_query = ('query[id][]=' + item for item in full[full.length - 2]).join('&')
+          '<div class="dropdown">' +
+            '<button class="btn btn-xs btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true" title="Related data">' +
+              'Related ' + '<span class="caret"></span>' +
+            '</button>' +
+            '<ul class="dropdown-menu" role="menu">' +
+              createCounterLink('data_tables?model=trait_scores&query[trait_descriptors.id]=' + full[full.length - 1],
+                full[full.length - 5],
+                'trait scores') +
+              createCounterLink('data_tables?model=plant_trials&' + plant_trials_query,
+                if full[full.length - 2] then full[full.length - 2].length else 0,
+                'plant trials') +
+            '</ul>' +
+          '</div>'
       ]
 
   'trait-scores':
@@ -250,7 +267,7 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('plant_trials', data, full[full.length - 4])
       ,
-        targets: 'trait_descriptors_descriptor_name_column'
+        targets: 'traits_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('trait_descriptors', data, full[full.length - 3])
       ,
@@ -259,10 +276,18 @@ window.configs =
           modelIdUrl('plant_scoring_units', data, full[full.length - 2])
       ]
 
+  'trial-scoring':
+    columnDefs:
+      [
+        targets: 'plant_scoring_units_scoring_unit_name_column'
+        render: (data, type, full, meta) ->
+          modelIdUrl('plant_scoring_units', data, full[full.length - 1])
+      ]
+
 
 window.modelIdUrl = (model, label, id) ->
   if model && label && id
-    '<a href="data_tables?model=' + model + '&query[id]=' + id + '">' + label + '</a>'
+    '<a href="/data_tables?model=' + model + '&query[id]=' + id + '">' + label + '</a>'
   else
     label
 

@@ -1,20 +1,25 @@
 module Submissions
   module Trial
     class Step03ContentForm < PlantTrialForm
-      property :trait_scores, writeable: false
-      property :upload_id
-      property :trait_mapping, writeable: false
+      property :lines_or_varieties
+      collection :technical_replicate_numbers
+      collection :design_factor_names
 
-      def self.permitted_properties
-        [
-          :upload_id,
-          :trait_mapping,
-          :trait_scores
-        ]
+      validates :lines_or_varieties, inclusion: { in: %w(plant_lines plant_varieties) }
+
+      validate do
+        all_valid = technical_replicate_numbers.all? do |number|
+          number.to_i.to_s == number && number.to_i > 0
+        end
+        errors.add(:technical_replicate_numbers, :invalid) unless all_valid
       end
 
-      def upload
-        Submission::Upload.trait_scores.where(id: upload_id).first
+      def technical_replicate_numbers
+        super || []
+      end
+
+      def design_factor_names
+        super || []
       end
     end
   end

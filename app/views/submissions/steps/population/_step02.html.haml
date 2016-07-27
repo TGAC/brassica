@@ -1,7 +1,9 @@
 .form-group
-  = content.label :taxonomy_term, class: 'required'
+  = content.label :taxonomy_term
   = content.select :taxonomy_term, options_for_select(TaxonomyTerm.names, @content.taxonomy_term), { include_blank: true }, class: 'taxonomy-term form-control', 'data-placeholder': 'Select term'
+  %small.help-block Please, leave this field blank if you are going to submit many plant lines of different species, in the following step.
 
 .form-group
   = content.label :population_type, class: 'required'
   = content.select :population_type, PopulationType.population_types, { include_blank: true }, class: 'population-type form-control', 'data-placeholder': "Select population type"
+  %small.help-block Please, choose the type of population you are submitting.
