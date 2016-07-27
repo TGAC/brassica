@@ -57,6 +57,12 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         to match_array [plant_lines[0].plant_line_name] + new_plant_lines_attrs.map { |attrs| attrs[:plant_line_name] }
     end
 
+    it 'does not require taxonomy term for plant population' do
+      submission.content.update(:step02, taxonomy_term: '')
+      subject.call
+      expect(subject.plant_population.attributes).to include( "taxonomy_term_id" => nil )
+    end
+
     it 'records created plant population for later use' do
       subject.call
       expect(submission.submitted_object_id).to eq subject.plant_population.id
