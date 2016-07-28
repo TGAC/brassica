@@ -11,7 +11,7 @@ It is a Rails web application and was created by eSpectrum company on a contract
 
 Apart from the LICENSE, TGAC explicitly requests any party that wishes to deploy a copy (modified or not) of BIP on their own servers, to contact, and obtain permission to do so. For that, please contact 
 <a href="mailto:bip@earlham.ac.uk">bip@earlham.ac.uk</a>. If you are interested in contributing to the project, for example by adding any analytics tools, please contact us, too.
-For further contact information on people behind the project or the database itself, please see the [about us](https://bip.tgac.ac.uk/about) section.
+For further contact information on people behind the project or the database itself, please see the [about us](https://bip.earlham.ac.uk/about) section.
 
 Also, follow the BIP on twitter to get the latest updates [@BrassicaP](https://twitter.com/BrassicaP).
 
