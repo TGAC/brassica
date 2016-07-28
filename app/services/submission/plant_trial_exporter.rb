@@ -3,6 +3,8 @@ class Submission::PlantTrialExporter < Submission::Exporter
     {
       plant_trial: plant_trial,
       plant_scoring_units: plant_scoring_units,
+      plant_accessions: plant_accessions,
+      trait_descriptors: trait_descriptors,
       trait_scoring: trait_scoring
     }.reject { |_,v| v.nil? }
   end
@@ -17,6 +19,16 @@ class Submission::PlantTrialExporter < Submission::Exporter
   def plant_scoring_units
     generate_document PlantScoringUnit,
                       { id: submitted_object.plant_scoring_units.pluck(:id) }
+  end
+
+  def plant_accessions
+    generate_document PlantAccession,
+                      { id: submitted_object.plant_scoring_units.pluck(:plant_accession_id) }
+  end
+
+  def trait_descriptors
+    generate_document TraitDescriptor,
+                      { id: submitted_object.trait_descriptors.map(&:id) }
   end
 
   def trait_scoring
