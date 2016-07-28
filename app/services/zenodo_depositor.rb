@@ -68,22 +68,16 @@ class ZenodoDepositor
           query_url("/#{remote_deposition['id']}/actions/publish"),
           method: :post
         )
-        submit_request(request) do |response|
-          Rails.logger.debug "PUBLICATION RESPONSE"
-          remote_deposition = JSON.parse(response.body)
-          Rails.logger.debug remote_deposition
-          Rails.logger.debug "DOI: #{remote_deposition['doi']}"
+        submit_request(request) do |publish_response|
+          remote_deposition = JSON.parse(publish_response.body)
+          if @deposition.submission
+            @deposition.submission.doi = remote_deposition['doi']
+            @deposition.submission.save!
+          end
         end
       else
         #TODO FIXME Error management
       end
-
-      # TODO FIXME just a temporary generated DOI, for UI testing
-      # doi = '10.5194/bg-8-2917-2011'
-      # if @deposition.submission
-      #   @deposition.submission.doi = doi
-      #   @deposition.submission.save!
-      # end
     end
   end
 

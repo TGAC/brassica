@@ -21,7 +21,7 @@
                        btn_class: "btn-primary",
                        title: tooltip)
 
-- else
+- elsif submission.depositable?
   = link_to "Deposit in Zendo",
             new_deposition_path(deposition: { submission_id: submission.id }),
             class: "btn #{button_size} btn-primary pull-right",
