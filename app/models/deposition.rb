@@ -9,8 +9,8 @@ class Deposition
     end
   end
 
-  attr_accessor :submission, :user, :title, :description, :creators
-  attr_writer :title, :description, :creators
+  attr_accessor :submission, :user, :title, :description, :creators, :contributors
+  attr_writer :title, :description, :creators, :contributors
 
   # NOTE: Depositions will work in two modes
   #  - with associated submissions (depositing submitted data to an external service)
@@ -34,6 +34,7 @@ class Deposition
       self.title = "#{I18n.t("submission.submission_type.#{submission.submission_type}")}: #{submission.object_name}" unless self.title
       self.description = submission.object_description unless self.description
       self.creators = [{ name: submission.user.full_name }]
+      self.contributors = submission.user.full_name unless self.contributors
     elsif user
       self.creators = [{ name: user.full_name }]
     end

@@ -44,7 +44,8 @@ class DepositionsController < ApplicationController
   def deposition_create_params
     params.fetch(:deposition, {}).permit(
       :title,
-      :description
+      :description,
+      :contributors
     )
   end
 end

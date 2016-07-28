@@ -29,6 +29,12 @@
       = f.label :description, class: 'required'
       = f.text_area :description, class: 'form-control'
 
+    .form-group
+      = f.label :contributors, class: 'required'
+      = f.text_area :contributors, class: 'form-control'
+      %small.help-block
+        Please provide dataset contributors' names, each name in a separate line.
+
     = my_submissions_button
     = link_to 'Cancel', @deposition.submission,  class: 'btn btn-primary'
     = f.submit class: 'btn btn-primary pull-right'
