@@ -118,6 +118,14 @@ class Submission < ActiveRecord::Base
     end
   end
 
+  def affiliation
+    case submission_type
+    when 'population' then content.step01.try(:owned_by) || ''
+    when 'trial' then content.step01.try(:institute_id) || ''
+    else ''
+    end
+  end
+
   def associated_model
     case submission_type
     when 'population'

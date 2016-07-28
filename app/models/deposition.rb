@@ -33,7 +33,7 @@ class Deposition
     if submission
       self.title = "#{I18n.t("submission.submission_type.#{submission.submission_type}")}: #{submission.object_name}" unless self.title
       self.description = submission.object_description unless self.description
-      self.creators = [{ name: submission.user.full_name }]
+      self.creators = [{ name: submission.user.full_name, affiliation: submission.affiliation }]
       self.contributors = submission.user.full_name unless self.contributors
     elsif user
       self.creators = [{ name: user.full_name }]
