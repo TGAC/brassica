@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ZenodoDepositor do
-  let(:population_submission) { create(:submission, :population, :finalized, publishable: true) }
-  let(:private_submission) { create(:submission, :population, :finalized, publishable: false) }
+  let(:population_submission) { create(:submission, :population, :finalized, published: true) }
+  let(:private_submission) { create(:submission, :population, :finalized, published: false) }
   let(:population_deposition) { Deposition.new(submission: population_submission) }
   let(:private_deposition) { Deposition.new(submission: private_submission) }
 

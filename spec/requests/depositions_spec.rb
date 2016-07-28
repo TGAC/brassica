@@ -20,7 +20,7 @@ RSpec.describe "Depositions management" do
         describe "POST /depositions" do
           let(:submission) { create :submission,
                                     :finalized,
-                                    publishable: true,
+                                    published: true,
                                     user: user,
                                     submission_type: submission_type }
 

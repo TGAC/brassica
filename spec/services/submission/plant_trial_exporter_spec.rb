@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Submission::PlantTrialExporter do
-  let(:submission) { create(:finalized_submission, :trial, publishable: true) }
+  let(:submission) { create(:finalized_submission, :trial, published: true) }
   let(:plant_trial) { submission.submitted_object }
   # let(:plant_lines) { create_list(:plant_line, 2, plant_variety: create(:plant_variety)) }
 

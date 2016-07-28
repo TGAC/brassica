@@ -192,21 +192,21 @@ RSpec.describe Submission do
       expect(build(:submission, finalized: false).depositable?).to be_falsey
     end
 
-    it 'is false for unpublishable submissions' do
+    it 'is false for unpublished submissions' do
       expect(build(:submission, :finalized).depositable?).to be_falsey
     end
 
-    it 'is false for finalized, publishable submissions with assigned doi' do
+    it 'is false for finalized, published submissions with assigned doi' do
       expect(build(:submission, :finalized, doi: 'x').depositable?).to be_falsey
     end
 
-    it 'is false for finalized, publishable, revocable submissions' do
-      submission = build(:submission, :finalized, publishable: true)
+    it 'is false for finalized, published, revocable submissions' do
+      submission = build(:submission, :finalized, published: true)
       expect(submission.depositable?).to be_falsey
     end
 
-    it 'is true for finalized, publishable, irrevocable submissions without a doi' do
-      submission = create(:submission, :finalized, publishable: true)
+    it 'is true for finalized, published, irrevocable submissions without a doi' do
+      submission = create(:submission, :finalized, published: true)
       submission.submitted_object.update_attribute(:published_on, Time.now - 8.days)
       expect(submission.depositable?).to be_truthy
     end

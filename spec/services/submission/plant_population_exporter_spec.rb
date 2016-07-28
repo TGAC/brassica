@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Submission::PlantPopulationExporter do
-  let(:submission) { create(:finalized_submission, :population, publishable: true) }
+  let(:submission) { create(:finalized_submission, :population, published: true) }
   let(:plant_population) { submission.submitted_object }
   let(:plant_lines) { create_list(:plant_line, 2, plant_variety: create(:plant_variety)) }
 
