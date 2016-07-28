@@ -31,7 +31,9 @@ class ZenodoDepositor
           upload_type: 'dataset',
           title: @deposition.title,
           creators: @deposition.creators,
-          description: @deposition.description
+          contributors: contributors_json,
+          description: @deposition.description,
+          license: 'odc-pddl'
         }
       }.to_json
     )
@@ -39,37 +41,64 @@ class ZenodoDepositor
     submit_request(request) do |response|
       remote_deposition = JSON.parse(response.body)
 
-      documents_to_deposit.each do |name, contents|
-        next if contents.empty?
-        request = Typhoeus::Request.new(
-          query_url("/#{remote_deposition['id']}/files"),
-          method: :post,
-          headers: { 'Content-Type' => 'multipart/form-data' },
-          body: {
-            filename: "#{name}.csv",
-            file: write_file(contents, "#{name}.csv")
-          }
-        )
-        submit_request(request) do |response|
-          # TODO FIXME execute 'Publish' here
-          # Currently we wait for Zenodo to be back again...
-          # puts response.body
+      deposited_file_count = 0
+      # We need a temp dir for deposition files
+      Dir.mktmpdir do |files_directory|
+        documents_to_deposit.each do |name, contents|
+          next if contents.empty?
+          request = Typhoeus::Request.new(
+            query_url("/#{remote_deposition['id']}/files"),
+            method: :post,
+            headers: { 'Content-Type' => 'multipart/form-data' },
+            body: {
+              filename: "#{name}.csv",
+              file: write_file(contents, files_directory, "#{name}.csv")
+            }
+          )
+          submit_request(request) do |_|
+            # Success
+            deposited_file_count += 1
+          end
         end
       end
 
-      # TODO FIXME just a temporary generated DOI, for UI testing
-      doi = '10.5194/bg-8-2917-2011'
-      if @deposition.submission
-        @deposition.submission.doi = doi
-        @deposition.submission.save!
+      if deposited_file_count == documents_to_deposit.size
+        # All documents were successfully deposited, time to Publish
+        request = Typhoeus::Request.new(
+          query_url("/#{remote_deposition['id']}/actions/publish"),
+          method: :post
+        )
+        submit_request(request) do |response|
+          Rails.logger.debug "PUBLICATION RESPONSE"
+          remote_deposition = JSON.parse(response.body)
+          Rails.logger.debug remote_deposition
+          Rails.logger.debug "DOI: #{remote_deposition['doi']}"
+        end
+      else
+        #TODO FIXME Error management
       end
+
+      # TODO FIXME just a temporary generated DOI, for UI testing
+      # doi = '10.5194/bg-8-2917-2011'
+      # if @deposition.submission
+      #   @deposition.submission.doi = doi
+      #   @deposition.submission.save!
+      # end
     end
   end
 
   private
 
-  def write_file(contents, filename)
-    file = Tempfile.new(filename)
+  def contributors_json
+    names = @deposition.contributors.split("\n")
+    names = names.select(&:present?)
+    names.map { |contributor|
+      { name: contributor, type: 'Researcher' }
+    }
+  end
+
+  def write_file(contents, files_directory, filename)
+    file = File.open("#{files_directory}/#{filename}", 'w')
     file.write contents
     file.rewind
     file
