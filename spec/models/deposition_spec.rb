@@ -14,10 +14,12 @@ RSpec.describe Deposition do
     it 'creates proper defaults when submission is present' do
       submission.content.update(:step01, name: 'population_name')
       submission.content.update(:step01, description: 'population_description')
+      submission.content.update(:step01, owned_by: 'Unknown organization')
       expect(submission_deposition).to be_valid
       expect(submission_deposition.title).to eq 'Plant population: population_name'
       expect(submission_deposition.description).to eq 'population_description'
-      expect(submission_deposition.creators).to eq [{ name: submission.user.full_name }]
+      expect(submission_deposition.creators).
+        to eq [{ name: submission.user.full_name, affiliation: 'Unknown organization' }]
     end
 
     it 'creates proper defaults when user is present' do
