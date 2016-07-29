@@ -26,9 +26,9 @@ RSpec.describe SubmissionDecorator do
       submission = create(:submission)
       sd = SubmissionDecorator.decorate(submission)
       expect { sd.further_details }.
-        to raise_error('Should be extended by subclasses')
+        to raise_error('Must be implemented by subclasses')
       expect { sd.label }.
-        to raise_error('Should be extended by subclasses')
+        to raise_error('Must be implemented by subclasses')
     end
   end
 
