@@ -11,7 +11,11 @@ class PlantTrial < ActiveRecord::Base
   has_attached_file :layout
 
   validates :plant_trial_name, presence: true, uniqueness: true
-  validates :project_descriptor, :trial_year, :place_name, presence: true
+  validates :project_descriptor,
+            :plant_trial_description,
+            :institute_id,
+            :trial_year,
+            :place_name, presence: true
   validates :latitude, allow_blank: true, numericality: {
     greater_than_or_equal_to: -90,
     less_than_or_equal_to: 90

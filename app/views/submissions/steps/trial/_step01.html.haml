@@ -48,14 +48,14 @@
     data), please do that using two separate Trial submissions.
 
 .form-group
-  = content.text_area :plant_trial_description, label: 'Trial description',
+  = content.text_area :plant_trial_description, label: 'Trial description', required: true,
     help: "Please provide a brief description of the trial. It should contain the trait(s) and the name of the population of interest, the trial type and location. The grant and project number could be named, too. An example of an existing trial description in the data base is: 'Seed quality assessment of the BnaTNDH population in a field trial in China'"
 
 - %w(institute_id terrain soil_type statistical_factors).each do |attr|
   .form-group
     - values = PlantTrial.visible(current_user.id).attribute_values(attr)
     - options = options_for_select(values, @content.send(attr))
-    = content.combo_field attr, options
+    = content.combo_field attr, options, required: (attr == 'institute_id')
 
 
 %fieldset

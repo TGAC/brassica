@@ -20,9 +20,11 @@ module Submissions
       property :data_status
 
       validates :plant_trial_name, presence: true
+      validates :plant_trial_description, presence: true
       validates :project_descriptor, presence: true
       validates :plant_population_id, presence: true
       validates :country_id, presence: true
+      validates :institute_id, presence: true
       validates :latitude, allow_blank: true, numericality: {
         greater_than_or_equal_to: -90,
         less_than_or_equal_to: 90

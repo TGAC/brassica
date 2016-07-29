@@ -71,6 +71,7 @@ RSpec.describe "Submission management" do
                 submission: {
                   content: {
                     plant_trial_name: "Trial A",
+                    plant_trial_description: "Trial A brief description.",
                     project_descriptor: "Project A",
                     plant_population_id: plant_population.id.to_s,
                     trial_year: "1999",

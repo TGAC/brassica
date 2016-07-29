@@ -43,6 +43,7 @@ FactoryGirl.define do
                                              project_descriptor: random_word,
                                              plant_population_id: plant_population.id,
                                              trial_year: 1999,
+                                             institute_id: Faker::Company.name,
                                              place_name: random_word,
                                              country_id: country.id)
           submission.content.update(:step02, trait_descriptor_list: [trait_descriptor.id.to_s])

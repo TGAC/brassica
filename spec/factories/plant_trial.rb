@@ -7,6 +7,7 @@ FactoryGirl.define do
     trial_year { Faker::Date.backward.year.to_s }
     plant_trial_description { Faker::Lorem.sentence }
     contact_person { Faker::Internet.user_name }
+    institute_id { Faker::Company.name }
     pubmed_id { Faker::Number.number(7) }
     confirmed_by_whom { Faker::Internet.user_name }
     published_on { Date.today-8.days }
