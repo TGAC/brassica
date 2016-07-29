@@ -16,8 +16,10 @@ if ARGV.size < 2
   exit 1
 end
 
-@client = Net::HTTP.new('bip.earlham.ac.uk', 443)
+# @client = Net::HTTP.new('bip.earlham.ac.uk', 443)
+@client = Net::HTTP.new('localhost', 3000)
 @client.use_ssl = true
+@client.verify_mode = OpenSSL::SSL::VERIFY_NONE
 @headers = {
   'Content-Type' => 'application/json',
   'X-BIP-Api-Key' => ARGV[1]
@@ -107,9 +109,11 @@ country_id = response['meta']['total_count'] > 0 ? response['countries'][0]['id'
 
 plant_trial_id = create_record('plant_trial',
   plant_trial_name: 'Tocopherol seed content measurement - SAMPLE DEMO TRIAL.',
+  plant_trial_description: 'This is a demonstration plant trial submission.',
   project_descriptor: 'RIPR',
   trial_year: 2016,
   place_name: 'Norwich',
+  institute_id: 'Earlham Institute',
   country_id: country_id
 )
 
