@@ -1297,7 +1297,7 @@ en:
           desc: Name of the project that undertook the trial
         -
           name: plant_trial_description
-          create: Q
+          create: required, Q
           desc: Additional descriptive information concerning the trial
         -
           name: trial_year
@@ -1305,7 +1305,7 @@ en:
           desc: Year (or years) the trial took place
         -
           name: institute_id
-          create: Q
+          create: required, Q
           desc: Name of the legal entity that performed this plant trial
         -
           name: trial_location_site_name
