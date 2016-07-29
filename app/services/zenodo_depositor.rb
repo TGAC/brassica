@@ -34,6 +34,12 @@ class ZenodoDepositor
           creators: @deposition.creators,
           contributors: contributors_json,
           description: @deposition.description,
+          keywords: ['Brassica', 'Phenotyping', 'Association studies'],
+          subjects: [
+            { term: 'Phenotype', identifier: 'http://id.loc.gov/authorities/subjects/sh96012165' },
+            { term: 'Brassica', identifier: 'http://id.loc.gov/authorities/subjects/sh86001831' },
+            { term: 'Plant breeding', identifier: 'https://www.britannica.com/science/plant-breeding' }
+          ],
           license: 'odc-pddl'
         }
       }.to_json
