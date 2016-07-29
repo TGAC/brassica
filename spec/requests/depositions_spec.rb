@@ -32,7 +32,7 @@ RSpec.describe "Depositions management" do
             expect(response).to redirect_to submission_path(submission)
             expect(submission.reload.doi).not_to be_nil
             expect(flash[:notice]).
-              to eq "Deposited data in Zenodo with DOI number:#{submission.doi}."
+              to eq "Deposited data in Zenodo with DOI number: #{submission.doi}."
           end
 
           it "warns the user if something goes wrong" do
