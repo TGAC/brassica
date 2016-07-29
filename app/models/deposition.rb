@@ -15,7 +15,8 @@ class Deposition
   # NOTE: Depositions will work in two modes
   #  - with associated submissions (depositing submitted data to an external service)
   #  - with table data filtered by user (depositing that data to an external service)
-  # Hence either submission or user should be present
+  # Hence either submission or user should be present.
+  # TODO TEMP: currently only the submission-based mode is implemented and supported.
 
   validates :title, :creators, :description, presence: true
   validates :submission, presence: true, unless: :user

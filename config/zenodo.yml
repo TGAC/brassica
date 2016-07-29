@@ -5,5 +5,6 @@ test:
   zenodo_server: https://sandbox.zenodo.org/
 
 production:
+  # FIXME TEMP Deploy and test with sandbox first!
   zenodo_server: https://sandbox.zenodo.org/
 #  zenodo_server: https://zenodo.org/

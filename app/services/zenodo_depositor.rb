@@ -9,7 +9,8 @@ class ZenodoDepositor
 
   # 1. Sets up a new deposition in Zenodo, with proper metadata
   # 2. Uploads CSV data to that deposition
-  # 3. Publishes that deposition (i.e. makes it available to Zenodo users)
+  # 3. Publishes that deposition (i.e. makes it available to public)
+  # 4. Saves assigned DOI in submission
   def call
     unless @deposition && @deposition.valid?
       report_problem 'Got nil or invalid Deposition. Unable to upload it to Zenodo.'
