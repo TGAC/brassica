@@ -82,8 +82,6 @@ class ZenodoDepositor
             @deposition.submission.save!
           end
         end
-      else
-        #TODO FIXME Error management
       end
     end
   end
