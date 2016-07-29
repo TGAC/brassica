@@ -16,7 +16,7 @@ if ARGV.size < 2
   exit 1
 end
 
-@client = Net::HTTP.new('bip.tgac.ac.uk', 443)
+@client = Net::HTTP.new('bip.earlham.ac.uk', 443)
 @client.use_ssl = true
 @headers = {
   'Content-Type' => 'application/json',
