@@ -107,6 +107,7 @@ VCR.configure do |c|
   c.hook_into :typhoeus
   c.hook_into :webmock
   c.default_cassette_options = { record: :new_episodes, re_record_interval: 7.days }
+  # FIXME: put ES server into configuration
   c.ignore_hosts '127.0.0.1', 'localhost'  # ES server
   c.ignore_hosts 'pub.orcid.org', 'sandbox.orcid.org'
 end

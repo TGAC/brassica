@@ -6,11 +6,12 @@ RSpec.describe ZenodoDepositor do
   let(:population_deposition) { Deposition.new(submission: population_submission) }
   let(:private_deposition) { Deposition.new(submission: private_submission) }
 
-  it 'does nothing for broken deposition' do
+  it 'fails with error for broken deposition' do
     expect_any_instance_of(Typhoeus::Request).not_to receive(:run)
-    deposit(nil)
-    deposit(Deposition.new)
-    deposit(Deposition.new(title: 't'))
+    error_msg = "Got nil or invalid Deposition. Unable to upload it to Zenodo."
+    expect { deposit(nil) }.to raise_error(ArgumentError, error_msg)
+    expect { deposit(Deposition.new) }.to raise_error(ArgumentError, error_msg)
+    expect { deposit(Deposition.new(title: 't')) }.to raise_error(ArgumentError, error_msg)
   end
 
   it 'handles network errors gracefully' do

@@ -12,18 +12,51 @@ class ZenodoDepositor
   # 3. Publishes that deposition (i.e. makes it available to public)
   # 4. Saves assigned DOI in submission
   def call
-    unless @deposition && @deposition.valid?
-      report_problem 'Got nil or invalid Deposition. Unable to upload it to Zenodo.'
-      return
+    unless @deposition.try(:valid?)
+      raise ArgumentError, 'Got nil or invalid Deposition. Unable to upload it to Zenodo.'
     end
 
-    documents_to_deposit = @deposition.documents_to_deposit
-    if documents_to_deposit.empty?
-      report_problem 'Nothing to deposit in Zenodo - deposition documents empty.'
-      return
-    end
+    return unless check_documents_presence
 
-    request = Typhoeus::Request.new(
+    deposition_request.tap do |request|
+      submit_request(request) do |response|
+        remote_deposition = JSON.parse(response.body)
+
+        deposited_file_count = 0
+        # We need a temp dir for deposition files
+        Dir.mktmpdir do |files_directory|
+          documents_to_deposit.each do |name, contents|
+            file = write_file(contents, files_directory, "#{name}.csv")
+            deposition_file_request(remote_deposition, file).tap do |file_request|
+              submit_request(file_request) { deposited_file_count += 1 }
+            end
+          end
+        end
+
+        if deposited_file_count == documents_to_deposit.size
+          # All documents were successfully deposited, time to Publish
+          deposition_publish_request(remote_deposition).tap do |publish_request|
+            submit_request(publish_request) do |publish_response|
+              remote_deposition = JSON.parse(publish_response.body)
+              set_submission_doi(remote_deposition)
+            end
+          end
+        end
+      end
+    end
+  end
+
+  private
+
+  def check_documents_presence
+    return true if documents_to_deposit.present?
+
+    report_problem 'Nothing to deposit in Zenodo - deposition documents empty.'
+    false
+  end
+
+  def deposition_request
+    Typhoeus::Request.new(
       query_url,
       method: :post,
       headers: { 'Content-Type' => 'application/json' },
@@ -32,7 +65,7 @@ class ZenodoDepositor
           upload_type: 'dataset',
           title: @deposition.title,
           creators: @deposition.creators,
-          contributors: contributors_json,
+          contributors: contributors,
           description: @deposition.description,
           keywords: ['Brassica', 'Phenotyping', 'Association studies'],
           subjects: [
@@ -44,63 +77,50 @@ class ZenodoDepositor
         }
       }.to_json
     )
-
-    submit_request(request) do |response|
-      remote_deposition = JSON.parse(response.body)
-
-      deposited_file_count = 0
-      # We need a temp dir for deposition files
-      Dir.mktmpdir do |files_directory|
-        documents_to_deposit.each do |name, contents|
-          next if contents.empty?
-          request = Typhoeus::Request.new(
-            query_url("/#{remote_deposition['id']}/files"),
-            method: :post,
-            headers: { 'Content-Type' => 'multipart/form-data' },
-            body: {
-              filename: "#{name}.csv",
-              file: write_file(contents, files_directory, "#{name}.csv")
-            }
-          )
-          submit_request(request) do |_|
-            # Success
-            deposited_file_count += 1
-          end
-        end
-      end
-
-      if deposited_file_count == documents_to_deposit.size
-        # All documents were successfully deposited, time to Publish
-        request = Typhoeus::Request.new(
-          query_url("/#{remote_deposition['id']}/actions/publish"),
-          method: :post
-        )
-        submit_request(request) do |publish_response|
-          remote_deposition = JSON.parse(publish_response.body)
-          if @deposition.submission
-            @deposition.submission.doi = remote_deposition['doi']
-            @deposition.submission.save!
-          end
-        end
-      end
-    end
   end
 
-  private
+  def deposition_file_request(remote_deposition, file)
+    Typhoeus::Request.new(
+      query_url("/#{remote_deposition['id']}/files"),
+      method: :post,
+      headers: { 'Content-Type' => 'multipart/form-data' },
+      body: {
+        filename: Pathname(file.path).basename.to_s,
+        file: file
+      }
+    )
+  end
 
-  def contributors_json
+  def deposition_publish_request(remote_deposition)
+    Typhoeus::Request.new(
+      query_url("/#{remote_deposition['id']}/actions/publish"),
+      method: :post
+    )
+  end
+
+  def documents_to_deposit
+    @deposition.documents_to_deposit.select { |_, contents| contents.present? }
+  end
+
+  def contributors
     names = @deposition.contributors.split("\n")
-    names = names.select(&:present?)
-    names.map { |contributor|
+    names.select(&:present?).map { |contributor|
       { name: contributor, type: 'Researcher' }
     }
   end
 
   def write_file(contents, files_directory, filename)
-    file = File.open("#{files_directory}/#{filename}", 'w')
-    file.write contents
-    file.rewind
-    file
+    path = File.join(files_directory, filename)
+    File.open(path, 'w').tap do |file|
+      file.write(contents)
+      file.rewind
+    end
+  end
+
+  def set_submission_doi(remote_deposition)
+    return unless @deposition.submission
+    @deposition.submission.doi = remote_deposition['doi']
+    @deposition.submission.save!
   end
 
   def submit_request(request)
