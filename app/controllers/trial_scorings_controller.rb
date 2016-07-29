@@ -4,14 +4,7 @@ class TrialScoringsController < ApplicationController
     params[:model] = 'trial_scoring'
 
     respond_to do |format|
-      format.html do
-        @trait_descriptors = TraitDescriptor.
-          joins(trait_scores: :plant_scoring_unit).
-          where(plant_scoring_units: { plant_trial_id: params[:id].to_i }).
-          order('trait_descriptors.id asc').uniq
-
-        @replicate_numbers = replicate_numbers
-      end
+      format.html
       format.json do
         cache_key = params.reject{ |k,_| %w(_ controller action format).include? k }
         cache_key[:latest_change] = data_latest_updated_at
@@ -29,14 +22,8 @@ class TrialScoringsController < ApplicationController
   private
 
   def prepare_grid_data
-    objects = @plant_trial.scoring_table_data(
-      trait_descriptor_ids, replicate_numbers, current_user.try(:id)
-    )
+    objects = @plant_trial.scoring_table_data(current_user.try(:id))
     ApplicationDecorator.decorate(objects).as_grid_data
-  end
-
-  def trait_descriptor_ids
-    params[:trait_descriptor_ids] || []
   end
 
   def data_latest_updated_at
@@ -48,13 +35,5 @@ class TrialScoringsController < ApplicationController
   def data_count
     @plant_trial.plant_scoring_units.count +
     TraitScore.of_trial(@plant_trial.id).count
-  end
-
-  def replicate_numbers
-    TraitScore.
-      joins(:plant_scoring_unit).
-      where(plant_scoring_units: { plant_trial_id: params[:id].to_i }).
-      group(:trait_descriptor_id).
-      maximum(:technical_replicate_number)
   end
 end
