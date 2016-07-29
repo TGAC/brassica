@@ -32,12 +32,11 @@ class Submission::PlantTrialExporter < Submission::Exporter
   end
 
   def trait_scoring
-    @trait_descriptors = submitted_object.trait_descriptors
-    data = submitted_object.scoring_table_data(@trait_descriptors.map(&:id), @submission.user.id)
+    data = submitted_object.scoring_table_data(@submission.user.id)
     return nil if data.empty?
     CSV.generate(headers: true) do |csv|
-      csv << ['Scoring unit name'] + @trait_descriptors.map(&:descriptor_name)
-      data.each { |row| csv << row }
+      csv << ['Scoring unit name'] + submitted_object.decorate.trait_headers
+      data.each { |row| csv << row[0...-1] }  # Drop the BIP internal id
     end
   end
 end
