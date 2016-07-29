@@ -7,9 +7,7 @@ class DepositionsController < ApplicationController
   end
 
   def create
-    @deposition = Deposition.new(
-      { submission: submission, user: current_user }.merge(deposition_create_params)
-    )
+    @deposition = Deposition.new(deposition_create_params)
 
     if @deposition.valid?
       service = ZenodoDepositor.new(@deposition)
@@ -36,8 +34,6 @@ class DepositionsController < ApplicationController
   def submission
     if params[:deposition][:submission_id]
       current_user.submissions.find(params[:deposition].delete(:submission_id))
-    else
-      nil
     end
   end
 
@@ -46,6 +42,9 @@ class DepositionsController < ApplicationController
       :title,
       :description,
       :contributors
+    ).merge(
+      submission: submission,
+      user: current_user
     )
   end
 end
