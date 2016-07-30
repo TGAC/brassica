@@ -3,7 +3,7 @@
 
   .row
     .col-sm-8
-      %h4= @submission.object_name
+      %h4= @submission.name
 
     .col-sm-4.text-right
       = render partial: "/submissions/show/status", locals: { submission: @submission, mode: :private }

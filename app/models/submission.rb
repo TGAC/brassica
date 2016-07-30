@@ -102,30 +102,6 @@ class Submission < ActiveRecord::Base
     STEPS.fetch(submission_type)
   end
 
-  def object_name
-    case submission_type
-    when 'population' then content.step01.try(:name) || ''
-    when 'trial' then content.step01.try(:plant_trial_name) || ''
-    else ''
-    end
-  end
-
-  def object_description
-    case submission_type
-    when 'population' then content.step01.try(:description) || ''
-    when 'trial' then content.step01.try(:plant_trial_description) || ''
-    else ''
-    end
-  end
-
-  def affiliation
-    case submission_type
-    when 'population' then content.step01.try(:owned_by) || ''
-    when 'trial' then content.step01.try(:institute_id) || ''
-    else ''
-    end
-  end
-
   def associated_model
     case submission_type
     when 'population'

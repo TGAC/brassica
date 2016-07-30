@@ -32,9 +32,16 @@ class Deposition
 
   def set_default_metadata
     if submission
-      self.title = "#{I18n.t("submission.submission_type.#{submission.submission_type}")}: #{submission.object_name}" unless self.title
-      self.description = submission.object_description unless self.description
-      self.creators = [{ name: submission.user.full_name, affiliation: submission.affiliation }]
+      decorated = if submission.population?
+                    PlantPopulationSubmissionDecorator.decorate(submission)
+                  elsif submission.trial?
+                    PlantTrialSubmissionDecorator.decorate(submission)
+                  else
+                    raise NotImplementedError
+                  end
+      self.title = "#{I18n.t("submission.submission_type.#{decorated.submission_type}")}: #{decorated.name}" unless self.title
+      self.description = decorated.description unless self.description
+      self.creators = [{ name: submission.user.full_name, affiliation: decorated.affiliation }]
       self.contributors = submission.user.full_name unless self.contributors
     elsif user
       self.creators = [{ name: user.full_name }]
