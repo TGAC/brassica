@@ -15,7 +15,7 @@ class DepositionsController < ApplicationController
       if @deposition.submission
         if @deposition.submission.doi
           redirect_to @deposition.submission,
-                      notice: "Deposited data in Zenodo with DOI number: #{@deposition.submission.doi}."
+                      notice: "Assigned DOI number: #{@deposition.submission.doi}."
         else
           redirect_to @deposition.submission,
                       alert: service.user_log.join('\n')

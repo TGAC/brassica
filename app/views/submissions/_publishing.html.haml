@@ -22,7 +22,7 @@
                        title: tooltip)
 
 - elsif submission.depositable?
-  = link_to "Deposit in Zendo",
+  = link_to "Request a DOI",
             new_deposition_path(deposition: { submission_id: submission.id }),
             class: "btn #{btn_size} btn-primary pull-right",
             title: 'Deposit this submission content in Zenodo.org to get official dataset DOI number.'

@@ -1,21 +1,24 @@
 .container
   %h3.section-heading
-    Deposition of submission #{@deposition.submission.object_name} in Zenodo.org
+    Assignment of a permanent DOI number for submitted dataset
 
   .alert.alert-info
-    This action will upload this <b>submission data</b> (and any other BIP
-    data directly related to it), to an external service, called
+    This action will create a permanent <b>Digital Object Identifier (DOI)</b> for
+    proper citation of this submission data (and metadata related to it).
+    The DOI is assigned through an external service called
     <b><a href='https://www.zenodo.org/' target='_blank'>Zenodo.org</a></b>.
 
-    This data will be stored there, using a common BIP service account,
-    and it will be accessible to all Zenodo visitors.
-    Your name will be mentioned as the creator of the dataset. In exchange,
-    you will get an official <b>DOI number</b> for this deposition, which
-    you would be able to quote in your works.
+    One of the criteria for a dataset to receive a DOI is that it remains
+    <b>stable</b> after the submission. Therefore, the data you submit to
+    receive a DOI will be exported to Zenodo to ensure that it remains as it
+    is presented at the time of this DOI request. Therefore, please <b>prepare this
+    submission carefully</b>. We would like to remind you that you are responsible
+    for the contents and specifications of your dataset.
 
   .alert.alert-info
-    Please, use the form below to provide a set of deposition metadata, which
-    you would like to publish along with this dataset, inside Zenodo.org.
+    Please, use the form below to provide a set of deposition metadata
+    which you would like to publish along with this dataset when requesting
+    a permanent DOI from Zenodo.
 
   = form_for @deposition do |f|
 
@@ -24,10 +27,17 @@
     .form-group
       = f.label :title, class: 'required'
       = f.text_field :title, class: 'form-control'
+      %small.help-block
+        A name by which the dataset is known. It can be the submission name in BIP or
+        it can be the title of your upcoming publication where you want to cite this dataset in.
 
     .form-group
       = f.label :description, class: 'required'
       = f.text_area :description, class: 'form-control'
+      %small.help-block
+        Enter a description of the dataset and how to use it. Currently displayed is your
+        description you submitted earlier in conjunction with the dataset. You can build
+        you DOI-dataset description on this description.
 
     .form-group
       = f.label :contributors, class: 'required'
@@ -37,4 +47,4 @@
 
     = my_submissions_button
     = link_to 'Cancel', @deposition.submission,  class: 'btn btn-primary'
-    = f.submit class: 'btn btn-primary pull-right'
+    = f.submit 'Request a DOI', class: 'btn btn-primary pull-right'
