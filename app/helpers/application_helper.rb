@@ -70,7 +70,7 @@ module ApplicationHelper
     options[:method] ||= :post
     options[:url] ||= url_for(object)
     options[:btn_class] ||= "btn-default"
-    options[:button_size] ||= ""
+    options[:btn_size] ||= ""
     options[:other_content] ||= capture(&blk) if block_given?
     options[:title] ||= nil
 

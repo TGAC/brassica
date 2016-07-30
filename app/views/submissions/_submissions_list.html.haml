@@ -17,7 +17,7 @@
         = render partial: "/submissions/show/status", locals: { submission: submission, mode: mode }
 
         - unless mode == :public
-          = confirmable_action("Delete", submission, method: :delete, button_size: 'btn-sm', btn_class: "btn-warning") do
+          = confirmable_action("Delete", submission, method: :delete, btn_size: 'btn-sm', btn_class: "btn-warning") do
             = link_to 'Edit', edit_submission_path(submission), class: 'btn btn-sm btn-default'
 
       - else
@@ -30,4 +30,4 @@
               class: 'btn btn-sm btn-default'
 
         - else
-          = render partial: 'publishing', locals: { submission: submission, button_size: 'btn-sm' }
+          = render partial: 'publishing', locals: { submission: submission, btn_size: 'btn-sm' }

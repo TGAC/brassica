@@ -7,7 +7,7 @@
                        url: revoke_submission_path(submission),
                        method: :patch,
                        title: tooltip,
-                       button_size: button_size)
+                       btn_size: btn_size)
 
 - elsif !submission.published?
   - tooltip = capture do
@@ -17,12 +17,12 @@
                        submission,
                        url: publish_submission_path(submission),
                        method: :patch,
-                       button_size: button_size,
+                       btn_size: btn_size,
                        btn_class: "btn-primary",
                        title: tooltip)
 
 - elsif submission.depositable?
   = link_to "Deposit in Zendo",
             new_deposition_path(deposition: { submission_id: submission.id }),
-            class: "btn #{button_size} btn-primary pull-right",
+            class: "btn #{btn_size} btn-primary pull-right",
             title: 'Deposit this submission content in Zenodo.org to get official dataset DOI number.'
