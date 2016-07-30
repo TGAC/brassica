@@ -44,6 +44,6 @@ class Submission::Publisher
   end
 
   def associated_collections
-    raise NotImplemented, "Must be implemented by subclasses"
+    raise NotImplementedError, "Must be implemented by subclasses"
   end
 end

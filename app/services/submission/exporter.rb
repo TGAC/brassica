@@ -4,7 +4,7 @@ class Submission::Exporter
   end
 
   def documents
-    raise NotImplemented, "Must be implemented by subclasses"
+    raise NotImplementedError, "Must be implemented by subclasses"
   end
 
   private
