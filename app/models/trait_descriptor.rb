@@ -68,7 +68,8 @@ class TraitDescriptor < ActiveRecord::Base
       query: params_for_filter(table_columns) +
         [
           'user_id',
-          'id'
+          'id',
+          'id' => []
         ]
     ]
   end

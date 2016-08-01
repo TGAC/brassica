@@ -7,6 +7,7 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'factory_girl_rails'
 require 'common_helpers'
+require 'vcr'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -100,3 +101,11 @@ RSpec.configure do |config|
 end
 
 OmniAuth.config.test_mode = true
+VCR.configure do |c|
+  c.cassette_library_dir = Rails.root.join('spec', 'support', 'vcr_cassettes')
+  c.hook_into :typhoeus
+  c.hook_into :webmock
+  c.default_cassette_options = { record: :new_episodes, re_record_interval: 7.days }
+  c.ignore_hosts '127.0.0.1', 'localhost'  # ES server
+  c.ignore_hosts 'pub.orcid.org', 'sandbox.orcid.org'
+end

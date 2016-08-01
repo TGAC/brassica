@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     end
     resources :uploads, controller: 'submissions/uploads', only: [:new, :create, :destroy]
   end
+  resources :depositions, only: [:new, :create]
   resources :plant_lines, only: [:index]
   resources :plant_varieties, only: [:index]
   resources :plant_parts, only: [:index]

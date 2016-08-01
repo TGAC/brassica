@@ -26,6 +26,10 @@ class SubmissionDecorator < Draper::Decorator
     end
   end
 
+  def doi
+    object.doi ? h.link_to(object.doi, "http://dx.doi.org/#{object.doi}") : ''
+  end
+
   def label
     raise Exception.new('Should be extended by subclasses')
   end

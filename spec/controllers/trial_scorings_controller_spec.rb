@@ -24,11 +24,6 @@ RSpec.describe TrialScoringsController do
       get :show, format: :json, id: plant_trial.id
     end
 
-    it 'passes empty array to scoring_table_data if no TDs are given in params' do
-      expect_any_instance_of(PlantTrial).to receive(:scoring_table_data).with([], {}, nil).once.and_return([])
-      get :show, format: :json, id: plant_trial.id
-    end
-
     context 'with caching' do
       it 'caches the response' do
         expect_any_instance_of(PlantTrial).to receive(:scoring_table_data).once.and_return([])
