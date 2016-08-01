@@ -299,7 +299,7 @@ window.imageDataUrl = (data) ->
       #NOTE: CyVerse does not translate double slashes to single slashes
       #NOTE: We try to support both already-escaped and not-yet-escaped strings
       escaped = escape(unescape(image.replace(/^\s*\/|\s+$/g, '')))
-      '<a href="http://mirrors.iplantcollaborative.org/browse/iplant/home/shared/' + escaped + '" target="_blank">image_' + (i + 1) + '</a> '
+      '<a href="http://mirrors.iplantcollaborative.org/browse/iplant/' + escaped + '" target="_blank">image_' + (i + 1) + '</a> '
     urls.join(' ')
   else
     data
