@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160719094108) do
+ActiveRecord::Schema.define(version: 20160801111646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -713,6 +713,7 @@ ActiveRecord::Schema.define(version: 20160719094108) do
     t.datetime "updated_at",                          null: false
     t.integer  "submitted_object_id"
     t.boolean  "published",           default: false, null: false
+    t.string   "doi"
   end
 
   add_index "submissions", ["finalized"], name: "index_submissions_on_finalized", using: :btree
