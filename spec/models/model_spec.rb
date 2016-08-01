@@ -25,7 +25,7 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
-  it 'defined permitted query params as strings only' do
+  it 'defines permitted query params as strings only' do
     ActiveRecord::Base.descendants.each do |model|
       if model.respond_to?(:permitted_params)
         query = model.send(:permitted_params).detect{ |x| x.is_a?(Hash) && x[:query].present? }

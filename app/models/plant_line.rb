@@ -68,7 +68,8 @@ class PlantLine < ActiveRecord::Base
         [
           'plant_populations.id',
           'user_id',
-          'id'
+          'id',
+          'id' => []
         ]
     ]
   end

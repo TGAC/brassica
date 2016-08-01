@@ -61,7 +61,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
 
   # Required by devise
-  config.action_mailer.default_url_options = { host: 'bip.tgac.ac.uk' }
+  config.action_mailer.default_url_options = { host: 'bip.earlham.ac.uk' }
 
   # Further mailer options used by exception notifier
   config.action_mailer.delivery_method = :smtp

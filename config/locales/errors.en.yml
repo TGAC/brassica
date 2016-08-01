@@ -33,6 +33,9 @@ en:
             plant_trial_name:
               blank: Please provide a trial name.
 
+            plant_trial_description:
+              blank: Please provide a brief description of your trial.
+
             project_descriptor:
               blank: Please provide a project name.
 
@@ -62,6 +65,9 @@ en:
 
             country_id:
               blank: Please select a country from the list.
+
+            institute_id:
+              blank: Please select or provide your institute name (affiliation).
 
             technical_replicate_numbers:
               invalid: |

@@ -11,7 +11,11 @@ class PlantTrial < ActiveRecord::Base
   has_attached_file :layout
 
   validates :plant_trial_name, presence: true, uniqueness: true
-  validates :project_descriptor, :trial_year, :place_name, presence: true
+  validates :project_descriptor,
+            :plant_trial_description,
+            :institute_id,
+            :trial_year,
+            :place_name, presence: true
   validates :latitude, allow_blank: true, numericality: {
     greater_than_or_equal_to: -90,
     less_than_or_equal_to: 90
@@ -32,7 +36,7 @@ class PlantTrial < ActiveRecord::Base
   include TableData
 
   # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
-  def scoring_table_data(trait_descriptor_ids, replicate_numbers, uid = nil)
+  def scoring_table_data(uid = nil)
     ts = TraitScore.arel_table
 
     psu_subquery = PlantScoringUnit.visible(uid)
@@ -53,7 +57,7 @@ class PlantTrial < ActiveRecord::Base
       scores = all_scores[unit.id] || []
 
       [unit.scoring_unit_name] +
-        trait_descriptor_ids.map do |td_id|
+        trait_descriptors.pluck(:id).map do |td_id|
           scores_for_trait = scores.select{ |s| s.trait_descriptor_id == td_id.to_i}
           (1..replicate_numbers[td_id.to_i]).map do |replicate_number|
             replicate = scores_for_trait.detect{ |s| s.technical_replicate_number == replicate_number }
@@ -62,6 +66,22 @@ class PlantTrial < ActiveRecord::Base
         end.flatten +
         [unit.id]
     end
+  end
+
+  def trait_descriptors
+    TraitDescriptor.
+      joins(trait_scores: :plant_scoring_unit).
+      where(plant_scoring_units: { plant_trial_id: id }).
+      order('trait_descriptors.id asc').uniq
+  end
+
+  # Gives technical replicate numbers for each trait descriptor
+  def replicate_numbers
+    TraitScore.
+      joins(:plant_scoring_unit).
+      where(plant_scoring_units: { plant_trial_id: id }).
+      group(:trait_descriptor_id).
+      maximum(:technical_replicate_number)
   end
 
   def self.table_columns

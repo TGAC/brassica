@@ -42,7 +42,8 @@ class PlantScoringUnit < ActiveRecord::Base
           'plant_trials.id',
           'plant_accessions.id',
           'user_id',
-          'id'
+          'id',
+          'id' => []
         ]
     ]
   end

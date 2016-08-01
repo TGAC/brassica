@@ -14,7 +14,7 @@ module ApplicationHelper
         end
       when 'data_tables', 'trial_scorings'
         :browse
-      when 'submissions'
+      when 'submissions', 'depositions'
         :submit
       when 'api_keys'
         :api
@@ -70,6 +70,7 @@ module ApplicationHelper
     options[:method] ||= :post
     options[:url] ||= url_for(object)
     options[:btn_class] ||= "btn-default"
+    options[:btn_size] ||= ""
     options[:other_content] ||= capture(&blk) if block_given?
     options[:title] ||= nil
 

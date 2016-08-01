@@ -23,6 +23,10 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     end.strip
   end
 
+  def name
+    plant_trial_name || ''
+  end
+
   def plant_trial_name
     @plant_trial_name ||= object.content.step01.plant_trial_name.presence
   end
@@ -62,6 +66,10 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     end
   end
 
+  def description
+    plant_trial_description || ''
+  end
+
   def plant_trial_description
     object.content.step01.plant_trial_description
   end
@@ -74,6 +82,10 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     country_id = object.content.step01.country_id
     return unless country_id.present?
     Country.find(country_id).country_name
+  end
+
+  def affiliation
+    institute_id || ''
   end
 
   def institute_id

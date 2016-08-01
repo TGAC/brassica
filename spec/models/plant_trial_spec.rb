@@ -75,9 +75,9 @@ RSpec.describe PlantTrial do
     end
   end
 
-  describe '.scoring_table_data' do
-    it 'returns empty table when no TD ids are provided' do
-      expect(subject.scoring_table_data([], {})).to eq []
+  describe '#scoring_table_data' do
+    it 'returns empty table by default' do
+      expect(subject.scoring_table_data).to eq []
     end
 
     context 'when there are PSUs inside the trial' do
@@ -85,7 +85,7 @@ RSpec.describe PlantTrial do
       before(:each) { create_list(:plant_scoring_unit, 3, plant_trial: plant_trial) }
 
       it 'returns all plant scoring units' do
-        scoring_table = plant_trial.scoring_table_data([], {})
+        scoring_table = plant_trial.scoring_table_data
         expect(scoring_table).
           to eq plant_trial.plant_scoring_units.map{ |psu| [psu.scoring_unit_name, psu.id] }.sort
       end
@@ -101,13 +101,13 @@ RSpec.describe PlantTrial do
         end
 
         it 'provides scores in correct TD order' do
-          scoring_table = plant_trial.scoring_table_data(tds.map(&:id), replicate_numbers)
+          scoring_table = plant_trial.scoring_table_data
           expect(scoring_table[0][1]).to eq tds[0].trait_scores[0].score_value
           expect(tds[1].trait_scores.map(&:score_value)).to include scoring_table[2][2]
         end
 
         it 'properly treats sparse data' do
-          scoring_table = plant_trial.scoring_table_data(tds.map(&:id), replicate_numbers)
+          scoring_table = plant_trial.scoring_table_data
           expect(scoring_table[1][1]).to eq '-'
           expect(scoring_table[1][2]).to eq '-'
           expect(scoring_table[2][1]).to eq '-'
@@ -123,7 +123,7 @@ RSpec.describe PlantTrial do
           end
 
           it 'builds proper sparse matrix of values' do
-            scoring_table = plant_trial.scoring_table_data(tds.map(&:id), replicate_numbers)
+            scoring_table = plant_trial.scoring_table_data
 
             expect(scoring_table[0][1..3]).to eq tds[0].trait_scores.where(plant_scoring_unit: psus[0]).order(:technical_replicate_number).pluck(:score_value)
             expect(scoring_table[0][4..5]).to eq tds[1].trait_scores.where(plant_scoring_unit: psus[0]).order(:technical_replicate_number).pluck(:score_value)
@@ -136,6 +136,26 @@ RSpec.describe PlantTrial do
           end
         end
       end
+    end
+  end
+
+  describe '#replicate_numbers' do
+    let(:plant_trial) { create(:plant_trial) }
+    let(:ps) { create(:plant_scoring_unit, plant_trial: plant_trial) }
+    let(:tds) { create_list(:trait_descriptor, 2) }
+    before(:each) do
+      create(:trait_score, trait_descriptor: tds[0], plant_scoring_unit: ps, technical_replicate_number: 2)
+      create(:trait_score, trait_descriptor: tds[0], plant_scoring_unit: ps, technical_replicate_number: 3)
+      create(:trait_score, trait_descriptor: tds[1], plant_scoring_unit: ps, technical_replicate_number: 2)
+    end
+
+    it 'returns empty hash if no scores are present' do
+      expect(subject.replicate_numbers).to eq({})
+    end
+
+    it 'groups technical replicate numbers by trait descriptor id' do
+      expect(plant_trial.replicate_numbers).
+        to eq({ tds[0].id => 3, tds[1].id => 2 })
     end
   end
 

@@ -23,6 +23,10 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
     end.strip
   end
 
+  def name
+    population_name || ''
+  end
+
   def population_name
     @population_name ||= object.content.step01.name.presence
   end
@@ -74,7 +78,11 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def description
-    object.content.step01.description.presence
+    object.content.step01.description.presence || ''
+  end
+
+  def affiliation
+    owned_by || ''
   end
 
   def owned_by

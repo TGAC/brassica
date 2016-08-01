@@ -46,8 +46,10 @@ class PlantVariety < ActiveRecord::Base
       :fetch,
       query: params_for_filter(table_columns) +
         [
+          'plant_populations.id',
           'user_id',
-          'id'
+          'id',
+          'id' => []
         ],
       search: [
         :plant_variety_name
