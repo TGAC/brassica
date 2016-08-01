@@ -62,6 +62,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include RSpecHtmlMatchers
   include CommonHelpers
+  config.include ElasticsearchHelper, :elasticsearch
 
   config.before :suite do
     DatabaseCleaner.clean_with :truncation
