@@ -7,5 +7,12 @@ namespace :search do
 
       Search::IndexBuilder.new.call(klass)
     end
+
+    desc "Destroy, recreate and populate all ES indices with public records"
+    task all: :environment do
+      Searchable.classes do |klass|
+        Search::IndexBuilder.new.call(klass)
+      end
+    end
   end
 end
