@@ -138,8 +138,7 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     # Special cases
     create(:plant_line, plant_line_name: "12345@67890")
 
-    # FIXME without sleep ES is not able to update index in time
-    sleep 1
+    refresh_index(*Searchable.classes)
   end
 
   after(:all) do
