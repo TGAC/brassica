@@ -23,7 +23,7 @@
         it.
 
       %p
-        = button_to "Renew key", recreate_api_keys_path, method: "put", class: 'btn btn-danger'
+        = button_to(recreate_api_keys_path, method: "put", class: 'btn btn-danger') { "Renew key" }
 
       %p.text-danger
         %strong Important.

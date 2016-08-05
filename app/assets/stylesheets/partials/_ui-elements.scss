@@ -30,6 +30,25 @@
   margin-bottom: 5px;
 }
 
+//button layout
+.btn, a {
+  .icon {
+    vertical-align: -1px;
+  }
+
+  .icon:first-child, .fa:first-child {
+    margin-right: 0.5em;
+  }
+
+  .icon:last-child, .fa:last-child {
+    margin-left: 0.5em;
+  }
+
+  .icon:only-child, .fa:only-child {
+    margin: 0
+  }
+}
+
 //forms
 .form-negative {
   border-color: $mono-color-2;
