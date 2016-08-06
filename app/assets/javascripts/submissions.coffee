@@ -47,7 +47,7 @@ class Submission
   initDirtyTracker: =>
     @dirtyTracker = new DirtyTracker(@$el[0]).init()
 
-    $('input[type=submit][name=back], .step a').on 'click', (event) =>
+    $('input[type=submit][name=back], button[type=submit][name=back], .step a').on 'click', (event) =>
       if @dirtyTracker.isChanged()
         msg = "Discard unsaved changes?"
 
@@ -83,7 +83,8 @@ class PopulationSubmission extends Submission
   initDirtyTracker: =>
     super()
 
-    $('input[type=submit][name=leave], input[type=submit][name=commit]').on 'click', (event) =>
+    $('input[type=submit][name=leave], input[type=submit][name=commit],
+      button[type=submit][name=leave], button[type=submit][name=commit]').on 'click', (event) =>
       if @dirtyTracker.isChanged('new-plant-line')
         unless confirm("Discard new Plant line?")
           event.preventDefault()

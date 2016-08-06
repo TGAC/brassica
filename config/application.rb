@@ -39,3 +39,7 @@ module Brassica
     config.active_record.raise_in_transactional_callbacks = true
   end
 end
+
+require_relative "../app/forms/base_form_builder"
+
+ActionView::Base.default_form_builder = BaseFormBuilder

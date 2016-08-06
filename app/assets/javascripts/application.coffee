@@ -54,3 +54,20 @@ $ ->
     this.setAttribute('href', this.getAttribute('href').replace('sarah_address', 'sarahcdyer@gmail.com'))
     this.setAttribute('href', this.getAttribute('href').replace('bip_address', 'bip@earlham.ac.uk'))
     $(this).html($(this).html().replace('bip_address', 'bip@earlham.ac.uk'))
+
+  # Multiple form submission prevention
+  $("form").not(".search").on 'submit', (event) ->
+    $form = $(this)
+
+    if $form.data('submitted')
+      return event.preventDefault()
+
+    $submits = $form.find("input[type=submit], button[type=submit]")
+
+    if active = document.activeElement
+      Button.disable(active)
+      Button.disable($submits.not(active), spinner: false)
+    else
+      Button.disable($submits, spinner: false)
+
+    $form.data(submitted: true)
