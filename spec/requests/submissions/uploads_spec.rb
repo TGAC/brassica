@@ -18,20 +18,15 @@ RSpec.describe "Submission uploads" do
     end
   end
 
-  context "with user signed in" do
-    let(:user) { submission.user }
-    let(:parsed_response) { JSON.parse(response.body) }
-
-    before { login_as(user) }
-
-    describe "POST /submissions/:submission_id/uploads" do
-      let(:file) { fixture_file_upload('files/score_upload.txt', 'text/plain') }
+  shared_examples "successful submission upload" do |content_type|
+    context "with #{content_type} content" do
+      let(:file) { fixture_file_upload('files/score_upload.txt', content_type) }
 
       it "creates upload" do
         expect {
           post "/submissions/#{submission.id}/uploads", submission_upload: {
             upload_type: 'trait_scores',
-            file: file
+              file: file
           }
         }.to change { submission.uploads.count }.from(0).to(1)
 
@@ -41,6 +36,19 @@ RSpec.describe "Submission uploads" do
           "delete_url" => submission_upload_path(submission, submission.uploads.last)
         )
       end
+    end
+  end
+
+  context "with user signed in" do
+    let(:user) { submission.user }
+    let(:parsed_response) { JSON.parse(response.body) }
+
+    before { login_as(user) }
+
+    describe "POST /submissions/:submission_id/uploads" do
+      it_behaves_like "successful submission upload", "text/csv"
+      it_behaves_like "successful submission upload", "text/plain"
+      it_behaves_like "successful submission upload", "application/vnd.ms-excel"
     end
 
     describe "GET /submissions/:submission_id/uploads/new" do
