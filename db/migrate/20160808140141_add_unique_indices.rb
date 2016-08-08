@@ -4,7 +4,6 @@ class AddUniqueIndices < ActiveRecord::Migration
     [:linkage_groups, :linkage_group_label],
     [:linkage_maps, :linkage_map_label],
     [:marker_assays, :marker_assay_name],
-    [:plant_accessions, :plant_accession],
     [:plant_lines, :plant_line_name],
     [:plant_parts, :plant_part],
     [:plant_populations, :name],
@@ -32,6 +31,14 @@ class AddUniqueIndices < ActiveRecord::Migration
       execute("CREATE UNIQUE INDEX #{table_name}_#{column_name}_idx ON #{table_name} (#{column_name})")
       puts "...successfully added index on column #{column_name} in #{table_name}."
     end
+
+    # Special case for plant_accessions
+    # Recreate regular (nonunique) index on plant_accessions.plant_accession
+    execute("DROP INDEX IF EXISTS plant_accessions_plant_accession_idx")
+    execute("CREATE INDEX plant_accessions_plant_accession_idx ON plant_accessions (plant_accession)")
+    # Create a joint unique index on plant_accessions.plant_accession and plant_accessions.originating_organisation
+    execute("DROP INDEX IF EXISTS plant_accessions_plant_accession_originating_organisation_idx")
+    execute("CREATE UNIQUE INDEX plant_accessions_plant_accession_originating_organisation_idx ON plant_accessions (plant_accession, originating_organisation)")
   end
 
   def down

@@ -279,7 +279,8 @@ ActiveRecord::Schema.define(version: 20160808140141) do
   end
 
   add_index "plant_accessions", ["plant_accession", "originating_organisation"], name: "plant_accessions_pa_oo_idx", using: :btree
-  add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", unique: true, using: :btree
+  add_index "plant_accessions", ["plant_accession", "originating_organisation"], name: "plant_accessions_plant_accession_originating_organisation_idx", unique: true, using: :btree
+  add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
   add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
   add_index "plant_accessions", ["plant_variety_id"], name: "index_plant_accessions_on_plant_variety_id", using: :btree
   add_index "plant_accessions", ["published"], name: "index_plant_accessions_on_published", using: :btree
