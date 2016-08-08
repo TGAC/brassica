@@ -37,6 +37,7 @@ class AddUniqueIndices < ActiveRecord::Migration
     execute("DROP INDEX IF EXISTS plant_accessions_plant_accession_idx")
     execute("CREATE INDEX plant_accessions_plant_accession_idx ON plant_accessions (plant_accession)")
     # Create a joint unique index on plant_accessions.plant_accession and plant_accessions.originating_organisation
+    execute("DROP INDEX IF EXISTS plant_accessions_pa_oo_idx")
     execute("DROP INDEX IF EXISTS plant_accessions_plant_accession_originating_organisation_idx")
     execute("CREATE UNIQUE INDEX plant_accessions_plant_accession_originating_organisation_idx ON plant_accessions (plant_accession, originating_organisation)")
   end

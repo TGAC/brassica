@@ -278,7 +278,6 @@ ActiveRecord::Schema.define(version: 20160808140141) do
     t.integer  "plant_variety_id"
   end
 
-  add_index "plant_accessions", ["plant_accession", "originating_organisation"], name: "plant_accessions_pa_oo_idx", using: :btree
   add_index "plant_accessions", ["plant_accession", "originating_organisation"], name: "plant_accessions_plant_accession_originating_organisation_idx", unique: true, using: :btree
   add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
   add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
@@ -490,6 +489,7 @@ ActiveRecord::Schema.define(version: 20160808140141) do
     t.integer  "user_id"
     t.boolean  "published",             default: true, null: false
     t.datetime "published_on"
+    t.text     "synonyms",              default: [],                array: true
   end
 
   add_index "plant_varieties", ["plant_variety_name"], name: "plant_varieties_plant_variety_name_idx", unique: true, using: :btree
