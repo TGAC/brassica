@@ -489,7 +489,6 @@ ActiveRecord::Schema.define(version: 20160808140141) do
     t.integer  "user_id"
     t.boolean  "published",             default: true, null: false
     t.datetime "published_on"
-    t.text     "synonyms",              default: [],                array: true
   end
 
   add_index "plant_varieties", ["plant_variety_name"], name: "plant_varieties_plant_variety_name_idx", unique: true, using: :btree
