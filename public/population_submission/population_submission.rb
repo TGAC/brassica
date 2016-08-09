@@ -20,7 +20,7 @@ if ARGV.size < 2
   exit 1
 end
 
-@client = Net::HTTP.new('bip.tgac.ac.uk', 443)
+@client = Net::HTTP.new('bip.earlham.ac.uk', 443)
 @client.use_ssl = true
 @headers = {
   'Content-Type' => 'application/json',
@@ -96,13 +96,14 @@ end
 
 
 # Function that finds or submits plant_lines
-def record_plant_line(plant_line_name, plant_variety_id)
+def record_plant_line(plant_line_name, plant_variety_id,comments)
   request = Net::HTTP::Get.new("/api/v1/plant_lines?plant_line[query][plant_line_name]=#{URI.escape plant_line_name}", @headers)
   response = call_bip request
   if response['meta']['total_count'] == 0
     create_record('plant_line',
       plant_line_name: plant_line_name,
-      plant_variety_id: plant_variety_id
+      plant_variety_id: plant_variety_id,
+      comments = comments #SRA identifier
     )
   else
     response['plant_lines'][0]['id']
@@ -122,7 +123,7 @@ end
 
 # Function that finds or submits plant_accessions
 
-def record_plant_accessions(plant_accession, originating_organisation,year_produced, plant_line_id, comments)
+def record_plant_accessions(plant_accession, originating_organisation,year_produced, plant_line_id)
   request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
   response = call_bip request
   if response['meta']['total_count'] == 0
@@ -130,8 +131,7 @@ def record_plant_accessions(plant_accession, originating_organisation,year_produ
       plant_accession: plant_accession,
       originating_organisation: originating_organisation,
       year_produced: year_produced,
-      plant_line_id: plant_line_id,
-      comments: comments  #SRA identifier
+      plant_line_id: plant_line_id
     )
   else
     response['plant_accessions'][0]['id']
@@ -146,9 +146,9 @@ CSV.foreach(ARGV[0]) do |row|
   next if row[0]== 'Accession_name' # omit the header
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
   plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
-  plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id)
+  plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id,row[SRA_IDENTIFIER])
   associate_line_with_population(plant_line_id, plant_population_id)
-  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],row[YEAR_PRODUCED],plant_line_id,row[SRA_IDENTIFIER])
+  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],row[YEAR_PRODUCED],plant_line_id)
 end
 
 puts '3. Finished'
