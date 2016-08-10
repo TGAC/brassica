@@ -82,5 +82,17 @@ RSpec.describe PlantAccession do
       expect(pa1).to be_valid
       expect(pa2).to be_valid
     end
+
+    it 'properly serializes pv.name' do
+      pv = create(:plant_variety)
+      pl = create(:plant_line, plant_variety: pv)
+      pa1 = create(:plant_accession, plant_line: pl, plant_variety: nil)
+      pa2 = create(:plant_accession, plant_line: nil, plant_variety: pv)
+
+      td = PlantAccession.table_data
+      td.each do |item|
+        expect(item[2]).to eq pv.plant_variety_name
+      end
+    end
   end
 end
