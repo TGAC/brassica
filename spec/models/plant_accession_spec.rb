@@ -14,7 +14,8 @@ RSpec.describe PlantAccession do
 
   describe '#pluck_columns' do
     it 'gets proper data table columns' do
-      pa = create(:plant_accession)
+      pl = create(:plant_line, plant_variety: nil)
+      pa = create(:plant_accession, plant_line: pl)
 
       create_list(:plant_scoring_unit, 3, plant_accession: pa)
       plucked = PlantAccession.table_data
@@ -35,14 +36,20 @@ RSpec.describe PlantAccession do
     end
 
     it 'gets plant variety name through related plant line' do
-      pl = create(:plant_line, plant_variety: create(:plant_variety))
-      pa = create(:plant_accession, plant_line: pl)
+      pa = create(:plant_accession)
+      pa_pv = create(:plant_accession, :with_variety)
 
       plucked = PlantAccession.table_data
-      expect(plucked.count).to eq 1
-      expect(plucked[0][1]).to eq pa.plant_line.plant_line_name
-      expect(plucked[0][2]).to eq pa.plant_line.plant_variety.plant_variety_name
-      expect(plucked[0][-2]).to eq pa.plant_line.plant_variety.id
+      expect(plucked.count).to eq 2
+      expect(plucked.map{ |p| p[1] }).
+        to match_array [pa.plant_line.plant_line_name, nil]
+      expect(plucked.map{ |p| p[2] }).
+        to match_array [
+          pa.plant_line.plant_variety.plant_variety_name,
+          pa_pv.plant_variety.plant_variety_name
+        ]
+      expect(plucked.map{ |p| p[-2] }).
+        to match_array [pa.plant_line.plant_variety.id, pa_pv.plant_variety.id]
     end
 
     it 'retrieves published data only' do

@@ -8,6 +8,7 @@ FactoryGirl.define do
     taxonomy_term
     sequence_identifier { Faker::Lorem.word }
     published_on { Date.today-8.days }
+    plant_variety
     user
     annotable
 
@@ -16,7 +17,6 @@ FactoryGirl.define do
         plant_line.fathered_descendants = build_list(:plant_population, 2, male_parent_line_id: evaluator.id)
         plant_line.mothered_descendants = build_list(:plant_population, 2, female_parent_line_id: evaluator.id)
         plant_line.plant_accessions = build_list(:plant_accession, 2, plant_line_id: evaluator.id)
-        # plant_line.plant_populations = build_list(:plant_population, 2)
 
         plant_line.plant_population_lists =
           build_list(:plant_population_list, 2, plant_line_id: evaluator.id)

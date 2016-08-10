@@ -11,5 +11,10 @@ FactoryGirl.define do
     plant_line
     user
     annotable
+
+    trait :with_variety do
+      plant_line { nil }
+      plant_variety
+    end
   end
 end

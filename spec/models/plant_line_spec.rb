@@ -102,7 +102,7 @@ RSpec.describe PlantLine do
 
   describe '#pluck_columns' do
     it 'gets proper data table columns' do
-      pl = create(:plant_line, plant_variety: create(:plant_variety))
+      pl = create(:plant_line)
 
       plucked = PlantLine.pluck_columns
       expect(plucked.count).to eq 1
@@ -123,8 +123,8 @@ RSpec.describe PlantLine do
 
     it 'retrieves published data only' do
       u = create(:user)
-      pl1 = create(:plant_line, user: u, published: true)
-      pl2 = create(:plant_line, user: u, published: false)
+      create(:plant_line, user: u, published: true)
+      create(:plant_line, user: u, published: false)
 
       pld = PlantLine.table_data
       expect(pld.count).to eq 1
