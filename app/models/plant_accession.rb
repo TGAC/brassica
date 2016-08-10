@@ -97,5 +97,26 @@ class PlantAccession < ActiveRecord::Base
     ]
   end
 
+  def self.indexed_json_structure
+    {
+      only: [
+        :plant_accession,
+        :plant_accession_derivation,
+        :originating_organisation,
+        :year_produced,
+        :date_harvested
+      ],
+      include: {
+        plant_line: {
+          only: :plant_line_name,
+          include: {
+            plant_variety: { only: :plant_variety_name }
+          }
+        },
+        plant_variety: { only: :plant_variety_name }
+      }
+    }
+  end
+
   include Annotable
 end
