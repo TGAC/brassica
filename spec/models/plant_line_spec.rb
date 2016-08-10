@@ -102,7 +102,7 @@ RSpec.describe PlantLine do
 
   describe '#pluck_columns' do
     it 'gets proper data table columns' do
-      pl = create(:plant_line)
+      pl = create(:plant_line, plant_variety: create(:plant_variety))
 
       plucked = PlantLine.pluck_columns
       expect(plucked.count).to eq 1

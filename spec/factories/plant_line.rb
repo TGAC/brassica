@@ -8,7 +8,6 @@ FactoryGirl.define do
     taxonomy_term
     sequence_identifier { Faker::Lorem.word }
     published_on { Date.today-8.days }
-    plant_variety
     user
     annotable
 

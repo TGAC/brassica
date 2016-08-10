@@ -36,7 +36,8 @@ RSpec.describe PlantAccession do
     end
 
     it 'gets plant variety name through related plant line' do
-      pa = create(:plant_accession)
+      pl = create(:plant_line, plant_variety: create(:plant_variety))
+      pa = create(:plant_accession, plant_line: pl)
       pa_pv = create(:plant_accession, :with_variety)
 
       plucked = PlantAccession.table_data

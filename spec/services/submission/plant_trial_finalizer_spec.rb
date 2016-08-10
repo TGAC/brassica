@@ -5,9 +5,13 @@ RSpec.describe Submission::PlantTrialFinalizer do
   let(:submission) { create(:submission, :trial) }
   let(:plant_population) { create(:plant_population, user: submission.user) }
   let(:existing_trait_descriptor) { create(:trait_descriptor) }
-  let(:existing_accession) { create(:plant_accession, plant_accession: 'existing_acc', originating_organisation: 'Organisation Existing') }
+  let(:existing_accession) {
+    create(:plant_accession, plant_accession: 'existing_acc',
+                             originating_organisation: 'Organisation Existing',
+                             plant_line: create(:plant_line, plant_variety: nil))
+  }
   let(:existing_variety) { create(:plant_variety) }
-  let(:existing_line) { create(:plant_line) }
+  let(:existing_line) { create(:plant_line, plant_variety: nil) }
   let(:trait) { create(:trait) }
   let(:trait_other) { create(:trait) }
   let(:plant_part) { create(:plant_part) }
