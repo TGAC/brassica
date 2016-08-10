@@ -97,14 +97,14 @@ end
 
 
 # Function that finds or submits plant_lines
-def record_plant_line(plant_line_name, plant_variety_id,comments)
+def record_plant_line(plant_line_name, plant_variety_id, comments)
   request = Net::HTTP::Get.new("/api/v1/plant_lines?plant_line[query][plant_line_name]=#{URI.escape plant_line_name}", @headers)
   response = call_bip request
   if response['meta']['total_count'] == 0
     create_record('plant_line',
       plant_line_name: plant_line_name,
       plant_variety_id: plant_variety_id,
-      comments = comments #SRA identifier
+      comments: comments #SRA identifier
     )
   else
     response['plant_lines'][0]['id']
@@ -124,7 +124,7 @@ end
 
 # Function that finds or submits plant_accessions
 
-def record_plant_accessions(plant_accession, originating_organisation,year_produced, plant_line_id)
+def record_plant_accession(plant_accession, originating_organisation, year_produced, plant_line_id)
   request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
   response = call_bip request
   if response['meta']['total_count'] == 0
@@ -147,9 +147,9 @@ CSV.foreach(ARGV[0]) do |row|
   next if row[0]== 'Accession_name' # omit the header
   puts "  * processing Accession  #{row[ACCESSION_NAME]}"
   plant_variety_id = record_plant_variety(row[VARIETY], row[CROP_TYPE])
-  plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id,row[SRA_IDENTIFIER])
+  plant_line_id = record_plant_line(row[LINE_NAME], plant_variety_id, row[SRA_IDENTIFIER])
   associate_line_with_population(plant_line_id, plant_population_id)
-  record_plant_accessions(row[ACCESSION_NAME],row[ACCESSION_SOURCE],row[YEAR_PRODUCED],plant_line_id)
+  record_plant_accession(row[ACCESSION_NAME], row[ACCESSION_SOURCE], row[YEAR_PRODUCED], plant_line_id)
 end
 
 puts '3. Finished'
