@@ -25,7 +25,6 @@ class PlantAccession < ActiveRecord::Base
 
   include Relatable
   include Filterable
-  include Pluckable
   include Searchable
   include Publishable
 
@@ -40,8 +39,7 @@ class PlantAccession < ActiveRecord::Base
         pv_subquery.as('plant_line_varieties').on { plant_line_varieties.id == plant_lines.plant_variety_id }.outer
     ]}
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
-    query = query.
-      where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
+    query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
 
     query = join_counters(query, uid)
     query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
