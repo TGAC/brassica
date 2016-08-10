@@ -13,10 +13,12 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
     create(:plant_variety, plant_variety_name: "Pvoo")
     create(:plant_variety, plant_variety_name: "Pvoobar")
     pv = create(:plant_variety, plant_variety_name: "Pvoobarbaz")
+    pv2 = create(:plant_variety, plant_variety_name: "Pvanother")
 
     pl = create(:plant_line, plant_line_name: "Ploob",
                              common_name: "Ploo cabbage",
-                             taxonomy_term: TaxonomyTerm.first)
+                             taxonomy_term: TaxonomyTerm.first,
+                             plant_variety: pv2)
     create(:plant_line, plant_line_name: "Ploobar",
                         common_name: "Ploobar cabbage",
                         taxonomy_term: TaxonomyTerm.second)
@@ -213,6 +215,10 @@ RSpec.describe Search, :elasticsearch, :dont_clean_db do
 
     it 'finds PA by plant_variety.plant_variety_name' do
       expect(Search.new("Pvoobarbaz").plant_accessions.count).to eq 1
+    end
+
+    it 'finds PA by plant_line.plant_variety.plant_variety_name' do
+      expect(Search.new("Pvanother").plant_accessions.count).to eq 1
     end
 
     it 'finds PA by :year_produced' do

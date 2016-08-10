@@ -3,11 +3,17 @@ require "rails_helper"
 RSpec.describe Submission::PlantTrialExporter do
   let(:submission) { create(:finalized_submission, :trial, published: true) }
   let(:plant_trial) { submission.submitted_object }
+  let(:plant_line) { create(:plant_line, plant_variety: create(:plant_variety)) }
   subject { described_class.new(submission) }
 
   describe "#documents" do
     it 'produces properly formatted all trial submission CSV documents' do
-      psus = create_list(:plant_scoring_unit, 2, plant_trial: plant_trial)
+      psus = [
+        create(:plant_scoring_unit, plant_trial: plant_trial,
+                                    plant_accession: create(:plant_accession, plant_line: plant_line)),
+        create(:plant_scoring_unit, plant_trial: plant_trial,
+                                    plant_accession: create(:plant_accession, :with_variety))
+      ]
       tds = create_list(:trait_descriptor, 2).sort_by(&:id)
       ts1 = create(:trait_score, plant_scoring_unit: psus[0], trait_descriptor: tds[0])
       ts2 = create(:trait_score, plant_scoring_unit: psus[1], trait_descriptor: tds[0], technical_replicate_number: 2)
@@ -27,6 +33,11 @@ RSpec.describe Submission::PlantTrialExporter do
       expect(documents[:plant_accessions].lines.size).to eq 3
       expect(documents[:plant_accessions].lines[1,2].map{ |l| l.split(',')[0] }).
         to match_array psus.map{ |psu| psu.plant_accession.plant_accession }
+      expect(documents[:plant_accessions].lines[1,2].map{ |l| l.split(',')[2] }).
+        to match_array [
+          psus[0].plant_accession.plant_line.plant_variety.plant_variety_name,
+          psus[1].plant_accession.plant_variety.plant_variety_name
+        ]
 
       expect(documents[:trait_descriptors].lines.size).to eq 3
       expect(documents[:trait_descriptors].lines[1,2].map{ |l| l.split(',')[1] }).
