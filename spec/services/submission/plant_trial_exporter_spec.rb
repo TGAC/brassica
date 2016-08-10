@@ -3,12 +3,14 @@ require "rails_helper"
 RSpec.describe Submission::PlantTrialExporter do
   let(:submission) { create(:finalized_submission, :trial, published: true) }
   let(:plant_trial) { submission.submitted_object }
+  let(:plant_line) { create(:plant_line, plant_variety: create(:plant_variety)) }
   subject { described_class.new(submission) }
 
   describe "#documents" do
     it 'produces properly formatted all trial submission CSV documents' do
       psus = [
-        create(:plant_scoring_unit, plant_trial: plant_trial),
+        create(:plant_scoring_unit, plant_trial: plant_trial,
+                                    plant_accession: create(:plant_accession, plant_line: plant_line)),
         create(:plant_scoring_unit, plant_trial: plant_trial,
                                     plant_accession: create(:plant_accession, :with_variety))
       ]
