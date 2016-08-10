@@ -35,24 +35,6 @@ RSpec.describe PlantAccession do
       ]
     end
 
-    it 'gets plant variety name through related plant line' do
-      pl = create(:plant_line, plant_variety: create(:plant_variety))
-      pa = create(:plant_accession, plant_line: pl)
-      pa_pv = create(:plant_accession, :with_variety)
-
-      plucked = PlantAccession.table_data
-      expect(plucked.count).to eq 2
-      expect(plucked.map{ |p| p[1] }).
-        to match_array [pa.plant_line.plant_line_name, nil]
-      expect(plucked.map{ |p| p[2] }).
-        to match_array [
-          pa.plant_line.plant_variety.plant_variety_name,
-          pa_pv.plant_variety.plant_variety_name
-        ]
-      expect(plucked.map{ |p| p[-2] }).
-        to match_array [pa.plant_line.plant_variety.id, pa_pv.plant_variety.id]
-    end
-
     it 'retrieves published data only' do
       u = create(:user)
       create(:plant_accession, user: u, published: true)
@@ -92,15 +74,14 @@ RSpec.describe PlantAccession do
     end
 
     it 'properly serializes pv.name' do
-      pv = create(:plant_variety)
-      pl = create(:plant_line, plant_variety: pv)
-      pa1 = create(:plant_accession, plant_line: pl, plant_variety: nil)
-      pa2 = create(:plant_accession, plant_line: nil, plant_variety: pv)
+      pvs = create_list(:plant_variety, 2)
+      pl = create(:plant_line, plant_variety: pvs[0])
+      create(:plant_accession, plant_line: pl)
+      create(:plant_accession, plant_line: nil, plant_variety: pvs[1])
 
-      td = PlantAccession.table_data
-      td.each do |item|
-        expect(item[2]).to eq pv.plant_variety_name
-      end
+      table_data = PlantAccession.table_data
+      expect(table_data.map{ |row| row[2] }).
+        to match_array pvs.map(&:plant_variety_name)
     end
   end
 end
