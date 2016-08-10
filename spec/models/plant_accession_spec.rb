@@ -17,7 +17,7 @@ RSpec.describe PlantAccession do
       pa = create(:plant_accession)
 
       create_list(:plant_scoring_unit, 3, plant_accession: pa)
-      plucked = PlantAccession.pluck_columns
+      plucked = PlantAccession.table_data
       expect(plucked.count).to eq 1
       expect(plucked[0]).to eq [
         pa.plant_accession,
@@ -34,10 +34,21 @@ RSpec.describe PlantAccession do
       ]
     end
 
+    it 'gets plant variety name through related plant line' do
+      pl = create(:plant_line, plant_variety: create(:plant_variety))
+      pa = create(:plant_accession, plant_line: pl)
+
+      plucked = PlantAccession.table_data
+      expect(plucked.count).to eq 1
+      expect(plucked[0][1]).to eq pa.plant_line.plant_line_name
+      expect(plucked[0][2]).to eq pa.plant_line.plant_variety.plant_variety_name
+      expect(plucked[0][-2]).to eq pa.plant_line.plant_variety.id
+    end
+
     it 'retrieves published data only' do
       u = create(:user)
-      pa1 = create(:plant_accession, user: u, published: true)
-      pa2 = create(:plant_accession, user: u, published: false)
+      create(:plant_accession, user: u, published: true)
+      create(:plant_accession, user: u, published: false)
 
       pad = PlantAccession.table_data
       expect(pad.count).to eq 1
