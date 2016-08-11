@@ -11,6 +11,9 @@ addons:
 services:
   - elasticsearch
 
+before_install:
+  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-2.3.4.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.4.deb && sudo service elasticsearch restart
+
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
