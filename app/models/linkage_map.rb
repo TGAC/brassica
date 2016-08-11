@@ -64,6 +64,7 @@ class LinkageMap < ActiveRecord::Base
         [
           'plant_populations.id',
           'linkage_groups.id',
+          'user_id',
           'id'
         ]
     ]

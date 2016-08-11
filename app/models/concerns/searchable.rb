@@ -14,7 +14,7 @@ module Searchable extend ActiveSupport::Concern
     end
 
     after_commit(on: :update) do
-      if !published?
+      if !published? && __elasticsearch__.client.exists(id: id, index: self.class.index_name)
         __elasticsearch__.delete_document
       elsif __elasticsearch__.client.exists(id: id, index: self.class.index_name)
         __elasticsearch__.update_document

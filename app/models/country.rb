@@ -20,6 +20,10 @@ class Country < ActiveRecord::Base
 
   def self.permitted_params
     [
+      search: [
+        'country_code',
+        'country_name'
+      ],
       query: [
         'id'
       ]

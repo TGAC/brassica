@@ -174,4 +174,37 @@ RSpec.describe "API V1" do
       expect(parsed_response['errors'].first['message']).to eq "Can't be blank"
     end
   end
+
+  describe 'only_mine index parameter' do
+    let!(:owned) { create_list(:plant_variety, 2, user: api_key.user) }
+    let!(:another) { create(:plant_variety) }
+
+    it 'returns only owned resources' do
+      expect(PlantVariety.count).to eq 3
+
+      get "/api/v1/plant_varieties?only_mine=true", {}, { "X-BIP-Api-Key" => api_key.token }
+      expect(response.status).to eq 200
+      expect(parsed_response).to have_key('plant_varieties')
+      expect(parsed_response['plant_varieties'].count).to eq 2
+      names = parsed_response['plant_varieties'].map{ |pv| pv['plant_variety_name'] }
+      expect(names).to match_array owned.map(&:plant_variety_name)
+    end
+
+    it 'can be combined with other filters' do
+      get "/api/v1/plant_varieties?only_mine=true&plant_variety[query][plant_variety_name]=#{owned[0].plant_variety_name}",
+          {}, { "X-BIP-Api-Key" => api_key.token }
+      expect(response.status).to eq 200
+      expect(parsed_response).to have_key('plant_varieties')
+      expect(parsed_response['plant_varieties'].count).to eq 1
+      expect(parsed_response['plant_varieties'][0]['plant_variety_name']).
+        to eq owned[0].plant_variety_name
+    end
+
+    it 'is turned off by default' do
+      get "/api/v1/plant_varieties", {}, { "X-BIP-Api-Key" => api_key.token }
+      expect(response.status).to eq 200
+      expect(parsed_response).to have_key('plant_varieties')
+      expect(parsed_response['plant_varieties'].count).to eq 3
+    end
+  end
 end

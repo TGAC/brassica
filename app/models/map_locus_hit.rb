@@ -47,6 +47,7 @@ class MapLocusHit < ActiveRecord::Base
           'linkage_maps.id',
           'linkage_groups.id',
           'map_positions.id',
+          'user_id',
           'id'
         ]
     ]

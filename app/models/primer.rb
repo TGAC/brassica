@@ -49,6 +49,7 @@ class Primer < ActiveRecord::Base
       :fetch,
       query: params_for_filter(table_columns) +
         [
+          'user_id',
           'id'
         ]
     ]
