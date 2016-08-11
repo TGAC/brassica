@@ -15,12 +15,7 @@ class SubmissionDecorator < Draper::Decorator
 
   def details_path
     if object.submitted_object
-      Rails.application.routes.url_helpers.data_tables_path(
-        model: object.associated_model.table_name,
-        query: {
-          id: object.submitted_object.id
-        }
-      )
+      h.data_tables_path(self_url_params)
     else
       '#'
     end
@@ -32,5 +27,23 @@ class SubmissionDecorator < Draper::Decorator
 
   def label
     raise Exception.new('Should be extended by subclasses')
+  end
+
+  def bip_link
+    if object.submitted_object
+      h.data_tables_url(self_url_params)
+    end
+  end
+
+  private
+
+  def self_url_params
+    nil unless object.submitted_object
+    {
+      model: object.associated_model.table_name,
+      query: {
+        id: object.submitted_object.id
+      }
+    }
   end
 end
