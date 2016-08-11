@@ -46,14 +46,13 @@ def call_bip(request)
 end
 
 #defining input columns from CSV
-ACCESSION_NAME=0
-LINE_NAME=1
-SRA_IDENTIFIER=2
-VARIETY=3
-CROP_TYPE=4
-ACCESSION_SOURCE=5
-YEAR_PRODUCED=6
-
+ACCESSION_NAME = 0
+LINE_NAME = 1
+SRA_IDENTIFIER = 3
+VARIETY = 4
+CROP_TYPE = 5
+ACCESSION_SOURCE = 6
+YEAR_PRODUCED = 7
 
 
 # Attempts to create a resource record with data. Returns the created object id.
@@ -61,7 +60,6 @@ def create_record(class_name, data)
   request = Net::HTTP::Post.new("/api/v1/#{pluralize_class class_name}", @headers)
   request.body = { class_name => data }.to_json
   response = call_bip request
-  puts "#{response}"
   if !response["errors"].nil? && response["errors"].size > 0
     STDERR.puts "Encountered the following error when creating #{class_name}."
     STDERR.puts response["errors"][0]["message"]
@@ -123,7 +121,6 @@ end
 
 
 # Function that finds or submits plant_accessions
-
 def record_plant_accession(plant_accession, originating_organisation, year_produced, plant_line_id)
   request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_accession]=#{plant_accession}", @headers)
   response = call_bip request
