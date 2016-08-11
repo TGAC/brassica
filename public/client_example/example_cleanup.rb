@@ -15,8 +15,7 @@ if ARGV.size < 1
   exit 1
 end
 
-# @client = Net::HTTP.new('bip.earlham.ac.uk', 443)
-@client = Net::HTTP.new('localhost', 3000)
+@client = Net::HTTP.new('bip.earlham.ac.uk', 443)
 @client.use_ssl = true
 @client.verify_mode = OpenSSL::SSL::VERIFY_NONE
 @headers = {
@@ -77,23 +76,3 @@ delete_mine('plant_varieties')
 delete_mine('plant_lines')
 delete_mine('plant_accessions')
 delete_mine('plant_populations')
-
-# request = Net::HTTP::Get.new("/api/v1/plant_varieties?only_mine=true&plant_variety[query][plant_variety_name]=Dimension", @headers)
-# response = call_bip request
-# puts response
-# puts '-----------------'
-#
-# request = Net::HTTP::Get.new("/api/v1/plant_varieties?only_mine=true", @headers)
-# response = call_bip request
-# puts response
-# puts '-----------------'
-#
-# request = Net::HTTP::Get.new("/api/v1/plant_varieties?plant_variety[query][plant_variety_name]=Dimension", @headers)
-# response = call_bip request
-# puts response
-# puts '-----------------'
-#
-# request = Net::HTTP::Get.new("/api/v1/plant_varieties?per_page=5", @headers)
-# response = call_bip request
-# puts response
-# puts '-----------------'
