@@ -67,7 +67,6 @@ class SubmissionsController < ApplicationController
 
   def destroy
     submission = current_user.submissions.find(params[:id])
-    submission.uploads.destroy_all
     submission.destroy
     redirect_to submissions_path, notice: "Submission deleted"
   end
