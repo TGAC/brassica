@@ -29,7 +29,6 @@ def test_error(response, request)
     STDERR.puts response['reason']
     if response['reason'] == 'This resource is already published and irrevocable'
       @untouchables << request.path.split('/').last.to_i
-      p @untouchables
     else
       STDERR.puts "Exiting."
       exit 1
