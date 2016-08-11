@@ -14,7 +14,7 @@ addons:
 #before_install:
 #  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-2.3.4.deb && sudo dpkg -i --force-confnew elasticsearch-2.3.4.deb && sudo service elasticsearch restart
 
-install:
+before_install:
   - mkdir /tmp/elasticsearch
   - wget -O - https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.3.4/elasticsearch-2.3.4.tar.gz | tar xz --directory=/tmp/elasticsearch --strip-components=1
   - /tmp/elasticsearch/bin/elasticsearch --daemonize --path.data /tmp
