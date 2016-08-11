@@ -103,8 +103,8 @@ class ZenodoDepositor
   end
 
   def contributors
-    names = @deposition.contributors.split("\n")
-    names.select(&:present?).map { |contributor|
+    names = @deposition.contributors.lines.map(&:strip).select(&:present?)
+    names.map { |contributor|
       { name: contributor, type: 'Researcher' }
     }
   end

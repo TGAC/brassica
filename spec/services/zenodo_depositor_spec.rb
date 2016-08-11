@@ -3,8 +3,12 @@ require 'rails_helper'
 RSpec.describe ZenodoDepositor do
   let(:population_submission) { create(:submission, :population, :finalized, published: true) }
   let(:private_submission) { create(:submission, :population, :finalized, published: false) }
-  let(:population_deposition) { Deposition.new(submission: population_submission) }
+  let(:population_deposition) {
+    Deposition.new(submission: population_submission, contributors: contributors)
+  }
   let(:private_deposition) { Deposition.new(submission: private_submission) }
+  let(:contributors) { "Foo Bar\r\nBaz B. Lah" }
+
 
   it 'fails with error for broken deposition' do
     expect_any_instance_of(Typhoeus::Request).not_to receive(:run)
