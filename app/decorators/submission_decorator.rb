@@ -51,7 +51,7 @@ class SubmissionDecorator < Draper::Decorator
   private
 
   def self_url_params
-    nil unless object.submitted_object
+    return unless object.submitted_object
     {
       model: object.associated_model.table_name,
       query: {
