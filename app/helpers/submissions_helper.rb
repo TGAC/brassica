@@ -88,15 +88,6 @@ module SubmissionsHelper
   private
 
   def decorator(submission)
-    return submission if submission.is_a?(SubmissionDecorator)
-
-    case submission.submission_type
-    when 'population'
-      PlantPopulationSubmissionDecorator.decorate(submission)
-    when 'trial'
-      PlantTrialSubmissionDecorator.decorate(submission)
-    else
-      raise ArgumentError, "Unknown submission type: #{submission.submission_type}"
-    end
+    SubmissionDecorator.decorate!(submission)
   end
 end

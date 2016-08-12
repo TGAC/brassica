@@ -1,6 +1,19 @@
 class SubmissionDecorator < Draper::Decorator
   delegate_all
 
+  def self.decorate!(submission)
+    return submission if submission.is_a?(SubmissionDecorator)
+
+    case submission.submission_type
+    when "population"
+      PlantPopulationSubmissionDecorator.decorate(submission)
+    when "trial"
+      PlantTrialSubmissionDecorator.decorate(submission)
+    else
+      raise NotImplementedError
+    end
+  end
+
   def submission_type_tag
     h.content_tag(
       :span,
