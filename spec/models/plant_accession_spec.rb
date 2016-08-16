@@ -48,23 +48,9 @@ RSpec.describe PlantAccession do
     end
   end
 
-  context 'unique attributes' do
-    it 'disallows duplicate plant_accession and originating_organisation' do
-      pa1 = create(:plant_accession, plant_accession: 'foo', originating_organisation: 'bar')
-      expect(pa1).to be_valid
-      pa2 = build(:plant_accession, plant_accession: 'foo', originating_organisation: 'bar')
-      expect(pa2).to_not be_valid
-      expect(pa2.errors[:plant_accession]).to include('has already been taken')
-    end
-
-    it 'allows plant_accessions to share plant_accession or originating_organisation' do
-      pa1 = create(:plant_accession, plant_accession: 'foo', originating_organisation: 'bar')
-      expect(pa1).to be_valid
-      pa2 = create(:plant_accession, plant_accession: 'foo', originating_organisation: 'baz')
-      expect(pa2).to be_valid
-      pa3 = create(:plant_accession, plant_accession: 'quux', originating_organisation: 'bar')
-      expect(pa3).to be_valid
-    end
+  context 'unique attributes', focus: true do
+    subject { FactoryGirl.build(:plant_accession) }
+    it { should validate_uniqueness_of(:plant_accession).scoped_to(:originating_organisation) }
   end
 
   context 'linking to pl and pv' do

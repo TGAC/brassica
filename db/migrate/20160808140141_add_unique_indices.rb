@@ -1,5 +1,6 @@
 class AddUniqueIndices < ActiveRecord::Migration
   @@unique_attrs = [
+    [:api_keys, :token],
     [:countries, :country_code],
     [:linkage_groups, :linkage_group_label],
     [:linkage_maps, :linkage_map_label],
@@ -19,25 +20,23 @@ class AddUniqueIndices < ActiveRecord::Migration
   ]
 
   def up
-    @@unique_attrs.each do |attr|
-      table_name = attr[0].to_s
-      column_name = attr[1].to_s
+    @@unique_attrs.each do |table_name, column_name|
 
-      idx_name = "#{table_name}_#{column_name}_idx"
+      idx_name = "#{table_name.to_s}_#{column_name.to_s}_idx"
 
-      # Drop existing index (if present)
       execute("DROP INDEX IF EXISTS #{idx_name}")
-
-      execute("CREATE UNIQUE INDEX #{table_name}_#{column_name}_idx ON #{table_name} (#{column_name})")
-      puts "...successfully added index on column #{column_name} in #{table_name}."
+      execute("CREATE UNIQUE INDEX #{table_name.to_s}_#{column_name.to_s}_idx ON #{table_name.to_s} (#{column_name.to_s})")
+      puts "...successfully added index on column #{column_name.to_s} in #{table_name.to_s}."
     end
 
-    # Special case for plant_accessions
-    # Recreate regular (nonunique) index on plant_accessions.plant_accession
-    execute("DROP INDEX IF EXISTS plant_accessions_plant_accession_idx")
-    execute("CREATE INDEX plant_accessions_plant_accession_idx ON plant_accessions (plant_accession)")
-    # Create a joint unique index on plant_accessions.plant_accession and plant_accessions.originating_organisation
+    # Drop some old (obsolete) indices
     execute("DROP INDEX IF EXISTS plant_accessions_pa_oo_idx")
+    execute("DROP INDEX IF EXISTS index_taxonomy_terms_on_name")
+    execute("DROP INDEX IF EXISTS index_traits_on_name")
+
+    # Special case for plant_accessions
+    # Create a joint unique index on plant_accessions.plant_accession and plant_accessions.originating_organisation
+    execute("DROP INDEX IF EXISTS plant_accessions_plant_accession_idx")
     execute("DROP INDEX IF EXISTS plant_accessions_plant_accession_originating_organisation_idx")
     execute("CREATE UNIQUE INDEX plant_accessions_plant_accession_originating_organisation_idx ON plant_accessions (plant_accession, originating_organisation)")
   end
