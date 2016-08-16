@@ -14,10 +14,11 @@ RSpec.describe PlantAccession do
 
   describe '#pluck_columns' do
     it 'gets proper data table columns' do
-      pa = create(:plant_accession)
+      pl = create(:plant_line, plant_variety: nil)
+      pa = create(:plant_accession, plant_line: pl)
 
       create_list(:plant_scoring_unit, 3, plant_accession: pa)
-      plucked = PlantAccession.pluck_columns
+      plucked = PlantAccession.table_data
       expect(plucked.count).to eq 1
       expect(plucked[0]).to eq [
         pa.plant_accession,
@@ -36,8 +37,8 @@ RSpec.describe PlantAccession do
 
     it 'retrieves published data only' do
       u = create(:user)
-      pa1 = create(:plant_accession, user: u, published: true)
-      pa2 = create(:plant_accession, user: u, published: false)
+      create(:plant_accession, user: u, published: true)
+      create(:plant_accession, user: u, published: false)
 
       pad = PlantAccession.table_data
       expect(pad.count).to eq 1
@@ -89,6 +90,17 @@ RSpec.describe PlantAccession do
       pa2 = build(:plant_accession, plant_variety: pv, plant_line: nil)
       expect(pa1).to be_valid
       expect(pa2).to be_valid
+    end
+
+    it 'properly serializes pv.name' do
+      pvs = create_list(:plant_variety, 2)
+      pl = create(:plant_line, plant_variety: pvs[0])
+      create(:plant_accession, plant_line: pl)
+      create(:plant_accession, plant_line: nil, plant_variety: pvs[1])
+
+      table_data = PlantAccession.table_data
+      expect(table_data.map{ |row| row[2] }).
+        to match_array pvs.map(&:plant_variety_name)
     end
   end
 end
