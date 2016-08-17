@@ -32,12 +32,12 @@ RSpec.describe SubmissionDecorator do
     end
   end
 
-  describe '#details_path, #bip_link' do
+  describe '#details_path, #details_url' do
     it 'provides empty paths for unfinished submission' do
       expect(population.details_path).to eq '#'
       expect(trial.details_path).to eq '#'
-      expect(population.bip_link).to be_nil
-      expect(trial.bip_link).to be_nil
+      expect(population.details_url).to be_nil
+      expect(trial.details_url).to be_nil
     end
 
     %i(population trial).each do |submission_type|
@@ -46,7 +46,7 @@ RSpec.describe SubmissionDecorator do
         sd = SubmissionDecorator.decorate(submission)
         expect(sd.details_path).
           to include "data_tables?model=plant_#{submission_type}s"
-        expect(sd.bip_link).
+        expect(sd.details_url).
           to include "http://test.host/data_tables?model=plant_#{submission_type}s"
       end
     end

@@ -40,11 +40,11 @@ class Deposition
       self.creators = [
         { name: submission.user.full_name, affiliation: decorated.affiliation }
       ]
-      if decorated.bip_link
+      if decorated.details_url
         self.related_identifiers = [
           {
             relation: 'isSupplementedBy',
-            identifier: decorated.bip_link
+            identifier: decorated.details_url
           }
         ]
       end
