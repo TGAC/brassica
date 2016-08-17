@@ -12,10 +12,12 @@ class Submission::Publisher
 
     now = Time.zone.now
     submission.transaction do
-      submission.update_attributes!(published: true)
-      publish_object(submission.submitted_object, now)
-      associated_collections.each do |collection|
-        collection.not_published.each { |instance| publish_object(instance, now) }
+      ActiveRecord::Base.delay_touching do
+        submission.update_attributes!(published: true)
+        publish_object(submission.submitted_object, now)
+        associated_collections.each do |collection|
+          collection.not_published.each { |instance| publish_object(instance, now) }
+        end
       end
     end
   end
@@ -25,10 +27,12 @@ class Submission::Publisher
     raise ArgumentError, "Submission is not revocable" unless submission.revocable?
 
     submission.transaction do
-      submission.update_attributes!(published: false)
-      revoke_object(submission.submitted_object)
-      associated_collections.each do |collection|
-        collection.each { |instance| revoke_object(instance) }
+      ActiveRecord::Base.delay_touching do
+        submission.update_attributes!(published: false)
+        revoke_object(submission.submitted_object)
+        associated_collections.each do |collection|
+          collection.each { |instance| revoke_object(instance) }
+        end
       end
     end
   end
