@@ -9,8 +9,8 @@ class Deposition
     end
   end
 
-  attr_accessor :submission, :user, :title, :description, :creators, :contributors
-  attr_writer :title, :description, :creators, :contributors
+  attr_accessor :submission, :user, :title, :description, :creators, :contributors, :related_identifiers
+  attr_writer :title, :description, :creators, :contributors, :related_identifiers
 
   # NOTE: Depositions will work in two modes
   #  - with associated submissions (depositing submitted data to an external service)
@@ -32,17 +32,22 @@ class Deposition
 
   def set_default_metadata
     if submission
-      decorated = if submission.population?
-                    PlantPopulationSubmissionDecorator.decorate(submission)
-                  elsif submission.trial?
-                    PlantTrialSubmissionDecorator.decorate(submission)
-                  else
-                    raise NotImplementedError
-                  end
+      decorated = SubmissionDecorator.decorate!(submission)
+
       self.title = "#{I18n.t("submission.submission_type.#{decorated.submission_type}")}: #{decorated.name}" unless self.title
       self.description = decorated.description unless self.description
-      self.creators = [{ name: submission.user.full_name, affiliation: decorated.affiliation }]
       self.contributors = submission.user.full_name unless self.contributors
+      self.creators = [
+        { name: submission.user.full_name, affiliation: decorated.affiliation }
+      ]
+      if decorated.details_url
+        self.related_identifiers = [
+          {
+            relation: 'isSupplementedBy',
+            identifier: decorated.details_url
+          }
+        ]
+      end
     elsif user
       self.creators = [{ name: user.full_name }]
     end
