@@ -69,6 +69,7 @@ class ZenodoDepositor
             { term: 'Brassica', identifier: 'http://id.loc.gov/authorities/subjects/sh86001831' },
             { term: 'Plant breeding', identifier: 'https://www.britannica.com/science/plant-breeding' }
           ],
+          related_identifiers: @deposition.related_identifiers,
           license: 'odc-pddl'
         }
       }.to_json,
