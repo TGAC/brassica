@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.0'
+gem 'activerecord-delay_touching'
+
 gem 'pg'
 
 gem 'puma'
