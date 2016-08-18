@@ -30,6 +30,7 @@ class AddUniqueIndices < ActiveRecord::Migration
     end
 
     # Drop some old (obsolete) indices
+    execute("DROP INDEX IF EXISTS index_api_keys_on_token")
     execute("DROP INDEX IF EXISTS plant_accessions_pa_oo_idx")
     execute("DROP INDEX IF EXISTS index_taxonomy_terms_on_name")
     execute("DROP INDEX IF EXISTS index_traits_on_name")
