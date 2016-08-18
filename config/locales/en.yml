@@ -11,6 +11,10 @@ en:
           trillion: T
           quadrillion: Q
 
+  time:
+    formats:
+      short: '%d %b %H:%M %Z'
+
   menu:
     home: Home
     browse: Browse database

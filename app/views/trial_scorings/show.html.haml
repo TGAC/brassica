@@ -11,16 +11,12 @@
 
   = back_button
 
-  - url = trial_scoring_path(id: @plant_trial.id, trait_descriptor_ids: @trait_descriptors.map(&:id))
+  - url = trial_scoring_path(id: @plant_trial.id)
   %table.table.table-condensed.table-browse.table-hover.data-table#trial-scoring{ data: { ajax: url }}
     %thead
       %tr
         %th.plant_scoring_units_scoring_unit_name_column
           = t 'tables.plant_scoring_units.scoring_unit_name'
-        - @trait_descriptors.map{ |td| [td.id, td.try(:trait).try(:name)] }.each do |id, column|
-          - (1..@replicate_numbers[id]).each do |replicate_number|
-            - if replicate_number == 1 && @replicate_numbers[id] == 1
-              %th= column
-            - else
-              %th= "#{column} rep#{replicate_number}"
+        - @plant_trial.decorate.trait_headers.each do |header|
+          %th.trait_scores_score_value_column= header
     %tbody

@@ -67,7 +67,6 @@ class SubmissionsController < ApplicationController
 
   def destroy
     submission = current_user.submissions.find(params[:id])
-    submission.uploads.destroy_all
     submission.destroy
     redirect_to submissions_path, notice: "Submission deleted"
   end
@@ -107,14 +106,7 @@ class SubmissionsController < ApplicationController
   end
 
   def decorator(submission)
-    case submission.submission_type
-    when 'population'
-      PlantPopulationSubmissionDecorator.decorate(submission)
-    when 'trial'
-      PlantTrialSubmissionDecorator.decorate(submission)
-    else
-      nil
-    end
+    SubmissionDecorator.decorate!(submission)
   end
 
   def publisher(submission)

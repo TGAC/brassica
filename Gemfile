@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.0'
+gem 'activerecord-delay_touching'
+
 gem 'pg'
 
 gem 'puma'
@@ -32,7 +34,8 @@ gem 'obo'
 gem 'hashie'
 gem 'draper', '~> 2.1.0'
 gem 'kaminari'
-gem 'paperclip', '~> 4.2.0'
+gem 'paperclip', '~> 4.3'
+gem 'typhoeus'
 gem 'squeel'
 
 gem 'cookies_eu'
@@ -69,4 +72,5 @@ group :test do
   gem 'rspec-html-matchers'
   gem 'webmock', require: false
   gem 'database_cleaner'
+  gem 'vcr'
 end

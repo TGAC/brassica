@@ -45,6 +45,7 @@ en:
     plant_accessions:
       plant_accession: Accession
       plant_accession_derivation: Derivation
+      plant_variety_name: Variety
       accession_originator: Originator
       originating_organisation: Organisation
       year_produced: Year produced

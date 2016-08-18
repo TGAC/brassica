@@ -123,8 +123,8 @@ RSpec.describe PlantLine do
 
     it 'retrieves published data only' do
       u = create(:user)
-      pl1 = create(:plant_line, user: u, published: true)
-      pl2 = create(:plant_line, user: u, published: false)
+      create(:plant_line, user: u, published: true)
+      create(:plant_line, user: u, published: false)
 
       pld = PlantLine.table_data
       expect(pld.count).to eq 1

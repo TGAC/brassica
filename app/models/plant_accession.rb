@@ -10,7 +10,7 @@ class PlantAccession < ActiveRecord::Base
 
   validates :plant_accession,
             presence: true,
-            uniqueness: true
+            uniqueness: { scope: :originating_organisation }
 
   validates :originating_organisation,
             presence: true
@@ -25,10 +25,25 @@ class PlantAccession < ActiveRecord::Base
 
   include Relatable
   include Filterable
-  include Pluckable
   include Searchable
   include Publishable
-  include TableData
+
+  def self.table_data(params = nil, uid = nil)
+    pv_subquery = PlantVariety.visible(uid)
+    pl_subquery = PlantLine.visible(uid)
+
+    query = all.
+      joins {[
+        pl_subquery.as('plant_lines').on { plant_lines.id == plant_accessions.plant_line_id }.outer,
+        pv_subquery.as('plant_varieties').on { plant_varieties.id == plant_accessions.plant_variety_id }.outer,
+        pv_subquery.as('plant_line_varieties').on { plant_line_varieties.id == plant_lines.plant_variety_id }.outer
+    ]}
+    query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
+    query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
+
+    query = join_counters(query, uid)
+    query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
+  end
 
   def plant_line_xor_plant_variety
     if plant_line_id.present? && plant_variety_id.present?
@@ -41,7 +56,7 @@ class PlantAccession < ActiveRecord::Base
     [
       'plant_accession',
       'plant_lines.plant_line_name',
-      'plant_varieties.plant_variety_name',
+      'CASE WHEN plant_varieties.id IS NULL THEN plant_line_varieties.plant_variety_name ELSE plant_varieties.plant_variety_name END AS plant_variety_name',
       'plant_accession_derivation',
       'originating_organisation',
       'year_produced',
@@ -67,7 +82,8 @@ class PlantAccession < ActiveRecord::Base
       query: params_for_filter(table_columns) +
         [
           'user_id',
-          'id'
+          'id',
+          'id' => []
         ]
     ]
   end
@@ -75,8 +91,29 @@ class PlantAccession < ActiveRecord::Base
   def self.ref_columns
     [
       'plant_line_id',
-      'plant_variety_id'
+      'COALESCE (plant_varieties.id, plant_line_varieties.id)'
     ]
+  end
+
+  def self.indexed_json_structure
+    {
+      only: [
+        :plant_accession,
+        :plant_accession_derivation,
+        :originating_organisation,
+        :year_produced,
+        :date_harvested
+      ],
+      include: {
+        plant_line: {
+          only: :plant_line_name,
+          include: {
+            plant_variety: { only: :plant_variety_name }
+          }
+        },
+        plant_variety: { only: :plant_variety_name }
+      }
+    }
   end
 
   include Annotable

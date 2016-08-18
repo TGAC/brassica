@@ -92,7 +92,7 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('plant_lines', data, full[full.length - 3])
       ,
-        targets: 'plant_varieties_plant_variety_name_column'
+        targets: 'plant_accessions_plant_variety_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_varieties', data, full[full.length - 2])
       ]
@@ -107,7 +107,7 @@ window.configs =
         targets: 'plant_lines_sequence_identifier_column'
         render: (data, type, full, meta) ->
           if data && data.indexOf("SR") == 0
-            '<a href="http://www.ncbi.nlm.nih.gov/sra/' + data + '" target="_blank">' + data + '</a>'
+            '<a href="http://trace.ncbi.nlm.nih.gov/Traces/sra/?run=' + data + '" target="_blank">' + data + '</a>'
           else
             data
       ]
@@ -271,6 +271,10 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('trait_descriptors', data, full[full.length - 3])
       ,
+        targets: 'trait_scores_score_value_column'
+        render: (data, type, full, meta) ->
+          imageDataUrl(data)
+      ,
         targets: 'plant_scoring_units_scoring_unit_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_scoring_units', data, full[full.length - 2])
@@ -282,7 +286,23 @@ window.configs =
         targets: 'plant_scoring_units_scoring_unit_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_scoring_units', data, full[full.length - 1])
+      ,
+        targets: 'trait_scores_score_value_column'
+        render: (data, type, full, meta) ->
+          imageDataUrl(data)
       ]
+
+
+window.imageDataUrl = (data) ->
+  if data && data.indexOf('/') > -1
+    urls = for image, i in data.split(',')
+      #NOTE: CyVerse does not translate double slashes to single slashes
+      #NOTE: We try to support both already-escaped and not-yet-escaped strings
+      escaped = escape(unescape(image.replace(/^\s*\/|\s+$/g, '')))
+      '<a href="http://mirrors.cyverse.org/browse/iplant/' + escaped + '" target="_blank">image_' + (i + 1) + '</a> '
+    urls.join(' ')
+  else
+    data
 
 
 window.modelIdUrl = (model, label, id) ->

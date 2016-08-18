@@ -8,7 +8,7 @@ class Submission < ActiveRecord::Base
   enum submission_type: %i(population trial qtl linkage_map)
 
   belongs_to :user
-  has_many :uploads, class_name: 'Submission::Upload'
+  has_many :uploads, class_name: 'Submission::Upload', dependent: :destroy
 
   validates :user, presence: true
   validates :submission_type, presence: true
@@ -76,7 +76,10 @@ class Submission < ActiveRecord::Base
     else
       raise CantFinalize
     end
+  end
 
+  def depositable?
+    published? && !revocable? && !doi
   end
 
   def submitted_object
@@ -97,10 +100,6 @@ class Submission < ActiveRecord::Base
 
   def steps
     STEPS.fetch(submission_type)
-  end
-
-  def name
-    [I18n.l(created_at, format: :short), content.step01.try(:name)].compact.join(' ')
   end
 
   def associated_model

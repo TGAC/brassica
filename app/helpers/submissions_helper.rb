@@ -4,7 +4,7 @@ module SubmissionsHelper
   end
 
   def my_submissions_button
-    link_to "My submissions", submissions_path, class: 'btn btn-default btn-sm'
+    link_to "Back to submissions list", submissions_path, class: 'btn btn-default'
   end
 
   def submission_private_link(submission)
@@ -88,15 +88,6 @@ module SubmissionsHelper
   private
 
   def decorator(submission)
-    return submission if submission.is_a?(SubmissionDecorator)
-
-    case submission.submission_type
-    when 'population'
-      PlantPopulationSubmissionDecorator.decorate(submission)
-    when 'trial'
-      PlantTrialSubmissionDecorator.decorate(submission)
-    else
-      raise ArgumentError, "Unknown submission type: #{submission.submission_type}"
-    end
+    SubmissionDecorator.decorate!(submission)
   end
 end

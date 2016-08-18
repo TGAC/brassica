@@ -187,6 +187,31 @@ RSpec.describe Submission do
     end
   end
 
+  describe '#depositable?' do
+    it 'is false for unfinalized submissions' do
+      expect(build(:submission, finalized: false).depositable?).to be_falsey
+    end
+
+    it 'is false for unpublished submissions' do
+      expect(build(:submission, :finalized).depositable?).to be_falsey
+    end
+
+    it 'is false for finalized, published submissions with assigned doi' do
+      expect(build(:submission, :finalized, doi: 'x').depositable?).to be_falsey
+    end
+
+    it 'is false for finalized, published, revocable submissions' do
+      submission = build(:submission, :finalized, published: true)
+      expect(submission.depositable?).to be_falsey
+    end
+
+    it 'is true for finalized, published, irrevocable submissions without a doi' do
+      submission = create(:submission, :finalized, published: true)
+      submission.submitted_object.update_attribute(:published_on, Time.now - 8.days)
+      expect(submission.depositable?).to be_truthy
+    end
+  end
+
   describe '#recent_first' do
     it 'orders submissions by update time' do
       ids = create_list(:submission, 7).map(&:id) +
@@ -225,5 +250,4 @@ RSpec.describe Submission do
       expect(submission.reload.content.step06.to_h).not_to be_blank
     end
   end
-
 end

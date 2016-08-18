@@ -1,4 +1,4 @@
-class Submissions::FormBuilder < ActionView::Helpers::FormBuilder
+class Submissions::FormBuilder < BaseFormBuilder
   alias_method :default_text_field, :text_field
   alias_method :default_text_area, :text_area
 

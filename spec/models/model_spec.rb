@@ -1,6 +1,26 @@
 require 'rails_helper'
 nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit, Trait]
 
+unique_attrs = [
+    [ApiKey, :token],
+    [Country, :country_code],
+    [LinkageGroup, :linkage_group_label],
+    [LinkageMap, :linkage_map_label],
+    [MarkerAssay, :marker_assay_name],
+    [PlantLine, :plant_line_name],
+    [PlantPart, :plant_part],
+    [PlantPopulation, :name],
+    [PlantTrial, :plant_trial_name],
+    [PlantVariety, :plant_variety_name],
+    [Primer, :primer],
+    [Probe, :probe_name],
+    [ProcessedTraitDataset, :processed_trait_dataset_name],
+    [QtlJob, :qtl_job_name],
+    [RestrictionEnzyme, :restriction_enzyme],
+    [TaxonomyTerm, :name],
+    [Trait, :name]
+]
+
 RSpec::Matchers.define :display_column do |expected|
   match do |actual|
     actual.any? do |column|
@@ -25,7 +45,7 @@ RSpec.describe ActiveRecord::Base do
     end
   end
 
-  it 'defined permitted query params as strings only' do
+  it 'defines permitted query params as strings only' do
     ActiveRecord::Base.descendants.each do |model|
       if model.respond_to?(:permitted_params)
         query = model.send(:permitted_params).detect{ |x| x.is_a?(Hash) && x[:query].present? }
@@ -186,5 +206,11 @@ RSpec.describe ActiveRecord::Base do
         end
       end
     end
+  end
+end
+
+unique_attrs.each do |class_name, column_name|
+  RSpec.describe class_name, type: :model do
+    it { should have_db_index(column_name).unique }
   end
 end
