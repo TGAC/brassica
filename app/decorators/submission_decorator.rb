@@ -23,7 +23,7 @@ class SubmissionDecorator < Draper::Decorator
   end
 
   def further_details
-    raise Exception.new('Should be extended by subclasses')
+    raise NotImplementedError, "Must be implemented by subclasses"
   end
 
   def details_path
@@ -45,7 +45,7 @@ class SubmissionDecorator < Draper::Decorator
   end
 
   def label
-    raise Exception.new('Should be extended by subclasses')
+    raise NotImplementedError, "Must be implemented by subclasses"
   end
 
   private
