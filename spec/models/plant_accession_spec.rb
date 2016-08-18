@@ -48,7 +48,7 @@ RSpec.describe PlantAccession do
     end
   end
 
-  context 'unique attributes', focus: true do
+  context 'unique attributes' do
     subject { FactoryGirl.build(:plant_accession) }
     it { should validate_uniqueness_of(:plant_accession).scoped_to(:originating_organisation) }
   end
