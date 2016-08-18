@@ -10,10 +10,12 @@ class Submission::PlantTrialFinalizer
 
   def call
     ActiveRecord::Base.transaction do
-      create_plant_trial
-      create_new_trait_descriptors
-      create_scoring
-      update_submission
+      ActiveRecord::Base.delay_touching do
+        create_plant_trial
+        create_new_trait_descriptors
+        create_scoring
+        update_submission
+      end
     end
     submission.finalized?
   end
