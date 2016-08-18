@@ -1,7 +1,7 @@
 require 'rails_helper'
 nullify_exclusions = [PlantPopulationList, TraitScore, PlantScoringUnit, Trait]
 
-@@unique_attrs = [
+unique_attrs = [
     [ApiKey, :token],
     [Country, :country_code],
     [LinkageGroup, :linkage_group_label],
@@ -209,7 +209,7 @@ RSpec.describe ActiveRecord::Base do
   end
 end
 
-@@unique_attrs.each do |class_name, column_name|
+unique_attrs.each do |class_name, column_name|
   RSpec.describe class_name, type: :model do
     it { should have_db_index(column_name).unique }
   end
