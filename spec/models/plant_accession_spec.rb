@@ -48,6 +48,11 @@ RSpec.describe PlantAccession do
     end
   end
 
+  context 'unique attributes' do
+    subject { FactoryGirl.build(:plant_accession) }
+    it { should validate_uniqueness_of(:plant_accession).scoped_to(:originating_organisation) }
+  end
+
   context 'linking to pl and pv' do
     let!(:pl) { create(:plant_line) }
     let!(:pv) { create(:plant_variety) }

@@ -10,7 +10,7 @@ class PlantAccession < ActiveRecord::Base
 
   validates :plant_accession,
             presence: true,
-            uniqueness: true
+            uniqueness: { scope: :originating_organisation }
 
   validates :originating_organisation,
             presence: true
