@@ -1,6 +1,6 @@
 Accession_name,Line_name,species,s-identidier,cultivar_name,accession_type,accession_source,year_produced
-U.Nottm_BnASSYST-001,BnASSYST-001,Brassica Napus,SRR3134012,Alesi,Modern winter OSR,Nottingham,2013
-U.Nottm_BnASSYST-002,BnASSYST-002,Brassica Napus,SRR3134013,Remy,Modern winter OSR,Nottingham,2013
+U.test,new_1,Brassica Napus,SRR3134012,Al,Modern winter OSR,Nottingham,2013
+U.test_1,BnASSYST-002,Brassica Napus,SRR3134013,Remy,Modern winter OSR,Nottingham,2013
 U.Nottm_BnASSYST-003,BnASSYST-003,Brassica Napus,SRR3134014,Robust,Modern winter OSR,Nottingham,2013
 U.Nottm_BnASSYST-004,BnASSYST-004,Brassica Napus,SRR3134015,Alaska,Modern winter OSR,Nottingham,2013
 U.Nottm_BnASSYST-005,BnASSYST-005,Brassica Napus,SRR3134016,Pirola,Modern winter OSR,Nottingham,2013
