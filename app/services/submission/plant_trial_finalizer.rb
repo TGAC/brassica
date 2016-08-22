@@ -113,28 +113,52 @@ class Submission::PlantTrialFinalizer
                           plant_trial_id: @plant_trial.id)
       )
 
-      (scores || {}).
+      scores_data = (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
           rollback(1) unless trait_descriptor
 
           trait_score_attributes = common_data.dup
-          if replicate_numbers[col_index] && replicate_numbers[col_index] > 0
-            trait_score_attributes.merge!(
-              technical_replicate_number: replicate_numbers[col_index]
-            )
-          end
+          trait_score_attributes[:technical_replicate_number] =
+            if replicate_numbers[col_index] && replicate_numbers[col_index] > 0
+              replicate_numbers[col_index]
+            else
+              1
+            end
 
-          TraitScore.create!(
-            trait_score_attributes.merge(
-              trait_descriptor: trait_descriptor,
-              score_value: value,
-              plant_scoring_unit_id: new_plant_scoring_unit.id
-            )
+          trait_score_attributes.merge!(
+            trait_descriptor_id: trait_descriptor.id,
+            score_value: value,
+            plant_scoring_unit_id: new_plant_scoring_unit.id
           )
+
+          trait_score_attributes.sort_by{ |k,_| k }.map do |_,v|
+            TraitScore.send(:sanitize, v)
+          end
+      end
+
+      if scores_data.present?
+        query =
+          "INSERT INTO trait_scores
+           (date_entered, entered_by_whom, plant_scoring_unit_id, published, published_on, score_value, technical_replicate_number, trait_descriptor_id, user_id)
+           VALUES
+           #{scores_data.map do |score_data|
+               "(#{score_data.join(', ')})"
+             end.join(', ')
+            }"
+
+        TraitScore.connection.execute(query)
+        PlantScoringUnit.reset_counters(new_plant_scoring_unit.id, :trait_scores)
       end
       new_plant_scoring_unit
+    end
+
+    submission.content.step02.trait_descriptor_list.size.times do |i|
+      TraitDescriptor.reset_counters(
+        get_nth_trait_descriptor(i).id,
+        :trait_scores
+      )
     end
   end
 
@@ -186,7 +210,7 @@ class Submission::PlantTrialFinalizer
     {
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
-      user: submission.user,
+      user_id: submission.user.id,
       published: publish?,
       published_on: (Time.now if publish?)
     }
