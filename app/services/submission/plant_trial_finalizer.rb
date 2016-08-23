@@ -113,7 +113,7 @@ class Submission::PlantTrialFinalizer
                           plant_trial_id: @plant_trial.id)
       )
 
-      scores_data = (scores || {}).
+      scores_sanitized_data = (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
@@ -133,33 +133,29 @@ class Submission::PlantTrialFinalizer
             plant_scoring_unit_id: new_plant_scoring_unit.id
           )
 
-          trait_score_attributes.sort_by{ |k,_| k }.map do |_,v|
+          # Ensure consistent order of raw values (by column name)
+          trait_score_attributes.sort.map do |_,v|
             TraitScore.send(:sanitize, v)
           end
       end
 
-      if scores_data.present?
+      if scores_sanitized_data.present?
         query =
           "INSERT INTO trait_scores
            (date_entered, entered_by_whom, plant_scoring_unit_id, published, published_on, score_value, technical_replicate_number, trait_descriptor_id, user_id)
            VALUES
-           #{scores_data.map do |score_data|
-               "(#{score_data.join(', ')})"
+           #{scores_sanitized_data.map do |score_sanitized_data|
+               "(#{score_sanitized_data.join(', ')})"
              end.join(', ')
             }"
 
         TraitScore.connection.execute(query)
-        PlantScoringUnit.reset_counters(new_plant_scoring_unit.id, :trait_scores)
+        reset_trait_score_counter(new_plant_scoring_unit)
       end
       new_plant_scoring_unit
     end
 
-    submission.content.step02.trait_descriptor_list.size.times do |i|
-      TraitDescriptor.reset_counters(
-        get_nth_trait_descriptor(i).id,
-        :trait_scores
-      )
-    end
+    reset_trait_descriptors_counters
   end
 
   def create_plant_trial
@@ -243,5 +239,17 @@ class Submission::PlantTrialFinalizer
 
   def lines_or_varieties
     submission.content.step04.lines_or_varieties || {}
+  end
+
+  private
+
+  def reset_trait_score_counter(resource)
+    resource.class.reset_counters(resource.id, :trait_scores)
+  end
+
+  def reset_trait_descriptors_counters
+    submission.content.step02.trait_descriptor_list.size.times do |i|
+      reset_trait_score_counter(get_nth_trait_descriptor(i))
+    end
   end
 end
