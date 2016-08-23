@@ -298,6 +298,7 @@ window.imageDataUrl = (data) ->
     urls = for image, i in data.split(',')
       #NOTE: CyVerse does not translate double slashes to single slashes
       #NOTE: We try to support both already-escaped and not-yet-escaped strings
+      image = $.trim(image)
       escaped = escape(unescape(image.replace(/^\s*\/|\s+$/g, '')))
       '<a href="http://mirrors.cyverse.org/browse/iplant/' + escaped + '" target="_blank">image_' + (i + 1) + '</a> '
     urls.join(' ')
