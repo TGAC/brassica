@@ -135,7 +135,7 @@ class Submission::PlantTrialFinalizer
 
           # Ensure consistent order of raw values (by column name)
           trait_score_attributes.sort.map do |_,v|
-            TraitScore.send(:sanitize, v)
+            TraitScore.sanitize(v)
           end
       end
 
