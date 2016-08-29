@@ -170,6 +170,15 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(TraitScore.find_by(score_value: 'z').plant_scoring_unit.scoring_unit_name).to eq 'p3'
     end
 
+    it 'updates counter caches for trait scores accordingly' do
+      expect{ subject.call }.to change{ TraitScore.count }.by(3)
+
+      expect(PlantScoringUnit.pluck(:scoring_unit_name, :trait_scores_count)).
+        to match_array [['p1', 0], ['p2', 1], ['p3', 2], ['p4', 0]]
+      expect(TraitDescriptor.pluck(:trait_scores_count)).
+        to match_array [1, 1, 1]
+    end
+
     context 'when dealing with plant lines and plant varieties' do
       it 'creates or assigns plant varieties for new accessions only' do
         submission.content.update(:step04,

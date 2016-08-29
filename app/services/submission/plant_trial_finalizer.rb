@@ -113,29 +113,49 @@ class Submission::PlantTrialFinalizer
                           plant_trial_id: @plant_trial.id)
       )
 
-      (scores || {}).
+      scores_sanitized_data = (scores || {}).
         select{ |_, value| value.present? }.
         map do |col_index, value|
           trait_descriptor = get_nth_trait_descriptor(trait_mapping[col_index])
           rollback(1) unless trait_descriptor
 
           trait_score_attributes = common_data.dup
-          if replicate_numbers[col_index] && replicate_numbers[col_index] > 0
-            trait_score_attributes.merge!(
-              technical_replicate_number: replicate_numbers[col_index]
-            )
-          end
+          trait_score_attributes[:technical_replicate_number] =
+            if replicate_numbers[col_index] && replicate_numbers[col_index] > 0
+              replicate_numbers[col_index]
+            else
+              1
+            end
 
-          TraitScore.create!(
-            trait_score_attributes.merge(
-              trait_descriptor: trait_descriptor,
-              score_value: value,
-              plant_scoring_unit_id: new_plant_scoring_unit.id
-            )
+          trait_score_attributes.merge!(
+            trait_descriptor_id: trait_descriptor.id,
+            score_value: value,
+            plant_scoring_unit_id: new_plant_scoring_unit.id
           )
+
+          # Ensure consistent order of raw values (by column name)
+          trait_score_attributes.sort.map do |_,v|
+            TraitScore.sanitize(v)
+          end
+      end
+
+      if scores_sanitized_data.present?
+        query =
+          "INSERT INTO trait_scores
+           (date_entered, entered_by_whom, plant_scoring_unit_id, published, published_on, score_value, technical_replicate_number, trait_descriptor_id, user_id)
+           VALUES
+           #{scores_sanitized_data.map do |score_sanitized_data|
+               "(#{score_sanitized_data.join(', ')})"
+             end.join(', ')
+            }"
+
+        TraitScore.connection.execute(query)
+        reset_trait_score_counter(new_plant_scoring_unit)
       end
       new_plant_scoring_unit
     end
+
+    reset_trait_descriptors_counters
   end
 
   def create_plant_trial
@@ -186,7 +206,7 @@ class Submission::PlantTrialFinalizer
     {
       date_entered: Date.today,
       entered_by_whom: submission.user.full_name,
-      user: submission.user,
+      user_id: submission.user.id,
       published: publish?,
       published_on: (Time.now if publish?)
     }
@@ -219,5 +239,17 @@ class Submission::PlantTrialFinalizer
 
   def lines_or_varieties
     submission.content.step04.lines_or_varieties || {}
+  end
+
+  private
+
+  def reset_trait_score_counter(resource)
+    resource.class.reset_counters(resource.id, :trait_scores)
+  end
+
+  def reset_trait_descriptors_counters
+    submission.content.step02.trait_descriptor_list.size.times do |i|
+      reset_trait_score_counter(get_nth_trait_descriptor(i))
+    end
   end
 end
