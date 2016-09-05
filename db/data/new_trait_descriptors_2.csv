@@ -1,0 +1,284 @@
+"trait_descriptors.category","trait_descriptors.stage_scored","trait.data_provenance","trait.description","trait.name","old_trait_name","trait_descriptors.scoring_method","trait_descriptors.units_of_measurements"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of Brassicasterol in seeds","Seed Brassicasterol concentration","Seed Brassicasterol","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of diunsaturated Campesterol in seeds","Seed diunsaturated Campesterol concentration","Seed Campesterol diunsaturated","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of Campesterol in seeds","Seed Campesterol concentration","Seed Campesterol","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of Stigmasterol in seeds","Seed Stigmasterol concentration","Seed Stigmasterol","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of B-Sitosterol in seeds","Seed B-Sitosterol concentration","Seed β-Sitosterol","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of Avenasterol in seeds","Seed Avenasterol concentration","Seed Avenasterol","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of Cycloartenol in seeds","Seed Cycloartenol concentration","Seed Cycloartenol","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The total concentration of phytosterols in seeds","Seed total Phytosterol concentration","Seed total Phytosterol concentration","* Roughly 80 mg of seed material is weighed into Precellys grinding tubes (ceramic beads, 2 ml capacity). The large seed amount is to reduce inter-seed variation.
+* Seeds are ground at 5500 rpm for 25 seconds three times, with a wait time of 30 seconds between each grinding step.
+* 1 ml of hexane containing the internal standards cholesteryl-heptadecanocate and cholestanol at a concentration of 0.00002M (20 µM) are added to samples.
+* Samples are vortexed, and then incubated at 30°C in a rotary incubator at 200 rpm for 1 hour.
+* Samples were then centrifuged at 14000 rpm for 1 minute to sediment seed material. The hexane supernatant was removed using Pasteur pipettes and transferred to 3 ml, glass trident vials.
+* A further two hexane extractions were performed (with no internal standards added), with 1 ml of pure hexane added to each sample, incubation at 30°C for 1 hour at 200 rpm, with a prior sample vortex step, centrifugation at 14000 rpm and finally, separation and pooling of the hexane fractions. 
+* The 3 ml of seed lipid extract was dried down using a Genevac EZ-2 at ? 40°C for 40 minutes.
+
+
+* 1.5 ml of 1.5 M potassium hydroxide in 95% ethanol was added to the lipid sample (roughly 10 mg), and incubated at 80°C for 1 hour (from 80 mg total seed, 1ml total suspension, 250 ul used).
+* The samples are cooled, and 1 ml of a 1% (w/v) NaCl solution is added, followed by 1 ml of hexane.
+* Samples are vortexed, centrifuged and the upper hexane phase is removed.
+* A further hexane extraction is carried out with 1 ml of hexane, which is pooled with the first.
+* Samples are dried in a rotary evaporator or under a stream of nitrogen.
+* Free sterols are then silated using 100 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C. (100 ul heptane added, 1 ul injection into GC-FID).
+*GC program:
+* Initial temp: 200°C, to 300°C at 16°C/min, then to 325°C at 4°C min and held for 4.5 minutes. 
+* Inlet temp: 325°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+","µg/g"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The percentage of Brassicasterol in the total of Phytosterols in seeds","Seed Brassicasterol percentage","Seed Brassicasterol percentage","The percentual proportions of individual Sterols derived from MO_008 were calculated from the concentrations with regard to the total amount of sterols","%"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The percentage of diunsaturated Campesterol in the total of Phytosterols in seeds","Seed diunsaturated Campesterol percentage","Seed diunsaturated Campesterol percentage","The percentual proportions of individual Sterols derived from MO_008 were calculated from the concentrations with regard to the total amount of sterols","%"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The percentage of Campesterol in the total of Phytosterols in seeds","Seed Campesterol percentage","Seed Campesterol percentage","The percentual proportions of individual Sterols derived from MO_008 were calculated from the concentrations with regard to the total amount of sterols","%"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The percentage of Stigmasterol in the total of Phytosterols in seeds","Seed Stigmasterol percentage","Seed Stigmasterol percentage","The percentual proportions of individual Sterols derived from MO_008 were calculated from the concentrations with regard to the total amount of sterols","%"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The percentage of B-Sitosterol in the total of Phytosterols in seeds","Seed B-Sitosterol percentage","Seed B-Sitosterol percentage","The percentual proportions of individual Sterols derived from MO_008 were calculated from the concentrations with regard to the total amount of sterols","%"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The percentage of Avenasterol in the total of Phytosterols in seeds","Seed Avenasterol percentage","Seed Avenasterol percentage","The percentual proportions of individual Sterols derived from MO_008 were calculated from the concentrations with regard to the total amount of sterols","%"
+"Biochemical","seed","Richard Broughton, Frederic Beaudoin, Rothamsted","The percentage of Cycloartenol in the total of Phytosterols in seeds","Seed Cycloartenol percentage","Seed Cycloartenol percentage","The percentual proportions of individual Sterols derived from MO_008 were calculated from the concentrations with regard to the total amount of sterols","%"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of components with alkane functional groups from pod and stem material","Pod and stem Alkane-functional group content","Pod and stem Alkane-functional group content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of components with primary alcohol functional groups from pod and stem material","Pod and stem primary Alkohol functional group content","Pod and stem prim. Alkohol functional group content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of components with fatty acids as functional groups from pod and stem material","Pod and stem Fatty acids functional group content","Pod and stem Fatty acids functional group content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of components with secondary alcohol functional groups from pod and stem material","Pod and stem secondary Alkohol functional group content","Pod and stem  2dary Alkohol functional group content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of components with ketone functional groups from pod and stem material","Pod and stem Ketone functional group content","Pod and stem Ketone functional group content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of all compounds with branched alcyl chains from pod and stem material","Pod and stem branched Alcyl-chain content","Pod and stem branched alcyl-chain content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of components with aldehyde functional groups from pod and stem material","Pod and stem Aldehyde functional group content","Pod and stem Aldehyde functional group content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical",,"Richard Broughton, Frederic Beaudoin, Rothamsted","The concentration of wax in the pod and seed material","Pod and stem wax content","Pod and stem wax content","* 3 pods and 3 sections of stem (10 cm) were collected from each plant, and inserted into Pyrex glass tubes (122 mm (L) x 19 mm (D), roughly 20 ml vol.).
+* Wax was extracted using chloroform. Chloroform was spiked with a C22:0 alkane and C17:0 fatty acid as internal standards. Internal standard concentrations were 10 µM in chloroform (giving 100 pmol/µl for GC injection). Wax was extracted for 30 seconds using 10 ml of the chloroform/IS mixture. Sample tubes were inverted continuously during the extraction phase. PTFE cap liners were used to ensure minimal extraction of plasticisers.
+* Pod and stem material are removed from the tubes, and samples dried under vacuum in a centrifugal evaporator (Genevac, EZ-2) at ? 42°C using program low BP. Samples can also be dried under a stream of nitrogen at ? 30°C. 
+* Wax components were derivatized with 200 µl of BSTFA + TMCS (99:1) for 1 hour at 85°C.
+* After cooling, 800 µl of heptane was added (total vol. 1 ml), and 1 µl was injected onto the GC-FID/MS. 
+* GC program:
+* Initial temp: 50°C, to 200°C at 50°C/min, to 280°C at 2°C min, to 325°C at 10°C/min, hold for 6.5 minutes.
+* Inlet temp: 280°C, split-less injection. 
+* Column: HP-1MS UI, 30 m x 0.25 mm x 0.25 µm, flow = 1 ml/ min.
+* FID temp: 325°C
+
+","µg/g"
+"Biochemical","seed","Swen Langer, Lenka Havlickova, York University","Alpha- tocopherol content in seeds","Seed alpha- tocopherol content","Seed α-tocopherol","A homogenous mixture of 80 mg of rapeseed seeds from each plant were ground in a bead mill (Tissue Lyser, Qiagen, Manchester, UK)
+ twice for 2min at 30Hz with 750 µl heptane (Rathburn, Walkerburn, UK) and 150 µl of 0.12mg mL-1 (25.4µM) internal standard, alpha-tocopherol acetate (Sigma-Aldrich, Gillingham, UK)
+ dissolved in ethanol (Rathburn). Samples were incubated at 4°C for 2h, centrifuged and 20 µl of clear supernatant directly subjected to HPLC analysis.
+ Tocopherols were identified by comparison of retention times with standards. TTC was counted as the sum of a-,y- and d-tocopherol contents","mg.kg-1 seed"
+"Biochemical","seed","Swen Langer, Lenka Havlickova, York University","Delta- tocopherol content in seeds","Seed delta- tocopherol content","Seed δ-tocopherol","A homogenous mixture of 80 mg of rapeseed seeds from each plant were ground in a bead mill (Tissue Lyser, Qiagen, Manchester, UK)
+ twice for 2min at 30Hz with 750 µl heptane (Rathburn, Walkerburn, UK) and 150 µl of 0.12mg mL-1 (25.4µM) internal standard, alpha-tocopherol acetate (Sigma-Aldrich, Gillingham, UK)
+ dissolved in ethanol (Rathburn). Samples were incubated at 4°C for 2h, centrifuged and 20 µl of clear supernatant directly subjected to HPLC analysis.
+ Tocopherols were identified by comparison of retention times with standards. TTC was counted as the sum of a-,y- and d-tocopherol contents","mg.kg-1 seed"
+"Biochemical","seed","Swen Langer, Lenka Havlickova, York University","Gamma- tocopherol content in seeds","Seed gamma- tocopherol content","Seed γ-tocopherol","A homogenous mixture of 80 mg of rapeseed seeds from each plant were ground in a bead mill (Tissue Lyser, Qiagen, Manchester, UK)
+ twice for 2min at 30Hz with 750 µl heptane (Rathburn, Walkerburn, UK) and 150 µl of 0.12mg mL-1 (25.4µM) internal standard, alpha-tocopherol acetate (Sigma-Aldrich, Gillingham, UK)
+ dissolved in ethanol (Rathburn). Samples were incubated at 4°C for 2h, centrifuged and 20 µl of clear supernatant directly subjected to HPLC analysis.
+ Tocopherols were identified by comparison of retention times with standards. TTC was counted as the sum of a-,y- and d-tocopherol contents","mg.kg-1 seed"

@@ -226,6 +226,13 @@ window.configs =
           else
             data
       ,
+        targets: 'trait_descriptors_scoring_method_column'
+        render: (data, type, full, meta) ->
+          if data
+            data.replace(/(?:\r\n|\r|\n)/g, '<br />');
+          else
+            data
+      ,
         targets: 'plant_parts_plant_part_column'
         render: (data, type, full, meta) ->
           if data && full[8] && full[8].indexOf("PO:") > -1
