@@ -12,7 +12,10 @@
         %span.label.label-info
           = surround '[',']' do
             - if params[:query].present?
-              = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
+              - if params[:query].is_a?(Hash)
+                = params[:query].map{ |k,v| "#{k} = #{v}" }.join(' && ')
+              - else
+                = params[:query]
             - if params[:fetch].present?
               = "search = "
               = params[:fetch]
