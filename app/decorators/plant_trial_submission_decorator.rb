@@ -42,7 +42,7 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   def plant_population
     return @plant_population if defined?(@plant_population)
     return if object.content.step01.plant_population_id.blank?
-    @plant_population = PlantPopulation.find(object.content.step01.plant_population_id)
+    @plant_population = PlantPopulation.find_by(id: object.content.step01.plant_population_id)
   end
 
   def trait_descriptors
