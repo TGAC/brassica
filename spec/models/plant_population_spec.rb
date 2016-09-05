@@ -126,4 +126,12 @@ RSpec.describe PlantPopulation do
       pp.update_attribute(:name, 'some other name')
     end
   end
+
+  describe '#submission' do
+    it 'it is destroyed when the population is destroyed' do
+      submission = create(:submission, :population, :finalized)
+      expect { submission.submitted_object.destroy }.
+        to change { Submission.population.count }.by(-1)
+    end
+  end
 end

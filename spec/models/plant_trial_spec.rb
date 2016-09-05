@@ -164,4 +164,12 @@ RSpec.describe PlantTrial do
     ptr = create(:plant_trial, plant_scoring_units: [psu])
     expect { ptr.destroy }.to change { PlantScoringUnit.count }.by(-1)
   end
+
+  describe '#submission' do
+    it 'it is destroyed when the trial is destroyed' do
+      submission = create(:submission, :trial, :finalized)
+      expect { submission.submitted_object.destroy }.
+        to change { Submission.trial.count }.by(-1)
+    end
+  end
 end

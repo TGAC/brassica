@@ -21,6 +21,11 @@ class PlantPopulation < ActiveRecord::Base
   has_many :plant_population_lists, dependent: :delete_all
   has_many :plant_lines, through: :plant_population_lists
 
+  has_one :submission,
+          ->(plant_population) { population.where(user_id: plant_population.user_id) },
+          foreign_key: :submitted_object_id,
+          dependent: :destroy
+
   validates :name, presence: true, uniqueness: true
   validates :user, presence: { on: :create }
 
