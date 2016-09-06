@@ -1,7 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe PlantTrial do
-  it { should belong_to(:plant_population).touch(true) }
+  context "associations" do
+    it { should belong_to(:plant_population).touch(true) }
+    it { should have_one(:submission).with_foreign_key(:submitted_object_id).dependent(:destroy) }
+  end
 
   context "validations" do
     it { should validate_presence_of(:plant_trial_name) }
@@ -163,5 +166,13 @@ RSpec.describe PlantTrial do
     psu = create(:plant_scoring_unit)
     ptr = create(:plant_trial, plant_scoring_units: [psu])
     expect { ptr.destroy }.to change { PlantScoringUnit.count }.by(-1)
+  end
+
+  describe '#submission' do
+    it 'is destroyed when the trial is destroyed' do
+      submission = create(:submission, :trial, :finalized)
+      expect { submission.submitted_object.destroy }.
+        to change { Submission.trial.count }.by(-1)
+    end
   end
 end

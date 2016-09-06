@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe PlantPopulation do
+  context "associations" do
+    it { should have_one(:submission).with_foreign_key(:submitted_object_id).dependent(:destroy) }
+  end
+
   it 'does not need owner for updates' do
     pp = create(:plant_population)
     pp.update_attribute(:user_id, nil)
@@ -124,6 +128,14 @@ RSpec.describe PlantPopulation do
       pp = create(:plant_population, user: create(:user), published: false)
       create(:plant_population_list, plant_population: pp, user: pp.user, published: false)
       pp.update_attribute(:name, 'some other name')
+    end
+  end
+
+  describe '#submission' do
+    it 'is destroyed when the population is destroyed' do
+      submission = create(:submission, :population, :finalized)
+      expect { submission.submitted_object.destroy }.
+        to change { Submission.population.count }.by(-1)
     end
   end
 end
