@@ -15,6 +15,8 @@ For further contact information on people behind the project or the database its
 
 Also, follow the BIP on twitter to get the latest updates [@BrassicaP](https://twitter.com/BrassicaP).
 
+If you are interested in learning how to submit data to the portal, training material is available on [BIP_training](https://github.com/TGAC/BIP_training).
+
 Currently, the web application is still under development and also changes to the database schema are possible. Despite these ongoing developments, navigation, data submissions and -download from the TGAC-hosted BIP version via the web-interface and the API should be possible.
 
 ## Dependencies
