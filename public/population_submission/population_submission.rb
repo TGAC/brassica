@@ -72,11 +72,12 @@ end
 puts " 1. Creating experimental plant_population "
 
 plant_population_id = create_record('plant_population',
-  name: 'RIPR_test_population',
-  description: '387 Brassica napus accessions used in the RIPR project for which mRNAseq data were submitted to SRA under PRJNA309367',
-  establishing_organisation: 'York University',
-  taxonomy_term_id: 27  #this is Brassica napus id in BIP
-)
+  name: 'enter your population name here',
+  description: 'enter your population description here',
+  establishing_organisation: 'organisation that established this plant population',
+  population_type_id: 3 , # Dh segregating:1 ,DFS:2 , DFFS: 3,F3 pooled:4 , Recombinant inbred: 5, F1 hybrid:6, Back Cross: 7
+  taxonomy_term_id: 27  # Brassica napus id in BIP  27, Brassica oleracea: 32, Brassica rapa:1
+  )
 
 
 # Function that finds or submits plant_varieties
