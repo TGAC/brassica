@@ -14,7 +14,8 @@ en:
         data will be accessible for all users of the Portal. Further contextual help
         will be provided at each of the following steps:
       population: |
-        The following process allows you to submit a detailed description of your
+        For a manual on Population submission please see <a href="https://github.com/TGAC/brassica/tree/add_manuals/public/manuals/upload_population_submission">here</a>.
+	The following process allows you to submit a detailed description of your
         Brassica population. Apart from species information you may indicate
         the parent Brassica lines and the list of (possibly new) plant lines
         connected with this population.
