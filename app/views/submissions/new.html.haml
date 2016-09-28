@@ -27,7 +27,7 @@
 
           %p
             = t("submission.description.#{s_type}")
-            = t('submission.description.common')
+            = t('submission.description.common', type: s_type).html_safe
 
           .row
             .col-sm-12
