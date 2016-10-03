@@ -11,8 +11,9 @@ en:
       common: |
         You will also be able to provide
         data ownership and provenance information. Once successfully submitted, the
-        data will be accessible for all users of the Portal. Further contextual help
-        will be provided at each of the following steps:
+        data will be accessible for all users of the Portal. For detailed instructions
+        please consult the <a href="/manuals/upload_%{type}_submission.pdf">manual</a>.
+        Further contextual help will be provided at each of the following steps:
       population: |
         The following process allows you to submit a detailed description of your
         Brassica population. Apart from species information you may indicate
