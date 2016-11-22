@@ -378,12 +378,12 @@ en:
           name: fathered_descendant_ids
           format: "int[]"
           create: readonly
-          desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the male line
+          desc: Zero or more BIP identifiers of Plant Populations descending from this entry in the male line
         -
           name: mothered_descendant_ids
           format: "int[]"
           create: readonly
-          desc: Zero or more BIP identifiers of Plant Lines descending from this entry in the female line
+          desc: Zero or more BIP identifiers of Plant Populations descending from this entry in the female line
         -
           name: plant_accession_ids
           format: "int[]"
