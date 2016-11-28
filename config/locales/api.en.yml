@@ -198,6 +198,24 @@ en:
           }
         }
 
+    traversing:
+      ids_example: |-
+        {
+          "plant_scoring_units": [
+            {
+              "id": :84208,
+              "trait_score_ids": [98413,98412],
+              ...
+            }
+          ]
+        }
+
+      request: |-
+        GET /api/v1/trait_scores?trait_score[query][id]=98413 HTTP/1.1
+        Content-Type: application/json
+        Accept: application/json
+        X-BIP-Api-Key: ba6d4625927ede0db8768782994d9276cfff9ba79e8df8c831aedc453e850836
+
     publishing:
       create_private_request: |-
         POST /api/v1/trait_scores HTTP/1.1
