@@ -16,8 +16,8 @@ if ARGV.size < 2
   exit 1
 end
 
-# @client = Net::HTTP.new('bip.earlham.ac.uk', 443)
-@client = Net::HTTP.new('localhost', 3000)
+@client = Net::HTTP.new('bip.earlham.ac.uk', 443)
+# @client = Net::HTTP.new('localhost', 3000)
 @client.use_ssl = true
 @client.verify_mode = OpenSSL::SSL::VERIFY_NONE
 @headers = {
