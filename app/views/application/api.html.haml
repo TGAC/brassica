@@ -9,6 +9,7 @@
           %li= link_to "Fetching data", "#fetching-data"
           %li= link_to "Filtering data", "#filtering-data"
           %li= link_to "Searching for data", "#searching-for-data"
+          %li= link_to "Traversing data model", "#traversing"
           %li= link_to "Submitting data", "#submitting-data"
           %li= link_to "Publishing data", "#publishing-data"
           %li= link_to "Deleting data", "#deleting-data"
@@ -192,6 +193,28 @@
         in the meantime. For this reason the results of `fetch` API calls might differ slightly from
         what can be obtained via the web search form.
 
+      %h3#traversing.section-heading Traversing data model
+
+      %p
+        Each record returned by described methods includes its BIP internal numerical identifier, <code>id</code>.
+        Also, a list of related records is usually provided as an array of such numbers, for instance a Plant
+        Scoring Unit may have multiple related Trait Scores:
+
+      %pre
+        %code= t('api.traversing.ids_example')
+
+      %p
+        Using these identifiers it is possible to query BIP for these related records:
+
+      %pre
+        %code= t('api.traversing.request')
+
+      = render partial: 'application/api/try_it', locals: { url: "/api/v1/trait_scores?trait_score[query][id]=98413" }
+
+      %br
+      %p
+        Please note the <code>plant_scoring_unit_id</code> field in the returned JSON response. Due to the
+        symmetry of relations, this should refer back to the original Plant Scoring Unit record (<code>id</code> 84208).
 
       %h3#submitting-data.section-heading Submitting new data
 
