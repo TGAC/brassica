@@ -70,6 +70,8 @@ loop do
   page += 1
 end
 
+
+
 STDERR.puts "\n  - #{trait_scores.size} Trait Scores loaded"
 
 STDERR.puts '3. Finding Trait Descriptors'
@@ -84,6 +86,7 @@ STDERR.puts "  - The Trait Descriptors scored in this Plant Trial: #{trait_descr
 
 STDERR.puts '4. Iterating through Plant Scoring Units'
 
+plant_scoring_units = []
 page = 1
 loop do
   request = Net::HTTP::Get.new("/api/v1/plant_scoring_units?plant_scoring_unit[query][plant_trials.id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
@@ -94,17 +97,45 @@ loop do
     outputs[plant_scoring_unit['scoring_unit_name']]['trait_scores'] =
       trait_scores.select{ |ts| ts['plant_scoring_unit_id'] == plant_scoring_unit['id'] }
   end
+  plant_scoring_units = response['plant_scoring_units']
   page += 1
 end
+
+STDERR.puts '5. Finding Plant Accessions for this Plant Trial.'
+
+plant_accession_ids = plant_scoring_units.map{ |ps| ps['plant_accession_id'] }.uniq
+ids_pa_param = plant_accession_ids.map{ |pa_id| "plant_accession[query][id][]=#{pa_id}" }.join("&")
+request = Net::HTTP::Get.new("/api/v1/plant_accessions?#{ids_pa_param}", @headers)
+response = call_bip request
+plant_accessions = response['plant_accessions']
+
+STDERR.puts "  - The Plant Accessions used in this Plant Trial: #{plant_accessions.map{ |pa| pa['plant_accession'] }}"
+
+
+STDERR.puts '6. Finding Plant Lines for this Plant Trial.'
+
+plant_line_ids = plant_accessions.map{ |pa| pa['plant_line_id'] }.uniq
+ids_pl_param = plant_line_ids.map{ |pl_id| "plant_line[query][id][]=#{pl_id}" }.join("&")
+request = Net::HTTP::Get.new("/api/v1/plant_lines?#{ids_pl_param}", @headers)
+response = call_bip request
+plant_lines = response['plant_lines']
+
+STDERR.puts "  - The Plant Lines used in this Plant Trial: #{plant_lines.map{ |pl| pl['plant_line_name'] }}"
+
 
 STDERR.puts '5. Generating output CSV to STDOUT'
 
 csv_string = CSV.generate do |csv|
-  csv << ["Sample id"] + trait_descriptors.map{ |td| td['trait']['name'] }
-  outputs.each do |scoring_unit_name, data|
-    csv << [scoring_unit_name] + trait_descriptors.map{ |td| data['trait_scores'].detect{ |ts| ts['trait_descriptor_id'] == td['id'] }['score_value']}
+  csv << ["Sample id"]+["Plant_Accession"] + trait_descriptors.map{ |td| td['trait']['name'] }
+  outputs.each do |scoring_unit_name, data1, data2|
+    csv << [scoring_unit_name] + plant_accessions.map{|pa| data1['plant_scoring_units'].detect{|ps| ps['plant_accession_id'] == pa['id']}['plant_accession']} \
+    + trait_descriptors.map{ |td| data2['trait_scores'].detect{ |ts| ts['trait_descriptor_id'] == td['id'] }['score_value']}
+
   end
 end
+
+# for later:
+# CSV.open("Trial_data.csv","w") do |csv|
 
 puts csv_string
 
