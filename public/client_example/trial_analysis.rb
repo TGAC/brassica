@@ -94,6 +94,7 @@ loop do
   break if response['plant_scoring_units'].size == 0
   response['plant_scoring_units'].each do |plant_scoring_unit|
     outputs[plant_scoring_unit['scoring_unit_name']] = {}
+    outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession_id'] = plant_scoring_unit['plant_accession_id']
     outputs[plant_scoring_unit['scoring_unit_name']]['trait_scores'] =
       trait_scores.select{ |ts| ts['plant_scoring_unit_id'] == plant_scoring_unit['id'] }
   end
@@ -123,14 +124,15 @@ plant_lines = response['plant_lines']
 STDERR.puts "  - The Plant Lines used in this Plant Trial: #{plant_lines.map{ |pl| pl['plant_line_name'] }}"
 
 
-STDERR.puts '5. Generating output CSV to STDOUT'
+STDERR.puts '7. Generating output CSV to STDOUT'
 
 csv_string = CSV.generate do |csv|
-  csv << ["Sample id"]+["Plant_Accession"] + trait_descriptors.map{ |td| td['trait']['name'] }
-  outputs.each do |scoring_unit_name, data1, data2|
-    csv << [scoring_unit_name] + plant_accessions.map{|pa| data1['plant_scoring_units'].detect{|ps| ps['plant_accession_id'] == pa['id']}['plant_accession']} \
-    + trait_descriptors.map{ |td| data2['trait_scores'].detect{ |ts| ts['trait_descriptor_id'] == td['id'] }['score_value']}
-
+  csv << ["Sample id", "Plant_Accession"] + trait_descriptors.map{ |td| td['trait']['name'] }
+  outputs.each do |scoring_unit_name, data|
+    plant_accession = plant_accessions.detect{ |pa| pa['id'] == data['plant_accession_id'] }
+    csv << [scoring_unit_name] +
+      [plant_accession ? plant_accession['plant_accession'] : ''] +
+      trait_descriptors.map{ |td| data['trait_scores'].detect{ |ts| ts['trait_descriptor_id'] == td['id'] }['score_value']}
   end
 end
 
