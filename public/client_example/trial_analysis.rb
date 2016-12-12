@@ -100,7 +100,7 @@ loop do
     outputs[plant_scoring_unit['scoring_unit_name']] = {}
     outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession_id'] = plant_scoring_unit['plant_accession_id']
     outputs[plant_scoring_unit['scoring_unit_name']]['trait_scores'] =
-      trait_scores.select{ |ts| ts['plant_scoring_unit_id'] == plant_scoring_unit['id'] }
+      trait_scores.select{ |ts| ts['plant_scoring_unit_id'] == plant_scoring_unit['id']}
   end
   page += 1
 end
@@ -109,7 +109,7 @@ end
 plant_scoring_units = []
 page = 1
 loop do
-  request = Net::HTTP::Get.new("/api/v1/plant_scoring_units?plant_scoring_unit[query][plant_trials.id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
+  request = Net::HTTP::Get.new("/api/v1/plant_scoring_units?plant_scoring_unit[query][plant_scoring_units.plant_trial_id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
   response = call_bip request
   break if response['plant_scoring_units'].size == 0
   plant_scoring_units += response['plant_scoring_units']
@@ -118,37 +118,36 @@ loop do
 end
 
 STDERR.puts '5. Finding Plant Accessions for this Plant Trial.'
-plant_accessions = []
-page = 1
-loop do
-plant_accession_ids = plant_scoring_units.map{ |ps| ps['plant_accession_id'] }.uniq
-ids_pa_param = plant_accession_ids.map{ |pa_id| "plant_accession[query][id][]=#{pa_id}" }.join("&")
-request = Net::HTTP::Get.new("/api/v1/plant_accessions?#{ids_pa_param}", @headers)
-response = call_bip request
-break if response['plant_accessions'].size == 0
-plant_accessions += response['plant_accessions']
-STDERR.print '.'
-page += 1
-end
-#plant_accessions = response['plant_accessions']
 
-#puts JSON.pretty_generate(response['plant_scoring_units'])
 
-STDERR.puts "  - The Plant Accessions used in this Plant Trial: #{plant_accessions.map{ |pa| pa['plant_accession'] }}"
-
-=begin
 plant_accessions = []
 page = 1
 loop do
   request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_scoring_units.plant_trial_id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
   response = call_bip request
   break if response['plant_accessions'].size == 0
-  plant_accessions += response['plant_accession']
+  plant_accessions += response['plant_accessions']
   STDERR.print '.'
   page += 1
 end
+
+
+=begin
+page = 1
+
+plant_accession_ids = plant_scoring_units.map{ |ps| ps['plant_accession_id'] }.uniq
+ids_pa_param = plant_accession_ids.map{ |pa_id| "plant_accession[query][id][]=#{pa_id}" }.join("&")
+request = Net::HTTP::Get.new("/api/v1/plant_accessions?#{ids_pa_param}", @headers)
+response = call_bip request
+plant_accessions = response['plant_accessions']
+
+#plant_accessions = response['plant_accessions']
 =end
-puts JSON.pretty_generate(response['plant_accessions'])
+#puts JSON.pretty_generate(plant_accessions['id'])
+
+STDERR.puts "  - The Plant Accessions used in this Plant Trial: #{plant_accessions.map{ |pa| pa['plant_accession'] }}"
+
+
 
 STDERR.puts '6. Finding Plant Lines for this Plant Trial.'
 
