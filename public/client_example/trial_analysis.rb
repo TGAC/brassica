@@ -5,8 +5,12 @@ require 'net/http'
 require 'net/https'
 
 # A BIP Ruby client which, given a Plant Trial name, fetches:
-#  * all Trait Scores
-#  * ....
+#  * all Trait Scores (trait measurement values)
+#  * all corresponding Trait Descriptors
+#  * Scoring Unit Names (sample name)
+#  * Accession Names
+#  * Line Names
+#  * Sequence Identifiers
 # and produces a CSV to standard output, with each Plant Scoring Unit represented by a row.
 
 if ARGV.size < 2
@@ -86,7 +90,7 @@ STDERR.puts "  - The Trait Descriptors scored in this Plant Trial: #{trait_descr
 
 STDERR.puts '4. Iterating through Plant Scoring Units'
 
-plant_scoring_units = []
+
 page = 1
 loop do
   request = Net::HTTP::Get.new("/api/v1/plant_scoring_units?plant_scoring_unit[query][plant_trials.id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
@@ -98,20 +102,53 @@ loop do
     outputs[plant_scoring_unit['scoring_unit_name']]['trait_scores'] =
       trait_scores.select{ |ts| ts['plant_scoring_unit_id'] == plant_scoring_unit['id'] }
   end
-  plant_scoring_units = response['plant_scoring_units']
+  page += 1
+end
+
+#adding all Plant_scoring_units
+plant_scoring_units = []
+page = 1
+loop do
+  request = Net::HTTP::Get.new("/api/v1/plant_scoring_units?plant_scoring_unit[query][plant_trials.id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
+  response = call_bip request
+  break if response['plant_scoring_units'].size == 0
+  plant_scoring_units += response['plant_scoring_units']
+  STDERR.print '.'
   page += 1
 end
 
 STDERR.puts '5. Finding Plant Accessions for this Plant Trial.'
-
+plant_accessions = []
+page = 1
+loop do
 plant_accession_ids = plant_scoring_units.map{ |ps| ps['plant_accession_id'] }.uniq
 ids_pa_param = plant_accession_ids.map{ |pa_id| "plant_accession[query][id][]=#{pa_id}" }.join("&")
 request = Net::HTTP::Get.new("/api/v1/plant_accessions?#{ids_pa_param}", @headers)
 response = call_bip request
-plant_accessions = response['plant_accessions']
+break if response['plant_accessions'].size == 0
+plant_accessions += response['plant_accessions']
+STDERR.print '.'
+page += 1
+end
+#plant_accessions = response['plant_accessions']
+
+#puts JSON.pretty_generate(response['plant_scoring_units'])
 
 STDERR.puts "  - The Plant Accessions used in this Plant Trial: #{plant_accessions.map{ |pa| pa['plant_accession'] }}"
 
+=begin
+plant_accessions = []
+page = 1
+loop do
+  request = Net::HTTP::Get.new("/api/v1/plant_accessions?plant_accession[query][plant_scoring_units.plant_trial_id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
+  response = call_bip request
+  break if response['plant_accessions'].size == 0
+  plant_accessions += response['plant_accession']
+  STDERR.print '.'
+  page += 1
+end
+=end
+puts JSON.pretty_generate(response['plant_accessions'])
 
 STDERR.puts '6. Finding Plant Lines for this Plant Trial.'
 
@@ -127,11 +164,14 @@ STDERR.puts "  - The Plant Lines used in this Plant Trial: #{plant_lines.map{ |p
 STDERR.puts '7. Generating output CSV to STDOUT'
 
 csv_string = CSV.generate do |csv|
-  csv << ["Sample id", "Plant_Accession"] + trait_descriptors.map{ |td| td['trait']['name'] }
+  csv << ["Sample id", "Plant_Accession","Plant_Line_name","Sequence_id"] + trait_descriptors.map{ |td| td['trait']['name'] }
   outputs.each do |scoring_unit_name, data|
     plant_accession = plant_accessions.detect{ |pa| pa['id'] == data['plant_accession_id'] }
+    plant_line = plant_lines.detect{|pl| pl['id' == data['plant_line_id']]}
     csv << [scoring_unit_name] +
       [plant_accession ? plant_accession['plant_accession'] : ''] +
+      [plant_line ? plant_line['plant_line_name']: '']+
+      [plant_line ? plant_line['sequence_id']: ''] +
       trait_descriptors.map{ |td| data['trait_scores'].detect{ |ts| ts['trait_descriptor_id'] == td['id'] }['score_value']}
   end
 end
