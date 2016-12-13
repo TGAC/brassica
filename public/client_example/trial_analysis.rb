@@ -109,7 +109,7 @@ end
 plant_scoring_units = []
 page = 1
 loop do
-  request = Net::HTTP::Get.new("/api/v1/plant_scoring_units?plant_scoring_unit[query][plant_scoring_units.plant_trial_id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
+  request = Net::HTTP::Get.new("/api/v1/plant_scoring_units?plant_scoring_unit[query][plant_trial_id]=#{plant_trial_id}&page=#{page}&per_page=200", @headers)
   response = call_bip request
   break if response['plant_scoring_units'].size == 0
   plant_scoring_units += response['plant_scoring_units']
