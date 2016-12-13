@@ -58,6 +58,7 @@ end
 
 plant_trial_id = response['plant_trials'][0]['id']
 
+
 STDERR.puts "  - Found, plant_trial_id = #{plant_trial_id}"
 
 STDERR.puts '2. Loading all Trait Scores for this Plant Trial.'
@@ -99,7 +100,9 @@ loop do
   response['plant_scoring_units'].each do |plant_scoring_unit|
     outputs[plant_scoring_unit['scoring_unit_name']] = {}
     outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession_id'] = plant_scoring_unit['plant_accession_id']
+    #outputs[plant_scoring_unit['scoring_unit_name']]['plant_accessions'] = plant_accessions.select{|pa| pa['id'] == plant_scoring_unit['plant_accession_id']}
     plant_accession_ids << plant_scoring_unit['plant_accession_id']
+    #plant_line_ids << plant_scoring_unit
     outputs[plant_scoring_unit['scoring_unit_name']]['trait_scores'] =
       trait_scores.select{ |ts| ts['plant_scoring_unit_id'] == plant_scoring_unit['id']}
   end
@@ -117,6 +120,7 @@ plant_accession_ids.each_slice(200) do |plant_accession_ids_slice|
   plant_accessions += response['plant_accessions']
   STDERR.print '.'
 end
+puts "#{plant_accession_ids}"
 
 =begin
 page = 1
@@ -132,17 +136,42 @@ plant_accessions = response['plant_accessions']
 #puts JSON.pretty_generate(plant_accessions['id'])
 
 STDERR.puts "  - The Plant Accessions used in this Plant Trial: #{plant_accessions.map{ |pa| pa['plant_accession'] }}"
+STDERR.puts "Number of Plant Accessions loaded: #{plant_accessions.size}"
+
 
 STDERR.puts '6. Finding Plant Lines for this Plant Trial.'
 
 plant_line_ids = plant_accessions.map{ |pa| pa['plant_line_id'] }.uniq
+
+
+#plant_line_ids.each_slice(200) do |plant_line_ids_slice|
 ids_pl_param = plant_line_ids.map{ |pl_id| "plant_line[query][id][]=#{pl_id}" }.join("&")
-request = Net::HTTP::Get.new("/api/v1/plant_lines?#{ids_pl_param}", @headers)
+request = Net::HTTP::Get.new("/api/v1/plant_lines?#{ids_pl_param}&per_page=200", @headers)
 response = call_bip request
 plant_lines = response['plant_lines']
+#end
+
+
+
+
+#test 2
+
+
+=begin
+plant_lines = []
+plant_accessions.each_slice(200) do |plant_accessions|
+  ids_pl_param = plant_accessions.map{ |pl_id| "plant_line[query][id][]=#{pl_id}" }.join("&")
+  request = Net::HTTP::Get.new("/api/v1/plant_lines?#{ids_pl_param}&per_page=200", @headers)
+  response = call_bip request
+  plant_lines += response['plant_lines']
+  STDERR.print '.'
+end
+=end
 
 STDERR.puts "  - The Plant Lines used in this Plant Trial: #{plant_lines.map{ |pl| pl['plant_line_name'] }}"
+STDERR.puts "Number of Plant Lines loaded: #{plant_lines.size}"
 
+puts JSON.pretty_generate(outputs)
 
 STDERR.puts '7. Generating output CSV to STDOUT'
 
