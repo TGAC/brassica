@@ -17,6 +17,8 @@
       %tr
         %th.plant_scoring_units_scoring_unit_name_column
           = t 'tables.plant_scoring_units.scoring_unit_name'
+        %th.plant_accessions_plant_accession_column
+          = t 'tables.plant_accessions.plant_accession'
         - @plant_trial.decorate.trait_headers.each do |header|
           %th.trait_scores_score_value_column= header
     %tbody
