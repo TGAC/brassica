@@ -152,7 +152,15 @@ window.configs =
       ,
         targets: 'plant_trials_id_column'
         render: (data, type, full, meta) ->
-          '<a href="trial_scorings/' + data + '">Show</a>'
+          '<a href="trial_scorings/' + data + '" ' +
+            'title="See all trial\'s trait scorings in a single table." data-toggle="tooltip">' +
+            'Show' +
+          '</a>' +
+          '</br>' +
+          '<a href="trial_scorings/' + data + '.zip" ' +
+            'title="Download zip file with full trial information." data-toggle="tooltip">' +
+            'Download' +
+          '</a>'
       ]
 
   'population-loci':

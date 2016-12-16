@@ -46,5 +46,44 @@ RSpec.describe TrialScoringsController do
         get :show, format: :json, id: plant_trial.id
       end
     end
+
+    context 'when called for zip format' do
+      let(:tds) { create_list(:trait_descriptor, 2) }
+      before(:each) {
+        psus = [
+          create(:plant_scoring_unit,
+                 plant_accession: create(:plant_accession, plant_line: create(:plant_line, :with_variety)),
+                 plant_trial: plant_trial,
+                 scoring_unit_name: 'a'),
+          create(:plant_scoring_unit,
+                 plant_accession: create(:plant_accession, :with_variety),
+                 plant_trial: plant_trial,
+                 scoring_unit_name: 'b')
+        ]
+        create(:trait_score, trait_descriptor: tds[0], plant_scoring_unit: psus[0])
+        create(:trait_score, trait_descriptor: tds[1], plant_scoring_unit: psus[0])
+        create(:trait_score, trait_descriptor: tds[1], plant_scoring_unit: psus[1])
+      }
+
+      it 'produces a zip file' do
+        get :show, format: :zip, id: plant_trial.id
+        expect(response.content_type).to eq 'application/zip'
+      end
+
+      it 'compress three files in the zip file' do
+        get :show, format: :zip, id: plant_trial.id
+        file = Tempfile.new('plant_trial')
+        file.write(response.body)
+        file.close
+        Zip::File.open(file.path) do |zfile|
+          data = zfile.map do |entry|
+            [entry.name, entry.get_input_stream.read]
+          end
+          expect(data.map(&:first)).
+            to match_array %w(plant_trial.csv trait_descriptors.csv trait_scoring.csv)
+          expect(data.map{ |d| d[1].lines.size }).to match_array [2,3,3]
+        end
+      end
+    end
   end
 end

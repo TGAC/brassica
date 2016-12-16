@@ -1,3 +1,5 @@
+require 'zip'
+
 class TrialScoringsController < ApplicationController
   def show
     @plant_trial = PlantTrial.find(params[:id])
@@ -16,13 +18,29 @@ class TrialScoringsController < ApplicationController
         end
         render json: grid_data
       end
+      format.zip do
+        exporter = Submission::PlantTrialExporter.new(
+          OpenStruct.new(submitted_object: @plant_trial, user: @plant_trial.user)
+        )
+        compressed_filestream = Zip::OutputStream.write_buffer do |zos|
+          exporter.documents.each do |document_name, content|
+            filename = "#{document_name}.csv"
+            zos.put_next_entry filename
+            zos.print content
+          end
+        end
+        compressed_filestream.rewind
+        send_data compressed_filestream.read,
+                  filename: "plant_trial_#{@plant_trial.plant_trial_name.parameterize('_')}.zip",
+                  type: 'application/zip'
+      end
     end
   end
 
   private
 
   def prepare_grid_data
-    objects = @plant_trial.scoring_table_data(current_user.try(:id))
+    objects = @plant_trial.scoring_table_data(user_id: current_user.try(:id))
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 

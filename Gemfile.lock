@@ -318,6 +318,7 @@ GEM
     rspec-support (3.5.0)
     ruby_parser (3.6.4)
       sexp_processor (~> 4.1)
+    rubyzip (1.2.0)
     safe_yaml (0.9.7)
     sass (3.2.19)
     sass-rails (4.0.5)
@@ -419,6 +420,7 @@ DEPENDENCIES
   reform (~> 1.2.6)
   rspec-html-matchers
   rspec-rails (~> 3.5.0)
+  rubyzip
   sass-rails (~> 4.0.3)
   shoulda-matchers
   spring
