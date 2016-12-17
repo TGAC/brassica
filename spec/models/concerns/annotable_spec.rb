@@ -36,7 +36,8 @@ RSpec.describe Annotable do
         ).merge(
           instance.respond_to?('trait_name') ? { 'trait_name' => instance.trait_name } : {}
         )
-        expect(instance.annotations_as_json).to eq test_hash
+        expect(instance.annotations_as_json).
+          to eq test_hash.merge('doi' => instance.try(:submission).try(:doi))
         expect(test_hash.values.map(&:nil?)).to all be_falsey
       rescue ArgumentError => e
         no_factory << table.singularize

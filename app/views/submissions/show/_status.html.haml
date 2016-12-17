@@ -23,6 +23,8 @@
       - else
         Submitted on #{l submission.updated_at, format: :short}
 
+        = submission.decorate.doi
+
   - else
     %span.label.label-default Draft
     .details
