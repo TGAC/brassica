@@ -123,6 +123,7 @@ $ ->
             content += '<i>This entry is not published.</i>'
           else if response['revocable?']
             content += '<i>This entry is still pending confirmation. Please do not quote it yet.</i>'
+          content += doiLink(response['doi'])
           content += pubmedLink(response['pubmed_id'])
           content = 'No annotations' if content == ''
           $(this).data('bs.popover').options.content = content
@@ -139,6 +140,12 @@ window.metadataElement = (title, value) ->
 window.pubmedLink = (value) ->
   if value
     "<a href='http://www.ncbi.nlm.nih.gov/pubmed/#{escapeHtml(value)}' target='_blank'>PubMed Link</a></br>"
+  else
+    ''
+
+window.doiLink = (value) ->
+  if value
+    "<strong>DOI</strong>: <a href='http://doi.org/#{escapeHtml(value)}' target='_blank'>#{escapeHtml(value)}</a></br>"
   else
     ''
 
