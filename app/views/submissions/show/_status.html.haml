@@ -23,7 +23,9 @@
       - else
         Submitted on #{l submission.updated_at, format: :short}
 
-        = submission.decorate.doi
+        - if submission.published?
+          %br
+          DOI: #{submission.decorate.doi}
 
   - else
     %span.label.label-default Draft
