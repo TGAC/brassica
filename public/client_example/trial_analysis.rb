@@ -160,11 +160,11 @@ loop do
   response['plant_scoring_units'].each do |plant_scoring_unit|
     outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession']= plant_accessions.select{|pa| pa['id'] == plant_scoring_unit['plant_accession_id']}
     # PROBLEM 2 trying to only display the accession name as a value for the key- value pair "plant_accession2" => "<accession_name>""
-    #outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession2']=plant_accessions.map{ |pa| plant_scoring_unit['plant_accession_id'].detect{ |psu| pa['id'] == psu['plant_accession_id'] }['plant_accession']}
+    #outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession_name']=plant_accessions.map{ |pa| plant_scoring_unit['plant_accession_id'].detect{ |psu| pa['id'] == psu['plant_accession_id'] }['plant_accession']}
   end
   page += 1
 end
-
+puts JSON.pretty_generate(outputs)
 
 =begin
 outputs.each do |key,value|
