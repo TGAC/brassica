@@ -39,12 +39,13 @@ RSpec.describe Submission::PlantTrialExporter do
       expect(documents[:trait_scoring].lines[0].strip.split(',')[13,3]).
         to eq ["#{tds[0].trait_name} rep1", "#{tds[0].trait_name} rep2", tds[1].trait_name]
 
-      generated_scores = CSV.parse(documents[:trait_scoring]).map{ |row| row[13,3] }[1,3]
+      generated_scores = CSV.parse(documents[:trait_scoring]).map{ |row| row[13,3] }
       expect(documents[:trait_scoring].lines[1,3].map{ |l| l.split(',')[0] }).
         to match_array psus.map(&:scoring_unit_name)
-      expect(generated_scores.map{ |l| l[0] }).to match_array [ts1.score_value, '-', '-']
-      expect(generated_scores.map{ |l| l[1] }).to match_array [ts2.score_value, '-', '-']
-      expect(generated_scores.map{ |l| l[2] }).to match_array [ts3.score_value, '-', '-']
+      expect(generated_scores[0]).to eq [tds[0].trait.name + ' rep1', tds[0].trait.name + ' rep2', tds[1].trait.name]
+      expect(generated_scores[1]).to eq [ts1.score_value, '-', '-']
+      expect(generated_scores[2]).to eq ['-', ts2.score_value, ts3.score_value]
+      expect(generated_scores[3]).to eq ['-', '-', '-']
 
       expect(documents[:trait_scoring].lines[1,3].map{ |l| l.split(',')[3] }).
         to match_array [
