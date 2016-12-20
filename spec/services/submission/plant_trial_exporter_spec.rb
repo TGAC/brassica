@@ -43,11 +43,11 @@ RSpec.describe Submission::PlantTrialExporter do
       sample_ids = documents[:trait_scoring].lines[1,3].map{ |l| l.split(',')[0] }
       expect(sample_ids).to match_array psus.map(&:scoring_unit_name)
       expect(generated_scores[0]).to eq [tds[0].trait.name + ' rep1', tds[0].trait.name + ' rep2', tds[1].trait.name]
-      expect(generated_scores[sample_ids.index(psus[0].plant_scoring_unit)]).
+      expect(generated_scores[sample_ids.index(psus[0].scoring_unit_name) + 1]).
         to eq [ts1.score_value, '-', '-']
-      expect(generated_scores[sample_ids.index(psus[1].plant_scoring_unit)]).
+      expect(generated_scores[sample_ids.index(psus[1].scoring_unit_name) + 1]).
         to eq ['-', ts2.score_value, ts3.score_value]
-      expect(generated_scores[sample_ids.index(psus[2].plant_scoring_unit)]).
+      expect(generated_scores[sample_ids.index(psus[2].scoring_unit_name) + 1]).
         to eq ['-', '-', '-']
 
       expect(documents[:trait_scoring].lines[1,3].map{ |l| l.split(',')[3] }).
