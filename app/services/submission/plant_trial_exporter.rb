@@ -11,7 +11,8 @@ class Submission::PlantTrialExporter < Submission::Exporter
 
   def plant_trial
     generate_document PlantTrial,
-                      { id: submitted_object.id }
+                      { id: submitted_object.id },
+                      column_names: PlantTrial.table_columns[0..-3]
   end
 
   def trait_descriptors
