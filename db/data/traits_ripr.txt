@@ -17,3 +17,4 @@ ug/g	Brassicasterol	Campesterol diunsat	Campesterol	Stigmasterol	B-Sitosterol	Av
 (tocopherols)
 
 a-toc 1st rep  	a-toc 2nd rep  	y-toc 1st rep  	y-toc 2nd rep 	d-toc 1st rep 	y-toc 2nd rep
+

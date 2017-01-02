@@ -20,7 +20,7 @@ module Annotable extend ActiveSupport::Concern
         (has_attribute?(:date_entered) ? [:date_entered] : []) +
         (has_attribute?(:data_owned_by) ? [:data_owned_by] : []) +
         (has_attribute?(:pubmed_id) ? [:pubmed_id] : []),
-        methods: [:revocable?, :private?]
+        methods: [:revocable?, :private?, :doi]
       )
     end
 
@@ -28,6 +28,10 @@ module Annotable extend ActiveSupport::Concern
 
     def self.ref_columns
       @old_ref_columns + ["#{table_name}.id"]
+    end
+
+    def doi
+      try(:submission).try(:doi)
     end
   end
 end

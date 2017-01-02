@@ -41,7 +41,7 @@ class SubmissionDecorator < Draper::Decorator
   end
 
   def doi
-    object.doi ? h.link_to(object.doi, "http://dx.doi.org/#{object.doi}") : ''
+    object.doi ? h.link_to(object.doi, "http://doi.org/#{object.doi}") : ''
   end
 
   def label
