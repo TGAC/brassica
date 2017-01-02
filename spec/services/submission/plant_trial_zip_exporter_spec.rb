@@ -8,7 +8,7 @@ RSpec.describe Submission::PlantTrialZipExporter do
 
   describe "#call" do
     it 'compress three files in the zip file' do
-      csv_data = Submission::PlantTrialZipExporter.new.call(plant_trial).read
+      csv_data = Submission::PlantTrialZipExporter.new.call(plant_trial, 'no_cache').read
       file = Tempfile.new('plant_trial')
       file.write(csv_data)
       file.close
