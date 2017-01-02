@@ -16,13 +16,18 @@ class TrialScoringsController < ApplicationController
         end
         render json: grid_data
       end
+      format.zip do
+        send_data Submission::PlantTrialZipExporter.new.call(@plant_trial).read,
+                  filename: "plant_trial_#{@plant_trial.plant_trial_name.parameterize('_')}.zip",
+                  type: 'application/zip'
+      end
     end
   end
 
   private
 
   def prepare_grid_data
-    objects = @plant_trial.scoring_table_data(current_user.try(:id))
+    objects = @plant_trial.scoring_table_data(user_id: current_user.try(:id))
     ApplicationDecorator.decorate(objects).as_grid_data
   end
 

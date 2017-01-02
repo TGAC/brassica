@@ -27,5 +27,9 @@ FactoryGirl.define do
         plant_line.update_column(:user_id, nil)
       end
     end
+
+    trait :with_variety do
+      plant_variety
+    end
   end
 end

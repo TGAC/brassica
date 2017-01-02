@@ -85,12 +85,26 @@ RSpec.describe PlantTrial do
 
     context 'when there are PSUs inside the trial' do
       let(:plant_trial) { create(:plant_trial) }
-      before(:each) { create_list(:plant_scoring_unit, 3, plant_trial: plant_trial) }
+      before(:each) {
+        [
+          create(:plant_scoring_unit,
+                 plant_accession: create(:plant_accession, plant_line: create(:plant_line, :with_variety)),
+                 plant_trial: plant_trial,
+                 scoring_unit_name: 'a'),
+          create(:plant_scoring_unit,
+                 plant_accession: create(:plant_accession, :with_variety),
+                 plant_trial: plant_trial,
+                 scoring_unit_name: 'b'),
+          create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: 'c')
+        ]
+      }
 
-      it 'returns all plant scoring units' do
+      it 'returns all plant scoring units with accession names' do
         scoring_table = plant_trial.scoring_table_data
         expect(scoring_table).
-          to eq plant_trial.plant_scoring_units.map{ |psu| [psu.scoring_unit_name, psu.id] }.sort
+          to eq plant_trial.plant_scoring_units.map { |psu|
+            [psu.scoring_unit_name, psu.plant_accession.plant_accession, psu.id]
+          }.sort
       end
 
       context 'and they have trait scores recorded' do
@@ -105,15 +119,15 @@ RSpec.describe PlantTrial do
 
         it 'provides scores in correct TD order' do
           scoring_table = plant_trial.scoring_table_data
-          expect(scoring_table[0][1]).to eq tds[0].trait_scores[0].score_value
-          expect(tds[1].trait_scores.map(&:score_value)).to include scoring_table[2][2]
+          expect(scoring_table[0][2]).to eq tds[0].trait_scores[0].score_value
+          expect(tds[1].trait_scores.map(&:score_value)).to include scoring_table[2][3]
         end
 
         it 'properly treats sparse data' do
           scoring_table = plant_trial.scoring_table_data
-          expect(scoring_table[1][1]).to eq '-'
           expect(scoring_table[1][2]).to eq '-'
-          expect(scoring_table[2][1]).to eq '-'
+          expect(scoring_table[1][3]).to eq '-'
+          expect(scoring_table[2][2]).to eq '-'
         end
 
         context 'with technical replicates' do
@@ -128,14 +142,36 @@ RSpec.describe PlantTrial do
           it 'builds proper sparse matrix of values' do
             scoring_table = plant_trial.scoring_table_data
 
-            expect(scoring_table[0][1..3]).to eq tds[0].trait_scores.where(plant_scoring_unit: psus[0]).order(:technical_replicate_number).pluck(:score_value)
-            expect(scoring_table[0][4..5]).to eq tds[1].trait_scores.where(plant_scoring_unit: psus[0]).order(:technical_replicate_number).pluck(:score_value)
-            expect(scoring_table[1][1..5]).to eq %w(- - - - -)
-            expect(scoring_table[2][1]).to eq '-'
-            expect(scoring_table[2][2]).to eq TraitScore.find_by(plant_scoring_unit: psus[2], trait_descriptor: tds[0]).score_value
-            expect(scoring_table[2][3]).to eq '-'
-            expect(scoring_table[2][4]).to eq TraitScore.find_by(plant_scoring_unit: psus[2], trait_descriptor: tds[1]).score_value
-            expect(scoring_table[2][5]).to eq '-'
+            expect(scoring_table[0][2..4]).to eq tds[0].trait_scores.where(plant_scoring_unit: psus[0]).order(:technical_replicate_number).pluck(:score_value)
+            expect(scoring_table[0][5..6]).to eq tds[1].trait_scores.where(plant_scoring_unit: psus[0]).order(:technical_replicate_number).pluck(:score_value)
+            expect(scoring_table[1][2..6]).to eq %w(- - - - -)
+            expect(scoring_table[2][2]).to eq '-'
+            expect(scoring_table[2][3]).to eq TraitScore.find_by(plant_scoring_unit: psus[2], trait_descriptor: tds[0]).score_value
+            expect(scoring_table[2][4]).to eq '-'
+            expect(scoring_table[2][5]).to eq TraitScore.find_by(plant_scoring_unit: psus[2], trait_descriptor: tds[1]).score_value
+            expect(scoring_table[2][6]).to eq '-'
+          end
+        end
+
+        context 'and an extended format is requested' do
+          it 'provides also a set of additional columns' do
+            scoring_table = plant_trial.scoring_table_data(extended: true)
+            expect(scoring_table[0][13]).to eq tds[0].trait_scores[0].score_value
+            expect(tds[1].trait_scores.map(&:score_value)).to include scoring_table[2][14]
+            expect(scoring_table[0][1]).to eq psus[0].plant_accession.plant_accession
+            expect(scoring_table[0][2]).to eq psus[0].plant_accession.plant_line.plant_line_name
+            expect(scoring_table[0][3]).to eq psus[0].plant_accession.plant_line.plant_variety.plant_variety_name
+            expect(scoring_table[1][3]).to eq psus[1].plant_accession.plant_variety.plant_variety_name
+            expect(scoring_table[2][3]).to eq nil # A case of PA -> PL with no PV in PL
+            expect(scoring_table[0][4]).to eq psus[0].plant_accession.plant_accession_derivation
+            expect(scoring_table[0][5]).to eq psus[0].plant_accession.originating_organisation
+            expect(scoring_table[0][6]).to eq psus[0].plant_accession.year_produced
+            expect(scoring_table[0][7]).to eq psus[0].plant_accession.date_harvested
+            expect(scoring_table[0][8]).to eq psus[0].number_units_scored
+            expect(scoring_table[0][9]).to eq psus[0].scoring_unit_sample_size
+            expect(scoring_table[0][10]).to eq psus[0].scoring_unit_frame_size
+            expect(scoring_table[0][11]).to eq psus[0].design_factor.design_factors
+            expect(scoring_table[0][12]).to eq psus[0].date_planted
           end
         end
       end

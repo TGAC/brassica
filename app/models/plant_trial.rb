@@ -44,27 +44,59 @@ class PlantTrial < ActiveRecord::Base
   include TableData
 
   # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
-  def scoring_table_data(uid = nil)
+  def scoring_table_data(user_id: nil, extended: false)
     ts = TraitScore.arel_table
 
-    psu_subquery = PlantScoringUnit.visible(uid)
-    td_subquery = TraitDescriptor.visible(uid)
+    psu_subquery = PlantScoringUnit.visible(user_id)
+    td_subquery = TraitDescriptor.visible(user_id)
+    pa_subquery = PlantAccession.visible(user_id)
+    if extended
+      pl_subquery = PlantLine.visible(user_id)
+      df_subquery = DesignFactor.visible(user_id)
+    end
 
     all_scores = TraitScore.
-      joins {[
-        psu_subquery.as('plant_scoring_units').on { plant_scoring_unit_id == plant_scoring_units.id }.outer,
-        td_subquery.as('trait_descriptors').on { trait_descriptor_id == trait_descriptors.id }.outer
-      ]}
+      joins {
+        [
+          psu_subquery.as('plant_scoring_units').on { plant_scoring_unit_id == plant_scoring_units.id }.outer,
+          pa_subquery.as('plant_accessions').on { plant_accessions.id == plant_scoring_units.plant_accession_id }.outer,
+          td_subquery.as('trait_descriptors').on { trait_descriptor_id == trait_descriptors.id }.outer
+        ] +
+        (
+          extended ? [
+            pl_subquery.as('plant_lines').on { plant_lines.id == plant_accessions.plant_line_id }.outer,
+            df_subquery.as('design_factors').on { design_factors.id == plant_scoring_units.design_factor_id }.outer
+          ] : []
+        )
+      }
     all_scores = all_scores.
       where(plant_scoring_units: { plant_trial_id: self.id }).
-      where(ts[:user_id].eq(uid).or(ts[:published].eq(true))).
+      where(ts[:user_id].eq(user_id).or(ts[:published].eq(true))).
       order('plant_scoring_units.scoring_unit_name asc, trait_descriptors.id asc').
       group_by(&:plant_scoring_unit_id)
 
-    plant_scoring_units.visible(uid).order('scoring_unit_name asc').map do |unit|
-      scores = all_scores[unit.id] || []
+    plant_scoring_units.visible(user_id).order('scoring_unit_name asc').map do |plant_scoring_unit|
+      scores = all_scores[plant_scoring_unit.id] || []
+      plant_accession = plant_scoring_unit.plant_accession
+      plant_line = extended ? plant_scoring_unit.plant_accession.try(:plant_line) : nil
 
-      [unit.scoring_unit_name] +
+      [plant_scoring_unit.scoring_unit_name,
+       plant_accession.try(:plant_accession)] +
+        (
+          extended ? [
+            plant_accession.try(:plant_line).try(:plant_line_name),
+            (plant_accession.try(:plant_variety) || plant_line.try(:plant_variety)).try(:plant_variety_name),
+            plant_accession.try(:plant_accession_derivation),
+            plant_accession.try(:originating_organisation),
+            plant_accession.try(:year_produced),
+            plant_accession.try(:date_harvested),
+            plant_scoring_unit.number_units_scored,
+            plant_scoring_unit.scoring_unit_sample_size,
+            plant_scoring_unit.scoring_unit_frame_size,
+            plant_scoring_unit.design_factor.try(:design_factors),
+            plant_scoring_unit.date_planted
+          ] : []
+        ) +
         trait_descriptors.pluck(:id).map do |td_id|
           scores_for_trait = scores.select{ |s| s.trait_descriptor_id == td_id.to_i}
           (1..replicate_numbers[td_id.to_i]).map do |replicate_number|
@@ -72,7 +104,7 @@ class PlantTrial < ActiveRecord::Base
             replicate ? replicate.score_value : '-'
           end
         end.flatten +
-        [unit.id]
+        [plant_scoring_unit.id]
     end
   end
 
