@@ -21,7 +21,7 @@ class Submission::PlantTrialExporter < Submission::Exporter
   end
 
   def trait_scoring
-    data = submitted_object.scoring_table_data(user_id: @submission.user.id, extended: true)
+    data = submitted_object.scoring_table_data(user_id: @submission.user.try(:id), extended: true)
     return nil if data.empty?
     CSV.generate(headers: true) do |csv|
       csv << [

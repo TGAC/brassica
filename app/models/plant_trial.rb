@@ -75,7 +75,12 @@ class PlantTrial < ActiveRecord::Base
       order('plant_scoring_units.scoring_unit_name asc, trait_descriptors.id asc').
       group_by(&:plant_scoring_unit_id)
 
-    plant_scoring_units.visible(user_id).order('scoring_unit_name asc').map do |plant_scoring_unit|
+    trait_descriptor_ids = trait_descriptors.pluck(:id)
+    replicate_number_map = Hash[trait_descriptor_ids.map do |td_id|
+      [td_id, replicate_numbers[td_id.to_i]]
+    end]
+
+    plant_scoring_units.visible(user_id).includes(:plant_accession, :design_factor).order('scoring_unit_name asc').map do |plant_scoring_unit|
       scores = all_scores[plant_scoring_unit.id] || []
       plant_accession = plant_scoring_unit.plant_accession
       plant_line = extended ? plant_scoring_unit.plant_accession.try(:plant_line) : nil
@@ -97,9 +102,9 @@ class PlantTrial < ActiveRecord::Base
             plant_scoring_unit.date_planted
           ] : []
         ) +
-        trait_descriptors.pluck(:id).map do |td_id|
+          trait_descriptor_ids.map do |td_id|
           scores_for_trait = scores.select{ |s| s.trait_descriptor_id == td_id.to_i}
-          (1..replicate_numbers[td_id.to_i]).map do |replicate_number|
+          (1..replicate_number_map[td_id]).map do |replicate_number|
             replicate = scores_for_trait.detect{ |s| s.technical_replicate_number == replicate_number }
             replicate ? replicate.score_value : '-'
           end
