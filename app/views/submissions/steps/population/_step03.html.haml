@@ -2,14 +2,6 @@
   %pre.parser-logs.alert.alert-warning.hidden
   %pre.parser-errors.alert.alert-danger.hidden
 
-  %pre.parser-summary.alert.alert-success{ class: "#{'hidden' unless @content.upload}" }
-    - if @content.upload
-      = raw @content.upload.parser_summary.join('</br>')
-
-  %pre.parser-warnings.alert.alert-danger{ class: "#{'hidden' unless @content.upload && @content.upload.parser_warnings.present?}" }
-    - if @content.upload && @content.upload.parser_warnings.present?
-      = raw @content.upload.parser_warnings.join('</br>')
-
   .form-group
     = label_tag :upload, 'Uploaded file'
     %div
@@ -93,6 +85,6 @@
       %button.btn.btn-primary.add-new-plant-line-for-list{type: 'button'} Confirm
 
 - @content.new_plant_lines.each do |plant_line|
-  %div{id: "new-plant-line-#{plant_line.plant_line_name.split.join('-').downcase}"}
+  %div{ id: "new-plant-line-#{plant_line.plant_line_name.split.join('-').downcase}" }
     - @content.class.new_plant_line_properties.each do |attr|
       = hidden_field_tag "submission[content][new_plant_lines][][#{attr}]", plant_line.send(attr)

@@ -95,7 +95,7 @@ module Submissions
 
       def upload
         upload = Submission::Upload.plant_lines.find_by(id: upload_id)
-        SubmissionPlantLinesUploadDecorator.decorate(upload) if upload
+        SubmissionUploadDecorator.decorate(upload) if upload
       end
     end
   end
