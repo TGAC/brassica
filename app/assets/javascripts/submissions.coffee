@@ -76,6 +76,7 @@ class PopulationSubmission extends Submission
     @$('.population-type').select2(@defaultSelectOptions)
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
 
+    @bindPlantLinesUpload()
     @bindNewPlantLineControls()
 
     super()
@@ -165,6 +166,60 @@ class PopulationSubmission extends Submission
 
   removeNewPlantLineFromList: (plant_line_name) =>
     $("##{@newPlantLineForListContainerId(plant_line_name)}").remove()
+
+  bindPlantLinesUpload: =>
+    @$('.plant-lines-upload').fileupload
+      data_type: 'json'
+
+      add: (event, data) =>
+        @$('.fileinput-button').addClass('disabled')
+        data.submit()
+
+      done: (event, data) =>
+        $(".errors").addClass('hidden').text("")
+
+        @$('#submission_content_upload_id').val(data.result.id)
+
+        @$('.fileinput').addClass('hidden')
+        @$('.fileinput-button').removeClass('disabled')
+        @$('.uploaded-plant-lines').removeClass('hidden')
+        @$('.uploaded-plant-lines .file-name').text(data.result.file_file_name)
+        @$('.uploaded-plant-lines .delete-plant-lines-upload').attr(href: data.result.delete_url)
+        @$('.uploaded-plant-lines .parser-logs').removeClass('hidden')
+        @$('.uploaded-plant-lines .parser-logs').text(data.result.logs.join('\n'))
+        if data.result.errors.length > 0
+          @$('.uploaded-plant-lines .parser-errors').removeClass('hidden')
+          @$('.uploaded-plant-lines .parser-errors').text(data.result.errors.join('\n'))
+          @$('.uploaded-plant-lines .parser-summary').addClass('hidden')
+          @$('.uploaded-plant-lines .parser-summary').text('')
+        else
+          if data.result.warnings.length > 0
+            @$('.uploaded-plant-lines .parser-warnings').removeClass('hidden')
+            @$('.uploaded-plant-lines .parser-warnings').text(data.result.warnings.join('\n'))
+          else
+            @$('.uploaded-plant-lines .parser-warnings').addClass('hidden')
+            @$('.uploaded-plant-lines .parser-warnings').text('')
+          @$('.uploaded-plant-lines .parser-errors').addClass('hidden')
+          @$('.uploaded-plant-lines .parser-errors').text('')
+          @$('.uploaded-plant-lines .parser-summary').removeClass('hidden')
+          @$('.uploaded-plant-lines .parser-summary').text(data.result.summary.join('\n'))
+
+      fail: (event, data) =>
+        if data.jqXHR.status == 401
+          window.location.reload()
+        else if data.jqXHR.status == 422
+          @$('.fileinput-button').removeClass('disabled')
+
+          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
+          $.each(data.jqXHR.responseJSON.errors, (_, error) =>
+            $li = $("<li></li>").text(error)
+            $errors.find("ul").append($li)
+          )
+
+    @$('.delete-plant-lines-upload').on 'ajax:success', (data, status, xhr) =>
+      @$('.fileinput').removeClass('hidden')
+      @$('.uploaded-plant-lines').addClass('hidden')
+
 
 class TrialSubmission extends Submission
   defaultSelectOptions: { allowClear: true }

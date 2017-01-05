@@ -88,6 +88,9 @@ en:
             file:
               no_header: 'No correct header provided. At least four columns are expected.'
               no_plant_accession_header: 'No correct header provided. Please provide the "Plant accession" column.'
+              no_plant_line_header: 'No correct header provided. Please provide the "Plant line" column.'
               no_line_or_variety_header: 'No correct header provided. Please provide either the "Plant line" or the "Plant variety" column.'
+              no_plant_variety_header: 'No correct header provided. Please provide the "Plant variety" column.'
+              no_species_header: 'No correct header provided. Please provide the "Species" column.'
               non_unique_mapping: 'Detected non unique column headers mapping
                 to traits. Please check the column names.'

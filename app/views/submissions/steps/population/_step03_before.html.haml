@@ -1,0 +1,38 @@
+.alert.alert-info
+  %p
+    One possibility to define plant Lines related to this population is to upload information
+    in a CSV file. This is especially suitable for cases when a lot of plant lines have to be
+    submitted.
+
+  %p
+    The
+    %b Species
+    column should provide the taxonomy name for a given line (e.g. "B. napus"). The
+    %b Plant variety
+    column should name the plant variety of which the given plant line is. You are welcome to use
+    = succeed ',' do
+      = link_to 'plant varieties currently defined in BIP', data_tables_path(model: 'plant_varieties'), target: '_blank'
+    or, in case the relevant varieties are
+    absent, to create your own. Any plant variety submitted in the CSV document, which is not
+    found inside BIP, will be created as a new Plant Variety table record. The
+    %b Plant line
+    value should be unique to each submitted plant line.
+
+  %p
+    For your convenience please use
+    %b
+      = link_to 'the ready template', '/plant_lines_template.csv'
+    in a CSV format. Please download it, leave the header (the first line) intact, and paste your data, in columns,
+    below the header (thus replacing the placeholder <code>... - replace it</code> values).
+
+= form_tag submission_uploads_path(submission), multipart: true, method: :post do
+
+  = hidden_field_tag "submission_upload[upload_type]", "plant_lines"
+
+  .form-group.fileinput{ class: "#{'hidden' if @content.upload}" }
+    .btn.btn-primary.fileinput-button
+      %span Choose a file...
+      = file_field_tag "submission_upload[file]", class: 'plant-lines-upload'
+    %small.help-block
+      When you are done preparing your plant lines data sheet, according to the manual presented above,
+      please upload the ready CSV file here.

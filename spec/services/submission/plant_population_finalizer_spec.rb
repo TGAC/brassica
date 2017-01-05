@@ -21,17 +21,21 @@ RSpec.describe Submission::PlantPopulationFinalizer do
     let(:plant_population_attrs) { attributes_for(:plant_population) }
 
     before do
-      submission.content.update(:step01, plant_population_attrs.slice(:name, :description))
+      submission.content.update(:step01,
+                                plant_population_attrs.
+                                  slice(:name, :description).
+                                  merge(population_type: population_type.population_type))
       submission.content.update(:step02,
-                                population_type: population_type.population_type,
-                                taxonomy_term: taxonomy_term.name)
-      submission.content.update(:step03,
-                                plant_line_list: [plant_lines[0].plant_line_name, new_plant_lines_attrs[0][:plant_line_name], new_plant_lines_attrs[1][:plant_line_name]],
-                                new_plant_lines: new_plant_lines_attrs,
+                                taxonomy_term: taxonomy_term.name,
                                 female_parent_line: plant_lines[0].plant_line_name,
                                 male_parent_line: plant_lines[1].plant_line_name)
-      submission.content.update(:step04, plant_population_attrs.
-        slice(:data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
+      submission.content.update(:step03,
+                                plant_line_list: [plant_lines[0].plant_line_name, new_plant_lines_attrs[0][:plant_line_name], new_plant_lines_attrs[1][:plant_line_name]],
+                                new_plant_lines: new_plant_lines_attrs)
+      submission.content.update(:step04,
+                                plant_population_attrs.
+                                  slice(:data_owned_by, :data_provenance, :comments).
+                                  merge(visibility: 'published'))
     end
 
     it 'creates plant population' do

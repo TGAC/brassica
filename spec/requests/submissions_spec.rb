@@ -137,7 +137,8 @@ RSpec.describe "Submission management" do
               step01: {
                 submission: {
                   content: {
-                    name: 'Population A'
+                    name: 'Population A',
+                    population_type: population_type.population_type
                   }
                 }
               },
@@ -145,15 +146,14 @@ RSpec.describe "Submission management" do
                 submission: {
                   content: {
                     taxonomy_term: taxonomy_term.name,
-                    population_type: population_type.population_type
+                    female_parent_line: plant_line.plant_line_name,
+                    male_parent_line: plant_line.plant_line_name
                   }
                 }
               },
               step03: {
                 submission: {
                   content: {
-                    female_parent_line: plant_line.plant_line_name,
-                    male_parent_line: plant_line.plant_line_name,
                     plant_line_list: [plant_line.id.to_s]
                   }
                 }

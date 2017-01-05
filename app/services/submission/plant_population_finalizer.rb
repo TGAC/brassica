@@ -44,24 +44,19 @@ class Submission::PlantPopulationFinalizer
   end
 
   def create_plant_population
-    attrs = common_data.merge(
-      name: submission.content.step01.name,
-      population_owned_by: submission.content.step01.owned_by
-    )
-
-    %i[female_parent_line male_parent_line].each do |parent_line_attr|
-      if parent_line = PlantLine.find_by(plant_line_name: submission.content.step03[parent_line_attr])
-        attrs.merge!(parent_line_attr => parent_line)
-      end
-    end
+    attrs = common_data
 
     attrs.merge!(submission.content.step01.to_h)
-    attrs.merge!(submission.content.step02.to_h)
+    if population_type = PopulationType.find_by!(population_type: submission.content.step01.population_type)
+      attrs.merge!(population_type: population_type)
+    end
+
     taxonomy_term = TaxonomyTerm.find_by(name: submission.content.step02.taxonomy_term)
     attrs.merge!(taxonomy_term: taxonomy_term)
-
-    if population_type = PopulationType.find_by!(population_type: submission.content.step02.population_type)
-      attrs.merge!(population_type: population_type)
+    %i[female_parent_line male_parent_line].each do |parent_line_attr|
+      if parent_line = PlantLine.find_by(plant_line_name: submission.content.step02[parent_line_attr])
+        attrs.merge!(parent_line_attr => parent_line)
+      end
     end
 
     attrs.merge!(submission.content.step04.to_h.except(:visibility))

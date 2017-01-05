@@ -1,14 +1,8 @@
 module Submissions
   module Population
     class Step03ContentForm < PlantPopulationForm
-      property :female_parent_line
-      property :male_parent_line
       property :plant_line_list
-
-      validates :female_parent_line, :male_parent_line, inclusion: {
-        in: :plant_line_names,
-        allow_blank: true
-      }
+      property :upload_id
 
       collection :new_plant_lines do
         property :plant_line_name
@@ -56,10 +50,6 @@ module Submissions
         end
       end
 
-      def plant_line_names
-        PlantLine.pluck(:plant_line_name)
-      end
-
       def plant_line_exists?(*attrs)
         PlantLine.where(*attrs).exists?
       end
@@ -71,7 +61,6 @@ module Submissions
 
       def self.permitted_properties
         [
-          :female_parent_line, :male_parent_line,
           {
             :plant_line_list => [],
             :new_plant_lines => new_plant_line_properties
@@ -102,6 +91,11 @@ module Submissions
         (super || []).select do |plant_line|
           plant_line_list.include?(plant_line.plant_line_name)
         end
+      end
+
+      def upload
+        upload = Submission::Upload.plant_lines.find_by(id: upload_id)
+        SubmissionPlantLinesUploadDecorator.decorate(upload) if upload
       end
     end
   end

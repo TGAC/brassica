@@ -30,15 +30,15 @@ en:
       population:
         step01:
           heading: Basic information.
-          body: Provide a unique name and a description of your population.
+          body: Provide a unique name and a description of your population. Select the population type.
         step02:
-          heading: Population type.
-          body: Choose the type of population you're submitting.
+          heading: Taxonomy.
+          body: Choose the species and the origin of the population you are submitting.
         step03:
           heading: Plant lines.
           body: |
-            If applicable, pick parent plant lines and define the list of plant
-            lines connected with the submitted population.
+            Define the list of plant lines connected with the submitted population.
+            You can either use the CSV file template (suitable for larger populations) or manual form submission.
         step04:
           heading: Provenance.
           body: Identify the owner of the submitted data and describe its provenance.

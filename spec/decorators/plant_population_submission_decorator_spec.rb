@@ -46,16 +46,16 @@ RSpec.describe PlantPopulationSubmissionDecorator do
     end
 
     it 'returns full further details info' do
-      sd.object.content.update(:step02, population_type: 'pt')
+      sd.object.content.update(:step01, population_type: 'pt')
       expect(sd.further_details).to eq '<span class="details">pt</span>'
 
-      sd.object.content.update(:step03, male_parent_line: 'mpl')
+      sd.object.content.update(:step02, male_parent_line: 'mpl')
       expect(sd.further_details).
         to eq '<span class="details">pt</span>' +
               '<span class="text">Parents: </span>' +
               '<span class="details">mpl</span>'
 
-      sd.object.content.update(:step03, female_parent_line: 'fpl', male_parent_line: 'mpl')
+      sd.object.content.update(:step02, female_parent_line: 'fpl', male_parent_line: 'mpl')
       expect(sd.further_details).
         to eq '<span class="details">pt</span>' +
               '<span class="text">Parents: </span>' +
