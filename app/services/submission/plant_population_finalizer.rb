@@ -23,6 +23,7 @@ class Submission::PlantPopulationFinalizer
   attr_accessor :submission
 
   def create_new_plant_lines
+    new_plant_varieties = submission.content.step03.new_plant_varieties || {}
     @new_plant_lines = (submission.content.step03.new_plant_lines || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
@@ -31,7 +32,10 @@ class Submission::PlantPopulationFinalizer
       ).merge(common_data)
 
       if attrs[:plant_variety_name].present?
-        plant_variety = PlantVariety.find_by!(plant_variety_name: attrs.delete(:plant_variety_name))
+        plant_variety_name = attrs.delete(:plant_variety_name)
+        plant_variety = PlantVariety.find_or_create_by!(plant_variety_name: plant_variety_name) do |new_plant_variety|
+          new_plant_variety.crop_type = new_plant_varieties[plant_variety_name]['crop_type']
+        end
         attrs[:plant_variety_id] = plant_variety.id
       end
 

@@ -5,18 +5,16 @@
     submitted.
 
   %p
-    The
-    %b Species
-    column should provide the taxonomy name for a given line (e.g. "B. napus"). The
-    %b Plant variety
-    column should name the plant variety of which the given plant line is. You are welcome to use
+    The <b>Species</b> column should provide the taxonomy name for a given line (e.g. "B. napus"). The
+    <b>Plant variety</b> column should name the plant variety of which the given plant line is.
+    You are welcome to use
     = succeed ',' do
       = link_to 'plant varieties currently defined in BIP', data_tables_path(model: 'plant_varieties'), target: '_blank'
     or, in case the relevant varieties are
     absent, to create your own. Any plant variety submitted in the CSV document, which is not
-    found inside BIP, will be created as a new Plant Variety table record. The
-    %b Plant line
-    value should be unique to each submitted plant line.
+    found inside BIP, will be created as a new plant variety table record. In such a case, the
+    following column value of <b>Crop type</b> is set as the new plant variety crop type property.
+    The <b>Plant line</b> value should be unique to each submitted plant line.
 
   %p
     For your convenience please use
