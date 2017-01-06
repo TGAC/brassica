@@ -87,6 +87,7 @@ en:
           attributes:
             file:
               no_header: 'No correct header provided. At least four columns are expected.'
+              no_header_plant_lines: 'No correct header provided.'
               no_plant_accession_header: 'No correct header provided. Please provide the "Plant accession" column.'
               no_originating_organisation_header: 'No correct header provided. Please provide the "Originating organisation" column.'
               no_year_produced_header: 'No correct header provided. Please provide the "Year produced" column.'
