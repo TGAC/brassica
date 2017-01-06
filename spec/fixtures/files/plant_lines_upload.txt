@@ -1,0 +1,6 @@
+Species,Plant variety,Crop type,Plant line,Plant accession,Originating organisation,Year produced
+Brassica napus,Alesi,Winter oilseed rape,pl_ok_newpv_newpa,New accession X,EI,2017
+Brassica napus,Valesca,Winter oilseed rape,pl_wrong_repeated_pa,New accession X,EI,2017
+Brassica napus,Valesca,Winter oilseed rape,pl_ok_nopa
+Brassica napus,Valesca,Winter oilseed rape,pl_wrong_partial_pa,,My org,2014
+Brassica napus,Valesca,Winter oilseed rape,pl_wrong_existing_pa,whri2004_C1,WHRI,2004
