@@ -190,19 +190,9 @@ class PopulationSubmission extends Submission
         if data.result.errors.length > 0
           @$('.uploaded-plant-lines .parser-errors').removeClass('hidden')
           @$('.uploaded-plant-lines .parser-errors').text(data.result.errors.join('\n'))
-          @$('.uploaded-plant-lines .parser-summary').addClass('hidden')
-          @$('.uploaded-plant-lines .parser-summary').text('')
         else
-          if data.result.warnings.length > 0
-            @$('.uploaded-plant-lines .parser-warnings').removeClass('hidden')
-            @$('.uploaded-plant-lines .parser-warnings').text(data.result.warnings.join('\n'))
-          else
-            @$('.uploaded-plant-lines .parser-warnings').addClass('hidden')
-            @$('.uploaded-plant-lines .parser-warnings').text('')
           @$('.uploaded-plant-lines .parser-errors').addClass('hidden')
           @$('.uploaded-plant-lines .parser-errors').text('')
-          @$('.uploaded-plant-lines .parser-summary').removeClass('hidden')
-          @$('.uploaded-plant-lines .parser-summary').text(data.result.summary.join('\n'))
 
       fail: (event, data) =>
         if data.jqXHR.status == 401
