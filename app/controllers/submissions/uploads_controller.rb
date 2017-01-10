@@ -66,6 +66,8 @@ class Submissions::UploadsController < ApplicationController
       SubmissionTraitScoresUploadDecorator.decorate(upload)
     when upload.plant_trial_layout?
       SubmissionPlantTrialLayoutUploadDecorator.decorate(upload)
+    when upload.plant_lines?
+      SubmissionPlantLinesUploadDecorator.decorate(upload)
     else
       SubmissionUploadDecorator.decorate(upload)
     end
