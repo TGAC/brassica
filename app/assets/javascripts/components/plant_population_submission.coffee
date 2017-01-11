@@ -80,7 +80,7 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
 
   hasNewPlantLine: (data) =>
     fieldName = "submission[content][new_plant_lines][][plant_line_name]"
-    $("<input type='hidden' name='#{fieldName}' value='#{data.plant_line_name}' />").length > 0
+    $("[name='#{fieldName}'][value=#{data.plant_line_name}]").length > 0
 
   appendToSelectedPlantLineLists: (data) =>
     $select = @$('.plant-line-list')
@@ -107,6 +107,10 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
   removeNewPlantLineFromList: (plant_line_name) =>
     $("##{@newPlantLineForListContainerId(plant_line_name)}").remove()
 
+    $select = @$('.plant-line-list')
+    $option = $select.find("option[value=#{plant_line_name}]")
+    $option.remove()
+
   bindPlantLinesUpload: =>
     @$('.plant-lines-upload').fileupload
       data_type: 'json'
@@ -117,8 +121,6 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
 
       done: (event, data) =>
         $(".errors").addClass('hidden').text("")
-
-        console.log(data.result)
 
         @$('#submission_content_upload_id').val(data.result.id)
 
