@@ -32,19 +32,13 @@ class Submission::PlantPopulationFinalizer
         taxonomy_term_id: taxonomy_term.id
       ).merge(common_data)
 
-      if (plant_variety = new_plant_varieties[attrs[:plant_line_name]]).present?
+      if (plant_variety = new_plant_varieties[attrs[:plant_line_name]]).present? || attrs[:plant_variety_name].present?
+        plant_variety_name = plant_variety.try(:[], 'plant_variety_name') || attrs[:plant_variety_name]
         attrs[:plant_variety_id] =
-          PlantVariety.find_or_create_by!(plant_variety_name: plant_variety['plant_variety_name']) do |new_plant_variety|
+          PlantVariety.find_or_create_by!(plant_variety_name: plant_variety_name) do |new_plant_variety|
+            new_plant_variety.attributes = common_data
             new_plant_variety.crop_type = plant_variety['crop_type']
           end.id
-      end
-
-      if attrs[:plant_variety_name].present?
-        plant_variety_name = attrs.delete(:plant_variety_name)
-        plant_variety = PlantVariety.find_or_create_by!(plant_variety_name: plant_variety_name) do |new_plant_variety|
-          new_plant_variety.crop_type = new_plant_varieties[attrs[:plant_line_name]]['crop_type']
-        end
-        attrs[:plant_variety_id] = plant_variety.id
       end
 
       if PlantLine.where(plant_line_name: attrs[:plant_line_name]).exists?
@@ -52,7 +46,7 @@ class Submission::PlantPopulationFinalizer
       else
         PlantLine.create!(attrs).tap do |plant_line|
           if (plant_accession = new_plant_accessions[attrs[:plant_line_name]]).present?
-            PlantAccession.create!(plant_accession.merge(plant_line: plant_line))
+            PlantAccession.create!(plant_accession.merge(plant_line: plant_line).merge(common_data))
           end
         end
       end
