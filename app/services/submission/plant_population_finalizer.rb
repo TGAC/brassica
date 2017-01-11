@@ -46,7 +46,11 @@ class Submission::PlantPopulationFinalizer
       else
         PlantLine.create!(attrs).tap do |plant_line|
           if (plant_accession = new_plant_accessions[attrs[:plant_line_name]]).present?
-            PlantAccession.create!(plant_accession.merge(plant_line: plant_line).merge(common_data))
+            if PlantAccession.where(plant_accession).exists?
+              rollback(2)
+            else
+              PlantAccession.create!(plant_accession.merge(plant_line: plant_line).merge(common_data))
+            end
           end
         end
       end

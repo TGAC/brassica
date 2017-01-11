@@ -144,6 +144,15 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         )
     end
 
+    it 'rollbacks when encountered existing PA data' do
+      create(:plant_accession,
+             plant_accession: 'New PA',
+             originating_organisation: 'An organisation',
+             year_produced: '2010')
+      expect{ subject.call }.not_to change{ PlantAccession.count }
+      expect(submission.finalized?).to be_falsey
+    end
+
     it 'assigns correct user as the owner of created plant lines' do
       subject.call
       expect(subject.new_plant_lines.map(&:user)).to all eq submission.user
@@ -163,7 +172,6 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         expect(plant_population_list.published_on).to be_within(5.seconds).of(Time.now)
       end
     end
-
 
     it 'makes submission and created objects published' do
       subject.call
