@@ -32,7 +32,7 @@ class Submission::TraitScoreTemplateGenerator
     end.flatten
 
     CSV.generate(headers: true) do |csv|
-      csv << ['Plant scoring unit name'] + design_factor_names + ['Plant accession', 'Originating organisation', "Plant #{pl_pv_name}"] + traits
+      csv << ['Plant scoring unit name'] + design_factor_names + ['Plant accession', 'Originating organisation', "Year produced", "Plant #{pl_pv_name}"] + traits
 
       ['A','B'].each do |sample|
         sample_values = traits.map.with_index do |trait,i|
@@ -42,6 +42,7 @@ class Submission::TraitScoreTemplateGenerator
             design_factors[sample] +
             ['Accession identifier - replace it',
              'Organisation name or acronym - replace it',
+             'Year produced - replace it',
              "Plant #{pl_pv_name} name - replace it"] +
             sample_values
       end

@@ -23,9 +23,9 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       data = call(submission)
 
       expect(data.lines[0]).
-        to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant line,#{trait_descriptor.trait_name}\n"
+        to eq "Plant scoring unit name,Plant accession,Originating organisation,Year produced,Plant line,#{trait_descriptor.trait_name}\n"
       expect(data.lines[2]).
-        to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it,Value of #{trait_descriptor.trait_name} scored for sample B - replace_it\n"
+        to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Year produced - replace it,Plant line name - replace it,Value of #{trait_descriptor.trait_name} scored for sample B - replace_it\n"
     end
 
     it 'generates template for plant varieties if asked for that' do
@@ -35,16 +35,16 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       data = call(submission)
 
       expect(data.lines[0]).
-        to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant variety\n"
+        to eq "Plant scoring unit name,Plant accession,Originating organisation,Year produced,Plant variety\n"
       expect(data.lines[2]).
-        to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant variety name - replace it\n"
+        to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Year produced - replace it,Plant variety name - replace it\n"
     end
 
     it 'does not break for no-traits submissions' do
       data = call(submission)
 
       expect(data.lines[0]).
-        to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant line\n"
+        to eq "Plant scoring unit name,Plant accession,Originating organisation,Year produced,Plant line\n"
     end
 
     it 'adds design factors to template, if defined' do
@@ -54,11 +54,11 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       data = call(submission)
 
       expect(data.lines[0]).
-        to eq "Plant scoring unit name,polytunnel,rep,sub_block,pot_number,Plant accession,Originating organisation,Plant line\n"
+        to eq "Plant scoring unit name,polytunnel,rep,sub_block,pot_number,Plant accession,Originating organisation,Year produced,Plant line\n"
       expect(data.lines[1]).
-        to eq "Sample scoring unit A name - replace it,1 - replace it,1 - replace it,1 - replace it,1 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+        to eq "Sample scoring unit A name - replace it,1 - replace it,1 - replace it,1 - replace it,1 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Year produced - replace it,Plant line name - replace it\n"
       expect(data.lines[2]).
-        to eq "Sample scoring unit B name - replace it,1 - replace it,1 - replace it,1 - replace it,2 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it\n"
+        to eq "Sample scoring unit B name - replace it,1 - replace it,1 - replace it,1 - replace it,2 - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Year produced - replace it,Plant line name - replace it\n"
     end
 
     it 'adds proper technical replicate columns if needed' do
@@ -70,11 +70,11 @@ RSpec.describe Submission::TraitScoreTemplateGenerator do
       data = call(submission)
 
       expect(data.lines[0]).
-        to eq "Plant scoring unit name,Plant accession,Originating organisation,Plant line,#{tds[0].trait_name} rep1,#{tds[0].trait_name} rep2,#{tds[1].trait_name},#{tds[2].trait_name}\n"
+        to eq "Plant scoring unit name,Plant accession,Originating organisation,Year produced,Plant line,#{tds[0].trait_name} rep1,#{tds[0].trait_name} rep2,#{tds[1].trait_name},#{tds[2].trait_name}\n"
       expect(data.lines[1]).
-        to eq "Sample scoring unit A name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it,Value of #{tds[0].trait_name} rep1 scored for sample A - replace_it,Value of #{tds[0].trait_name} rep2 scored for sample A - replace_it,Value of #{tds[1].trait_name} scored for sample A - replace_it,Value of #{tds[2].trait_name} scored for sample A - replace_it\n"
+        to eq "Sample scoring unit A name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Year produced - replace it,Plant line name - replace it,Value of #{tds[0].trait_name} rep1 scored for sample A - replace_it,Value of #{tds[0].trait_name} rep2 scored for sample A - replace_it,Value of #{tds[1].trait_name} scored for sample A - replace_it,Value of #{tds[2].trait_name} scored for sample A - replace_it\n"
       expect(data.lines[2]).
-        to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Plant line name - replace it,Value of #{tds[0].trait_name} rep1 scored for sample B - replace_it,Value of #{tds[0].trait_name} rep2 scored for sample B - replace_it,Value of #{tds[1].trait_name} scored for sample B - replace_it,Value of #{tds[2].trait_name} scored for sample B - replace_it\n"
+        to eq "Sample scoring unit B name - replace it,Accession identifier - replace it,Organisation name or acronym - replace it,Year produced - replace it,Plant line name - replace it,Value of #{tds[0].trait_name} rep1 scored for sample B - replace_it,Value of #{tds[0].trait_name} rep2 scored for sample B - replace_it,Value of #{tds[1].trait_name} scored for sample B - replace_it,Value of #{tds[2].trait_name} scored for sample B - replace_it\n"
     end
   end
 
