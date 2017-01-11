@@ -50,10 +50,10 @@ class Submission::PlantPopulationFinalizer
       if PlantLine.where(plant_line_name: attrs[:plant_line_name]).exists?
         rollback(2)
       else
-        plant_line = PlantLine.create!(attrs)
-
-        if (plant_accession = new_plant_accessions[attrs[:plant_line_name]]).present?
-          PlantAccession.create!(plant_accession.merge(plant_line: plant_line))
+        PlantLine.create!(attrs).tap do |plant_line|
+          if (plant_accession = new_plant_accessions[attrs[:plant_line_name]]).present?
+            PlantAccession.create!(plant_accession.merge(plant_line: plant_line))
+          end
         end
       end
     end

@@ -155,6 +155,6 @@ class Submission::PlantLineParser
   end
 
   def current_plant_lines
-    @current_plant_lines ||= @upload.submission.content.step03.plant_line_list
+    @current_plant_lines ||= @upload.submission.content.step03.plant_line_list || []
   end
 end
