@@ -12,26 +12,46 @@ RSpec.describe Submission::PlantPopulationFinalizer do
 
   context 'given submission with valid content' do
     let(:new_plant_lines_attrs) {
-      attributes_for_list(:plant_line, 2).map { |attrs|
+      attributes_for_list(:plant_line, 2).map.with_index { |attrs, i|
         attrs.slice(:plant_line_name, :sequence_identifier, :comments, :data_owned_by, :data_provenance).
-          merge(taxonomy_term: taxonomy_term.name, plant_variety_name: plant_variety.plant_variety_name)
+          merge(
+            taxonomy_term: taxonomy_term.name,
+            plant_variety_name: (i == 0) ? plant_variety.plant_variety_name : 'New PV name'
+          )
       }
     }
 
     let(:plant_population_attrs) { attributes_for(:plant_population) }
 
     before do
-      submission.content.update(:step01, plant_population_attrs.slice(:name, :description))
+      submission.content.update(:step01,
+                                plant_population_attrs.
+                                  slice(:name, :description).
+                                  merge(population_type: population_type.population_type))
       submission.content.update(:step02,
-                                population_type: population_type.population_type,
-                                taxonomy_term: taxonomy_term.name)
+                                taxonomy_term: taxonomy_term.name,
+                                female_parent_line: plant_lines[0].plant_line_name,
+                                male_parent_line: plant_lines[1].plant_line_name)
       submission.content.update(:step03,
                                 plant_line_list: [plant_lines[0].plant_line_name, new_plant_lines_attrs[0][:plant_line_name], new_plant_lines_attrs[1][:plant_line_name]],
                                 new_plant_lines: new_plant_lines_attrs,
-                                female_parent_line: plant_lines[0].plant_line_name,
-                                male_parent_line: plant_lines[1].plant_line_name)
-      submission.content.update(:step04, plant_population_attrs.
-        slice(:data_owned_by, :data_provenance, :comments).merge(visibility: 'published'))
+                                new_plant_varieties: {
+                                  new_plant_lines_attrs[1][:plant_line_name] => {
+                                    plant_variety_name: 'New PV name',
+                                    crop_type: 'A crop of a type'
+                                  }
+                                },
+                                new_plant_accessions: {
+                                  new_plant_lines_attrs[0][:plant_line_name] => {
+                                    plant_accession: 'New PA',
+                                    originating_organisation: 'An organisation',
+                                    year_produced: '2010'
+                                  }
+                                })
+      submission.content.update(:step04,
+                                plant_population_attrs.
+                                  slice(:data_owned_by, :data_provenance, :comments).
+                                  merge(visibility: 'published'))
     end
 
     it 'creates plant population' do
@@ -90,8 +110,47 @@ RSpec.describe Submission::PlantPopulationFinalizer do
           'user_id' => submission.user.id
         )
         expect(plant_line.published_on).to be_within(5.seconds).of(Time.now)
-        expect(plant_line.plant_variety).to eq plant_variety
       end
+    end
+
+    it 'assigns existing plant varieties and creates new ones' do
+      expect { subject.call }.to change { PlantVariety.count }.by(1)
+      expect(PlantLine.find_by(plant_line_name: new_plant_lines_attrs[0][:plant_line_name]).plant_variety).
+        to eq PlantVariety.find_by(plant_variety_name: new_plant_lines_attrs[0][:plant_variety_name])
+      expect(PlantLine.find_by(plant_line_name: new_plant_lines_attrs[1][:plant_line_name]).plant_variety).
+        to eq PlantVariety.find_by(plant_variety_name: 'New PV name')
+      expect(PlantVariety.find_by(plant_variety_name: 'New PV name').attributes).
+        to include(
+          'crop_type' => 'A crop of a type',
+          'date_entered' => Date.today,
+          'entered_by_whom' => submission.user.full_name,
+          'user_id' => submission.user.id,
+          'published' => true
+        )
+    end
+
+    it 'creates new plant accessions where requested to' do
+      expect { subject.call }.to change { PlantAccession.count }.by(1)
+      expect(PlantAccession.find_by(plant_accession: 'New PA').attributes).
+        to include(
+          'originating_organisation' => 'An organisation',
+          'year_produced' => '2010',
+          'plant_variety_id' => nil,
+          'plant_line_id' => PlantLine.find_by(plant_line_name: new_plant_lines_attrs[0][:plant_line_name]).id,
+          'date_entered' => Date.today,
+          'entered_by_whom' => submission.user.full_name,
+          'user_id' => submission.user.id,
+          'published' => true
+        )
+    end
+
+    it 'rollbacks when encountered existing PA data' do
+      create(:plant_accession,
+             plant_accession: 'New PA',
+             originating_organisation: 'An organisation',
+             year_produced: '2010')
+      expect{ subject.call }.not_to change{ PlantAccession.count }
+      expect(submission.finalized?).to be_falsey
     end
 
     it 'assigns correct user as the owner of created plant lines' do
@@ -113,7 +172,6 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         expect(plant_population_list.published_on).to be_within(5.seconds).of(Time.now)
       end
     end
-
 
     it 'makes submission and created objects published' do
       subject.call

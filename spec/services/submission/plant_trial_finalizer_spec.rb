@@ -48,8 +48,6 @@ RSpec.describe Submission::PlantTrialFinalizer do
     let(:layout_upload) { create(:upload, :plant_trial_layout, submission: submission) }
 
     before do
-
-      # binding.pry
       submission.content.update(:step01, plant_trial_attrs)
       submission.content.update(:step02,
         trait_descriptor_list: new_trait_descriptors_attrs.map{ |td| td[:trait] } + [existing_trait_descriptor.id],

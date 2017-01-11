@@ -20,19 +20,19 @@ FactoryGirl.define do
         if submission.population?
           submission.content.update(:step01, name: random_word,
                                              description: Faker::Lorem.sentence,
+                                             population_type: random_word,
                                              owned_by: Faker::Internet.email)
-          submission.content.update(:step02, population_type: random_word,
-                                             taxonomy_term: random_word)
-          submission.content.update(:step03, female_parent_line: nil,
-                                             male_parent_line: nil,
-                                             plant_line_list: [])
+          submission.content.update(:step02, taxonomy_term: random_word,
+                                             female_parent_line: nil,
+                                             male_parent_line: nil)
+          submission.content.update(:step03, plant_line_list: [])
           submission.content.update(:step04, comments: Faker::Lorem.sentence,
                                              visibility: submission.published? ? 'published' : 'private')
 
           submission.step = :step04
 
           FactoryGirl.create(:taxonomy_term, name: submission.content.step02.taxonomy_term)
-          FactoryGirl.create(:population_type, population_type: submission.content.step02.population_type)
+          FactoryGirl.create(:population_type, population_type: submission.content.step01.population_type)
         elsif submission.trial?
           plant_population = FactoryGirl.create(:plant_population, user: submission.user)
           country = FactoryGirl.create(:country)

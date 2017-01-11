@@ -53,7 +53,11 @@ class Submissions::UploadsController < ApplicationController
   end
 
   def process_upload(upload)
-    Submission::TraitScoreParser.new(upload).call if upload.trait_scores?
+    if upload.trait_scores?
+      Submission::TraitScoreParser.new(upload).call
+    elsif upload.plant_lines?
+      Submission::PlantLineParser.new(upload).call
+    end
   end
 
   def decorate_upload(upload)
@@ -62,6 +66,8 @@ class Submissions::UploadsController < ApplicationController
       SubmissionTraitScoresUploadDecorator.decorate(upload)
     when upload.plant_trial_layout?
       SubmissionPlantTrialLayoutUploadDecorator.decorate(upload)
+    when upload.plant_lines?
+      SubmissionPlantLinesUploadDecorator.decorate(upload)
     else
       SubmissionUploadDecorator.decorate(upload)
     end

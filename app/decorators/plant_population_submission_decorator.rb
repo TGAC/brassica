@@ -40,7 +40,7 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def population_type
-    @population_type ||= object.content.step02.population_type.presence
+    @population_type ||= object.content.step01.population_type.presence
   end
 
   def plant_lines
@@ -70,11 +70,11 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def female_parent_line_name
-    object.content.step03.female_parent_line.presence
+    object.content.step02.female_parent_line.presence
   end
 
   def male_parent_line_name
-    object.content.step03.male_parent_line.presence
+    object.content.step02.male_parent_line.presence
   end
 
   def description

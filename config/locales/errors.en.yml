@@ -87,7 +87,14 @@ en:
           attributes:
             file:
               no_header: 'No correct header provided. At least four columns are expected.'
+              no_header_plant_lines: 'No correct header provided.'
               no_plant_accession_header: 'No correct header provided. Please provide the "Plant accession" column.'
+              no_originating_organisation_header: 'No correct header provided. Please provide the "Originating organisation" column.'
+              no_year_produced_header: 'No correct header provided. Please provide the "Year produced" column.'
+              no_plant_line_header: 'No correct header provided. Please provide the "Plant line" column.'
               no_line_or_variety_header: 'No correct header provided. Please provide either the "Plant line" or the "Plant variety" column.'
+              no_plant_variety_header: 'No correct header provided. Please provide the "Plant variety" column.'
+              no_species_header: 'No correct header provided. Please provide the "Species" column.'
+              no_crop_type_header: 'No correct header provided. Please provide the "Crop type" column.'
               non_unique_mapping: 'Detected non unique column headers mapping
                 to traits. Please check the column names.'

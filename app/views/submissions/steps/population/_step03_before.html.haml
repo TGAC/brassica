@@ -1,0 +1,56 @@
+.alert.alert-info
+  %p
+    One possibility to define plant Lines related to this population is to upload information
+    in a CSV file. This is especially suitable for cases when a lot of plant lines have to be
+    submitted.
+
+  %p
+    The <b>Species</b> column should provide the taxonomy name for a given line (e.g. "B. napus"). The
+    <b>Plant variety</b> column should name the plant variety of which the given plant line is.
+    You are welcome to use
+    = succeed ',' do
+      = link_to 'plant varieties currently defined in BIP', data_tables_path(model: 'plant_varieties'), target: '_blank'
+    or, in case the relevant varieties are
+    absent, to create your own. Any plant variety submitted in the CSV document, which is not
+    found inside BIP, will be created as a new plant variety table record. In such a case, the
+    following column value of <b>Crop type</b> is set as the new plant variety crop type property.
+    The <b>Plant line</b> value should be unique to each submitted plant line.
+
+  %p
+    Further set of three columns pertains to <b>plant accession</b> information. Each new, submitted
+    plant line should be (though it isn't strictly required by the submission wizard) related to
+    a plant accession entry. This entry is defined by three elements:
+    %ul
+      %li
+        %b Plant accession
+        which names the accession (use the unique accession identification from your organisation, e.g. Notthm_BnASSYST_001)
+      %li
+        %b Originating organisation
+        which names the organisation which named this accession (e.g. Nottingham)
+      %li
+        %b Year produced
+        which sets the year of the accession (e.g. 2012).
+
+    If you provide the plant accession information, you are <i>required to supply values for all three
+    columns</i>. Also, your organisation should ensure the unique naming of accession - so you never
+    duplicate the <b>Plant accession</b> value in the context of the same <b>Originating organisation</b>.
+
+  %p
+    For your convenience please use
+    %b
+      = link_to 'the ready template', '/plant_lines_template.csv'
+    in a CSV format. Please download it, leave the header (the first line) intact, and paste your data, in columns,
+    below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
+    columns even if you do not submit any values for them.
+
+= form_tag submission_uploads_path(submission), multipart: true, method: :post do
+
+  = hidden_field_tag "submission_upload[upload_type]", "plant_lines"
+
+  .form-group.fileinput{ class: "#{'hidden' if @content.upload}" }
+    .btn.btn-primary.fileinput-button
+      %span Choose a file...
+      = file_field_tag "submission_upload[file]", class: 'plant-lines-upload'
+    %small.help-block
+      When you are done preparing your plant lines data sheet, according to the manual presented above,
+      please upload the ready CSV file here.

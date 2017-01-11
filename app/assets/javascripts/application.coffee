@@ -7,7 +7,7 @@
 # It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
 # compiled file.
 #
-# Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
+# Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 # about supported directives.
 #
 #= require jquery
@@ -25,7 +25,12 @@
 #= require jquery.ui.widget
 #= require jquery.iframe-transport
 #= require jquery.fileupload
-#= require_tree .
+#
+#= require_directory ./lib
+#= require ./components/submission
+#= require ./components/plant_population_submission
+#= require ./components/plant_trial_submission
+#= require_directory .
 
 $ ->
   $('body').tooltip
