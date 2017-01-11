@@ -20,5 +20,10 @@
     trait characteristics and cultivation ranges.
 
 .form-group
+  = content.label :population_type, class: 'required'
+  = content.select :population_type, PopulationType.population_types, { include_blank: true }, class: 'population-type form-control', 'data-placeholder': "Select population type"
+  %small.help-block Please, choose the type of population you are submitting.
+
+.form-group
   = content.text_field :owned_by, label: "Population owned by",
   help: 'Please provide information on who owns the population. For example, the name(s) of its developer(s).'

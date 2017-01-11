@@ -14,5 +14,11 @@ FactoryGirl.define do
       file { fixture_file_upload(Rails.root.join(*%w(spec fixtures files plant-trial-layout-example.jpg)), 'image/jpeg') }
       association :submission, submission_type: :trial
     end
+
+    trait :plant_lines do
+      upload_type 'plant_lines'
+      file { fixture_file_upload(Rails.root.join(*%w(spec fixtures files plant_lines_upload.txt)), 'text/plain') }
+      association :submission, submission_type: :population
+    end
   end
 end

@@ -4,6 +4,9 @@
   %small.help-block Please, leave this field blank if you are going to submit many plant lines of different species, in the following step.
 
 .form-group
-  = content.label :population_type, class: 'required'
-  = content.select :population_type, PopulationType.population_types, { include_blank: true }, class: 'population-type form-control', 'data-placeholder': "Select population type"
-  %small.help-block Please, choose the type of population you are submitting.
+  = content.label :female_parent_line
+  = content.select :female_parent_line, [@content.female_parent_line], { include_blank: true }, class: 'female-parent-line form-control', 'data-placeholder': "Select plant line"
+
+.form-group
+  = content.label :male_parent_line
+  = content.select :male_parent_line, [@content.male_parent_line], { include_blank: true }, class: 'male-parent-line form-control', 'data-placeholder': "Select plant line"
