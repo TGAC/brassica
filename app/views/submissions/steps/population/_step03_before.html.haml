@@ -40,7 +40,8 @@
     %b
       = link_to 'the ready template', '/plant_lines_template.csv'
     in a CSV format. Please download it, leave the header (the first line) intact, and paste your data, in columns,
-    below the header (thus replacing the placeholder <code>... - replace it</code> values).
+    below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
+    columns even if you do not submit any values for them.
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
 
