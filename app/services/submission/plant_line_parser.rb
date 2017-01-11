@@ -5,11 +5,6 @@ class Submission::PlantLineParser
   def initialize(upload)
     @upload = upload
   end
-  #
-  # def initialize(upload, current_plant_lines)
-  #   @upload = upload
-  #   @current_plant_lines = current_plant_lines
-  # end
 
   def call
     @upload.log "Starting Plant Lines file parsing [file name: #{@upload.file_file_name}]"
@@ -24,8 +19,7 @@ class Submission::PlantLineParser
     end
 
     if @upload.errors.empty?
-      # TODO FIXME rather add uploaded PLs to the existing list (of e.g. manually created PLs) instead of replacing everything
-      @upload.submission.content.update(:step03,
+      @upload.submission.content.append(:step03,
                                         plant_line_list: plant_line_names,
                                         new_plant_lines: @plant_lines,
                                         new_plant_varieties: @plant_varieties,
@@ -99,12 +93,12 @@ class Submission::PlantLineParser
   end
 
   def correct_input?(row)
-    species, plant_variety_name, crop_type, plant_line_name, plant_accession, originating_organisation, year_produced = parse_row(row)
+    species, _plant_variety_name, _crop_type, plant_line_name, plant_accession, originating_organisation, year_produced = parse_row(row)
     return false if plant_line_name.blank?
     if plant_line_names.include? plant_line_name
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined in the uploaded file."
-    # elsif @current_plant_lines.include? plant_line_name
-    #   @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined. Please clear the 'Plant line list' field before re-uploading a CSV file."
+    elsif current_plant_lines.include? plant_line_name
+      @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined. Please clear the 'Plant line list' field before re-uploading a CSV file."
     elsif reused_plant_line?(plant_line_name)
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already present in BIP."\
                   "Please use the 'Plant line list' field to add this existing plant line to the submitted population."
@@ -126,11 +120,11 @@ class Submission::PlantLineParser
   end
 
   def parse_row(row)
-    row.map{ |d| d.nil? ? '' : d.strip }
+    row.map { |d| d.nil? ? '' : d.strip }
   end
 
   def plant_line_names
-    @plant_lines.map{ |plant_line| plant_line[:plant_line_name] }
+    @plant_lines.map { |plant_line| plant_line[:plant_line_name] }
   end
 
   def new_plant_variety?(plant_variety_name)
@@ -158,5 +152,9 @@ class Submission::PlantLineParser
         pa[:originating_organisation] == originating_organisation &&
         pa[:year_produced] == year_produced
     end
+  end
+
+  def current_plant_lines
+    @current_plant_lines ||= @upload.submission.content.step03.plant_line_list
   end
 end
