@@ -12,7 +12,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
 
   context 'given submission with valid content' do
     let(:new_plant_lines_attrs) {
-      attributes_for_list(:plant_line, 2).map.with_index { |attrs,i|
+      attributes_for_list(:plant_line, 2).map.with_index { |attrs, i|
         attrs.slice(:plant_line_name, :sequence_identifier, :comments, :data_owned_by, :data_provenance).
           merge(
             taxonomy_term: taxonomy_term.name,
