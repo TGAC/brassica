@@ -10,7 +10,7 @@ class PlantAccession < ActiveRecord::Base
 
   validates :plant_accession,
             presence: true,
-            uniqueness: { scope: :originating_organisation }
+            uniqueness: { scope: [:originating_organisation, :year_produced] }
 
   validates :originating_organisation,
             presence: true

@@ -8,6 +8,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
   let(:existing_accession) {
     create(:plant_accession, plant_accession: 'existing_acc',
                              originating_organisation: 'Organisation Existing',
+                             year_produced: '2017',
                              plant_line: create(:plant_line, plant_variety: nil))
   }
   let(:existing_variety) { create(:plant_variety) }
@@ -60,11 +61,12 @@ RSpec.describe Submission::PlantTrialFinalizer do
           'p4' => { 2 => '' }
         },
         accessions: {
-          'p1' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A' },
+          'p1' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A', year_produced: '2017' },
           'p2' => { plant_accession: existing_accession.plant_accession,
-                    originating_organisation: existing_accession.originating_organisation },
-          'p3' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A' },
-          'p4' => { plant_accession: 'new_acc2', originating_organisation: 'Organisation A' }
+                    originating_organisation: existing_accession.originating_organisation,
+                    year_produced: existing_accession.year_produced },
+          'p3' => { plant_accession: 'new_acc1', originating_organisation: 'Organisation A', year_produced: '2017' },
+          'p4' => { plant_accession: 'new_acc2', originating_organisation: 'Organisation A', year_produced: '2017' }
         },
         lines_or_varieties: {
           'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'pv' },
@@ -228,7 +230,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
             },
             accessions: {
               'p1' => { plant_accession: existing_accession.plant_accession,
-                        originating_organisation: existing_accession.originating_organisation }
+                        originating_organisation: existing_accession.originating_organisation,
+                        year_produced: existing_accession.year_produced}
             },
             lines_or_varieties: {
               'p1' => { relation_class_name: 'PlantLine', relation_record_name: nil }
@@ -398,7 +401,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       it 'raises an error when there is no plant line or plant variety information for new accession' do
         submission.content.update(:step04,
           accessions: {
-            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo' }
+            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo', year_produced: '2017' }
           },
           lines_or_varieties: {}
         )
@@ -412,7 +415,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       it 'raises an error when there is strange relation information for new accession' do
         submission.content.update(:step04,
           accessions: {
-            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo' }
+            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo', year_produced: '2017' }
           },
           lines_or_varieties: {
             'p1' => { relation_class_name: 'PlantPopulation', relation_record_name: 'Why not?' }
@@ -428,7 +431,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       it 'rollbacks when a new plant line is encountered for a new plant accession' do
         submission.content.update(:step04,
           accessions: {
-            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo' }
+            'p1' => { plant_accession: 'new_acc1', originating_organisation: 'oo', year_produced: '2017' }
           },
           lines_or_varieties: {
             'p1' => { relation_class_name: 'PlantLine', relation_record_name: 'New line that should not be created' }

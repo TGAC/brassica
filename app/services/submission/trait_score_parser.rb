@@ -48,6 +48,7 @@ class Submission::TraitScoreParser
   # - a 0+ set of columns with design factor names as headers
   # - column 'Plant accession'
   # - column 'Originating organisation'
+  # - column 'Year produced'
   # - column 'Plant line' or 'Plant variety'
   # - trait name columns, preferably called exactly as the chosen traits
   #  - if technical replicates are present for a given trait, heir are expected to appear in order,
@@ -62,7 +63,7 @@ class Submission::TraitScoreParser
     @line_or_variety = 'PlantLine'
     replicates_present = false
     @number_of_design_factors = 0
-    if header.blank? || header.size < 4
+    if header.blank? || header.size < 5
       @upload.errors.add(:file, :no_header)
     elsif header.index('Plant accession').nil?
       @upload.errors.add(:file, :no_plant_accession_header)
@@ -78,8 +79,8 @@ class Submission::TraitScoreParser
       @line_or_variety = 'PlantVariety' if header.index('Plant line').nil?
 
       @upload.log "Mapping file header columns to Trait Descriptors"
-      replicates_present = detect_replication(header[4..-1])
-      header[(4 + @number_of_design_factors)..-1].each_with_index do |column_name, i|
+      replicates_present = detect_replication(header[5..-1])
+      header[(5 + @number_of_design_factors)..-1].each_with_index do |column_name, i|
         next if i >= @trait_names.length && !replicates_present
         trait_name, replicate_number = split_to_trait_and_replicate(column_name)
         trait_index = @trait_names.find_index(trait_name)
@@ -112,17 +113,18 @@ class Submission::TraitScoreParser
       design_factors, score_line = score_line.partition.with_index do |_, i|
         i >= 1 && i <= @design_factor_names.size
       end
-      plant_id, plant_accession, originating_organisation, line_name_or_variety_name, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
+      plant_id, plant_accession, originating_organisation, year_produced, line_name_or_variety_name, *values = score_line.map{ |d| d.nil? ? '' : d.strip }
       unless plant_id.blank?
         @design_factors[plant_id] = design_factors
-        if plant_accession.blank? || originating_organisation.blank?
-          @upload.log "Ignored row for #{plant_id} since either Plant accession or Originating organisation is missing."
-        elsif line_name_or_variety_name.blank? && new_accession?(plant_accession, originating_organisation)
+        if plant_accession.blank? || originating_organisation.blank? || year_produced.blank?
+          @upload.log "Ignored row for #{plant_id} since Plant accession, Originating organisation and/or Year produced is missing."
+        elsif line_name_or_variety_name.blank? && new_accession?(plant_accession, originating_organisation, year_produced)
           @upload.log "Ignored row for #{plant_id} since #{@line_or_variety} value is missing."
         else
           @accessions[plant_id] = {
             plant_accession: plant_accession,
-            originating_organisation: originating_organisation
+            originating_organisation: originating_organisation,
+            year_produced: year_produced
           }
           @lines_or_varieties[plant_id] = {
             relation_class_name: @line_or_variety,
@@ -158,17 +160,19 @@ class Submission::TraitScoreParser
     header_columns.any?{ |column_name| column_name && column_name.index(/rep\d+$/) }
   end
 
-  def new_accession?(plant_accession, originating_organisation)
+  def new_accession?(plant_accession, originating_organisation, year_produced)
     @existing_plant_accessions ||= []
     @new_plant_accessions ||= []
-    return false if @existing_plant_accessions.include? [plant_accession, originating_organisation]
-    return true if @new_plant_accessions.include? [plant_accession, originating_organisation]
+    return false if @existing_plant_accessions.include? [plant_accession, originating_organisation, year_produced]
+    return true if @new_plant_accessions.include? [plant_accession, originating_organisation, year_produced]
     if PlantAccession.find_by(plant_accession: plant_accession,
-                              originating_organisation: originating_organisation)
-      @existing_plant_accessions << [plant_accession, originating_organisation]
+                              originating_organisation: originating_organisation,
+                              year_produced: year_produced
+    )
+      @existing_plant_accessions << [plant_accession, originating_organisation, year_produced]
       false
     else
-      @new_plant_accessions << [plant_accession, originating_organisation]
+      @new_plant_accessions << [plant_accession, originating_organisation, year_produced]
       true
     end
   end

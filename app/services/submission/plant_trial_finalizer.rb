@@ -46,7 +46,8 @@ class Submission::PlantTrialFinalizer
   def find_or_create_plant_accession(plant_id)
     PlantAccession.find_or_create_by!(
       plant_accession: accessions[plant_id]['plant_accession'],
-      originating_organisation: accessions[plant_id]['originating_organisation']
+      originating_organisation: accessions[plant_id]['originating_organisation'],
+      year_produced: accessions[plant_id]['year_produced']
     ) do |new_plant_accession|
       # If new accession, set PL or PV relation for that accession
       accession_relation = {}

@@ -104,8 +104,9 @@ class Submission::PlantLineParser
                   "Please use the 'Plant line list' field to add this existing plant line to the submitted population."
     elsif species.blank?
       @upload.log "Ignored row for #{plant_line_name} since Species name is missing."
-    elsif existing_plant_accession?(plant_accession, originating_organisation)
-      @upload.log "Ignored row for #{plant_line_name} since it refers to a plant accession which currently exists in BIP."
+    elsif existing_plant_accession?(plant_accession, originating_organisation, year_produced)
+      @upload.log "Ignored row for #{plant_line_name} since it refers to a plant accession which currently exists in BIP."\
+                  "If your intention was to refer to an existing accession, please leave the Plant accession, Originating organisation and Year produced values blank for this plant line."
     elsif incomplete_plant_accession?(plant_accession, originating_organisation, year_produced)
       @upload.log "Ignored row for #{plant_line_name} since incomplete plant accession was given."\
                   "Either all or none of the Plant accession, Originating organisation and Year produced values must be provided."
@@ -132,10 +133,11 @@ class Submission::PlantLineParser
       PlantVariety.find_by_plant_variety_name(plant_variety_name).blank?
   end
 
-  def existing_plant_accession?(plant_accession, originating_organisation)
+  def existing_plant_accession?(plant_accession, originating_organisation, year_produced)
     PlantAccession.where(
       plant_accession: plant_accession,
-      originating_organisation: originating_organisation).present?
+      originating_organisation: originating_organisation,
+      year_produced: year_produced).present?
   end
 
   def incomplete_plant_accession?(*pa_data)
