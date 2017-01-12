@@ -90,7 +90,7 @@ class Submission::PlantLineParser
   end
 
   def correct_input?(row)
-    species, plant_variety_name, crop_type, plant_line_name, common_name, previous_line_name, genetic_status, sequence, plant_accession, originating_organisation, year_produced = parse_row(row)
+    species, _plant_variety_name, _crop_type, plant_line_name, _common_name, _previous_line_name, _genetic_status, _sequence, plant_accession, originating_organisation, year_produced = parse_row(row)
     return false if plant_line_name.blank?
     if plant_line_names.include? plant_line_name
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined in the uploaded file."
