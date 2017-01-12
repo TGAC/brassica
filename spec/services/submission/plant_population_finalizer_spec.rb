@@ -13,7 +13,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
   context 'given submission with valid content' do
     let(:new_plant_lines_attrs) {
       attributes_for_list(:plant_line, 2).map.with_index { |attrs, i|
-        attrs.slice(:plant_line_name, :sequence_identifier, :comments, :data_owned_by, :data_provenance).
+        attrs.slice(:plant_line_name, :common_name, :previous_line_name, :genetic_status, :sequence_identifier, :comments, :data_owned_by, :data_provenance).
           merge(
             taxonomy_term: taxonomy_term.name,
             plant_variety_name: (i == 0) ? plant_variety.plant_variety_name : 'New PV name'
@@ -100,6 +100,9 @@ RSpec.describe Submission::PlantPopulationFinalizer do
         expect(plant_line).to be_persisted
         expect(plant_line.attributes).to include(
           'plant_line_name' => new_plant_lines_attrs[idx][:plant_line_name],
+          'common_name' => new_plant_lines_attrs[idx][:common_name],
+          'previous_line_name' => new_plant_lines_attrs[idx][:previous_line_name],
+          'genetic_status' => new_plant_lines_attrs[idx][:genetic_status],
           'sequence_identifier' => new_plant_lines_attrs[idx][:sequence_identifier],
           'entered_by_whom' => submission.user.full_name,
           'date_entered' => Date.today,

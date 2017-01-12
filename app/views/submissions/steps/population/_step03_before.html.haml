@@ -14,7 +14,19 @@
     absent, to create your own. Any plant variety submitted in the CSV document, which is not
     found inside BIP, will be created as a new plant variety table record. In such a case, the
     following column value of <b>Crop type</b> is set as the new plant variety crop type property.
-    The <b>Plant line</b> value should be unique to each submitted plant line.
+
+  %p
+    Following five columns characterise the plant line itself:
+    %ul
+      %li the <b>Plant line</b> column value is required, it should provide the name of the line, and it should be unique to each submitted plant line
+      %li <b>Common name</b> (optional) - a name that is widely recognized by the breeder community
+      %li <b>Previous line name</b> (optional) - the old name of the plant line, if it was changed
+      %li
+        <b>Genetic status</b> (optional) - the name of the design method used to obtain this
+        line (i.e. open pollinated, inbred, substitution lines)
+      %li
+        <b>Sequence</b> (optional) - an identifier of the line sequence, in an external database,
+        like NCBI SRA; identifiers starting with SR will be automatically recognized as SRA submissions.
 
   %p
     Further set of three columns pertains to <b>plant accession</b> information. Each new, submitted
