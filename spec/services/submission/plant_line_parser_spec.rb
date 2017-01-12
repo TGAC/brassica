@@ -56,7 +56,11 @@ RSpec.describe Submission::PlantLineParser do
       expect(subject.plant_lines).to eq [{
         plant_line_name: 'pl',
         plant_variety_name: '',
-        taxonomy_term: 'Brassica napus'
+        taxonomy_term: 'Brassica napus',
+        common_name: nil,
+        previous_line_name: nil,
+        genetic_status: nil,
+        sequence_identifier: nil
       }]
     end
 
@@ -73,8 +77,24 @@ RSpec.describe Submission::PlantLineParser do
       input_is "Brassica napus,,,pl1\n\nBrassica napus,,,pl2\n\n"
       subject.send(:parse_plant_lines)
       expect(subject.plant_lines).to eq [
-        { plant_line_name: 'pl1', plant_variety_name: '', taxonomy_term: 'Brassica napus' },
-        { plant_line_name: 'pl2', plant_variety_name: '', taxonomy_term: 'Brassica napus' }
+        {
+          plant_line_name: 'pl1',
+          plant_variety_name: '',
+          taxonomy_term: 'Brassica napus',
+          common_name: nil,
+          previous_line_name: nil,
+          genetic_status: nil,
+          sequence_identifier: nil
+        },
+        {
+          plant_line_name: 'pl2',
+          plant_variety_name: '',
+          taxonomy_term: 'Brassica napus',
+          common_name: nil,
+          previous_line_name: nil,
+          genetic_status: nil,
+          sequence_identifier: nil
+        }
       ]
     end
 
@@ -125,7 +145,7 @@ RSpec.describe Submission::PlantLineParser do
     context 'managing plant accession information' do
       ['pa', ',oo', ',,yp'].each do |incomplete_pa|
         it 'prevents creation of incomplete PA record' do
-          input_is "Brassica napus,,,pl," + incomplete_pa
+          input_is "Brassica napus,,,pl,,,,," + incomplete_pa
           subject.send(:parse_plant_lines)
           expect(upload.logs).to include
             "Ignored row for pl since incomplete plant accession was given."\
@@ -135,21 +155,21 @@ RSpec.describe Submission::PlantLineParser do
 
       it 'prevents reusing existing plant accession for new plant lines' do
         pa = create(:plant_accession)
-        input_is "Brassica napus,,,pl,#{pa.plant_accession},\"#{pa.originating_organisation}\",#{pa.year_produced}"
+        input_is "Brassica napus,,,pl,,,,,#{pa.plant_accession},\"#{pa.originating_organisation}\",#{pa.year_produced}"
         subject.send(:parse_plant_lines)
         expect(upload.logs).
           to include "Ignored row for pl since it refers to a plant accession which currently exists in BIP."
       end
 
       it 'detects repetition of plant accession information in the file' do
-        input_is "Brassica napus,,,pl1,pa,oo,2017\nBrassica napus,,,pl2,pa,oo,2017"
+        input_is "Brassica napus,,,pl1,,,,,pa,oo,2017\nBrassica napus,,,pl2,,,,,pa,oo,2017"
         subject.send(:parse_plant_lines)
         expect(upload.logs).
           to include "Ignored row for pl2 since the defined plant accession was already used for another plant line in this file."
       end
 
       it 'saves new plant accession information for new plant lines' do
-        input_is "Brassica napus,,,pl,pa,oo,2017"
+        input_is "Brassica napus,,,pl,,,,,pa,oo,2017"
         subject.send(:parse_plant_lines)
         expect(subject.instance_variable_get(:@plant_accessions)).
           to eq({ 'pl' => { plant_accession: 'pa', originating_organisation: 'oo', year_produced: '2017' }})
@@ -171,12 +191,20 @@ RSpec.describe Submission::PlantLineParser do
         {
           'plant_line_name' => 'pl_ok_newpv_newpa',
           'plant_variety_name' => 'Alesi',
-          'taxonomy_term' => 'Brassica napus'
+          'taxonomy_term' => 'Brassica napus',
+          'common_name' => '',
+          'previous_line_name' => '',
+          'genetic_status' => '',
+          'sequence_identifier' => ''
         },
         {
           'plant_line_name' => 'pl_ok_nopa',
           'plant_variety_name' => 'Valesca',
-          'taxonomy_term' => 'Brassica napus'
+          'taxonomy_term' => 'Brassica napus',
+          'common_name' => 'Correct plant line',
+          'previous_line_name' => 'pl_ok_old',
+          'genetic_status' => 'inbred',
+          'sequence_identifier' => 'SRR3134398'
         }
       ]
       expect(upload.submission.content.step03.new_plant_varieties).to eq({
