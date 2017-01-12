@@ -1,6 +1,6 @@
-Species,Plant variety,Crop type,Plant line,Plant accession,Originating organisation,Year produced
-Brassica napus,Alesi,Winter oilseed rape,pl_ok_newpv_newpa,New accession X,EI,2017
-Brassica napus,Valesca,Winter oilseed rape,pl_wrong_repeated_pa,New accession X,EI,2017
-Brassica napus,Valesca,Winter oilseed rape,pl_ok_nopa
-Brassica napus,Valesca,Winter oilseed rape,pl_wrong_partial_pa,,My org,2014
-Brassica napus,Valesca,Winter oilseed rape,pl_wrong_existing_pa,whri2004_C1,WHRI,2004
+Species,Plant variety,Crop type,Plant line,Common name,Previous line name,Genetic status,Sequence,Plant accession,Originating organisation,Year produced
+Brassica napus,Alesi,Winter oilseed rape,pl_ok_newpv_newpa,,,,,New accession X,EI,2017
+Brassica napus,Valesca,Winter oilseed rape,pl_wrong_repeated_pa,,,,,New accession X,EI,2017
+Brassica napus,Valesca,Winter oilseed rape,pl_ok_nopa,Correct plant line,pl_ok_old,inbred,SRR3134398
+Brassica napus,Valesca,Winter oilseed rape,pl_wrong_partial_pa,,,,,,My org,2014
+Brassica napus,Valesca,Winter oilseed rape,pl_wrong_existing_pa,,,,,whri2004_C1,WHRI,2004

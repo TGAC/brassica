@@ -12,7 +12,19 @@ RSpec.describe Submission::PlantLineParser do
         to eq ['No correct header provided.']
     end
 
-    header = ['Species','Plant variety','Crop type','Plant line','Plant accession','Originating organisation','Year produced']
+    header = [
+      'Species',
+      'Plant variety',
+      'Crop type',
+      'Plant line',
+      'Common name',
+      'Previous line name',
+      'Genetic status',
+      'Sequence',
+      'Plant accession',
+      'Originating organisation',
+      'Year produced'
+    ]
     header.each do |column_name|
       it "reports missing #{column_name} column" do
         input_is header.reject{ |c| c == column_name }.join(',')
@@ -46,6 +58,15 @@ RSpec.describe Submission::PlantLineParser do
         plant_variety_name: '',
         taxonomy_term: 'Brassica napus'
       }]
+    end
+
+    it 'handles optional plant line information' do
+      input_is 'Brassica napus,,,pl,cn,pln,gs,seq'
+      subject.send(:parse_plant_lines)
+      expect(subject.plant_lines[0][:common_name]).to eq 'cn'
+      expect(subject.plant_lines[0][:previous_line_name]).to eq 'pln'
+      expect(subject.plant_lines[0][:genetic_status]).to eq 'gs'
+      expect(subject.plant_lines[0][:sequence_identifier]).to eq 'seq'
     end
 
     it 'handles empty newlines properly' do

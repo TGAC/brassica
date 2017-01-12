@@ -35,20 +35,13 @@ class Submission::PlantLineParser
     header = csv.readline
     if header.blank?
       @upload.errors.add(:file, :no_header_plant_lines)
-    elsif header.index('Plant line').nil?
-      @upload.errors.add(:file, :no_plant_line_header)
-    elsif header.index('Plant variety').nil?
-      @upload.errors.add(:file, :no_plant_variety_header)
-    elsif header.index('Crop type').nil?
-      @upload.errors.add(:file, :no_crop_type_header)
-    elsif header.index('Species').nil?
-      @upload.errors.add(:file, :no_species_header)
-    elsif header.index('Plant accession').nil?
-      @upload.errors.add(:file, :no_plant_accession_header)
-    elsif header.index('Originating organisation').nil?
-      @upload.errors.add(:file, :no_originating_organisation_header)
-    elsif header.index('Year produced').nil?
-      @upload.errors.add(:file, :no_year_produced_header)
+      return
+    end
+
+    header_columns.each do |column_name|
+      if header.index(column_name).nil?
+        @upload.errors.add(:file, "no_#{column_name.downcase.parameterize('_')}_header".to_sym)
+      end
     end
   end
 
@@ -59,7 +52,7 @@ class Submission::PlantLineParser
     @plant_accessions = {}
     csv.each do |row|
       next unless correct_input?(row)
-      species, plant_variety_name, crop_type, plant_line_name, plant_accession, originating_organisation, year_produced = parse_row(row)
+      species, plant_variety_name, crop_type, plant_line_name, common_name, previous_line_name, genetic_status, sequence, plant_accession, originating_organisation, year_produced = parse_row(row)
       if new_plant_variety?(plant_variety_name)
         @plant_varieties[plant_line_name] = {
           plant_variety_name: plant_variety_name,
@@ -76,7 +69,11 @@ class Submission::PlantLineParser
       @plant_lines << {
         plant_line_name: plant_line_name,
         plant_variety_name: plant_variety_name,
-        taxonomy_term: species
+        taxonomy_term: species,
+        common_name: common_name,
+        previous_line_name: previous_line_name,
+        genetic_status: genetic_status,
+        sequence_identifier: sequence
       }
     end
     @upload.log "Parsed #{@plant_lines.size} correct plant line(s)."
@@ -156,5 +153,21 @@ class Submission::PlantLineParser
 
   def current_plant_lines
     @current_plant_lines ||= @upload.submission.content.step03.plant_line_list || []
+  end
+
+  def header_columns
+    [
+      "Species",
+      "Plant variety",
+      "Crop type",
+      "Plant line",
+      "Common name",
+      "Previous line name",
+      "Genetic status",
+      "Sequence",
+      "Plant accession",
+      "Originating organisation",
+      "Year produced"
+    ]
   end
 end
