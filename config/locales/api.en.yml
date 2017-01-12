@@ -1155,7 +1155,9 @@ en:
       note:
         <b>NOTE:</b> you should link a new Plant Accession to either a Plant Line of a Plant Variety.
         So, excatly one of <code>plant_line_id</code> and <code>plant_variety_id</code> attributes
-        should be provided (but never both).
+        should be provided (but never both). Also note that the combination of (<code>plant_accession</code>,
+        <code>originating_organisation</code> and <code>year_produced</code> must uniquely identify the accession,
+        i.e. no two records with identical values in all three fields may exist in the database.
 
       create:
         example: |-

@@ -137,6 +137,36 @@ RSpec.describe "API V1" do
         }, { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(1)
     end
+
+    it 'does not accept plant accession if another accession with identical PA, OO and YP fields exists' do
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: nil,
+            plant_variety_id: pv.id,
+            originating_organisation: 'oo',
+            year_produced: '2017'
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(1)
+
+      expect {
+        post "/api/v1/plant_accessions", {
+          plant_accession: {
+            plant_accession: 'foo',
+            plant_line_id: nil,
+            plant_variety_id: pv.id,
+            originating_organisation: 'oo',
+            year_produced: '2017'
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantAccession.count }.by(0)
+
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].first['message']).
+        to eq 'Has already been taken'
+    end
   end
 
   context 'when submitting a design factor' do
