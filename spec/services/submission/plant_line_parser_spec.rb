@@ -116,8 +116,9 @@ RSpec.describe Submission::PlantLineParser do
         pa = create(:plant_accession)
         input_is "Brassica napus,,,pl,#{pa.plant_accession},\"#{pa.originating_organisation}\",#{pa.year_produced}"
         subject.send(:parse_plant_lines)
-        expect(upload.logs).
-          to include "Ignored row for pl since it refers to a plant accession which currently exists in BIP."
+        expect(upload.logs).to include
+          "Ignored row for pl since it refers to a plant accession which currently exists in BIP."\
+          "If your intention was to refer to an existing accession, please leave the Plant accession, Originating organisation and Year produced values blank for this plant line."
       end
 
       it 'detects repetition of plant accession information in the file' do
