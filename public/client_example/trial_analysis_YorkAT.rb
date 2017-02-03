@@ -151,7 +151,7 @@ end
 STDERR.puts "  - The Plant Lines used in this Plant Trial: #{plant_lines.map{ |pl| pl['plant_line_name'] }}"
 STDERR.puts "Number of Plant Lines loaded: #{plant_lines.size}"
 
-STDERR.puts " 7. Linking Plant Accesions with Plant Scoring Units"
+STDERR.puts "7. Linking Plant Accesions with Plant Scoring Units"
 
 page = 1
 loop do
@@ -179,8 +179,14 @@ csv_string = CSV.generate(col_sep: "\t") do |csv|
     end.
     each do |scoring_unit_name, data|
       plant_accession = plant_accessions.detect{ |pa| pa['id'] == data['plant_accession_id'] }
-      csv << [plant_accession ? plant_accession['plant_accession'] : ''] +
-        #[plant_line ? plant_line['plant_line_name']: '']+
+      plant_line = plant_lines.detect{ |pl| pl['id'] == plant_accession['plant_line_id'] }
+
+      unless plant_line
+        STDERR.puts "No plant line information for #{scoring_unit_name} found. Exiting."
+        exit(1)
+      end
+
+      csv << [plant_line['plant_line_name']] +
         trait_descriptors.map { |td|
           ts = data['trait_scores'].detect { |ts|
             ts['trait_descriptor_id'] == td['id']
