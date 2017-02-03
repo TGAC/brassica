@@ -13,7 +13,7 @@ require 'pry'
 #  * Accession Names
 #  * Line Names
 #  * Sequence Identifiers
-# and produces a CSV to standard output, with each Plant Scoring Unit represented by a row.
+# and produces a TSV to standard output, with each Plant Scoring Unit represented by a row.
 
 if ARGV.size < 2
   STDERR.puts 'Not enough arguments. Usage:'
@@ -167,8 +167,8 @@ loop do
 end
 # puts JSON.pretty_generate(outputs)
 
-STDERR.puts '8. Generating output CSV to STDOUT'
-csv_string = CSV.generate(col_sep: "\t") do |csv|
+STDERR.puts '8. Generating output TSV to STDOUT'
+output_string = CSV.generate(col_sep: "\t") do |csv|
   csv << ["<Trait>"] + trait_descriptors.map{ |td| td['trait']['name'].gsub(/\s+/, '.') }
   outputs.
     select do |_, data|
@@ -197,6 +197,6 @@ csv_string = CSV.generate(col_sep: "\t") do |csv|
     end
 end
 
-puts csv_string
+puts output_string
 
 STDERR.puts '6. Finished'
