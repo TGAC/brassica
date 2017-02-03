@@ -170,18 +170,25 @@ end
 STDERR.puts '8. Generating output CSV to STDOUT'
 csv_string = CSV.generate(col_sep: "\t") do |csv|
   csv << ["<Trait>"] + trait_descriptors.map{ |td| td['trait']['name'].gsub(/\s+/, '.') }
-  outputs.each do |scoring_unit_name, data|
-    plant_accession = plant_accessions.detect{ |pa| pa['id'] == data['plant_accession_id'] }
-    csv << [plant_accession ? plant_accession['plant_accession'] : ''] +
-      #[plant_line ? plant_line['plant_line_name']: '']+
-      trait_descriptors.map { |td|
-        ts = data['trait_scores'].detect { |ts|
-          ts['trait_descriptor_id'] == td['id']
-        }
+  outputs.
+    select do |_, data|
+      trait_descriptors.select { |td|
+        data['trait_scores'].detect { |ts| ts['trait_descriptor_id'] == td['id'] }
+      }.
+      count == trait_descriptors.count
+    end.
+    each do |scoring_unit_name, data|
+      plant_accession = plant_accessions.detect{ |pa| pa['id'] == data['plant_accession_id'] }
+      csv << [plant_accession ? plant_accession['plant_accession'] : ''] +
+        #[plant_line ? plant_line['plant_line_name']: '']+
+        trait_descriptors.map { |td|
+          ts = data['trait_scores'].detect { |ts|
+            ts['trait_descriptor_id'] == td['id']
+          }
 
-        ts['score_value'] if ts
-      }
-  end
+          ts['score_value'] if ts
+        }
+    end
 end
 
 puts csv_string
