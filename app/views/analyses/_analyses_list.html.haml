@@ -1,0 +1,10 @@
+%ul.analyses
+  - analyses.each do |analysis|
+    %li
+
+      .main-info
+        %div
+          -# = submission_type(submission)
+          = analysis.analysis_type
+          = link_to analysis.name, analysis_path(analysis)
+          = analysis.status

@@ -1,5 +1,8 @@
 class Analysis::DataFile < ActiveRecord::Base
-  enum data_type: %w(gwas_genotype gwas_phenotype gwas_map gwas_results)
+  BASE_DATA_TYPES = %w(std_out std_err)
+  GWAS_DATA_TYPES = %w(gwas_genotype gwas_phenotype gwas_map gwas_results)
+
+  enum data_type: BASE_DATA_TYPES | GWAS_DATA_TYPES
   enum role: %w(input output)
 
   belongs_to :owner, class_name: "User"

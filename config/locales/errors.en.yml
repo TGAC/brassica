@@ -3,6 +3,17 @@ en:
   activerecord:
     errors:
       models:
+        analysis:
+          attributes:
+            name:
+              blank: Please provide a name for analysis.
+
+            genotype_data_file:
+              blank: Please upload a genotype data file.
+
+            phenotype_data_file:
+              blank: Please upload a phenotype data file.
+
         submission:
           attributes:
             name:

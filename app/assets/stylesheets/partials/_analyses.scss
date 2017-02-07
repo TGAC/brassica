@@ -1,0 +1,27 @@
+.analyses {
+  @extend .list-group;
+  margin-top: 1em;
+  > li {
+    @extend .list-group-item;
+    .main-info {
+      display: inline-block;
+      width: 60%;
+      vertical-align: top;
+    }
+    // .details {
+    //   font-size: small;
+    //   margin-right: 20px;
+    //   margin-top: 4px;
+    // }
+    // .status {
+    //   display: inline-block;
+    //   width: 22%;
+    // }
+    // .actions {
+    //   float: right;
+    //   width: 17%;
+    //   margin-top: 6px;
+    //   text-align: right;
+    // }
+  }
+}

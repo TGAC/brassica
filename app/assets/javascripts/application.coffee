@@ -30,6 +30,7 @@
 #= require ./components/submission
 #= require ./components/plant_population_submission
 #= require ./components/plant_trial_submission
+#= require ./components/gwas_analysis
 #= require_directory .
 
 $ ->

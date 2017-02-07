@@ -1,0 +1,13 @@
+.container
+  %h2.page-title My analyses
+
+  - if @analyses.present?
+    = render partial: 'analyses_list', locals: { analyses: @analyses }
+
+    = new_analysis_button
+
+  - else
+    .alert.alert-info
+      %p You do not have any analyses yet.
+
+    %p= new_analysis_button

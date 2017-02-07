@@ -1,0 +1,13 @@
+en:
+  analyses:
+    new:
+      analysis_type:
+        gwas: GWAS
+
+      description:
+        common: |
+          Further contextual help will be provided at each step of analysis setup.
+          Only you will have access to the results produced by analysis.
+        gwas: |
+          The following process allows you to perform GWAS on data you submit.
+          You will need to provide genotype and phenotype data for the analysis.

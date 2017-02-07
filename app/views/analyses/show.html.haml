@@ -1,0 +1,19 @@
+.container.show-analysis
+  %h3.section-heading #{t(".analysis_type.#{@analysis.analysis_type}")} analysis
+
+  .row
+    .col-sm-8
+      %h4= @analysis.name
+
+    .col-sm-4.text-right
+      = @analysis.status
+      -# = render partial: "/submissions/show/status", locals: { submission: @submission, mode: :private }
+
+  .panel.panel-default
+
+    -# %ul.list-group
+      -# = render "submissions/show/#{@submission.object.submission_type}"
+
+  .row
+    .col-sm-6
+      = link_to "My analyses", analyses_path, class: 'btn btn-primary'

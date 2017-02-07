@@ -16,6 +16,8 @@ module ApplicationHelper
         :browse
       when 'submissions', 'depositions'
         :submit
+      when 'analyses'
+        :analyze
       when 'api_keys'
         :api
       else
@@ -34,6 +36,7 @@ module ApplicationHelper
       home: root_path,
       browse: browse_data_path,
       submit: new_submission_path,
+      analyze: new_analysis_path,
       api: api_documentation_path,
       about: about_path
     }

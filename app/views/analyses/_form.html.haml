@@ -1,0 +1,71 @@
+.container
+  %h3.section-heading
+    #{t(".analysis_type.#{@analysis.analysis_type}")} analysis
+
+  %div{ class: "new-#{@analysis.analysis_type}-analysis" }
+    = render partial: '/errors', locals: { errors: @form.errors }
+
+    = fields_for(@form, builder: BaseFormBuilder) do |f|
+      .form-group
+        = f.text_field :name, required: true, label: 'Analysis name',
+          help: 'Please, provide <b>name</b> for the analysis.', form: 'new_analysis'
+
+      .form-group
+        = label_tag :genotype_data_file, 'Genotype data', class: 'required'
+
+        .alert.alert-info Genotype data file...
+
+        .genotype-data-file-errors.errors.hidden
+
+        = form_tag analyses_data_files_path, multipart: true, method: :post do
+          = hidden_field_tag "analysis_data_file[data_type]", "gwas_genotype"
+
+          .genotype-data-file-fileinput.fileinput{ class: "#{'hidden' if @form.genotype_data_file}" }
+            .btn.btn-primary.fileinput-button
+              %span Choose a file...
+              = file_field_tag "analysis_data_file[file]", class: 'genotype-data-file'
+
+            %small.help-block
+              VCF, CSV
+
+        .genotype-data-file{ class: "#{'hidden' unless @form.genotype_data_file}" }
+          %span.file-name= @form.genotype_data_file.try(:file_file_name)
+
+          = delete_analysis_data_file_button(@form.genotype_data_file,
+            class: 'btn btn-default delete-genotype-data-file')
+
+      .form-group
+        = label_tag :phenotype_data_file, 'Phenotype/trait data', class: 'required'
+
+        .alert.alert-info Phenotype data file...
+
+        .phenotype-data-file{ class: "#{'hidden' unless @form.phenotype_data_file}" }
+          %span.file-name= @form.phenotype_data_file.try(:file_file_name)
+
+          = delete_analysis_data_file_button(@form.phenotype_data_file,
+            class: 'btn btn-default delete-phenotype-data-file')
+
+        .phenotype-data-file-errors.errors.hidden
+
+        = form_tag analyses_data_files_path, multipart: true, method: :post do
+          = hidden_field_tag "analysis_data_file[data_type]", "gwas_phenotype"
+
+          .phenotype-data-file-fileinput.fileinput{ class: "#{'hidden' if @form.phenotype_data_file}" }
+            .btn.btn-primary.fileinput-button
+              %span Choose a file...
+              = file_field_tag "analysis_data_file[file]", class: 'phenotype-data-file'
+
+            %small.help-block
+              CSV
+
+    .action-buttons
+      = link_to "Back", new_analysis_path, class: 'btn btn-default btn-wide btn-back'
+
+      .pull-right
+        = form_for(@form) do |f|
+          = f.hidden_field :analysis_type
+          = f.hidden_field :genotype_data_file_id
+          = f.hidden_field :phenotype_data_file_id
+
+          = f.submit "Run", class: 'btn btn-primary btn-wide btn-next'
+
