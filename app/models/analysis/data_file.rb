@@ -1,0 +1,19 @@
+class Analysis::DataFile < ActiveRecord::Base
+  enum data_type: %w(gwas_genotype gwas_phenotype gwas_map gwas_results)
+  enum role: %w(input output)
+
+  belongs_to :owner, class_name: "User"
+  belongs_to :analysis
+
+  # TODO: use hashes in url and path
+  has_attached_file :file
+
+  validates :owner, presence: true
+  validates :file, attachment_presence: true,
+                   attachment_size: { less_than: 50.megabytes },
+                   attachment_file_name: { matches: /\.(vcf|csv|txt)\Z/ }
+
+  do_not_validate_attachment_file_type :file
+
+  delegate :url, to: :file, prefix: true
+end

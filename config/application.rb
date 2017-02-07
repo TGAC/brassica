@@ -43,3 +43,6 @@ end
 require_relative "../app/forms/base_form_builder"
 
 ActionView::Base.default_form_builder = BaseFormBuilder
+
+IMAGE_CONTENT_TYPES = %w(image/png image/jpeg image/gif)
+CSV_CONTENT_TYPES = %w(text/csv text/plain application/vnd.ms-excel)

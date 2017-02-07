@@ -5,6 +5,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
+require 'paperclip/matchers'
 require 'factory_girl_rails'
 require 'common_helpers'
 require 'vcr'
@@ -63,6 +64,7 @@ RSpec.configure do |config|
   config.include RSpecHtmlMatchers
   include CommonHelpers
   config.include ElasticsearchHelper, :elasticsearch
+  config.include Paperclip::Shoulda::Matchers, type: :model
 
   config.before :suite do
     DatabaseCleaner.clean_with :truncation

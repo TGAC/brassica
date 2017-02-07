@@ -11,11 +11,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170202160421) do
+ActiveRecord::Schema.define(version: 20170227114911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "analyses", force: :cascade do |t|
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.string   "name",                        null: false
+    t.json     "args",           default: {}, null: false
+    t.integer  "analysis_type",  default: 0,  null: false
+    t.integer  "status",         default: 0,  null: false
+    t.integer  "owner_id",                    null: false
+    t.integer  "associated_pid"
+    t.datetime "finished_at"
+  end
+
+  add_index "analyses", ["owner_id", "analysis_type"], name: "index_analyses_on_owner_id_and_analysis_type", using: :btree
+
+  create_table "analysis_data_files", force: :cascade do |t|
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "analysis_id"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.integer  "role",              default: 0, null: false
+    t.integer  "data_type",         default: 0, null: false
+    t.integer  "owner_id",                      null: false
+  end
+
+  add_index "analysis_data_files", ["analysis_id", "role", "data_type"], name: "index_analysis_data_files_on_analysis_id_and_role_and_data_type", using: :btree
+  add_index "analysis_data_files", ["owner_id"], name: "index_analysis_data_files_on_owner_id", using: :btree
 
   create_table "api_keys", force: :cascade do |t|
     t.datetime "created_at"
@@ -849,6 +879,9 @@ ActiveRecord::Schema.define(version: 20170202160421) do
 
   add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
 
+  add_foreign_key "analyses", "users", column: "owner_id", on_delete: :cascade
+  add_foreign_key "analysis_data_files", "analyses"
+  add_foreign_key "analysis_data_files", "users", column: "owner_id", on_delete: :cascade
   add_foreign_key "api_keys", "users", on_update: :cascade, on_delete: :cascade
   add_foreign_key "design_factors", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "genotype_matrices", "linkage_maps", on_update: :cascade, on_delete: :nullify

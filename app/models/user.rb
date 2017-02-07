@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   include Nondestroyable
 
   has_many :submissions
+  has_many :analyses, foreign_key: :owner_id
+  has_many :data_files, class_name: "Analysis::DataFile", foreign_key: :owner_id
   has_one :api_key
 
   validates :login, presence: true, uniqueness: { case_sensitive: false }
