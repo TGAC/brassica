@@ -26,7 +26,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
     before do
       submission.content.update(:step01,
                                 plant_population_attrs.
-                                  slice(:name, :description).
+                                  slice(:name, :description, :establishing_organisation).
                                   merge(population_type: population_type.population_type))
       submission.content.update(:step02,
                                 taxonomy_term: taxonomy_term.name,
@@ -60,6 +60,7 @@ RSpec.describe Submission::PlantPopulationFinalizer do
       expect(subject.plant_population.attributes).to include(
         'name' => plant_population_attrs[:name],
         'description' => plant_population_attrs[:description],
+        'establishing_organisation' => plant_population_attrs[:establishing_organisation],
         "data_provenance" => plant_population_attrs[:data_provenance],
         "data_owned_by" => plant_population_attrs[:data_owned_by],
         'date_entered' => Date.today,

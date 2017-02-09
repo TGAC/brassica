@@ -28,6 +28,7 @@ class PlantPopulation < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :user, presence: { on: :create }
+  validates :establishing_organisation, presence: {on: :create, message: 'Establishing organisation must be specified.'}
 
   after_update :cascade_visibility
 

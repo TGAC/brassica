@@ -25,6 +25,13 @@ RSpec.describe PlantPopulation do
     expect(pp.published_on).not_to be_blank
   end
 
+  it 'requires establishing_organisation to not be blank on create' do
+    pp = build(:plant_population, establishing_organisation: '')
+    expect(pp).to_not be_valid
+    pp.establishing_organisation = 'foo'
+    expect(pp).to be_valid
+  end
+
   describe '#filter' do
     before(:each) do
       @pp = create(:plant_population)
