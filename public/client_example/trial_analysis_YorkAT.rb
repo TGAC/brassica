@@ -7,12 +7,11 @@ require 'net/https'
 require 'pry'
 
 # A BIP Ruby client which, given a Plant Trial name, fetches:
+#
 #  * all Trait Scores (trait measurement values)
 #  * all corresponding Trait Descriptors
-#  * Scoring Unit Names (sample name)
-#  * Accession Names
 #  * Line Names
-#  * Sequence Identifiers
+#
 # and produces a TSV to standard output, with each Plant Scoring Unit represented by a row.
 
 if ARGV.size < 2
@@ -63,6 +62,7 @@ plant_trial_id = response['plant_trials'][0]['id']
 
 STDERR.puts "  - Found, plant_trial_id = #{plant_trial_id}"
 
+
 STDERR.puts '2. Loading all Trait Scores for this Plant Trial.'
 STDERR.print '  - Progress: '
 
@@ -77,8 +77,8 @@ loop do
   page += 1
 end
 
-
 STDERR.puts "\n  - #{trait_scores.size} Trait Scores loaded"
+
 
 STDERR.puts '3. Finding Trait Descriptors'
 
@@ -89,6 +89,7 @@ response = call_bip request
 trait_descriptors = response['trait_descriptors']
 
 STDERR.puts "  - The Trait Descriptors scored in this Plant Trial: #{trait_descriptors.map{ |td| td['trait']['name'] }}"
+
 
 STDERR.puts '4. Iterating through Plant Scoring Units'
 
@@ -102,9 +103,7 @@ loop do
   response['plant_scoring_units'].each do |plant_scoring_unit|
     outputs[plant_scoring_unit['scoring_unit_name']] = {}
     outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession_id'] = plant_scoring_unit['plant_accession_id']
-    #outputs[plant_scoring_unit['scoring_unit_name']]['plant_accessions'] = plant_accessions.select{|pa| pa['id'] == plant_scoring_unit['plant_accession_id']}
     plant_accession_ids << plant_scoring_unit['plant_accession_id']
-    #plant_line_ids << plant_scoring_unit
     outputs[plant_scoring_unit['scoring_unit_name']]['trait_scores'] =
       trait_scores.select{ |ts| ts['plant_scoring_unit_id'] == plant_scoring_unit['id']}
   end
@@ -125,10 +124,7 @@ plant_accession_ids.each_slice(200) do |plant_accession_ids_slice|
   response = call_bip request
   plant_accessions += response['plant_accessions']
   STDERR.print '.'
-  #page += 1
 end
-
-#page = 1
 
 STDERR.puts "  - The Plant Accessions used in this Plant Trial: #{plant_accessions.map{ |pa| pa['plant_accession'] }}"
 STDERR.puts "Number of Plant Accessions loaded: #{plant_accessions.size}"
@@ -137,19 +133,17 @@ STDERR.puts "Number of Plant Accessions loaded: #{plant_accessions.size}"
 STDERR.puts '6. Finding Plant Lines for this Plant Trial.'
 
 plant_line_ids = plant_accessions.map{ |pa| pa['plant_line_id'] }.uniq
-
 plant_lines = []
 plant_line_ids.each_slice(200) do |plant_line_ids_slice|
   ids_pl_param = plant_line_ids_slice.map{ |pl_id| "plant_line[query][id][]=#{pl_id}" }.join("&")
   request = Net::HTTP::Get.new("/api/v1/plant_lines?#{ids_pl_param}&per_page=200", @headers)
-  # binding.pry
   response = call_bip request
   plant_lines += response['plant_lines']
 end
 
-
 STDERR.puts "  - The Plant Lines used in this Plant Trial: #{plant_lines.map{ |pl| pl['plant_line_name'] }}"
 STDERR.puts "Number of Plant Lines loaded: #{plant_lines.size}"
+
 
 STDERR.puts "7. Linking Plant Accesions with Plant Scoring Units"
 
@@ -160,14 +154,13 @@ loop do
   break if response['plant_scoring_units'].size == 0
   response['plant_scoring_units'].each do |plant_scoring_unit|
     outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession'] = plant_accessions.detect { |pa| pa['id'] == plant_scoring_unit['plant_accession_id']}
-    # PROBLEM 2 trying to only display the accession name as a value for the key- value pair "plant_accession2" => "<accession_name>""
-    #outputs[plant_scoring_unit['scoring_unit_name']]['plant_accession_name']=plant_accessions.map{ |pa| plant_scoring_unit['plant_accession_id'].detect{ |psu| pa['id'] == psu['plant_accession_id'] }['plant_accession']}
   end
   page += 1
 end
-# puts JSON.pretty_generate(outputs)
+
 
 STDERR.puts '8. Generating output TSV to STDOUT'
+
 output_string = CSV.generate(col_sep: "\t") do |csv|
   csv << ["<Trait>"] + trait_descriptors.map{ |td| td['trait']['name'].gsub(/\s+/, '.') }
   outputs.
