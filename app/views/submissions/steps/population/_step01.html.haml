@@ -25,5 +25,16 @@
   %small.help-block Please, choose the type of population you are submitting.
 
 .form-group
+  - organisations = PlantPopulation.visible(current_user.id).attribute_values(:establishing_organisation).delete_if{|o| o.blank?}.sort
+  - options = options_for_select(organisations, @content.establishing_organisation)
+  - if options.present?
+    = content.combo_field :establishing_organisation, options, label: 'Establishing organisation',
+        required: true,
+        help: 'Please provide the <b>organisation</b> responsible for establishing this population. Either select an existing organisation name, or provide a new one.'
+  - else
+    = content.text_field :establishing_organisation, required: true, label: 'Establishing organisation',
+      help: 'Please provide the <b>organisation</b> responsible for establishing this population.'
+
+.form-group
   = content.text_field :owned_by, label: "Population owned by",
   help: 'Please provide information on who owns the population. For example, the name(s) of its developer(s).'

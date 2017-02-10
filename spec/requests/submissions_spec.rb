@@ -138,7 +138,8 @@ RSpec.describe "Submission management" do
                 submission: {
                   content: {
                     name: 'Population A',
-                    population_type: population_type.population_type
+                    population_type: population_type.population_type,
+                    establishing_organisation: 'Organisation X'
                   }
                 }
               },

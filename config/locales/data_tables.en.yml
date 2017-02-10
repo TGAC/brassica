@@ -68,6 +68,7 @@ en:
       male_parent_line: Male parent line
       plant_population_lists_count: Plant lines
       description: Description
+      establishing_organisation: Establishing organisation
     plant_scoring_units:
       scoring_unit_name: Scoring unit name
       number_units_scored: Units scored

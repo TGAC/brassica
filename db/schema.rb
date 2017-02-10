@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111093120) do
+ActiveRecord::Schema.define(version: 20170202160421) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(version: 20170111093120) do
     t.integer  "user_id",    null: false
   end
 
-  add_index "api_keys", ["token"], name: "api_keys_token_idx", unique: true, using: :btree
+  add_index "api_keys", ["token"], name: "index_api_keys_on_token", using: :btree
 
   create_table "countries", force: :cascade do |t|
     t.string   "country_code", limit: 3, null: false
@@ -279,6 +279,7 @@ ActiveRecord::Schema.define(version: 20170111093120) do
   end
 
   add_index "plant_accessions", ["plant_accession", "originating_organisation", "year_produced"], name: "plant_accessions_pa_oo_yp_idx", unique: true, using: :btree
+  add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
   add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
   add_index "plant_accessions", ["plant_variety_id"], name: "index_plant_accessions_on_plant_variety_id", using: :btree
   add_index "plant_accessions", ["published"], name: "index_plant_accessions_on_published", using: :btree
@@ -361,7 +362,7 @@ ActiveRecord::Schema.define(version: 20170111093120) do
     t.text     "description"
     t.date     "date_established"
     t.text     "established_by_whom"
-    t.text     "establishing_organisation"
+    t.text     "establishing_organisation",                   null: false
     t.text     "population_owned_by"
     t.text     "comments"
     t.text     "entered_by_whom"
@@ -733,6 +734,7 @@ ActiveRecord::Schema.define(version: 20170111093120) do
   end
 
   add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
+  add_index "taxonomy_terms", ["name"], name: "index_taxonomy_terms_on_name", unique: true, using: :btree
   add_index "taxonomy_terms", ["name"], name: "taxonomy_terms_name_idx", unique: true, using: :btree
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
@@ -832,6 +834,7 @@ ActiveRecord::Schema.define(version: 20170111093120) do
   end
 
   add_index "traits", ["label"], name: "index_traits_on_label", using: :btree
+  add_index "traits", ["name"], name: "index_traits_on_name", unique: true, using: :btree
   add_index "traits", ["name"], name: "traits_name_idx", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|

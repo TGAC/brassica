@@ -3,10 +3,12 @@ module Submissions
     class Step01ContentForm < PlantPopulationForm
       property :name
       property :description
+      property :establishing_organisation
       property :population_type
       property :owned_by
 
       validates :name, presence: true
+      validates :establishing_organisation, presence: true
       validates :population_type, inclusion: { in: :population_types }
 
       validate do

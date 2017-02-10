@@ -9,6 +9,9 @@ en:
               blank: Please provide a name.
               taken: A plant population with this name already exists.
 
+            establishing_organisation:
+              blank: Please specify the establishing organisation.
+
             population_type:
               inclusion: Please select a population type from the list.
 
