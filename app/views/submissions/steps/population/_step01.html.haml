@@ -25,8 +25,7 @@
   %small.help-block Please, choose the type of population you are submitting.
 
 .form-group
-  - organisations = PlantPopulation.visible(current_user.id).attribute_values(:establishing_organisation).delete_if{|o| o.blank?}.sort
-  - options = options_for_select(organisations, @content.establishing_organisation)
+  - options = options_for_select(@content.establishing_organisations(current_user), @content.establishing_organisation)
   - if options.present?
     = content.combo_field :establishing_organisation, options, label: 'Establishing organisation',
         required: true,
