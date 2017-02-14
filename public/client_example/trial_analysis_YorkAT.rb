@@ -160,13 +160,19 @@ end
 STDERR.puts '8. Generating output TSV to STDOUT'
 
 output_string = CSV.generate(col_sep: "\t") do |csv|
-  csv << ["<Trait>"] + trait_descriptors.map{ |td| td['trait']['name'].gsub(/\s+/, '.') }
+  # NOTE: We do not want to use any quotes nor include whitespace characters except for column separators.
+  trait_descriptor_names = trait_descriptors.map { |td| td['trait']['name'].gsub(/\s+/, '.') }
+
+  # NOTE: The "<Trait>" column is expected by the tool taking this data as its input.
+  csv << ["<Trait>"] + trait_descriptor_names
+
   outputs.
     select do |_, data|
-      trait_descriptors.select { |td|
+      scored_trait_descriptors = trait_descriptors.select { |td|
         data['trait_scores'].detect { |ts| ts['trait_descriptor_id'] == td['id'] }
-      }.
-      count == trait_descriptors.count
+      }
+
+      scored_trait_descriptors.count == trait_descriptors.count
     end.
     each do |scoring_unit_name, data|
       plant_accession = plant_accessions.detect{ |pa| pa['id'] == data['plant_accession_id'] }
@@ -179,15 +185,15 @@ output_string = CSV.generate(col_sep: "\t") do |csv|
 
       csv << [plant_line['plant_line_name']] +
         trait_descriptors.map { |td|
-          ts = data['trait_scores'].detect { |ts|
+          trait_score = data['trait_scores'].detect { |ts|
             ts['trait_descriptor_id'] == td['id']
           }
 
-          ts['score_value'] if ts
+          trait_score['score_value'] if trait_score
         }
     end
 end
 
 puts output_string
 
-STDERR.puts '6. Finished'
+STDERR.puts '9. Finished'
