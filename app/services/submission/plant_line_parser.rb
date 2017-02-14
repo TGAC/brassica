@@ -24,6 +24,7 @@ class Submission::PlantLineParser
                                         new_plant_lines: @plant_lines,
                                         new_plant_varieties: @plant_varieties,
                                         new_plant_accessions: @plant_accessions)
+      @upload.submission.content.update(:step03, uploaded_plant_lines: @plant_lines)
       @upload.submission.save!
       @upload.submission.content.save!
     end

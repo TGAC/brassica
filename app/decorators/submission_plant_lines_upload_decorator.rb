@@ -1,11 +1,11 @@
 class SubmissionPlantLinesUploadDecorator < SubmissionUploadDecorator
   def as_json(*)
-    super.merge(new_plant_lines: new_plant_lines)
+    super.merge(uploaded_plant_lines: uploaded_plant_lines)
   end
 
   private
 
-  def new_plant_lines
-    submission.content.step03.new_plant_lines
+  def uploaded_plant_lines
+    submission.content.step03.uploaded_plant_lines
   end
 end

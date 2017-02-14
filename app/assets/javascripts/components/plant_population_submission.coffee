@@ -138,8 +138,8 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
           @$('.uploaded-plant-lines .parser-errors').addClass('hidden')
           @$('.uploaded-plant-lines .parser-errors').text('')
 
-          $.each(data.result.new_plant_lines, (_, newPlantLine) =>
-            @appendToSelectedPlantLineLists(newPlantLine) unless @hasNewPlantLine(newPlantLine)
+          $.each(data.result.uploaded_plant_lines, (_, uploadedPlantLine) =>
+            @appendToSelectedPlantLineLists(uploadedPlantLine) unless @hasNewPlantLine(uploadedPlantLine)
           )
 
       fail: (event, data) =>
