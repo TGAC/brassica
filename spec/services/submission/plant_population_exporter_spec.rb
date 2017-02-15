@@ -23,7 +23,7 @@ RSpec.describe Submission::PlantPopulationExporter do
       expect(documents.size).to eq 5
       expect(documents[:plant_population].lines.size).to eq 2
       expect(documents[:plant_population].lines[1].chomp).
-        to end_with plant_population.description
+        to end_with plant_population.establishing_organisation
       expect(documents[:plant_varieties].lines.size).to eq 4
       expect(documents[:plant_varieties].lines[1,3].map{ |l| l.split(',')[0] }).
         to match_array PlantVariety.all.pluck(:plant_variety_name)
@@ -82,7 +82,8 @@ RSpec.describe Submission::PlantPopulationExporter do
           I18n.t('tables.plant_populations.female_parent_line'),
           I18n.t('tables.plant_populations.male_parent_line'),
           I18n.t('tables.pop_type_lookup.population_type'),
-          I18n.t('tables.plant_populations.description')
+          I18n.t('tables.plant_populations.description'),
+          I18n.t('tables.plant_populations.establishing_organisation')
         ]
 
       expect(documents[:plant_varieties].lines[0].strip.split(',')).

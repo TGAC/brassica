@@ -78,6 +78,8 @@ class Submission::PlantPopulationFinalizer
 
     if PlantPopulation.where(name: attrs[:name]).exists?
       rollback(0)
+    elsif attrs[:establishing_organisation].blank?
+      rollback(0)
     else
       @plant_population = PlantPopulation.create!(attrs)
     end

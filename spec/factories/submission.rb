@@ -21,6 +21,7 @@ FactoryGirl.define do
           submission.content.update(:step01, name: random_word,
                                              description: Faker::Lorem.sentence,
                                              population_type: random_word,
+                                             establishing_organisation: random_word,
                                              owned_by: Faker::Internet.email)
           submission.content.update(:step02, taxonomy_term: random_word,
                                              female_parent_line: nil,

@@ -28,6 +28,7 @@ class PlantPopulation < ActiveRecord::Base
 
   validates :name, presence: true, uniqueness: true
   validates :user, presence: { on: :create }
+  validates :establishing_organisation, presence: { on: :create, message: 'Establishing organisation must be specified.' }
 
   after_update :cascade_visibility
 
@@ -35,6 +36,7 @@ class PlantPopulation < ActiveRecord::Base
   include Filterable
   include Searchable
   include Publishable
+  include AttributeValues
 
   scope :by_name, -> { order('plant_populations.name') }
 
@@ -65,7 +67,8 @@ class PlantPopulation < ActiveRecord::Base
       'plant_lines.plant_line_name AS female_parent_line',
       'male_parent_lines_plant_populations.plant_line_name AS male_parent_line',
       'pop_type_lookup.population_type',
-      'description'
+      'description',
+      'establishing_organisation'
     ]
   end
 
@@ -81,7 +84,7 @@ class PlantPopulation < ActiveRecord::Base
   def self.indexed_json_structure
     {
       only: [
-        :name, :canonical_population_name, :description
+        :name, :canonical_population_name, :description, :establishing_organisation
       ],
       include: {
         taxonomy_term: { only: :name },
@@ -98,12 +101,14 @@ class PlantPopulation < ActiveRecord::Base
       search: [
         'name',
         'canonical_population_name',
-        'description'
+        'description',
+        'establishing_organisation'
       ],
       query: [
         'name',
         'canonical_population_name',
         'description',
+        'establishing_organisation',
         'user_id',
         'id'
       ]

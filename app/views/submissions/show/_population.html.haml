@@ -2,6 +2,7 @@
     data_tables_path(model: :plant_populations, query: { id: @submission.submitted_object_id })
 = submission_value @submission, :description
 = submission_value @submission, :owned_by
+= submission_value @submission, :establishing_organisation
 = submission_value @submission, :population_type
 = submission_value @submission, :species_name, 'Species'
 = submission_value @submission, :plant_line_names, 'Plant lines',

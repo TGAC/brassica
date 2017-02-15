@@ -70,6 +70,27 @@ RSpec.describe "API V1" do
     end
   end
 
+  context 'when submitting plant populations' do
+    let!(:tt) { create(:taxonomy_term) }
+    let!(:pt) { create(:population_type) }
+
+    it 'does not accept plant populations without establishing_organisation' do
+      expect {
+        post '/api/v1/plant_populations', {
+          plant_population: {
+            name: 'foo',
+            taxonomy_term_id: tt.id,
+            population_type_id: pt.id
+          }
+        }, { "X-BIP-Api-Key" => api_key.token }
+      }.to change { PlantPopulation.count }.by(0)
+      expect(response.status).to eq 422
+      expect(parsed_response['errors'].length).to eq 1
+      expect(parsed_response['errors'].first['message']).
+        to eq 'Establishing organisation must be specified.'
+    end
+  end
+
   context 'when submitting plant accessions' do
     let!(:pl) { create(:plant_line) }
     let!(:pv) { create(:plant_variety) }

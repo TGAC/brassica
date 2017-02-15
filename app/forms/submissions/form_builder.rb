@@ -33,7 +33,9 @@ class Submissions::FormBuilder < BaseFormBuilder
 
     options.merge!(id: id) if id.present?
 
-    @template.combo_field_tag(name, value, option_tags, options)
+    html = @template.combo_field_tag(name, value, option_tags, options)
+
+    @object.errors[attr].present? ? @template.field_error_proc.call(html) : html
   end
 
   def field_with_label_and_help(field, attr, options = {})

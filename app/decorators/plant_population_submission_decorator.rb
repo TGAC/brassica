@@ -31,6 +31,10 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
     @population_name ||= object.content.step01.name.presence
   end
 
+  def establishing_organisation
+    @establishing_organisation ||= object.content.step01.establishing_organisation.presence
+  end
+
   def species_name
     taxonomy_term
   end

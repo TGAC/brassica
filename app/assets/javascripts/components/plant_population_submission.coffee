@@ -12,6 +12,14 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
     @$('.population-type').select2(@defaultSelectOptions)
     @$('.plant-line-list').select2(@plantLineListSelectOptions)
 
+    fields = [
+      'establishing-organisation'
+    ]
+
+    $.each fields, (_, field) =>
+      @$(".#{field}").select2(@defaultSelectOptions)
+      @$(".#{field}-wrapper").comboField()
+
     @bindPlantLinesUpload()
     @bindNewPlantLineControls()
 
