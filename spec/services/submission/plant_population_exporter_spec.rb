@@ -83,7 +83,7 @@ RSpec.describe Submission::PlantPopulationExporter do
           I18n.t('tables.plant_populations.male_parent_line'),
           I18n.t('tables.pop_type_lookup.population_type'),
           I18n.t('tables.plant_populations.description'),
-          "Establishing organisation"
+          I18n.t('tables.plant_populations.establishing_organisation')
         ]
 
       expect(documents[:plant_varieties].lines[0].strip.split(',')).

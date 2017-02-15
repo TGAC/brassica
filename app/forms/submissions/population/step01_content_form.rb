@@ -7,8 +7,6 @@ module Submissions
       property :population_type
       property :owned_by
 
-      collection :establishing_organisations
-
       validates :name, presence: true
       validates :establishing_organisation, presence: true
       validates :population_type, inclusion: { in: :population_types }

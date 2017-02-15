@@ -27,9 +27,8 @@
 .form-group
   - options = options_for_select(@content.establishing_organisations(current_user), @content.establishing_organisation)
   - if options.present?
-    = content.combo_field :establishing_organisation, options, label: 'Establishing organisation',
-        required: true,
-        help: 'Please provide the <b>organisation</b> responsible for establishing this population. Either select an existing organisation name, or provide a new one.'
+    = content.combo_field :establishing_organisation, options, required: true, label: 'Establishing organisation', name: 'establishing_organisation',
+      help: 'Please provide the <b>organisation</b> responsible for establishing this population. Either select an existing organisation name, or provide a new one.'
   - else
     = content.text_field :establishing_organisation, required: true, label: 'Establishing organisation',
       help: 'Please provide the <b>organisation</b> responsible for establishing this population.'

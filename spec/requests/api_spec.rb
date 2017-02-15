@@ -87,7 +87,7 @@ RSpec.describe "API V1" do
       expect(response.status).to eq 422
       expect(parsed_response['errors'].length).to eq 1
       expect(parsed_response['errors'].first['message']).
-          to eq 'Establishing organisation must be specified.'
+        to eq 'Establishing organisation must be specified.'
     end
   end
 
