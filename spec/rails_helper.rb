@@ -112,3 +112,16 @@ VCR.configure do |c|
   c.ignore_hosts URI.parse(Rails.application.config_for(:elasticsearch).fetch("host")).host
   c.ignore_hosts 'pub.orcid.org', 'sandbox.orcid.org'
 end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
+class FactoryGirl::SyntaxRunner
+  def self.fixture_path
+    "#{::Rails.root}/spec/fixtures"
+  end
+end
