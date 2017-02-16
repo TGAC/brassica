@@ -95,7 +95,7 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
 
     # add all PL attributes to DOM so it can be sent with form
     $form = @$el.find('form')
-    $container = $('<div></div').attr(id: @newPlantLineForListContainerId(data.plant_line_name))
+    $container = $('<div></div>').attr(id: @newPlantLineForListContainerId(data.plant_line_name), class: "new-plant-line-attrs")
     $container.appendTo($form)
 
     $.each(data, (attr, val) =>
@@ -110,6 +110,18 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
     $select = @$('.plant-line-list')
     $option = $select.find("option[value=#{plant_line_name}]")
     $option.remove()
+
+    this.resetNewPlantLines() if $select.find("option").length == 0
+
+  resetNewPlantLines: =>
+    $form = @$el.find('form')
+    $form.find(".new-plant-line-attrs").remove()
+
+    $container = $('<div></div>').attr(id: @newPlantLineForListContainerId(""), class: "new-plant-line-attrs")
+    $container.appendTo($form)
+
+    $input = $("<input type='hidden' name='submission[content][new_plant_lines][]' />")
+    $input.appendTo($container)
 
   bindPlantLinesUpload: =>
     @$('.plant-lines-upload').fileupload
