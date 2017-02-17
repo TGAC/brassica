@@ -5,15 +5,27 @@
 - rep_traits = technical_replicate_numbers.select{ |k,v| v.to_i > 1 }.to_a
 
 .alert.alert-info
-  %h5 Trait scoring sheet structure
+  %h5 Template download
+
   %p
-    Please upload file with score values. The required format is simple and features
+    = link_to 'Download template', new_submission_upload_path(submission), class: 'btn btn-success'
+  %p
+    Please click the button above to download a trait scoring sheet template in CSV format. The template has been created
+    according to the choices you have made so far in this submission. If you see that the headers don’t correspond
+    to the data you want to submit, navigate back to previous submission steps and amend them accordingly.
+    An altered template can then be downloaded at this step.
+
+  %br
+  %h5 Trait scoring sheet structure
+
+  %p
+    The next step requires you to upload a file with scoring values. The required format is simple and features
     %b unique plant scoring unit identification in the first column
-    (please go back to step 3 for short definition of a plant scoring unit), then
+    (please go back to step 3 for a short definition of a plant scoring unit), followed by
     - if design_factor_names.present?
-      %b #{design_factor_names.size} columns for design factors
-      selected in the previous step,
-    %b 2 columns about plant accession
+      %b #{design_factor_names.size} column(s) for design factors
+      selected in the previous step and
+    %b 2 column(s) for plant accession information
     (accession id and accession assigning organisation - see below),
     %b another column with plant #{pl_pv_name} name
     (also explained below) and
@@ -21,31 +33,27 @@
     (including potential technical replicate scores) in further columns.
     The number of columns depends on
     %ul
-      %li how many <b>Traits</b> you have chosen in the second step of this submission,
-      %li how many <b>design factors</b> you have defined in the third step (raw data only),
+      %li how many <b>traits</b> you selected in the second step of this submission,
+      %li how many <b>design factors</b> you defined in the third step (raw data only),
       %li how many <b>technical replicates</b> you plan to submit (raw data only).
-    All values should be separated by a comma (<code>,</code>). In cases where a value is missing,
+    All values should be separated by commas (<code>,</code>). In cases where a value is missing,
     please remember to provide the correct number of commas anyway. Sticking to this template
-    should guarantee correct parsing of score values when you upload the ready file.
-
-  %p
-    For your convenience please use
-    %b
-      = link_to 'the ready template', new_submission_upload_path(submission)
-    in a CSV format, created according to the choices you have made so far in this submission.
-    Please download it, leave the header (the first line) intact, and paste your data, in columns,
-    below the header (thus replacing the placeholder <code>... - replace it</code> values).
+    should guarantee correct parsing of score values when you upload the file. Please, paste your data, in columns,
+    below the header (thus replacing the placeholder <code>... - replace it</code> values).
 
   %br
   %h5 Plant accession information
   %p
-    Accession-related fields (the <b>Plant accession</b> identifier - in column #{design_factor_names.size + 2} - the
+    Accession-related fields (<b>Plant accession</b> identifier - in column #{design_factor_names.size + 2}, the
     <b>Originating organisation</b>
-    which issued this accession number - in column #{design_factor_names.size + 3}) - and the <b>Year produced</b> -
-    in column #{design_factor_names.size + 4} are mandatory. Should you not have an
-    Accession for your plants, please create one yourself (for example, using a seedbag_id).
-    It will serve as placeholder identifier for the unique genetic material you used in your trials.
-    It is therefore important, that you are able to relate back to the identifier when cross-linking
+    which issued this accession number - in column #{design_factor_names.size + 3}, and the <b>Year produced</b> -
+    in column #{design_factor_names.size + 4} are mandatory. If you do not have an Accession defined
+    for your plants, please create one yourself (for example, using
+    %code
+      = '<institute_name>_<seedbag_id>'
+    ).
+    It will serve as a placeholder identifier for the unique genetic material used in your trials.
+    Accordingly, it is important that you are able to relate back to the identifier when cross-linking
     with the corresponding genetic data.
 
   %br
@@ -56,24 +64,24 @@
     (i.e. ones which are not present
     in BIP). Every such new accession will be recorded in BIP and it will be related to a <b>plant #{pl_pv_name}</b>.
     - if pl_pv_name == 'line'
-      If there are new plant lines created in the course of your experiment, or you are using existing
-      plant lines which are not present in BIP at the moment, we would request that you submit these
+      If there are new plant lines created in the course of your experiment, or if you are using existing
+      plant lines which are not present in BIP at the moment, we request that you submit these
       new plant lines first, using the
       = succeed '.' do
         = link_to 'Plant population submission procedure', new_submission_path, target: '_blank'
-      Afterwards you are able to go back here and proceed with the trial data submission (the state of
-      this submission will be retained, after you click the <b>Save & edit later</b> button.
+      Afterwards you will be able to return to this step and proceed with trial data submission
+      (to save your draft submission, click the <b>Save & edit later</b> button).
 
       %p
         For the list of plant lines currently registered in BIP, you may
         = succeed '.' do
           = link_to 'consult this data table', data_tables_path(model: 'plant_lines'), target: '_blank'
         Please use the values from the <b>Line name</b> column when referring to existing plant lines
-        in your CSV file.
+        in your CSV file in order to avoid duplications due to differences in spelling..
 
     - else
       If you are using plant varieties (cultivars) which are not listed in BIP, please provide their names
-      in column #{design_factor_names.size + 4}. These names will be then recorded in BIP as new
+      in column #{design_factor_names.size + 4}. These names will then be recorded in BIP as new
       plant varieties related to your plant accession.
 
       %p
@@ -81,23 +89,25 @@
         = link_to 'consult this data table', data_tables_path(model: 'plant_varieties'), target: '_blank'
         in order to find their names.
         Please use the values from the <b>Variety</b> column when referring to existing plant varieties
-        in your CSV file.
+        in your CSV file in order to avoid duplications due to differences in spelling.
 
   %br
   %h5 Trait scores ordering #{'and technical replicates' if rep_traits.present?}
   %p
-    The first line will be treated as a header. Specific values for columns
+    The first line will be treated as a header. Specific values in columns
     #{design_factor_names.size + 5} and further
-    will be stored as scoring for the
-    trait that's name matches the corresponding column header. If no match is found, the score will
+    will be treated as scoring for the
+    trait whose name matches the corresponding column header. If no match is found, the score will
     be stored by column index. That is, an unmatched column
     #{design_factor_names.size + 6}
     header will cause all column
     #{design_factor_names.size + 6}
-    values counted as scoring of the second trait (in the order of input)
+    values to be treated as scores for the second trait (in the order of input)
     - if rep_traits.present?
       , or the second technical replicate of the first trait,
-    defined during the second step of the submission.
+    defined during the second step of this submission.
+    Please <b>be careful when pasting your trait scores beneath the correct headers</b>
+    as they may not appear in the order they are recorded in your source spreadsheet.
 
   - if rep_traits.present?
     %p
