@@ -10,14 +10,14 @@ class Submissions::UploadsController < ApplicationController
   end
 
   def create
-    upload = Submission::Upload.create(upload_params.merge(submission_id: submission.id))
+    upload = decorate_upload(create_upload)
 
     if upload.valid?
       process_upload(upload)
 
-      render json: decorate_upload(upload), status: :created
+      render json: upload, status: :created
     else
-      render json: decorate_upload(upload), status: :unprocessable_entity
+      render json: upload, status: :unprocessable_entity
     end
   end
 
@@ -46,6 +46,10 @@ class Submissions::UploadsController < ApplicationController
 
   def submission
     @submission ||= current_user.submissions.find(params[:submission_id])
+  end
+
+  def create_upload
+    Submission::Upload.create(upload_params.merge(submission_id: submission.id))
   end
 
   def upload_params
