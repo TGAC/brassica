@@ -5,9 +5,21 @@
 - rep_traits = technical_replicate_numbers.select{ |k,v| v.to_i > 1 }.to_a
 
 .alert.alert-info
-  %h5 Trait scoring sheet structure
+  %h5 Template download
+
   %p
-    Please upload a file with score values. The required format is simple and features
+    = link_to 'Download template', new_submission_upload_path(submission), class: 'btn btn-success'
+  %p
+    Please click the button above to download a trait scoring sheet template in CSV format. The template has been created
+    according to the choices you have made so far in this submission. If you see that the headers don’t correspond
+    to the data you want to submit, navigate back to previous submission steps and amend them accordingly.
+    An altered template can then be downloaded at this step.
+
+  %br
+  %h5 Trait scoring sheet structure
+
+  %p
+    The next step requires you to upload a file with scoring values. The required format is simple and features
     %b unique plant scoring unit identification in the first column
     (please go back to step 3 for a short definition of a plant scoring unit), followed by
     - if design_factor_names.present?
@@ -26,15 +38,8 @@
       %li how many <b>technical replicates</b> you plan to submit (raw data only).
     All values should be separated by commas (<code>,</code>). In cases where a value is missing,
     please remember to provide the correct number of commas anyway. Sticking to this template
-    should guarantee correct parsing of score values when you upload the file.
-
-  %p
-    For your convenience please use
-    %b
-      = link_to 'the ready template', new_submission_upload_path(submission)
-    in CSV format, created in accordance with the choices you have made thus far in this submission.
-    Please download it, leave the header (first line) intact, and paste your data in columns,
-    below the header (replacing the <code>... - replace it</code> placeholder with actual values).
+    should guarantee correct parsing of score values when you upload the file. Please, paste your data, in columns,
+    below the header (thus replacing the placeholder <code>... - replace it</code> values).
 
   %br
   %h5 Plant accession information
@@ -43,7 +48,10 @@
     <b>Originating organisation</b>
     which issued this accession number - in column #{design_factor_names.size + 3}, and the <b>Year produced</b> -
     in column #{design_factor_names.size + 4} are mandatory. If you do not have an Accession defined
-    for your plants, please create one yourself (for example, using seedbag_id).
+    for your plants, please create one yourself (for example, using
+    %code
+      = '<institute_name>_<seedbag_id>'
+    ).
     It will serve as a placeholder identifier for the unique genetic material used in your trials.
     Accordingly, it is important that you are able to relate back to the identifier when cross-linking
     with the corresponding genetic data.
