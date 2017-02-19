@@ -5,14 +5,18 @@ en:
       models:
         analysis:
           attributes:
+            base:
+              geno_pheno_samples_mismatch: Samples in genotype and phenotype data files do not match.
             name:
               blank: Please provide a name for analysis.
 
             genotype_data_file:
               blank: Please upload a genotype data file.
+              no_id_column: "No 'ID' column found in genotype CSV file."
 
             phenotype_data_file:
               blank: Please upload a phenotype data file.
+              no_id_column: "No 'ID' column found in phenotype CSV file."
 
         submission:
           attributes:

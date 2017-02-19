@@ -13,7 +13,7 @@
       .form-group
         = label_tag :genotype_data_file, 'Genotype data', class: 'required'
 
-        .alert.alert-info Genotype data file...
+        .alert.alert-info= t('.genotype_data_file_help')
 
         .genotype-data-file-errors.errors.hidden
 
@@ -37,7 +37,7 @@
       .form-group
         = label_tag :phenotype_data_file, 'Phenotype/trait data', class: 'required'
 
-        .alert.alert-info Phenotype data file...
+        .alert.alert-info= t('.phenotype_data_file_help')
 
         .phenotype-data-file{ class: "#{'hidden' unless @form.phenotype_data_file}" }
           %span.file-name= @form.phenotype_data_file.try(:file_file_name)

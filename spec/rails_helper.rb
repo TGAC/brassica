@@ -7,7 +7,6 @@ require 'rspec/rails'
 require 'shoulda/matchers'
 require 'paperclip/matchers'
 require 'factory_girl_rails'
-require 'common_helpers'
 require 'vcr'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -62,6 +61,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :controller
   config.include Devise::TestHelpers, type: :controller
   config.include RSpecHtmlMatchers
+  config.include FixtureHelper
   include CommonHelpers
   config.include ElasticsearchHelper, :elasticsearch
   config.include Paperclip::Shoulda::Matchers, type: :model
@@ -121,6 +121,8 @@ Shoulda::Matchers.configure do |config|
 end
 
 class FactoryGirl::SyntaxRunner
+  include FixtureHelper
+
   def self.fixture_path
     "#{::Rails.root}/spec/fixtures"
   end

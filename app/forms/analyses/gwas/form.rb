@@ -27,7 +27,7 @@ module Analyses
             pheno.errors.each { |error| errors.add(:phenotype_data_file, error) }
           end
 
-          unless geno.sample_ids.sort == pheno.sample_ids.sort
+          unless geno.sample_ids.try(:sort) == pheno.sample_ids.try(:sort)
             errors.add(:base, :geno_pheno_samples_mismatch)
           end
         end
@@ -46,11 +46,30 @@ module Analyses
       private
 
       def parse_genotype_data
-        Analyses::Gwas::GenotypeCsvParser.new.call(genotype_data_file)
+        file = File.open(genotype_data_file.file.path, "r")
+        genotype_data_parser.call(file)
+      ensure
+        file && file.close
       end
 
       def parse_phenotype_data
-        Analyses::Gwas::PhenotypeCsvParser.new.call(phenotype_data_file)
+        file = File.open(phenotype_data_file.file.path, "r")
+        phenotype_data_parser.call(file)
+      ensure
+        file && file.close
+      end
+
+      def genotype_data_parser
+        case genotype_data_file.file_file_name
+        when /.vcf\z/i
+          Analysis::Gwas::GenotypeVcfParser.new
+        else
+          Analysis::Gwas::GenotypeCsvParser.new
+        end
+      end
+
+      def phenotype_data_parser
+        Analysis::Gwas::PhenotypeCsvParser.new
       end
     end
   end

@@ -11,3 +11,12 @@ en:
         gwas: |
           The following process allows you to perform GWAS on data you submit.
           You will need to provide genotype and phenotype data for the analysis.
+    form:
+      genotype_data_file_help: |
+        Please, provide genotype data either as:
+
+        - a VCF file
+        - a CSV file
+
+      phenotype_data_file_help: |
+        Please, provide phenotype data as a CSV file.

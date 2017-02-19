@@ -1,45 +1,60 @@
 require "csv"
 
-class Analysis::Gwas::PhenotypeCsvParser
-  def call(io)
-    Result.new(CSV.new(io)).tap do |result|
-      unless result.headers.include?("ID")
-        result.errors.add(:base, :no_id_column)
+class Analysis
+  class Gwas
+    class PhenotypeCsvParser
+      def call(io)
+        Result.new(CSV.new(io)).tap do |result|
+          unless result.headers.include?("ID")
+            result.errors << :no_id_column
+          end
+
+          if result.trait_ids.blank?
+            result.errors << :no_traits
+          end
+
+          if result.sample_ids.blank?
+            result.errors << :no_samples
+          end
+        end
+
+      # TODO: handle empty file
+
+      rescue CSV::MalformedCSVError => ex
+        Result.new(CSV.new(StringIO.new)).tap do |result|
+          # TODO: expose detailed info (e.g. Illegal quoting in line 2)
+          result.errors << :malformed_csv
+        end
       end
 
-      unless (result.headers - %w(ID)).size > 0
-        result.errors.add(:base, :no_trait_columns)
+      class Result
+        attr_reader :errors, :csv
+
+        def initialize(csv)
+          @csv = csv
+          @errors = []
+        end
+
+        def valid?
+          errors.empty?
+        end
+
+        def headers
+          @headers ||= csv.readline
+        end
+
+        def trait_ids
+          headers - %w(ID)
+        end
+
+        def sample_ids
+          id_col_idx = headers.index("ID")
+
+          return unless id_col_idx
+
+          @sample_ids ||= csv.each.map { |row| row[id_col_idx] }
+        end
       end
-
-      unless sample_ids.count > 0
-        result.errors.add(:base, :no_samples)
-      end
-    end
-  end
-
-  class Result
-    extend ActiveModel::Naming
-    extend ActiveModel::Translation
-
-    attr_reader :errors, :csv
-
-    def initialize(csv)
-      @csv = csv
-      @errors = []
-    end
-
-    def valid?
-      errors.empty?
-    end
-
-    def headers
-      @headers ||= csv.readline
-    end
-
-    def sample_ids
-      id_col_idx = headers.index("ID")
-
-      @sample_ids ||= csv.each.map { |row| row[id_col_idx] }
     end
   end
 end

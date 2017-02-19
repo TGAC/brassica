@@ -1,7 +1,6 @@
 class Analysis::ShellRunner
   JobError = Class.new(RuntimeError)
 
-  # TODO: handle std out and std err
   # TODO: aborting analysis in progress
 
   def initialize(analysis)
@@ -69,7 +68,8 @@ class Analysis::ShellRunner
 
   def store_file(path, data_type:)
     file = File.open(path, "r")
-    analysis.data_files.create!(role: :output, file: file, data_type: data_type)
+    analysis.data_files.create!(owner: analysis.owner, role: :output,
+                                file: file, data_type: data_type)
   ensure
     file && file.close
   end

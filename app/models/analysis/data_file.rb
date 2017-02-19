@@ -19,4 +19,6 @@ class Analysis::DataFile < ActiveRecord::Base
   do_not_validate_attachment_file_type :file
 
   delegate :url, to: :file, prefix: true
+
+  scope :csv, -> { where(file_content_type: CSV_CONTENT_TYPES) }
 end
