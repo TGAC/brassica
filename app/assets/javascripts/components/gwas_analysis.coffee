@@ -1,10 +1,4 @@
 window.GwasAnalysis = class GwasAnalysis extends Component
-  constructor: (el) ->
-    @$el = $(el)
-
-  $: (args) =>
-    @$el.find(args)
-
   init: =>
     return unless @$el.length >= 1
 

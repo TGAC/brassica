@@ -31,6 +31,7 @@
 #= require ./components/plant_population_submission
 #= require ./components/plant_trial_submission
 #= require ./components/gwas_analysis
+#= require ./components/manhattan_plot
 #= require_directory .
 
 $ ->

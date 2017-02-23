@@ -3,25 +3,78 @@
   margin-top: 1em;
   > li {
     @extend .list-group-item;
+
     .main-info {
       display: inline-block;
-      width: 60%;
+      width: 79%;
       vertical-align: top;
     }
-    // .details {
-    //   font-size: small;
-    //   margin-right: 20px;
-    //   margin-top: 4px;
-    // }
-    // .status {
-    //   display: inline-block;
-    //   width: 22%;
-    // }
-    // .actions {
-    //   float: right;
-    //   width: 17%;
-    //   margin-top: 6px;
-    //   text-align: right;
-    // }
+    .details {
+      font-size: small;
+      margin-top: 4px;
+    }
+    .status {
+      display: inline-block;
+      width: 20%;
+      text-align: right;
+    }
   }
+}
+
+ul.analysis-nav {
+  margin-bottom: 0;
+}
+
+.new-gwas-analysis {
+  .form-group {
+    margin-bottom: 2em;
+  }
+}
+
+.show-analysis {
+  ul.analysis-nav {
+    margin-bottom: 0;
+  }
+
+  .std-out, .std-err {
+    .actions {
+      @extend .clearfix;
+
+      margin-bottom: 1em;
+
+      a {
+        display: block;
+        float: right;
+      }
+    }
+
+    pre {
+      clear: both;
+      display: block;
+    }
+  }
+
+  .table-footer {
+    top: 0;
+  }
+}
+
+.analysis-status {
+  @extend .label;
+}
+
+.analysis-status-idle {
+  @extend .label-default;
+}
+
+.analysis-status-success {
+  @extend .label-success;
+}
+
+.analysis-status-failure {
+  @extend .label-danger;
+}
+
+.analysis-status-running {
+  @extend .label-info;
 }

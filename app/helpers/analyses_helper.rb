@@ -14,4 +14,9 @@ module AnalysesHelper
 
     link_to "Delete", url, options
   end
+
+  def analysis_status_label(analysis)
+    text = t(analysis.status, scope: %i(analysis status))
+    content_tag(:span, text, class: "analysis-status analysis-status-#{analysis.status}")
+  end
 end

@@ -43,7 +43,7 @@ class Analysis
     end
 
     def selected_traits
-      @selected_traits ||= analysis.args.fetch("phenos")
+      @selected_traits ||= analysis.args["phenos"]
 
       unless @selected_traits.present?
         file = File.open(phenotype_data_file.file.path, "r")

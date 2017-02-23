@@ -79,4 +79,11 @@ module ApplicationHelper
 
     render partial: "/confirmable_action", locals: options.merge(label: label, object: object)
   end
+
+  def read_file(path, limit:)
+    file = File.open(path, "r")
+    file.read(limit)
+  ensure
+    file && file.close
+  end
 end

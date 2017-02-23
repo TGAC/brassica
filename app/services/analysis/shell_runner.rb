@@ -38,6 +38,7 @@ class Analysis::ShellRunner
 
   def set_status(new_status)
     analysis.update!(status: new_status)
+    analysis.update!(finished_at: Time.now) if analysis.finished?
   end
 
   def run_job_command(job_command)

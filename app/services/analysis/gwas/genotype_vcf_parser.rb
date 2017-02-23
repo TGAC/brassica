@@ -69,11 +69,26 @@ class Analysis
         end
 
         def each_record(&blk)
-          io.each_line do |line|
-            fields = BioVcf::VcfLine.parse(line)
-
-            yield BioVcf::VcfRecord.new(fields, header)
+          enum = io.each_line.lazy.map do |line|
+            fields = ensure_id(BioVcf::VcfLine.parse(line))
+            BioVcf::VcfRecord.new(fields, header)
           end
+
+          block_given? ? enum.each(&blk) : enum
+        end
+
+        private
+
+        # Make sure record has a unique identifier
+        def ensure_id(fields)
+          id_idx = 2
+          chrom_idx = 0
+          pos_idx = 1
+
+          return fields unless fields[id_idx] == "."
+
+          fields[id_idx] = fields.values_at(chrom_idx, pos_idx).map(&:to_s).join(".")
+          fields
         end
       end
     end

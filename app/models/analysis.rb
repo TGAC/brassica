@@ -14,6 +14,18 @@ class Analysis < ActiveRecord::Base
 
   scope :recent_first, -> { order(updated_at: :desc) }
 
+  def std_out
+    data_files.std_out.first
+  end
+
+  def std_err
+    data_files.std_err.first
+  end
+
+  def finished?
+    success? || failure?
+  end
+
   private
 
   # TODO: rename args to specification (or spec)

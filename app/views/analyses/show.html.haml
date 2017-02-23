@@ -1,18 +1,10 @@
 .container.show-analysis
-  %h3.section-heading #{t(".analysis_type.#{@analysis.analysis_type}")} analysis
+  %h3.section-heading
+    #{t("analysis.analysis_type.#{@analysis.analysis_type}")} analysis: #{@analysis.name}
 
-  .row
-    .col-sm-8
-      %h4= @analysis.name
+    .pull-right= analysis_status_label(@analysis)
 
-    .col-sm-4.text-right
-      = @analysis.status
-      -# = render partial: "/submissions/show/status", locals: { submission: @submission, mode: :private }
-
-  .panel.panel-default
-
-    -# %ul.list-group
-      -# = render "submissions/show/#{@submission.object.submission_type}"
+  = render "analyses/show/#{@analysis.analysis_type}"
 
   .row
     .col-sm-6

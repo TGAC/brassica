@@ -1,9 +1,16 @@
 en:
+  analysis:
+    status:
+      idle: Idle
+      running: Running
+      success: Success
+      failure: Failure
+
+    analysis_type:
+      gwas: GWAS
+
   analyses:
     new:
-      analysis_type:
-        gwas: GWAS
-
       description:
         common: |
           Further contextual help will be provided at each step of analysis setup.

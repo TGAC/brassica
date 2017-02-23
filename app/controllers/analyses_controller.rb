@@ -3,6 +3,8 @@ class AnalysesController < ApplicationController
 
   def index
     @analyses = current_user.analyses.recent_first
+
+
   end
 
   def new
@@ -21,6 +23,8 @@ class AnalysesController < ApplicationController
         analysis = Analysis.create!(attrs)
         analysis.data_files << @form.genotype_data_file
         analysis.data_files << @form.phenotype_data_file
+
+        AnalysisJob.new(analysis).enqueue
       end
 
       redirect_to analyses_path, notice: "New analysis started"
@@ -33,6 +37,10 @@ class AnalysesController < ApplicationController
 
   def show
     @analysis = current_user.analyses.find(params[:id])
+
+    if @analysis.gwas?
+      @manhattan = Analysis::Gwas::ManhattanPlot.new(@analysis).call
+    end
   end
 
   private

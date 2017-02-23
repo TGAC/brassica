@@ -4,7 +4,14 @@
 
       .main-info
         %div
-          -# = submission_type(submission)
           = analysis.analysis_type
           = link_to analysis.name, analysis_path(analysis)
-          = analysis.status
+
+      .status
+        = analysis_status_label(analysis)
+
+        .details
+          - if analysis.idle? || analysis.running?
+            Created at #{l analysis.created_at.utc, format: :short}
+          - else
+            Finished at #{l analysis.finished_at.utc, format: :short}

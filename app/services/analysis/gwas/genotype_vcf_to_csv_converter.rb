@@ -13,8 +13,7 @@ class Analysis
         sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
 
         vcf_data.each_record do |record|
-          mutation_name = record.id != "." ? record.id : [record.chrom, record.pos.to_s].join(".")
-          mutation_names << mutation_name
+          mutation_names << record.id
 
           vcf_data.sample_ids.each do |sample_name|
             sample = record.sample_by_name(sample_name)

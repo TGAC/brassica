@@ -21,4 +21,5 @@ class Analysis::DataFile < ActiveRecord::Base
   delegate :url, to: :file, prefix: true
 
   scope :csv, -> { where(file_content_type: CSV_CONTENT_TYPES) }
+  scope :vcf, -> { where("file_file_name ILIKE '%.vcf'") }
 end

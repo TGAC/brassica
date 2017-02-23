@@ -1,6 +1,6 @@
 .container
   %h3.section-heading
-    #{t(".analysis_type.#{@analysis.analysis_type}")} analysis
+    #{t("analysis.analysis_type.#{@analysis.analysis_type}")} analysis
 
   %div{ class: "new-#{@analysis.analysis_type}-analysis" }
     = render partial: '/errors', locals: { errors: @form.errors }
