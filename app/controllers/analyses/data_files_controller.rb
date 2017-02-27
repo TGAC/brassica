@@ -2,21 +2,28 @@ class Analyses::DataFilesController < ApplicationController
   prepend_before_filter :authenticate_user!
 
   def new
-    # send_data Submission::TraitScoreTemplateGenerator.new(submission).call,
-    #           content_type: 'text/csv; charset=UTF-8; header=present',
-    #           disposition: 'attachment; filename=plant_trial_scoring_data.csv'
+    data_type = params[:data_type]
+    generator = case data_type
+                when "gwas_genotype"
+                  Analysis::Gwas::GenotypeCsvTemplateGenerator.new
+                when "gwas_phenotype"
+                  Analysis::Gwas::PhenotypeCsvTemplateGenerator.new
+                end
+
+    if generator
+      send_data generator.call,
+        content_type: 'text/csv; charset=UTF-8; header=present',
+        disposition: "attachment; filename=#{data_type.dasherize}-template.csv"
+    else
+      render nothing: true
+    end
   end
 
   def create
     data_file = Analysis::DataFile.create(create_params)
 
-    if data_file.valid?
-      # process_data_file(data_file)
-
-      render json: decorate_data_file(data_file), status: :created
-    else
-      render json: decorate_data_file(data_file), status: :unprocessable_entity
-    end
+    render json: decorate_data_file(data_file),
+      status: data_file.valid? ? :created : :unprocessable_entity
   end
 
   def destroy

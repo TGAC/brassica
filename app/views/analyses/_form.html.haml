@@ -13,7 +13,7 @@
       .form-group
         = label_tag :genotype_data_file, 'Genotype data', class: 'required'
 
-        .alert.alert-info= t('.genotype_data_file_help')
+        .alert.alert-info= t('.genotype_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_genotype)).html_safe
 
         .genotype-data-file-errors.errors.hidden
 
@@ -26,7 +26,7 @@
               = file_field_tag "analysis_data_file[file]", class: 'genotype-data-file'
 
             %small.help-block
-              VCF, CSV
+              Please upload the genotype VCF or CSV file here. Max file size is 50 MiB.
 
         .genotype-data-file{ class: "#{'hidden' unless @form.genotype_data_file}" }
           %span.file-name= @form.genotype_data_file.try(:file_file_name)
@@ -37,7 +37,7 @@
       .form-group
         = label_tag :phenotype_data_file, 'Phenotype/trait data', class: 'required'
 
-        .alert.alert-info= t('.phenotype_data_file_help')
+        .alert.alert-info= t('.phenotype_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_phenotype)).html_safe
 
         .phenotype-data-file{ class: "#{'hidden' unless @form.phenotype_data_file}" }
           %span.file-name= @form.phenotype_data_file.try(:file_file_name)
@@ -56,7 +56,7 @@
               = file_field_tag "analysis_data_file[file]", class: 'phenotype-data-file'
 
             %small.help-block
-              CSV
+              Please upload the phenotype CSV file here. Max file size is 50 MiB.
 
     .action-buttons
       = link_to "Back", new_analysis_path, class: 'btn btn-default btn-wide btn-back'
