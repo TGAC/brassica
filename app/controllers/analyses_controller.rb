@@ -38,8 +38,13 @@ class AnalysesController < ApplicationController
   def show
     @analysis = current_user.analyses.find(params[:id])
 
-    if @analysis.gwas?
-      @manhattan = Analysis::Gwas::ManhattanPlot.new(@analysis).call
+    respond_to do |format|
+      format.html do
+        if @analysis.gwas?
+          @manhattan = Analysis::Gwas::ManhattanPlot.new(@analysis).call
+        end
+      end
+      format.json { render json: @analysis }
     end
   end
 
