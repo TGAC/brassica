@@ -3,8 +3,6 @@ class AnalysesController < ApplicationController
 
   def index
     @analyses = current_user.analyses.recent_first
-
-
   end
 
   def new
@@ -39,12 +37,14 @@ class AnalysesController < ApplicationController
     @analysis = current_user.analyses.find(params[:id])
 
     respond_to do |format|
+      format.json { render json: @analysis }
       format.html do
-        if @analysis.gwas?
+        if request.xhr?
+          render partial: "analysis_item", layout: false, locals: { analysis: @analysis }
+        elsif @analysis.gwas?
           @manhattan = Analysis::Gwas::ManhattanPlot.new(@analysis).call
         end
       end
-      format.json { render json: @analysis }
     end
   end
 
