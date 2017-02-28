@@ -1,12 +1,13 @@
 .analyses {
   @extend .list-group;
   margin-top: 1em;
+
   > li {
     @extend .list-group-item;
 
     .main-info {
       display: inline-block;
-      width: 79%;
+      width: 59%;
       vertical-align: top;
     }
     .details {
@@ -15,7 +16,13 @@
     }
     .status {
       display: inline-block;
-      width: 20%;
+      width: 19%;
+      text-align: left;
+    }
+    .actions {
+      float: right;
+      width: 19%;
+      margin-top: 6px;
       text-align: right;
     }
   }

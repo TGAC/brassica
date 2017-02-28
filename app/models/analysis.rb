@@ -13,6 +13,7 @@ class Analysis < ActiveRecord::Base
   validate :check_args
 
   scope :recent_first, -> { order(updated_at: :desc) }
+  scope :finished, -> { where(status: statuses.values_at(:success, :failure)) }
 
   def std_out
     data_files.std_out.first

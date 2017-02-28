@@ -48,6 +48,13 @@ class AnalysesController < ApplicationController
     end
   end
 
+  def destroy
+    analysis = current_user.analyses.finished.find(params[:id])
+    analysis.destroy
+
+    redirect_to analyses_path, notice: "Analysis '#{analysis.name}' deleted"
+  end
+
   private
 
   def analysis_params

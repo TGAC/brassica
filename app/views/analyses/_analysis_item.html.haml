@@ -12,3 +12,9 @@
         Created at #{l analysis.created_at.utc, format: :short}
       - else
         Finished at #{l analysis.finished_at.utc, format: :short}
+
+  - if analysis.finished?
+    = confirmable_action("Delete", analysis, method: :delete, btn_size: 'btn-sm', btn_class: "btn-warning")
+  - else
+    .actions
+      %button.btn.btn-sm{ disabled: true, type: :button } Delete
