@@ -55,6 +55,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano3-puma'
   gem 'capistrano-chruby'
+  gem 'capistrano3-delayed-job', '~> 1.7.2'
   gem 'railroady'
 end
 

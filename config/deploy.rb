@@ -34,3 +34,7 @@ set :default_env, {
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+set :delayed_job_prefix, 'bip'
+set :delayed_job_pools, { "*": 2 }
+set :delayed_job_roles, :app
