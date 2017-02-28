@@ -8,7 +8,6 @@ class Analysis::DataFile < ActiveRecord::Base
   belongs_to :owner, class_name: "User"
   belongs_to :analysis
 
-  # TODO: use hashes in url and path
   has_attached_file :file
 
   validates :owner, presence: true

@@ -1,12 +1,11 @@
 class Analysis::ShellRunner
   JobError = Class.new(RuntimeError)
 
-  # TODO: aborting analysis in progress
-
   def initialize(analysis)
     @analysis = analysis
   end
 
+  # Run job in the shell, job command MUST be properly escaped.
   def call(job_command)
     raise "Invalid analysis status" unless analysis.idle?
 
@@ -42,13 +41,7 @@ class Analysis::ShellRunner
   end
 
   def run_job_command(job_command)
-    # log 'Executing following command line'
-    # log job_command
-
-    # if reference.reload.to_be_destroyed?
-    #   log "Skipping shell job execution, reference was scheduled to be destroyed."
-    #   raise JobError, "Reference was scheduled to be destroyed"
-    # end
+    logger.info "Executing following command line: #{job_command}"
 
     # Start job in another process, capturing both output streams
     IO.popen(job_command + " 2>>#{std_err_path} 1>>#{std_out_path}", 'r+') do |child_io|
@@ -59,7 +52,8 @@ class Analysis::ShellRunner
       child_io.gets until child_io.eof?
     end
 
-    # log "Finished shell job execution done, final exit code: (#{$?})."
+    logger.info "Finished shell job execution, exit code: (#{$?})."
+
     raise(JobError, "ERROR in processing: (#{$?})") unless $?.success?
 
   ensure
@@ -97,5 +91,9 @@ class Analysis::ShellRunner
       Rails.application.config_for(:jobs).fetch('execution_dir'),
       analysis.id.to_s
     )
+  end
+
+  def logger
+    Rails.logger
   end
 end

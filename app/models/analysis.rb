@@ -10,7 +10,6 @@ class Analysis < ActiveRecord::Base
   validates :owner, :name, presence: true
   validates :name, length: { maximum: 250 }
   validates :associated_pid, numericality: { only_integer: true, allow_nil: true }
-  validate :check_args
 
   scope :recent_first, -> { order(updated_at: :desc) }
   scope :finished, -> { where(status: statuses.values_at(:success, :failure)) }
@@ -25,12 +24,5 @@ class Analysis < ActiveRecord::Base
 
   def finished?
     success? || failure?
-  end
-
-  private
-
-  # TODO: rename args to specification (or spec)
-  def check_args
-    # TODO: check args
   end
 end

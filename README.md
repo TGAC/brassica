@@ -25,7 +25,7 @@ Currently, the web application is still under development and also changes to th
 * PostgreSQL
 * Elasticsearch 1.4.3, Java 7
 * R 3.2.2 or better
-  * [GWASSER](https://github.com/cyverseuk/GWASSER)
+* [GWASSER](https://github.com/cyverseuk/GWASSER)
 
 
 

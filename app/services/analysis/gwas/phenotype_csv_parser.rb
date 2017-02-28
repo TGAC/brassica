@@ -4,7 +4,7 @@ class Analysis
   class Gwas
     class PhenotypeCsvParser
       def call(io)
-        Result.new(CSV.new(io)).tap do |result|
+        Analysis::CsvParser.new.call(io, Result).tap do |result|
           unless result.headers.include?("ID")
             result.errors << :no_id_column
           end
@@ -17,32 +17,9 @@ class Analysis
             result.errors << :no_samples
           end
         end
-
-      # TODO: handle empty file
-
-      rescue CSV::MalformedCSVError => ex
-        Result.new(CSV.new(StringIO.new)).tap do |result|
-          # TODO: expose detailed info (e.g. Illegal quoting in line 2)
-          result.errors << :malformed_csv
-        end
       end
 
-      class Result
-        attr_reader :errors, :csv
-
-        def initialize(csv)
-          @csv = csv
-          @errors = []
-        end
-
-        def valid?
-          errors.empty?
-        end
-
-        def headers
-          @headers ||= csv.readline
-        end
-
+      class Result < Analysis::CsvParser::Result
         def trait_ids
           headers - %w(ID)
         end

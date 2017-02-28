@@ -1,3 +1,4 @@
+# Utility allowing to control flash-messages
 window.Flash = {
   notice: (content) ->
     this.append("notice", content)
