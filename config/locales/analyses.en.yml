@@ -14,10 +14,13 @@ en:
       description:
         common: |
           Further contextual help will be provided at each step of analysis setup.
-          Only you will have access to the results produced by analysis.
+          Only you will have access to the results produced by the analysis.
         gwas: |
-          The following process allows you to perform GWAS on data you submit.
-          You will need to provide genotype and phenotype data for the analysis.
+          The following process allows you to perform
+          <a href='https://en.wikipedia.org/wiki/Genome-wide_association_study'
+          target='_blank' title='Genome-wide association study'><b>GWAS</b></a>
+          on data you submit. You will need to provide genotype and phenotypic trait
+          data for the analysis.<br/>
     form:
       genotype_data_file_help: |
         Genotype data needs to be provided in one of two accepted formats -

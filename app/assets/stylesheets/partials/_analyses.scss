@@ -1,3 +1,8 @@
+.new-analysis-big-btn {
+  @extend .btn, .btn-primary, .btn-lg;
+  margin-top: 2em;
+}
+
 .analyses {
   @extend .list-group;
   margin-top: 1em;
@@ -26,16 +31,6 @@
       text-align: right;
     }
   }
-}
-
-.new-gwas-analysis {
-  .form-group {
-    margin-bottom: 2em;
-  }
-}
-
-ul.analysis-nav {
-  margin-bottom: 0;
 }
 
 .new-gwas-analysis {

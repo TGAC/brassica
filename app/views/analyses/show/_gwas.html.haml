@@ -1,7 +1,7 @@
 = javascript_include_tag "plotly"
 
 - if @analysis.finished?
-  %ul.analysis-nav.nav.nav-tabs{ role: :tablist }
+  %ul.analysis-nav.nav.nav-pills{ role: :tablist }
     - if @analysis.success?
       %li.active= link_to("Results", '#analysis_results', role: :tab, data: { toggle: :tab })
       %li= link_to("Output files", '#analysis_outputs', role: :tab, data: { toggle: :tab })
