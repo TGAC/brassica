@@ -39,7 +39,9 @@
         .panel.panel-default
           %ul.list-group
             - @analysis.data_files.output.gwas_results.each do |data_file|
-              %li.list-group-item= link_to data_file.file_file_name, data_file.file.url
+              %li.list-group-item
+                = link_to data_file.file_file_name, data_file.file.url
+                %span= number_to_human_size(data_file.file.size)
 
     #analysis_std_out.tab-pane{ class: (:active if @analysis.failure?),  role: :tabpanel }
       - if (std_out = @analysis.std_out.file).size > 0
