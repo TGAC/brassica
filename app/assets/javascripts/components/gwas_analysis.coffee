@@ -3,6 +3,7 @@ window.GwasAnalysis = class GwasAnalysis extends Component
     return unless @$el.length >= 1
 
     @bindDataFile('genotype-data-file')
+    @bindDataFile('map-data-file')
     @bindDataFile('phenotype-data-file')
 
   bindDataFile: (field) =>

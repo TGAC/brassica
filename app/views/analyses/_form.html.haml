@@ -35,6 +35,30 @@
             class: 'btn btn-default delete-genotype-data-file')
 
       .form-group
+        = label_tag :map_data_file, 'Genotype map'
+
+        .alert.alert-info= t('.map_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_map)).html_safe
+
+        .map-data-file-errors.errors.hidden
+
+        = form_tag analyses_data_files_path, multipart: true, method: :post do
+          = hidden_field_tag "analysis_data_file[data_type]", "gwas_map"
+
+          .map-data-file-fileinput.fileinput{ class: "#{'hidden' if @form.map_data_file}" }
+            .btn.btn-primary.fileinput-button
+              %span Choose a file...
+              = file_field_tag "analysis_data_file[file]", class: 'map-data-file'
+
+            %small.help-block
+              Please upload the map CSV file here. Max file size is 50 MiB.
+
+        .map-data-file{ class: "#{'hidden' unless @form.map_data_file}" }
+          %span.file-name= @form.map_data_file.try(:file_file_name)
+
+          = delete_analysis_data_file_button(@form.map_data_file,
+            class: 'btn btn-default delete-map-data-file')
+
+      .form-group
         = label_tag :phenotype_data_file, 'Phenotype/trait data', class: 'required'
 
         .alert.alert-info= t('.phenotype_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_phenotype)).html_safe
@@ -65,6 +89,7 @@
         = form_for(@form) do |f|
           = f.hidden_field :analysis_type
           = f.hidden_field :genotype_data_file_id
+          = f.hidden_field :map_data_file_id
           = f.hidden_field :phenotype_data_file_id
 
           = f.submit "Run", class: 'btn btn-primary btn-wide btn-next'

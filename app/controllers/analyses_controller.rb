@@ -17,9 +17,12 @@ class AnalysesController < ApplicationController
 
     if @form.valid?
       @form.save do |attrs|
-        attrs = attrs.merge(owner: current_user).except(:genotype_data_file_id, :phenotype_data_file_id)
+        attrs = attrs.merge(owner: current_user).
+          except(:genotype_data_file_id, :phenotype_data_file_id, :map_data_file_id)
+
         analysis = Analysis.create!(attrs)
         analysis.data_files << @form.genotype_data_file
+        analysis.data_files << @form.map_data_file if @form.map_data_file
         analysis.data_files << @form.phenotype_data_file
 
         AnalysisJob.new(analysis).enqueue

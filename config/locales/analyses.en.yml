@@ -33,9 +33,9 @@ en:
         data layout:<br/>
         <br/>
         <ul>
-          <li>First column of the CSV file is an ID column. Values in this column denote sample
-          identifiers</li>
-          <li>Each following column is associated with a <a href='https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism' title='Single-nucleotide polymorphism'>SNP</a>. Value in the header row
+          <li>First column of the CSV file is an ID column. Values in this column denote <b>sample
+          identifiers</b></li>
+          <li>Each following column is associated with a <a href='https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism' title='Single-nucleotide polymorphism'><b>SNP</b></a>. Value in the header row
           identifies the SNP, whereas values in subsequent rows denote if a sample is affected (2),
           not affected (1) or the information is missing (0 or NA).</li>
         </ul>
@@ -43,14 +43,27 @@ en:
         Low quality or irrelevant data should be filtered out of the VCF file before it
         is uploaded.
 
-      phenotype_data_file_help: |
-        Phenotype data needs to be provided in a CSV file formatted as shown by a
-        <a href='%{template_url}'><b>template</b></a>:<br/>
+      map_data_file_help: |
+        Map data file provides supplementary information about the location of mutations
+        defined in genotype CSV file. It is not needed when using VCF for genotype data
+        as this format already includes locations.
+
+        CSV file format is shown by a <a href='%{template_url}'><b>downloadable template</b></a>:<br/>
         <br/>
         <ul>
-          <li>First column of the CSV file is an ID column. Values in this column denote sample
-          identifiers</li>
+          <li>First column of the CSV file is ID. Values in this column denote <b>SNPs</b>.</li>
+          <li>Second column is Chr. Values in this column denote <b>chromosome</b>.</li>
+          <li>Third and last column is cM. Its values denote mutation's <b>position</b>
+          in the chromosome.</li>
+        </ul>
+
+      phenotype_data_file_help: |
+        Phenotype data needs to be provided in a CSV file formatted as shown by a
+        <a href='%{template_url}'><b>downloadable template</b></a>:<br/>
+        <br/>
+        <ul>
+          <li>First column of the CSV file is an ID column. Values in this column denote <b>sample
+          identifiers</b></li>
           <li>Each following column is associated with a phenotypic trait. Value in the header row
-          identifies the trait, whereas subsequent rows contain values measured in
-          sampled plants.
+          identifies the <b>trait</b>, whereas subsequent rows contain <b>measurement values</b>.
         </ul>

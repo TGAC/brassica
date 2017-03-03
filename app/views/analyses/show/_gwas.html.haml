@@ -32,7 +32,7 @@
                   %td= mutation[0]
                   %td= mutation[2]
                   %td= mutation[3]
-                  %td= "%.4f" % mutation[1]
+                  %td= mutation[1] == "NA" ? "NA" : "%.4f" % mutation[1]
                   %td= trait_name
 
       #analysis_data_files.tab-pane{ role: :tabpanel }

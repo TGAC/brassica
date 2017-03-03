@@ -8,6 +8,7 @@ module Analyses
       property :analysis_type
       property :name
       property :genotype_data_file_id
+      property :map_data_file_id
       property :phenotype_data_file_id
 
       validates :name, presence: true
@@ -30,11 +31,18 @@ module Analyses
           unless geno.sample_ids.try(:sort) == pheno.sample_ids.try(:sort)
             errors.add(:base, :geno_pheno_samples_mismatch)
           end
+
+          # TODO: check map file format and consistency with genotype data
         end
       end
 
       def genotype_data_file
         data_file = Analysis::DataFile.gwas_genotype.find_by(id: genotype_data_file_id)
+        AnalysisDataFileDecorator.decorate(data_file) if data_file
+      end
+
+      def map_data_file
+        data_file = Analysis::DataFile.gwas_map.find_by(id: map_data_file_id)
         AnalysisDataFileDecorator.decorate(data_file) if data_file
       end
 
