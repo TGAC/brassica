@@ -34,7 +34,7 @@
           = delete_analysis_data_file_button(@form.genotype_data_file,
             class: 'btn btn-default delete-genotype-data-file')
 
-      .form-group
+      .form-group.hidden
         = label_tag :map_data_file, 'Genotype map'
 
         .alert.alert-info= t('.map_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_map)).html_safe

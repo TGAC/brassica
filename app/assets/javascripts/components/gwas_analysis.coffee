@@ -2,11 +2,37 @@ window.GwasAnalysis = class GwasAnalysis extends Component
   init: =>
     return unless @$el.length >= 1
 
-    @bindDataFile('genotype-data-file')
-    @bindDataFile('map-data-file')
-    @bindDataFile('phenotype-data-file')
+    this.bindGenotypeUpload()
+    this.bindMapUpload()
+    this.bindPhenotypeUpload()
 
-  bindDataFile: (field) =>
+  bindGenotypeUpload: =>
+    $map_form_group = this.$('.map-data-file-fileinput').parents('.form-group')
+    $map_fileinput = $map_form_group.find('.fileinput')
+    $map_upload_result = @$("div.map-data-file")
+
+    this.bindDataFile('genotype-data-file',
+      done: (data) =>
+        if data.result.file_file_name.match(/\.vcf$/)
+          $map_form_group.addClass('hidden')
+        else
+          $map_form_group.removeClass('hidden')
+
+      delete: =>
+        $map_form_group.addClass('hidden')
+        $map_fileinput.removeClass('hidden')
+        $map_upload_result.addClass('hidden')
+
+        this.$("#analysis_map_data_file_id").val("")
+    )
+
+  bindMapUpload: =>
+    this.bindDataFile('map-data-file')
+
+  bindPhenotypeUpload: =>
+    this.bindDataFile('phenotype-data-file')
+
+  bindDataFile: (field, options = {}) =>
     $fileinput = @$(".#{field}-fileinput")
     $result = @$("div.#{field}")
 
@@ -29,6 +55,8 @@ window.GwasAnalysis = class GwasAnalysis extends Component
         $result.find('.file-name').text(data.result.file_file_name)
         $result.find(".delete-#{field}").attr(href: data.result.delete_url)
 
+        options.done && options.done(data)
+
       fail: (event, data) =>
         if data.jqXHR.status == 401
           window.location.reload()
@@ -44,4 +72,6 @@ window.GwasAnalysis = class GwasAnalysis extends Component
     @$(".delete-#{field}").on 'ajax:success', (data, status, xhr) =>
       $fileinput.removeClass('hidden')
       $result.addClass('hidden')
+
+      options.delete && options.delete()
 
