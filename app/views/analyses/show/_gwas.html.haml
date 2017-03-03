@@ -4,7 +4,7 @@
   %ul.analysis-nav.nav.nav-pills{ role: :tablist }
     - if @analysis.success?
       %li.active= link_to("Results", '#analysis_results', role: :tab, data: { toggle: :tab })
-      %li= link_to("Output files", '#analysis_outputs', role: :tab, data: { toggle: :tab })
+      %li= link_to("Data files", '#analysis_data_files', role: :tab, data: { toggle: :tab })
 
     %li{ class: (:active if @analysis.failure?) }
       = link_to("Std output", '#analysis_std_out', role: :tab, data: { toggle: :tab })
@@ -35,8 +35,21 @@
                   %td= "%.4f" % mutation[1]
                   %td= trait_name
 
-      #analysis_outputs.tab-pane{ role: :tabpanel }
+      #analysis_data_files.tab-pane{ role: :tabpanel }
         .panel.panel-default
+          .panel-heading
+            .panel-title Input
+
+          %ul.list-group
+            - @analysis.data_files.input.each do |data_file|
+              %li.list-group-item
+                = link_to data_file.file_file_name, data_file.file.url
+                %span= number_to_human_size(data_file.file.size)
+
+        .panel.panel-default
+          .panel-heading
+            .panel-title Output
+
           %ul.list-group
             - @analysis.data_files.output.gwas_results.each do |data_file|
               %li.list-group-item
