@@ -24,6 +24,9 @@ class Analysis
               # TODO: fix GWASSER so that it does not output invalid row ID.1
               next if name =~ /\AID(\.1)?\z/
 
+              # GWASSER replaces dashes in mutation names with dots...
+              name = name.gsub(".", "-")
+
               neg_log10_p_values[name] = neg_log10_p
             end
 
@@ -45,30 +48,9 @@ class Analysis
               mutations.each_with_index do |(_, _, chrom, _), idx|
                 chromosomes[chrom] << idx
               end
-
-            # TODO: consider creating a map file for VCF too
-            elsif genotype_vcf_data_file = analysis.data_files.gwas_genotype.vcf.first
-              File.open(genotype_vcf_data_file.file.path, "r") do |file|
-                vcf_data = Analysis::Gwas::GenotypeVcfParser.new.call(file)
-                mutations = vcf_data.each_record.map do |record|
-                  [record.id, neg_log10_p_values[record.id], record.chrom, record.pos]
-                end.force
-              end
-
-              mutations = mutations.sort { |mut_a, mut_b|
-                chrom_a, pos_a = mut_a[-2..-1]
-                chrom_b, pos_b = mut_b[-2..-1]
-
-                chrom_a == chrom_b ? pos_a <=> pos_b : chrom_a <=> chrom_b
-              }
-
-              mutations.each_with_index do |(_, _, chrom, _), idx|
-                chromosomes[chrom] << idx
-              end
             else
               mutations = neg_log10_p_values.to_a
             end
-
 
             tooltips = mutations.map { |mut| format_tooltip(*mut) }
 

@@ -6,10 +6,10 @@ RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
 
     let(:sample_names) { %w(Original s1t1 s2t1 s3t1 s1t2 s2t2 s3t2) }
     let(:mutation_names) {
-      %w(1.10257:A:C 1.10291:C:T 1.10297:C:T 1.10303:C:T 1.10315:C:T 1.10321:C:T
-          1.10327:T:C 1.10583:G:A 1.10665:C:G
-          1.10694:C:G 1.10723:C:G 1.12783:G:A 1.13116:T:G 1.13118:A:G 1.13178:G:A
-          1.13302:C:T 1.13757:G:A X13868:A:G X13868:A:T X13868:A:C)
+      %w(1.10257-A-C 1.10291-C-T 1.10297-C-T 1.10303-C-T 1.10315-C-T 1.10321-C-T
+          1.10327-T-C 1.10583-G-A 1.10665-C-G
+          1.10694-C-G 1.10723-C-G 1.12783-G-A 1.13116-T-G 1.13118-A-G 1.13178-G-A
+          1.13302-C-T 1.13757-G-A X13868-A-G X13868-A-T X13868-A-C)
     }
 
     let(:output_values) {

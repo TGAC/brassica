@@ -6,7 +6,7 @@ class Analysis
     end
 
     def call
-      prepare_csv_genotype_data_file
+      prepare_csv_data_files
       runner.call(job_command) do
         store_results
       end
@@ -16,17 +16,25 @@ class Analysis
 
     attr_reader :analysis
 
-    def prepare_csv_genotype_data_file
+    def prepare_csv_data_files
       return if csv_data_file = genotype_data_file(:csv)
 
       vcf_data_file = genotype_data_file
 
-      csv = Analysis::Gwas::GenotypeVcfToCsvConverter.new.call(vcf_data_file.file.path)
+      genotype_csv, map_csv = Analysis::Gwas::GenotypeVcfToCsvConverter.new.call(vcf_data_file.file.path)
 
       analysis.data_files.create!(
         role: :input,
         data_type: :gwas_genotype,
-        file: csv,
+        file: genotype_csv,
+        file_content_type: "text/csv",
+        owner: analysis.owner
+      )
+
+      analysis.data_files.create!(
+        role: :input,
+        data_type: :gwas_map,
+        file: map_csv,
         file_content_type: "text/csv",
         owner: analysis.owner
       )
