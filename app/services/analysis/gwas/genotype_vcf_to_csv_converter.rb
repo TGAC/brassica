@@ -13,25 +13,31 @@ class Analysis
         sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
 
         vcf_data.each_record do |record|
-          mutation_names << record.id
+          record.alt.each.with_index do |alternative, idx|
+            alternative_no = idx + 1
+            mutation_names << "#{record.id}:#{record.ref}:#{alternative}"
 
-          vcf_data.sample_ids.each do |sample_name|
-            sample = record.sample_by_name(sample_name)
+            vcf_data.sample_ids.each do |sample_name|
+              sample = record.sample_by_name(sample_name)
 
-            # 1 = unaff, 2 = aff, 0 = miss
-            #
-            # TODO: this needs to be confirmed
-            value = if sample.empty?
-                      "NA"
-                    elsif sample.gti.all? { |val| val == "." }
-                      0
-                    elsif sample.gti.any? { |val| val > 0 }
-                      2
-                    else
-                      1
-                    end
+              if sample.empty?
+                value = "NA" # call cannot be made
+              else
+                alternative_count = sample.gti.count { |allele_no| allele_no == alternative_no }
+                value = if sample.gti.size == alternative_count
+                          # alternative allele in each chromosome
+                          2
+                        elsif alternative_count > 0
+                          # alternative allele in one chromosome only
+                          1
+                        else
+                          # no mutation
+                          0
+                        end
+              end
 
-            sample_data[sample_name] << value
+              sample_data[sample_name] << value
+            end
           end
         end
 
