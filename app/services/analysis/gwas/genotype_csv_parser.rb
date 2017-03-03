@@ -16,6 +16,8 @@ class Analysis
           if result.sample_ids.blank?
             result.errors << :no_samples
           end
+
+          result.rewind
         end
       end
 

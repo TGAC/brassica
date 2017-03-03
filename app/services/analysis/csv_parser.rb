@@ -25,6 +25,11 @@ class Analysis
       def valid?
         errors.empty?
       end
+
+      def rewind(skip_header: true)
+        csv.rewind
+        csv.readline if skip_header
+      end
     end
   end
 end
