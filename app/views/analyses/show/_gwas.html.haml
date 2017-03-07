@@ -1,61 +1,58 @@
 = javascript_include_tag "plotly"
 
-- if @analysis.finished?
-  %ul.analysis-nav.nav.nav-pills{ role: :tablist }
-    - if @analysis.success?
-      %li.active= link_to("Results", '#analysis_results', role: :tab, data: { toggle: :tab })
-      %li= link_to("Data files", '#analysis_data_files', role: :tab, data: { toggle: :tab })
+%ul.analysis-nav.nav.nav-pills{ role: :tablist }
+  = nav_item("Results", tab: :analysis_results, active: @analysis.success?, disabled: !@analysis.success?)
+  = nav_item("Data files", tab: :analysis_data_files, active: !@analysis.finished?)
+  = nav_item("Std output", tab: :analysis_std_out, active: @analysis.failure?, disabled: !@analysis.finished?)
+  = nav_item("Std error", tab: :analysis_std_err, disabled: !@analysis.finished?)
 
-    %li{ class: (:active if @analysis.failure?) }
-      = link_to("Std output", '#analysis_std_out', role: :tab, data: { toggle: :tab })
+.tab-content.clearfix
+  - if @analysis.success?
+    #analysis_results.tab-pane.active{ role: :tabpanel }
+      #gwas-manhattan-plot.hidden{ data: @manhattan }
 
-    %li= link_to("Std error", '#analysis_std_err', role: :tab, data: { toggle: :tab })
+      %table.table.table-condensed.table-hover.data-table
+        %thead
+          %tr
+            %th SNP
+            %th Chromosome
+            %th Position
+            %th -log<sub>10</sub>(P)
+            %th Trait
 
-  .tab-content.clearfix
-    - if @analysis.success?
-      #analysis_results.tab-pane.active{ role: :tabpanel }
-        #gwas-manhattan-plot.hidden{ data: @manhattan }
+        %tbody
+          - @manhattan[:traits].each do |trait_name, mutations, _|
+            - mutations.each.with_index do |mutation|
+              %tr
+                %td= mutation[0]
+                %td= mutation[2]
+                %td= mutation[3]
+                %td= mutation[1] == "NA" ? "NA" : "%.4f" % mutation[1]
+                %td= trait_name
 
-        %table.table.table-condensed.table-hover.data-table
-          %thead
-            %tr
-              %th SNP
-              %th Chromosome
-              %th Position
-              %th -log<sub>10</sub>(P)
-              %th Trait
+  #analysis_data_files.tab-pane{ role: :tabpanel, class: (:active if @analysis.idle? || @analysis.running?) }
+    .panel.panel-default
+      .panel-heading
+        .panel-title Input
 
-          %tbody
-            - @manhattan[:traits].each do |trait_name, mutations, _|
-              - mutations.each.with_index do |mutation|
-                %tr
-                  %td= mutation[0]
-                  %td= mutation[2]
-                  %td= mutation[3]
-                  %td= mutation[1] == "NA" ? "NA" : "%.4f" % mutation[1]
-                  %td= trait_name
+      %ul.list-group
+        - @analysis.data_files.input.each do |data_file|
+          %li.list-group-item
+            = link_to data_file.file_file_name, data_file.file.url
+            %span= number_to_human_size(data_file.file.size)
 
-      #analysis_data_files.tab-pane{ role: :tabpanel }
-        .panel.panel-default
-          .panel-heading
-            .panel-title Input
+    - if @analysis.data_files.output.present?
+      .panel.panel-default
+        .panel-heading
+          .panel-title Output
 
-          %ul.list-group
-            - @analysis.data_files.input.each do |data_file|
-              %li.list-group-item
-                = link_to data_file.file_file_name, data_file.file.url
-                %span= number_to_human_size(data_file.file.size)
+        %ul.list-group
+          - @analysis.data_files.output.gwas_results.each do |data_file|
+            %li.list-group-item
+              = link_to data_file.file_file_name, data_file.file.url
+              %span= number_to_human_size(data_file.file.size)
 
-        .panel.panel-default
-          .panel-heading
-            .panel-title Output
-
-          %ul.list-group
-            - @analysis.data_files.output.gwas_results.each do |data_file|
-              %li.list-group-item
-                = link_to data_file.file_file_name, data_file.file.url
-                %span= number_to_human_size(data_file.file.size)
-
+  - if @analysis.finished?
     #analysis_std_out.tab-pane{ class: (:active if @analysis.failure?),  role: :tabpanel }
       - if (std_out = @analysis.std_out.file).size > 0
         .std-out

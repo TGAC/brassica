@@ -25,9 +25,15 @@ module ApplicationHelper
     end
   end
 
-  def active_link(label, path)
-    content_tag :li, class: 'active' do
-      link_to t("menu.#{label}"), path
+  def nav_item(label, path = "#", active: false, disabled: false, tab: nil)
+    raise "Conflicting options" if active && disabled
+
+    klass = active ? :active : (:disabled if disabled)
+    link_options = tab ? { role: :tab, data: { toggle: :tab } } : {}
+    path = "##{tab}" if tab
+
+    content_tag :li, class: klass do
+      link_to label, path, link_options
     end
   end
 
