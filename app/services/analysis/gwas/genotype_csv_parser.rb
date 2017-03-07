@@ -5,17 +5,9 @@ class Analysis
     class GenotypeCsvParser
       def call(io)
         Analysis::CsvParser.new.call(io, Result).tap do |result|
-          unless result.headers.include?("ID")
-            result.errors << :no_id_column
-          end
-
-          if result.mutation_ids.blank?
-            result.errors << :no_mutations
-          end
-
-          if result.sample_ids.blank?
-            result.errors << :no_samples
-          end
+          result.errors << :no_id_column unless result.headers.include?("ID")
+          result.errors << :no_mutations if result.mutation_ids.blank?
+          result.errors << :no_samples if result.sample_ids.blank?
 
           result.rewind
         end

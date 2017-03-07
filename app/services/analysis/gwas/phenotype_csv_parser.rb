@@ -5,17 +5,9 @@ class Analysis
     class PhenotypeCsvParser
       def call(io)
         Analysis::CsvParser.new.call(io, Result).tap do |result|
-          unless result.headers.include?("ID")
-            result.errors << :no_id_column
-          end
-
-          if result.trait_ids.blank?
-            result.errors << :no_traits
-          end
-
-          if result.sample_ids.blank?
-            result.errors << :no_samples
-          end
+          result.errors << :no_id_column unless result.headers.include?("ID")
+          result.errors << :no_traits if result.trait_ids.blank?
+          result.errors << :no_samples if result.sample_ids.blank?
 
           result.rewind
         end

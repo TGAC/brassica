@@ -5,13 +5,10 @@ class Analysis
     class MapCsvParser
       def call(io)
         Analysis::CsvParser.new.call(io, Result).tap do |result|
-          unless result.headers.include?("ID")
-            result.errors << :no_id_column
-          end
-
-          if result.mutation_ids.blank?
-            result.errors << :no_mutations
-          end
+          result.errors << :no_id_column unless result.headers.include?("ID")
+          result.errors << :no_chr_column unless result.headers.include?("Chr")
+          result.errors << :no_cm_column unless result.headers.include?("cM")
+          result.errors << :no_mutations if result.mutation_ids.blank?
 
           result.rewind
         end

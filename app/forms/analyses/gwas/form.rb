@@ -16,10 +16,11 @@ module Analyses
       validates :phenotype_data_file, presence: true
 
       validate do
-        if genotype_data_file && phenotype_data_file
-          geno = parse_genotype_data
-          pheno = parse_phenotype_data
+        geno = parse_data_file(genotype_data_file, genotype_data_parser)
+        map = parse_data_file(map_data_file, map_data_parser)
+        pheno = parse_data_file(phenotype_data_file, phenotype_data_parser)
 
+        if geno && pheno
           unless geno.valid?
             geno.errors.each { |error| errors.add(:genotype_data_file, error) }
           end
@@ -31,8 +32,18 @@ module Analyses
           unless geno.sample_ids.try(:sort) == pheno.sample_ids.try(:sort)
             errors.add(:base, :geno_pheno_samples_mismatch)
           end
+        end
 
-          # TODO: check map file format and consistency with genotype data
+        if map_data_file
+          unless map.valid?
+            map.errors.each { |error| errors.add(:map_data_file, error) }
+          end
+        end
+
+        if geno && map
+          unless map.mutation_ids.try(:sort) == geno.mutation_ids.try(:sort)
+            errors.add(:base, :geno_map_mutations_mismatch)
+          end
         end
       end
 
@@ -53,16 +64,11 @@ module Analyses
 
       private
 
-      def parse_genotype_data
-        file = File.open(genotype_data_file.file.path, "r")
-        genotype_data_parser.call(file)
-      ensure
-        file && file.close
-      end
+      def parse_data_file(data_file, parser)
+        return unless data_file
 
-      def parse_phenotype_data
-        file = File.open(phenotype_data_file.file.path, "r")
-        phenotype_data_parser.call(file)
+        file = File.open(data_file.file.path, "r")
+        parser.call(file)
       ensure
         file && file.close
       end
@@ -74,6 +80,10 @@ module Analyses
         else
           Analysis::Gwas::GenotypeCsvParser.new
         end
+      end
+
+      def map_data_parser
+        Analysis::Gwas::MapCsvParser.new
       end
 
       def phenotype_data_parser
