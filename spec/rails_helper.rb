@@ -65,6 +65,7 @@ RSpec.configure do |config|
   include CommonHelpers
   config.include ElasticsearchHelper, :elasticsearch
   config.include Paperclip::Shoulda::Matchers, type: :model
+  config.include ActiveSupport::Testing::TimeHelpers
 
   config.before :suite do
     DatabaseCleaner.clean_with :truncation
