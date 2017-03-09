@@ -77,4 +77,5 @@ group :test do
   gem 'webmock', require: false
   gem 'database_cleaner'
   gem 'vcr'
+  gem 'simplecov', require: false
 end
