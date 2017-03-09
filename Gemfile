@@ -78,4 +78,7 @@ group :test do
   gem 'database_cleaner'
   gem 'vcr'
   gem 'simplecov', require: false
+  gem 'capybara', require: false
+  gem 'poltergeist', require: false
+  gem 'launchy', require: false
 end

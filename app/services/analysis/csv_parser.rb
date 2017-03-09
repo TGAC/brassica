@@ -3,7 +3,6 @@ require "csv"
 class Analysis
   class CsvParser
     def call(io, result_class = Result)
-      # TODO: handle empty file
       result_class.new(CSV.new(io))
 
     rescue CSV::MalformedCSVError => ex
@@ -18,7 +17,7 @@ class Analysis
 
       def initialize(csv)
         @csv = csv
-        @headers = csv.readline
+        @headers = csv.readline || []
         @errors = []
       end
 
@@ -29,6 +28,7 @@ class Analysis
       def rewind(skip_header: true)
         csv.rewind
         csv.readline if skip_header
+        csv.pos
       end
     end
   end

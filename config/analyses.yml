@@ -1,0 +1,11 @@
+default: &default
+  gwas: <%= ENV['GWAS_SCRIPT'] %>
+
+development:
+  <<: *default
+
+test:
+  gwas: <%= "#{Rails.root.join("spec", "bin", "gwas_mock.rb")} --railsRoot #{Rails.root}" %>
+
+production:
+  <<: *default

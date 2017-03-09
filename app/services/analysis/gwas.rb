@@ -17,7 +17,7 @@ class Analysis
     attr_reader :analysis
 
     def prepare_csv_data_files
-      return if csv_data_file = genotype_data_file(:csv)
+      return if genotype_data_file(:csv)
 
       vcf_data_file = genotype_data_file
 
@@ -70,18 +70,19 @@ class Analysis
     end
 
     def job_command
-      parts = [
-        ENV.fetch("GWAS_SCRIPT"),
+      args = [
         "--gFile", genotype_data_file(:csv).file.path,
         "--pFile", phenotype_data_file.file.path,
         "--outDir", runner.results_dir,
         "--noPlots"
       ]
 
-      parts += ["--phenos", selected_traits].flatten
-      parts += ["--cov", mixed_effect_traits].flatten if mixed_effect_traits.present?
+      args += ["--phenos", selected_traits].flatten
+      args += ["--cov", mixed_effect_traits].flatten if mixed_effect_traits.present?
 
-      parts.map { |part| Shellwords.escape(part) }.join(" ")
+      args = args.map { |part| Shellwords.escape(part) }
+
+      ([gwas_script] + args).join(" ")
     end
 
     def genotype_data_file(type = nil)
@@ -92,6 +93,10 @@ class Analysis
 
     def phenotype_data_file
       analysis.data_files.gwas_phenotype.first
+    end
+
+    def gwas_script
+      Rails.application.config_for(:analyses).fetch("gwas")
     end
   end
 end

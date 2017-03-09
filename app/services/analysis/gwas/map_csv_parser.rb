@@ -1,5 +1,3 @@
-require "csv"
-
 class Analysis
   class Gwas
     class MapCsvParser

@@ -31,7 +31,7 @@
                 %td= trait_name
 
   #analysis_data_files.tab-pane{ role: :tabpanel, class: (:active if @analysis.idle? || @analysis.running?) }
-    .panel.panel-default
+    .panel.panel-default.input-panel
       .panel-heading
         .panel-title Input
 
@@ -42,7 +42,7 @@
             %span= number_to_human_size(data_file.file.size)
 
     - if @analysis.data_files.output.present?
-      .panel.panel-default
+      .panel.panel-default.output-panel
         .panel-heading
           .panel-title Output
 

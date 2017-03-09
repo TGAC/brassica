@@ -10,5 +10,6 @@ $ ->
     ]
   )
 
-  # No idea why, but it does not work if included in data table definition above
+  # NOTE: No idea why, but it does not work if included in data table
+  # definition above. Perhaps that's how it works with prepopulated tables?
   data_table.order([3, 'desc']).draw()

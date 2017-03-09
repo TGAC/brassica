@@ -72,8 +72,11 @@ RSpec.configure do |config|
   end
 
   config.around :each do |example|
-    DatabaseCleaner.strategy = example.metadata[:elasticsearch] ? :truncation : :transaction
-    DatabaseCleaner.start unless example.metadata[:dont_clean_db]
+    strategy = (example.metadata[:elasticsearch] || example.metadata[:js]) ? :deletion : :transaction
+
+    DatabaseCleaner.strategy = strategy
+
+    DatabaseCleaner.start unless (example.metadata[:dont_clean_db] || strategy == :deletion)
     example.run
     DatabaseCleaner.clean unless example.metadata[:dont_clean_db]
   end
@@ -112,6 +115,9 @@ VCR.configure do |c|
   c.default_cassette_options = { record: :new_episodes, re_record_interval: 7.days }
   c.ignore_hosts URI.parse(Rails.application.config_for(:elasticsearch).fetch("host")).host
   c.ignore_hosts 'pub.orcid.org', 'sandbox.orcid.org'
+
+  # FIXME: temporary workaround for feature specs
+  c.allow_http_connections_when_no_cassette = true
 end
 
 Shoulda::Matchers.configure do |config|
@@ -128,3 +134,5 @@ class FactoryGirl::SyntaxRunner
     "#{::Rails.root}/spec/fixtures"
   end
 end
+
+Delayed::Worker.delay_jobs = false

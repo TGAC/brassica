@@ -74,7 +74,7 @@ module Analyses
       end
 
       def genotype_data_parser
-        case genotype_data_file.file_file_name
+        case genotype_data_file.try(:file_file_name)
         when /.vcf\z/i
           Analysis::Gwas::GenotypeVcfParser.new
         else

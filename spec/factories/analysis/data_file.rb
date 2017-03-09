@@ -10,6 +10,18 @@ FactoryGirl.define do
       role "output"
     end
 
+    trait :std_out do
+      role "output"
+      data_type "std_out"
+      file { fixture_file("empty.txt", "text/plain") }
+    end
+
+    trait :std_err do
+      role "output"
+      data_type "std_err"
+      file { fixture_file("empty.txt", "text/plain") }
+    end
+
     trait :gwas_genotype_csv do
       role "input"
       data_type "gwas_genotype"
@@ -22,10 +34,22 @@ FactoryGirl.define do
       file { fixture_file("gwas-genotypes.vcf", "text/vcard") }
     end
 
+    trait :gwas_map do
+      role "input"
+      data_type "gwas_map"
+      file { fixture_file("gwas-map.csv", "text/csv") }
+    end
+
     trait :gwas_phenotype do
       role "input"
       data_type "gwas_phenotype"
       file { fixture_file("gwas-phenotypes.csv", "text/csv") }
+    end
+
+    trait :gwas_results do
+      role "output"
+      data_type "gwas_results"
+      file { fixture_file("gwas-results.csv", "text/csv") }
     end
   end
 end
