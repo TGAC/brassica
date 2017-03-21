@@ -27,6 +27,9 @@ en:
         <a href='http://samtools.github.io/hts-specs/' title='Variant Call Format'>VCF</a> or
         <a href='https://en.wikipedia.org/wiki/Comma-separated_values' title='Comma-separated values'>CSV</a>.<br/>
         <br/>
+        VCF is a well-defined format and any such file should be acceptable. However, for best performance low quality
+        or irrelevant data should be filtered out of the VCF file before it is uploaded.
+        <br/><br/>
         Unlike VCF, the CSV format itself does not exactly determine how the
         data should be formatted. As such, we provide a
         <a href='%{template_url}'><b>downloadable template</b></a> showing expected
@@ -36,12 +39,8 @@ en:
           <li>First column of the CSV file is an ID column. Values in this column denote <b>sample
           identifiers</b></li>
           <li>Each following column is associated with a <a href='https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism' title='Single-nucleotide polymorphism'><b>SNP</b></a>. Value in the header row
-          identifies the SNP, whereas values in subsequent rows denote if a sample is affected (2),
-          not affected (1) or the information is missing (0 or NA).</li>
+          identifies the SNP, whereas values in subsequent rows denote number of alleles affected (0, 1, 2 or NA).
         </ul>
-        <br/>
-        Low quality or irrelevant data should be filtered out of the VCF file before it
-        is uploaded.
 
       map_data_file_help: |
         Map data file provides supplementary information about the location of mutations
@@ -52,7 +51,7 @@ en:
         <br/>
         <ul>
           <li>First column of the CSV file is ID. Values in this column denote <b>SNPs</b>.</li>
-          <li>Second column is Chr. Values in this column denote <b>chromosome</b>.</li>
+          <li>Second column is Chr. Values in this column denote <b>chromosome</b> number.</li>
           <li>Third and last column is cM. Its values denote mutation's <b>position</b>
           in the chromosome.</li>
         </ul>
