@@ -71,7 +71,7 @@ initial state but make sure that no instance of the app is running when calling 
 ### R packages
 
 This application relies on a set of tools and packages being installed on the server, so
-respective element of the application can call them, spawning new system processes.
+respective elements of the application can call them, spawning new system processes.
 
 After installation you will need to setup your R environment. Run the "R" executable
 in your shell and issue the following commands from R prompt (you may do that either
