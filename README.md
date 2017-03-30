@@ -89,8 +89,10 @@ Please also make sure to set these environment variables in your `.env` file:
 
 ```
 ANALYSIS_EXEC_DIR=<path to analysis top working directory>
-GWAS_SCRIPT=<path to the GWASSER executable>
+GWAS_SCRIPT=<path to the GWASSER.R executable script>
 ```
+
+The `GWASSER.R` script should be made executable.
 
 ## Background workers
 
