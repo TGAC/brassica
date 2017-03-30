@@ -88,10 +88,12 @@ system-wide, with `sudo`, or just for your user):
 Please also make sure to set these environment variables in your `.env` file:
 
 ```
-ANALYSIS_EXEC_DIR=<path to analysis top working directory>
-GWAS_SCRIPT=<path to the GWASSER.R executable script>
+ANALYSIS_EXEC_DIR=<full path to analysis working directory>
+GWAS_SCRIPT=<full path to the GWASSER.R executable script>
 ```
 
+The analysis working directory needs to be an empty directory writable by the
+application. It is used to run analysis script and store temporary outputs.
 The `GWASSER.R` script should be made executable.
 
 ## Background workers
@@ -105,10 +107,10 @@ rake tasks:
     # Start a delayed_job worker and exit when all available jobs are complete
     bin/rake jobs:workoff
 
-If you need to run more processes for different pools you can use `bin/delayed_job`
+If you need to run more processes you can use `bin/delayed_job`
 script:
 
-    bin/delayed_job {start,stop,restart} --pool=fast --pool=*
+    bin/delayed_job {start,stop,restart} --pool=*:2
 
 
 ## Deployment
