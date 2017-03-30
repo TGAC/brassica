@@ -1,5 +1,5 @@
 class AnalysesController < ApplicationController
-  before_filter :authenticate_user!, except: :new
+  before_filter :authenticate_user!, if: :require_user?
 
   def index
     @analyses = current_user.analyses.recent_first
@@ -59,6 +59,10 @@ class AnalysesController < ApplicationController
   end
 
   private
+
+  def require_user?
+    action_name != "new" || params[:analysis].present?
+  end
 
   def analysis_params
     params.require(:analysis).permit(:analysis_type)
