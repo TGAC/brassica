@@ -8,6 +8,8 @@ class Analyses::DataFilesController < ApplicationController
                   Analysis::Gwas::GenotypeCsvTemplateGenerator.new
                 when "gwas_phenotype"
                   Analysis::Gwas::PhenotypeCsvTemplateGenerator.new
+                when "gwas_map"
+                  Analysis::Gwas::MapCsvTemplateGenerator.new
                 end
 
     if generator
