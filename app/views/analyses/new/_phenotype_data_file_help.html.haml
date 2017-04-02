@@ -1,0 +1,9 @@
+.alert.alert-info
+  Phenotype data needs to be provided in a CSV file formatted as shown by a
+  #{link_to "downloadable template", new_analyses_data_file_path(data_type: :gwas_phenotype)}</b>:
+  %br
+  %br
+  %ul
+    %li First column of the CSV file is an ID column. Values in this column denote <b>sample identifiers</b>
+    %li Each following column is associated with a phenotypic trait. Value in the header row
+    identifies the <b>trait</b>, whereas subsequent rows contain <b>measurement values</b>.

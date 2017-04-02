@@ -12,8 +12,7 @@
 
       .form-group
         = label_tag :genotype_data_file, 'Genotype data', class: 'required'
-
-        .alert.alert-info= t('.genotype_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_genotype)).html_safe
+        = render partial: "/analyses/new/genotype_data_file_help"
 
         .genotype-data-file-errors.errors.hidden
 
@@ -36,8 +35,7 @@
 
       .form-group{ class: (:hidden unless @form.map_data_file) }
         = label_tag :map_data_file, 'Genotype map'
-
-        .alert.alert-info= t('.map_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_map)).html_safe
+        = render partial: "/analyses/new/map_data_file_help"
 
         .map-data-file-errors.errors.hidden
 
@@ -60,8 +58,7 @@
 
       .form-group
         = label_tag :phenotype_data_file, 'Phenotype/trait data', class: 'required'
-
-        .alert.alert-info= t('.phenotype_data_file_help', template_url: new_analyses_data_file_path(data_type: :gwas_phenotype)).html_safe
+        = render partial: "/analyses/new/phenotype_data_file_help"
 
         .phenotype-data-file{ class: "#{'hidden' unless @form.phenotype_data_file}" }
           %span.file-name= @form.phenotype_data_file.try(:file_file_name)
