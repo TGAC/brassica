@@ -16,9 +16,14 @@
   %br
 
   %ul
-    %li First column of the CSV file is an ID column. Values in this column denote <b>sample identifiers</b>
+    %li Values in the CSV file must be comma-delimited.
+    %li
+      First column of the CSV file is an ID column. Values in this column
+      denote <b>sample identifiers</b> (e.g. p-00001, su_hri96_DEU146_BRA_00018_001).
+      These values must be unique.
     %li
       Each following column is associated with a <b>
       #{link_to "SNP", 'https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism', title: 'Single-nucleotide polymorphism'}</b>.
-      Value in the header row identifies the SNP, whereas values in subsequent
-      rows denote number of alleles affected (0, 1, 2 or NA).
+      Value in the header row identifies the SNP (e.g. rs17602729, snp-1, mut_a123),
+      whereas values in subsequent rows denote number of alleles affected (0, 1, 2 or NA).
+      SNP identifiers must be unique.
