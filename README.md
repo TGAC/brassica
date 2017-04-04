@@ -7,17 +7,21 @@ The portal caters for the growing interest in phenotype data storage, reproducib
 The use of ontologies and nomenclature will make it easier to make conclusions on genotype-phenotype relationships within and across Brassica species. We currently use [Plant and Trait Ontology] (https://archive.gramene.org/plant_ontology/ontology_browse.html#tax) as reference ontologies for plants. And [GR_tax ontology ](https://archive.gramene.org/plant_ontology/ontology_browse.html#tax)to cover Brassica taxonomy.
 Marker sequences are currently cross-referenced with resources such as [Genebank(NCBI)](https://www.ncbi.nlm.nih.gov/genbank/) and [EnsemblPlants](https://plants.ensembl.org/index.html) where possible, which will be expanded in the future.
 
-It is a Rails web application and was created by eSpectrum company on a contract with the Earlham Institute (former The Genome Analysis Centre) but it is released as a free and open source project (see the LICENSE.txt file). The underlying database schema is derived from the CropStoreDB schema ver.7, with the original version developed by <a href="mailto:Graham.King@scu.edu.au">Graham King</a> and Pierre Carion at [Rothamsted Research](https://www.rothamsted.ac.uk/).
+It is a Rails web application is released as a free and open source project (see the LICENSE.txt file). The underlying database schema is derived from the CropStoreDB schema ver.7, with the original version developed by <a href="mailto:Graham.King@scu.edu.au">Graham King</a> and Pierre Carion at [Rothamsted Research](https://www.rothamsted.ac.uk/).
 
-Apart from the LICENSE, TGAC explicitly requests any party that wishes to deploy a copy (modified or not) of BIP on their own servers, to contact, and obtain permission to do so. For that, please contact
-<a href="mailto:bip@earlham.ac.uk">bip@earlham.ac.uk</a>. If you are interested in contributing to the project, for example by adding any analytics tools, please contact us, too.
+Apart from the LICENSE, EI explicitly requests any party that wishes to deploy a copy (modified or not) of BIP on their own servers, to contact, and obtain permission to do so. For that, please contact
+<a href="mailto:bip@earlham.ac.uk">bip@earlham.ac.uk</a>. If you are interested in contributing to the project, for example by adding any analytics tools, please contact us, too. We are looking forward any feedback!
 For further contact information on people behind the project or the database itself, please see the [about us](https://bip.earlham.ac.uk/about) section.
 
 Also, follow the BIP on twitter to get the latest updates [@BrassicaP](https://twitter.com/BrassicaP).
 
 If you are interested in learning how to submit data to the portal, training material is available on [BIP_training](https://github.com/TGAC/BIP_training).
 
-Currently, the web application is still under development and also changes to the database schema are possible. Despite these ongoing developments, navigation, data submissions and -download from the TGAC-hosted BIP version via the web-interface and the API should be possible.
+Currently, the web application is still under development and also changes to the database schema are possible. Despite these ongoing developments, navigation, data submissions and -download from the EI-hosted BIP version via the web-interface and the API should be possible.
+
+## Cite
+Tomasz Gubała, Tomasz Szymczyszyn, Piotr Nowakowski, Bogdan Chucherko, Annemarie H. Eckes, Wiktor Jurkowski, & Sarah C. Dyer. (2017). TGAC/brassica: v1.0.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.466050 https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
+
 
 ## Dependencies
 
