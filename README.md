@@ -20,7 +20,8 @@ If you are interested in learning how to submit data to the portal, training mat
 Currently, the web application is still under development and also changes to the database schema are possible. Despite these ongoing developments, navigation, data submissions and -download from the EI-hosted BIP version via the web-interface and the API should be possible.
 
 ## Cite
-Tomasz Gubała, Tomasz Szymczyszyn, Piotr Nowakowski, Bogdan Chucherko, Annemarie H. Eckes, Wiktor Jurkowski, & Sarah C. Dyer. (2017). TGAC/brassica: v1.0.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.466050 https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
+Tomasz Gubała, Tomasz Szymczyszyn, Piotr Nowakowski, Bogdan Chucherko, Annemarie H. Eckes, Sarah C. Dyer, & Wiktor Jurkowski. (2017). TGAC/brassica: v1.0.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.466050
+https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 
 
 ## Dependencies
