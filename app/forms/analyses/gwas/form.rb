@@ -20,16 +20,16 @@ module Analyses
         map = parse_data_file(map_data_file, map_data_parser)
         pheno = parse_data_file(phenotype_data_file, phenotype_data_parser)
 
+        if geno && !geno.valid?
+          geno.errors.each { |error| errors.add(:genotype_data_file, error) }
+        end
+
+        if pheno && !pheno.valid?
+          pheno.errors.each { |error| errors.add(:phenotype_data_file, error) }
+        end
+
         if geno && pheno
-          unless geno.valid?
-            geno.errors.each { |error| errors.add(:genotype_data_file, error) }
-          end
-
-          unless pheno.valid?
-            pheno.errors.each { |error| errors.add(:phenotype_data_file, error) }
-          end
-
-          unless geno.sample_ids.try(:sort) == pheno.sample_ids.try(:sort)
+          if geno.sample_ids.try(:sort) != pheno.sample_ids.try(:sort)
             errors.add(:base, :geno_pheno_samples_mismatch)
           end
         end
@@ -41,7 +41,7 @@ module Analyses
         end
 
         if geno && map
-          unless map.mutation_ids.try(:sort) == geno.mutation_ids.try(:sort)
+          if map.mutation_ids.try(:sort) != geno.mutation_ids.try(:sort)
             errors.add(:base, :geno_map_mutations_mismatch)
           end
         end
