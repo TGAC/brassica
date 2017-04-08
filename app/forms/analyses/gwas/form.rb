@@ -67,10 +67,7 @@ module Analyses
       def parse_data_file(data_file, parser)
         return unless data_file
 
-        file = File.open(data_file.file.path, "r")
-        parser.call(file)
-      ensure
-        file && file.close
+        File.open(data_file.file.path, "r") { |file| parser.call(file) }
       end
 
       def genotype_data_parser

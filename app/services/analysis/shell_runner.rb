@@ -62,11 +62,9 @@ class Analysis::ShellRunner
   end
 
   def store_file(path, data_type:)
-    file = File.open(path, "r")
-    analysis.data_files.create!(owner: analysis.owner, role: :output,
-                                file: file, data_type: data_type)
-  ensure
-    file && file.close
+    File.open(path, "r") do |file|
+      analysis.data_files.create!(owner: analysis.owner, role: :output, file: file, data_type: data_type)
+    end
   end
 
   def setup_exec_dir

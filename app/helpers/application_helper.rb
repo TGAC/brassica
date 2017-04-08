@@ -87,9 +87,6 @@ module ApplicationHelper
   end
 
   def read_file(path, limit:)
-    file = File.open(path, "r")
-    file.read(limit)
-  ensure
-    file && file.close
+    File.open(path, "r") { |file| file.read(limit) }
   end
 end

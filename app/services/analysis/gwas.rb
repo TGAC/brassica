@@ -54,15 +54,13 @@ class Analysis
       @selected_traits ||= analysis.args["phenos"]
 
       unless @selected_traits.present?
-        file = File.open(phenotype_data_file.file.path, "r")
-        result = Analysis::Gwas::PhenotypeCsvParser.new.call(file)
-        @selected_traits = result.trait_ids
+        File.open(phenotype_data_file.file.path, "r") do |file|
+          result = Analysis::Gwas::PhenotypeCsvParser.new.call(file)
+          @selected_traits = result.trait_ids
+        end
       end
 
       @selected_traits
-
-    ensure
-      file && file.close
     end
 
     def mixed_effect_traits
