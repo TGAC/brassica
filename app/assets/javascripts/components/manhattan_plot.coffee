@@ -4,12 +4,13 @@ window.ManhattanPlot = class ManhattanPlot extends Component
 
     data = @$el.data()
 
+    @$plotEl = @$el.append("<div>").addClass("hidden")
     @chromosomes = data.chromosomes
     @traces = this.prepareTraces(data.traits)
 
-    this.plot()
-
-    @$el.removeClass("hidden")
+    this.plot().then =>
+      @$el.find('.loading').remove()
+      @$plotEl.removeClass("hidden")
 
   prepareTraces: (traits) =>
     $.map(traits, (trace, trace_idx) ->
@@ -29,7 +30,7 @@ window.ManhattanPlot = class ManhattanPlot extends Component
 
   plot: =>
     Plotly.plot(
-      @el,
+      @$plotEl[0],
       @traces,
       this.layout(),
       this.options()

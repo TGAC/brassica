@@ -44,6 +44,12 @@
     margin-bottom: 0;
   }
 
+  .loading {
+    text-align: center;
+    color: $text-color;
+    margin: 2em 0;
+  }
+
   .std-out, .std-err {
     .actions {
       @extend .clearfix;

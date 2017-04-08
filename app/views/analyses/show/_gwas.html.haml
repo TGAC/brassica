@@ -9,7 +9,9 @@
 .tab-content.clearfix
   - if @analysis.success?
     #analysis_results.tab-pane.active{ role: :tabpanel }
-      #gwas-manhattan-plot.hidden{ data: @manhattan }
+      #gwas-manhattan-plot{ data: @manhattan }
+        .loading
+          %span.fa.fa-spin.fa-circle-o-notch.fa-4x
 
       %table.table.table-condensed.table-hover{ "data-export": :all }
         %thead
