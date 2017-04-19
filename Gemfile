@@ -2,11 +2,9 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.0'
 gem 'activerecord-delay_touching'
-
 gem 'pg'
-
 gem 'puma'
-
+gem 'daemons'
 gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'font-awesome-sass', '~> 4.3.1'
