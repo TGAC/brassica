@@ -63,6 +63,8 @@ $ ->
             api.columns().indexes().toArray().slice(0, -2)
           else if dt.sInstance == 'trial-scoring'
             api.columns().indexes().toArray()
+          else if dt.nTable.dataset && dt.nTable.dataset.export == "all"
+            api.columns().indexes().toArray()
           else
             api.columns().indexes().toArray().slice(0, -1)
         fnClick:

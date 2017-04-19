@@ -1,0 +1,16 @@
+.alert.alert-info
+  Phenotype data needs to be provided in a CSV file formatted as shown by a <b>
+  #{link_to "downloadable template", new_analyses_data_file_path(data_type: :gwas_phenotype)}</b>:
+  %br
+  %br
+  %ul
+    %li Values in the CSV file must be comma-delimited.
+    %li
+      First column of the CSV file is an ID column. Values in this column
+      denote <b>sample identifiers</b> (e.g. p-00001, su_hri96_DEU146_BRA_00018_001).
+      These values must be unique.
+    %li
+      Each following column is associated with a phenotypic trait. Value in the
+      header row identifies the <b>trait</b> (e.g. Primary-root-length,
+      hzau_SDOIL_01_LAB), whereas subsequent rows contain <b>measurement values</b>.
+      Trait names must be unique. No spaces are allowed in trait names.

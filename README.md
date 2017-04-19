@@ -29,6 +29,9 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 * MRI 2.2.x
 * PostgreSQL
 * Elasticsearch 1.4.3, Java 7
+* R 3.2.2 or better
+* [GWASSER](https://github.com/cyverseuk/GWASSER)
+
 
 
 ### Elasticsearch
@@ -69,6 +72,50 @@ This will load production data, migrate it and initialize ES indices.
 
 The `app:bootstrap` task may be used at a later time to reset database to its
 initial state but make sure that no instance of the app is running when calling the task.
+
+### R packages
+
+This application relies on a set of tools and packages being installed on the server, so
+respective elements of the application can call them, spawning new system processes.
+
+After installation you will need to setup your R environment. Run the "R" executable
+in your shell and issue the following commands from R prompt (you may do that either
+system-wide, with `sudo`, or just for your user):
+
+ - `install.packages('lme4')`
+ - `install.packages('argparse')`
+ - `install.packages('dplyr')`
+ - `install.packages('lmerTest')`
+
+
+### Configuration
+
+Please also make sure to set these environment variables in your `.env` file:
+
+```
+ANALYSIS_EXEC_DIR=<full path to analysis working directory>
+GWAS_SCRIPT=<full path to the GWASSER.R executable script>
+```
+
+The analysis working directory needs to be an empty directory writable by the
+application. It is used to run analysis script and store temporary outputs.
+The `GWASSER.R` script should be made executable.
+
+## Background workers
+
+In order to run background jobs in development you can use one of the following
+rake tasks:
+
+    # Start a delayed_job worker
+    bin/rake jobs:work
+
+    # Start a delayed_job worker and exit when all available jobs are complete
+    bin/rake jobs:workoff
+
+If you need to run more processes you can use `bin/delayed_job`
+script:
+
+    bin/delayed_job {start,stop,restart} --pool=*:2
 
 
 ## Deployment

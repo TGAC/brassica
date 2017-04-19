@@ -54,4 +54,11 @@ module CommonHelpers
   def all_belongs_to(model_klass)
     model_klass.reflect_on_all_associations(:belongs_to).map(&:name)
   end
+
+  def tempfile(content, *args)
+    Tempfile.open(*args).tap do |f|
+      f << content
+      f.rewind
+    end
+  end
 end

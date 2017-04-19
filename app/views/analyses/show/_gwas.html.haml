@@ -1,0 +1,87 @@
+= javascript_include_tag "plotly"
+
+%ul.analysis-nav.nav.nav-pills{ role: :tablist }
+  = nav_item("Results", tab: :analysis_results, active: @analysis.success?, disabled: !@analysis.success?)
+  = nav_item("Data files", tab: :analysis_data_files, active: !@analysis.finished?)
+  = nav_item("Std output", tab: :analysis_std_out, active: @analysis.failure?, disabled: !@analysis.finished?)
+  = nav_item("Std error", tab: :analysis_std_err, disabled: !@analysis.finished?)
+
+.tab-content.clearfix
+  - if @analysis.success?
+    #analysis_results.tab-pane.active{ role: :tabpanel }
+      #gwas-manhattan-plot{ data: @manhattan }
+        .loading
+          %span.fa.fa-spin.fa-circle-o-notch.fa-4x
+
+      %table.table.table-condensed.table-hover{ "data-export": :all }
+        %thead
+          %tr
+            %th SNP
+            %th Chromosome
+            %th Position
+            %th -log<sub>10</sub>(P)
+            %th Trait
+
+        %tbody
+          - @manhattan[:traits].each do |trait_name, mutations, _|
+            - mutations.each.with_index do |mutation|
+              %tr
+                %td= mutation[0]
+                %td= mutation[2]
+                %td= mutation[3]
+                %td= mutation[1] == "NA" ? "NA" : "%.4f" % mutation[1]
+                %td= trait_name
+
+  #analysis_data_files.tab-pane{ role: :tabpanel, class: (:active if @analysis.idle? || @analysis.running?) }
+    .panel.panel-default.input-panel
+      .panel-heading
+        .panel-title Input
+
+      %ul.list-group
+        - @analysis.data_files.input.each do |data_file|
+          %li.list-group-item
+            = link_to data_file.file_file_name, data_file.file.url
+            %span= number_to_human_size(data_file.file.size)
+
+    - if @analysis.data_files.output.present?
+      .panel.panel-default.output-panel
+        .panel-heading
+          .panel-title Output
+
+        %ul.list-group
+          - @analysis.data_files.output.gwas_results.each do |data_file|
+            %li.list-group-item
+              = link_to data_file.file_file_name, data_file.file.url
+              %span= number_to_human_size(data_file.file.size)
+
+  - if @analysis.finished?
+    #analysis_std_out.tab-pane{ class: (:active if @analysis.failure?),  role: :tabpanel }
+      - if (std_out = @analysis.std_out.file).size > 0
+        .std-out
+          .actions
+            = link_to "Download", std_out.url, target: "_blank", class: 'btn btn-default'
+
+          - if std_out.size > 50.kilobytes
+            .alert.alert-info
+              Showing first 50 KiB of #{std_out.size / 1.kilobyte} KiB.
+
+          %pre= read_file(std_out.path, limit: 50.kilobytes)
+
+      - else
+        .alert.alert-info Standard output empty
+
+    #analysis_std_err.tab-pane{ role: :tabpanel }
+      - if (std_err = @analysis.std_err.file).size > 0
+        .std-err
+          .actions
+            = link_to "Download", std_err.url, target: "_blank", class: 'btn btn-default'
+
+          - if std_err.size > 50.kilobytes
+            .alert.alert-info
+              Showing first 50 KiB of #{std_err.size / 1.kilobyte} KiB.
+
+          %pre= read_file(std_err.path, limit: 50.kilobytes)
+
+      - else
+        .alert.alert-info Standard error empty
+

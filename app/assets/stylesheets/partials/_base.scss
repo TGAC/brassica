@@ -59,6 +59,14 @@ fieldset {
   background-color: $rss-color;
 }
 
+/* file upload */
+.fileinput-button {
+  label {
+    margin-bottom: 0;
+    font-weight: normal;
+  }
+}
+
 /* other */
 .actions {
   transition: none;

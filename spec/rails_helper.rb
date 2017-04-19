@@ -5,8 +5,8 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
+require 'paperclip/matchers'
 require 'factory_girl_rails'
-require 'common_helpers'
 require 'vcr'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -61,16 +61,22 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :controller
   config.include Devise::TestHelpers, type: :controller
   config.include RSpecHtmlMatchers
+  config.include FixtureHelper
   include CommonHelpers
   config.include ElasticsearchHelper, :elasticsearch
+  config.include Paperclip::Shoulda::Matchers, type: :model
+  config.include ActiveSupport::Testing::TimeHelpers
 
   config.before :suite do
     DatabaseCleaner.clean_with :truncation
   end
 
   config.around :each do |example|
-    DatabaseCleaner.strategy = example.metadata[:elasticsearch] ? :truncation : :transaction
-    DatabaseCleaner.start unless example.metadata[:dont_clean_db]
+    strategy = (example.metadata[:elasticsearch] || example.metadata[:js]) ? :deletion : :transaction
+
+    DatabaseCleaner.strategy = strategy
+
+    DatabaseCleaner.start unless (example.metadata[:dont_clean_db] || strategy == :deletion)
     example.run
     DatabaseCleaner.clean unless example.metadata[:dont_clean_db]
   end
@@ -108,5 +114,25 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.default_cassette_options = { record: :new_episodes, re_record_interval: 7.days }
   c.ignore_hosts URI.parse(Rails.application.config_for(:elasticsearch).fetch("host")).host
+  c.ignore_hosts '127.0.0.1'
   c.ignore_hosts 'pub.orcid.org', 'sandbox.orcid.org'
+
+  c.allow_http_connections_when_no_cassette = false
 end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
+class FactoryGirl::SyntaxRunner
+  include FixtureHelper
+
+  def self.fixture_path
+    "#{::Rails.root}/spec/fixtures"
+  end
+end
+
+Delayed::Worker.delay_jobs = false
