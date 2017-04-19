@@ -19,7 +19,7 @@
         = form_tag analyses_data_files_path, multipart: true, method: :post do
           = hidden_field_tag "analysis_data_file[data_type]", "gwas_genotype", id: "genotype-data-file-data-type"
 
-          .genotype-data-file-fileinput.fileinput{ class: "#{'hidden' if @form.genotype_data_file}" }
+          .genotype-data-file-fileinput.fileinput{ class: ('hidden' if @form.genotype_data_file) }
             .btn.btn-primary.fileinput-button
               %label{ for: "genotype-data-file" } Choose genotype file...
               = file_field_tag "analysis_data_file[file]", class: 'genotype-data-file', id: 'genotype-data-file'
@@ -27,13 +27,13 @@
             %small.help-block
               Please upload the genotype VCF or CSV file here. Max file size is 50 MiB.
 
-        .genotype-data-file{ class: "#{'hidden' unless @form.genotype_data_file}" }
+        .genotype-data-file{ class: ('hidden' unless @form.genotype_data_file) }
           %span.file-name= @form.genotype_data_file.try(:file_file_name)
 
           = delete_analysis_data_file_button(@form.genotype_data_file,
             class: 'btn btn-default delete-genotype-data-file')
 
-      .form-group{ class: (:hidden unless @form.map_data_file) }
+      .form-group{ class: ('hidden' unless @form.map_data_file) }
         = label_tag :map_data_file, 'Genotype map'
         = render partial: "/analyses/new/map_data_file_help"
 
@@ -42,7 +42,7 @@
         = form_tag analyses_data_files_path, multipart: true, method: :post do
           = hidden_field_tag "analysis_data_file[data_type]", "gwas_map", id: "map-data-file-data-type"
 
-          .map-data-file-fileinput.fileinput{ class: "#{'hidden' if @form.map_data_file}" }
+          .map-data-file-fileinput.fileinput{ class: ('hidden' if @form.map_data_file) }
             .btn.btn-primary.fileinput-button
               %label{ for: "map-data-file" } Choose map file...
               = file_field_tag "analysis_data_file[file]", class: 'map-data-file', id: 'map-data-file'
@@ -50,7 +50,7 @@
             %small.help-block
               Please upload the map CSV file here. Max file size is 50 MiB.
 
-        .map-data-file{ class: "#{'hidden' unless @form.map_data_file}" }
+        .map-data-file{ class: ('hidden' unless @form.map_data_file) }
           %span.file-name= @form.map_data_file.try(:file_file_name)
 
           = delete_analysis_data_file_button(@form.map_data_file,
@@ -60,7 +60,7 @@
         = label_tag :phenotype_data_file, 'Phenotype/trait data', class: 'required'
         = render partial: "/analyses/new/phenotype_data_file_help"
 
-        .phenotype-data-file{ class: "#{'hidden' unless @form.phenotype_data_file}" }
+        .phenotype-data-file{ class: ('hidden' unless @form.phenotype_data_file) }
           %span.file-name= @form.phenotype_data_file.try(:file_file_name)
 
           = delete_analysis_data_file_button(@form.phenotype_data_file,
@@ -71,7 +71,7 @@
         = form_tag analyses_data_files_path, multipart: true, method: :post do
           = hidden_field_tag "analysis_data_file[data_type]", "gwas_phenotype", id: "phenotype-data-file-data-type"
 
-          .phenotype-data-file-fileinput.fileinput{ class: "#{'hidden' if @form.phenotype_data_file}" }
+          .phenotype-data-file-fileinput.fileinput{ class: ('hidden' if @form.phenotype_data_file) }
             .btn.btn-primary.fileinput-button
               %label{ for: "phenotype-data-file" } Choose phenotype file...
               = file_field_tag "analysis_data_file[file]", class: 'phenotype-data-file', id: 'phenotype-data-file'

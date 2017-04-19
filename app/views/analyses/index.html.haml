@@ -2,7 +2,7 @@
   %h2.page-title My analyses
 
   - if @analyses.present?
-    = render partial: 'analyses_list', locals: { analyses: @analyses }
+    %ul.analyses= render partial: "analysis_item", collection: @analyses, as: :analysis
 
     = new_analysis_button
 
