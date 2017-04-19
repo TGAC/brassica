@@ -17,6 +17,8 @@ RSpec.describe Analysis::DataFileCleanup do
   context "assigned file" do
     let!(:assigned_data_file) { create(:analysis_data_file, :gwas_phenotype, owner: user, analysis: analysis) }
 
+    before { travel(1.month) }
+
     it "preserves assigned data files" do
       expect { subject.call }.not_to change { Analysis::DataFile.count }
     end

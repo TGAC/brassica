@@ -76,13 +76,6 @@ RSpec.describe Analysis::ShellRunner do
     end
   end
 
-  describe "#store_result" do
-    it "appends to analysis outputs" do
-      pending
-      fail
-    end
-  end
-
   def exec_dir
     Rails.application.config_for(:jobs).fetch("execution_dir")
   end

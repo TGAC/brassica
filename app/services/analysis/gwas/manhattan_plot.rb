@@ -38,12 +38,12 @@ class Analysis
                 end
               end
 
-              mutations = mutations.sort { |mut_a, mut_b|
+              mutations = mutations.sort do |mut_a, mut_b|
                 chrom_a, pos_a = mut_a[-2..-1]
                 chrom_b, pos_b = mut_b[-2..-1]
 
                 chrom_a == chrom_b ? pos_a <=> pos_b : chrom_a <=> chrom_b
-              }
+              end
 
               mutations.each_with_index do |(_, _, chrom, _), idx|
                 chromosomes[chrom] << idx

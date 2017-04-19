@@ -114,10 +114,10 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.default_cassette_options = { record: :new_episodes, re_record_interval: 7.days }
   c.ignore_hosts URI.parse(Rails.application.config_for(:elasticsearch).fetch("host")).host
+  c.ignore_hosts '127.0.0.1'
   c.ignore_hosts 'pub.orcid.org', 'sandbox.orcid.org'
 
-  # FIXME: temporary workaround for feature specs
-  c.allow_http_connections_when_no_cassette = true
+  c.allow_http_connections_when_no_cassette = false
 end
 
 Shoulda::Matchers.configure do |config|

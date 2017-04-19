@@ -46,8 +46,10 @@ RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
     end
 
     it "outputs map CSV file" do
-      pending
-      fail
+      CSV.open(map_csv.path, headers: false) do |csv|
+        expect(csv.readline).to eq(%w(ID Chr cM))
+        expect(csv.readlines.map { |r| r[0] }).to eq(mutation_names)
+      end
     end
   end
 end
