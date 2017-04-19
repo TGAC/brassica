@@ -38,3 +38,6 @@ set :default_env, {
 set :delayed_job_prefix, 'bip'
 set :delayed_job_pools, { "*": 2 }
 set :delayed_job_roles, :app
+
+Rake::Task['deploy:assets:precompile'].clear
+

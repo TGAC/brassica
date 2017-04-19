@@ -8,6 +8,22 @@ role :app, %w{bip-deploy}
 role :web, %w{bip-deploy}
 role :db,  %w{bip-deploy}
 
+namespace :deploy do
+  namespace :assets do
+    desc 'Precompile assets locally and then rsync to web servers'
+    task :precompile do
+      puts 'Compiling assets'
+      `bundle exec rake assets:precompile assets:clean`
+
+      on roles(fetch(:assets_roles)) do |server|
+        execute "rm -f #{release_path}/public/assets/.sprockets-manifest*"
+        `rsync -av ./public/assets/ bip-deploy:#{release_path}/public/assets/`
+      end
+
+      `bundle exec rake assets:clobber`
+    end
+  end
+end
 
 # Extended Server Syntax
 # ======================
