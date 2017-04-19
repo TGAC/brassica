@@ -16,7 +16,7 @@ namespace :deploy do
       `bundle exec rake assets:precompile assets:clean`
 
       on roles(fetch(:assets_roles)) do |server|
-        execute "rm -f #{release_path}/public/assets/.sprockets-manifest*"
+        execute "rm -rf #{release_path}/public/assets/*"
         `rsync -av ./public/assets/ bip-deploy:#{release_path}/public/assets/`
       end
 
