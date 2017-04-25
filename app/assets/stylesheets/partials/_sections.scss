@@ -73,12 +73,36 @@
       }
     }
 
-    &.submit {
+    &.submit, &.analyse {
       @include boxed-content-icon($accent-color-2);
     }
 
     &.documentation {
       @include boxed-content-icon($mono-color-1);
+    }
+
+    @media (max-width: $screen-xs-max) {
+      p {
+        min-height: 86px;
+      }
+    }
+
+    @media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+      p {
+        min-height: 66px;
+      }
+    }
+
+    @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+      p {
+        min-height: 106px;
+      }
+    }
+
+    @media (min-width: $screen-lg-min) {
+      p {
+        min-height: 86px;
+      }
     }
   }
 }
