@@ -10,8 +10,7 @@ Marker sequences are currently cross-referenced with resources such as [Genebank
 It is a Rails web application is released as a free and open source project (see the LICENSE.txt file). The underlying database schema is derived from the CropStoreDB schema ver.7, with the original version developed by <a href="mailto:Graham.King@scu.edu.au">Graham King</a> and Pierre Carion at [Rothamsted Research](https://www.rothamsted.ac.uk/).
 
 While not required under the LICENSE, Earlham Institute explicitly asks any party that wishes to deploy a copy (modified or not) of BIP on their own servers, to contact, and obtain permission to do so. For that, please contact
-<a href="mailto:bip@earlham.ac.uk">bip@earlham.ac.uk</a>. This is to help measure the software impact and stay in contact with users for continuous software improvement.
-If you are interested in contributing to the project, for example by adding any analytics tools, please contact us, too. We are looking forward any feedback!
+<a href="mailto:bip@earlham.ac.uk">bip@earlham.ac.uk</a>. According to the LICENSE, contacting us is not a legally binding requirement, but it aims to help measure the software impact and stay in contact with users for continuous software improvement. If you are interested in contributing to the project, for example by adding any analytics tools, please contact us, too. We are looking forward any feedback!
 For further contact information on people behind the project or the database itself, please see the [about us](https://bip.earlham.ac.uk/about) section.
 
 Also, follow the BIP on twitter to get the latest updates [@BrassicaP](https://twitter.com/BrassicaP).
