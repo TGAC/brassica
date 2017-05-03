@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Analysis::Gwas::ManhattanPlot do
   let!(:analysis) { create(:analysis, :gwas) }
   let!(:gwas_results_data_files) {
-    analysis.args["phenos"].map do |trait_name|
+    analysis.meta["phenos"].map do |trait_name|
       create(:analysis_data_file, :gwas_results, analysis: analysis, owner: analysis.owner,
              file: fixture_file("gwas-results-SNPAssociation-Full-#{trait_name}.csv", "text/csv"))
     end

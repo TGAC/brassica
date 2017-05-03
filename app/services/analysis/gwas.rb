@@ -17,8 +17,11 @@ class Analysis
     attr_reader :analysis
 
     def prepare_csv_data_files
-      return if genotype_data_file(:csv)
+      prepare_genotype_csv_data_file unless genotype_data_file(:csv)
+      prepare_plant_trial_phenotype_csv_data_file if plant_trial_based?
+    end
 
+    def prepare_genotype_csv_data_file
       vcf_data_file = genotype_data_file
 
       genotype_csv, map_csv = Analysis::Gwas::GenotypeVcfToCsvConverter.new.call(vcf_data_file.file.path)
@@ -40,6 +43,15 @@ class Analysis
       )
     end
 
+    def prepare_plant_trial_phenotype_csv_data_file
+      plant_trial = PlantTrial.find(analysis.meta.fetch("plant_trial_id"))
+      Analysis::Gwas::PlantTrialPhenotypeBuilder.new.call(plant_trial)
+    end
+
+    def plant_trial_based?
+      analysis.meta["plant_trial_id"].present?
+    end
+
     def runner
       @runner ||= Analysis::ShellRunner.new(analysis)
     end
@@ -51,7 +63,7 @@ class Analysis
     end
 
     def selected_traits
-      @selected_traits ||= analysis.args["phenos"]
+      @selected_traits ||= analysis.meta["phenos"]
 
       unless @selected_traits.present?
         File.open(phenotype_data_file.file.path, "r") do |file|
@@ -64,7 +76,7 @@ class Analysis
     end
 
     def mixed_effect_traits
-      @mixed_effect_traits ||= analysis.args["cov"]
+      @mixed_effect_traits ||= analysis.meta["cov"]
     end
 
     def job_command

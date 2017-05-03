@@ -2,7 +2,7 @@ class Analysis < ActiveRecord::Base
   enum analysis_type: %w(gwas)
   enum status: %w(idle running success failure)
 
-  # NOTE: there is args attribute stored as json
+  # NOTE: there is :meta attribute stored as json
 
   belongs_to :owner, class_name: "User"
   has_many :data_files, class_name: "Analysis::DataFile", dependent: :destroy

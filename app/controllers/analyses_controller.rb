@@ -16,17 +16,7 @@ class AnalysesController < ApplicationController
     @form = form
 
     if @form.valid?
-      @form.save do |attrs|
-        attrs = attrs.merge(owner: current_user).
-          except(:genotype_data_file_id, :phenotype_data_file_id, :map_data_file_id)
-
-        analysis = Analysis.create!(attrs)
-        analysis.data_files << @form.genotype_data_file
-        analysis.data_files << @form.map_data_file if @form.map_data_file
-        analysis.data_files << @form.phenotype_data_file
-
-        AnalysisJob.new(analysis).enqueue
-      end
+      @form.save!
 
       redirect_to analyses_path, notice: "New analysis started"
     else
@@ -69,7 +59,8 @@ class AnalysesController < ApplicationController
   end
 
   def form_params
-    params.require(:analysis).permit(*form_klass.permitted_properties)
+    params.require(:analysis).permit(*form_klass.permitted_properties).
+      merge(owner: current_user)
   end
 
   def form

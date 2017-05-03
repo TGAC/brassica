@@ -16,7 +16,7 @@ RSpec.feature "GWAS results" do
   let!(:gwas_map) { create(:analysis_data_file, :gwas_map, owner: user, analysis: analysis, file: gwas_map_content) }
 
   let!(:gwas_results_data_files) {
-    analysis.args["phenos"].map do |trait_name|
+    analysis.meta["phenos"].map do |trait_name|
       create(:analysis_data_file, :gwas_results, analysis: analysis, owner: analysis.owner,
              file: fixture_file("gwas-results-SNPAssociation-Full-#{trait_name}.csv", "text/csv"))
     end
@@ -28,7 +28,7 @@ RSpec.feature "GWAS results" do
 
   before { login_as(user, scope: :user) }
 
-  scenario "foo", js: true do
+  scenario "are available", js: true do
     visit analysis_path(analysis)
 
     expect(page).to have_content("GWAS analysis: #{analysis.name}")
