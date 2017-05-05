@@ -2,14 +2,9 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
 
   attr_accessor :request_params, :user
 
-  # Authentication via ORCID is currently unsupported by BrAPI.
-  # before_filter :authenticate_api_key!
-
-
   rescue_from ActionController::ParameterMissing do |exception|
     render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
   end
-
 
 
 
@@ -53,11 +48,11 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
         total_pages = (total_count/page_size.to_f).ceil
         
         json_response = { 
-          'metadata' => json_metadata(page_size, page, total_count, total_pages),
-          'result' => json_result_array
+          metadata: json_metadata(page_size, page, total_count, total_pages),
+          result: json_result_array
         }
        
-        render json: json_response, :except => ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
+        render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
       
       end
     

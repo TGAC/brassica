@@ -3,8 +3,6 @@ class Brapi::V1::GermplasmQueries
   include Singleton
 
   def initialize
-    # Currently only one connection opened. 
-    # TODO: For the future would be good to create a connection pool.
     @connection = ActiveRecord::Base.connection.raw_connection    
   end
 
@@ -50,7 +48,6 @@ class Brapi::V1::GermplasmQueries
       SELECT DISTINCT ON (plant_accessions.id)
       plant_accessions.id,
       plant_accessions.user_id,
-      plant_accessions.published,
       plant_accessions.plant_accession as "germplasmDbId", 
       case 
         when plant_lines.common_name != null then plant_lines.common_name

@@ -3,20 +3,6 @@ require 'pp'
 
 RSpec.describe Brapi::V1::GermplasmController do
   
-  # BrAPI doesn't use ORCID authentication system and WP7 hasn't agreed yet on an alternative. 
-  # We will have to work for some time without requiring authentications.
-  #
-  #context 'when unauthenticated' do
-  #  describe '#search' do
-  #
-  #    it 'withouth being authenticated you cannot obtain authorithation to do anything' do
-  #      get :search , germplasmDbId: 'hzau2003_TN077_a03'
-  #        expect(response).to have_http_status(401)
-  #    end 
-  #  end
-  #
-  #end
-  
   context 'BrAPI without requiring authentication' do
     let(:u1) { create :user }
     before { sign_in u1 }
