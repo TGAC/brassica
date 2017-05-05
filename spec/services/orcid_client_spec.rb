@@ -7,6 +7,7 @@ RSpec.describe OrcidClient do
     it 'loads user full_name from orcid' do
       extra_info = OrcidClient.get_user_data ENV['ORCID_TEST_UID']
       expect(extra_info).not_to eq nil
+      p extra_info
       expect(extra_info[:status]).to eq :ok
       expect(extra_info[:full_name]).to eq ENV['ORCID_TEST_FULL_NAME']
     end

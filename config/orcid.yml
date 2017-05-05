@@ -10,16 +10,16 @@ sandbox: &sandbox
   authorize_params:
     scope: /authenticate
   client_options:
-    site: http://sandbox.orcid.org
-    authorize_url: http://sandbox.orcid.org/oauth/authorize?show_login=true
+    site: https://sandbox.orcid.org
+    authorize_url: https://sandbox.orcid.org/oauth/authorize?show_login=true
     token_url: https://sandbox.orcid.org/oauth/token
 
 development:
   <<: *default
 
 test:
-#  <<: *sandbox
-  <<: *default
+  <<: *sandbox
+#  <<: *default
 
 production:
   <<: *default
