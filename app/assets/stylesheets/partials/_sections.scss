@@ -73,8 +73,12 @@
       }
     }
 
-    &.submit, &.analyse {
+    &.submit {
       @include boxed-content-icon($accent-color-2);
+    }
+
+    &.analyse {
+      @include boxed-content-icon($accent-color-3);
     }
 
     &.documentation {
