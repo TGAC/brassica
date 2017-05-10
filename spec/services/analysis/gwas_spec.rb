@@ -53,9 +53,39 @@ RSpec.describe Analysis::Gwas do
     end
 
     context "plant trial based analysis" do
+      let!(:plant_trial) { create(:plant_trial, user: analysis.owner) }
+      let!(:trait_descriptors) { create_list(:trait_descriptor, 5) }
+      let!(:plant_scoring_units) {
+        1.upto(100).map { |idx|
+          create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: "plant#{idx}")
+        }
+      }
+      let!(:trait_scores) {
+        plant_scoring_units.map.with_index { |psu, idx|
+          create(:trait_score, plant_scoring_unit: psu, score_value: idx, trait_descriptor: trait_descriptors.sample)
+        }
+      }
+
+      let!(:genotype_data_file) {
+        create(:analysis_data_file, :gwas_genotype_vcf, analysis: analysis, owner: analysis.owner)
+      }
+
+      let(:runner) { double(call: nil, results_dir: nil, store_result: nil) }
+
+      before do
+        analysis.update!(meta: { plant_trial_id: plant_trial.id })
+      end
+
       it "creates phenotype CSV from plant trial data" do
-        pending
-        fail
+        expect { subject.call }.
+          to change { analysis.data_files.gwas_phenotype.count }.
+          from(0).to(1)
+      end
+
+      it "changes analysis status to success" do
+        expect { subject.call }.
+          to change { analysis.reload.status }.
+          from("idle").to("success")
       end
     end
   end

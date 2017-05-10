@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Analysis::Gwas::PlantTrialPhenotypeBuilder do
+RSpec.describe Analysis::Gwas::PlantTrialPhenotypeCsvBuilder do
   let(:plant_trial) { create(:plant_trial) }
   let!(:plant_scoring_units) { create_list(:plant_scoring_unit, 3, plant_trial: plant_trial) }
   let!(:trait_scores) {

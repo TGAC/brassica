@@ -22,7 +22,7 @@ module Analyses
       def save!
         save do |attrs|
           attrs = attrs.except(:genotype_data_file_id, :phenotype_data_file_id, :map_data_file_id, :plant_trial_id)
-          attrs[:meta] = { plan_trial_id: plant_trial_id } if plant_trial_based?
+          attrs[:meta] = { plant_trial_id: plant_trial_id } if plant_trial_based?
 
           Analysis.transaction do
             analysis = Analysis.create!(attrs)
@@ -103,7 +103,7 @@ module Analyses
       end
 
       def build_plant_trial_pheno_data
-        Analysis::Gwas::PlantTrialPhenotypeBuilder.new.build(plant_trial)
+        Analysis::Gwas::PlantTrialPhenotypeCsvBuilder.new.build(plant_trial)
       end
 
       def genotype_data_parser

@@ -44,8 +44,16 @@ class Analysis
     end
 
     def prepare_plant_trial_phenotype_csv_data_file
-      plant_trial = PlantTrial.find(analysis.meta.fetch("plant_trial_id"))
-      Analysis::Gwas::PlantTrialPhenotypeBuilder.new.call(plant_trial)
+      plant_trial = PlantTrial.visible(analysis.owner_id).find(analysis.meta.fetch("plant_trial_id"))
+      phenotype_csv = Analysis::Gwas::PlantTrialPhenotypeCsvBuilder.new.build_csv(plant_trial)
+
+      analysis.data_files.create!(
+        role: :input,
+        data_type: :gwas_phenotype,
+        file: phenotype_csv,
+        file_content_type: "text/csv",
+        owner: analysis.owner
+      )
     end
 
     def plant_trial_based?

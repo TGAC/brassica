@@ -9,6 +9,7 @@ class AnalysesController < ApplicationController
     if params.key?(:analysis)
       @analysis = Analysis.new(analysis_params)
       @form = form
+      @plant_trials = plant_trials_with_scores
     end
   end
 
@@ -21,6 +22,7 @@ class AnalysesController < ApplicationController
       redirect_to analyses_path, notice: "New analysis started"
     else
       @analysis = Analysis.new(analysis_params)
+      @plant_trials = plant_trials_with_scores
 
       render :new
     end
@@ -52,6 +54,13 @@ class AnalysesController < ApplicationController
 
   def require_user?
     action_name != "new" || params[:analysis].present?
+  end
+
+  def plant_trials_with_scores
+    PlantTrial.visible(current_user.id).select do |plant_trial|
+      plant_trial.plant_scoring_units.visible(current_user.id).exists? &&
+        plant_trial.trait_descriptors.visible(current_user.id).exists?
+    end
   end
 
   def analysis_params

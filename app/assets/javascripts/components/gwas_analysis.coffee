@@ -2,14 +2,24 @@ window.GwasAnalysis = class GwasAnalysis extends Component
   init: =>
     return unless @$el.length >= 1
 
+    this.bind()
+
+  bind: =>
+    this.bindPlantTrialSelect()
     this.bindGenotypeUpload()
     this.bindMapUpload()
     this.bindPhenotypeUpload()
 
+  bindPlantTrialSelect: =>
+    $select = this.$("#analysis_plant_trial_id")
+    $select.on "change", (event) =>
+      this.clearDataFile("phenotype-data-file")
+      this.updateGenotypeTemplateLink($select.val())
+
   bindGenotypeUpload: =>
     $map_form_group = this.$('.map-data-file-fileinput').parents('.form-group')
     $map_fileinput = $map_form_group.find('.fileinput')
-    $map_upload_result = @$("div.map-data-file")
+    $map_upload_result = this.$("div.map-data-file")
 
     this.bindDataFile('genotype-data-file',
       done: (data) =>
@@ -30,13 +40,18 @@ window.GwasAnalysis = class GwasAnalysis extends Component
     this.bindDataFile('map-data-file')
 
   bindPhenotypeUpload: =>
-    this.bindDataFile('phenotype-data-file')
+    this.bindDataFile('phenotype-data-file',
+      done: (data) =>
+        $select = this.$("#analysis_plant_trial_id")
+        $select.val("")
+        this.updateGenotypeTemplateLink($select.val())
+    )
 
   bindDataFile: (field, options = {}) =>
-    $fileinput = @$(".#{field}-fileinput")
-    $result = @$("div.#{field}")
+    $fileinput = this.$(".#{field}-fileinput")
+    $result = this.$("div.#{field}")
 
-    @$("input.#{field}").fileupload
+    this.$("input.#{field}").fileupload
       data_type: 'json'
 
       add: (event, data) =>
@@ -46,7 +61,7 @@ window.GwasAnalysis = class GwasAnalysis extends Component
       done: (event, data) =>
         $(".errors").addClass('hidden').text("")
 
-        @$("#analysis_#{field.replace(/-/g, '_')}_id").val(data.result.id)
+        this.$("#analysis_#{field.replace(/-/g, '_')}_id").val(data.result.id)
 
         $fileinput.addClass('hidden')
         $fileinput.find('.fileinput-button').removeClass('disabled')
@@ -69,9 +84,24 @@ window.GwasAnalysis = class GwasAnalysis extends Component
             $errors.find("ul").append($li)
           )
 
-    @$(".delete-#{field}").on 'ajax:success', (data, status, xhr) =>
+    this.$(".delete-#{field}").on 'ajax:success', (data, status, xhr) =>
       $fileinput.removeClass('hidden')
       $result.addClass('hidden')
 
       options.delete && options.delete()
 
+  clearDataFile: (field) =>
+    $fileinput = this.$(".#{field}-fileinput")
+    $result = this.$("div.#{field}")
+
+    $fileinput.removeClass('hidden')
+    $result.addClass('hidden')
+
+    this.$("#analysis_#{field.replace(/-/g, '_')}_id").val("")
+
+  updateGenotypeTemplateLink: (plant_trial_id) =>
+    $link = this.$("#analysis_gwas_genotype_template_download")
+    url = $link.attr("href")
+    url = url.replace(/&plant_trial_id=.*/, '') + "&plant_trial_id=" + plant_trial_id
+
+    $link.attr(href: url)

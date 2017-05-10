@@ -37,6 +37,14 @@
   .form-group {
     margin-bottom: 2em;
   }
+
+  .form-group + hr {
+    margin-top: -1em;
+  }
+
+  .nav-tabs {
+    margin-bottom: 10px;
+  }
 }
 
 .show-analysis {
