@@ -13,7 +13,7 @@ namespace :deploy do
     desc 'Precompile assets locally and then rsync to web servers'
     task :precompile do
       puts 'Compiling assets'
-      `bundle exec rake assets:precompile assets:clean`
+      `bundle exec rake assets:precompile assets:non_digested assets:clean`
 
       on roles(fetch(:assets_roles)) do |server|
         execute "rm -rf #{release_path}/public/assets/*"
