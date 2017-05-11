@@ -4,6 +4,8 @@ RSpec.describe Analysis::DataFileCleanup do
   let(:user) { create(:user) }
   let(:analysis) { create(:analysis, owner: user) }
 
+  after { travel_back }
+
   context "orphaned data file" do
     let!(:orphaned_data_file) { create(:analysis_data_file, :gwas_phenotype, owner: user) }
 
