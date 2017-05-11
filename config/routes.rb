@@ -61,4 +61,14 @@ Rails.application.routes.draw do
       patch ":plural_model_name/:id/revoke", to: 'resources#revoke', constraints: publishable_constraints
     end
   end
+  
+  
+  # BRAPI V1
+  namespace :brapi, defaults: { format: 'json' } do
+    namespace :v1 do
+      
+      get "germplasm-search", to: 'germplasm#search'
+          
+    end
+  end
 end
