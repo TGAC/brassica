@@ -68,6 +68,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       
       get "germplasm-search", to: 'germplasm#search'
+      post "studies-search", to: 'studies#search'
+      get "studies/:id", to: 'studies#shown'
+      get "studies", to: 'studies#shown'
           
     end
   end
