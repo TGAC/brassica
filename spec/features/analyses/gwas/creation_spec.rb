@@ -34,7 +34,8 @@ RSpec.feature "Analysis creation" do
       attach_file("genotype-data-file", fixture_file_path("gwas-genotypes.vcf"))
       attach_file("phenotype-data-file", fixture_file_path("gwas-phenotypes.csv"))
 
-      sleep(1)
+      expect(page).to have_css("span.file-name", text: "gwas-genotypes.vcf")
+      expect(page).to have_css("span.file-name", text: "gwas-phenotypes.csv")
 
       expect { click_button "Run" }.to change { Analysis.count }.from(0).to(1)
 
@@ -54,7 +55,9 @@ RSpec.feature "Analysis creation" do
       attach_file("map-data-file", fixture_file_path("gwas-map.csv"))
       attach_file("phenotype-data-file", fixture_file_path("gwas-phenotypes.csv"))
 
-      sleep(1)
+      expect(page).to have_css("span.file-name", text: "gwas-genotypes.csv")
+      expect(page).to have_css("span.file-name", text: "gwas-map.csv")
+      expect(page).to have_css("span.file-name", text: "gwas-phenotypes.csv")
 
       expect { click_button "Run" }.to change { Analysis.count }.from(0).to(1)
 
@@ -88,7 +91,8 @@ RSpec.feature "Analysis creation" do
       attach_file("genotype-data-file", fixture_file_path("gwas-genotypes.csv"))
       attach_file("map-data-file", fixture_file_path("gwas-map.csv"))
 
-      sleep(1)
+      expect(page).to have_css("span.file-name", text: "gwas-genotypes.csv")
+      expect(page).to have_css("span.file-name", text: "gwas-map.csv")
 
       expect {
         click_button "Run"
