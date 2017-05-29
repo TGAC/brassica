@@ -29,6 +29,10 @@
             = f.select :plant_trial_id, @plant_trials.map { |trial| [trial.plant_trial_name, trial.id] },
               { include_blank: "None" }, class: 'form-control', form: 'new_analysis'
 
+            %small.help-block
+              Plant scoring units from selected trial will be used to populate
+              genotype CSV file template.
+
           .tab-pane#phenotype_data_file_upload
             = render partial: "/analyses/new/phenotype_data_file_help"
 
