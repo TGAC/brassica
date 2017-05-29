@@ -26,14 +26,15 @@ class Analysis
         headers = %w(ID) + data.trait_ids.map { |trait_id| trait_id.gsub(/\s+/, ".") }
 
         Tempfile.new(["plant-trial-phenotype", ".csv"]).tap do |csv_file|
-          csv_file.write(headers.join(",") + "\n")
+          csv_file << CSV.generate(force_quotes: true) do |csv|
+            csv << headers
 
-          data.scoring.each do |sample|
-            sample = sample.map { |val| val == "-" ? "NA" : val }
-            scores = data.trait_id_indices.map { |idx| sample[idx] }
+            data.scoring.each do |sample|
+              sample = sample.map { |val| val == "-" ? "NA" : val }
+              scores = data.trait_id_indices.map { |idx| sample[idx] }
 
-            csv_file.write(sample[0] + ",")
-            csv_file.write(scores.join(",") + "\n")
+              csv << [sample[0]] + scores
+            end
           end
 
           csv_file.flush

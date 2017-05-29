@@ -53,14 +53,13 @@ class Analysis
       private
 
       def generate_genotype_csv(mutation_names, sample_data)
-        headers = %w(ID) + mutation_names
-
         Tempfile.new(["genotype", ".csv"]).tap do |csv_file|
-          csv_file.write(headers.join(",") + "\n")
+          csv_file << CSV.generate(force_quotes: true) do |csv|
+            csv << %w(ID) + mutation_names
 
-          sample_data.each do |sample_name, mutations|
-            csv_file.write(sample_name + ",")
-            csv_file.write(mutations.join(",") + "\n")
+            sample_data.each do |sample_name, mutations|
+              csv << [sample_name] + mutations
+            end
           end
 
           csv_file.flush
@@ -69,14 +68,14 @@ class Analysis
       end
 
       def generate_map_csv(mutation_names, mutation_data)
-        headers = %w(ID Chr cM)
-
         Tempfile.new(["map", ".csv"]).tap do |csv_file|
-          csv_file.write(headers.join(",") + "\n")
+          csv_file << CSV.generate(force_quotes: true) do |csv|
+            csv << %w(ID Chr cM)
 
-          mutation_names.each.with_index do |name, idx|
-            chrom, pos = mutation_data[idx]
-            csv_file.write([name, chrom, pos].join(",") + "\n")
+            mutation_names.each.with_index do |name, idx|
+              chrom, pos = mutation_data[idx]
+              csv << [name, chrom, pos]
+            end
           end
 
           csv_file.flush

@@ -27,11 +27,11 @@ RSpec.describe Analysis::Gwas::PlantTrialPhenotypeCsvBuilder do
     it "returns CSV acceptable by GWASSER" do
       headers = subject.readline.strip.split(",")
 
-      expect(headers).to eq(["ID"] + trait_names)
+      expect(headers).to eq(['"ID"'] + trait_names.map { |t| %("#{t}") })
       expect(subject.readlines).to match_array([
-        "#{scoring_unit_names[0]},0,NA,NA\n",
-        "#{scoring_unit_names[1]},NA,1,NA\n",
-        "#{scoring_unit_names[2]},NA,NA,2\n"
+        %("#{scoring_unit_names[0]}","0","NA","NA"\n),
+        %("#{scoring_unit_names[1]}","NA","1","NA"\n),
+        %("#{scoring_unit_names[2]}","NA","NA","2"\n)
       ])
     end
   end
