@@ -101,7 +101,10 @@ window.GwasAnalysis = class GwasAnalysis extends Component
 
   updateGenotypeTemplateLink: (plant_trial_id) =>
     $link = this.$("#analysis_gwas_genotype_template_download")
+
     url = $link.attr("href")
-    url = url.replace(/&plant_trial_id=.*/, '') + "&plant_trial_id=" + plant_trial_id
+    params = Url.queryParams(url)
+    params["plant_trial_id"] = plant_trial_id
+    url = Url.replaceQueryParams(url, params)
 
     $link.attr(href: url)
