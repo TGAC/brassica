@@ -28,19 +28,17 @@ module Analyses
           pheno.errors.each { |error| errors.add(:phenotype_data_file, error) }
         end
 
-        if geno && pheno
+        if geno && geno.valid? && pheno && pheno.valid?
           if geno.sample_ids.try(:sort) != pheno.sample_ids.try(:sort)
             errors.add(:base, :geno_pheno_samples_mismatch)
           end
         end
 
-        if map_data_file
-          unless map.valid?
-            map.errors.each { |error| errors.add(:map_data_file, error) }
-          end
+        if map && !map.valid?
+          map.errors.each { |error| errors.add(:map_data_file, error) }
         end
 
-        if geno && map
+        if geno && geno.valid? && map && map.valid?
           if map.mutation_ids.try(:sort) != geno.mutation_ids.try(:sort)
             errors.add(:base, :geno_map_mutations_mismatch)
           end
