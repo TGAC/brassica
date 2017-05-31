@@ -29,7 +29,7 @@ class Analysis
           File.open(map_csv_data_file.file.path, "r") do |file|
             map_data = Analysis::Gwas::MapCsvParser.new.call(file)
             mutations = map_data.csv.map do |name, chrom, pos|
-              [name, neg_log10_p_values[name], chrom.to_i, pos.to_i]
+              [name, neg_log10_p_values[name], chrom, pos.to_i]
             end
           end
 
