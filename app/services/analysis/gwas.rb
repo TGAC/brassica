@@ -25,6 +25,7 @@ class Analysis
 
       analysis.data_files.create!(
         role: :input,
+        origin: :generated,
         data_type: :gwas_genotype,
         file: genotype_csv,
         file_content_type: "text/csv",
@@ -33,6 +34,7 @@ class Analysis
 
       analysis.data_files.create!(
         role: :input,
+        origin: :generated,
         data_type: :gwas_map,
         file: map_csv,
         file_content_type: "text/csv",
