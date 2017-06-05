@@ -10,7 +10,6 @@ RSpec.describe Brapi::V1::StudiesController do
     describe '#search' do
 
       it 'requires at least one valid param to work' do
-      
         pa = create(:plant_accession, plant_accession: "hzau2003_TN077_a03")
         pt = create(:plant_trial, plant_trial_name: "hzau_2003_Wuhan_02")
         psu = create(:plant_scoring_unit, plant_accession: pa, plant_trial: pt)
@@ -58,7 +57,7 @@ RSpec.describe Brapi::V1::StudiesController do
         post :search,
             germplasmDbIds: ['hzau2003_TN077_a03','hzau2004_TN038_a02']
         expect(response).to have_http_status(200)
-        expect((JSON.parse(response.body))['result'].size).to eq 2
+        expect((JSON.parse(response.body))['result']['data'].size).to eq 2
         
       end
       
@@ -77,24 +76,24 @@ RSpec.describe Brapi::V1::StudiesController do
         post :search,
             germplasmDbIds: ['hzau2003_TN077_a03','hzau2004_TN038_a02'], studyLocations: ['China']
         expect(response).to have_http_status(200)
-        expect((JSON.parse(response.body))['result'].size).to eq 2
+        expect((JSON.parse(response.body))['result']['data'].size).to eq 2
         
       end
       
       it 'cheking ordering: query by germplasmDbId = [hzau2003_TN077_a03, hzau2004_TN038_a02], 
       sortBy: name and sortOrder: asc,  returns first hzau2003_TN077_a03' do
-        pa = create(:plant_accession, plant_accession: "hzau2003_TN077_a03")
-        pt = create(:plant_trial, plant_trial_name: "hzau_2003_Wuhan_02")
-        psu = create(:plant_scoring_unit, plant_accession: pa, plant_trial: pt)
+        pa = create(:plant_accession, plant_accession: "hzau2003_TN077_a03", published: true)
+        pt = create(:plant_trial, plant_trial_name: "hzau_2003_Wuhan_02", published: true)
+        psu = create(:plant_scoring_unit, plant_accession: pa, plant_trial: pt, published: true)
         
-        pa2 = create(:plant_accession, plant_accession: "hzau2004_TN038_a02")
-        pt2 = create(:plant_trial, plant_trial_name: "hzau_2004_Weinan_03")
-        psu2 = create(:plant_scoring_unit, plant_accession: pa2, plant_trial: pt2)
+        pa2 = create(:plant_accession, plant_accession: "hzau2004_TN038_a02", published: true)
+        pt2 = create(:plant_trial, plant_trial_name: "hzau_2004_Weinan_03", published: true)
+        psu2 = create(:plant_scoring_unit, plant_accession: pa2, plant_trial: pt2, published: true)
         
         post :search,
             germplasmDbIds: ['hzau2003_TN077_a03','hzau2004_TN038_a02'], sortBy: "name", sortOrder: "asc"
-        expect(response).to have_http_status(200)
-        expect((JSON.parse(response.body))['result'][0]['plant_accession']).to eq "hzau2003_TN077_a03"
+        expect(response).to have_http_status(200)        
+        expect((JSON.parse(response.body))['result']['data'][0]['trialName']).to eq "hzau_2003_Wuhan_02"
         
       end
       
@@ -111,16 +110,14 @@ RSpec.describe Brapi::V1::StudiesController do
         post :search,
             germplasmDbIds: ['hzau2003_TN077_a03','hzau2004_TN038_a02'], sortBy: "name", sortOrder: "desc"
         expect(response).to have_http_status(200)
-        expect((JSON.parse(response.body))['result'][0]['plant_accession']).to eq "hzau2004_TN038_a02"
+        expect((JSON.parse(response.body))['result']['data'][0]['trialName']).to eq "hzau_2004_Weinan_03"
         
       end
  
     end
     
     
-    
-    
-    describe '#shown' do
+    describe '#show' do
     
       it 'requires one valid param to work, id' do
         co = create(:country, country_code: "CHN", country_name: "China")
@@ -129,14 +126,14 @@ RSpec.describe Brapi::V1::StudiesController do
         pt = create(:plant_trial , :with_layout, plant_trial_name: "hzau_2003_Wuhan_02", country: co)
         psu = create(:plant_scoring_unit, plant_accession: pa, plant_trial: pt)
         
-        get :shown
+        get :show
         expect(response).to have_http_status(422)
 
-        get :shown, 
+        get :show, 
             id: pt.id
         expect(response).to have_http_status(200)
         
-        get :shown,
+        get :show,
             id: '9999999'
         expect(response).to have_http_status(404)
          
@@ -149,7 +146,7 @@ RSpec.describe Brapi::V1::StudiesController do
         pt = create(:plant_trial , :with_layout, plant_trial_name: "hzau_2003_Wuhan_02", country: co)
         psu = create(:plant_scoring_unit, plant_accession: pa, plant_trial: pt)
         
-        get :shown, 
+        get :show, 
             id: pt.id
         expect(response).to have_http_status(200)
         expect((JSON.parse(response.body))['result'].size).to eq 1

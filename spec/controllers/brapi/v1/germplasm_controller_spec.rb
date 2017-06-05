@@ -59,12 +59,8 @@ RSpec.describe Brapi::V1::GermplasmController do
           format: :json,
           germplasmDbId: "hzau2003_TN077_a04"
           expect(response).to have_http_status(404)
-        #
-        #json = JSON.parse(response.body)
-        #expect(json['result'].size).to eq 1
 
-      end
-      
+      end     
  
     end
 

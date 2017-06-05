@@ -38,8 +38,13 @@ class Brapi::V1::GermplasmQueries
     
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets
     where_query = where_query + (where_atts_count>0?" and ":" where ") 
-    where_query = where_query + " (plant_accessions.user_id IS NULL 
-      OR plant_accessions.published = TRUE) "
+    where_query += <<-SQL.strip_heredoc
+      ((plant_accessions.user_id IS NULL OR plant_accessions.published = TRUE) AND
+       (plant_populations.user_id IS NULL OR plant_populations.published = TRUE) AND
+       (plant_lines.user_id IS NULL OR plant_lines.published = TRUE) AND
+       (plant_varieties_from_lines.user_id IS NULL OR plant_varieties_from_lines.published = TRUE) AND
+       (plant_varieties_from_accessions.user_id IS NULL OR plant_varieties_from_accessions.published = TRUE) )
+    SQL
     
     
     # select clauses
@@ -101,9 +106,7 @@ class Brapi::V1::GermplasmQueries
       
       total_query = select_query + joins_query + where_query + order_query + pagination_query
 
-      json_wrapping_query = "SELECT row_to_json(row) from ("+total_query+") row"
-      
-      result_object = execute_statement(json_wrapping_query, where_atts)
+      result_object = execute_statement(total_query, where_atts)
     end
     
     result_object

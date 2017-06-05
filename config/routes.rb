@@ -69,8 +69,8 @@ Rails.application.routes.draw do
       
       get "germplasm-search", to: 'germplasm#search'
       post "studies-search", to: 'studies#search'
-      get "studies/:id", to: 'studies#shown'
-      get "studies", to: 'studies#shown'
+      get "studies/:id", to: 'studies#show'
+      get "studies", to: 'studies#show'
           
     end
   end

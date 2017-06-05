@@ -12,7 +12,7 @@ class Brapi::V1::StudiesController < Brapi::BaseController
     # accepted params: studyType, studyNames, studyLocations, programNames, germplasmDbIds
     # observationVariableDbIds, active, sortBy, sortOrder
     # pageSize, page
-    
+
     # At least one implemented search parameter should be provided
     if !params['studyType'].present? && !params['studyNames'].present? && !params['studyLocations'].present? && 
         !params['programNames'].present? && !params['germplasmDbIds'].present? && 
@@ -34,12 +34,11 @@ class Brapi::V1::StudiesController < Brapi::BaseController
       if records.nil? || records.size ==0
         render json: { reason: 'Resource not found' }, status: :not_found  # 404
       else
-        
         json_result_array = []
         
         # any programmatic data manipulation can be done here
         result_object.each do |row|
-          row = JSON.parse(row["row_to_json"])
+          row[:seasons] = [row["seasons"]]
           
           # To check authentication and ownership when ORCID is supported by BrAPI
           # We currently only retrieve public records. This is already done at query level
@@ -60,7 +59,9 @@ class Brapi::V1::StudiesController < Brapi::BaseController
         
         json_response = { 
           metadata: json_metadata(page_size, page, total_count, total_pages),
-          result: json_result_array
+          result: {
+            data: json_result_array
+          }
         }
        
         render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
@@ -70,7 +71,7 @@ class Brapi::V1::StudiesController < Brapi::BaseController
   end
 
 
-  def shown
+  def show
     # accepted params: id
 
     if !params['id'].present? 
@@ -88,10 +89,10 @@ class Brapi::V1::StudiesController < Brapi::BaseController
         json_result_array = []
         
         # any programmatic data manipulation can be done here
-        result_object.each do |row|
-          row = JSON.parse(row["row_to_json"])
+        result_object.each do |row|          
+          row[:seasons] = [row["seasons"]]
           
-          location_hash = row.extract!("locationDbId", "name", "countryCode", "countryName", "latitute", 
+          location_hash = row.extract!("locationDbId", "name", "countryCode", "countryName", "latitude", 
             "longitude", "altitude")
           location_hash[:additional_info] = row.extract!("terrain", "soil_type")
           row[:location] = [location_hash]
@@ -138,41 +139,15 @@ class Brapi::V1::StudiesController < Brapi::BaseController
   def json_metadata(page_size, current_page, total_count, total_pages)
     json_metadata = {
       status: [],
-      files: [],
+      datafiles: [],
       pagination: {
-        pageSize: page_size, # old 'per_page'
-        currentPage:  current_page, # old 'page'
-        totalCount: total_count, # old 'total_count'
+        pageSize: page_size, # like 'per_page' in CollectionDecorator
+        currentPage: current_page, # like old 'page' in CollectionDecorator
+        totalCount: total_count, # like 'total_count'  in CollectionDecorator
         totalPages: total_pages 
       }
     }
   end
   
-
-  def authenticate_api_key!
-    unless api_key_token.present?
-      render json: '{"reason": "BIP API requires API key authentication"}', status: 401
-      return
-    end
-    unless api_key.present?
-      if api_key_token == I18n.t('api.general.demo_key')
-        render json: '{"reason": "Please use your own, personal API key"}', status: 401
-      else
-        render json: '{"reason": "Invalid API key"}', status: 401
-      end
-    end
-  end
-
-  def api_key_token
-    return @api_key_token if defined?(@api_key_token)
-    token = params[:api_key] || request.headers["X-BIP-Api-Key"]
-    @api_key_token = ApiKey.normalize_token(token)
-  end
-
-  def api_key
-    return @api_key if defined?(@api_key)
-    @api_key = api_key_token && ApiKey.find_by(token: api_key_token)
-  end
-
 
 end

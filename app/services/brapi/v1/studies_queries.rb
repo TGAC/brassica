@@ -25,30 +25,34 @@ class Brapi::V1::StudiesQueries
     # I think we are not going to differentiate among study data and trial data in brapi
     if studyNames.present?   # plant_trials.plant_trial_name  TODO: FEEDBACK BY ANNEMARIE. MAPPING STUDY = TRIAL
       where_atts_count+= 1
-      where_query += get_posgresql_where_condition("plant_trials.plant_trial_name", studyNames, where_atts_count)
-      where_atts << get_posgresql_att(studyNames)  
+      where_query += get_where_condition("plant_trials.plant_trial_name", studyNames, where_atts_count)
+      where_atts << get_att(studyNames)  
     end
     if studyLocations.present?   # countries.country_name
       where_atts_count+= 1
-      where_query += get_posgresql_where_condition("countries.country_name", studyLocations, where_atts_count)
-      where_atts << get_posgresql_att(studyLocations)  
+      where_query += get_where_condition("countries.country_name", studyLocations, where_atts_count)
+      where_atts << get_att(studyLocations)  
     end
     if programNames.present?   # plant_trials.project_descriptor
       where_atts_count+= 1
-      where_query += get_posgresql_where_condition("plant_trials.project_descriptor", programNames, where_atts_count)
-      where_atts << get_posgresql_att(programNames)  
+      where_query += get_where_condition("plant_trials.project_descriptor", programNames, where_atts_count)
+      where_atts << get_att(programNames)  
     end
     if germplasmDbIds.present?   # plant_accessions.plant_accession
       where_atts_count+= 1
-      where_query += get_posgresql_where_condition("plant_accessions.plant_accession", germplasmDbIds, where_atts_count)
-      where_atts << get_posgresql_att(germplasmDbIds)    
+      where_query += get_where_condition("plant_accessions.plant_accession", germplasmDbIds, where_atts_count)
+      where_atts << get_att(germplasmDbIds)    
     end
     
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets
     where_atts_count+= 1
     where_query = where_query + (where_atts_count>1?" and ":" where ") 
-    where_query = where_query + " (plant_accessions.user_id IS NULL 
-      OR plant_accessions.published = TRUE) "
+    where_query += <<-SQL.strip_heredoc
+      ((plant_accessions.user_id IS NULL OR plant_accessions.published = TRUE) AND
+       (plant_scoring_units.user_id IS NULL OR plant_scoring_units.published = TRUE) AND
+       (plant_trials.user_id IS NULL OR plant_trials.published = TRUE) )      
+    SQL
+    
     
     # select clauses
     # studyDbId, name, trialDbId, trialName, studyType, seasons, locationDbId, locationName, 
@@ -61,11 +65,9 @@ class Brapi::V1::StudiesQueries
       plant_trials.plant_trial_name as "name", 
       plant_trials.id as "trialDbId", 
       plant_trials.plant_trial_name as "trialName",   
-      plant_trials.trial_year as "seasons",           
+      plant_trials.trial_year as "seasons",   
       countries.id as "locationDbId",
       countries.country_name as "locationName",
-      plant_scoring_units.plant_accession_id,
-      plant_accessions.plant_accession,
       plant_trials.project_descriptor as "programName"
     SQL
     
@@ -97,8 +99,7 @@ class Brapi::V1::StudiesQueries
       pagination_query = pagination_query(page, page_size)
       
       total_query = select_query + joins_query + where_query + order_query + pagination_query
-      json_wrapping_query = "SELECT row_to_json(row) from ("+total_query+") row"
-      result_object = execute_statement(json_wrapping_query, where_atts)
+      result_object = execute_statement(total_query, where_atts)
     end
     
     result_object
@@ -123,16 +124,20 @@ class Brapi::V1::StudiesQueries
     # I think we are not going to differentiate among study data and trial data in brapi
     if id.present?   # plant_trials.id
       where_atts_count+= 1
-      where_query += get_posgresql_where_condition("plant_trials.id", id, where_atts_count)
-      where_atts << get_posgresql_att(id)  
+      where_query += get_where_condition("plant_trials.id", id, where_atts_count)
+      where_atts << get_att(id)  
     end
     
     
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets
     where_atts_count+= 1
     where_query = where_query + (where_atts_count>1?" and ":" where ") 
-    where_query = where_query + " (plant_accessions.user_id IS NULL 
-      OR plant_accessions.published = TRUE) "
+    where_query += <<-SQL.strip_heredoc
+      ((plant_accessions.user_id IS NULL OR plant_accessions.published = TRUE) AND
+       (plant_scoring_units.user_id IS NULL OR plant_scoring_units.published = TRUE) AND
+       (plant_trials.user_id IS NULL OR plant_trials.published = TRUE) )      
+    SQL
+    
     
     # select clauses
     # studyDbId, studyName, studyType, seasons, trialDbId, trialName, startDate, endDate, active 
@@ -152,7 +157,7 @@ class Brapi::V1::StudiesQueries
       plant_trials.place_name as "name",
       countries.country_code as "countryCode",
       countries.country_name as "countryName",
-      plant_trials.latitude as "latitute",
+      plant_trials.latitude as "latitude",
       plant_trials.longitude as "longitude",
       plant_trials.altitude as "altitude",
       plant_trials.terrain as "terrain",
@@ -186,8 +191,7 @@ class Brapi::V1::StudiesQueries
     
     total_query = select_query + joins_query + where_query
     
-    json_wrapping_query = "SELECT row_to_json(row) from ("+total_query+") row"
-    result_object = execute_statement(json_wrapping_query, where_atts)
+    result_object = execute_statement(total_query, where_atts)
     
     return result_object
   end
@@ -231,8 +235,8 @@ class Brapi::V1::StudiesQueries
     return order_query    
   end
 
-  def get_posgresql_where_condition(field, value, condition_number )
-    where_clause = (condition_number>1?" and ":" where ") 
+  def get_where_condition(field, value, condition_number )
+    where_clause = (condition_number > 1 ? " and " : " where ") 
     if value.kind_of?(Array)
       where_clause += " "+field+" = ANY($"+condition_number.to_s+")"
     else
@@ -241,15 +245,15 @@ class Brapi::V1::StudiesQueries
     return where_clause
   end
   
-  def get_posgresql_att(att)
+  def get_att(att)
     if att.kind_of?(Array)
-      return get_posgresql_array(att)
+      return get_array(att)
     else
       return att
     end   
   end
   
-  def get_posgresql_array(array)
+  def get_array(array)
     if array.kind_of?(Array)
       array_string = "{"
       array.each_with_index do |el, index|
