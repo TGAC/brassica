@@ -19,9 +19,6 @@ class Analysis
           # TODO: fix GWASSER so that it does not output invalid row ID.1
           next if name =~ /\AID(\.1)?\z/
 
-          # GWASSER replaces dashes in mutation names with dots...
-          name = name.gsub(".", "-")
-
           neg_log10_p_values[name] = neg_log10_p
         end
 
@@ -29,7 +26,7 @@ class Analysis
           File.open(map_csv_data_file.file.path, "r") do |file|
             map_data = Analysis::Gwas::MapCsvParser.new.call(file)
             mutations = map_data.csv.map do |name, chrom, pos|
-              [name, neg_log10_p_values[name], chrom, pos.to_i]
+              [name, neg_log10_p_values[name.gsub(/\W/, '_')], chrom, pos.to_i]
             end
           end
 

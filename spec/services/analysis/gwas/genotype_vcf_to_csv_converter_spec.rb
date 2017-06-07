@@ -6,10 +6,13 @@ RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
 
     let(:sample_names) { %w(Original s1t1 s2t1 s3t1 s1t2 s2t2 s3t2) }
     let(:mutation_names) {
-      %w(1.10257-A-C 1.10291-C-T 1.10297-C-T 1.10303-C-T 1.10315-C-T 1.10321-C-T
-          1.10327-T-C 1.10583-G-A 1.10665-C-G
-          1.10694-C-G 1.10723-C-G 1.12783-G-A 1.13116-T-G 1.13118-A-G 1.13178-G-A
-          1.13302-C-T 1.13757-G-A X13868-A-G X13868-A-T X13868-A-C)
+      %w(1_10257_A_C 1_10291_C_T 1_10297_C_T 1_10303_C_T 1_10315_C_T 1_10321_C_T
+          1_10327_T_C 1_10583_G_A 1_10665_C_G
+          1_10694_C_G 1_10723_C_G 1_12783_G_A 1_13116_T_G 1_13118_A_G 1_13178_G_A
+          1_13302_C_T 1_13757_G_A X13868_A_G X13868_A_T X13868_A_C)
+    }
+    let(:mutation_names_to_ignore) {
+      %w(1_10291_C_T 1_10583_G_A 1_10327_T_C 1_10694_C_G 1_13118_A_G 1_13116_T_G 1_12783_G_A)
     }
 
     let(:output_values) {
@@ -26,7 +29,7 @@ RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
 
     it "outputs geno CSV file" do
       CSV.open(geno_csv.path, headers: false) do |csv|
-        expect(csv.readline).to eq(%w(ID) + mutation_names)
+        expect(csv.readline).to eq(%w(ID) + (mutation_names - mutation_names_to_ignore))
 
         sample_names.each do |sample_name|
           sample = csv.readline
@@ -48,7 +51,7 @@ RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
     it "outputs map CSV file" do
       CSV.open(map_csv.path, headers: false) do |csv|
         expect(csv.readline).to eq(%w(ID Chr cM))
-        expect(csv.readlines.map { |r| r[0] }).to eq(mutation_names)
+        expect(csv.readlines.map { |r| r[0] }).to eq(mutation_names - mutation_names_to_ignore)
       end
     end
   end
