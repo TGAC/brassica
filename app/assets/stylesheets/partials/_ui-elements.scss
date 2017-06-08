@@ -115,6 +115,10 @@
     margin-bottom: 100px !important;
     width: 100% !important;
   }
+
+  .panel & {
+    border: none;
+  }
 }
 
 //table surrounding

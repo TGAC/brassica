@@ -21,3 +21,11 @@ en:
           target='_blank' title='Genome-wide association study'><b>GWAS</b></a>
           on data you submit. You will need to provide genotype and phenotypic trait
           data for the analysis.<br/>
+
+    show:
+      gwas:
+        gwas_genotype: Genotype
+        gwas_map: Map
+        gwas_phenotype: Phenotype
+        uploaded: User upload
+        generated: Generated file
