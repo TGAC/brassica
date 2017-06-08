@@ -17,15 +17,15 @@
         .alert.alert-info Choose the source of phenotypic data by selecting a plant trial or uploading a file.
 
       %ul.nav.nav-tabs
-        %li.active
+        %li{ class: ("active" unless @form.phenotype_data_file) }
           %a{ href: "#plant_trial_select", "data-toggle": :tab } Plant trial
 
-        %li
+        %li{ class: ("active" if @form.phenotype_data_file) }
           %a{ href: "#phenotype_data_file_upload", "data-toggle": :tab } Data upload
 
       .form-group
         .tab-content
-          .tab-pane#plant_trial_select.active
+          .tab-pane#plant_trial_select{ class: ("active" unless @form.phenotype_data_file) }
             = f.select :plant_trial_id, @plant_trials.map { |trial| [trial.plant_trial_name, trial.id] },
               { include_blank: "None" }, class: 'form-control', form: 'new_analysis'
 
@@ -33,7 +33,7 @@
               Plant scoring units from selected trial will be used to populate
               genotype CSV file template.
 
-          .tab-pane#phenotype_data_file_upload
+          .tab-pane#phenotype_data_file_upload{ class: ("active" if @form.phenotype_data_file) }
             = render partial: "/analyses/new/phenotype_data_file_help"
 
             .phenotype-data-file{ class: ('hidden' unless @form.phenotype_data_file) }

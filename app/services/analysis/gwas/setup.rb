@@ -6,6 +6,7 @@ class Analysis
       end
 
       # TODO: make nicer names for generated / normalized data files
+      # TODO: do not generate normalized files if it is not necessary
       def call
         geno_csv_data_file = genotype_data_file(:csv)
 
@@ -88,13 +89,12 @@ class Analysis
           end
         end
 
-        # TODO: store normalized files as separate ones with origin == "generated"
         Tempfile.open([File.basename(data_file.file.path, ".csv") + "-normalized", ".csv"]) do |file|
           file << normalized_csv
           file.flush
           file.rewind
 
-          data_file.update!(file: file)
+          create_csv_data_file(file, data_type: data_file.data_type)
         end
       end
 
