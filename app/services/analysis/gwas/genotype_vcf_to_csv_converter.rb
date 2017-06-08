@@ -14,25 +14,15 @@ class Analysis
           sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
 
           vcf_data.each_record do |record|
-            record.alt.each.with_index do |alternative, idx|
-              alternative_no = idx + 1
-              sample_values = []
+            record_data = process_record(record, vcf_data.sample_ids)
 
-              vcf_data.sample_ids.each do |sample_name|
-                sample = record.sample_by_name(sample_name)
-                value = sample_value(sample, alternative_no)
+            next unless record_data
 
-                sample_values << [sample_name, value]
-              end
+            mutation_names += record_data[:mutation_names]
+            mutation_data += record_data[:mutation_data]
 
-              unique_values = sample_values.map { |_, val| val }.uniq
-
-              if (unique_values - ["NA"]).size > 1
-                mutation_names << "#{record.id}_#{record.ref}_#{alternative}".strip.gsub(/\W/, '_')
-                mutation_data << [record.chrom.to_s.strip, record.pos.to_s.strip]
-
-                sample_values.each { |sample_name, val| sample_data[sample_name] << val }
-              end
+            record_data[:sample_data].each do |sample_name, values|
+              sample_data[sample_name] += values
             end
           end
 
@@ -44,6 +34,54 @@ class Analysis
       end
 
       private
+
+      # Extract mutation and samples data from a single VCF record. If VCF record
+      # specifies more than one alternative base it needs to be mapped to more
+      # than one CSV column.
+      #
+      # If there is no variation (i.e. there is only one distinct value apart
+      # from NA for each sample) for given mutation then it is silently skipped.
+      #
+      # Special characters apart from underscore are stripped from sample and
+      # mutation identifiers.
+      #
+      # record - VCF record
+      # sample_ids - original VCF sample identifiers
+      #
+      # Returns a hash containing mutation names, positions and
+      #   values for each sample.
+      def process_record(record, sample_ids)
+        mutation_names = []
+        mutation_data = []
+        sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
+
+        record.alt.each.with_index do |alternative, idx|
+          alternative_no = idx + 1
+          sample_values = []
+
+          sample_ids.each do |sample_name|
+            sample = record.sample_by_name(sample_name)
+            value = sample_value(sample, alternative_no)
+
+            sample_values << [sample_name, value]
+          end
+
+          unique_values = sample_values.map { |_, val| val }.uniq
+
+          if (unique_values - ["NA"]).size > 1
+            mutation_names << "#{record.id}_#{record.ref}_#{alternative}".strip.gsub(/\W/, '_')
+            mutation_data << [record.chrom.to_s.strip, record.pos.to_s.strip]
+
+            sample_values.each { |sample_name, val| sample_data[sample_name] << val }
+          end
+        end
+
+        {
+          mutation_names: mutation_names,
+          mutation_data: mutation_data,
+          sample_data: sample_data
+        }
+      end
 
       # Find number of alternative alleles for given sample.
       #
