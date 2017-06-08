@@ -4,6 +4,7 @@ class Analysis::DataFile < ActiveRecord::Base
 
   enum data_type: BASE_DATA_TYPES | GWAS_DATA_TYPES
   enum role: %w(input output)
+  enum origin: %w(uploaded generated)
 
   belongs_to :owner, class_name: "User"
   belongs_to :analysis

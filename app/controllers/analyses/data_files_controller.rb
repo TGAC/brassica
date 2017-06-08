@@ -49,7 +49,7 @@ class Analyses::DataFilesController < ApplicationController
     params.
       require(:analysis_data_file).
       permit(:file, :data_type).
-      merge(owner: current_user)
+      merge(owner: current_user, origin: "uploaded")
   end
 
   def decorate_data_file(data_file)

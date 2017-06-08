@@ -13,6 +13,8 @@ window.ManhattanPlot = class ManhattanPlot extends Component
       @$plotEl.removeClass("hidden")
 
   prepareTraces: (traits) =>
+    chromosomeNames = $.map(@chromosomes, (c) -> c[0])
+
     $.map(traits, (trace, trace_idx) ->
         name: trace[0]
         x: $.map(trace[1], (_, idx) -> idx)
@@ -22,7 +24,7 @@ window.ManhattanPlot = class ManhattanPlot extends Component
         mode: "markers"
         type: "scatter"
         marker:
-          color: $.map(trace[1], (mut) -> (mut[2] * 11) % 7 ) # color depends on chromosome
+          color: $.map(trace[1], (mut) -> (chromosomeNames.indexOf(mut[2]) * 11) % 7 ) # color depends on chromosome
           symbol: trace_idx % 44 # symbol depends on trait
           opacity: 0.6
           colorscale: "Portland"
