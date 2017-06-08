@@ -52,7 +52,6 @@ class Brapi::V1::GermplasmQueries
     select_query = <<-SQL.strip_heredoc
       SELECT DISTINCT ON (plant_accessions.id)
       plant_accessions.id,
-      plant_accessions.user_id,
       plant_accessions.plant_accession as "germplasmDbId", 
       case 
         when plant_lines.common_name != null then plant_lines.common_name

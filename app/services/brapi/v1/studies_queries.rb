@@ -43,6 +43,11 @@ class Brapi::V1::StudiesQueries
       where_query += get_where_condition("plant_accessions.plant_accession", germplasmDbIds, where_atts_count)
       where_atts << get_att(germplasmDbIds)    
     end
+    if observationVariableDbIds.present?   # trait_descriptors.id
+      where_atts_count+= 1
+      where_query += get_where_condition("trait_descriptors.id", observationVariableDbIds, where_atts_count)
+      where_atts << get_att(observationVariableDbIds)    
+    end
     
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets
     where_atts_count+= 1
@@ -50,6 +55,7 @@ class Brapi::V1::StudiesQueries
     where_query += <<-SQL.strip_heredoc
       ((plant_accessions.user_id IS NULL OR plant_accessions.published = TRUE) AND
        (plant_scoring_units.user_id IS NULL OR plant_scoring_units.published = TRUE) AND
+       (trait_descriptors.user_id IS NULL OR trait_descriptors.published = TRUE) AND
        (plant_trials.user_id IS NULL OR plant_trials.published = TRUE) )      
     SQL
     
@@ -59,18 +65,17 @@ class Brapi::V1::StudiesQueries
     # programDbId, programName, startDate, endDate, studyType, active, additionalInfo
     select_query = get_select_distinct_clause(sortBy)
     select_query += <<-SQL.strip_heredoc
-    
-      plant_trials.user_id,
       plant_trials.id as "studyDbId", 
       plant_trials.plant_trial_name as "name", 
-      plant_trials.id as "trialDbId", 
-      plant_trials.plant_trial_name as "trialName",   
+      null as "trialDbId", 
+      null as "trialName",   
       plant_trials.trial_year as "seasons",   
       countries.id as "locationDbId",
       countries.country_name as "locationName",
       plant_trials.project_descriptor as "programName"
     SQL
     
+    # TODO: "trialDbId" and "trialName": we don't have our equivalent entity "Investigation" yet.
     # TODO: "seasons": ["2007 Spring", "2008 Fall"] -> seasons themselves not present in our DB
     # TODO: "programDbId": "3" -> WE DON'T HAVE THIS STRUCTURE
     # TODO: "startDate": "2007-06-01" -> NOT PRESENT IN OUR DB
@@ -85,6 +90,8 @@ class Brapi::V1::StudiesQueries
     LEFT JOIN plant_scoring_units ON plant_trials.id = plant_scoring_units.plant_trial_id
     LEFT JOIN plant_accessions ON plant_scoring_units.plant_accession_id = plant_accessions.id
     LEFT JOIN countries ON plant_trials.country_id = countries.id
+    LEFT JOIN trait_scores ON plant_scoring_units.id = trait_scores.plant_scoring_unit_id
+    LEFT JOIN trait_descriptors ON trait_descriptors.id = trait_scores.trait_descriptor_id
     "
     
     if count_mode
@@ -118,10 +125,7 @@ class Brapi::V1::StudiesQueries
     where_query = " "
     where_atts = []
     where_atts_count = 0
-    
-    # TODO: We don't support yet these params: studyType, observationVariableDbIds, active
-    
-    # I think we are not going to differentiate among study data and trial data in brapi
+        
     if id.present?   # plant_trials.id
       where_atts_count+= 1
       where_query += get_where_condition("plant_trials.id", id, where_atts_count)
@@ -145,13 +149,11 @@ class Brapi::V1::StudiesQueries
     # location: locationDbId, name, abbreviation, countryCode, countryName, latitude, longitude, altitude, additionalInfo
     select_query = get_select_distinct_clause(" plant_trials.id ")
     select_query += <<-SQL.strip_heredoc
-      
-      plant_trials.user_id,
       plant_trials.id as "studyDbId", 
       plant_trials.plant_trial_name as "studyName", 
       plant_trials.trial_year as "seasons",           
-      plant_trials.id as "trialDbId", 
-      plant_trials.plant_trial_name as "trialName", 
+      null as "trialDbId", 
+      null as "trialName", 
       -- location 
       countries.id as "locationDbId",
       plant_trials.place_name as "name",
@@ -172,6 +174,7 @@ class Brapi::V1::StudiesQueries
       
     SQL
     
+    # TODO: "trialDbId" and "trialName": we don't have our equivalent entity "Investigation" yet.
     # TODO: "studyType": "Trial" -> NOT PRESENT IN OUR DB
     # TODO: "seasons": ["2007 Spring", "2008 Fall"] -> seasons themselves not present in our DB
     # TODO: "startDate": "2007-06-01" -> NOT PRESENT IN OUR DB
@@ -216,10 +219,6 @@ class Brapi::V1::StudiesQueries
     when "studyDbId"   
       order_query += " plant_trials.id "
     when "name"
-      order_query += " plant_trials.plant_trial_name "
-    when "trialDbId"
-      order_query += " plant_trials.id "
-    when "trialName"
       order_query += " plant_trials.plant_trial_name "
     when "seasons"
       order_query += " plant_trials.trial_year "
