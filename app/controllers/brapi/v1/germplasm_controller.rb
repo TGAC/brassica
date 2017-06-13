@@ -31,8 +31,6 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
         
         # any programmatic data manipulation can be done here
         result_object.each do |row|
-          row = JSON.parse(row["row_to_json"])
-          
           # To check authentication and ownership when ORCID is supported by BrAPI
           # We currently only retrieve public records. This is already done at query level
           #if (!row[:user_id] || row[:published] )
@@ -49,7 +47,9 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
         
         json_response = { 
           metadata: json_metadata(page_size, page, total_count, total_pages),
-          result: json_result_array
+          result: {
+            data: json_result_array
+          }
         }
        
         render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
@@ -58,7 +58,6 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
     
     end
   end
-
 
 
 
@@ -76,42 +75,16 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
   def json_metadata(page_size, current_page, total_count, total_pages)
     json_metadata = {
       status: [],
-      files: [],
+      datafiles: [],
       pagination: {
-        pageSize: page_size, # old 'per_page'
-        currentPage:  current_page, # old 'page'
-        totalCount: total_count, # old 'total_count'
+        pageSize: page_size, # like 'per_page' in CollectionDecorator
+        currentPage:  current_page, # like 'page' in CollectionDecorator
+        totalCount: total_count, # like 'total_count' in CollectionDecorator
         totalPages: total_pages 
       }
     }
   end
   
-
-
-  def authenticate_api_key!
-    unless api_key_token.present?
-      render json: '{"reason": "BIP API requires API key authentication"}', status: 401
-      return
-    end
-    unless api_key.present?
-      if api_key_token == I18n.t('api.general.demo_key')
-        render json: '{"reason": "Please use your own, personal API key"}', status: 401
-      else
-        render json: '{"reason": "Invalid API key"}', status: 401
-      end
-    end
-  end
-
-  def api_key_token
-    return @api_key_token if defined?(@api_key_token)
-    token = params[:api_key] || request.headers["X-BIP-Api-Key"]
-    @api_key_token = ApiKey.normalize_token(token)
-  end
-
-  def api_key
-    return @api_key if defined?(@api_key)
-    @api_key = api_key_token && ApiKey.find_by(token: api_key_token)
-  end
 
 
 end
