@@ -35,6 +35,11 @@ class Analysis
             chrom_a, pos_a = mut_a[-2..-1]
             chrom_b, pos_b = mut_b[-2..-1]
 
+            if chrom_a.match(/\d/) && chrom_b.match(/\d/)
+              chrom_a = chrom_a.gsub(/\D+/, '').to_i
+              chrom_b = chrom_b.gsub(/\D+/, '').to_i
+            end
+
             chrom_a == chrom_b ? pos_a <=> pos_b : chrom_a <=> chrom_b
           end
 
