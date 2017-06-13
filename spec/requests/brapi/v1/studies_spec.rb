@@ -97,7 +97,7 @@ RSpec.describe "BRAPI V1 studies calls" do
         sortOrder: "asc"
       }.to_json, headers
       expect(response.status).to eq 200
-      expect(parsed_response['result']['data'][0]['trialName']).to eq "hzau_2003_Wuhan_02"
+      expect(parsed_response['result']['data'][0]['name']).to eq "hzau_2003_Wuhan_02"
     end
     
     it 'studies-search cheking ordering: query by germplasmDbId = [hzau2003_TN077_a03, hzau2004_TN038_a02], 
@@ -112,7 +112,7 @@ RSpec.describe "BRAPI V1 studies calls" do
         sortOrder: "desc"
       }.to_json, headers
       expect(response.status).to eq 200
-      expect(parsed_response['result']['data'][0]['trialName']).to eq "hzau_2004_Weinan_03"
+      expect(parsed_response['result']['data'][0]['name']).to eq "hzau_2004_Weinan_03"
     end
  
     it 'cheking format' do        
