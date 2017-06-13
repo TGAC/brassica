@@ -32,7 +32,20 @@ class AnalysesController < ApplicationController
     @analysis = current_user.analyses.find(params[:id])
 
     respond_to do |format|
-      format.json { render json: @analysis }
+      format.json do
+        if @analysis.gwas? && @analysis.success?
+          results = Analysis::Gwas::ManhattanPlot.new(@analysis).call.fetch(:traits).map do |trait_name, mutations, _|
+            mutations.map { |m| m[1] = "%.4f" % m[1]; m << trait_name }
+          end.flatten(1)
+
+          render json: {
+            analysis: @analysis,
+            results: results
+          }
+        else
+          render json: { analysis: @analysis }
+        end
+      end
       format.html do
         if request.xhr?
           render partial: "analysis_item", layout: false, locals: { analysis: @analysis }

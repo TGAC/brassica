@@ -13,7 +13,7 @@
         .loading
           %span.fa.fa-spin.fa-circle-o-notch.fa-4x
 
-      %table.table.table-condensed.table-hover{ "data-export": :all }
+      %table.table.table-condensed.table-hover{ "data-export": :all, "data-url": analysis_path(@analysis) }
         %thead
           %tr
             %th SNP
@@ -21,16 +21,6 @@
             %th Position
             %th -log<sub>10</sub>(P)
             %th Trait
-
-        %tbody
-          - @manhattan[:traits].each do |trait_name, mutations, _|
-            - mutations.each.with_index do |mutation|
-              %tr
-                %td= mutation[0]
-                %td= mutation[2]
-                %td= mutation[3]
-                %td= mutation[1] == "NA" ? "NA" : "%.4f" % mutation[1]
-                %td= trait_name
 
   #analysis_data_files.tab-pane{ role: :tabpanel, class: (:active if @analysis.idle? || @analysis.running?) }
     .panel.panel-default.input-panel
