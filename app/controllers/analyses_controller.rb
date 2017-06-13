@@ -50,7 +50,8 @@ class AnalysesController < ApplicationController
         if request.xhr?
           render partial: "analysis_item", layout: false, locals: { analysis: @analysis }
         elsif @analysis.gwas?
-          @manhattan = Analysis::Gwas::ManhattanPlot.new(@analysis).call
+          @cutoff = params.key?(:cutoff) ? params[:cutoff].to_f : 2
+          @manhattan = Analysis::Gwas::ManhattanPlot.new(@analysis, cutoff: @cutoff).call
         end
       end
     end

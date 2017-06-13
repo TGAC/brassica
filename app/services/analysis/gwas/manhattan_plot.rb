@@ -1,10 +1,11 @@
 class Analysis
   class Gwas
     class ManhattanPlot
-      attr_reader :analysis
+      attr_reader :analysis, :cutoff
 
-      def initialize(analysis)
+      def initialize(analysis, cutoff: 0)
         @analysis = analysis
+        @cutoff = cutoff
       end
 
       def process_trait(data_file)
@@ -26,7 +27,7 @@ class Analysis
           File.open(map_csv_data_file.file.path, "r") do |file|
             map_data = Analysis::Gwas::MapCsvParser.new.call(file)
             mutations = map_data.csv.map do |name, chrom, pos|
-              [name, neg_log10_p_values[name.gsub(/\W/, '_')], chrom, pos.to_i]
+              [name, neg_log10_p_values[name.gsub(/\W/, '_')].to_f, chrom, pos.to_i]
             end
           end
 
@@ -41,13 +42,15 @@ class Analysis
           mutations = neg_log10_p_values.to_a
         end
 
+        mutations.reject! { |_, neg_log10_p| neg_log10_p < cutoff } if cutoff > 0
+
         tooltips = mutations.map { |mut| format_tooltip(*mut) }
 
         [trait, mutations, tooltips]
       end
 
       def call
-        { traits: [], chromosomes: [] }.tap do |results|
+        { traits: [], chromosomes: [], cutoff: cutoff }.tap do |results|
 
           chromosomes = Hash.new { |h, k| h[k] = [] }
 
