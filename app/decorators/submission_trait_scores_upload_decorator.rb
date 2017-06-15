@@ -17,7 +17,6 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
       end
 
       if accessions.present?
-        existing_accessions, new_accessions = split_accessions
         lines, varieties = get_lines_and_varieties
         existing_lines = find_present_plant_lines(lines)
         existing_varieties = find_present_plant_varieties(varieties)
@@ -49,17 +48,51 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
           warnings << "  - " + new_line_name
         end
       end
+
+      if new_accessions.present?
+        invalid_accessions = []
+
+        new_accessions.each do |accession_attrs|
+          accession = PlantAccession.new(accession_attrs)
+
+          if accession.invalid? &&
+              (accession.errors.key?(:year_produced) ||
+               accession.errors.key?(:originating_organisation) ||
+               accession.errors.key?(:plant_accession))
+
+            invalid_accessions << accession
+          end
+        end
+
+        if invalid_accessions.present?
+          warnings << "\n" if warnings.present?
+          warnings << "This submission cannot be concluded because the following new accessions cannot be created:"
+          invalid_accessions.each do |accession|
+            warnings << "  - " + accession.plant_accession
+          end
+        end
+      end
     end
   end
 
   private
 
   def unique_accessions
-    accessions.values.uniq
+    accessions ? accessions.values.uniq : []
+  end
+
+  def new_accessions
+    split_accessions unless defined?(@new_accessions)
+    @new_accessions
+  end
+
+  def existing_accessions
+    split_accessions unless defined?(@existing_accessions)
+    @existing_accessions
   end
 
   def split_accessions
-    unique_accessions.partition do |accession|
+    @existing_accessions, @new_accessions = unique_accessions.partition do |accession|
       present_accession?(accession)
     end
   end
