@@ -1,0 +1,12 @@
+rs# alleles chrom pos strand assembly# center protLSID assayLSID panelLSID QCcode NA19625 NA19700 NA19701 NA19702
+rs12255619 A/C chr10 88481 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs12255619:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ AA AA AC AA
+rs11252546 C/T chr10 94427 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs11252546:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ TT TT TT TT
+rs7909677 A/G chr10 101955 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs7909677:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ AA AA AA AA
+rs10904494 A/C chr10 103934 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs10904494:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ AA AA AA AA
+rs11591988 C/T chr10 116070 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs11591988:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ CC CC CC CC
+rs4508132 C/T chr10 121636 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs4508132:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ CC CT CC CT
+rs10904561 G/T chr10 125656 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs10904561:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ TT GT TT TT
+rs7917054 A/G chr10 125708 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs7917054:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ AA GG AA AG
+rs7906287 A/G chr10 125853 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs7906287:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ GG AG GG AG
+rs12775579 C/T chr10 129676 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs12775579:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ CC CC CC CC
+rs4495823 A/G chr10 133543 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs4495823:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ AA AG AA AG
