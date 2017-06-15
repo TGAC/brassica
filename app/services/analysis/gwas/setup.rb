@@ -63,7 +63,9 @@ class Analysis
           end
         end
 
-        values_by_mutation.map { |mutation, values| mutation if (values - ["NA"]).size < 2 }.compact - ["ID"]
+        values_by_mutation.
+          select { |mutation, values| (values - ["NA"]).size < 2 }.
+          keys - ["ID"]
       end
 
       def normalize_csv(data_file, remove_columns: [], remove_rows: [])

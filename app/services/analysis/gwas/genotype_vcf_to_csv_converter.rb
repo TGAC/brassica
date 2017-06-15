@@ -94,17 +94,15 @@ class Analysis
       #   0 for no mutation
       #   NA if call could not be made
       def sample_value(sample, alternative_no)
-        if sample.empty?
-          "NA" # call could not be made
+        return "NA" if sample.empty?
+
+        alternative_count = sample.gti.count { |allele_no| allele_no == alternative_no }
+        if sample.gti.size == alternative_count
+          2
+        elsif alternative_count > 0
+          1
         else
-          alternative_count = sample.gti.count { |allele_no| allele_no == alternative_no }
-          if sample.gti.size == alternative_count
-            2
-          elsif alternative_count > 0
-            1
-          else
-            0
-          end
+          0
         end
       end
 
