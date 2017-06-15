@@ -44,7 +44,7 @@ class Analysis
           end
 
         else
-          mutations = neg_log10_p_values.to_a
+          mutations = neg_log10_p_values.transform_values { |value| value.to_f }.to_a
         end
 
         mutations.reject! { |_, neg_log10_p| neg_log10_p < cutoff } if cutoff > 0

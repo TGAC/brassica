@@ -14,9 +14,9 @@ RSpec.describe Analysis::Gwas::ManhattanPlot do
   context "with no map file available" do
     let(:expected_trait_results) {
       [
-        ["snp1", "42.248475811326"],
-        ["snp2", "2.71525554601752"],
-        ["snp3", "197.525150438166"]
+        ["snp1", 42.248475811326],
+        ["snp2", 2.71525554601752],
+        ["snp3", 197.525150438166]
       ]
     }
 
@@ -47,9 +47,9 @@ RSpec.describe Analysis::Gwas::ManhattanPlot do
 
     let(:expected_trait_results) {
       [
-        ["snp3", "197.525150438166", "1", 3],
-        ["snp1", "42.248475811326", "1", 14],
-        ["snp2", "2.71525554601752", "2", 4]
+        ["snp3", 197.525150438166, "1", 3],
+        ["snp1", 42.248475811326, "1", 14],
+        ["snp2", 2.71525554601752, "2", 4]
       ]
     }
 
