@@ -23,7 +23,9 @@ class Analysis
 
       def build_csv(plant_trial)
         data = build(plant_trial)
-        headers = %w(ID) + data.trait_ids.map { |trait_id| trait_id.gsub(/\s+/, "_") }
+
+        # TODO: make sure normalized names are unique
+        headers = %w(ID) + data.trait_ids.map { |trait_id| trait_id.gsub(/\W+/, "_") }
 
         Tempfile.new(["plant-trial-phenotype", ".csv"]).tap do |csv_file|
           csv_file << CSV.generate(force_quotes: true) do |csv|

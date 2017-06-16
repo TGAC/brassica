@@ -8,6 +8,33 @@ class Analysis
         @cutoff = cutoff
       end
 
+      def call
+        { traits: [], chromosomes: [], cutoff: cutoff }.tap do |results|
+
+          chromosomes = Hash.new { |h, k| h[k] = [] }
+
+          result_data_files.each do |data_file|
+            trait, mutations, tooltips = process_trait(data_file)
+
+            mutations.each_with_index do |(_, _, chrom, _), idx|
+              chromosomes[chrom] << idx
+            end if mutations.present? && mutations.first.size > 2
+
+            results[:traits] << [trait, mutations, tooltips]
+          end
+
+          results[:chromosomes] = chromosomes.map do |chrom, indices|
+            [chrom, indices.min, indices.max]
+          end
+        end
+      end
+
+      private
+
+      def result_data_files
+        analysis.data_files.gwas_results
+      end
+
       def process_trait(data_file)
         neg_log10_p_values = {}
         mutations = nil
@@ -27,6 +54,7 @@ class Analysis
           File.open(map_csv_data_file.file.path, "r") do |file|
             map_data = Analysis::Gwas::MapCsvParser.new.call(file)
             mutations = map_data.csv.map do |name, chrom, pos|
+              # TODO: handle NA values without casting to floats
               [name, neg_log10_p_values[name.gsub(/\W/, '_')].to_f, chrom, pos.to_i]
             end
           end
@@ -47,38 +75,12 @@ class Analysis
           mutations = neg_log10_p_values.transform_values { |value| value.to_f }.to_a
         end
 
+        # TODO: use cutoff in a smarter way, do not apply if there are no values above cutoff
         mutations.reject! { |_, neg_log10_p| neg_log10_p < cutoff } if cutoff > 0
 
         tooltips = mutations.map { |mut| format_tooltip(*mut) }
 
         [trait, mutations, tooltips]
-      end
-
-      def call
-        { traits: [], chromosomes: [], cutoff: cutoff }.tap do |results|
-
-          chromosomes = Hash.new { |h, k| h[k] = [] }
-
-          result_data_files.each do |data_file|
-            trait, mutations, tooltips = process_trait(data_file)
-
-            mutations.each_with_index do |(_, _, chrom, _), idx|
-              chromosomes[chrom] << idx
-            end if mutations.first.size > 2
-
-            results[:traits] << [trait, mutations, tooltips]
-          end
-
-          results[:chromosomes] = chromosomes.map do |chrom, indices|
-            [chrom, indices.min, indices.max]
-          end
-        end
-      end
-
-      private
-
-      def result_data_files
-        analysis.data_files.gwas_results
       end
 
       def format_tooltip(mut, neg_log10_p, chrom = nil, pos = nil)

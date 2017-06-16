@@ -1,0 +1,22 @@
+.panel.panel-default.input-panel
+  .panel-heading
+    .panel-title Input
+
+  %table.table
+    - @analysis.data_files.input.each do |data_file|
+      %tr
+        %td= link_to data_file.file_file_name, data_file.file.url
+        %td= t(".#{data_file.data_type}")
+        %td= number_to_human_size(data_file.file.size)
+        %td= t(".#{data_file.origin}")
+
+- if @analysis.data_files.gwas_results.present?
+  .panel.panel-default.output-panel
+    .panel-heading
+      .panel-title Output
+
+    %ul.list-group
+      - @analysis.data_files.output.gwas_results.each do |data_file|
+        %li.list-group-item
+          = link_to data_file.file_file_name, data_file.file.url
+          %span= number_to_human_size(data_file.file.size)

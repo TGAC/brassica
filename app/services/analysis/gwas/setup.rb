@@ -1,6 +1,8 @@
 class Analysis
   class Gwas
     class Setup
+      attr_accessor :failure_reason
+
       def initialize(analysis)
         @analysis = analysis
       end
@@ -12,18 +14,56 @@ class Analysis
 
         if !geno_csv_data_file
           # NOTE: no need to normalize as conversion already outputs correct files
+          # TODO: check if there are any mutations left
           convert_genotype_vcf_to_csv
+
         elsif geno_csv_data_file.uploaded?
-          mutations_to_remove = find_mutations_to_remove(geno_csv_data_file)
-          normalize_csv(geno_csv_data_file, remove_columns: mutations_to_remove)
+          mutations_to_remove = find_columns_to_remove(geno_csv_data_file)
+
+          @analysis.meta['removed_mutations'] = mutations_to_remove
+          @analysis.save!
+
+          geno_status = normalize_csv(geno_csv_data_file, remove_columns: mutations_to_remove)
+
+          if geno_status != :ok
+            self.failure_reason =
+              case geno_status
+              when :all_but_one_columns_removed
+                :all_mutations_removed
+              else
+                :geno_csv_invalid
+              end
+
+            return
+          end
+
           normalize_csv(map_data_file, remove_rows: mutations_to_remove) if map_data_file
         end
 
         if plant_trial_based?
           prepare_plant_trial_phenotype_csv_data_file
         else
-          normalize_csv(phenotype_data_file)
+          traits_to_remove = find_columns_to_remove(phenotype_data_file)
+
+          @analysis.meta['removed_traits'] = traits_to_remove
+          @analysis.save!
+
+          pheno_status = normalize_csv(phenotype_data_file, remove_columns: traits_to_remove)
+
+          if pheno_status != :ok
+            self.failure_reason =
+              case pheno_status
+              when :all_but_one_columns_removed
+                :all_traits_removed
+              else
+                :pheno_csv_invalid
+              end
+
+            return
+          end
         end
+
+        true
       end
 
       private
@@ -50,54 +90,39 @@ class Analysis
         analysis.meta["plant_trial_id"].present?
       end
 
-      def find_mutations_to_remove(geno_csv_data_file)
-        values_by_mutation = Hash.new { |h, k| h[k] = Set.new }
+      # Return headers of columns for which there is less than two distinct
+      # values (NA does not count). Such columns cannot be passed as input
+      # for GWASSER.
+      def find_columns_to_remove(csv_data_file)
+        values_by_col_name = Hash.new { |h, k| h[k] = Set.new }
 
-        CSV.open(geno_csv_data_file.file.path) do |csv|
+        CSV.open(csv_data_file.file.path) do |csv|
           headers = csv.readline
 
           csv.each do |row|
             row.each.with_index do |val, col_idx|
-              values_by_mutation[headers[col_idx]] << val
+              values_by_col_name[headers[col_idx]] << val
             end
           end
         end
 
-        values_by_mutation.
-          select { |mutation, values| (values - ["NA"]).size < 2 }.
+        values_by_col_name.
+          select { |col_name, values| (values - ["NA"]).size < 2 }.
           keys - ["ID"]
       end
 
       def normalize_csv(data_file, remove_columns: [], remove_rows: [])
-        normalized_csv = CSV.generate(force_quotes: true) do |csv|
-          CSV.open(data_file.file.path, "r") do |existing_csv|
-            headers = existing_csv.readline
-            remove_col_idxes = remove_columns.map { |col| headers.index(col) }
+        status, tmpfile = Analysis::Gwas::CsvNormalizer.new.
+          call(data_file.file, remove_columns: remove_columns, remove_rows: remove_rows)
 
-            existing_csv.rewind
-            existing_csv.each.with_index do |row, row_idx|
-              next if remove_rows.include?(row[0])
-
-              csv << row.map.with_index do |val, col_idx|
-                next if remove_col_idxes.include?(col_idx)
-
-                if row_idx == 0 || col_idx == 0
-                  val.strip.gsub(/\W/, '_')
-                else
-                  val.strip
-                end
-              end.compact
-            end
-          end
+        if status == :ok
+          create_csv_data_file(tmpfile, data_type: data_file.data_type)
         end
 
-        Tempfile.open([File.basename(data_file.file.path, ".csv") + "-normalized", ".csv"]) do |file|
-          file << normalized_csv
-          file.flush
-          file.rewind
+        status
 
-          create_csv_data_file(file, data_type: data_file.data_type)
-        end
+      ensure
+        tmpfile && tmpfile.close
       end
 
       def genotype_data_file(type = nil)

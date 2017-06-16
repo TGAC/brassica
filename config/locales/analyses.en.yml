@@ -29,3 +29,10 @@ en:
         gwas_phenotype: Phenotype
         uploaded: User upload
         generated: Generated file
+      gwas_results:
+        failure_reason:
+          all_mutations_removed: All mutations were excluded from analysis due to lack of variance between samples.
+          all_traits_removed: All traits were excluded from analysis due to lack of variance between samples.
+          geno_csv_invalid: There was an issue with genotype file.
+          pheno_csv_invalid: There was an issue with phenotype file.
+          shell_job_error: The analysis failed. Please, consult 'Std error' and 'Std output' for more information.

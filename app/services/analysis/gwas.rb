@@ -6,7 +6,11 @@ class Analysis
     end
 
     def call
-      setup.call
+      unless setup.call
+        runner.mark_as_failure(setup.failure_reason)
+        return
+      end
+
       runner.call(job_command) do
         store_results
       end
