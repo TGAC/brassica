@@ -108,7 +108,7 @@ class Analysis
       end
 
       def generate_genotype_csv(mutation_names, sample_data)
-        Tempfile.new(["genotype", ".csv"]).tap do |csv_file|
+        NamedTempfile.new(".csv").tap do |csv_file|
           csv_file << CSV.generate(force_quotes: true) do |csv|
             csv << %w(ID) + mutation_names
 
@@ -117,13 +117,14 @@ class Analysis
             end
           end
 
+          csv_file.original_filename = "genotype.csv"
           csv_file.flush
           csv_file.rewind
         end
       end
 
       def generate_map_csv(mutation_names, mutation_data)
-        Tempfile.new(["map", ".csv"]).tap do |csv_file|
+        NamedTempfile.new(".csv").tap do |csv_file|
           csv_file << CSV.generate(force_quotes: true) do |csv|
             csv << %w(ID Chr cM)
 
@@ -133,6 +134,7 @@ class Analysis
             end
           end
 
+          csv_file.original_filename = "map.csv"
           csv_file.flush
           csv_file.rewind
         end

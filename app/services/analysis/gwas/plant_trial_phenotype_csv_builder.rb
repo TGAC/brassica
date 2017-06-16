@@ -27,7 +27,7 @@ class Analysis
         # TODO: make sure normalized names are unique
         headers = %w(ID) + data.trait_ids.map { |trait_id| trait_id.gsub(/\W+/, "_") }
 
-        Tempfile.new(["plant-trial-phenotype", ".csv"]).tap do |csv_file|
+        NamedTempfile.new(".csv").tap do |csv_file|
           csv_file << CSV.generate(force_quotes: true) do |csv|
             csv << headers
 
@@ -39,6 +39,7 @@ class Analysis
             end
           end
 
+          csv_file.original_filename = "plant-trail-phenotype.csv"
           csv_file.flush
           csv_file.rewind
         end

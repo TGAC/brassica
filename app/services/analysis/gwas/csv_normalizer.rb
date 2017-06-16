@@ -30,12 +30,13 @@ class Analysis
           end
         end
 
-        file = Tempfile.new([File.basename(file.path, ".csv") + "-normalized", ".csv"])
-        file << normalized_csv
-        file.flush
-        file.rewind
+        tmpfile = NamedTempfile.new(".csv")
+        tmpfile.original_filename = "#{File.basename(file.original_filename, ".csv")}.normalized.csv"
+        tmpfile << normalized_csv
+        tmpfile.flush
+        tmpfile.rewind
 
-        [:ok, file]
+        [:ok, tmpfile]
       end
     end
   end
