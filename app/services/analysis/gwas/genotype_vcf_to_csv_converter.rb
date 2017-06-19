@@ -11,6 +11,7 @@ class Analysis
 
           mutation_names = []
           mutation_data = []
+          removed_mutation_names = []
           sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
 
           vcf_data.each_record do |record|
@@ -20,15 +21,20 @@ class Analysis
 
             mutation_names += record_data[:mutation_names]
             mutation_data += record_data[:mutation_data]
+            removed_mutation_names += record_data[:removed_mutation_names]
 
             record_data[:sample_data].each do |sample_name, values|
               sample_data[sample_name] += values
             end
           end
 
+          return :all_mutations_removed unless mutation_names.present?
+
           [
+            :ok,
             generate_genotype_csv(mutation_names, sample_data),
-            generate_map_csv(mutation_names, mutation_data)
+            generate_map_csv(mutation_names, mutation_data),
+            removed_mutation_names
           ]
         end
       end
@@ -53,6 +59,7 @@ class Analysis
       def process_record(record, sample_ids)
         mutation_names = []
         mutation_data = []
+        removed_mutation_names = []
         sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
 
         record.alt.each.with_index do |alternative, idx|
@@ -66,21 +73,25 @@ class Analysis
             sample_values << [sample_name, value]
           end
 
+          mutation_name = "#{record.id}_#{record.ref}_#{alternative}".strip.gsub(/\W/, '_')
           unique_values = sample_values.map { |_, val| val }.uniq
 
           if (unique_values - ["NA"]).size > 1
             # TODO: make sure normalized names are unique
-            mutation_names << "#{record.id}_#{record.ref}_#{alternative}".strip.gsub(/\W/, '_')
+            mutation_names << mutation_name
             mutation_data << [record.chrom.to_s.strip, record.pos.to_s.strip]
 
             sample_values.each { |sample_name, val| sample_data[sample_name] << val }
+          else
+            removed_mutation_names << mutation_name
           end
         end
 
         {
           mutation_names: mutation_names,
           mutation_data: mutation_data,
-          sample_data: sample_data
+          sample_data: sample_data,
+          removed_mutation_names: removed_mutation_names
         }
       end
 

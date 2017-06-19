@@ -25,4 +25,8 @@ class Analysis < ActiveRecord::Base
   def finished?
     success? || failure?
   end
+
+  def plant_trial_based?
+    meta["plant_trial_id"].present?
+  end
 end

@@ -1,13 +1,17 @@
 class Analysis
   class Gwas
+    include Setup::Helpers
+
     def initialize(analysis, runner: nil)
       @analysis = analysis
       @runner = runner
     end
 
     def call
-      unless setup.call
-        runner.mark_as_failure(setup.failure_reason)
+      status = setup.call
+
+      unless status == :ok
+        runner.mark_as_failure(status)
         return
       end
 
@@ -53,7 +57,7 @@ class Analysis
 
     def job_command
       args = [
-        "--gFile", genotype_data_file.file.path,
+        "--gFile", genotype_data_file(:csv).file.path,
         "--pFile", phenotype_data_file.file.path,
         "--outDir", runner.results_dir,
         "--noPlots"
@@ -65,21 +69,6 @@ class Analysis
       args = args.map { |part| Shellwords.escape(part) }
 
       ([gwas_script] + args).join(" ")
-    end
-
-    def genotype_data_file
-      scope = analysis.data_files.gwas_genotype.csv
-      scope.generated.first || scope.uploaded.first
-    end
-
-    def phenotype_data_file
-      scope = analysis.data_files.gwas_phenotype
-      scope.generated.first || scope.uploaded.first
-    end
-
-    def map_data_file
-      scope = analysis.data_files.gwas_map
-      scope.generated.first || scope.uploaded.first
     end
 
     def gwas_script

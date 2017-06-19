@@ -1,14 +1,15 @@
 class Analysis
   class Gwas
+    # Copies given CSV file intended to be used as GWASSER input making sure
+    # that its headers and sample names do not contain special characters
+    # except for underscore.
     class CsvNormalizer
       def call(file, remove_columns: [], remove_rows: [])
         normalized_csv = CSV.generate(force_quotes: true) do |csv|
           CSV.open(file.path, "r") do |existing_csv|
             headers = existing_csv.readline
 
-            if headers.size - remove_columns.size < 2
-              return :all_but_one_columns_removed
-            end
+            return :all_columns_removed if headers.size - remove_columns.size < 2
 
             remove_col_idxes = remove_columns.map { |col| headers.index(col) }
 

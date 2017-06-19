@@ -24,10 +24,13 @@ RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
 
     subject { described_class.new.call(vcf_path) }
 
-    let(:geno_csv) { subject.first }
-    let(:map_csv) { subject.last }
+    let(:status) { subject[0] }
+    let(:geno_csv) { subject[1] }
+    let(:map_csv) { subject[2] }
 
     it "outputs geno CSV file" do
+      expect(status).to eq(:ok)
+
       CSV.open(geno_csv.path, headers: false) do |csv|
         expect(csv.readline).to eq(%w(ID) + (mutation_names - mutation_names_to_ignore))
 
@@ -43,12 +46,16 @@ RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
     end
 
     it "produces separate geno CSV column for each alternate allele in a VCF record" do
+      expect(status).to eq(:ok)
+
       CSV.open(geno_csv.path, headers: false) do |csv|
         expect(csv.readline[-3..-1]).to eq(mutation_names[-3..-1])
       end
     end
 
     it "outputs map CSV file" do
+      expect(status).to eq(:ok)
+
       CSV.open(map_csv.path, headers: false) do |csv|
         expect(csv.readline).to eq(%w(ID Chr cM))
         expect(csv.readlines.map { |r| r[0] }).to eq(mutation_names - mutation_names_to_ignore)
