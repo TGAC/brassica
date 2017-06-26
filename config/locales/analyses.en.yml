@@ -31,6 +31,6 @@ en:
         generated: Generated file
       gwas_results:
         failure_reason:
-          all_mutations_removed: All mutations were excluded from analysis due to lack of variance between samples.
-          all_traits_removed: All traits were excluded from analysis due to lack of variance between samples.
+          all_mutations_removed: All mutations were excluded from analysis due to lack of variability between samples.
+          all_traits_removed: All traits were excluded from analysis due to lack of variability between samples.
           shell_job_error: The analysis failed. Please, consult 'Std error' and 'Std output' for more information.

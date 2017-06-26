@@ -1,4 +1,13 @@
 - if @analysis.success?
+  - if @analysis.removed_mutations.present?
+    .alert.alert-warning
+      Following mutations were excluded from the input due to lack of variability:
+      = @analysis.removed_mutations.join(", ")
+
+    .alert.alert-warning
+      Following traits were excluded from the input due to lack of variability:
+      = @analysis.removed_traits.join(", ")
+
   - if @cutoff > 0
     .alert.alert-info
       Plotting SNPs with -log<sub>10</sub>(p-value) &geq; #{@cutoff}. See table below for complete data or
