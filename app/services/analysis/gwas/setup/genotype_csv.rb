@@ -26,17 +26,6 @@ class Analysis
 
         attr_accessor :analysis
 
-        def save_mutations_to_remove
-          mutations = find_csv_columns_to_remove(genotype_data_file(:csv).file)
-
-          analysis.meta['removed_mutations'] = mutations
-          analysis.save!
-        end
-
-        def normalize_geno_csv
-          normalize_csv(genotype_data_file(:csv).file, remove_columns: analysis.meta['removed_mutations'])
-        end
-
         def check_geno_status(status)
           case status
           when :ok then :ok

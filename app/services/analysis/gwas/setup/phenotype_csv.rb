@@ -26,13 +26,6 @@ class Analysis
 
         attr_accessor :analysis
 
-        def save_traits_to_remove
-          traits = find_csv_columns_to_remove(phenotype_data_file.file)
-
-          analysis.meta['removed_traits'] = traits
-          analysis.save!
-        end
-
         def normalize_pheno_csv
           normalize_csv(phenotype_data_file.file, remove_columns: analysis.meta['removed_traits'])
         end

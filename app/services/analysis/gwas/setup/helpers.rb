@@ -23,6 +23,14 @@ class Analysis
             call(file, remove_columns: remove_columns, remove_rows: remove_rows)
         end
 
+        def normalize_geno_csv(geno_csv_file = genotype_data_file(:csv).file)
+          normalize_csv(geno_csv_file, remove_columns: analysis.meta['removed_mutations'])
+        end
+
+        def normalize_pheno_csv(pheno_csv_file = phenotype_data_file.file)
+          normalize_csv(pheno_csv_file, remove_columns: analysis.meta['removed_traits'])
+        end
+
         def create_csv_data_file(file, data_type:)
           analysis.data_files.create!(
             role: :input,
@@ -56,6 +64,20 @@ class Analysis
           values_by_col_name.
             select { |col_name, values| (values - ["NA"]).size < 2 }.
             keys - ["ID"]
+        end
+
+        def save_mutations_to_remove(geno_csv_file = genotype_data_file(:csv).file)
+          find_csv_columns_to_remove(geno_csv_file).tap do |mutations|
+            analysis.meta['removed_mutations'] = mutations
+            analysis.save!
+          end
+        end
+
+        def save_traits_to_remove(pheno_csv_file = phenotype_data_file.file)
+          find_csv_columns_to_remove(pheno_csv_file).tap do |traits|
+            analysis.meta['removed_traits'] = traits
+            analysis.save!
+          end
         end
       end
     end
