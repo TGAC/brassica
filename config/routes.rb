@@ -71,6 +71,7 @@ Rails.application.routes.draw do
       post "studies-search", to: 'studies#search'
       get "studies/:id", to: 'studies#show'
       get "studies", to: 'studies#show'
+      post "phenotypes-search", to: 'phenotypes#search'
           
     end
   end
