@@ -4,6 +4,7 @@
       Following mutations were excluded from the input due to lack of variability:
       = @analysis.removed_mutations.join(", ")
 
+  - if @analysis.removed_traits.present?
     .alert.alert-warning
       Following traits were excluded from the input due to lack of variability:
       = @analysis.removed_traits.join(", ")
