@@ -10,6 +10,53 @@
         = f.text_field :name, required: true, label: 'Analysis name',
           help: 'Please, provide <b>name</b> for the analysis.', form: 'new_analysis'
 
+      %hr
+
+      .form-group
+        %label.required Phenotype/trait data
+        .alert.alert-info Choose the source of phenotypic data by selecting a plant trial or uploading a file.
+
+      %ul.nav.nav-tabs
+        %li{ class: ("active" unless @form.phenotype_data_file) }
+          %a{ href: "#plant_trial_select", "data-toggle": :tab } Plant trial
+
+        %li{ class: ("active" if @form.phenotype_data_file) }
+          %a{ href: "#phenotype_data_file_upload", "data-toggle": :tab } Data upload
+
+      .form-group
+        .tab-content
+          .tab-pane#plant_trial_select{ class: ("active" unless @form.phenotype_data_file) }
+            = f.select :plant_trial_id, @plant_trials.map { |trial| [trial.plant_trial_name, trial.id] },
+              { include_blank: "None" }, class: 'form-control', form: 'new_analysis'
+
+            %small.help-block
+              Plant scoring units from selected trial will be used to populate
+              genotype CSV file template.
+
+          .tab-pane#phenotype_data_file_upload{ class: ("active" if @form.phenotype_data_file) }
+            = render partial: "/analyses/new/phenotype_data_file_help"
+
+            .phenotype-data-file{ class: ('hidden' unless @form.phenotype_data_file) }
+              %span.file-name= @form.phenotype_data_file.try(:file_file_name)
+
+              = delete_analysis_data_file_button(@form.phenotype_data_file,
+                class: 'btn btn-default delete-phenotype-data-file')
+
+            .phenotype-data-file-errors.errors.hidden
+
+            = form_tag analyses_data_files_path, multipart: true, method: :post do
+              = hidden_field_tag "analysis_data_file[data_type]", "gwas_phenotype", id: "phenotype-data-file-data-type"
+
+              .phenotype-data-file-fileinput.fileinput{ class: ('hidden' if @form.phenotype_data_file) }
+                .btn.btn-primary.fileinput-button
+                  %label{ for: "phenotype-data-file" } Choose phenotype file...
+                  = file_field_tag "analysis_data_file[file]", class: 'phenotype-data-file', id: 'phenotype-data-file'
+
+                %small.help-block
+                  Please upload the phenotype CSV file here. Max file size is 50 MiB.
+
+      %hr
+
       .form-group
         = label_tag :genotype_data_file, 'Genotype data', class: 'required'
         = render partial: "/analyses/new/genotype_data_file_help"
@@ -56,28 +103,7 @@
           = delete_analysis_data_file_button(@form.map_data_file,
             class: 'btn btn-default delete-map-data-file')
 
-      .form-group
-        = label_tag :phenotype_data_file, 'Phenotype/trait data', class: 'required'
-        = render partial: "/analyses/new/phenotype_data_file_help"
-
-        .phenotype-data-file{ class: ('hidden' unless @form.phenotype_data_file) }
-          %span.file-name= @form.phenotype_data_file.try(:file_file_name)
-
-          = delete_analysis_data_file_button(@form.phenotype_data_file,
-            class: 'btn btn-default delete-phenotype-data-file')
-
-        .phenotype-data-file-errors.errors.hidden
-
-        = form_tag analyses_data_files_path, multipart: true, method: :post do
-          = hidden_field_tag "analysis_data_file[data_type]", "gwas_phenotype", id: "phenotype-data-file-data-type"
-
-          .phenotype-data-file-fileinput.fileinput{ class: ('hidden' if @form.phenotype_data_file) }
-            .btn.btn-primary.fileinput-button
-              %label{ for: "phenotype-data-file" } Choose phenotype file...
-              = file_field_tag "analysis_data_file[file]", class: 'phenotype-data-file', id: 'phenotype-data-file'
-
-            %small.help-block
-              Please upload the phenotype CSV file here. Max file size is 50 MiB.
+      %hr
 
     .action-buttons
       = link_to "Back", new_analysis_path, class: 'btn btn-default btn-wide btn-back'

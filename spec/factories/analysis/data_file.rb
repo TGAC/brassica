@@ -28,10 +28,22 @@ FactoryGirl.define do
       file { fixture_file("gwas-genotypes.csv", "text/csv") }
     end
 
+    trait :gwas_genotype_csv_with_no_relevant_mutations do
+      role "input"
+      data_type "gwas_genotype"
+      file { fixture_file("gwas-genotypes-no-relevant-mutations.csv", "text/csv") }
+    end
+
     trait :gwas_genotype_vcf do
       role "input"
       data_type "gwas_genotype"
       file { fixture_file("gwas-genotypes.vcf", "text/vcard") }
+    end
+
+    trait :gwas_genotype_vcf_with_no_relevant_mutations do
+      role "input"
+      data_type "gwas_genotype"
+      file { fixture_file("gwas-genotypes-no-relevant-mutations.vcf", "text/vcard") }
     end
 
     trait :gwas_map do
@@ -44,6 +56,12 @@ FactoryGirl.define do
       role "input"
       data_type "gwas_phenotype"
       file { fixture_file("gwas-phenotypes.csv", "text/csv") }
+    end
+
+    trait :gwas_phenotype_with_no_relevant_traits do
+      role "input"
+      data_type "gwas_phenotype"
+      file { fixture_file("gwas-phenotypes-no-relevant-traits.csv", "text/csv") }
     end
 
     trait :gwas_results do

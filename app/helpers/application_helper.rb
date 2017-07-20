@@ -87,6 +87,8 @@ module ApplicationHelper
   end
 
   def read_file(path, limit:)
-    File.open(path, "r") { |file| file.read(limit) }
+    # Encoding is forced because text may be truncated in the middle of an individual character,
+    # this may result in a visual glitch, but is not very important.
+    File.open(path, "r") { |file| file.read(limit) }.force_encoding("UTF-8")
   end
 end

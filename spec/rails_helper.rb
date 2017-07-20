@@ -83,14 +83,19 @@ RSpec.configure do |config|
 
   config.before :each do |example|
     unless example.metadata[:elasticsearch]
-      es = Class.new do
+      ::FakeEsClient ||= Class.new do
+        def exists(*args); false; end
+      end
+
+      ::FakeEsProxy ||= Class.new do
         def index_document; end
         def update_document; end
         def delete_document; end
-      end.new
+        def client; FakeEsClient.new; end
+      end
 
       searchable_models.each do |model|
-        allow_any_instance_of(model).to receive(:__elasticsearch__).and_return(es)
+        allow_any_instance_of(model).to receive(:__elasticsearch__).and_return(FakeEsProxy.new)
       end
     end
   end

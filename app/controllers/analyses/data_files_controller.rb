@@ -5,7 +5,7 @@ class Analyses::DataFilesController < ApplicationController
     data_type = params[:data_type]
     generator = case data_type
                 when "gwas_genotype"
-                  Analysis::Gwas::GenotypeCsvTemplateGenerator.new
+                  Analysis::Gwas::GenotypeCsvTemplateGenerator.new(plant_trial)
                 when "gwas_phenotype"
                   Analysis::Gwas::PhenotypeCsvTemplateGenerator.new
                 when "gwas_map"
@@ -49,10 +49,14 @@ class Analyses::DataFilesController < ApplicationController
     params.
       require(:analysis_data_file).
       permit(:file, :data_type).
-      merge(owner: current_user)
+      merge(owner: current_user, origin: "uploaded")
   end
 
   def decorate_data_file(data_file)
     AnalysisDataFileDecorator.decorate(data_file)
+  end
+
+  def plant_trial
+    PlantTrial.visible(current_user.id).find(params[:plant_trial_id]) if params[:plant_trial_id].present?
   end
 end

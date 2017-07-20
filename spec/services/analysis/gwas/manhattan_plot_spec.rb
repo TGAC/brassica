@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Analysis::Gwas::ManhattanPlot do
   let!(:analysis) { create(:analysis, :gwas) }
   let!(:gwas_results_data_files) {
-    analysis.args["phenos"].map do |trait_name|
+    analysis.meta["phenos"].map do |trait_name|
       create(:analysis_data_file, :gwas_results, analysis: analysis, owner: analysis.owner,
              file: fixture_file("gwas-results-SNPAssociation-Full-#{trait_name}.csv", "text/csv"))
     end
@@ -14,9 +14,9 @@ RSpec.describe Analysis::Gwas::ManhattanPlot do
   context "with no map file available" do
     let(:expected_trait_results) {
       [
-        ["snp1", "42.248475811326"],
-        ["snp2", "2.71525554601752"],
-        ["snp3", "197.525150438166"]
+        ["snp1", 42.248475811326],
+        ["snp2", 2.71525554601752],
+        ["snp3", 197.525150438166]
       ]
     }
 
@@ -47,9 +47,9 @@ RSpec.describe Analysis::Gwas::ManhattanPlot do
 
     let(:expected_trait_results) {
       [
-        ["snp3", "197.525150438166", 1, 3],
-        ["snp1", "42.248475811326", 1, 14],
-        ["snp2", "2.71525554601752", 2, 4]
+        ["snp3", 197.525150438166, "1", 3],
+        ["snp1", 42.248475811326, "1", 14],
+        ["snp2", 2.71525554601752, "2", 4]
       ]
     }
 
@@ -68,7 +68,7 @@ RSpec.describe Analysis::Gwas::ManhattanPlot do
     end
 
     it "returns chromosome information" do
-      expect(subject[:chromosomes]).to eq([[1, 0, 1], [2, 2, 2]])
+      expect(subject[:chromosomes]).to eq([["1", 0, 1], ["2", 2, 2]])
     end
   end
 end

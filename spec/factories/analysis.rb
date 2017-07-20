@@ -5,7 +5,7 @@ FactoryGirl.define do
 
     trait :gwas do
       analysis_type "gwas"
-      args(
+      meta(
         "phenos": %w(trait5 trait6 trait7),
         "cov": %w()
       )

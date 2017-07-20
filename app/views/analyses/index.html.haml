@@ -1,13 +1,13 @@
 .container
-  %h2.page-title My analyses
+  %h2.page-title
+    My analyses
+
+    %span.actions
+      = new_analysis_button
 
   - if @analyses.present?
     %ul.analyses= render partial: "analysis_item", collection: @analyses, as: :analysis
 
-    = new_analysis_button
-
   - else
     .alert.alert-info
       %p You do not have any analyses yet.
-
-    %p= new_analysis_button

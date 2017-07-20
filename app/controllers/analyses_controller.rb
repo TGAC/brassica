@@ -9,6 +9,7 @@ class AnalysesController < ApplicationController
     if params.key?(:analysis)
       @analysis = Analysis.new(analysis_params)
       @form = form
+      @plant_trials = plant_trials_with_scores
     end
   end
 
@@ -16,21 +17,12 @@ class AnalysesController < ApplicationController
     @form = form
 
     if @form.valid?
-      @form.save do |attrs|
-        attrs = attrs.merge(owner: current_user).
-          except(:genotype_data_file_id, :phenotype_data_file_id, :map_data_file_id)
-
-        analysis = Analysis.create!(attrs)
-        analysis.data_files << @form.genotype_data_file
-        analysis.data_files << @form.map_data_file if @form.map_data_file
-        analysis.data_files << @form.phenotype_data_file
-
-        AnalysisJob.new(analysis).enqueue
-      end
+      @form.save!
 
       redirect_to analyses_path, notice: "New analysis started"
     else
       @analysis = Analysis.new(analysis_params)
+      @plant_trials = plant_trials_with_scores
 
       render :new
     end
@@ -40,12 +32,27 @@ class AnalysesController < ApplicationController
     @analysis = current_user.analyses.find(params[:id])
 
     respond_to do |format|
-      format.json { render json: @analysis }
+      format.json do
+        if @analysis.gwas? && @analysis.success?
+          results = Analysis::Gwas::ManhattanPlot.new(@analysis).call.fetch(:traits).map do |trait_name, mutations, _|
+            mutations.map { |m| m[1] = "%.4f" % m[1]; m << trait_name }
+          end.flatten(1)
+
+          render json: {
+            analysis: @analysis,
+            results: results
+          }
+        else
+          render json: { analysis: @analysis }
+        end
+      end
       format.html do
         if request.xhr?
           render partial: "analysis_item", layout: false, locals: { analysis: @analysis }
         elsif @analysis.gwas?
-          @manhattan = Analysis::Gwas::ManhattanPlot.new(@analysis).call
+          @analysis = GwasAnalysisDecorator.decorate(@analysis)
+          @manhattan = Analysis::Gwas::ManhattanPlot.
+            new(@analysis, cutoff: (params[:cutoff].to_f if params.key?(:cutoff))).call
         end
       end
     end
@@ -64,12 +71,20 @@ class AnalysesController < ApplicationController
     action_name != "new" || params[:analysis].present?
   end
 
+  def plant_trials_with_scores
+    PlantTrial.visible(current_user.id).select do |plant_trial|
+      plant_trial.plant_scoring_units.visible(current_user.id).exists? &&
+        plant_trial.trait_descriptors.visible(current_user.id).exists?
+    end
+  end
+
   def analysis_params
     params.require(:analysis).permit(:analysis_type)
   end
 
   def form_params
-    params.require(:analysis).permit(*form_klass.permitted_properties)
+    params.require(:analysis).permit(*form_klass.permitted_properties).
+      merge(owner: current_user)
   end
 
   def form

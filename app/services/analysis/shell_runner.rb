@@ -16,7 +16,7 @@ class Analysis::ShellRunner
     yield if block_given?
     remove_exec_dir
   rescue JobError
-    set_status :failure
+    set_status :failure, :shell_job_error
   rescue
     set_status :failure
     raise
@@ -31,13 +31,19 @@ class Analysis::ShellRunner
     @results_dir ||= File.join(exec_dir, "results")
   end
 
+  def mark_as_failure(reason = nil)
+    set_status(:failure, reason)
+  end
+
   private
 
   attr_reader :analysis
 
-  def set_status(new_status)
-    analysis.update!(status: new_status)
-    analysis.update!(finished_at: Time.now) if analysis.finished?
+  def set_status(new_status, reason = nil)
+    analysis.status = new_status
+    analysis.meta['failure_reason'] = reason
+    analysis.finished_at = Time.now if analysis.finished?
+    analysis.save!
   end
 
   def run_job_command(job_command)
