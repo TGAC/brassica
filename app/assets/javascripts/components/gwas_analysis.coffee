@@ -52,7 +52,8 @@ window.GwasAnalysis = class GwasAnalysis extends Component
     $result = this.$("div.#{field}")
 
     this.$("input.#{field}").fileupload
-      data_type: 'json'
+      dataType: 'json'
+      dropZone: $fileinput
 
       add: (event, data) =>
         $fileinput.find('.fileinput-button').addClass('disabled')
