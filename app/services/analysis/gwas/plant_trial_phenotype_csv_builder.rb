@@ -23,9 +23,12 @@ class Analysis
 
       def build_csv(plant_trial)
         data = build(plant_trial)
-        headers = %w(ID) + data.trait_ids.map { |trait_id| trait_id.gsub(/\s+/, ".") }
 
-        Tempfile.new(["plant-trial-phenotype", ".csv"]).tap do |csv_file|
+        # TODO: make sure normalized names are unique
+        trait_ids = data.trait_ids.map { |trait_id| trait_id.gsub(/\W+/, "_") }
+        headers = %w(ID) + trait_ids
+
+        tmpfile = NamedTempfile.new(".csv").tap do |csv_file|
           csv_file << CSV.generate(force_quotes: true) do |csv|
             csv << headers
 
@@ -33,13 +36,16 @@ class Analysis
               sample = sample.map { |val| val == "-" ? "NA" : val }
               scores = data.trait_id_indices.map { |idx| sample[idx] }
 
-              csv << [sample[0]] + scores
+              csv << [sample[0].gsub(/\W/, '_')] + scores
             end
           end
 
+          csv_file.original_filename = "plant-trail-phenotype.csv"
           csv_file.flush
           csv_file.rewind
         end
+
+        [tmpfile, trait_ids]
       end
 
       private

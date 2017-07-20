@@ -22,7 +22,7 @@ RSpec.describe Analysis::Gwas::PlantTrialPhenotypeCsvBuilder do
   end
 
   describe "#build_csv" do
-    subject { described_class.new.build_csv(plant_trial) }
+    subject { described_class.new.build_csv(plant_trial).first }
 
     it "returns CSV acceptable by GWASSER" do
       headers = subject.readline.strip.split(",")

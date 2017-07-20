@@ -30,7 +30,7 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 * PostgreSQL
 * Elasticsearch 1.4.3, Java 7
 * R 3.2.2 or better
-* [GWASSER](https://github.com/cyverseuk/GWASSER)
+* [GWASSER](https://github.com/kammerer/GWASSER) (forked from [cyverseuk/GWASSER](https://github.com/cyverseuk/GWASSER))
 
 
 

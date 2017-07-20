@@ -1,3 +1,8 @@
+.page-title {
+  .actions {
+    @extend .pull-right;
+  }
+}
 
 //button styles
 .btn-secondary {
@@ -114,6 +119,10 @@
   &.table-browse {
     margin-bottom: 100px !important;
     width: 100% !important;
+  }
+
+  .panel & {
+    border: none;
   }
 }
 

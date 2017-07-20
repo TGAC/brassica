@@ -1,6 +1,6 @@
 module AnalysesHelper
   def new_analysis_button
-    link_to "Perform data analysis", new_analysis_path, class: 'btn btn-primary'
+    link_to "Perform new analysis", new_analysis_path, class: 'btn btn-primary'
   end
 
   def delete_analysis_data_file_button(data_file, options = {})

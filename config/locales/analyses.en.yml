@@ -21,3 +21,16 @@ en:
           target='_blank' title='Genome-wide association study'><b>GWAS</b></a>
           on data you submit. You will need to provide genotype and phenotypic trait
           data for the analysis.<br/>
+
+    show:
+      gwas:
+        gwas_genotype: Genotype
+        gwas_map: Map
+        gwas_phenotype: Phenotype
+        uploaded: User upload
+        generated: Generated file
+      gwas_results:
+        failure_reason:
+          all_mutations_removed: All mutations were excluded from analysis due to lack of variability between samples.
+          all_traits_removed: All traits were excluded from analysis due to lack of variability between samples.
+          shell_job_error: The analysis failed. Please, consult 'Std error' and 'Std output' for more information.

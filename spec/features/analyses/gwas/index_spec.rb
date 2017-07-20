@@ -20,7 +20,7 @@ RSpec.feature "Analyses index" do
 
       expect(page).to have_css("h2.page-title", text: "My analyses")
       expect(page).to have_content("You do not have any analyses yet.")
-      expect(page).to have_link("Perform data analysis")
+      expect(page).to have_link("Perform new analysis")
     end
   end
 
