@@ -7,7 +7,7 @@ class Analysis
       end
 
       def call
-        { traits: [], chromosomes: [] }.tap do |results|
+        { traits: [] }.tap do |results|
           chromosomes = Hash.new { |h, k| h[k] = [] }
 
           result_data_files.each do |data_file|
