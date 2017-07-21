@@ -11,7 +11,18 @@ en:
       common: |
         You will also be able to provide
         data ownership and provenance information. Once successfully submitted, the
-        data will be accessible for all users of the Portal. For detailed instructions
+        data will be accessible for all users of the Portal.
+
+        Submitted data is by default private. This means that it is only visible and accessible to you.
+        You can change this at the last step of the submission or any time after the submission.
+        For more information, please see the documentation. Submitted and published data falls
+        under the <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 license</a>
+        , to ensure maximal re-use potential and recognition of data
+        generator or submitter, if not otherwise stated in the comments. Please be sure to fill
+        out the provenance section in detail so other users can accredit you properly.
+        For more information, please visit the documentation pages.
+
+        For detailed instructions regarding the data uploading process
         please consult the <a href="/manuals/upload_%{type}_submission.pdf">manual</a>.
         Further contextual help will be provided at each of the following steps:
       population: |
