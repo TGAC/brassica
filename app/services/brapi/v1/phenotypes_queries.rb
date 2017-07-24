@@ -15,8 +15,16 @@ class Brapi::V1::PhenotypesQueries
   # observations.observationVariableName, observations.season, observations.value, observations.observationTimeStamp,
   # observations.collector
   # BrAPI v1 doesn't define very well the exact meaning of all these fields
-  def phenotypes_search_query(germplasmDbIds, observationVariableDbIds, studyDbIds, locationDbIds, seasonDbIds, 
-      sortBy, sortOrder, page, page_size, count_mode)
+  def phenotypes_search_query(query_params, count_mode:)
+    germplasm_db_ids= query_params[:germplasm_db_ids] 
+    observation_variable_db_ids= query_params[:observation_variable_db_ids]
+    study_db_ids= query_params[:study_db_ids] 
+    location_db_ids= query_params[:location_db_ids]
+    season_db_ids= query_params[:season_db_ids] 
+    sort_by= query_params[:sort_by] 
+    sort_order= query_params[:sort_order] 
+    page= query_params[:page] 
+    page_size= query_params[:page_size] 
     
     # where conditions
     where_query = " "
@@ -24,38 +32,36 @@ class Brapi::V1::PhenotypesQueries
     where_atts_count = 0
     
     # TODO: We don't support yet these params: programDbIds, observationLevel
-    
-    if germplasmDbIds.present?   # plant_accessions.plant_accession
+    if germplasm_db_ids.present?   # plant_accessions.plant_accession
       where_atts_count+= 1
-      where_query += get_where_condition("plant_accessions.plant_accession", germplasmDbIds, where_atts_count)
-      where_atts << get_att(germplasmDbIds)    
+      where_query += get_where_condition("plant_accessions.plant_accession", germplasm_db_ids, where_atts_count)
+      where_atts << get_att(germplasm_db_ids)    
     end
-    if observationVariableDbIds.present?   # trait_descriptors.id
+    if observation_variable_db_ids.present?   # trait_descriptors.id
       where_atts_count+= 1
-      where_query += get_where_condition("trait_descriptors.id", observationVariableDbIds, where_atts_count)
-      where_atts << get_att(observationVariableDbIds)    
+      where_query += get_where_condition("trait_descriptors.id", observation_variable_db_ids, where_atts_count)
+      where_atts << get_att(observation_variable_db_ids)    
     end
-    if studyDbIds.present?   # plant_trials.id
+    if study_db_ids.present?   # plant_trials.id
       where_atts_count+= 1
-      where_query += get_where_condition("plant_trials.id", studyDbIds, where_atts_count)
-      where_atts << get_att(studyDbIds)    
+      where_query += get_where_condition("plant_trials.id", study_db_ids, where_atts_count)
+      where_atts << get_att(study_db_ids)    
     end
-    if locationDbIds.present?   # countries.id
+    if location_db_ids.present?   # countries.id
       where_atts_count+= 1
-      where_query += get_where_condition("countries.id", locationDbIds, where_atts_count)
-      where_atts << get_att(locationDbIds)  
+      where_query += get_where_condition("countries.id", location_db_ids, where_atts_count)
+      where_atts << get_att(location_db_ids)  
     end
-    if seasonDbIds.present?   # plant_trials.trial_year
+    if season_db_ids.present?   # plant_trials.trial_year
       where_atts_count+= 1
-      where_query += get_where_condition("plant_trials.trial_year", seasonDbIds, where_atts_count)
-      where_atts << get_att(seasonDbIds)  
+      where_query += get_where_condition("plant_trials.trial_year", season_db_ids, where_atts_count)
+      where_atts << get_att(season_db_ids)  
     end
     #if observationLevel.present?   
     # observationLevel as param is defined as: level of this observation unit. Its ID is the observationUnitDbId.
     # but the examples show things like 'observationLevel: plot', not an ID at all. So this has to be better defined.
     # Also, in our case observationLevel is a calculated field, so it seems that selection by it cannot be done directly.
     
-
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets
     where_atts_count+= 1
     where_query = where_query + (where_atts_count>1?" and ":" where ") 
@@ -126,14 +132,14 @@ class Brapi::V1::PhenotypesQueries
     LEFT JOIN trait_scores ON plant_scoring_units.id = trait_scores.plant_scoring_unit_id
     LEFT JOIN trait_descriptors ON trait_scores.trait_descriptor_id = trait_descriptors.id
     "
-    
+
     if count_mode
       total_query = "SELECT COUNT(*) FROM ("+select_query + joins_query + where_query +") AS total_entries_count"
       result_object = execute_statement(total_query, where_atts)
     else
       # order
-      order_query =  " ORDER BY "+ get_sortby_field(sortBy)      
-      order_query += (sortOrder!=nil && sortOrder=="desc"?" desc ":" asc ") 
+      order_query =  " ORDER BY "+ get_sortby_field(sort_by)      
+      order_query += (sort_order!=nil && sort_order=="desc"?" desc ":" asc ") 
       
       # pagination
       pagination_query = pagination_query(page, page_size)
@@ -141,7 +147,6 @@ class Brapi::V1::PhenotypesQueries
       total_query = select_query + joins_query + where_query + order_query + pagination_query
       result_object = execute_statement(total_query, where_atts)
     end
-    
     result_object
   end
 
@@ -149,9 +154,9 @@ class Brapi::V1::PhenotypesQueries
   private
 
 
-  def get_sortby_field(sortBy)
+  def get_sortby_field(sort_by)
     order_query = ""
-    case sortBy 
+    case sort_by 
     when "germplasmDbIds"   
       order_query += " plant_accessions.plant_accession "
     when "observationVariableDbIds"   

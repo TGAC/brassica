@@ -112,52 +112,42 @@ RSpec.describe "BRAPI V1 phenotypes calls" do
       expect(result['Y']).to be_nil.or(be_a String)
       expect(result['treatments']).to be_nil.or(be_a Array)
       expect(result['observationUnitXref']).to be_nil.or(be_a Array)
-      if (result['observationUnitXref'].is_a? Array)
-        observationsXref = result['observationUnitXref']
+      observationsXref = result['observationUnitXref']
+      if (observationsXref.size > 0)
+        observationXref = observationsXref[0]
         
-        if (observationsXref.size > 0)
-          observationXref = observationsXref[0]
-          
-          expect(observationXref).to be_nil.or(be_a Hash)
-          expect(observationXref['source']).to be_a String     # mandatory field
-          expect(observationXref['id']).to be_a String         # mandatory field
+        expect(observationXref).to be_nil.or(be_a Hash)
+        expect(observationXref['source']).to be_a String     # mandatory field
+        expect(observationXref['id']).to be_a String         # mandatory field
 
-          observationXref.keys.each do |key|
-            if (['source','id'].include? key)
-              expect(observationXref[key]).to be_nil.or(be_a String)
-            else
-              raise_error('Unexpected property name: observationXref['+key+']')
-            end
-          end  
-        end
+        observationXref.keys.each do |key|
+          if (['source','id'].include? key)
+            expect(observationXref[key]).to be_nil.or(be_a String)
+          else
+            raise_error('Unexpected property name: observationXref['+key+']')
+          end
+        end  
       end
       
       expect(result['observations']).to be_a Array             # mandatory field
-      if (result['observations'].is_a? Array)
-        observations = result['observations']
-        
-        expect(observations.size).to be > 0
-        if (observations.size > 0)
-          observation = observations[0]
-          
-          expect(observation['observationVariableDbId']).to be_a String     # mandatory field
-  
-          expect(observation).to be_nil.or(be_a Hash)
-          observation.keys.each do |key|
-            if (['observationDbId','observationVariableName','season','observationTimeStamp',
-                'collector','observationVariableDbId'].include? key)
-              expect(observation[key]).to be_nil.or(be_a String)
-            else
-              raise_error('Unexpected property name: observation['+key+']')
-            end
-          end  
+    
+      observations = result['observations']
+      expect(observations.size).to be > 0
+      observation = observations[0]
+      
+      expect(observation).to be_nil.or(be_a Hash)
+      expect(observation['observationVariableDbId']).to be_a String     # mandatory field
+      observation.keys.each do |key|
+        if (['observationDbId','observationVariableName','season','observationTimeStamp',
+            'collector','observationVariableDbId'].include? key)
+          expect(observation[key]).to be_nil.or(be_a String)
+        else
+          raise_error('Unexpected property name: observation['+key+']')
         end
-      
-      end
-      
+      end  
+
     end     
     
   end
   
-
 end
