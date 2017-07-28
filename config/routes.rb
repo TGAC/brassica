@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   root 'application#index'
   get 'about', to: 'application#about'
   get 'api_documentation', to: 'application#api'
+  get 'about_bip', to: 'application#about_bip'
 
   resources :submissions do
     member do

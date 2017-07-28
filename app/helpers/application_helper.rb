@@ -44,7 +44,8 @@ module ApplicationHelper
       submit: new_submission_path,
       analyze: new_analysis_path,
       api: api_documentation_path,
-      about: about_path
+      about: about_path,
+      about_bip: about_bip_path
     }
   end
 

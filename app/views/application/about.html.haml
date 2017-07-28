@@ -1,25 +1,22 @@
 .container
-  .h2.page-title About Brassica Information Portal
+  .h2.page-title About Us
+
+  %h4 Our Mission
 
   %p.text-long
-    %strong The Brassica Information Portal
-    is a web repository for population and trait
-    scoring information related to the Brassica breeding community. It provides
-    information about quantitative trait loci and links curated Brassica phenotype
-    experimental data with genotype information stored in external data sources.
-    Advanced data submission capabilities and APIs enable users to store
-    and publish their own study results in our Portal. The repository can be easily
-    browsed thanks to a set of user-friendly query interfaces.
+    Our first goal is to make Brassica crop data openly accessible and available in a
+    standardised and well-described manner. We collaborate with
+    = succeed ',' do
+      = link_to 'Elixir', 'https://www.elixir-europe.org/about-us'
+    = link_to 'Bioschemas.org', 'http://bioschemas.org/'
+    and Biosamples to make the hosted data findable and interoperable with analysis tools and
+    re-usable among the scientific community.
+
+
+  %h4 Earlham Institute
 
   %p.text-long
-    BIP Portal follows our
-    = link_to 'Terms of Use', 'http://www.earlham.ac.uk/terms-use'
-    rules, so please check these when interested in using our service.
-
-  %h4 Earlham Institute (EI)
-
-  %p.text-long
-    %strong The Earlham Institute (EI)
+    The Earlham Institute (EI)
     is a vibrant contemporary research institute working in an area of rapid
     technological development and innovation. Our mission is to advance bioscience
     by enabling and developing computational and genomics data-driven approaches in biology.
@@ -106,16 +103,6 @@
       %li
         = link_to 'The RIPR project','http://www.rothamsted.ac.uk/projects/S5361'
 
-  %h4 How to cite us
-
-  %h5 BIP
-  %p.text-long
-    Eckes AH, Gubała T, Nowakowski P et al. Introducing the Brassica Information Portal: Towards integrating genotypic and phenotypic
-    Brassica crop data [version 1; referees: awaiting peer review]. F1000Research 2017, 6:465 (doi: 10.12688/f1000research.11301.1)
-
-  %h5 GWASSER
-  %p.text-long
-    = link_to "https://github.com/cyverseuk/GWASSER", "https://github.com/cyverseuk/GWASSER", target: "_blank"
 
   %h4 Acknowledgments
 
