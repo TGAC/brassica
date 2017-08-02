@@ -76,16 +76,20 @@ class Brapi::V1::PhenotypesController < Brapi::BaseController
 
   def extract_observation(observation_row)        
     # We introduce data related to plot numbers, plants, etc
-    begin
-      observation_levels_hash = JSON.load(observation_row.delete("observation_levels_json"))
-      if !observation_levels_hash.nil?
-          observation_row["plotNumber"]= observation_levels_hash["plot"]
-          observation_row["plantNumber"]= observation_levels_hash["plant"]
-          observation_row["blockNumber"]= observation_levels_hash["block"]
-          observation_row["observationLevel"]= observation_levels_hash.keys[observation_levels_hash.keys.length-1]
+    observation_levels_hash = JSON.load(observation_row.delete("observation_levels_json"))
+    if !observation_levels_hash.nil?
+      if observation_levels_hash.include? "plot"
+        observation_row["plotNumber"]= observation_levels_hash["plot"]
       end
-    rescue JSON::ParserError => e  
-      # If there is an unexpected structure in observation_levels_hash, we won't fill that information 
+      if observation_levels_hash.include? "plant"
+        observation_row["plantNumber"]= observation_levels_hash["plant"]
+      end
+      if observation_levels_hash.include? "block"
+        observation_row["blockNumber"]= observation_levels_hash["block"]
+      end
+      if observation_levels_hash.keys.length > 0
+        observation_row["observationLevel"]= observation_levels_hash.keys[observation_levels_hash.keys.length-1]
+      end
     end
     
     observation_hash = {
@@ -97,7 +101,6 @@ class Brapi::V1::PhenotypesController < Brapi::BaseController
       collector: observation_row.delete("observations_collector"),            
       value: observation_row.delete("observations_value")
     }
-    return observation_hash
   end
   
   def get_page
