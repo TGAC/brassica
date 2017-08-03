@@ -21,6 +21,7 @@ class Brapi::V1::PhenotypesQueries
     study_db_ids= query_params[:study_db_ids] 
     location_db_ids= query_params[:location_db_ids]
     season_db_ids= query_params[:season_db_ids] 
+    observation_time_stamp_range= query_params[:observation_time_stamp_range]
     sort_by= query_params[:sort_by] 
     sort_order= query_params[:sort_order] 
     page= query_params[:page] 
@@ -57,6 +58,16 @@ class Brapi::V1::PhenotypesQueries
       where_query += get_where_condition("plant_trials.trial_year", season_db_ids, where_atts_count)
       where_atts << get_att(season_db_ids)  
     end
+    if observation_time_stamp_range.present?   # trait_scores.scoring_date
+      where_atts_count+= 1
+      where_query += get_where_timerange_condition("trait_scores.scoring_date", observation_time_stamp_range, where_atts_count)
+      where_atts << get_att(observation_time_stamp_range[0])  
+      if observation_time_stamp_range.length >=2
+        where_atts << get_att(observation_time_stamp_range[1]) 
+        where_atts_count+= 1
+      end 
+    end
+    
     #if observationLevel.present?   
     # observationLevel as param is defined as: level of this observation unit. Its ID is the observationUnitDbId.
     # but the examples show things like 'observationLevel: plot', not an ID at all. So this has to be better defined.
@@ -109,11 +120,11 @@ class Brapi::V1::PhenotypesQueries
       trait_descriptors.descriptor_name as "observations_observationVariableName",
       trait_scores.scoring_date as "observations_season",
       trait_scores.score_value as "observations_value",
-      to_char(trait_scores.scoring_date, 'YYYY-MM-DD"T"HH24:MM:SS"Z"') as "observations_observationTimeStamp",
+      to_char(trait_scores.scoring_date, 'YYYY-MM-DD"T"HH24:MM:SSOF') as "observations_observationTimeStamp",
       plant_scoring_units.described_by_whom as "observations_collector"
       
     SQL
-    
+
     # observationLevel, plotNumber, plantNumber, blockNumber, and X, Y have to be extracted 
     #   from observationLevels (observation_levels_json)
     # entryType and entryNumber are not defined at all in BrAPI v1. It seems they always return null.
@@ -171,6 +182,20 @@ class Brapi::V1::PhenotypesQueries
       order_query += " plant_scoring_units.id "
     end
     return order_query    
+  end
+
+  def get_where_timerange_condition(field, value, condition_number )
+    where_clause = (condition_number > 1 ? " and " : " where ") 
+    if value.kind_of?(Array) 
+      if value.length >=2
+        where_clause += " "+field+" >= ($"+condition_number.to_s+") AND "+field+" < ($"+(condition_number+1).to_s+")"
+      elsif value.length == 1
+        where_clause += " "+field+" >= ($"+condition_number.to_s+") AND "+field+" < ($"+condition_number.to_s+")"
+      end
+    else
+      where_clause = get_where_condition(field, value, condition_number)
+    end  
+    return where_clause
   end
 
   def get_where_condition(field, value, condition_number )

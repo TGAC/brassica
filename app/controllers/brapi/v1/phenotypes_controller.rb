@@ -10,7 +10,7 @@ class Brapi::V1::PhenotypesController < Brapi::BaseController
 
   def search
     # accepted params: germplasmDbIds, observationVariableDbIds, studyDbIds, locationDbIds, seasonDbIds
-    # sortBy, sortOrder
+    # observationTimeStampRange, sortBy, sortOrder
     # pageSize, page
     # TODO Not supported yet: programDbIds, observationLevel
 
@@ -24,6 +24,7 @@ class Brapi::V1::PhenotypesController < Brapi::BaseController
       study_db_ids: params['studyDbIds'], 
       location_db_ids: params['locationDbIds'],
       season_db_ids: params['seasonDbIds'], 
+      observation_time_stamp_range: params['observationTimeStampRange'],
       sort_by: params['sortBy'], 
       sort_order: params['sortOrder'], 
       page: page, 
