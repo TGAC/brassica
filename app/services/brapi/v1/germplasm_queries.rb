@@ -10,30 +10,37 @@ class Brapi::V1::GermplasmQueries
   # All possible fields to return:
   # germplasmDbId, defaultDisplayName, accessionNumber, germplasmName, germplasmPUI, pedigree, 
   # seedSource, synonyms, commonCropName, instituteCode, instituteName, biologicalStatusOfAccessionCode, 
-  # countryOfOriginCode, typeOfGermplasmStorageCode, genus, species, speciesAuthority, subtaxa, subtaxaAuthority, 
+  # countryOfOriginCode, typeOfGermplasmStorageCode, genus, species, taxonIds, speciesAuthority, subtaxa, subtaxaAuthority, 
   # donors, acquisitionDate
 
-  def germplasm_search_query(germplasmPUI, germplasmDbId, germplasmName, page, page_size, count_mode)
+  def germplasm_search_query(query_params, count_mode)
+    germplasm_pui= query_params[:germplasm_pui] 
+    germplasm_db_id= query_params[:germplasm_db_id]
+    germplasm_name= query_params[:germplasm_name] 
+    page= query_params[:page] 
+    page_size= query_params[:page_size]
+    
+    
     # where conditions
     where_query = " "
     where_atts = []
     where_atts_count = 0
     
     # TO BE DEFINED
-    #if germplasmPUI.present? 
+    #if germplasm_pui.present? 
     
-    if germplasmDbId.present?   # plant_accessions.plant_accession
+    if germplasm_db_id.present?   # plant_accessions.plant_accession
       where_atts_count+= 1
       where_query = where_query + "where plant_accessions.plant_accession = $"+where_atts_count.to_s
-      where_atts<< germplasmDbId
+      where_atts<< germplasm_db_id
     end
      
-    if germplasmName.present?   # plant_lines.plant_variety_name or plant_lines.common_name
+    if germplasm_name.present?   # plant_lines.plant_variety_name or plant_lines.common_name
       where_atts_count+= 1
       where_query = where_query + (where_atts_count>0?" and ":" where ") 
       where_query = where_query + " (plant_lines.plant_variety_name = $"+where_atts_count.to_s+
       " OR plant_lines.common_name = $"+where_atts_count.to_s+")"
-      where_atts<< germplasmName
+      where_atts<< germplasm_name
     end
     
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets
@@ -71,9 +78,18 @@ class Brapi::V1::GermplasmQueries
       taxonomy_terms.name as "subtaxa" 
     SQL
     
-    
-    
+    # TODO : germplasmName
+    # TODO : germplasmPUI
+    # TODO : pedigree
+    # TODO : seedSource
+    # TODO : synonyms
     # TODO : instituteCode mandatory : to be implemented. To review instituteName
+    # TODO : typeOfGermplasmStorageCode
+    # TODO : taxonIds
+    # TODO : speciesAuthority
+    # TODO : subtaxaAuthority   
+    # TODO : donors
+    # TODO : acquisitionDate
     
     # joins
     
@@ -132,7 +148,8 @@ class Brapi::V1::GermplasmQueries
     end
     return results
   end
-
+  
+  
   def pagination_query(page, page_size)
     return " LIMIT "+page_size.to_s+" OFFSET "+((page-1)*page_size).to_s  
   end

@@ -18,8 +18,15 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
       page = get_page
       page_size = get_page_size 
           
-      result_object = germplasm_queries.germplasm_search_query(
-        params['germplasmPUI'],params['germplasmDbId'], params['germplasmName'], page, page_size, false)
+      query_params = { 
+        germplasm_pui: params['germplasmPUI'], 
+        germplasm_db_id: params['germplasmDbId'],
+        germplasm_name: params['germplasmName'],
+        page: page, 
+        page_size: page_size
+      }
+          
+      result_object = germplasm_queries.germplasm_search_query(query_params, false)
       
       records = result_object.values
      
@@ -40,8 +47,7 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
         
         # pagination data returned
         
-        result_count_object = germplasm_queries.germplasm_search_query(
-          params['germplasmPUI'],params['germplasmDbId'], params['germplasmName'], page, page_size, true)
+        result_count_object = germplasm_queries.germplasm_search_query(query_params, true)
         total_count = result_count_object.values.first[0].to_i
         total_pages = (total_count/page_size.to_f).ceil
         
