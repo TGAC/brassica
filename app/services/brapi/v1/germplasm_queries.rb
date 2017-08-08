@@ -4,6 +4,7 @@ class Brapi::V1::GermplasmQueries
 
   def initialize
     @connection = ActiveRecord::Base.connection.raw_connection    
+    @connection.exec("set statement_timeout to 10000;")     
   end
 
   # processing result: https://github.com/plantbreeding/API/blob/master/Specification/Germplasm/GermplasmSearchGET.md 
@@ -138,11 +139,16 @@ class Brapi::V1::GermplasmQueries
     # at least until the previous one has been deallocated
     Thread.exclusive do
       @connection.prepare('brapi_statement', sql)
-      
-      if( (atts != nil) && !(atts.empty?) )
-        results = @connection.exec_prepared("brapi_statement", atts)
-      else
-        results = @connection.exec_prepared("brapi_statement")
+      begin
+        if( (atts != nil) && !(atts.empty?) )
+          results = @connection.exec_prepared("brapi_statement", atts)
+        else
+          results = @connection.exec_prepared("brapi_statement")
+        end
+      rescue PG::Error => e
+        @connection.exec("ROLLBACK") 
+        results = nil
+        Rails.logger.warn { "Encountered an error executing a BrAPI germplasm-related query: #{se.message} #{se.backtrace.join("\n")}" }
       end
       @connection.exec("DEALLOCATE brapi_statement")
     end
