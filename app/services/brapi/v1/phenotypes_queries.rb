@@ -3,7 +3,8 @@ class Brapi::V1::PhenotypesQueries
   include Singleton
 
   def initialize
-    @connection = ActiveRecord::Base.connection.raw_connection    
+    @connection = ActiveRecord::Base.connection.raw_connection   
+    @connection.exec("set statement_timeout to 10000;")      
   end
 
 
@@ -238,12 +239,17 @@ class Brapi::V1::PhenotypesQueries
     # at least until the previous one has been deallocated
     Thread.exclusive do
       @connection.prepare('brapi_phenotypes_statement', sql)
-       
-      if( (atts != nil) && !(atts.empty?) )
-        results = @connection.exec_prepared("brapi_phenotypes_statement", atts)
-      else
-        results = @connection.exec_prepared("brapi_phenotypes_statement")
-      end
+      begin 
+        if( (atts != nil) && !(atts.empty?) )
+          results = @connection.exec_prepared("brapi_phenotypes_statement", atts)
+        else
+          results = @connection.exec_prepared("brapi_phenotypes_statement")
+        end
+      rescue PG::Error => e
+        @connection.exec("ROLLBACK") 
+        results = nil
+        Rails.logger.warn { "Encountered an error executing a BrAPI phenotypes-related query: #{se.message} #{se.backtrace.join("\n")}" }
+      end  
       @connection.exec("DEALLOCATE brapi_phenotypes_statement")
     end
     return results

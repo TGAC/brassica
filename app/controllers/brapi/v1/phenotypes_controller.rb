@@ -32,43 +32,47 @@ class Brapi::V1::PhenotypesController < Brapi::BaseController
     }
     
     result_object = phenotypes_queries.phenotypes_search_query(query_params, count_mode: false )
-    records = result_object.values
-   
-    if result_object.count > 0
-      observation_units = []
-      observations = Hash.new { |h, k| h[k] = [] }
-      #intermediate_hash = {}
-      
-      # any programmatic data manipulation can be done here
-      result_object.each do |observation_row|
-        # To check authentication and ownership when ORCID is supported by BrAPI
-        # We currently only retrieve public records. This is already done at query level
-        #if (!row[:user_id] || row[:published] )
-        
-        observation_unit_id = observation_row["observationUnitDbId"]
-        observation = extract_observation(observation_row)  
-        if observations[observation_unit_id].empty?
-          observation_row["observations"] = observations[observation_unit_id]
-          observation_units << observation_row
-        end  
-        observations[observation_unit_id] << observation
-      end
-      
-      # pagination data returned
-      result_count_object = phenotypes_queries.phenotypes_search_query(query_params, count_mode: true)
-      
-      total_count = result_count_object.values.first[0].to_i
-      total_pages = (total_count/page_size.to_f).ceil
-      
-      json_response = { 
-        metadata: json_metadata(page_size, page, total_count, total_pages),
-        result: {
-          data: observation_units
-        }
-      }
-      render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
+    if result_object.nil?
+      render json: { reason: 'Internal error', message: 'There was some error managing phenotypes/search query' }, status: :internal_server_error
     else
-      render json: { reason: 'Resource not found' }, status: :not_found  # 404
+      records = result_object.values
+     
+      if result_object.count > 0
+        observation_units = []
+        observations = Hash.new { |h, k| h[k] = [] }
+        #intermediate_hash = {}
+        
+        # any programmatic data manipulation can be done here
+        result_object.each do |observation_row|
+          # To check authentication and ownership when ORCID is supported by BrAPI
+          # We currently only retrieve public records. This is already done at query level
+          #if (!row[:user_id] || row[:published] )
+          
+          observation_unit_id = observation_row["observationUnitDbId"]
+          observation = extract_observation(observation_row)  
+          if observations[observation_unit_id].empty?
+            observation_row["observations"] = observations[observation_unit_id]
+            observation_units << observation_row
+          end  
+          observations[observation_unit_id] << observation
+        end
+        
+        # pagination data returned
+        result_count_object = phenotypes_queries.phenotypes_search_query(query_params, count_mode: true)
+        
+        total_count = result_count_object.values.first[0].to_i
+        total_pages = (total_count/page_size.to_f).ceil
+        
+        json_response = { 
+          metadata: json_metadata(page_size, page, total_count, total_pages),
+          result: {
+            data: observation_units
+          }
+        }
+        render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
+      else
+        render json: { reason: 'Resource not found' }, status: :not_found  # 404
+      end
     end
   end
 
