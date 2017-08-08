@@ -248,7 +248,7 @@ class Brapi::V1::PhenotypesQueries
       rescue PG::Error => e
         @connection.exec("ROLLBACK") 
         results = nil
-        Rails.logger.warn { "Encountered an error executing a BrAPI phenotypes-related query: #{se.message} #{se.backtrace.join("\n")}" }
+        Rails.logger.warn { "Encountered an error executing a BrAPI phenotypes-related query: #{e.message} #{e.backtrace.join("\n")}" }
       end  
       @connection.exec("DEALLOCATE brapi_phenotypes_statement")
     end

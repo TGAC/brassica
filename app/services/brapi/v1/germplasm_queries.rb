@@ -148,7 +148,7 @@ class Brapi::V1::GermplasmQueries
       rescue PG::Error => e
         @connection.exec("ROLLBACK") 
         results = nil
-        Rails.logger.warn { "Encountered an error executing a BrAPI germplasm-related query: #{se.message} #{se.backtrace.join("\n")}" }
+        Rails.logger.warn { "Encountered an error executing a BrAPI germplasm-related query: #{e.message} #{e.backtrace.join("\n")}" }
       end
       @connection.exec("DEALLOCATE brapi_statement")
     end
