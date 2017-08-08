@@ -14,7 +14,7 @@ class Brapi::V1::GermplasmQueries
   # countryOfOriginCode, typeOfGermplasmStorageCode, genus, species, taxonIds, speciesAuthority, subtaxa, subtaxaAuthority, 
   # donors, acquisitionDate
 
-  def germplasm_search_query(query_params, count_mode)
+  def germplasm_search_query(query_params, count_mode:)
     germplasm_pui= query_params[:germplasm_pui] 
     germplasm_db_id= query_params[:germplasm_db_id]
     germplasm_name= query_params[:germplasm_name] 
