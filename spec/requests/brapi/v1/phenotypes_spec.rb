@@ -113,7 +113,7 @@ RSpec.describe "BRAPI V1 phenotypes calls" do
       expect(result['treatments']).to be_nil.or(be_a Array)
       expect(result['observationUnitXref']).to be_nil.or(be_a Array)
       observationsXref = result['observationUnitXref']
-      if (observationsXref.size > 0)
+      if (!observationsXref.nil? && observationsXref.size > 0)
         observationXref = observationsXref[0]
         
         expect(observationXref).to be_nil.or(be_a Hash)
