@@ -348,6 +348,7 @@ GEM
       colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    swagger-blocks (2.0.0)
     therubyracer (0.12.0)
       libv8 (~> 3.16.14.0)
       ref
@@ -425,9 +426,13 @@ DEPENDENCIES
   shoulda-matchers
   spring
   squeel
+  swagger-blocks
   therubyracer
   thin
   typhoeus
   uglifier (>= 1.3.0)
   vcr
   webmock
+
+BUNDLED WITH
+   1.14.6

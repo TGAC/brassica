@@ -73,7 +73,10 @@ Rails.application.routes.draw do
       get "studies", to: 'studies#show'
       get "studies/:studyDbId/germplasm", to: 'studies#germplasm'
       post "phenotypes-search", to: 'phenotypes#search'
-       
+          
+      # BRAPI V1 Swagger endpoint
+      resources :apidocs, only: [:index]
+          
     end
   end
   

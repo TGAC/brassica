@@ -1,4 +1,93 @@
 class Brapi::V1::StudiesController < Brapi::BaseController
+  include Swagger::Blocks
+  # Swagger API doc
+  swagger_path '/brapi/v1/studies-search' do
+    operation :post do
+      key :summary, 'Search of studies by different params'
+      key :description, 'Returns zero, one or multiple studies'
+      key :operationId, 'studies-search'
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :studies_search_params
+        key :in, :body
+        key :description, 'Search parameters.'
+        key :required, false
+        schema do
+          key :'$ref', :StudiesSearchInput
+        end
+      end
+      
+      response :not_found do
+        key :description, 'There were not any study with the required params' 
+      end
+      response :unprocessable_entity do
+        key :description, 'There was an error managing the internal query' 
+      end
+      response :default do
+        key :description, 'list of studies'
+      end
+    end
+  end
+  
+  swagger_path '/brapi/v1/studies/{id}' do
+    operation :get do
+      key :summary, 'Shows information related to one study by its id'
+      key :description, 'Returns full information of one study'
+      key :operationId, 'studies-show'
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'Identifier of the study. Usually a number, could be alphanumeric'
+        key :required, true
+        key :type, :string
+      end
+      response :not_found do
+        key :description, 'There were not any study with the required params' 
+      end
+      response :unprocessable_entity do
+        key :description, 'There was an error managing the internal query' 
+      end
+      response :default do
+        key :description, 'Full study information'
+      end
+    end
+  end
+  
+  swagger_path '/brapi/v1/studies/{studyDbId}/germplasm' do
+    operation :get do
+      key :summary, 'Shows germplasm related to one study'
+      key :description, 'Returns germplasm related of one study'
+      key :operationId, 'studies-germplasm'
+      key :tags, [
+        'Studies'
+      ]
+      parameter do
+        key :name, :studyDbId
+        key :in, :path
+        key :description, 'Identifier of the study. Usually a number, could be alphanumeric'
+        key :required, true
+        key :type, :string
+      end
+      parameter :page
+      parameter :pageSize
+      
+      response :not_found do
+        key :description, 'There were not any germplasm related to the study with the required params' 
+      end
+      response :unprocessable_entity do
+        key :description, 'There was an error managing the internal query' 
+      end
+      response :default do
+        key :description, 'Full germplasm information'
+      end
+    end
+  end
+  
   
   attr_accessor :request_params, :user
 

@@ -1,5 +1,34 @@
 class Brapi::V1::GermplasmController < Brapi::BaseController
-
+  include Swagger::Blocks
+  # Swagger API doc
+  swagger_path '/brapi/v1/germplasm-search' do
+    operation :get do
+      key :summary, 'Search of germplasms by different params'
+      key :description, 'Returns zero, one or multiple germplasms'
+      key :operationId, 'germplasm-search'
+      key :tags, [
+        'Germplasm'
+      ]
+     # TODO: parameter :germplasmPUI
+      parameter :germplasmDbId
+      parameter :germplasmName
+      parameter :page
+      parameter :pageSize
+      
+      response :not_found do
+        key :description, 'There were not any germplasm with the required params' 
+      end
+      response :unprocessable_entity do
+        key :description, 'There was an error managing the internal query' 
+      end
+      response :default do
+        key :description, 'list of germplasms'
+      end
+    end
+  end
+  
+  
+  
   attr_accessor :request_params, :user
 
   rescue_from ActionController::ParameterMissing do |exception|
@@ -10,7 +39,6 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
 
   def search
     # accepted params: germplasmPUI , germplasmDbId , germplasmName , pageSize , page
-    
     if !params['germplasmPUI'].present? && !params['germplasmDbId'].present? && !params['germplasmName'].present?
       raise ActionController::ParameterMissing.new('Not Found')
     else 

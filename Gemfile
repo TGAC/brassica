@@ -43,6 +43,8 @@ gem 'cookies_eu'
 
 gem 'exception_notification'
 
+gem 'swagger-blocks'
+
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 

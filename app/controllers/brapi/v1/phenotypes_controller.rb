@@ -1,6 +1,36 @@
 class Brapi::V1::PhenotypesController < Brapi::BaseController
-
-
+  include Swagger::Blocks
+  # Swagger API doc
+  swagger_path '/brapi/v1/phenotypes-search' do
+    operation :post do
+      key :summary, 'Search of phenotype information by different params'
+      key :description, 'Returns a list of observationUnit with the observed Phenotypes.'
+      key :operationId, 'phenotypes-search'
+      key :tags, [
+        'Phenotypes'
+      ]
+      parameter do
+        key :name, :phenotype_search_params
+        key :in, :body
+        key :description, 'Search parameters.'
+        key :required, false
+        schema do
+          key :'$ref', :PhenotypesSearchInput
+        end
+      end
+      response :not_found do
+        key :description, 'There were not any phenotype information with the required params' 
+      end
+      response :unprocessable_entity do
+        key :description, 'There was an error managing the internal query' 
+      end
+      response :default do
+        key :description, 'list of phenotyping information'
+      end
+    end
+  end
+  
+  
   attr_accessor :request_params, :user
 
   rescue_from ActionController::ParameterMissing do |exception|
