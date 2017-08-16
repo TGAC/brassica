@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'pp'
 
 RSpec.describe "BRAPI V1 germplasm calls" do
   let(:user) { create(:user) }
