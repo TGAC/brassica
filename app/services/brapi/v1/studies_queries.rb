@@ -112,7 +112,7 @@ class Brapi::V1::StudiesQueries
     else
       # order
       order_query =  " ORDER BY "+ get_sortby_field(sort_by)      
-      order_query += (sort_order != nil && sort_order == "desc"?" desc ":" asc ") 
+      order_query += (sort_order!=nil && sort_order=="desc"?" desc ":" asc ") 
       
       # pagination
       pagination_query = pagination_query(page, page_size)
@@ -210,6 +210,103 @@ class Brapi::V1::StudiesQueries
     
     return result_object
   end
+
+
+   # processing result: https://github.com/plantbreeding/API/blob/master/Specification/Studies/StudyGermplasmDetails.md
+  # All possible fields to return:
+  # studyDbId, trialName, germplasmDbId, entryNumber, germplasmName, pedigree, seedSource, accessionNumber, germplasmPUI,
+  # synonyms
+  # germplasmDbId, defaultDisplayName, accessionNumber, germplasmName, germplasmPUI, pedigree, 
+  # seedSource, synonyms, commonCropName, instituteCode, instituteName, biologicalStatusOfAccessionCode, 
+  # countryOfOriginCode, typeOfGermplasmStorageCode, genus, species, taxonIds, speciesAuthority, subtaxa, subtaxaAuthority, 
+  # donors, acquisitionDate
+
+  def germplasm_query(query_params, count_mode:)
+    study_db_id= query_params[:study_db_id]
+    sort_by= query_params[:sort_by] 
+    sort_order= query_params[:sort_order] 
+    page= query_params[:page] 
+    page_size= query_params[:page_size] 
+    
+    if !sort_by.present?      # default sort field
+      sort_by = "germplasmDbId"
+    end
+    
+    puts query_params
+    # where conditions
+    where_query = " "
+    where_atts = []
+    where_atts_count = 0
+    
+    # TO BE DEFINED
+    #if germplasmPUI.present? 
+    
+    if study_db_id.present?   # plant_trials.id
+      where_atts_count+= 1
+      where_query = where_query + "where plant_trials.id = $"+where_atts_count.to_s
+      where_atts << study_db_id
+    end
+     
+     
+    # Until ORCID implementation is done, we only must retrieve published or not owned datasets
+    where_query = where_query + (where_atts_count>0?" and ":" where ") 
+    where_query += <<-SQL.strip_heredoc
+      ((plant_accessions.user_id IS NULL OR plant_accessions.published = TRUE) AND
+       (plant_populations.user_id IS NULL OR plant_populations.published = TRUE) AND
+       (plant_lines.user_id IS NULL OR plant_lines.published = TRUE) )
+       
+    SQL
+    
+     # AND
+     #  (plant_varieties_from_lines.user_id IS NULL OR plant_varieties_from_lines.published = TRUE) AND
+     #  (plant_varieties_from_accessions.user_id IS NULL OR plant_varieties_from_accessions.published = TRUE)
+    
+    
+    # select clauses
+    select_query = get_select_distinct_base_clause("plant_accessions.id", sort_by)
+    select_query += <<-SQL.strip_heredoc
+    
+      plant_accessions.id as "germplasmDbId", 
+      plant_accessions.plant_accession as "germplasmName",
+      plant_accessions.plant_accession as "accessionNumber"  
+    SQL
+    
+    # TODO : trialName
+    # TODO : germplasmPUI
+    # TODO : pedigree
+    # TODO : seedSource
+    # TODO : synonyms
+    
+    
+    # joins
+   
+    joins_query = "
+    FROM plant_trials
+    INNER JOIN plant_populations ON plant_trials.plant_population_id = plant_populations.id
+    INNER JOIN plant_population_lists ON plant_population_lists.plant_population_id = plant_populations.id
+    INNER JOIN plant_lines ON plant_population_lists.plant_line_id = plant_lines.id
+    INNER JOIN plant_accessions AS plant_accessions ON plant_lines.id = plant_accessions.plant_line_id
+    "
+   
+    
+    if count_mode
+      total_query = "SELECT COUNT(*) FROM ("+select_query + joins_query + where_query +") AS total_entries_count"
+      result_object = execute_statement(total_query, where_atts)
+    else
+      # order
+      order_query =  " ORDER BY "+ get_sortby_field(sort_by)      
+      order_query += (!sort_order.nil? && sort_order=="desc"?" desc ":" asc ") 
+      
+      # pagination
+      pagination_query = pagination_query(page, page_size)
+      
+      total_query = select_query + joins_query + where_query + order_query + pagination_query
+      result_object = execute_statement(total_query, where_atts)
+    end
+    
+    result_object
+  end
+
 
 
 
