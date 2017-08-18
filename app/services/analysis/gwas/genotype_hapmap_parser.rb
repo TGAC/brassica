@@ -42,25 +42,44 @@ class Analysis
         end
 
         def each_record(&blk)
-          enum = io.each_line.lazy.map do |line|
-            ensure_id(line.split(/\s+/))
-          end
+          enum = io.each_line.lazy.map { |line| Record.new(sample_ids, line.split(/\s+/)) }
 
           block_given? ? enum.each(&blk) : enum
         end
+      end
 
-        private
+      class Record
+        attr_reader :sample_ids
 
-        # Make sure record has a unique identifier
-        def ensure_id(fields)
-          id_idx = HEADER_COLUMNS.index("rs#")
-          chrom_idx = HEADER_COLUMNS.index("chrom")
-          pos_idx = HEADER_COLUMNS.index("pos")
+        def initialize(sample_ids, raw)
+          @sample_ids = sample_ids
+          @raw = raw
+        end
 
-          return fields unless fields[id_idx].blank?
+        def rs
+          rs_idx = HEADER_COLUMNS.index("rs#")
 
-          fields[id_idx] = fields.values_at(chrom_idx, pos_idx).map(&:to_s).join(".")
-          fields
+          if @raw[rs_idx].blank?
+            @raw[id_idx] = [chrom, pos].map(&:to_s).join(".")
+          end
+
+          @raw[rs_idx]
+        end
+
+        def alleles
+          @raw[HEADER_COLUMNS.index("alleles")]
+        end
+
+        def chrom
+          @raw[HEADER_COLUMNS.index("chrom")]
+        end
+
+        def pos
+          @raw[HEADER_COLUMNS.index("pos")]
+        end
+
+        def samples
+          @raw[HEADER_COLUMNS.size..-1]
         end
       end
     end

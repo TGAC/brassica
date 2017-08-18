@@ -14,10 +14,7 @@ class Analysis
           sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
 
           hapmap_data.each_record do |record|
-            # TODO: headers should not appear here
-            next if record[0] == "rs#"
-
-            record_data = process_record(record, hapmap_data.sample_ids)
+            record_data = process_record(record)
 
             next unless record_data
 
@@ -49,19 +46,16 @@ class Analysis
       # mutation identifiers.
       #
       # record - hapmap record
-      # sample_ids - original hapmap sample identifiers
       #
       # Returns a hash containing mutation name, position and value for each sample.
-      def process_record(record, sample_ids)
+      def process_record(record)
         # TODO pass records as structs instead of arrays
-        mutation_name = record[0]
-        mutation_data = [record[2], record[3]] # chrom, pos
+        mutation_name = record.rs
+        mutation_data = [record.chrom, record.pos]
         sample_values = []
 
-        sample_ids.each.with_index do |sample_name, sample_idx|
-          mutation = record[1] # definition
-          sample = record[11 + sample_idx] # first sample is in 11th column (0-based)
-          value = sample_value(mutation, sample)
+        record.sample_ids.each.with_index do |sample_name, sample_idx|
+          value = sample_value(record.alleles, record.samples[sample_idx])
 
           sample_values << [sample_name, value]
         end
