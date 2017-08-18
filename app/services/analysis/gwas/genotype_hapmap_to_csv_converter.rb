@@ -49,7 +49,6 @@ class Analysis
       #
       # Returns a hash containing mutation name, position and value for each sample.
       def process_record(record)
-        # TODO pass records as structs instead of arrays
         mutation_name = record.rs
         mutation_data = [record.chrom, record.pos]
         sample_values = []
@@ -74,7 +73,7 @@ class Analysis
       # Find number of alternative alleles for given sample.
       #
       # mutation - definition of mutation (e.g. A/C)
-      # sample - sample alleles (e.g. AA, AC, CC)
+      # sample - sample alleles (e.g. AA, AC, CC, NN)
       #
       # Returns:
       #   2 for alternative allele in each chromosome
@@ -82,7 +81,11 @@ class Analysis
       #   0 for no mutation
       #   NA if call could not be made
       def sample_value(mutation, sample)
+        verify_sample(sample)
+
         _original, alternative = mutation.split("/")
+
+        return "NA" if alternative == "NN"
 
         alternative_count = sample.split("").count { |allele| allele == alternative }
 
@@ -92,6 +95,14 @@ class Analysis
           1
         else
           0
+        end
+      end
+
+      def verify_sample(sample)
+        return if sample == "NN"
+
+        if sample.split("").any? { |allele| %w(C G A T).exclude?(allele) }
+          fail "Value #{sample} not understood"
         end
       end
 

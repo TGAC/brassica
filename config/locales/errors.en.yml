@@ -14,6 +14,7 @@ en:
             genotype_data_file:
               blank: Please upload a genotype data file.
               no_id_column: "No 'ID' column found in genotype CSV file."
+              no_samples: "No sample data found in genotype file"
               malformed_csv: "Genotype CSV file is malformed and cannot be read."
 
             map_data_file:
