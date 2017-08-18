@@ -80,5 +80,9 @@ Rails.application.routes.draw do
     end
   end
   
+  Rails.application.routes.draw do
+    mount SwaggerUiEngine::Engine, at: '/swagger-apidocs'
+  end
+  
   
 end

@@ -41,8 +41,8 @@ class Brapi::V1::ApidocsController < ApplicationController
         key :url, 'https://github.com/plantbreeding/API/tree/master/Specification/Studies'
       end
     end
-    #key :host, 'localhost:3000'
-    #key :basePath, '/brapi-docs'
+    # IGNORED BY THE ENGINE key :host, 'http://localhost:3000'
+    # IGNORED BY THE ENGINE key :basePath, '/swagger-apidocs'
     key :consumes, ['application/json']
     key :produces, ['application/json']
     
