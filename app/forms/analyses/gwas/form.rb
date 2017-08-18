@@ -105,8 +105,10 @@ module Analyses
       end
 
       def genotype_data_parser
-        case genotype_data_file.try(:file_file_name)
-        when /.vcf\z/i
+        case genotype_data_file.try(:file_format)
+        when "hapmap"
+          Analysis::Gwas::GenotypeHapmapParser.new
+        when "vcf"
           Analysis::Gwas::GenotypeVcfParser.new
         else
           Analysis::Gwas::GenotypeCsvParser.new
