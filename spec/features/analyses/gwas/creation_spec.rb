@@ -44,6 +44,26 @@ RSpec.feature "Analysis creation" do
     end
   end
 
+  context "with HapMap genotype data" do
+    scenario "is successful", js: true do
+      click_link("Start!")
+      fill_in("Analysis name", with: "Some interesting name")
+
+      click_on "Data upload"
+
+      attach_file("genotype-data-file", fixture_file_path("gwas-genotypes.hapmap"))
+      attach_file("phenotype-data-file", fixture_file_path("gwas-phenotypes.csv"))
+
+      expect(page).to have_css("span.file-name", text: "gwas-genotypes.hapmap")
+      expect(page).to have_css("span.file-name", text: "gwas-phenotypes.csv")
+
+      expect { click_button "Run" }.to change { Analysis.count }.from(0).to(1)
+
+      expect(page).to have_current_path(analyses_path)
+      expect(page).to have_content("Some interesting name")
+    end
+  end
+
   context "with CSV genotype data" do
     scenario "is successful", js: true do
       click_link("Start!")
