@@ -1,4 +1,6 @@
 require 'singleton'
+require 'errors'
+
 class Brapi::V1::StudiesQueries
   include Singleton
 
@@ -302,10 +304,10 @@ class Brapi::V1::StudiesQueries
         end
       rescue PG::Error => e
         @connection.exec("ROLLBACK") 
-        results = nil
-        Rails.logger.warn { "Encountered an error executing a BrAPI studies-related query: #{e.message} #{e.backtrace.join("\n")}" }
+        raise Errors::Brapi::QueryError.new(sql)
+      ensure
+        @connection.exec("DEALLOCATE brapi_studies__statement")
       end  
-      @connection.exec("DEALLOCATE brapi_studies__statement")
     end
     return results
   end

@@ -1,7 +1,14 @@
+require 'errors'
+
 class Brapi::V1::StudiesController < Brapi::BaseController
 
-
   attr_accessor :request_params, :user
+
+  rescue_from 'Errors::Brapi::QueryError' do |ex|
+    Rails.logger.warn { "Encountered an error executing a BrAPI studies-related query: #{ex.message} #{ex.backtrace.join("\n")}" }
+    ExceptionNotifier.notify_exception(ex, env: request.env, data: { sql: ex.sql, cause: ex.cause.message })
+    render json: { reason: 'Internal error', message: 'There was some error managing studies/search query' }, status: :internal_server_error
+  end
 
   rescue_from ActionController::ParameterMissing do |exception|
     render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
