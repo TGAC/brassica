@@ -1,5 +1,4 @@
 require 'singleton'
-require 'errors'
 
 class Brapi::V1::StudiesQueries
   include Singleton
@@ -304,7 +303,7 @@ class Brapi::V1::StudiesQueries
         end
       rescue PG::Error => e
         @connection.exec("ROLLBACK") 
-        raise Errors::Brapi::QueryError.new(sql)
+        raise Brapi::QueryError.new([sql,atts])
       ensure
         @connection.exec("DEALLOCATE brapi_studies__statement")
       end  

@@ -33,8 +33,7 @@ module Brassica
 
     config.autoload_paths += [
       "#{config.root}/app/forms",
-      "#{config.root}/app/forms/concerns",
-      "#{config.root}/app/errors"
+      "#{config.root}/app/forms/concerns"
     ]
 
     config.active_record.raise_in_transactional_callbacks = true
