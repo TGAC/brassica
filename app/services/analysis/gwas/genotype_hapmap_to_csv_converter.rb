@@ -11,25 +11,31 @@ class Analysis
 
           mutation_names = []
           mutation_data = []
+          removed_mutation_names = []
           sample_data = Hash.new { |data, sample_name| data[sample_name] = [] }
 
           hapmap_data.each_record do |record|
-            record_data = process_record(record)
+            record_status, record_data = process_record(record)
 
-            next unless record_data
+            case record_status
+            when :ok
+              mutation_names << record_data[:mutation_name]
+              mutation_data << record_data[:mutation_data]
 
-            mutation_names << record_data[:mutation_name]
-            mutation_data << record_data[:mutation_data]
+              record_data[:sample_values].each do |sample_name, value|
+                sample_data[sample_name] << value
+              end
 
-            record_data[:sample_values].each do |sample_name, value|
-              sample_data[sample_name] << value
+            when :removed
+              removed_mutation_names << record_data[:mutation_name]
             end
           end
 
           [
             :ok,
             generate_genotype_csv(mutation_names, sample_data),
-            generate_map_csv(mutation_names, mutation_data)
+            generate_map_csv(mutation_names, mutation_data),
+            removed_mutation_names
           ]
         end
       end
@@ -49,7 +55,7 @@ class Analysis
       #
       # Returns a hash containing mutation name, position and value for each sample.
       def process_record(record)
-        mutation_name = record.rs
+        mutation_name = record.rs.strip.gsub(/\W/, '_')
         mutation_data = [record.chrom, record.pos]
         sample_values = []
 
@@ -61,13 +67,13 @@ class Analysis
 
         unique_values = sample_values.map { |_, val| val }.uniq
 
-        return if (unique_values - ["NA"]).size <= 1
+        return [:removed, { mutation_name: mutation_name }] if (unique_values - ["NA"]).size <= 1
 
-        {
+        [:ok, {
           mutation_name: mutation_name,
           mutation_data: mutation_data,
           sample_values: sample_values
-        }
+        }]
       end
 
       # Find number of alternative alleles for given sample.

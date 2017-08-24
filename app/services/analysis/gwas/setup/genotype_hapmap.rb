@@ -13,7 +13,6 @@ class Analysis
         end
 
         def call
-          # TODO: make hapmap converter return removed mutations
           status, geno_csv_file, map_csv_file, removed_mutations =
             convert_genotype_hapmap_to_csv
 
