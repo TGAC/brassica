@@ -146,45 +146,40 @@ class Brapi::V1::StudiesController < Brapi::BaseController
           
       result_object = studies_queries.germplasm_query(query_params, count_mode: false )  
       
-      if result_object.nil?
-        render json: { reason: 'Internal error', message: 'There was some error managing studies/germplasm query' }, status: :internal_server_error
+      if result_object.count == 0
+        render json: { reason: 'Resource not found' }, status: :not_found  # 404
       else
-        records = result_object.values
-        if records.nil? || records.size == 0
-          render json: { reason: 'Resource not found' }, status: :not_found  # 404
-        else
-          json_result_array = []
-          entry_number = 1 + ((page-1) * page_size)
-          # any programmatic data manipulation can be done here
-          result_object.each do |row|
-            row[:entryNumber] = entry_number.to_s
-            entry_number += 1
-            
-            # To check authentication and ownership when ORCID is supported by BrAPI
-            # We currently only retrieve public records. This is already done at query level
-            #if (!row[:user_id] || row[:published] )
-            json_result_array << row
-            #end
-          end
+        json_result_array = []
+        
+        entry_number = 1 + ((page-1) * page_size)
+        # any programmatic data manipulation can be done here
+        result_object.each do |row|
+          row[:entryNumber] = entry_number.to_s
+          entry_number += 1
           
-          # pagination data returned
-          
-          result_count_object = studies_queries.germplasm_query(query_params, count_mode: true )
-          
-          total_count = result_count_object.values.first[0].to_i
-          total_pages = (total_count/page_size.to_f).ceil
-          
-          json_response = { 
-            metadata: json_metadata(page_size, page, total_count, total_pages),
-            result: {
-              studyDbId: params['studyDbId'],
-              data: json_result_array
-            }
-          }
-         
-          render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
+          # To check authentication and ownership when ORCID is supported by BrAPI
+          # We currently only retrieve public records. This is already done at query level
+          #if (!row[:user_id] || row[:published] )
+          json_result_array << row
+          #end
         end
         
+        # pagination data returned
+        
+        result_count_object = studies_queries.germplasm_query(query_params, count_mode: true )
+        
+        total_count = result_count_object.values.first[0].to_i
+        total_pages = (total_count/page_size.to_f).ceil
+        
+        json_response = { 
+          metadata: json_metadata(page_size, page, total_count, total_pages),
+          result: {
+            studyDbId: params['studyDbId'],
+            data: json_result_array
+          }
+        }
+       
+        render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
       end
     
     end
