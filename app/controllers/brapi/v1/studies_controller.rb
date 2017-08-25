@@ -44,12 +44,14 @@ class Brapi::V1::StudiesController < Brapi::BaseController
           render json: { reason: 'Resource not found' }, status: :not_found  # 404
         else
           json_result_array = []
-          
-          # To check authentication and ownership when ORCID is supported by BrAPI
-          # We currently only retrieve public records. This is already done at query level
-          #if (!row[:user_id] || row[:published] )
-          json_result_array << row
-          #end
+          result_object.each do |row|
+            # To check authentication and ownership when ORCID is supported by BrAPI
+            # We currently only retrieve public records. This is already done at query level
+            #if (!row[:user_id] || row[:published] )
+            row['seasons'] = [row['seasons']]
+            json_result_array << row
+            #end
+          end
         end
         
         # pagination data returned

@@ -233,7 +233,6 @@ class Brapi::V1::StudiesQueries
       sort_by = "germplasmDbId"
     end
     
-    puts query_params
     # where conditions
     where_query = " "
     where_atts = []
