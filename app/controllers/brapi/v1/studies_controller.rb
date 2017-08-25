@@ -1,11 +1,6 @@
 class Brapi::V1::StudiesController < Brapi::BaseController
 
-
   attr_accessor :request_params, :user
-
-  rescue_from ActionController::ParameterMissing do |exception|
-    render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
-  end
 
 
   def search
@@ -24,14 +19,23 @@ class Brapi::V1::StudiesController < Brapi::BaseController
       page = get_page
       page_size = get_page_size 
           
-      result_object = studies_queries.studies_search_query(
-        params['studyType'], params['studyNames'], params['studyLocations'], params['programNames'],
-        params['germplasmDbIds'], params['observationVariableDbIds'], params['active'],
-        params['sortBy'], params['sortOrder'], page, page_size, false)
+      query_params = { 
+        study_type: params['studyType'], 
+        study_names: params['studyNames'],
+        study_locations: params['studyLocations'],
+        program_names: params['programNames'],
+        germplasm_db_ids: params['germplasmDbIds'],
+        observation_variable_db_ids: params['observationVariableDbIds'],
+        active: params['active'],
+        sort_by: params['sortBy'],
+        sort_order: params['sortOrder'],
+        page: page, 
+        page_size: page_size
+      }   
+          
+      result_object = studies_queries.studies_search_query(query_params, count_mode: false)
       
-      records = result_object.values
-     
-      if records.nil? || records.size ==0
+      if result_object.count == 0
         render json: { reason: 'Resource not found' }, status: :not_found  # 404
       else
         json_result_array = []
@@ -49,10 +53,7 @@ class Brapi::V1::StudiesController < Brapi::BaseController
         
         # pagination data returned
         
-        result_count_object = studies_queries.studies_search_query(
-          params['studyType'], params['studyNames'], params['studyLocations'], params['programNames'],
-          params['germplasmDbIds'], params['observationVariableDbIds'], params['active'],
-          params['sortBy'], params['sortOrder'], page, page_size, true)
+        result_count_object = studies_queries.studies_search_query(query_params, count_mode: true)
         
         total_count = result_count_object.values.first[0].to_i
         total_pages = (total_count/page_size.to_f).ceil
@@ -63,10 +64,8 @@ class Brapi::V1::StudiesController < Brapi::BaseController
             data: json_result_array
           }
         }
-       
         render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
       end
-    
     end
   end
 
@@ -80,10 +79,8 @@ class Brapi::V1::StudiesController < Brapi::BaseController
       studies_queries = Brapi::V1::StudiesQueries.instance
           
       result_object = studies_queries.studies_get_query(params['id'])
-      
-      records = result_object.values
-     
-      if records.nil? || records.size == 0
+       
+      if result_object.count == 0
         render json: { reason: 'Resource not found' }, status: :not_found  # 404
       else
         json_result_array = []
@@ -113,16 +110,15 @@ class Brapi::V1::StudiesController < Brapi::BaseController
         end
         
         json_response = { 
-          metadata: json_metadata(0, 0, records.size, 0),
+          metadata: json_metadata(0, 0, result_object.count, 0),
           result: json_result_array
         }
        
         render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
       end
-    
     end
-    
   end
+
 
 
   private
@@ -148,6 +144,5 @@ class Brapi::V1::StudiesController < Brapi::BaseController
       }
     }
   end
-  
 
 end

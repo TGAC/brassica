@@ -17,4 +17,16 @@ class Brapi::BaseController < ActionController::Metal
   include ActionController::Rescue
 
   include Rails.application.routes.url_helpers
+  
+  
+  rescue_from 'Brapi::QueryError' do |ex|
+    Rails.logger.warn { "Encountered an error executing a BrAPI-related query: #{ex.message} #{ex.backtrace.join("\n")}" }
+    ExceptionNotifier.notify_exception(ex, env: request.env, data: { sql: ex.sql, cause: ex.cause.message })
+    render json: { reason: 'Internal error', message: 'There was some error managing Brapi query' }, status: :internal_server_error
+  end
+
+  rescue_from ActionController::ParameterMissing do |exception|
+    render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
+  end 
+  
 end

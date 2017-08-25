@@ -1,9 +1,11 @@
 require 'singleton'
+
 class Brapi::V1::StudiesQueries
   include Singleton
 
   def initialize
     @connection = ActiveRecord::Base.connection.raw_connection    
+    @connection.exec("set statement_timeout to 10000;")     
   end
 
 
@@ -12,41 +14,52 @@ class Brapi::V1::StudiesQueries
   # studyDbId, name, trialDbId, trialName, studyType, seasons, locationDbId, locationName, 
   # programDbId, programName, startDate, endDate, studyType, active, additionalInfo
   # BrAPI v1 doesn't define very well the exact meaning of all these fields
-  def studies_search_query(studyType, studyNames, studyLocations, programNames, germplasmDbIds, observationVariableDbIds, 
-      active, sortBy, sortOrder, page, page_size, count_mode)
+  def studies_search_query(query_params, count_mode:)
+    
+    study_type= query_params[:study_type]
+    study_names= query_params[:study_names]
+    study_locations= query_params[:study_locations]
+    program_names= query_params[:program_names]
+    germplasm_db_ids= query_params[:germplasm_db_ids]
+    observation_variable_db_ids= query_params[:observation_variable_db_ids]
+    active= query_params[:active]
+    sort_by= query_params[:sort_by]
+    sort_order= query_params[:sort_order]
+    page= query_params[:page] 
+    page_size= query_params[:page_size]
     
     # where conditions
     where_query = " "
     where_atts = []
     where_atts_count = 0
     
-    # TODO: We don't support yet these params: studyType, observationVariableDbIds, active
+    # TODO: We don't support yet these params: studyType, active
     
     # I think we are not going to differentiate among study data and trial data in brapi
-    if studyNames.present?   # plant_trials.plant_trial_name  TODO: FEEDBACK BY ANNEMARIE. MAPPING STUDY = TRIAL
+    if study_names.present?   # plant_trials.plant_trial_name  TODO: FEEDBACK BY ANNEMARIE. MAPPING STUDY = TRIAL
       where_atts_count+= 1
-      where_query += get_where_condition("plant_trials.plant_trial_name", studyNames, where_atts_count)
-      where_atts << get_att(studyNames)  
+      where_query += get_where_condition("plant_trials.plant_trial_name", study_names, where_atts_count)
+      where_atts << get_att(study_names)  
     end
-    if studyLocations.present?   # countries.country_name
+    if study_locations.present?   # countries.country_name
       where_atts_count+= 1
-      where_query += get_where_condition("countries.country_name", studyLocations, where_atts_count)
-      where_atts << get_att(studyLocations)  
+      where_query += get_where_condition("countries.country_name", study_locations, where_atts_count)
+      where_atts << get_att(study_locations)  
     end
-    if programNames.present?   # plant_trials.project_descriptor
+    if program_names.present?   # plant_trials.project_descriptor
       where_atts_count+= 1
-      where_query += get_where_condition("plant_trials.project_descriptor", programNames, where_atts_count)
-      where_atts << get_att(programNames)  
+      where_query += get_where_condition("plant_trials.project_descriptor", program_names, where_atts_count)
+      where_atts << get_att(program_names)  
     end
-    if germplasmDbIds.present?   # plant_accessions.plant_accession
+    if germplasm_db_ids.present?   # plant_accessions.plant_accession
       where_atts_count+= 1
-      where_query += get_where_condition("plant_accessions.plant_accession", germplasmDbIds, where_atts_count)
-      where_atts << get_att(germplasmDbIds)    
+      where_query += get_where_condition("plant_accessions.plant_accession", germplasm_db_ids, where_atts_count)
+      where_atts << get_att(germplasm_db_ids)    
     end
-    if observationVariableDbIds.present?   # trait_descriptors.id
+    if observation_variable_db_ids.present?   # trait_descriptors.id
       where_atts_count+= 1
-      where_query += get_where_condition("trait_descriptors.id", observationVariableDbIds, where_atts_count)
-      where_atts << get_att(observationVariableDbIds)    
+      where_query += get_where_condition("trait_descriptors.id", observation_variable_db_ids, where_atts_count)
+      where_atts << get_att(observation_variable_db_ids)    
     end
     
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets
@@ -63,7 +76,7 @@ class Brapi::V1::StudiesQueries
     # select clauses
     # studyDbId, name, trialDbId, trialName, studyType, seasons, locationDbId, locationName, 
     # programDbId, programName, startDate, endDate, studyType, active, additionalInfo
-    select_query = get_select_distinct_clause(sortBy)
+    select_query = get_select_distinct_clause(sort_by)
     select_query += <<-SQL.strip_heredoc
       plant_trials.id as "studyDbId", 
       plant_trials.plant_trial_name as "name", 
@@ -99,8 +112,8 @@ class Brapi::V1::StudiesQueries
       result_object = execute_statement(total_query, where_atts)
     else
       # order
-      order_query =  " ORDER BY "+ get_sortby_field(sortBy)      
-      order_query += (sortOrder!=nil && sortOrder=="desc"?" desc ":" asc ") 
+      order_query =  " ORDER BY "+ get_sortby_field(sort_by)      
+      order_query += (sort_order != nil && sort_order == "desc"?" desc ":" asc ") 
       
       # pagination
       pagination_query = pagination_query(page, page_size)
@@ -117,7 +130,7 @@ class Brapi::V1::StudiesQueries
   
   # processing result: https://github.com/plantbreeding/API/blob/master/Specification/Studies/SearchStudies.md 
   # All possible fields to return:
-  # studyDbId, studyName, studyType, seasons, trialDbId, trialName, startDate, endDate, active, location 
+  # studyDbId, studyName, studyType, seasons, trialDbId, trialName, trialDbIds, startDate, endDate, active, location 
   # BrAPI v1 doesn't define very well the exact meaning of all these fields
   def studies_get_query(id)
     
@@ -144,7 +157,7 @@ class Brapi::V1::StudiesQueries
     
     
     # select clauses
-    # studyDbId, studyName, studyType, seasons, trialDbId, trialName, startDate, endDate, active 
+    # studyDbId, studyName, studyType, seasons, trialDbId, trialName, trialDbIds, startDate, endDate, active 
     # Here the location has a different meaning than studies-search.Location here refers more to a place than the country.
     # location: locationDbId, name, abbreviation, countryCode, countryName, latitude, longitude, altitude, additionalInfo
     select_query = get_select_distinct_clause(" plant_trials.id ")
@@ -174,7 +187,7 @@ class Brapi::V1::StudiesQueries
       
     SQL
     
-    # TODO: "trialDbId" and "trialName": we don't have our equivalent entity "Investigation" yet.
+    # TODO: "trialDbId", "trialDbIds" and "trialName": we don't have our equivalent entity "Investigation" yet.
     # TODO: "studyType": "Trial" -> NOT PRESENT IN OUR DB
     # TODO: "seasons": ["2007 Spring", "2008 Fall"] -> seasons themselves not present in our DB
     # TODO: "startDate": "2007-06-01" -> NOT PRESENT IN OUR DB
@@ -200,22 +213,24 @@ class Brapi::V1::StudiesQueries
   end
 
 
+
   private
 
-  def get_select_distinct_clause(sortBy)
-    distinct_clause = ""
-    sort_by_field = get_sortby_field(sortBy) 
-    if sort_by_field == " plant_trials.id "
-      distinct_clause = "SELECT DISTINCT ON (plant_trials.id)"
-    else
-      distinct_clause = "SELECT DISTINCT ON (plant_trials.id,"+sort_by_field+")"
-    end 
-    return distinct_clause
+  def get_select_distinct_clause(sort_by)
+    get_select_distinct_base_clause("plant_trials.id",sort_by)
   end
 
-  def get_sortby_field(sortBy)
+  def get_select_distinct_base_clause(base, sort_by)
+    distinct_clause = ""
+    sort_by_field = get_sortby_field(sort_by) 
+    distinct_clause = "SELECT DISTINCT ON ("+base+","+sort_by_field+")"
+    return distinct_clause
+  end
+  
+
+  def get_sortby_field(sort_by)
     order_query = ""
-    case sortBy 
+    case sort_by 
     when "studyDbId"   
       order_query += " plant_trials.id "
     when "name"
@@ -228,6 +243,12 @@ class Brapi::V1::StudiesQueries
       order_query += " countries.country_name "
     when "programName"
       order_query += " plant_trials.project_descriptor "
+    when "germplasmDbId"   
+      order_query += " plant_accessions.id "
+    when "germplasmName"   
+      order_query += " plant_accessions.plant_accession "
+    when "plant_accession"   
+      order_query += " plant_accessions.plant_accession "
     else
       order_query += " plant_trials.id "
     end
@@ -270,20 +291,26 @@ class Brapi::V1::StudiesQueries
 
   def execute_statement(sql, atts)
     results = []
-    # There should be only one 'brapi_statement' prepared and executing running at the same time,
+    # There should be only one 'brapi_studies__statement' prepared and executing running at the same time,
     # at least until the previous one has been deallocated
     Thread.exclusive do
       @connection.prepare('brapi_studies__statement', sql)
-      
-      if( (atts != nil) && !(atts.empty?) )
-        results = @connection.exec_prepared("brapi_studies__statement", atts)
-      else
-        results = @connection.exec_prepared("brapi_studies__statement")
-      end
-      @connection.exec("DEALLOCATE brapi_studies__statement")
+      begin
+        if( (atts != nil) && !(atts.empty?) )
+          results = @connection.exec_prepared("brapi_studies__statement", atts)
+        else
+          results = @connection.exec_prepared("brapi_studies__statement")
+        end
+      rescue PG::Error => e
+        @connection.exec("ROLLBACK") 
+        raise Brapi::QueryError.new([sql,atts])
+      ensure
+        @connection.exec("DEALLOCATE brapi_studies__statement")
+      end  
     end
     return results
   end
+
 
   def pagination_query(page, page_size)
     return " LIMIT "+page_size.to_s+" OFFSET "+((page-1)*page_size).to_s  
