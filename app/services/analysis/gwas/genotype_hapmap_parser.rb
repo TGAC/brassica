@@ -42,9 +42,9 @@ class Analysis
         end
 
         def each_record(&blk)
-          enum = io.each_line.lazy.map { |line| Record.new(sample_ids, line.split(/\s+/)) }
+          records = io.each_line.lazy.map { |line| Record.new(sample_ids, line.split(/\s+/)) }
 
-          block_given? ? enum.each(&blk) : enum
+          block_given? ? records.each(&blk) : records
         end
       end
 

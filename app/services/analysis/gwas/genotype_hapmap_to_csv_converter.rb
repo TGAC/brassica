@@ -93,7 +93,7 @@ class Analysis
 
         return "NA" if alternative == "NN"
 
-        alternative_count = sample.split("").count { |allele| allele == alternative }
+        alternative_count = sample.chars.count { |allele| allele == alternative }
 
         if sample.length == alternative_count
           2
@@ -107,7 +107,7 @@ class Analysis
       def verify_sample(sample)
         return if sample == "NN"
 
-        if sample.split("").any? { |allele| %w(C G A T).exclude?(allele) }
+        if sample.chars.any? { |allele| %w(C G A T).exclude?(allele) }
           fail "Value #{sample} not understood"
         end
       end
