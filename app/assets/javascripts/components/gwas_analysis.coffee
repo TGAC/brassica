@@ -23,7 +23,7 @@ window.GwasAnalysis = class GwasAnalysis extends Component
 
     this.bindDataFile('genotype-data-file',
       done: (data) =>
-        if data.result.file_file_name.match(/\.vcf$/)
+        if data.result.file_format == "vcf" || data.result.file_format == "hapmap"
           $map_form_group.addClass('hidden')
         else
           $map_form_group.removeClass('hidden')
