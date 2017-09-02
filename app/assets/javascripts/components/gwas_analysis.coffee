@@ -74,6 +74,7 @@ window.GwasAnalysis = class GwasAnalysis extends Component
         options.done && options.done(data)
 
       fail: (event, data) =>
+
         if data.jqXHR.status == 401
           window.location.reload()
         else if data.jqXHR.status == 422
@@ -84,6 +85,11 @@ window.GwasAnalysis = class GwasAnalysis extends Component
             $li = $("<li></li>").text(error)
             $errors.find("ul").append($li)
           )
+        else
+          $fileinput.find('.fileinput-button').removeClass('disabled')
+
+          $errors = $(".#{field}-errors").text("").removeClass('hidden').append("<ul></ul>")
+          $errors.find("ul").append($("<li></li>").text("Unexpected server response: #{data.jqXHR.status} #{data.jqXHR.statusText}"))
 
     this.$(".delete-#{field}").on 'ajax:success', (data, status, xhr) =>
       $fileinput.removeClass('hidden')
