@@ -1,13 +1,21 @@
 class AnalysisDataFileDecorator < Draper::Decorator
   delegate_all
 
+  def file_format_name
+    return unless file_format.present?
+
+    I18n.t("analyses.new.form.#{file_format}")
+  end
+
   def as_json(*)
     if new_record?
       super.merge(
+        file_format_name: file_format_name,
         errors: formatted_errors
       )
     else
       super.merge(
+        file_format_name: file_format_name,
         errors: formatted_errors,
         delete_url: delete_url
       )

@@ -69,6 +69,7 @@ window.GwasAnalysis = class GwasAnalysis extends Component
 
         $result.removeClass('hidden')
         $result.find('.file-name').text(data.result.file_file_name)
+        $result.find('.file-format').text(data.result.file_format_name)
         $result.find(".delete-#{field}").attr(href: data.result.delete_url)
 
         options.done && options.done(data)
