@@ -38,20 +38,14 @@ class Brapi::V1::StudiesController < Brapi::BaseController
       if result_object.count == 0
         render json: { reason: 'Resource not found' }, status: :not_found  # 404
       else
-        records = result_object.values
-       
-        if records.nil? || records.size ==0
-          render json: { reason: 'Resource not found' }, status: :not_found  # 404
-        else
-          json_result_array = []
-          result_object.each do |row|
-            # To check authentication and ownership when ORCID is supported by BrAPI
-            # We currently only retrieve public records. This is already done at query level
-            #if (!row[:user_id] || row[:published] )
-            row['seasons'] = [row['seasons']]
-            json_result_array << row
-            #end
-          end
+        json_result_array = []
+        result_object.each do |row|
+          # To check authentication and ownership when ORCID is supported by BrAPI
+          # We currently only retrieve public records. This is already done at query level
+          #if (!row[:user_id] || row[:published] )
+          row['seasons'] = [row['seasons']]
+          json_result_array << row
+          #end
         end
         
         # pagination data returned
@@ -150,10 +144,11 @@ class Brapi::V1::StudiesController < Brapi::BaseController
         render json: { reason: 'Resource not found' }, status: :not_found  # 404
       else
         json_result_array = []
-        
+        trialName = ""
         entry_number = 1 + ((page-1) * page_size)
         # any programmatic data manipulation can be done here
         result_object.each do |row|
+          trialName = row.delete("trialName")
           row[:entryNumber] = entry_number.to_s
           entry_number += 1
           
@@ -175,11 +170,12 @@ class Brapi::V1::StudiesController < Brapi::BaseController
           metadata: json_metadata(page_size, page, total_count, total_pages),
           result: {
             studyDbId: params['studyDbId'],
+            trialName: trialName,
             data: json_result_array
           }
         }
        
-        render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
+        render json: json_response
       end
     
     end
