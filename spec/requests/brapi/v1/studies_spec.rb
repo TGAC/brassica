@@ -237,21 +237,24 @@ RSpec.describe "BRAPI V1 studies calls" do
     let!(:co) { create(:country, country_code: "CHN", country_name: "China") }
     
     let!(:pl) { create(:plant_line, published: true, user: user) }
-    let!(:pp) { create(:plant_population, name: 'plant_population_1', establishing_organisation: 'plant_population_organisation_1', published: true, user: user) }
+    let!(:pp) { create(:plant_population, name: 'plant_population_1', male_parent_line: pl, 
+      establishing_organisation: 'plant_population_organisation_1', published: true, user: user) }
     let!(:pt) { create(:plant_trial, id: 9, plant_population: pp, plant_trial_name: "plant_trial_9", country: co) }
 
-    let!(:ppl) { create(:plant_population_list, plant_population: pp, plant_line: pl, published: true, user: user) }
-    let!(:pa) { create(:plant_accession, id: 1, plant_line: pl, plant_accession: "plant_accession_1", published: true, user: user) }
+    let!(:pa) { create(:plant_accession, id: 1, plant_line: pl, plant_accession: "plant_accession_1", 
+      published: true, user: user) }
     let!(:psu) { create(:plant_scoring_unit, plant_accession: pa, plant_trial: pt) }
 
     let!(:pl2) { create(:plant_line, published: true, user: user) }
-    let!(:pp2) { create(:plant_population, name: 'plant_population_2', establishing_organisation: 'plant_population_organisation_2', published: true, user: user) }
+    let!(:pp2) { create(:plant_population, name: 'plant_population_2', female_parent_line: pl2, 
+      establishing_organisation: 'plant_population_organisation_2', published: true, user: user) }
     let!(:pt2) { create(:plant_trial, id: 10, plant_population: pp2, plant_trial_name: "plant_trial_10", country: co) }
 
-    let!(:ppl2) { create(:plant_population_list, plant_population: pp2, plant_line: pl2, published: true, user: user) }
-    let!(:pa21) { create(:plant_accession, id: 2, plant_line: pl2, plant_accession: "plant_accession_2", published: true, user: user) }
+    let!(:pa21) { create(:plant_accession, id: 2, plant_line: pl2, plant_accession: "plant_accession_2", 
+      published: true, user: user) }
     let!(:psu21) { create(:plant_scoring_unit, plant_accession: pa21, plant_trial: pt2) }
-    let!(:pa22) { create(:plant_accession, id: 3, plant_line: pl2, plant_accession: "plant_accession_3", published: true, user: user) }
+    let!(:pa22) { create(:plant_accession, id: 3, plant_line: pl2, plant_accession: "plant_accession_3", 
+      published: true, user: user) }
     let!(:psu22) { create(:plant_scoring_unit, plant_accession: pa22, plant_trial: pt2) }
 
     it 'requires numeric studyDbId search param to work' do
@@ -261,17 +264,6 @@ RSpec.describe "BRAPI V1 studies calls" do
       
       get '/brapi/v1/studies/asdf/germplasm', {}, headers
       expect(response.status).to eq 500
-      
-    end
-    
-    it 'alphanumeric studyDbId doesnt work' do
-      headers = { 
-        "CONTENT_TYPE" => "application/json"
-      }
-      
-      get '/brapi/v1/studies/9/germplasm', {}, headers
-      expect(response.status).to eq 200
-      
       
     end
     

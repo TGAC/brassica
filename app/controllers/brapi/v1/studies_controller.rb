@@ -121,7 +121,7 @@ class Brapi::V1::StudiesController < Brapi::BaseController
   def germplasm
     # accepted params: studyDbId
     # pageSize, page
-
+    
     # studyDbId should be provided
     if !params['studyDbId'].present? 
       raise ActionController::ParameterMissing.new('Not Found')
