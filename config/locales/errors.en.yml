@@ -14,8 +14,10 @@ en:
             genotype_data_file:
               blank: Please upload a genotype data file.
               no_id_column: "No 'ID' column found in genotype CSV file."
-              no_samples: "No sample data found in genotype file"
+              no_samples: "No sample data found in genotype file."
               malformed_csv: "Genotype CSV file is malformed and cannot be read."
+              not_a_hapmap: "Genotype file does not seem to be a HapMap file."
+              not_a_vcf: "Genotype file does not seem to be a VCF file."
 
             map_data_file:
               no_id_column: "No 'ID' column found in map CSV file."

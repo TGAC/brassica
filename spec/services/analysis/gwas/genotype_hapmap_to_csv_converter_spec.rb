@@ -8,18 +8,18 @@ RSpec.describe Analysis::Gwas::GenotypeHapmapToCsvConverter do
       let(:sample_names) { %w(NA19625 NA19700 NA19701 NA19702) }
       let(:mutation_names) {
         %w(rs12255619 rs11252546 rs7909677 rs10904494 rs11591988 rs4508132
-          rs10904561 rs7917054 rs7906287 rs12775579 rs4495823)
+          rs10904561 rs7917054 rs7906287 rs12775579 rs4495823 rs0000001 rs0000002)
       }
       let(:mutation_names_to_ignore) {
-        %w(rs11252546 rs7909677 rs10904494 rs11591988 rs12775579)
+        %w(rs11252546 rs7909677 rs10904494 rs11591988 rs12775579 rs0000002)
       }
 
       let(:output_values) {
         {
-          "NA19625": %w(0 2 0 0 0 0 2 0 2 0 NA),
-          "NA19700": %w(0 2 0 0 0 1 1 2 1 0 0),
-          "NA19701": %w(1 2 0 0 0 0 2 0 2 0 0),
-          "NA19702": %w(0 2 0 0 0 1 2 1 1 0 1)
+          "NA19625": %w(0 2 0 0 0 0 2 0 2 0 NA 1),
+          "NA19700": %w(0 2 0 0 0 1 1 2 1 0 0 1),
+          "NA19701": %w(1 2 0 0 0 0 2 0 2 0 0 1),
+          "NA19702": %w(0 2 0 0 0 1 2 1 1 0 1 1)
         }
       }
 
@@ -56,12 +56,12 @@ RSpec.describe Analysis::Gwas::GenotypeHapmapToCsvConverter do
       end
     end
 
-    context "non-standard file" do
-      let(:hapmap_path) { Rails.root.join(*%w(spec fixtures files hapmap iupac.txt)).to_s }
+    context "invalid file" do
+      let(:hapmap_path) { Rails.root.join(*%w(spec fixtures files hapmap invalid.txt)).to_s }
 
       it "fails with error" do
         expect { subject.call(hapmap_path) }.
-          to raise_error("Value RY not understood")
+          to raise_error("Value XX not understood")
       end
     end
   end

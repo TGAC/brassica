@@ -78,8 +78,8 @@ class Analysis
 
       # Find number of alternative alleles for given sample.
       #
-      # mutation - definition of mutation (e.g. A/C)
-      # sample - sample alleles (e.g. AA, AC, CC, NN)
+      # mutation - definition of mutation (e.g. A/C, only basic codes are valid)
+      # sample - sample alleles (e.g. AA, AC, CC, NN, all IUPAC codes are valid)
       #
       # Returns:
       #   2 for alternative allele in each chromosome
@@ -87,13 +87,15 @@ class Analysis
       #   0 for no mutation
       #   NA if call could not be made
       def sample_value(mutation, sample)
+        verify_mutation(mutation)
         verify_sample(sample)
 
         _original, alternative = mutation.split("/")
 
-        return "NA" if alternative == "NN"
+        return "NA" if na_codes.include?(alternative)
+        return "NA" if sample.chars.any? { |allele| base_codes.exclude?(allele) && codes_map.fetch(allele).include?(alternative) }
 
-        alternative_count = sample.chars.count { |allele| allele == alternative }
+        alternative_count = sample.chars.count { |allele| codes_map.fetch(allele) == [alternative] }
 
         if sample.length == alternative_count
           2
@@ -104,12 +106,47 @@ class Analysis
         end
       end
 
-      def verify_sample(sample)
-        return if sample == "NN"
+      def verify_mutation(mutation)
+        alleles = mutation.split("/")
+        fail "Invalid mutation specification '#{mutation}'" unless alleles.size == 2
+        fail "Value #{alleles} not valid in mutation specification" if alleles.any? { |allele| base_codes.exclude?(allele) }
+      end
 
-        if sample.chars.any? { |allele| %w(C G A T).exclude?(allele) }
-          fail "Value #{sample} not understood"
-        end
+      def verify_sample(sample)
+        return if na_codes.include?(sample)
+        fail "Value #{sample} not understood" if sample.chars.any? { |allele| codes.exclude?(allele) }
+      end
+
+      def base_codes
+        %w(A C G T)
+      end
+
+      def na_codes
+        @na_codes ||= ["NN", "?"]
+      end
+
+      def codes_map
+        @codes_map ||= {
+          "A" => %w(A),
+          "C" => %w(C),
+          "G" => %w(G),
+          "T" => %w(T),
+          "R" => %w(A G),
+          "Y" => %w(C T),
+          "S" => %w(G C),
+          "W" => %w(A T),
+          "K" => %w(G T),
+          "M" => %w(A C),
+          "B" => %w(C G T),
+          "D" => %w(A G T),
+          "H" => %w(A C T),
+          "V" => %w(A C G),
+          "N" => %w(A C G T)
+        }
+      end
+
+      def codes
+        @codes ||= codes_map.keys
       end
 
       def generate_genotype_csv(mutation_names, sample_data)

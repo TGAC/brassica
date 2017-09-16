@@ -1,2 +1,0 @@
-rs# alleles chrom pos strand assembly# center protLSID assayLSID panelLSID QCcode Sample1
-rs12255619 A/C chr10 88481 + ncbi_b36 bbs urn:lsid:bbs.hapmap.org:Protocol:Phase3_Draft1:1 urn:lsid:bbs.hapmap.org:Assay:Phase3_Draft1_rs12255619:1 urn:lsid:dcc.hapmap.org:Panel:US_African-30-trios:3 QC+ RY
