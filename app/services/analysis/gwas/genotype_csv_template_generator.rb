@@ -7,12 +7,13 @@ class Analysis
 
       def call
         values = [0, 1, 2, "NA"]
+        snps = ["SNP-1", "SNP-2", "SNP-3", "SNP-4"]
 
         CSV.generate do |csv|
-          csv << ["ID", "SNP-1", "SNP-2", "SNP-3", "SNP-4"]
+          csv << ["ID"] + sample_ids
 
-          sample_ids.each do |sample_id|
-            csv << [sample_id] + values.shuffle
+          snps.each do |snp|
+            csv << [snp] + values.shuffle
           end
         end
       end
