@@ -18,8 +18,8 @@ class Analysis::DataFile < ActiveRecord::Base
 
   do_not_validate_attachment_file_type :file
 
-  after_commit :normalize_line_breaks, on: :create
   before_validation :assign_file_format, on: :create
+  after_commit :normalize_line_breaks, on: :create
 
   delegate :url, to: :file, prefix: true
 

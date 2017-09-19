@@ -24,6 +24,8 @@ class Analyses::DataFilesController < ApplicationController
   def create
     data_file = Analysis::DataFile.create(create_params)
 
+    postprocess_data_file(data_file)
+
     render json: decorate_data_file(data_file),
       status: data_file.valid? ? :created : :unprocessable_entity
   end
@@ -50,6 +52,12 @@ class Analyses::DataFilesController < ApplicationController
       require(:analysis_data_file).
       permit(:file, :data_type).
       merge(owner: current_user, origin: "uploaded")
+  end
+
+  def postprocess_data_file(data_file)
+    return unless data_file.file_format == "csv" && data_file.gwas_genotype?
+
+    CSV::Transpose.new(data_file.file.path).call(force_quotes: true)
   end
 
   def decorate_data_file(data_file)

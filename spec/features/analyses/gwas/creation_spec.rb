@@ -71,11 +71,11 @@ RSpec.feature "Analysis creation" do
 
       click_on "Data upload"
 
-      attach_file("genotype-data-file", fixture_file_path("gwas-genotypes.csv"))
+      attach_file("genotype-data-file", fixture_file_path("gwas-genotypes-transposed.csv"))
       attach_file("map-data-file", fixture_file_path("gwas-map.csv"))
       attach_file("phenotype-data-file", fixture_file_path("gwas-phenotypes.csv"))
 
-      expect(page).to have_css("span.file-name", text: "gwas-genotypes.csv")
+      expect(page).to have_css("span.file-name", text: "gwas-genotypes-transposed.csv")
       expect(page).to have_css("span.file-name", text: "gwas-map.csv")
       expect(page).to have_css("span.file-name", text: "gwas-phenotypes.csv")
 
@@ -108,10 +108,10 @@ RSpec.feature "Analysis creation" do
 
       select(plant_trial.plant_trial_name, from: "analysis_plant_trial_id")
 
-      attach_file("genotype-data-file", fixture_file_path("gwas-genotypes.csv"))
+      attach_file("genotype-data-file", fixture_file_path("gwas-genotypes-transposed.csv"))
       attach_file("map-data-file", fixture_file_path("gwas-map.csv"))
 
-      expect(page).to have_css("span.file-name", text: "gwas-genotypes.csv")
+      expect(page).to have_css("span.file-name", text: "gwas-genotypes-transposed.csv")
       expect(page).to have_css("span.file-name", text: "gwas-map.csv")
 
       expect {
