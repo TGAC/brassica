@@ -45,6 +45,7 @@ end
 require_relative "../app/forms/base_form_builder"
 require_relative "../lib/line_break_normalizer"
 require_relative "../lib/named_tempfile"
+require_relative "../lib/csv/transpose"
 
 ActionView::Base.default_form_builder = BaseFormBuilder
 
