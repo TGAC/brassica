@@ -33,3 +33,5 @@ config/database.yml
 
 # Rspec config
 /.rspec
+
+.DS_Store
