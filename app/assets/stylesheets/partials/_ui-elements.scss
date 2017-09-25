@@ -1,3 +1,8 @@
+.page-title {
+  .actions {
+    @extend .pull-right;
+  }
+}
 
 //button styles
 .btn-secondary {
@@ -19,6 +24,10 @@
 
 .btn-mono {
   @include button-variant($text-color-negative, $mono-color-1, darken($mono-color-1, 5));
+}
+
+.btn-accent-3 {
+  @include button-variant($text-color-negative, $accent-color-3, darken($accent-color-3, 5));
 }
 
 .btn-wide {
@@ -110,6 +119,10 @@
   &.table-browse {
     margin-bottom: 100px !important;
     width: 100% !important;
+  }
+
+  .panel & {
+    border: none;
   }
 }
 

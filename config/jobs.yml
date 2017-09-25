@@ -1,0 +1,8 @@
+development:
+  execution_dir: <%= Rails.root.join("tmp/exec/development") %>
+
+test:
+  execution_dir: <%= Rails.root.join("tmp/exec/test") %>
+
+production:
+  execution_dir: <%= ENV['ANALYSIS_EXEC_DIR'] %>

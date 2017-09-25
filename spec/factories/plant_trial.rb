@@ -18,6 +18,6 @@ FactoryGirl.define do
   end
 
   trait :with_layout do
-    layout { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'files', 'plant-trial-layout-example.jpg'), 'image/jpeg') }
+    layout { fixture_file('plant-trial-layout-example.jpg', 'image/jpeg') }
   end
 end

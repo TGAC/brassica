@@ -16,6 +16,8 @@ module ApplicationHelper
         :browse
       when 'submissions', 'depositions'
         :submit
+      when 'analyses'
+        :analyze
       when 'api_keys'
         :api
       else
@@ -23,9 +25,15 @@ module ApplicationHelper
     end
   end
 
-  def active_link(label, path)
-    content_tag :li, class: 'active' do
-      link_to t("menu.#{label}"), path
+  def nav_item(label, path = "#", active: false, disabled: false, tab: nil)
+    raise "Conflicting options" if active && disabled
+
+    klass = active ? :active : (:disabled if disabled)
+    link_options = tab ? { role: :tab, data: { toggle: :tab } } : {}
+    path = "##{tab}" if tab
+
+    content_tag :li, class: klass do
+      link_to label, path, link_options
     end
   end
 
@@ -34,8 +42,10 @@ module ApplicationHelper
       home: root_path,
       browse: browse_data_path,
       submit: new_submission_path,
+      analyze: new_analysis_path,
       api: api_documentation_path,
-      about: about_path
+      about: about_path,
+      about_bip: about_bip_path
     }
   end
 
@@ -75,5 +85,11 @@ module ApplicationHelper
     options[:title] ||= nil
 
     render partial: "/confirmable_action", locals: options.merge(label: label, object: object)
+  end
+
+  def read_file(path, limit:)
+    # Encoding is forced because text may be truncated in the middle of an individual character,
+    # this may result in a visual glitch, but is not very important.
+    File.open(path, "r") { |file| file.read(limit) }.force_encoding("UTF-8")
   end
 end

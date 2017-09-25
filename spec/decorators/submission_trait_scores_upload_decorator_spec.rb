@@ -28,7 +28,7 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
         'p1' => { plant_accession: existing_accession.plant_accession,
                   originating_organisation: existing_accession.originating_organisation },
         'p2' => { plant_accession: 'pa', originating_organisation: 'oo' },
-        'p3' => { plant_accession: 'pa', originating_organisation: 'oo2' },
+        'p3' => { plant_accession: 'pa', originating_organisation: 'oo2', year_produced: "unknown" },
         'p4' => { plant_accession: 'pa2', originating_organisation: 'oo' },
         'p5' => { plant_accession: existing_accession.plant_accession,
                   originating_organisation: existing_accession.originating_organisation },
@@ -78,9 +78,12 @@ RSpec.describe SubmissionTraitScoresUploadDecorator do
         ]
       expect(sd.parser_warnings).
         to eq [
-          'This submission cannot be concluded before the following new plant line(s)',
-          'are successfully submitted, using the Population submission procedure:',
-          '  - Line to be submitted'
+          "This submission cannot be concluded before the following new plant line(s)",
+          "are successfully submitted, using the Population submission procedure:",
+          "  - Line to be submitted",
+          "\n",
+          "This submission cannot be concluded because the following new accessions cannot be created:",
+          "  - pa"
         ]
     end
   end

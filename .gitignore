@@ -34,4 +34,8 @@ config/database.yml
 # Rspec config
 /.rspec
 
+# Test coverage data
+/coverage
+
+# Mac internal attributes file
 .DS_Store

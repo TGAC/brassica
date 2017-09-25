@@ -1,0 +1,30 @@
+.alert.alert-info
+  Genotype data needs to be provided in one of the accepted formats -
+  #{link_to 'VCF', 'http://samtools.github.io/hts-specs/', title: 'Variant Call Format', target: "_blank"},
+  #{link_to 'HapMap', 'http://augustogarcia.me/statgen-esalq/Hapmap-and-VCF-formats-and-its-integration-with-onemap/#hapmap', title: "HapMap", target: "_blank"} or
+  #{link_to 'CSV', 'https://en.wikipedia.org/wiki/Comma-separated_values', title: 'Comma-separated values', target: "_blank"}.
+  %br
+  %br
+  VCF and HapMap are well-defined formats and any such file should be acceptable. However, for best performance low quality
+  or irrelevant data should be filtered out of the VCF file before it is uploaded.
+  %br
+  %br
+  Unlike VCF, the CSV format itself does not exactly determine how the
+  data should be formatted. As such, we provide a <b>#{analysis_data_file_template_link(:gwas_genotype)}</b>
+  showing expected data layout:
+  %br
+  %br
+
+  %ul
+    %li Values in the CSV file must be comma-delimited.
+    %li
+      First column of the CSV file is an ID column. Values in this column denote the <b>
+      #{link_to "SNP", 'https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism', title: 'Single-nucleotide polymorphism'}</b>s.
+      (e.g. rs17602729, snp-1, mut_a123). SNP identifiers must be unique.
+
+    %li
+      Each following column is associated with a <b>sample</b>.
+
+      Value in the header row identifies the sample (e.g. p-00001, su_hri96_DEU146_BRA_00018_001),
+      whereas values in subsequent rows denote number of alleles affected (0, 1, 2 or NA). Sample identifiers
+      must be unique.
