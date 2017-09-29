@@ -1,0 +1,11 @@
+.container.show-analysis{ "data-analysis-status": @analysis.status }
+  %h3.section-heading
+    #{t("analysis.analysis_type.#{@analysis.analysis_type}")} analysis: #{@analysis.name}
+
+    .pull-right= analysis_status_label(@analysis)
+
+  = render "analyses/show/#{@analysis.analysis_type}"
+
+  .row
+    .col-sm-6
+      = link_to "My analyses", analyses_path, class: 'btn btn-primary'

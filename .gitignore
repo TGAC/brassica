@@ -33,3 +33,6 @@ config/database.yml
 
 # Rspec config
 /.rspec
+
+# Test coverage data
+/coverage

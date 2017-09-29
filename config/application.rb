@@ -37,9 +37,16 @@ module Brassica
     ]
 
     config.active_record.raise_in_transactional_callbacks = true
+
+    config.active_job.queue_adapter = :delayed_job
   end
 end
 
 require_relative "../app/forms/base_form_builder"
+require_relative "../lib/line_break_normalizer"
+require_relative "../lib/named_tempfile"
 
 ActionView::Base.default_form_builder = BaseFormBuilder
+
+IMAGE_CONTENT_TYPES = %w(image/png image/jpeg image/gif)
+CSV_CONTENT_TYPES = %w(text/csv text/plain application/vnd.ms-excel)

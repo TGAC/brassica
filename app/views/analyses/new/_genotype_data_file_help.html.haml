@@ -1,0 +1,28 @@
+.alert.alert-info
+  Genotype data needs to be provided in one of two accepted formats -
+  #{link_to 'VCF', 'http://samtools.github.io/hts-specs/', title: 'Variant Call Format', target: "_blank"} or
+  #{link_to 'CSV', 'https://en.wikipedia.org/wiki/Comma-separated_values', title: 'Comma-separated values', target: "_blank"}.
+  %br
+  %br
+  VCF is a well-defined format and any such file should be acceptable. However, for best performance low quality
+  or irrelevant data should be filtered out of the VCF file before it is uploaded.
+  %br
+  %br
+  Unlike VCF, the CSV format itself does not exactly determine how the
+  data should be formatted. As such, we provide a <b>#{analysis_data_file_template_link(:gwas_genotype)}</b>
+  showing expected data layout:
+  %br
+  %br
+
+  %ul
+    %li Values in the CSV file must be comma-delimited.
+    %li
+      First column of the CSV file is an ID column. Values in this column
+      denote <b>sample identifiers</b> (e.g. p-00001, su_hri96_DEU146_BRA_00018_001).
+      These values must be unique.
+    %li
+      Each following column is associated with a <b>
+      #{link_to "SNP", 'https://en.wikipedia.org/wiki/Single-nucleotide_polymorphism', title: 'Single-nucleotide polymorphism'}</b>.
+      Value in the header row identifies the SNP (e.g. rs17602729, snp-1, mut_a123),
+      whereas values in subsequent rows denote number of alleles affected (0, 1, 2 or NA).
+      SNP identifiers must be unique.

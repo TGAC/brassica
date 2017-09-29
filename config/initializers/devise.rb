@@ -242,7 +242,12 @@ Devise.setup do |config|
   config.warden do |manager|
     manager.failure_app = Class.new(Devise::FailureApp) do
       def redirect_url
-        if request.referrer.to_s.include?(new_submission_path)
+        special_paths = [
+          new_submission_path,
+          new_analysis_path
+        ]
+
+        if special_paths.any? { |path| request.referrer.to_s.include?(path) }
           request.referrer
         else
           root_path

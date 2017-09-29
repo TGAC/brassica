@@ -1,0 +1,15 @@
+- std_out = @analysis.std_out.try(:file)
+
+- if std_out && std_out.size > 0
+  .std-out
+    .actions
+      = link_to "Download", std_out.url, target: "_blank", class: 'btn btn-default'
+
+    - if std_out.size > 50.kilobytes
+      .alert.alert-info
+        Showing first 50 KiB of #{std_out.size / 1.kilobyte} KiB.
+
+    %pre= read_file(std_out.path, limit: 50.kilobytes)
+
+- else
+  .alert.alert-info Standard output empty

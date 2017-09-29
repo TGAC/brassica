@@ -44,7 +44,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def find_or_create_plant_accession(plant_id)
-    PlantAccession.find_or_create_by!(
+    plant_accession = PlantAccession.find_or_create_by(
       plant_accession: accessions[plant_id]['plant_accession'],
       originating_organisation: accessions[plant_id]['originating_organisation'],
       year_produced: accessions[plant_id]['year_produced']
@@ -76,6 +76,10 @@ class Submission::PlantTrialFinalizer
 
       new_plant_accession.assign_attributes(common_data.merge(accession_relation))
     end
+
+    rollback(3) unless plant_accession.valid?
+
+    plant_accession
   end
 
   def create_design_factor(plant_id)
