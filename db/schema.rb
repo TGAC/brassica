@@ -327,7 +327,6 @@ ActiveRecord::Schema.define(version: 20170925120738) do
   end
 
   add_index "plant_accessions", ["plant_accession", "originating_organisation", "year_produced"], name: "plant_accessions_pa_oo_yp_idx", unique: true, using: :btree
-  add_index "plant_accessions", ["plant_accession"], name: "plant_accessions_plant_accession_idx", using: :btree
   add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
   add_index "plant_accessions", ["plant_variety_id"], name: "index_plant_accessions_on_plant_variety_id", using: :btree
   add_index "plant_accessions", ["published"], name: "index_plant_accessions_on_published", using: :btree
@@ -783,7 +782,6 @@ ActiveRecord::Schema.define(version: 20170925120738) do
   end
 
   add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
-  add_index "taxonomy_terms", ["name"], name: "index_taxonomy_terms_on_name", unique: true, using: :btree
   add_index "taxonomy_terms", ["name"], name: "taxonomy_terms_name_idx", unique: true, using: :btree
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
@@ -883,7 +881,6 @@ ActiveRecord::Schema.define(version: 20170925120738) do
   end
 
   add_index "traits", ["label"], name: "index_traits_on_label", using: :btree
-  add_index "traits", ["name"], name: "index_traits_on_name", unique: true, using: :btree
   add_index "traits", ["name"], name: "traits_name_idx", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
