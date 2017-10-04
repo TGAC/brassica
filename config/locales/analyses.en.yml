@@ -11,6 +11,11 @@ en:
 
   analyses:
     new:
+      form:
+        vcf: VCF
+        csv: CSV
+        hapmap: HapMap
+
       description:
         common: |
           Further contextual help will be provided at each step of analysis setup.

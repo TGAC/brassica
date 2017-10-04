@@ -42,7 +42,7 @@ class Analysis
       private
 
       # Extract mutation and samples data from a single VCF record. If VCF record
-      # specifies more than one alternative base it needs to be mapped to more
+      # specifies more than one mutation (alternative base) it needs to be mapped to more
       # than one CSV column.
       #
       # If there is no variation (i.e. there is only one distinct value apart

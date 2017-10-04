@@ -36,6 +36,14 @@
 .new-gwas-analysis {
   .form-group {
     margin-bottom: 2em;
+
+    .file-format:before {
+      content: "(";
+    }
+
+    .file-format:after {
+      content: ")";
+    }
   }
 
   .form-group + hr {
