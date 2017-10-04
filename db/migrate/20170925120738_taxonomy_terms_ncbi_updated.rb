@@ -6,7 +6,7 @@ class TaxonomyTermsNcbiUpdated < ActiveRecord::Migration
     
     TaxonomyTerm.reset_column_information
  
-    filename = "db/taxonomy_terms_ncbi_updated.csv"
+    filename = "db/data/taxonomy_terms_ncbi_updated.csv"
     
     CSV.foreach(filename, :headers => true) do |row|
       sql = <<-SQL
