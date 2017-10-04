@@ -30,12 +30,7 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
   
   
   attr_accessor :request_params, :user
-
-  rescue_from ActionController::ParameterMissing do |exception|
-    render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
-  end
-
-
+  
 
   def search
     # accepted params: germplasmPUI , germplasmDbId , germplasmName , pageSize , page
@@ -53,15 +48,12 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
         page: page, 
         page_size: page_size
       }
-          
-      result_object = germplasm_queries.germplasm_search_query(query_params, count_mode: false)
       
-      records = result_object.values
-     
-      if records.nil? || records.size ==0
+      result_object = germplasm_queries.germplasm_search_query(query_params, count_mode: false)   
+          
+      if result_object.count == 0
         render json: { reason: 'Resource not found' }, status: :not_found  # 404
       else
-        
         json_result_array = []
         
         # any programmatic data manipulation can be done here
@@ -87,9 +79,7 @@ class Brapi::V1::GermplasmController < Brapi::BaseController
         }
        
         render json: json_response, except: ["id", "user_id", "created_at", "updated_at", "total_entries_count"]
-      
       end
-    
     end
   end
 

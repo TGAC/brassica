@@ -138,19 +138,19 @@ class Brapi::V1::GermplasmQueries
     # There should be only one 'brapi_statement' prepared and executing running at the same time,
     # at least until the previous one has been deallocated
     Thread.exclusive do
-      @connection.prepare('brapi_statement', sql)
+      @connection.prepare('brapi_germplasm__statement', sql)
       begin
         if( (atts != nil) && !(atts.empty?) )
-          results = @connection.exec_prepared("brapi_statement", atts)
+          results = @connection.exec_prepared("brapi_germplasm__statement", atts)
         else
-          results = @connection.exec_prepared("brapi_statement")
+          results = @connection.exec_prepared("brapi_germplasm__statement")
         end
       rescue PG::Error => e
         @connection.exec("ROLLBACK") 
-        results = nil
-        Rails.logger.warn { "Encountered an error executing a BrAPI germplasm-related query: #{e.message} #{e.backtrace.join("\n")}" }
+        raise Brapi::QueryError.new([sql,atts])
+      ensure
+        @connection.exec("DEALLOCATE brapi_germplasm__statement")
       end
-      @connection.exec("DEALLOCATE brapi_statement")
     end
     return results
   end
