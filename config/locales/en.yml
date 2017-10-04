@@ -19,8 +19,10 @@ en:
     home: Home
     browse: Browse database
     submit: Submit data
+    analyze: Perform analysis
     api: API documentation
     about: About us
+    about_bip: About BIP
 
   browse_tabs:
     plant_populations: Populations

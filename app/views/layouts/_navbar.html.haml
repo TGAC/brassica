@@ -9,8 +9,4 @@
       .collapse.navbar-collapse#navbar-collapse
         %ul.nav.navbar-nav
           - navbar_menu.each do |label, path|
-            - if active_nav_label == label
-              = active_link(label, path)
-            - else
-              %li{ class: "#{'disabled' if path == '#'}" }
-                = link_to t("menu.#{label}"), path
+            = nav_item(t("menu.#{label}"), path, active: active_nav_label == label, disabled: path == "#")

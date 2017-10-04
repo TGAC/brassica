@@ -147,8 +147,11 @@ RSpec.describe ActiveRecord::Base do
   context 'publishable records' do
     let(:omitted_tables) {
       [
+        'analyses',
+        'analysis_data_files',
         'api_keys',
         'countries',
+        'delayed_jobs',
         'schema_migrations',
         'submission_uploads',
         'submissions',

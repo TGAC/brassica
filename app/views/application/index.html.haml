@@ -43,7 +43,7 @@
 
 %section.section-actions.container
   .row
-    .col-md-4.boxed-content.browse
+    .col-md-3.col-xs-6.boxed-content.browse
       %a(href=browse_data_path)
         %i.flaticon-database
       %h2.boxed-content-title Browse database
@@ -52,7 +52,7 @@
         look for related QTLs in a variety of Brassica subspicies.
       = link_to 'Browse data', browse_data_path, class: 'btn btn-primary'
 
-    .col-md-4.boxed-content.submit
+    .col-md-3.col-xs-6.boxed-content.submit
       %a(href=new_submission_path)
         %i.flaticon-pages
       %h2.boxed-content-title Submit new data
@@ -61,7 +61,17 @@
         traits and identified genetic mappings to be published in the Portal.
       = link_to 'Submit data', new_submission_path, class: 'btn btn-action'
 
-    .col-md-4.boxed-content.documentation
+    .col-md-3.col-xs-6.boxed-content.analyse
+      %a(href=new_analysis_path)
+        %i.flaticon-magnifier
+      %h2.boxed-content-title Analyse data
+      %p
+        Perform genome-wide association study to identify genetic variants
+        underpinning phenotypic trait variability.
+
+      = link_to 'Perform analysis', new_analysis_path, class: 'btn btn-accent-3'
+
+    .col-md-3.col-xs-6.boxed-content.documentation
       %a(href=api_documentation_path)
         %i.flaticon-settings
       %h2.boxed-content-title API Documentation

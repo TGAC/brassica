@@ -1,25 +1,22 @@
 .container
-  .h2.page-title About Brassica Information Portal
+  .h2.page-title About Us
+
+  %h4 Our Mission
 
   %p.text-long
-    %strong The Brassica Information Portal
-    is a web repository for population and trait
-    scoring information related to the Brassica breeding community. It provides
-    information about quantitative trait loci and links curated Brassica phenotype
-    experimental data with genotype information stored in external data sources.
-    Advanced data submission capabilities and APIs enable users to store
-    and publish their own study results in our Portal. The repository can be easily
-    browsed thanks to a set of user-friendly query interfaces.
+    Our first goal is to make Brassica crop data openly accessible and available in a
+    standardised and well-described manner. We collaborate with
+    = succeed ',' do
+      = link_to 'Elixir', 'https://www.elixir-europe.org/about-us'
+    = link_to 'Bioschemas.org', 'http://bioschemas.org/'
+    and Biosamples to make the hosted data findable and interoperable with analysis tools and
+    re-usable among the scientific community.
+
+
+  %h4 Earlham Institute
 
   %p.text-long
-    BIP Portal follows our
-    = link_to 'Terms of Use', 'http://www.earlham.ac.uk/terms-use'
-    rules, so please check these when interested in using our service.
-
-  %h4 Earlham Institute (EI)
-
-  %p.text-long
-    %strong The Earlham Institute (EI)
+    The Earlham Institute (EI)
     is a vibrant contemporary research institute working in an area of rapid
     technological development and innovation. Our mission is to advance bioscience
     by enabling and developing computational and genomics data-driven approaches in biology.
@@ -46,7 +43,7 @@
         Earlham Institute, www:
         = link_to 'http://www.earlham.ac.uk/carlos-horro', 'http://www.earlham.ac.uk/carlos-horro'
       %li
-        %strong Sarah Ayling
+        %strong Sarah Dyer
         Earlham Institute, email:
         =link_to 'contact address', 'mailto:sarah_address', class: 'email-link'
       %li
@@ -106,11 +103,13 @@
       %li
         = link_to 'The RIPR project','http://www.rothamsted.ac.uk/projects/S5361'
 
+
   %h4 Acknowledgments
 
   %p.text-long
     This work was supported by UK Biotechnology and Biological Sciences Research Council
     as part of the BBSRC Renewable Industrial Products from Rapeseed (RIPR) Programme (BB/L002124/1).
+
   %p.text-long
     The underlying database schema is derived from the CropStoreDB schema ver.7 (Love et al 2012, doi:
     = link_to '10.1111/j.1744-7909.2012.01120.x', 'https://doi.org/10.1111/j.1744-7909.2012.01120.x', target: '_blank'

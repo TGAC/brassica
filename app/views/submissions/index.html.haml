@@ -1,14 +1,12 @@
 .container
-  %h2.page-title My submissions
+  %h2.page-title
+    My submissions
+
+    .actions= new_submission_button
 
   - if @submissions.present?
-
     = render partial: 'submissions_list', locals: { submissions: @submissions, mode: :private }
-
-    = new_submission_button
 
   - else
     .alert.alert-info
       %p You do not have any submissions yet.
-
-    %p= new_submission_button

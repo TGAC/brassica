@@ -1,0 +1,20 @@
+%li{ data: { id: analysis.id, url: analysis_path(analysis), refresh: (:true unless analysis.finished?) } }
+  .main-info
+    %div
+      = analysis.analysis_type
+      = link_to analysis.name, analysis_path(analysis)
+
+  .status
+    = analysis_status_label(analysis)
+
+    .details
+      - if analysis.idle? || analysis.running?
+        Created at #{l analysis.created_at.utc, format: :short}
+      - else
+        Finished at #{l analysis.finished_at.utc, format: :short}
+
+  - if analysis.finished?
+    = confirmable_action("Delete", analysis, method: :delete, btn_size: 'btn-sm', btn_class: "btn-warning")
+  - else
+    .actions
+      %button.btn.btn-sm{ disabled: true, type: :button } Delete

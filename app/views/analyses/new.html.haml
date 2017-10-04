@@ -1,0 +1,16 @@
+.container
+  - if @analysis
+    = render partial: "/analyses/new/form"
+  - else
+    - type = :gwas
+
+    %div{ role: 'tabpanel', class: "tab-pane active", id: type }
+      %h3.section-heading
+        Perform new #{t("analysis.analysis_type.#{type}")}
+
+      %p
+        = t(".description.#{type}").html_safe
+        = t('.description.common', type: type).html_safe
+
+      .text-center
+        = link_to 'Start!', new_analysis_path(analysis: { analysis_type: type }), class: 'new-analysis-big-btn'

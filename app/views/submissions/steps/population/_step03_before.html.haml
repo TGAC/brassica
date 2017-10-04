@@ -55,6 +55,8 @@
     below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
     columns even if you do not submit any values for them.
 
+.errors.hidden
+
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
 
   = hidden_field_tag "submission_upload[upload_type]", "plant_lines"
