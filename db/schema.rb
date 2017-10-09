@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170818182938) do
+ActiveRecord::Schema.define(version: 20170929085416) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -464,6 +464,7 @@ ActiveRecord::Schema.define(version: 20170818182938) do
     t.integer  "user_id"
     t.boolean  "published",                default: true, null: false
     t.datetime "published_on"
+    t.string   "biosamples_id"
   end
 
   add_index "plant_scoring_units", ["design_factor_id"], name: "plant_scoring_units_design_factor_id_idx", using: :btree
