@@ -2,8 +2,8 @@ class LineBreakNormalizer
   def call(filepath)
     File.open(filepath, "r") do |src|
       Tempfile.open("") do |dst|
-        src.each_line do |line|
-          dst << line.sub(/\r\n|\r/, "\n")
+        src.read.split(/\r\n|\r|\n/).each do |line|
+          dst << "#{line}\n"
         end
 
         dst.flush
