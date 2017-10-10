@@ -71,8 +71,12 @@ Rails.application.routes.draw do
       post "studies-search", to: 'studies#search'
       get "studies/:id", to: 'studies#show'
       get "studies", to: 'studies#show'
+      get "studies/:studyDbId/germplasm", to: 'studies#germplasm'
       post "phenotypes-search", to: 'phenotypes#search'
-          
+      get "variables", to: 'variables#list'
+       
     end
   end
+  
+  
 end
