@@ -138,7 +138,7 @@ class Brapi::V1::StudiesController < Brapi::BaseController
         page_size: page_size
       }  
           
-      result_object = studies_queries.germplasm_query(query_params, count_mode: false )  
+      result_object = studies_queries.germplasm_query(query_params, count_mode: false )       
       
       if result_object.count == 0
         render json: { reason: 'Resource not found' }, status: :not_found  # 404
@@ -162,7 +162,7 @@ class Brapi::V1::StudiesController < Brapi::BaseController
         # pagination data returned
         
         result_count_object = studies_queries.germplasm_query(query_params, count_mode: true )
-        
+
         total_count = result_count_object.values.first[0].to_i
         total_pages = (total_count/page_size.to_f).ceil
         

@@ -221,7 +221,6 @@ class Brapi::V1::StudiesQueries
   # seedSource, synonyms, commonCropName, instituteCode, instituteName, biologicalStatusOfAccessionCode, 
   # countryOfOriginCode, typeOfGermplasmStorageCode, genus, species, taxonIds, speciesAuthority, subtaxa, subtaxaAuthority, 
   # donors, acquisitionDate
-
   def germplasm_query(query_params, count_mode:)
     study_db_id= query_params[:study_db_id]
     page= query_params[:page] 
@@ -243,24 +242,22 @@ class Brapi::V1::StudiesQueries
     
     where_query = where_query + (where_atts_count>0?" and ":" where ") 
     where_query += <<-SQL.strip_heredoc
-      ((plant_populations.male_parent_line_id = plant_lines.id OR
-       plant_populations.female_parent_line_id = plant_lines.id) AND
-       plant_accessions.plant_line_id = plant_lines.id )     
+      ( plant_scoring_units.plant_trial_id = plant_trials.id AND
+        plant_scoring_units.plant_accession_id = plant_accessions.id )     
     SQL
              
     # Until ORCID implementation is done, we only must retrieve published or not owned datasets  
     where_query = where_query + " AND " 
     where_query += <<-SQL.strip_heredoc
       ((plant_accessions.user_id IS NULL OR plant_accessions.published = TRUE) AND
-       (plant_populations.user_id IS NULL OR plant_populations.published = TRUE) AND
-       (plant_lines.user_id IS NULL OR plant_lines.published = TRUE) AND
+       (plant_scoring_units.user_id IS NULL OR plant_scoring_units.published = TRUE) AND
        (plant_trials.user_id IS NULL OR plant_trials.published = TRUE) )   
     SQL
     
     
     # select clauses
     select_query = <<-SQL.strip_heredoc
-      SELECT -- plant_trials.id as "studyDbId",  not necessary to be retrieved
+      SELECT DISTINCT ON (plant_trials.id,plant_accessions.id)
       plant_trials.project_descriptor as "trialName",
       plant_accessions.id as "germplasmDbId", 
       plant_accessions.plant_accession as "germplasmName",
@@ -275,8 +272,7 @@ class Brapi::V1::StudiesQueries
     
     # joinS
     joins_query = "
-    FROM plant_lines, plant_accessions, 
-    plant_trials INNER JOIN plant_populations ON plant_trials.plant_population_id = plant_populations.id
+    FROM plant_trials, plant_accessions, plant_scoring_units
     "
     
     if count_mode
@@ -295,7 +291,6 @@ class Brapi::V1::StudiesQueries
     
     result_object
   end
-
 
 
 
