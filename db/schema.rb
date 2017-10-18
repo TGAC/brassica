@@ -10,7 +10,6 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
 ActiveRecord::Schema.define(version: 20170929085416) do
 
   # These are extensions that must be enabled in order to support this database
@@ -779,6 +778,7 @@ ActiveRecord::Schema.define(version: 20170929085416) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.boolean  "canonical",        default: true
+    t.string   "ncbi_taxon"
   end
 
   add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
