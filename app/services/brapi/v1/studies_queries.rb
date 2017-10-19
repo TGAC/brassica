@@ -213,6 +213,86 @@ class Brapi::V1::StudiesQueries
   end
 
 
+   # processing result: https://github.com/plantbreeding/API/blob/master/Specification/Studies/StudyGermplasmDetails.md
+  # All possible fields to return:
+  # studyDbId, trialName, germplasmDbId, entryNumber, germplasmName, pedigree, seedSource, accessionNumber, germplasmPUI,
+  # synonyms
+  # germplasmDbId, defaultDisplayName, accessionNumber, germplasmName, germplasmPUI, pedigree, 
+  # seedSource, synonyms, commonCropName, instituteCode, instituteName, biologicalStatusOfAccessionCode, 
+  # countryOfOriginCode, typeOfGermplasmStorageCode, genus, species, taxonIds, speciesAuthority, subtaxa, subtaxaAuthority, 
+  # donors, acquisitionDate
+  def germplasm_query(query_params, count_mode:)
+    study_db_id= query_params[:study_db_id]
+    page= query_params[:page] 
+    page_size= query_params[:page_size] 
+    
+    # where conditions
+    where_query = " "
+    where_atts = []
+    where_atts_count = 0
+    
+    # TO BE DEFINED
+    #if germplasmPUI.present? 
+    
+    if study_db_id.present?   # plant_trials.id
+      where_atts_count+= 1
+      where_query = where_query + "where plant_trials.id = $"+where_atts_count.to_s
+      where_atts << study_db_id
+    end
+    
+    where_query = where_query + (where_atts_count>0?" and ":" where ") 
+    where_query += <<-SQL.strip_heredoc
+      ( plant_scoring_units.plant_trial_id = plant_trials.id AND
+        plant_scoring_units.plant_accession_id = plant_accessions.id )     
+    SQL
+             
+    # Until ORCID implementation is done, we only must retrieve published or not owned datasets  
+    where_query = where_query + " AND " 
+    where_query += <<-SQL.strip_heredoc
+      ((plant_accessions.user_id IS NULL OR plant_accessions.published = TRUE) AND
+       (plant_scoring_units.user_id IS NULL OR plant_scoring_units.published = TRUE) AND
+       (plant_trials.user_id IS NULL OR plant_trials.published = TRUE) )   
+    SQL
+    
+    
+    # select clauses
+    select_query = <<-SQL.strip_heredoc
+      SELECT DISTINCT ON (plant_trials.id,plant_accessions.id)
+      plant_trials.project_descriptor as "trialName",
+      plant_accessions.id as "germplasmDbId", 
+      plant_accessions.plant_accession as "germplasmName",
+      plant_accessions.plant_accession as "accessionNumber"  
+    SQL
+    
+    # TODO : germplasmPUI
+    # TODO : pedigree
+    # TODO : seedSource
+    # TODO : synonyms
+    
+    
+    # joinS
+    joins_query = "
+    FROM plant_trials, plant_accessions, plant_scoring_units
+    "
+    
+    if count_mode
+      total_query = "SELECT COUNT(*) FROM ("+select_query + joins_query + where_query +") AS total_entries_count"
+      result_object = execute_statement(total_query, where_atts)
+    else
+      # order
+      order_query =  " ORDER BY plant_accessions.id asc" 
+      
+      # pagination
+      pagination_query = pagination_query(page, page_size)
+      
+      total_query = select_query + joins_query + where_query + order_query + pagination_query
+      result_object = execute_statement(total_query, where_atts)
+    end
+    
+    result_object
+  end
+
+
 
   private
 
