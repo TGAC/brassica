@@ -113,7 +113,7 @@ class Brapi::V1::StudiesQueries
     else
       # order
       order_query =  " ORDER BY "+ get_sortby_field(sort_by)      
-      order_query += (sort_order != nil && sort_order == "desc"?" desc ":" asc ") 
+      order_query += (sort_order!=nil && sort_order=="desc"?" desc ":" asc ") 
       
       # pagination
       pagination_query = pagination_query(page, page_size)
@@ -291,7 +291,6 @@ class Brapi::V1::StudiesQueries
     
     result_object
   end
-
 
 
   private
