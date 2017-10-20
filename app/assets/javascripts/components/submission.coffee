@@ -1,4 +1,4 @@
-window.Submission = class Submission
+window.Submission = class Submission extends Component
   @makeAjaxSelectOptions: (url, id_attr, text_attr, small_text_attr) =>
     text_attr ||= id_attr
 
@@ -33,12 +33,6 @@ window.Submission = class Submission
         else
           "<span class='new-item-for-list-selection'>#{item.text}</span>"
     )
-
-  constructor: (el) ->
-    @$el = $(el)
-
-  $: (args) =>
-    @$el.find(args)
 
   init: =>
     return unless @$el.length >= 1

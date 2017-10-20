@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   root 'application#index'
   get 'about', to: 'application#about'
   get 'api_documentation', to: 'application#api'
+  get 'about_bip', to: 'application#about_bip'
 
   resources :submissions do
     member do
@@ -29,6 +30,11 @@ Rails.application.routes.draw do
   resources :traits, only: [:index]
   resources :trial_scorings, only: [:show]
   resources :data_tables, only: [:index, :show]
+  resources :analyses, except: [:edit]
+
+  namespace :analyses do
+    resources :data_files, controller: 'data_files', only: [:new, :create, :destroy]
+  end
 
   get 'search', to: 'searches#counts'
   get 'browse_data', to: 'data_tables#index', defaults: { model: 'plant_populations' }

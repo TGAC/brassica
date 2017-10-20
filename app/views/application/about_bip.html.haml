@@ -1,0 +1,180 @@
+.container
+  .h2.page-title About Brassica Information Portal
+
+  %p.text-long
+    %strong The Brassica Information Portal
+    is a web repository for population and trait
+    scoring information related to the Brassica breeding community. It provides
+    information about quantitative trait loci and links curated Brassica phenotype
+    experimental data with genotype information stored in external data sources.
+    Advanced data submission capabilities and APIs enable users to store
+    and publish their own study results in BIP. The repository can be easily
+    browsed thanks to a set of user-friendly query interfaces.
+
+  %h4 BIP shows impact
+
+  %p.text-long
+    Further information on the Projects related to the Brassica Information Portal can be found in the
+    #{link_to 'BIP project description','http://www.earlham.ac.uk/brassica-information-portal'}.
+    The Brassica Information Portal has received a lot of attention after our
+    = link_to 'press release.', 'http://www.earlham.ac.uk/new-integrative-data-portal-brilliant-brassicas'
+    The
+    = link_to 'Eastern Daily Press', 'http://www.edp24.co.uk/business/farming/new_web_portal_could_open_the_door_to_better_brassicas_1_4544187'
+    and
+    = link_to 'Agri-Tech East', 'http://www.agritech-east.co.uk/first-web-portal-for-brassica-will-accelerate-improvements/'
+    wrote articles in response to the press release. The Brassica Information Portal was also presented in the Arabidopsis community newsletter
+    = link_to '(GARNish_25).', 'http://www.garnetcommunity.org.uk/sites/default/files/newsltr/GARNish25_Online__0.pdf'
+    A blog entry explains to the public why Brassica crops are important and brilliant- have a look at
+    = link_to 'Brilliant Brassica.', 'http://www.earlham.ac.uk/brilliant-brassica'
+
+  %h4 Manuals and training
+
+  %p.text-long
+    Most of operations at BIP is explained through context-sensitive help.
+    In addition, detailed manuals explaining use of submission wizards are available below:
+    %ul
+      %li= link_to 'Population Submission','/manuals/upload_population_submission.pdf'
+      %li= link_to 'Trial Submissions','/manuals/upload_trial_submission.pdf'
+
+  %p.text-long
+    From the home page you may access a separate section dedicated to the
+    = link_to t('menu.api'), navbar_menu[:api]
+    where you find all information needed to write your own calls for programmatic data upload
+    and retrieval.
+
+  %p.text-long
+    We have organised number of practical training courses on using the BIP. The first
+    = link_to 'workshop', 'http://www.earlham.ac.uk/first-brassica-data-training-ei'
+    on how to use the database has been held on the 7.09.2016.
+    All slides, hands-on tutorial and test data sets are available on
+    = link_to 'github','https://github.com/TGAC/BIP_training'
+    for you to follow in your own pace.
+
+  %h4 Authentication
+
+  %p.text-long
+    Login for submission is managed by an external OAuth service, ORCiD. Registration is very quick and registered users
+    can access every functionality (submission and analysis) of the Portal.
+
+  %h4 Feedback
+
+  %p.text-long
+    If you have any queries or suggestions related to the software, data, documentation and training, please contact us at
+    = link_to 'contact address', 'mailto:bip_address', class: 'email-link'
+
+  %h4 How to cite us
+
+  %h5 Citing BIP
+  %p.text-long
+    Eckes AH, Gubała T, Nowakowski P et al. Introducing the Brassica Information Portal: Towards integrating genotypic and phenotypic
+    Brassica crop data [version 1; referees: awaiting peer review]. F1000Research 2017, 6:465 (doi: 10.12688/f1000research.11301.1)
+
+  %h5 Citing GWASSER
+  %p.text-long
+    = link_to "https://github.com/cyverseuk/GWASSER", "https://github.com/cyverseuk/GWASSER"
+
+  %h4 Licensing
+
+  %h5 Citing data deposited in BIP
+
+  %p.text-long
+    It is required for everyone using published data sets to acknowledge authors and organisations that generated and submitted it.
+    In order to make this process easy, BIP allows storage of detailed author contact details, data set DOIs and publication meta-data (Pubmed ID; article DOI).
+    Data set submitted to BIP can be cited by the unique identifier assigned to the complete data set.
+    We also recommend to generate DOIs for specific parts of the original submission.
+    We use ZENODO as an external service to assign DOIs. Please read more information about our data sharing policy below.
+
+  %h5 Source Code
+
+  %p.text-long
+    The BIP framework is open source under the
+    = link_to 'GPLv3','https://www.gnu.org/licenses/gpl-3.0.html'
+    license and is available on
+    = succeed '.' do
+      = link_to 'github','https://github.com/TGAC/brassica'
+    BIP is a community project, we kindly welcome any contributions to improve existing and add new functionalities.
+    If you wish to deploy a copy of BIP (for Brassica or any other crop) on your own servers, don’t hesitate to contact us in case you need our assistance.
+    Contacting us also helps measuring the software impact and planning future developments.
+
+  %h4 Data model
+
+  %p.text-long
+    Our data model is developed based on CropStoreDB and is presented
+    = succeed '.' do
+      = link_to 'in this diagram', 'images/models_complete.png'
+
+  %h4 Data and metadata types we accept
+
+  %p.text-long
+    We currently accept <i>Brassica</i> crops trial and population (meta)data. Submitting population or
+    trial data via the submission web interface, we ask for metadata to be filled into fields provided
+    during several submission steps. Your data can be submitted using the automatically generated .csv templates
+    that will vary depending on the metadata information you put in during previous steps. Using the api, we also
+    accept input data and metadata in .json format. Please see the
+    = link_to t('menu.api'), navbar_menu[:api]
+    for more information.  We also have a
+    = link_to 'ruby client','https://github.com/TGAC/brassica/tree/master/public/client_example'
+    which provides an example of submission of population data with API.
+    It requires an input data in csv format and  additional metadata within the client script.
+    Follow the manual for population submission where examples for each submission field are provided.
+    Content of every field is further described in the API documentation.
+
+  %h4 Data and metadata standards
+
+  %p.text-long
+    We are putting a lot of effort into use of controlled vocabularies, ontologies and adherence to minimal requirements.
+    For traits, we are developing the Brassica trait ontology
+    = succeed ',' do
+      = link_to '(BRATO)','https://github.com/Brassica-Trait-Ontology/brato'
+    which adheres to
+    = link_to 'CropOntology','http://www.cropontology.org/'
+    standards.
+    If you have or are aware of other trait types that we do not cover yet, please get in touch or add them to BRATO directly.
+    Your contributions are most welcome!
+    We currently use
+    = link_to 'Plant','http://archive.gramene.org/plant_ontology/'
+    and
+    = link_to 'Trait Ontology','http://archive.gramene.org/db/ontology/search?id=TO:0000387'
+    as reference ontologies for plants and
+    = link_to 'GR_tax ontology','http://archive.gramene.org/db/ontology/search?id=GR_tax:017502'
+    to cover Brassica taxonomy. Marker sequences are currently cross-referenced with resources such as
+    = link_to 'Sequence Read Archive (NCBI)','https://www.ncbi.nlm.nih.gov/sra'
+    and
+    = link_to 'EnsemblPlants','http://plants.ensembl.org/index.html'
+    where possible.
+
+  %h4 Data privacy
+
+  %p.text-long
+    You can submit data to BIP without publicly releasing it straight away. For example, it is possible to submit your data
+    prior to publication, and removing the embargo post- publication. Be advised that you cannot obtain a DOI to cite your
+    dataset in the paper without public release. In order to obtain a DOI, your data needs to be publicly available and stable.
+    Submitter is given a week of grace period during which the content may be retracted or the status of the data may be changed
+    from public to private and subsequently modified.
+    Once made public, and after the grace period expired you cannot modify or delete your record. If you wish to this please contact us.
+
+  %h4 Data sharing
+
+  %p.text-long
+    Submitters are responsible to adhere with data policies of his/her institution or company.
+    If not stated otherwise, submitted data falls under the
+    = succeed ',' do
+      = link_to 'CC BY 4.0 license','https://creativecommons.org/licenses/by/4.0/'
+    to ensure maximal re-use potential,
+    while the data generator or submitter needs to be accredited. Submitters can provide licensing information during
+    the submission process. If this is not explicitly done, the CC BY 4.0 license applies.
+    If you plan to reuse previously generated data sets please refer to the individual projects for license information.
+
+
+  %h4 Availability and liability
+
+  %p.text-long
+    BIP is hosted on NBI infrastructure that has a good record of keeping servers up and running.
+    However, we cannot guarantee the availability of our services to the users at all time. Assistance is available during business hours London time,
+    please contact us at
+    = link_to 'bip@earlham.ac.uk', 'mailto:bip_address', class: 'email-link'
+
+  %p.text-long
+    BIP Portal follows Earlham Institute
+    = link_to 'Terms of Use', 'http://www.earlham.ac.uk/terms-use'
+    rules.

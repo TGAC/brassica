@@ -2,11 +2,9 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.2.0'
 gem 'activerecord-delay_touching'
-
 gem 'pg'
-
 gem 'puma'
-
+gem 'daemons'
 gem 'haml-rails'
 gem 'bootstrap-sass', '~> 3.3.3'
 gem 'font-awesome-sass', '~> 4.3.1'
@@ -38,10 +36,12 @@ gem 'paperclip', '~> 4.3'
 gem 'rubyzip'
 gem 'typhoeus'
 gem 'squeel'
-
 gem 'cookies_eu'
-
 gem 'exception_notification'
+gem 'delayed_job'
+gem 'delayed_job_active_record', '~> 4.1.1'
+gem 'bio-vcf', '~> 0.9.2'
+gem 'whenever', '~> 0.9.7'
 
 gem 'swagger-blocks'
 gem 'swagger_ui_engine'
@@ -57,6 +57,7 @@ group :development do
   gem 'capistrano-rails'
   gem 'capistrano3-puma'
   gem 'capistrano-chruby'
+  gem 'capistrano3-delayed-job', '~> 1.7.2'
   gem 'railroady'
 end
 
@@ -77,4 +78,8 @@ group :test do
   gem 'webmock', require: false
   gem 'database_cleaner'
   gem 'vcr'
+  gem 'simplecov', require: false
+  gem 'capybara', require: false
+  gem 'poltergeist', require: false
+  gem 'launchy', require: false
 end

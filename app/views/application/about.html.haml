@@ -1,116 +1,76 @@
 .container
-  .h2.page-title About Brassica Information Portal
+  .h2.page-title About Us
+
+  %h4 Our Mission
 
   %p.text-long
-    %strong The Brassica Information Portal
-    is a web repository for population and trait
-    scoring information related to the Brassica breeding community. It provides
-    information about quantitative trait loci and links curated Brassica phenotype
-    experimental data with genotype information stored in external data sources.
-    Advanced data submission capabilities and APIs enable users to store
-    and publish their own study results in our Portal. The repository can be easily
-    browsed thanks to a set of user-friendly query interfaces.
+    Our aim is to make <i>Brassica</i> crop data openly accessible and available in a
+    standardised and well-described manner. We collaborate with
+    = succeed ',' do
+      = link_to 'Elixir', 'https://www.elixir-europe.org/about-us'
+    = link_to 'Bioschemas.org', 'http://bioschemas.org/'
+    and
+    = link_to 'Biosamples', 'https://www.ebi.ac.uk/biosamples/'
+    to make the hosted data findable and interoperable with analysis tools and
+    re-usable among the scientific community.
 
-  %p.text-long
-    BIP Portal follows our
-    = link_to 'Terms of Use', 'http://www.earlham.ac.uk/terms-use'
-    rules, so please check these when interested in using our service.
-
-  %h4 Earlham Institute (EI)
-
-  %p.text-long
-    %strong The Earlham Institute (EI)
-    is a vibrant contemporary research institute working in an area of rapid
-    technological development and innovation. Our mission is to advance bioscience
-    by enabling and developing computational and genomics data-driven approaches in biology.
-    We build our excellence in genomics and computational bioscience to develop the
-    = link_to 'Norwich Research Park', 'http://www.norwichresearchpark.com/'
-    as a world-leading centre in bioinformatics and applied biotechnology. Please consult
-    = link_to 'EI website', 'http://www.earlham.ac.uk/'
-    to learn more about us, our goals and the current projects we run.
 
   %h4 Brassica Information Portal Team
 
-  %p.text-long
-    %ul
-      %li
-        %strong Wiktor Jurkowski
-        Earlham Institute, www:
-        = link_to 'http://www.earlham.ac.uk/wiktor-jurkowski', 'http://www.earlham.ac.uk/wiktor-jurkowski'
-      %li
-        %strong Annemarie Eckes
-        Earlham Institute, www:
-        =link_to 'http://www.earlham.ac.uk/annemarie-hildegard-eckes', 'http://www.earlham.ac.uk/annemarie-hildegard-eckes'
-      %li
-        %strong Carlos Horro
-        Earlham Institute, www:
-        = link_to 'http://www.earlham.ac.uk/carlos-horro', 'http://www.earlham.ac.uk/carlos-horro'
-      %li
-        %strong Sarah Ayling
-        Earlham Institute, email:
-        =link_to 'contact address', 'mailto:sarah_address', class: 'email-link'
-      %li
-        %strong Tomasz Gubała
-        =link_to 'Spectrum IT', 'http://espectrum.pl/it'
-      %li
-        %strong Tomasz Szymczyszyn
-        =link_to 'Spectrum IT', 'http://espectrum.pl/it'
-      %li
-        %strong Piotr Nowakowski
-        =link_to 'Spectrum IT', 'http://espectrum.pl/it'
-      %li
-        %strong Graham King
-        =link_to 'Southern Cross University', 'http://scu.edu.au/scps/index.php/3'
+  %ul.text-long
+    %li
+      %strong Wiktor Jurkowski
+      Earlham Institute, www:
+      = link_to 'http://www.earlham.ac.uk/wiktor-jurkowski', 'http://www.earlham.ac.uk/wiktor-jurkowski'
+    %li
+      %strong Annemarie Eckes
+      Earlham Institute, www:
+      =link_to 'http://www.earlham.ac.uk/annemarie-hildegard-eckes', 'http://www.earlham.ac.uk/annemarie-hildegard-eckes'
+    %li
+      %strong Carlos Horro
+      Earlham Institute, www:
+      = link_to 'http://www.earlham.ac.uk/carlos-horro', 'http://www.earlham.ac.uk/carlos-horro'
+    %li
+      %strong Sarah Dyer
+      Earlham Institute, email:
+      =link_to 'contact address', 'mailto:sarah_address', class: 'email-link'
+    %li
+      %strong Tomasz Gubała
+      =link_to 'Spectrum IT', 'http://espectrum.pl/it'
+    %li
+      %strong Tomasz Szymczyszyn
+      =link_to 'Spectrum IT', 'http://espectrum.pl/it'
+    %li
+      %strong Piotr Nowakowski
+      =link_to 'Spectrum IT', 'http://espectrum.pl/it'
+    %li
+      %strong Graham King
+      =link_to 'Southern Cross University', 'http://scu.edu.au/scps/index.php/3'
 
-  %p.text-long
-    BIP source code is available at
-    = link_to 'GitHub', 'https://github.com/TGAC/brassica'
-    and the internal data model is presented
-    = succeed '.' do
-      = link_to 'in this diagram', 'images/models_complete.png'
 
-    Please get in touch with ideas and patches to further improve it, we are always happy to accept new contributors.
+  %h4 Brassica Community
 
-  %h4 BIP shows impact
+  %ul.text-long
+    %li
+      = link_to 'Brassica.info','http://www.brassica.info/index.php'
+    %li
+      = link_to 'CropStoreDB','http://www.cropstoredb.org/'
+    %li
+      = link_to 'brassicadb','http://brassicadb.org/brad/'
+    %li
+      = link_to 'The OREGIN project','http://www.herts.ac.uk/oregin/about-oregin'
+    %li
+      = link_to 'The RIPR project','http://www.rothamsted.ac.uk/projects/S5361'
 
-  %p.text-long
-    Further information on the Projects related to the Brassica Information Portal can be found in the
-    = link_to 'general project description','http://www.earlham.ac.uk/brassica-information-portal'
-    from the Earlham Institute.  The Brassica Information Portal has received a lot of attention after our
-    = link_to 'press release.', 'http://www.earlham.ac.uk/new-integrative-data-portal-brilliant-brassicas'
-    The
-    = link_to 'Eastern Daily Press', 'http://www.edp24.co.uk/business/farming/new_web_portal_could_open_the_door_to_better_brassicas_1_4544187'
-    and
-    = link_to 'Agri-Tech East', 'http://www.agritech-east.co.uk/first-web-portal-for-brassica-will-accelerate-improvements/'
-    wrote articles in response to the press release. The Brassica Information Portal was also represented in an article in the Newsletter from the Arabidopsis community
-    = link_to '(GARNish_25).', 'http://www.garnetcommunity.org.uk/sites/default/files/newsltr/GARNish25_Online__0.pdf'
-    A blog entry explains to the public why Brassica crops are important and brilliant- have a look at
-    = link_to 'Brilliant Brassica.', 'http://www.earlham.ac.uk/brilliant-brassica'
-    The first
-    = link_to 'workshop', 'http://www.earlham.ac.uk/first-brassica-data-training-ei'
-    on how to use the database has been held on the 7.09.2016. Training material for this workshop is available
-    = link_to 'here', 'https://github.com/TGAC/BIP_training'
-    and you can follow the instructions in your own time.
-
-  %p.text-short
-    Below is a list of links relevant to the Brassica Community:
-    %ul
-      %li
-        = link_to 'Brassica.info','http://www.brassica.info/index.php'
-      %li
-        = link_to 'CropStoreDB','http://www.cropstoredb.org/'
-      %li
-        = link_to 'brassicadb','http://brassicadb.org/brad/'
-      %li
-        = link_to 'The OREGIN project','http://www.herts.ac.uk/oregin/about-oregin'
-      %li
-        = link_to 'The RIPR project','http://www.rothamsted.ac.uk/projects/S5361'
 
   %h4 Acknowledgments
 
   %p.text-long
     This work was supported by UK Biotechnology and Biological Sciences Research Council
-    as part of the BBSRC Renewable Industrial Products from Rapeseed (RIPR) Programme (BB/L002124/1).
+    as part of the BBSRC Renewable Industrial Products from Rapeseed (RIPR) Programme (BB/L002124/1)
+    and was strategically funded by the BBSRC, Institute Strategic Programme Grant (BB/J004669/1) at the Earlham Institute
+    (formerly The Genome Analysis Centre, Norwich).
+
   %p.text-long
     The underlying database schema is derived from the CropStoreDB schema ver.7 (Love et al 2012, doi:
     = link_to '10.1111/j.1744-7909.2012.01120.x', 'https://doi.org/10.1111/j.1744-7909.2012.01120.x', target: '_blank'
@@ -120,3 +80,5 @@
     and
     = link_to 'Gramene', 'http://archive.gramene.org/about/index.html#copyright'
     projects licenses.
+
+

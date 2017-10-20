@@ -20,7 +20,7 @@ RSpec.describe "Submission uploads" do
 
   shared_examples "successful submission upload" do |content_type|
     context "with #{content_type} content" do
-      let(:file) { fixture_file_upload('files/score_upload.txt', content_type) }
+      let(:file) { fixture_file('score_upload.txt', content_type) }
 
       it "creates upload" do
         expect {

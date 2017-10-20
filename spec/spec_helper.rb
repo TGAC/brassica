@@ -15,6 +15,11 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+if ENV['COVERAGE']
+  require "simplecov"
+  SimpleCov.start 'rails'
+end
+
 require "webmock/rspec"
 
 RSpec.configure do |config|

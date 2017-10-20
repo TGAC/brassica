@@ -1,0 +1,41 @@
+en:
+  analysis:
+    status:
+      idle: Idle
+      running: Running
+      success: Success
+      failure: Failure
+
+    analysis_type:
+      gwas: GWAS
+
+  analyses:
+    new:
+      form:
+        vcf: VCF
+        csv: CSV
+        hapmap: HapMap
+
+      description:
+        common: |
+          Further contextual help will be provided at each step of analysis setup.
+          Only you will have access to the results produced by the analysis.
+        gwas: |
+          The following process allows you to perform
+          <a href='https://en.wikipedia.org/wiki/Genome-wide_association_study'
+          target='_blank' title='Genome-wide association study'><b>GWAS</b></a>
+          on data you submit. You will need to provide genotype and phenotypic trait
+          data for the analysis.<br/>
+
+    show:
+      gwas:
+        gwas_genotype: Genotype
+        gwas_map: Map
+        gwas_phenotype: Phenotype
+        uploaded: User upload
+        generated: Generated file
+      gwas_results:
+        failure_reason:
+          all_mutations_removed: All mutations were excluded from analysis due to lack of variability between samples.
+          all_traits_removed: All traits were excluded from analysis due to lack of variability between samples.
+          shell_job_error: The analysis failed. Please, consult 'Std error' and 'Std output' for more information.

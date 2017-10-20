@@ -1,0 +1,16 @@
+- std_err = @analysis.std_err.try(:file)
+
+- if std_err && std_err.size > 0
+  .std-err
+    .actions
+      = link_to "Download", std_err.url, target: "_blank", class: 'btn btn-default'
+
+    - if std_err.size > 50.kilobytes
+      .alert.alert-info
+        Showing first 50 KiB of #{std_err.size / 1.kilobyte} KiB.
+
+    %pre= read_file(std_err.path, limit: 50.kilobytes)
+
+- else
+  .alert.alert-info Standard error empty
+

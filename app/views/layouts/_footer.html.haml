@@ -43,6 +43,8 @@
             = link_to t('menu.api'), navbar_menu[:api]
           %li
             = link_to t('menu.about'), navbar_menu[:about]
+          %li
+            = link_to t('menu.about_bip'), navbar_menu[:about_bip]
           - if user_signed_in?
             %li
               = link_to 'Submissions', submissions_path

@@ -28,8 +28,10 @@
 #
 #= require_directory ./lib
 #= require ./components/submission
-#= require ./components/plant_population_submission
-#= require ./components/plant_trial_submission
+#= require_directory ./components
+#= require data_grid_common_columns
+#= require data_grid_specific_columns
+#= require data_grid
 #= require_directory .
 
 $ ->

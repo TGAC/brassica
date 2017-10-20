@@ -1,0 +1,110 @@
+.new-analysis-big-btn {
+  @extend .btn, .btn-primary, .btn-lg;
+  margin-top: 2em;
+}
+
+.analyses {
+  @extend .list-group;
+  margin-top: 1em;
+
+  > li {
+    @extend .list-group-item;
+
+    .main-info {
+      display: inline-block;
+      width: 59%;
+      vertical-align: top;
+    }
+    .details {
+      font-size: small;
+      margin-top: 4px;
+    }
+    .status {
+      display: inline-block;
+      width: 19%;
+      text-align: left;
+    }
+    .actions {
+      float: right;
+      width: 19%;
+      margin-top: 6px;
+      text-align: right;
+    }
+  }
+}
+
+.new-gwas-analysis {
+  .form-group {
+    margin-bottom: 2em;
+
+    .file-format:before {
+      content: "(";
+    }
+
+    .file-format:after {
+      content: ")";
+    }
+  }
+
+  .form-group + hr {
+    margin-top: -1em;
+  }
+
+  .nav-tabs {
+    margin-bottom: 10px;
+  }
+}
+
+.show-analysis {
+  ul.analysis-nav {
+    margin-bottom: 0;
+  }
+
+  .loading {
+    text-align: center;
+    color: $text-color;
+    margin: 2em 0;
+  }
+
+  .std-out, .std-err {
+    .actions {
+      @extend .clearfix;
+
+      margin-bottom: 1em;
+
+      a {
+        display: block;
+        float: right;
+      }
+    }
+
+    pre {
+      clear: both;
+      display: block;
+    }
+  }
+
+  .table-footer {
+    top: 0;
+  }
+}
+
+.analysis-status {
+  @extend .label;
+}
+
+.analysis-status-idle {
+  @extend .label-default;
+}
+
+.analysis-status-success {
+  @extend .label-success;
+}
+
+.analysis-status-failure {
+  @extend .label-danger;
+}
+
+.analysis-status-running {
+  @extend .label-info;
+}

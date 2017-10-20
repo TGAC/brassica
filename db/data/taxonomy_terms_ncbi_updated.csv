@@ -1,0 +1,189 @@
+ID,LABEL,New_Label,ncbi_taxon,NAME,TAXONOMY_TERM_ID,CREATED_AT,UPDATE_AT,CANONICAL
+1,GR_tax:078967,GR_tax:078967,NCBI_taxid:3705,Brassica,,35:32.6,35:32.6,TRUE
+2,GR_tax:078968,GR_tax:078968,NCBI_taxid:87089,Brassica balearica,1,35:32.7,35:32.7,TRUE
+3,GR_tax:078969,GR_tax:078969,NCBI_taxid:180530,Brassica barrelieri,1,35:32.7,35:32.7,TRUE
+4,GR_tax:078970,GR_tax:078970,NCBI_taxid:52824,Brassica carinata,1,35:32.7,35:32.7,TRUE
+5,GR_tax:078971,GR_tax:078971,NCBI_taxid:69181,Brassica cretica,1,35:32.8,35:32.8,TRUE
+6,GR_tax:078972,GR_tax:078972,NCBI_taxid:180531,Brassica deflexa,1,35:32.8,35:32.8,TRUE
+7,GR_tax:078973,GR_tax:078973,NCBI_taxid:308263,Brassica elongata,1,35:32.8,35:32.8,TRUE
+8,GR_tax:078974,GR_tax:078974,NCBI_taxid:308264,Brassica fruticulosa,1,35:32.8,35:32.8,TRUE
+9,GR_tax:078975,GR_tax:078975,NCBI_taxid:308265,Brassica gravinae,1,35:32.9,35:32.9,TRUE
+10,GR_tax:078976,GR_tax:078976,NCBI_taxid:69182,Brassica hilarionis,1,35:32.9,35:32.9,TRUE
+11,GR_tax:078977,GR_tax:078977,NCBI_taxid:129365,Brassica incana,1,35:32.9,35:32.9,TRUE
+12,GR_tax:078978,GR_tax:078978,NCBI_taxid:69183,Brassica insularis,1,35:32.9,35:32.9,TRUE
+13,GR_tax:078979,GR_tax:078979,NCBI_taxid:109998,Brassica insularis subsp. insularis,12,35:32.9,35:32.9,TRUE
+14,GR_tax:078980,GR_tax:078980,NCBI_taxid:3707,Brassica juncea,1,35:33.0,35:33.0,TRUE
+15,GR_tax:078981,GR_tax:078981,NCBI_taxid:366463,Brassica juncea var. crassicaulis,14,35:33.0,35:33.0,TRUE
+16,GR_tax:078982,GR_tax:078982,NCBI_taxid:366468,Brassica juncea var. gracilis,14,35:33.0,35:33.0,TRUE
+17,GR_tax:078983,GR_tax:078983,NCBI_taxid:366462,Brassica juncea var. megarrhiza,14,35:33.0,35:33.0,TRUE
+18,GR_tax:078984,GR_tax:078984,NCBI_taxid:323353,Brassica juncea var. multiceps,14,35:33.0,35:33.0,TRUE
+19,GR_tax:078985,GR_tax:078985,NCBI_taxid:366466,Brassica juncea var. multisecta,14,35:33.1,35:33.1,TRUE
+20,GR_tax:078986,GR_tax:078986,NCBI_taxid:366465,Brassica juncea var. rugosa,14,35:33.1,35:33.1,TRUE
+21,GR_tax:078987,GR_tax:078987,NCBI_taxid:366464,Brassica juncea var. strumata,14,35:33.1,35:33.1,TRUE
+22,GR_tax:078988,GR_tax:078988,NCBI_taxid:323352,Brassica juncea var. tumida,14,35:33.1,35:33.1,TRUE
+23,GR_tax:078989,GR_tax:078989,NCBI_taxid:366467,Brassica juncea var. utilis,14,35:33.2,35:33.2,TRUE
+24,GR_tax:078990,GR_tax:078990,NCBI_taxid:69184,Brassica macrocarpa,1,35:33.2,35:33.2,TRUE
+25,GR_tax:078991,GR_tax:078991,NCBI_taxid:180533,Brassica maurorum,1,35:33.3,35:33.3,TRUE
+26,GR_tax:078992,GR_tax:078992,NCBI_taxid:69185,Brassica montana,1,35:33.3,35:33.3,TRUE
+27,GR_tax:078993,GR_tax:078993,NCBI_taxid:3708,Brassica napus,1,35:33.3,35:33.3,TRUE
+28,GR_tax:078994,GR_tax:078994,NCBI_taxid:3709,Brassica napus var. napobrassica,27,35:33.3,35:33.3,TRUE
+29,GR_tax:078995,GR_tax:078995,NCBI_taxid:138011,Brassica napus var. napus,27,35:33.3,35:33.3,TRUE
+30,GR_tax:078996,GR_tax:078996,NCBI_taxid:3710,Brassica nigra,1,35:33.3,35:33.3,TRUE
+31,GR_tax:078997,GR_tax:078997,NCBI_taxid:492283,Brassica nigra var. abyssinica,30,35:33.4,35:33.4,TRUE
+32,GR_tax:078998,GR_tax:078998,NCBI_taxid:3712,Brassica oleracea,1,35:33.4,35:33.4,TRUE
+33,CROPSTORE,GR_tax:078999,NCBI_taxid:3713,Brassica oleracea var. acephala,32,35:33.4,35:35.7,FALSE
+34,GR_tax:079000,GR_tax:079000,NCBI_taxid:3714,Brassica oleracea var. alboglabra,32,35:33.4,35:33.4,TRUE
+35,GR_tax:079001,GR_tax:079001,NCBI_taxid:3715,Brassica oleracea var. botrytis,32,35:33.4,35:33.4,TRUE
+36,CROPSTORE,GR_tax:079002,NCBI_taxid:3716,Brassica oleracea var. capitata,32,35:33.4,35:36.0,FALSE
+37,GR_tax:079003,GR_tax:079003,NCBI_taxid:416546,Brassica oleracea var. costata,32,35:33.5,35:33.5,TRUE
+38,GR_tax:079004,GR_tax:079004,NCBI_taxid:178616,Brassica oleracea var. gemmifera,32,35:33.5,35:33.5,TRUE
+39,GR_tax:079005,GR_tax:079005,NCBI_taxid:109379,Brassica oleracea var. gongylodes,32,35:33.5,35:33.5,TRUE
+40,GR_tax:079006,GR_tax:079006,NCBI_taxid:36774,Brassica oleracea var. italica,32,35:33.5,35:33.5,TRUE
+41,GR_tax:079007,GR_tax:079007,NCBI_taxid:178615,Brassica oleracea var. medullosa,32,35:33.5,35:33.5,TRUE
+42,GR_tax:079008,GR_tax:079008,NCBI_taxid:109376,Brassica oleracea var. oleracea,32,35:33.5,35:33.5,TRUE
+43,GR_tax:079009,GR_tax:079009,NCBI_taxid:178614,Brassica oleracea var. ramosa,32,35:33.6,35:33.6,TRUE
+44,CROPSTORE,GR_tax:079010,NCBI_taxid:308439,Brassica oleracea var. viridis,32,35:33.6,35:35.9,FALSE
+45,GR_tax:079011,GR_tax:079011,NCBI_taxid:442485,Brassica oleracea x Brassica rapa subsp. pekinensis,1,35:33.6,35:33.6,TRUE
+46,GR_tax:079012,GR_tax:079012,NCBI_taxid:180534,Brassica oxyrrhina,1,35:33.6,35:33.6,TRUE
+47,GR_tax:079013,GR_tax:079013,NCBI_taxid:308266,Brassica procumbens,1,35:33.6,35:33.6,TRUE
+48,GR_tax:079014,GR_tax:079014,NCBI_taxid:3711,Brassica rapa,1,35:33.7,35:33.7,TRUE
+49,GR_tax:079015,GR_tax:079015,NCBI_taxid:439823,Brassica rapa subsp. campestris,48,35:33.7,35:33.7,TRUE
+50,CROPSTORE,GR_tax:079016,NCBI_taxid:93385,Brassica rapa subsp. chinensis,48,35:33.7,35:36.3,FALSE
+51,GR_tax:079017,GR_tax:079017,NCBI_taxid:320797,Brassica rapa var. parachinensis,48,35:33.7,35:33.7,TRUE
+52,GR_tax:079018,GR_tax:079018,NCBI_taxid:386281,Brassica rapa var. purpuraria,48,35:33.8,35:33.8,TRUE
+53,GR_tax:079019,GR_tax:079019,NCBI_taxid:267281,Brassica rapa subsp. narinosa,48,35:33.8,35:33.8,TRUE
+54,GR_tax:079020,GR_tax:079020,NCBI_taxid:333344,Brassica rapa subsp. nipposinica,48,35:33.8,35:33.8,TRUE
+55,GR_tax:079021,GR_tax:079021,NCBI_taxid:344680,Brassica rapa var. perviridis,48,35:33.8,35:33.8,TRUE
+56,CROPSTORE,GR_tax:079022,NCBI_taxid:145471,Brassica rapa subsp. oleifera,48,35:33.8,35:36.3,FALSE
+57,CROPSTORE,GR_tax:079023,NCBI_taxid:51351,Brassica rapa subsp. pekinensis,48,35:33.9,35:36.4,FALSE
+58,GR_tax:079024,GR_tax:079024,NCBI_taxid:51350,Brassica rapa subsp. rapa,48,35:33.9,35:33.9,TRUE
+59,GR_tax:079025,GR_tax:079025,NCBI_taxid:308267,Brassica repanda,1,35:33.9,35:33.9,TRUE
+60,GR_tax:079026,GR_tax:079026,NCBI_taxid:69186,Brassica rupestris,1,35:33.9,35:33.9,TRUE
+61,GR_tax:079027,GR_tax:079027,NCBI_taxid:361226,Brassica souliei,1,35:33.9,35:33.9,TRUE
+62,GR_tax:079028,GR_tax:079028,NCBI_taxid:180529,Brassica souliei subsp. amplexicaulis,61,35:33.9,35:33.9,TRUE
+63,GR_tax:079029,GR_tax:079029,NCBI_taxid:261533,Brassica spinescens,1,35:34.0,35:34.0,TRUE
+64,GR_tax:079030,GR_tax:079030,NCBI_taxid:37661,Brassica tournefortii,1,35:34.0,35:34.0,TRUE
+65,GR_tax:079031,GR_tax:079031,NCBI_taxid:69187,Brassica villosa,1,35:34.0,35:34.0,TRUE
+66,GR_tax:079032,GR_tax:079032,NCBI_taxid:264905,Brassica villosa subsp. bivoniana,65,35:34.0,35:34.0,TRUE
+67,GR_tax:079033,GR_tax:079033,NCBI_taxid:264906,Brassica villosa subsp. drepanensis,65,35:34.1,35:34.1,TRUE
+68,GR_tax:079034,GR_tax:079034,NCBI_taxid:3717,Brassica sp.,1,35:34.1,35:34.1,TRUE
+69,CROPSTORE,-,,X_Brassicoraphanus,,35:34.1,35:34.1,FALSE
+70,CROPSTORE,GR_tax:079000,NCBI_taxid:3714,Brassica alboglabra,1,35:34.1,35:34.1,FALSE
+71,CROPSTORE,GR_tax:078978,NCBI_taxid:69183,Brassica atlantica,1,35:34.2,35:34.2,FALSE
+72,CROPSTORE,GR_tax:079032,NCBI_taxid:264905,Brassica bivoniana,1,35:34.2,35:34.2,FALSE
+73,CROPSTORE,-,NCBI_taxid:1520936,Brassica bourgeaui,1,35:34.2,35:34.2,FALSE
+74,CROPSTORE,-,NCBI_taxid:660053,Brassica desnottesii,1,35:34.2,35:34.2,FALSE
+75,CROPSTORE,GR_tax:079033,NCBI_taxid:264906,Brassica drepanensis,1,35:34.3,35:34.3,FALSE
+76,CROPSTORE,-,,Brassica nivalis,1,35:34.3,35:34.3,FALSE
+77,CROPSTORE,GR_tax:079021,NCBI_taxid:344680,Brassica perviridis,1,35:34.3,35:34.3,FALSE
+78,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea?,1,35:34.3,35:34.3,FALSE
+79,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus?,1,35:34.4,35:34.4,FALSE
+80,CROPSTORE,GR_tax:078996,NCBI_taxid:3710,Brassica nigra?,1,35:34.4,35:34.4,FALSE
+81,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa?,1,35:34.4,35:34.4,FALSE
+82,CROPSTORE,-,NCBI_taxid:913332,Brassica rapa and napus,1,35:34.4,35:34.4,FALSE
+83,CROPSTORE,GR_tax:078969,NCBI_taxid:180530,Brassica barrelieri sabularia,3,35:34.5,35:34.5,FALSE
+84,CROPSTORE,GR_tax:078971,NCBI_taxid:69181,Brassica cretica aegaea,5,35:34.5,35:34.5,FALSE
+85,CROPSTORE,GR_tax:078971,NCBI_taxid:69181,Brassica cretica cretica,5,35:34.5,35:34.5,FALSE
+86,CROPSTORE,GR_tax:078971,NCBI_taxid:69181,Brassica cretica laconica,5,35:34.6,35:34.6,FALSE
+87,CROPSTORE,GR_tax:078972,NCBI_taxid:180531,Brassica deflexa leptocarpa,6,35:34.6,35:34.6,FALSE
+88,CROPSTORE,GR_tax:078973,NCBI_taxid:308263,Brassica elongata elongata,7,35:34.7,35:34.7,FALSE
+89,CROPSTORE,GR_tax:078973,NCBI_taxid:308263,Brassica elongata integrifolia,7,35:34.7,35:34.7,FALSE
+90,CROPSTORE,GR_tax:078973,NCBI_taxid:308263,Brassica elongata subscaposa,7,35:34.7,35:34.7,FALSE
+91,CROPSTORE,GR_tax:078974,NCBI_taxid:308264,Brassica fruticulosa djafarensis,8,35:34.7,35:34.7,FALSE
+92,CROPSTORE,GR_tax:078974,NCBI_taxid:308264,Brassica fruticulosa fruticolosa,8,35:34.8,35:34.8,FALSE
+93,CROPSTORE,GR_tax:078974,NCBI_taxid:308264,Brassica fruticulosa fruticulosa,8,35:34.8,35:34.8,FALSE
+94,CROPSTORE,GR_tax:078974,NCBI_taxid:308264,Brassica fruticulosa glaberrima,8,35:34.8,35:34.8,FALSE
+95,CROPSTORE,GR_tax:078974,NCBI_taxid:308264,Brassica fruticulosa pomeliana,8,35:34.9,35:34.9,FALSE
+96,CROPSTORE,GR_tax:078974,NCBI_taxid:308264,Brassica fruticulosa radicata,8,35:34.9,35:34.9,FALSE
+97,CROPSTORE,GR_tax:078975,NCBI_taxid:308265,Brassica gravinae brachyloma,9,35:34.9,35:34.9,FALSE
+98,CROPSTORE,GR_tax:078975,NCBI_taxid:308265,Brassica gravinae djurdjurae,9,35:34.9,35:34.9,FALSE
+99,CROPSTORE,GR_tax:078977,NCBI_taxid:129365,Brassica incana incana,11,35:34.9,35:34.9,FALSE
+100,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea carinata,14,35:35.0,35:35.0,FALSE
+101,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea cereptana,14,35:35.0,35:35.0,FALSE
+102,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea cernua,14,35:35.0,35:35.0,FALSE
+103,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea crispifolia,14,35:35.0,35:35.0,FALSE
+104,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea folisa,14,35:35.1,35:35.1,FALSE
+105,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea integlifolia,14,35:35.1,35:35.1,FALSE
+106,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea integrifolia,14,35:35.1,35:35.1,FALSE
+107,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea japonica,14,35:35.1,35:35.1,FALSE
+108,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea juncea,14,35:35.2,35:35.2,FALSE
+109,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea laevigata,14,35:35.2,35:35.2,FALSE
+110,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea mangolica,14,35:35.2,35:35.2,FALSE
+111,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea melanosperma,14,35:35.2,35:35.2,FALSE
+112,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea mongolica,14,35:35.3,35:35.3,FALSE
+113,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea napiformis,14,35:35.3,35:35.3,FALSE
+114,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea sareptana,14,35:35.3,35:35.3,FALSE
+115,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea suberispifolia,14,35:35.3,35:35.3,FALSE
+116,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea subintegrifolia,14,35:35.4,35:35.4,FALSE
+117,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea subsareptana,14,35:35.4,35:35.4,FALSE
+118,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea tsatsai,14,35:35.4,35:35.4,FALSE
+119,CROPSTORE,GR_tax:078990,NCBI_taxid:69184,Brassica macrocarpa macrocarpa,24,35:35.4,35:35.4,FALSE
+120,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus biennis,27,35:35.5,35:35.5,FALSE
+121,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus oleifera,27,35:35.5,35:35.5,FALSE
+122,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus pabularia,27,35:35.5,35:35.5,FALSE
+123,CROPSTORE,GR_tax:078996,NCBI_taxid:3710,Brassica nigra dissecta,30,35:35.5,35:35.5,FALSE
+124,CROPSTORE,GR_tax:078996,NCBI_taxid:3710,Brassica nigra nigra,30,35:35.6,35:35.6,FALSE
+125,CROPSTORE,GR_tax:078996,NCBI_taxid:3710,Brassica nigra orientales,30,35:35.6,35:35.6,FALSE
+126,CROPSTORE,GR_tax:078996,NCBI_taxid:3710,Brassica nigra pseudocampestris,30,35:35.6,35:35.6,FALSE
+127,CROPSTORE,GR_tax:078996,NCBI_taxid:3710,Brassica nigra rigida,30,35:35.6,35:35.6,FALSE
+128,CROPSTORE,GR_tax:078999,NCBI_taxid:3713,Brassica oleracea acephala?,32,35:35.9,35:35.9,FALSE
+129,CROPSTORE,GR_tax:078998,NCBI_taxid:3712,Brassica oleracea africana,32,35:36.0,35:36.0,FALSE
+130,CROPSTORE,GR_tax:079002,NCBI_taxid:3716,Brassica oleracea capitata?,32,35:36.0,35:36.0,FALSE
+131,CROPSTORE,GR_tax:079004,NCBI_taxid:178616,Brassica oleracea gemnifera,32,35:36.1,35:36.1,FALSE
+132,CROPSTORE,GR_tax:078998,NCBI_taxid:3712,Brassica oleracea sabauda,32,35:36.1,35:36.1,FALSE
+133,CROPSTORE,GR_tax:078998,NCBI_taxid:3712,Brassica oleracea sabellica,32,35:36.1,35:36.1,FALSE
+134,CROPSTORE,GR_tax:078998,NCBI_taxid:3712,Brassica oleracea tronchuda,32,35:36.1,35:36.1,FALSE
+135,CROPSTORE,GR_tax:078998,NCBI_taxid:3712,Brassica oleracea tronchuda?,32,35:36.2,35:36.2,FALSE
+136,CROPSTORE,GR_tax:079000,NCBI_taxid:3714,Brassica oleracea alboglabra?,32,35:36.2,35:36.2,FALSE
+137,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa Broccoletto Gp,48,35:36.2,35:36.2,FALSE
+138,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa Neep Greens Gp,48,35:36.2,35:36.2,FALSE
+139,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa Pak Choi Group,48,35:36.3,35:36.3,FALSE
+140,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa dichotoma,48,35:36.3,35:36.3,FALSE
+141,CROPSTORE,GR_tax:079018,NCBI_taxid:386281,Brassica rapa purpurea,48,35:36.4,35:36.4,FALSE
+142,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa ruvo,48,35:36.4,35:36.4,FALSE
+143,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa sylvestris,48,35:36.5,35:36.5,FALSE
+144,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa trilocularis,48,35:36.5,35:36.5,FALSE
+145,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa napobrassica,48,35:36.5,35:36.5,FALSE
+146,CROPSTORE,GR_tax:079014,NCBI_taxid:3711,Brassica rapa? rapa?,81,35:36.5,35:36.5,FALSE
+147,CROPSTORE,GR_tax:079025,NCBI_taxid:308267,Brassica repanda almeriensis,59,35:36.6,35:36.6,FALSE
+148,CROPSTORE,GR_tax:079025,NCBI_taxid:308267,Brassica repanda blancoana,59,35:36.6,35:36.6,FALSE
+149,CROPSTORE,GR_tax:079025,NCBI_taxid:308267,Brassica repanda cadevallii,59,35:36.6,35:36.6,FALSE
+150,CROPSTORE,GR_tax:079025,NCBI_taxid:308267,Brassica repanda cantabrica,59,35:36.6,35:36.6,FALSE
+151,CROPSTORE,GR_tax:079025,NCBI_taxid:308267,Brassica repanda confusa,59,35:36.7,35:36.7,FALSE
+152,CROPSTORE,GR_tax:079025,NCBI_taxid:308267,Brassica repanda maritima,59,35:36.7,35:36.7,FALSE
+153,CROPSTORE,GR_tax:079025,NCBI_taxid:308267,Brassica repanda nudicaulis,59,35:36.7,35:36.7,FALSE
+154,CROPSTORE,GR_tax:079026,NCBI_taxid:69186,Brassica rupestris glaucescens,60,35:36.7,35:36.7,FALSE
+155,CROPSTORE,GR_tax:079026,NCBI_taxid:69186,Brassica rupestris hispida,60,35:36.8,35:36.8,FALSE
+156,CROPSTORE,GR_tax:079027,NCBI_taxid:361226,Brassica souliei dimorpha,61,35:36.8,35:36.8,FALSE
+157,CROPSTORE,GR_tax:079029,NCBI_taxid:261533,Brassica spinescens spinescens,63,35:36.8,35:36.8,FALSE
+158,CROPSTORE,GR_tax:079031,NCBI_taxid:69187,Brassica villosa tinei,65,35:36.8,35:36.8,FALSE
+159,CROPSTORE,GR_tax:079031,NCBI_taxid:69187,Brassica villosa villosa,65,35:36.9,35:36.9,FALSE
+160,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea integrifolia crispifolia,106,35:36.9,35:36.9,FALSE
+161,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea integrifolia integrifolia,106,35:36.9,35:36.9,FALSE
+162,CROPSTORE,GR_tax:078980,NCBI_taxid:3707,Brassica juncea integrifolia rugosa,106,35:36.9,35:36.9,FALSE
+163,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus var. napus annua,29,35:37.0,35:37.0,FALSE
+164,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus var. napus biennis,29,35:37.0,35:37.0,FALSE
+165,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus var. napus pabularia,29,35:37.0,35:37.0,FALSE
+166,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus oleifera annua,121,35:37.0,35:37.0,FALSE
+167,CROPSTORE,GR_tax:078993,NCBI_taxid:3708,Brassica napus oleifera biennis,121,35:37.0,35:37.0,FALSE
+168,CROPSTORE,GR_tax:078999,NCBI_taxid:3713,Brassica oleracea var. acephala medullosa,33,35:37.1,35:37.1,FALSE
+169,CROPSTORE,GR_tax:078999,NCBI_taxid:3713,Brassica oleracea var. acephala palmifolia,33,35:37.1,35:37.1,FALSE
+170,CROPSTORE,GR_tax:078999,NCBI_taxid:3713,Brassica oleracea var. acephala ramosa,33,35:37.1,35:37.1,FALSE
+171,CROPSTORE,GR_tax:078999,NCBI_taxid:3713,Brassica oleracea var. acephala sabellica,33,35:37.1,35:37.1,FALSE
+172,CROPSTORE,GR_tax:078999,NCBI_taxid:3713,Brassica oleracea var. acephala viridis,33,35:37.2,35:37.2,FALSE
+173,CROPSTORE,GR_tax:079001,NCBI_taxid:3715,Brassica oleracea var. botrytis botrytis,35,35:37.2,35:37.2,FALSE
+174,CROPSTORE,GR_tax:079001,NCBI_taxid:3715,Brassica oleracea var. botrytis italica,35,35:37.2,35:37.2,FALSE
+175,CROPSTORE,GR_tax:079002,NCBI_taxid:3716,Brassica oleracea var. capitata rubra,36,35:37.2,35:37.2,FALSE
+176,CROPSTORE,GR_tax:079002,NCBI_taxid:3716,Brassica oleracea var. capitata sabauda,36,35:37.2,35:37.2,FALSE
+177,CROPSTORE,GR_tax:079002,NCBI_taxid:3716,Brassica oleracea var. capitata alba,36,35:37.3,35:37.3,FALSE
+178,CROPSTORE,GR_tax:079016,NCBI_taxid:93385,Brassica rapa subsp. chinensis communis,50,35:37.3,35:37.3,FALSE
+179,CROPSTORE,GR_tax:079017,NCBI_taxid:320797,Brassica rapa subsp. chinensis parachinensis,50,35:37.3,35:37.3,FALSE
+180,CROPSTORE,GR_tax:079018,NCBI_taxid:386281,Brassica rapa subsp. chinensis purpuraria,50,35:37.3,35:37.3,FALSE
+181,CROPSTORE,GR_tax:079016,NCBI_taxid:93385,Brassica rapa subsp. chinensis rosularis,50,35:37.4,35:37.4,FALSE
+182,CROPSTORE,GR_tax:079022,NCBI_taxid:145471,Brassica rapa subsp. oleifera annua,56,35:37.4,35:37.4,FALSE
+183,CROPSTORE,GR_tax:079022,NCBI_taxid:145471,Brassica rapa subsp. oleifera biennis,56,35:37.4,35:37.4,FALSE
+184,CROPSTORE,GR_tax:079022,NCBI_taxid:145471,Brassica rapa subsp. oleifera sylvestris,56,35:37.4,35:37.4,FALSE
+185,CROPSTORE,GR_tax:079023,NCBI_taxid:51351,Brassica rapa subsp. pekinensis glabra,57,35:37.5,35:37.5,FALSE
+186,CROPSTORE,GR_tax:079023,NCBI_taxid:51351,Brassica rapa subsp. pekinensis laxa,57,35:37.5,35:37.5,FALSE
+187,CROPSTORE,GR_tax:079023,NCBI_taxid:51351,Brassica rapa subsp. pekinensis pekinensis,57,35:37.5,35:37.5,FALSE
+188,CROPSTORE,GR_tax:079023,NCBI_taxid:51351,Brassica rapa subsp. pekinensis pandurata,57,35:37.5,35:37.5,FALSE
