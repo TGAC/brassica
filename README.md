@@ -27,10 +27,11 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 
 ## Dependencies
 
+* Ruby >= 2.0  
 * MRI 2.2.x
 * PostgreSQL
 * Elasticsearch 1.4.3, Java 7
-* R 3.2.2 or better
+* R >= 3.2.2
 * [GWASSER](https://github.com/kammerer/GWASSER) (forked from [cyverseuk/GWASSER](https://github.com/cyverseuk/GWASSER))
 
 
@@ -53,8 +54,11 @@ is quick and easy).
 
 
 ## Installation
+To start installation clone brassica repository:
 
-Install required gems:
+    git clone  https://github.com/TGAC/brassica.git
+
+Navigate to source code location and install required gems:
 
     bundle
 
