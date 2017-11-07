@@ -9,8 +9,7 @@ Marker sequences are currently cross-referenced with resources such as [Genebank
 
 It is a Rails web application is released as a free and open source project (see the LICENSE.txt file). The underlying database schema is derived from the CropStoreDB schema ver.7, with the original version developed by <a href="mailto:Graham.King@scu.edu.au">Graham King</a> and Pierre Carion at [Rothamsted Research](https://www.rothamsted.ac.uk/).
 
-While not required under the LICENSE, Earlham Institute kindly asks any party that wishes to deploy a copy (modified or not) of BIP on their own servers, to contact us at
-<a href="mailto:bip@earlham.ac.uk">bip@earlham.ac.uk</a>. According to the LICENSE, contacting us is not a legally binding requirement, but it aims to help measure the software impact and stay in contact with users for continuous software improvement. If you are interested in contributing to the project, for example by adding any analytics tools, please contact us, too. We are looking forward any feedback!
+BIP is a community project, we kindly welcome any contributions to improve existing and add new functionalities. If you wish to deploy a copy of BIP (for Brassica or any other crop) on your own servers, don’t hesitate to contact us <a href="mailto:bip@earlham.ac.uk">bip@earlham.ac.uk</a> in case you need our assistance. Contacting us also helps measuring the software impact and planning future developments.  If you are interested in contributing to the project, for example by adding any analytics tools, please contact us, too. We are looking forward any feedback!
 For further contact information on people behind the project or the database itself, please see the [about us](https://bip.earlham.ac.uk/about) section.
 
 Also, follow the BIP on twitter to get the latest updates [@BrassicaP](https://twitter.com/BrassicaP).
@@ -20,6 +19,8 @@ If you are interested in learning how to submit data to the portal, training mat
 Currently, the web application is still under development and also changes to the database schema are possible. Despite these ongoing developments, navigation, data submissions and -download from the EI-hosted BIP version via the web-interface and the API should be possible.
 
 ## Cite
+Eckes AH, Gubała T, Nowakowski P et al. Introducing the Brassica Information Portal: Towards integrating genotypic and phenotypic Brassica crop data [version 1; referees: awaiting peer review]. F1000Research 2017, 6:465 (doi: 10.12688/f1000research.11301.1) 
+
 Tomasz Gubała, Tomasz Szymczyszyn, Piotr Nowakowski, Bogdan Chucherko, Annemarie H. Eckes, Sarah C. Dyer, & Wiktor Jurkowski. (2017). TGAC/brassica: v1.0.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.466050
 https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 
