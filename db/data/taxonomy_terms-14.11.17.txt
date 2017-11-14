@@ -1,0 +1,188 @@
+Brassica
+Brassica alboglabra
+Brassica atlantica
+Brassica balearica
+Brassica barrelieri
+Brassica barrelieri sabularia
+Brassica bivoniana
+Brassica bourgeaui
+Brassica carinata
+Brassica cretica
+Brassica cretica aegaea
+Brassica cretica cretica
+Brassica cretica laconica
+Brassica deflexa
+Brassica deflexa leptocarpa
+Brassica desnottesii
+Brassica drepanensis
+Brassica elongata
+Brassica elongata elongata
+Brassica elongata integrifolia
+Brassica elongata subscaposa
+Brassica fruticulosa
+Brassica fruticulosa djafarensis
+Brassica fruticulosa fruticolosa
+Brassica fruticulosa fruticulosa
+Brassica fruticulosa glaberrima
+Brassica fruticulosa pomeliana
+Brassica fruticulosa radicata
+Brassica gravinae
+Brassica gravinae brachyloma
+Brassica gravinae djurdjurae
+Brassica hilarionis
+Brassica incana
+Brassica incana incana
+Brassica insularis
+Brassica insularis subsp. insularis
+Brassica juncea
+Brassica juncea carinata
+Brassica juncea cereptana
+Brassica juncea cernua
+Brassica juncea crispifolia
+Brassica juncea folisa
+Brassica juncea integlifolia
+Brassica juncea integrifolia
+Brassica juncea integrifolia crispifolia
+Brassica juncea integrifolia integrifolia
+Brassica juncea integrifolia rugosa
+Brassica juncea japonica
+Brassica juncea juncea
+Brassica juncea laevigata
+Brassica juncea mangolica
+Brassica juncea melanosperma
+Brassica juncea mongolica
+Brassica juncea napiformis
+Brassica juncea sareptana
+Brassica juncea suberispifolia
+Brassica juncea subintegrifolia
+Brassica juncea subsareptana
+Brassica juncea tsatsai
+Brassica juncea var. crassicaulis
+Brassica juncea var. gracilis
+Brassica juncea var. megarrhiza
+Brassica juncea var. multiceps
+Brassica juncea var. multisecta
+Brassica juncea var. rugosa
+Brassica juncea var. strumata
+Brassica juncea var. tumida
+Brassica juncea var. utilis
+Brassica juncea?
+Brassica macrocarpa
+Brassica macrocarpa macrocarpa
+Brassica maurorum
+Brassica montana
+Brassica napus
+Brassica napus biennis
+Brassica napus oleifera
+Brassica napus oleifera annua
+Brassica napus oleifera biennis
+Brassica napus pabularia
+Brassica napus var. napobrassica
+Brassica napus var. napus
+Brassica napus var. napus annua
+Brassica napus var. napus biennis
+Brassica napus var. napus pabularia
+Brassica napus?
+Brassica nigra
+Brassica nigra dissecta
+Brassica nigra nigra
+Brassica nigra orientales
+Brassica nigra pseudocampestris
+Brassica nigra rigida
+Brassica nigra var. abyssinica
+Brassica nigra?
+Brassica nivalis
+Brassica oleracea
+Brassica oleracea acephala?
+Brassica oleracea africana
+Brassica oleracea alboglabra?
+Brassica oleracea capitata?
+Brassica oleracea gemnifera
+Brassica oleracea sabauda
+Brassica oleracea sabellica
+Brassica oleracea tronchuda
+Brassica oleracea tronchuda?
+Brassica oleracea var. acephala
+Brassica oleracea var. acephala medullosa
+Brassica oleracea var. acephala palmifolia
+Brassica oleracea var. acephala ramosa
+Brassica oleracea var. acephala sabellica
+Brassica oleracea var. acephala viridis
+Brassica oleracea var. alboglabra
+Brassica oleracea var. botrytis
+Brassica oleracea var. botrytis botrytis
+Brassica oleracea var. botrytis italica
+Brassica oleracea var. capitata
+Brassica oleracea var. capitata alba
+Brassica oleracea var. capitata rubra
+Brassica oleracea var. capitata sabauda
+Brassica oleracea var. costata
+Brassica oleracea var. gemmifera
+Brassica oleracea var. gongylodes
+Brassica oleracea var. italica
+Brassica oleracea var. medullosa
+Brassica oleracea var. oleracea
+Brassica oleracea var. ramosa
+Brassica oleracea var. viridis
+Brassica oleracea x Brassica rapa subsp. pekinensis
+Brassica oxyrrhina
+Brassica perviridis
+Brassica procumbens
+Brassica rapa
+Brassica rapa Broccoletto Gp
+Brassica rapa Neep Greens Gp
+Brassica rapa Pak Choi Group
+Brassica rapa and napus
+Brassica rapa dichotoma
+Brassica rapa napobrassica
+Brassica rapa purpurea
+Brassica rapa ruvo
+Brassica rapa subsp. campestris
+Brassica rapa subsp. chinensis
+Brassica rapa subsp. chinensis communis
+Brassica rapa subsp. chinensis parachinensis
+Brassica rapa subsp. chinensis purpuraria
+Brassica rapa subsp. chinensis rosularis
+Brassica rapa subsp. narinosa
+Brassica rapa subsp. nipposinica
+Brassica rapa subsp. oleifera
+Brassica rapa subsp. oleifera annua
+Brassica rapa subsp. oleifera biennis
+Brassica rapa subsp. oleifera sylvestris
+Brassica rapa subsp. pekinensis
+Brassica rapa subsp. pekinensis glabra
+Brassica rapa subsp. pekinensis laxa
+Brassica rapa subsp. pekinensis pandurata
+Brassica rapa subsp. pekinensis pekinensis
+Brassica rapa subsp. rapa
+Brassica rapa sylvestris
+Brassica rapa trilocularis
+Brassica rapa var. parachinensis
+Brassica rapa var. perviridis
+Brassica rapa var. purpuraria
+Brassica rapa?
+Brassica rapa? rapa?
+Brassica repanda
+Brassica repanda almeriensis
+Brassica repanda blancoana
+Brassica repanda cadevallii
+Brassica repanda cantabrica
+Brassica repanda confusa
+Brassica repanda maritima
+Brassica repanda nudicaulis
+Brassica rupestris
+Brassica rupestris glaucescens
+Brassica rupestris hispida
+Brassica souliei
+Brassica souliei dimorpha
+Brassica souliei subsp. amplexicaulis
+Brassica sp.
+Brassica spinescens
+Brassica spinescens spinescens
+Brassica tournefortii
+Brassica villosa
+Brassica villosa subsp. bivoniana
+Brassica villosa subsp. drepanensis
+Brassica villosa tinei
+Brassica villosa villosa
+X_Brassicoraphanus"
