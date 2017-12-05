@@ -26,7 +26,11 @@
             = t("submission.submission_type.#{s_type}")
 
           %p
-            = t("submission.description.#{s_type}")
+            - if s_type == "population"
+              != t("submission.description.#{s_type}", plant_lines_template_url: '/manuals/plant_lines_template.csv')
+            - else
+              = t("submission.description.#{s_type}")
+
             = t('submission.description.common', type: s_type).html_safe
 
           .row

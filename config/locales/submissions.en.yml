@@ -14,7 +14,7 @@ en:
         You can change this at the last step of the submission or any time after the submission. Once this is done, the
         data will be accessible for all users of the Portal.
         Submitted and published data falls under the <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0 license</a>,
-        to ensure maximal re-use potential and recognition of data generator or submitter, if not otherwise stated in the comments. 
+        to ensure maximal re-use potential and recognition of data generator or submitter, if not otherwise stated in the comments.
         Fill out the provenance section in detail so other users can accredit you properly.
         For more information, please visit the documentation pages.</br>
         For detailed instructions regarding the data uploading process
@@ -25,9 +25,9 @@ en:
         Brassica population. Apart from species information you may indicate
         the parent Brassica lines and the list of (possibly new) plant lines
         connected with this population.</br>
-        For your convenience use %b = link_to 'the template', '/manuals/plant_lines_template.csv'
+        For your convenience use <b><a href='%{plant_lines_template_url}'>the template</a></b>
         in a CSV format. Download it, leave the header (the first line) intact, and paste your data, in columns,
-        below the header. Please do not remove any columns even if you leave them empty. See template content and Step 3 for details.        
+        below the header. Please do not remove any columns even if you leave them empty. See template content and Step 3 for details.
       trial: |
         With Trail submission you are able to upload new trait scoring information to BIP.
         The process lets you describe trial conditions and environment, to indicate
