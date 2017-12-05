@@ -67,4 +67,27 @@ Rails.application.routes.draw do
       patch ":plural_model_name/:id/revoke", to: 'resources#revoke', constraints: publishable_constraints
     end
   end
+  
+  
+  # BRAPI V1
+  namespace :brapi, defaults: { format: 'json' } do
+    namespace :v1 do
+      
+      get "germplasm-search", to: 'germplasm#search'
+      post "studies-search", to: 'studies#search'
+      get "studies/:id", to: 'studies#show'
+      get "studies", to: 'studies#show'
+      get "studies/:studyDbId/germplasm", to: 'studies#germplasm'
+      post "phenotypes-search", to: 'phenotypes#search'
+          
+      # BRAPI V1 Swagger endpoint
+      resources :apidocs, only: [:index]
+          
+    end
+  end
+  
+  Rails.application.routes.draw do
+    mount SwaggerUiEngine::Engine, at: '/swagger-apidocs'
+  end
+  
 end

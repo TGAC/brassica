@@ -39,3 +39,4 @@ config/database.yml
 
 # Mac internal attributes file
 .DS_Store
+

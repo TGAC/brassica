@@ -375,6 +375,9 @@ GEM
       colorize (>= 0.7.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    swagger-blocks (2.0.0)
+    swagger_ui_engine (0.0.5)
+      rails
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
@@ -468,6 +471,8 @@ DEPENDENCIES
   simplecov
   spring
   squeel
+  swagger-blocks
+  swagger_ui_engine
   therubyracer
   thin
   typhoeus
@@ -478,3 +483,4 @@ DEPENDENCIES
 
 BUNDLED WITH
    1.13.7
+
