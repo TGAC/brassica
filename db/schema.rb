@@ -106,6 +106,43 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "design_factors", ["published"], name: "index_design_factors_on_published", using: :btree
   add_index "design_factors", ["user_id"], name: "index_design_factors_on_user_id", using: :btree
 
+  create_table "environments", force: :cascade do |t|
+    t.integer  "plant_trial_id",               null: false
+    t.float    "day_temperature"
+    t.float    "night_temperature"
+    t.float    "temperature_change"
+    t.float    "ppfd_canopy"
+    t.float    "ppfd_plant"
+    t.float    "light_period"
+    t.float    "light_intensity"
+    t.float    "light_intensity_range"
+    t.float    "outside_light"
+    t.float    "rfr_ratio"
+    t.float    "daily_uvb"
+    t.float    "total_light"
+    t.boolean  "co2_controlled"
+    t.float    "co2_light"
+    t.float    "co2_dark"
+    t.float    "relative_humidity_light"
+    t.float    "relative_humidity_dark"
+    t.float    "rooting_container_volume"
+    t.float    "rooting_container_height"
+    t.integer  "rooting_count"
+    t.float    "sowing_density"
+    t.float    "soil_porosity"
+    t.float    "soil_penetration"
+    t.float    "soil_organic_matter"
+    t.float    "medium_temperature"
+    t.float    "water_retention"
+    t.float    "nitrogen_concentration_start"
+    t.float    "nitrogen_concentration_end"
+    t.float    "conductivity"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "environments", ["plant_trial_id"], name: "index_environments_on_plant_trial_id", using: :btree
+
   create_table "genotype_matrices", force: :cascade do |t|
     t.text     "matrix_compiled_by",       null: false
     t.text     "original_file_name",       null: false
@@ -903,6 +940,7 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "analysis_data_files", "users", column: "owner_id", on_delete: :cascade
   add_foreign_key "api_keys", "users", on_update: :cascade, on_delete: :cascade
   add_foreign_key "design_factors", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "environments", "plant_trials"
   add_foreign_key "genotype_matrices", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "linkage_groups", "linkage_maps", on_update: :cascade, on_delete: :nullify
   add_foreign_key "linkage_groups", "users", on_update: :cascade, on_delete: :nullify
