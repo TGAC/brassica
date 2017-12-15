@@ -12,6 +12,7 @@ class PlantTrial < ActiveRecord::Base
   has_many :processed_trait_datasets
 
   has_one :environment
+  has_one :treatment
   has_one :submission,
           ->(plant_trial) { trial.where(user_id: plant_trial.user_id) },
           foreign_key: :submitted_object_id,

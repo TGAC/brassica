@@ -920,6 +920,19 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "traits", ["label"], name: "index_traits_on_label", using: :btree
   add_index "traits", ["name"], name: "traits_name_idx", unique: true, using: :btree
 
+  create_table "treatments", force: :cascade do |t|
+    t.integer  "plant_trial_id",        null: false
+    t.float    "air_temperature_day"
+    t.float    "air_temperature_night"
+    t.float    "salt"
+    t.float    "watering_temperature"
+    t.text     "other"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "treatments", ["plant_trial_id"], name: "index_treatments_on_plant_trial_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "login",                          null: false
     t.string   "email"
@@ -1010,4 +1023,5 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "trait_scores", "plant_scoring_units", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_scores", "trait_descriptors", on_update: :cascade, on_delete: :nullify
   add_foreign_key "trait_scores", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "treatments", "plant_trials"
 end
