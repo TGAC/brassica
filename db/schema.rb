@@ -473,6 +473,17 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "plant_scoring_units", ["scoring_unit_name"], name: "plant_scoring_units_scoring_unit_name_idx", using: :btree
   add_index "plant_scoring_units", ["user_id"], name: "index_plant_scoring_units_on_user_id", using: :btree
 
+  create_table "plant_treatment_types", force: :cascade do |t|
+    t.integer  "parent_ids",              array: true
+    t.string   "name",       null: false
+    t.string   "term",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "plant_treatment_types", ["name"], name: "index_plant_treatment_types_on_name", unique: true, using: :btree
+  add_index "plant_treatment_types", ["term"], name: "index_plant_treatment_types_on_term", unique: true, using: :btree
+
   create_table "plant_trial_environments", force: :cascade do |t|
     t.integer  "plant_trial_id", null: false
     t.boolean  "co2_controlled"
