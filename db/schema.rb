@@ -493,6 +493,17 @@ ActiveRecord::Schema.define(version: 20180202171044) do
 
   add_index "plant_trial_environments", ["plant_trial_id"], name: "index_plant_trial_environments_on_plant_trial_id", using: :btree
 
+  create_table "plant_trial_treatment_applications", force: :cascade do |t|
+    t.string   "sti_type",          null: false
+    t.integer  "treatment_id",      null: false
+    t.integer  "treatment_type_id", null: false
+    t.text     "description"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "plant_trial_treatment_applications", ["treatment_id", "treatment_type_id"], name: "idx_plant_trial_treatment_applications", using: :btree
+
   create_table "plant_trial_treatments", force: :cascade do |t|
     t.integer  "plant_trial_id", null: false
     t.datetime "created_at",     null: false
@@ -971,6 +982,8 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "plant_scoring_units", "plant_trials", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "users", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_trial_environments", "plant_trials"
+  add_foreign_key "plant_trial_treatment_applications", "plant_treatment_types", column: "treatment_type_id"
+  add_foreign_key "plant_trial_treatment_applications", "plant_trial_treatments", column: "treatment_id"
   add_foreign_key "plant_trial_treatments", "plant_trials"
   add_foreign_key "plant_trials", "countries", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_trials", "plant_populations", on_update: :cascade, on_delete: :nullify
