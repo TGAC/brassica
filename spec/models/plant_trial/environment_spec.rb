@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe Environment do
+RSpec.describe PlantTrial::Environment do
   context "associations" do
-    it { should belong_to(:plant_trial).touch(true) }
+    it { should belong_to(:plant_trial).touch(true).inverse_of(:environment) }
   end
 
   context "validations" do

@@ -1,6 +1,6 @@
-class CreateEnvironments < ActiveRecord::Migration
+class CreatePlantTrialEnvironments < ActiveRecord::Migration
   def change
-    create_table :environments do |t|
+    create_table :plant_trial_environments do |t|
       t.references :plant_trial, null: false, foreign_key: true, index: true
       t.float :day_temperature
       t.float :night_temperature

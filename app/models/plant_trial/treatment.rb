@@ -1,5 +1,5 @@
-class Treatment < ActiveRecord::Base
-  belongs_to :plant_trial, touch: true
+class PlantTrial::Treatment < ActiveRecord::Base
+  belongs_to :plant_trial, touch: true, inverse_of: :treatment
 
   validates :plant_trial, presence: true
   validates :air_temperature_day, temperature: true, allow_nil: true

@@ -11,8 +11,9 @@ class PlantTrial < ActiveRecord::Base
   has_many :plant_scoring_units, dependent: :destroy
   has_many :processed_trait_datasets
 
-  has_one :environment
-  has_one :treatment
+  has_one :environment, class_name: "PlantTrial::Environment", inverse_of: :plant_trial
+  has_one :treatment, class_name: "PlantTrial::Treatment", inverse_of: :plant_trial
+
   has_one :submission,
           ->(plant_trial) { trial.where(user_id: plant_trial.user_id) },
           foreign_key: :submitted_object_id,

@@ -1,6 +1,6 @@
-class CreateTreatments < ActiveRecord::Migration
+class CreatePlantTrialTreatments < ActiveRecord::Migration
   def change
-    create_table :treatments do |t|
+    create_table :plant_trial_treatments do |t|
       t.references :plant_trial, null: false, foreign_key: true, index: true
       t.float :air_temperature_day
       t.float :air_temperature_night

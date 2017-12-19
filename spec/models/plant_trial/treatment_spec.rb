@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe Treatment do
+RSpec.describe PlantTrial::Treatment do
   context "associations" do
-    it { should belong_to(:plant_trial).touch(true) }
+    it { should belong_to(:plant_trial).touch(true).inverse_of(:treatment) }
   end
 
   context "validations" do

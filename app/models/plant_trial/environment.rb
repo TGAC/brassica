@@ -1,5 +1,5 @@
-class Environment < ActiveRecord::Base
-  belongs_to :plant_trial, touch: true
+class PlantTrial::Environment < ActiveRecord::Base
+  belongs_to :plant_trial, touch: true, inverse_of: :environment
 
   validates :plant_trial, presence: true
   validates :day_temperature, temperature: true, allow_nil: true
