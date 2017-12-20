@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe PlantTrial do
+  context "fields" do
+    it { should define_enum_for(:study_type).with(%w(field greenhouse greenhouse_then_field growth_chamber)) }
+  end
+
   context "associations" do
     it { should belong_to(:plant_population).touch(true) }
     it { should have_one(:submission).with_foreign_key(:submitted_object_id).dependent(:destroy) }
@@ -67,8 +71,9 @@ RSpec.describe PlantTrial do
   describe '#table_data' do
     it 'retrieves published data only' do
       u = create(:user)
-      pt1 = create(:plant_trial, user: u, published: true)
-      pt2 = create(:plant_trial, user: u, published: false)
+
+      create(:plant_trial, user: u, published: true)
+      create(:plant_trial, user: u, published: false)
 
       ptd = PlantTrial.table_data
       expect(ptd.count).to eq 1

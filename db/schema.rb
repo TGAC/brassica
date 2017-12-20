@@ -513,8 +513,8 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "plant_trial_treatments", ["plant_trial_id"], name: "index_plant_trial_treatments_on_plant_trial_id", using: :btree
 
   create_table "plant_trials", force: :cascade do |t|
-    t.text     "plant_trial_name",                         null: false
-    t.text     "project_descriptor",                       null: false
+    t.text     "plant_trial_name",                                   null: false
+    t.text     "project_descriptor",                                 null: false
     t.text     "plant_trial_description"
     t.text     "trial_year"
     t.text     "institute_id"
@@ -539,16 +539,17 @@ ActiveRecord::Schema.define(version: 20180202171044) do
     t.integer  "country_id"
     t.integer  "plant_population_id"
     t.integer  "pubmed_id"
-    t.integer  "plant_scoring_units_count", default: 0,    null: false
+    t.integer  "plant_scoring_units_count",           default: 0,    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.boolean  "published",                 default: true, null: false
+    t.boolean  "published",                           default: true, null: false
     t.datetime "published_on"
     t.string   "layout_file_name"
     t.string   "layout_content_type"
     t.integer  "layout_file_size"
     t.datetime "layout_updated_at"
+    t.integer  "study_type",                limit: 2
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
