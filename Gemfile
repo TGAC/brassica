@@ -29,7 +29,7 @@ gem 'elasticsearch-rails', '~> 2'
 
 gem 'reform', '~> 2.2'
 gem 'reform-rails'
-gem 'obo'
+gem 'obo', require: false
 gem 'hashie'
 gem 'draper', '~> 2.1.0'
 gem 'kaminari'
