@@ -1,4 +1,6 @@
 class PlantTrial < ActiveRecord::Base
+  enum study_type: %w(field greenhouse greenhouse_then_field growth_chamber)
+
   belongs_to :plant_population, counter_cache: true, touch: true
   belongs_to :country
   belongs_to :user
