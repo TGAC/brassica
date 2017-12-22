@@ -1,4 +1,4 @@
-.alert.alert-info
+.info-block
   %p
     The BIP service assumes that each row in the trait scoring sheet, that you are going to submit,
     represents a so-called <b>plant scoring unit</b>. For raw data it may simply be an individual
@@ -37,7 +37,7 @@
 - if submission.raw_data?
   %fieldset
     %legend Design factors
-    .alert.alert-info
+    .info-block
       %p
         Please select the appropriate statistical design factors suitable for your experimental setup from
         the drop-down fields. Start by selecting the <b>highest design factor first</b>
@@ -58,7 +58,7 @@
 
   %fieldset
     %legend Technical replicate numbers
-    .alert.alert-info
+    .info-block
       %p
         If you are using <i>technical replicates</i> in your experiment, please
         set the number of replicates you are scoring per trait. Leaving the value

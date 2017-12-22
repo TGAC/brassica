@@ -4,7 +4,7 @@
 - technical_replicate_numbers = submission.content.step03.technical_replicate_numbers || {}
 - rep_traits = technical_replicate_numbers.select{ |k,v| v.to_i > 1 }.to_a
 
-.alert.alert-info
+.info-block
   %h5 Template download
 
   .row
@@ -18,9 +18,7 @@
     .col-md-4.text-right
       = submission_template_link(new_submission_upload_path(submission))
 
-  %br
   %h5 Trait scoring sheet structure
-
   %p
     The next step requires you to upload a file with scoring values. The required format is simple and features
     %b unique plant scoring unit identification in the first column
@@ -35,16 +33,18 @@
     %b trait scores
     (including potential technical replicate scores) in further columns.
     The number of columns depends on
-    %ul
-      %li how many <b>traits</b> you selected in the second step of this submission,
-      %li how many <b>design factors</b> you defined in the third step (raw data only),
-      %li how many <b>technical replicates</b> you plan to submit (raw data only).
+
+  %ul
+    %li how many <b>traits</b> you selected in the second step of this submission,
+    %li how many <b>design factors</b> you defined in the third step (raw data only),
+    %li how many <b>technical replicates</b> you plan to submit (raw data only).
+
+  %p
     All values should be separated by commas (<code>,</code>). In cases where a value is missing,
     please remember to provide the correct number of commas anyway. Sticking to this template
     should guarantee correct parsing of score values when you upload the file. Please, paste your data, in columns,
     below the header (thus replacing the placeholder <code>... - replace it</code> values).
 
-  %br
   %h5 Plant accession information
   %p
     Accession-related fields (<b>Plant accession</b> identifier - in column #{design_factor_names.size + 2}, the
@@ -59,7 +59,6 @@
     Accordingly, it is important that you are able to relate back to the identifier when cross-linking
     with the corresponding genetic data.
 
-  %br
   %h5 Plant #{pl_pv_name} column
   %p
     This column is especially important if you
@@ -94,7 +93,6 @@
         Please use the values from the <b>Variety</b> column when referring to existing plant varieties
         in your CSV file in order to avoid duplications due to differences in spelling.
 
-  %br
   %h5 Trait scores ordering #{'and technical replicates' if rep_traits.present?}
   %p
     The first line will be treated as a header. Specific values in columns
@@ -120,8 +118,7 @@
       the first technical replicate (no other trait scores in between).
 
   %p
-    In order to avoid any ordering related issues,
-    %b please use the CSV template
+    In order to avoid any ordering related issues, <b>please use the CSV template</b>
     provided to you above - this template's header has all trait name
     - if rep_traits.present?
       and technical replicate
@@ -131,7 +128,6 @@
 .errors.hidden
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
-
   = hidden_field_tag "submission_upload[upload_type]", "trait_scores"
 
   .form-group.fileinput{ class: "#{'hidden' if @content.upload}" }

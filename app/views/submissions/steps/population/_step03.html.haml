@@ -9,7 +9,7 @@
       = delete_submission_upload_button(@content.upload,
         class: 'btn btn-default delete-plant-lines-upload')
 
-  .parser-note.alert.alert-info
+  .info-block.parser-note
     %p
       Please review the above parsing logs. If there were any critical errors during the process,
       the red section will try to give some hints regarding their nature. You may then try to fix
@@ -21,7 +21,7 @@
 
   %hr
 
-.alert.alert-info
+.info-block
   Alternatively, you may use the input below to add plant lines to this population.
   You are able to select one or more lines from the database or, if suitable plant line
   does not exist in BIP, you are welcome to add it using the <b>Add new plant line</b>
