@@ -1,8 +1,20 @@
 .alert.alert-info
-  %p
-    One possibility to define plant Lines related to this population is to upload information
-    in a CSV file. This is especially suitable for cases when a lot of plant lines have to be
-    submitted.
+  %h5 Template download
+
+  .row
+    .col-md-8
+      %p
+        One possibility to define plant lines related to this population is to upload information
+        in a CSV file. This is especially suitable for cases when a lot of plant lines have to be
+        submitted. Please use the button next to this text to download the template in CSV format.
+        Please, leave the header (the first line) intact, and paste your data, in columns,
+        below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
+        columns even if you do not submit any values for them.
+
+    .col-md-4.text-right
+      = submission_template_link('/manuals/plant_lines_template.csv')
+
+  %h5 Template structure
 
   %p
     The <b>Species</b> column should provide the taxonomy name for a given line (e.g. "B. napus"). The
@@ -46,14 +58,6 @@
     If you provide the plant accession information, you are <i>required to supply values for all three
     columns</i>. Also, your organisation should ensure the unique naming of accession - so you never
     duplicate the <b>Plant accession</b> value in the context of the same <b>Originating organisation</b>.
-
-  %p
-    For your convenience please use
-    %b
-      = link_to 'the ready template', '/manuals/plant_lines_template.csv'
-    in a CSV format. Please download it, leave the header (the first line) intact, and paste your data, in columns,
-    below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
-    columns even if you do not submit any values for them.
 
 .errors.hidden
 
