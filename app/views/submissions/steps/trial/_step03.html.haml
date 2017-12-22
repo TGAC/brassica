@@ -15,24 +15,24 @@
     If you submit raw data, you will have an option to submit technical replicate readings as
     well as design factors (for instance, ordinal numbers for plots, reps and so forth).
 
-.form-group
-  = label_tag "Origin of genetic material used in this trial"
-  %br
-  = content.label :lines_or_varieties, "Plant lines", value: 'plant_lines', class: 'radio-inline' do
-    = content.radio_button :lines_or_varieties, 'plant_lines', checked: true
-    Plant lines
-  = content.label :lines_or_varieties, "Plant varieties", value: 'plant_varieties', class: 'radio-inline' do
-    = content.radio_button :lines_or_varieties, 'plant_varieties'
-    Plant varieties
-  %small.help-block
-    Per each plant scoring unit submitted, the source of genetic material should be provided.
-    It may either be a <b>plant line</b> or a <b>plant variety (cultivar)</b>.
-    This choice depends on the type of experiment you are conducting. You should select
-    the <b>Plant lines</b> option if you
-    %ul
-      %li created new genetic material (using, for instance, crossing or mutagenesis) in the course of your project,
-      %li or you use former plant line genetic material which is not (yet) recognized as a variety or a cultivar.
-    In other cases you should probably select the the <b>Plant varieties</b> option.
+.fieldset
+  %legend Origin of genetic material used in this trial
+  .form-group
+    = content.label :lines_or_varieties, "Plant lines", value: 'plant_lines', class: 'radio-inline' do
+      = content.radio_button :lines_or_varieties, 'plant_lines', checked: true
+      Plant lines
+    = content.label :lines_or_varieties, "Plant varieties", value: 'plant_varieties', class: 'radio-inline' do
+      = content.radio_button :lines_or_varieties, 'plant_varieties'
+      Plant varieties
+    %small.help-block
+      Per each plant scoring unit submitted, the source of genetic material should be provided.
+      It may either be a <b>plant line</b> or a <b>plant variety (cultivar)</b>.
+      This choice depends on the type of experiment you are conducting. You should select
+      the <b>Plant lines</b> option if you
+      %ul
+        %li created new genetic material (using, for instance, crossing or mutagenesis) in the course of your project,
+        %li or you use former plant line genetic material which is not (yet) recognized as a variety or a cultivar.
+      In other cases you should probably select the the <b>Plant varieties</b> option.
 
 - if submission.raw_data?
   %fieldset
