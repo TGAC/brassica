@@ -1,7 +1,7 @@
 module Submissions
   module Trial
     class Step06ContentForm < PlantTrialForm
-      property :visibility, default: 'published'
+      property :visibility, default: 'private'
       property :data_owned_by
       property :data_provenance
       property :comments
