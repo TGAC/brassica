@@ -1,0 +1,12 @@
+.container
+  %h2.page-title.no-navbar
+    Traits
+
+    .actions= link_to "New trait", new_admin_trait_path, class: "btn btn-primary"
+
+  - if @traits.present?
+    = render partial: 'traits', locals: { traits: @traits }
+
+  - else
+    .alert.alert-info
+      %p No traits defined

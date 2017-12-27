@@ -1,0 +1,33 @@
+= form_for([:admin, @trait]) do |f|
+  = render partial: "/errors", locals: { errors: @trait.errors }
+
+  .form-group
+    = f.text_field :name, required: true
+
+  .form-group
+    = f.text_field :label, required: true, help: "Eg. ontological term or 'BIP/EI' for traits not defined in any ontology"
+
+  .form-group
+    = f.text_area :description
+
+  .form-group
+    = f.label :canonical
+
+    %br
+
+    = f.label :canonical, value: "true", class: "radio-inline" do
+      = f.radio_button :canonical, 'true'
+      Yes
+
+    = f.label :canonical, value: "false", class: "radio-inline" do
+      = f.radio_button :canonical, 'false'
+      No
+
+  .form-group
+    = f.text_area :data_provenance
+
+  .form-group.actions
+    = link_to "Cancel", admin_traits_path, class: "btn btn-default btn-back"
+
+    .pull-right
+      = f.submit class: "btn btn-primary"

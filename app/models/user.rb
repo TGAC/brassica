@@ -25,4 +25,11 @@ class User < ActiveRecord::Base
     user
   end
 
+  def self.admin_logins
+    @admin_logins ||= Rails.application.config_for(:admins)
+  end
+
+  def admin?
+    @admin ||= self.class.admin_logins.include?(login)
+  end
 end
