@@ -9,6 +9,8 @@ class Api::CreateParams
 
   def permitted_params
     request_params.require(model.name).permit(permissions)
+  rescue NoMethodError
+    fail Api::InvalidParams, "Request params could not be parsed"
   end
 
   def permissions

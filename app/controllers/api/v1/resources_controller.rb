@@ -15,6 +15,10 @@ class Api::V1::ResourcesController < Api::BaseController
     render json: { errors: { attribute: exception.param, message: exception.message } }, status: 422
   end
 
+  rescue_from Api::InvalidParams do |exception|
+    render json: { errors: { message: exception.message } }, status: 422
+  end
+
   def index
     index = Api::Index.new(model, api_key.user)
     resources = index.where(index_params).order(:id)
