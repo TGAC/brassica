@@ -4,4 +4,8 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     full_name { Faker::Name.name }
   end
+
+  factory :admin, parent: :user do
+    login { User.admin_logins.sample }
+  end
 end
