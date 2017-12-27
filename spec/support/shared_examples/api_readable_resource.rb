@@ -1,5 +1,6 @@
 RSpec.shared_examples "API-readable resource" do |model_klass|
   model_name = model_klass.name.underscore
+
   let(:parsed_response) { JSON.parse(response.body) }
 
   context "with no api key" do
@@ -13,7 +14,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
     end
 
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
-      let!(:resource) { create model_name }
+      let!(:resource) { create model_name.to_sym }
 
       it "returns 401" do
         get "/api/v1/#{model_name.pluralize}/#{resource.id}"
@@ -44,7 +45,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
     end
 
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
-      let!(:resource) { create model_name }
+      let!(:resource) { create model_name.to_sym }
 
       it "returns 401" do
         get "/api/v1/#{model_name.pluralize}/#{resource.id}", {}, { "X-BIP-Api-Key" => "invalid" }
@@ -60,7 +61,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
     describe "GET /api/v1/#{model_name.pluralize}" do
       describe "response" do
-        let!(:resources) { create_list(model_name, 3) }
+        let!(:resources) { create_list(model_name.to_sym, 3) }
 
         it "renders existing resources" do
           get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => api_key.token }
@@ -85,7 +86,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
       end
 
       describe "pagination" do
-        let!(:resources) { create_list(model_name, 3) }
+        let!(:resources) { create_list(model_name.to_sym, 3) }
 
         it "paginates returned resources" do
           get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => api_key.token }
@@ -142,7 +143,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
           end
 
           it 'always supports filtering with id param' do
-            resource = create(model_klass)
+            resource = create(model_name.to_sym)
             query = { query: { id: resource.id } }
 
             get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
@@ -156,7 +157,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         if model_klass.ancestors.include?(Searchable)
           it 'supports fetch query param', :elasticsearch do
             hit_attribute = model_klass.indexed_json_structure[:only].first
-            term = create(model_klass).send(hit_attribute)
+            term = create(model_name.to_sym).send(hit_attribute)
             fetch_params = { fetch: term }
 
             expect(Search).to receive(:new).at_least(1).with(term).and_call_original
@@ -171,7 +172,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
     end
 
     describe "GET /api/v1/#{model_name.pluralize}/:id" do
-      let!(:resource) { create model_name }
+      let!(:resource) { create model_name.to_sym }
       let(:parsed_object) { JSON.parse(response.body)[model_name] }
 
       it "returns requested resource" do

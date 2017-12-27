@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :map_locus_hit do
     sequence(:consensus_group_assignment) {|n| "#{Faker::Lorem.characters(1)}_#{n}"}
     canonical_marker_name { Faker::Lorem.word }

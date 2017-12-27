@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :trait_score do
     score_value { Faker::Number.number(10).to_s }
     value_type { Faker::Lorem.sentence }

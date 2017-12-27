@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   trait :annotable do
     comments { Faker::Lorem.sentence }
     entered_by_whom { Faker::Internet.user_name }
