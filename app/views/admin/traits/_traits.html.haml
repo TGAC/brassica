@@ -1,4 +1,4 @@
-%table.table.traits
+%table.table.table-condensed.table-browse.table-hover.data-table
   %thead
     %tr
       %th= Trait.human_attribute_name(:name)
@@ -17,5 +17,3 @@
       %td= trait.data_provenance
       %td.actions
         = link_to "Edit", edit_admin_trait_path(trait), class: "btn btn-default btn-sm"
-
-= paginate(traits)

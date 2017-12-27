@@ -1,6 +1,6 @@
 class Admin::TraitsController < Admin::BaseController
   def index
-    @traits = Trait.all.page(params[:page] || 1)
+    @traits = Trait.all
   end
 
   def new
