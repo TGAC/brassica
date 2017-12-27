@@ -67,4 +67,8 @@ Rails.application.routes.draw do
       patch ":plural_model_name/:id/revoke", to: 'resources#revoke', constraints: publishable_constraints
     end
   end
+
+  namespace :admin do
+    resources :traits, only: [:index, :new, :create, :edit, :update]
+  end
 end

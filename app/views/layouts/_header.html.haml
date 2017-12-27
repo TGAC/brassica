@@ -23,6 +23,10 @@
                 %li= link_to 'Submissions', submissions_path
                 %li= link_to 'Analyses', analyses_path
                 %li= link_to 'API Key', api_keys_path
+
+                - if current_user.admin?
+                  %li= link_to 'Traits', admin_traits_path
+
                 %li= link_to 'Sign out', sign_out_path
 
           %li{ role: 'presentation' }
