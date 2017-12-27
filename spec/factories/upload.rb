@@ -1,6 +1,6 @@
 include ActionDispatch::TestProcess
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :upload, class: Submission::Upload do
     upload_type 'trait_scores'
     file { fixture_file("score_upload.txt", 'text/plain') }

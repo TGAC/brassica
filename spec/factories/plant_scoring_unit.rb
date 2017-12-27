@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :plant_scoring_unit do
     sequence(:scoring_unit_name) { Faker::Lorem.characters(14) }
     number_units_scored { Faker::Number.number(1).to_s + ' blocks' }

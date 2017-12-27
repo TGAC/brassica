@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :linkage_map do
     sequence(:linkage_map_label) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
     sequence(:linkage_map_name) { Faker::Lorem.characters(10) }

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :analysis_data_file, class: "Analysis::DataFile" do
     owner(factory: :user)
 

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :plant_variety do
     sequence(:plant_variety_name) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
     crop_type { Faker::Lorem.word }

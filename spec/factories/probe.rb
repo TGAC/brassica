@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :probe do
     sequence(:probe_name) {|n| "#{Faker::Lorem.word}_#{n}"}
     clone_name { Faker::Lorem.word }

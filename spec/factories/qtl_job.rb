@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :qtl_job do
     sequence(:qtl_job_name) {|n| "#{Faker::Lorem.characters(11)}_#{n}"}
     qtl_software { Faker::Lorem.word }

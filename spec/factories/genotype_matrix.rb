@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :genotype_matrix do
     sequence(:original_file_name) {|n| "#{Faker::Lorem.characters(12)}_#{n}"}
     date_matrix_available { Faker::Date.backward }

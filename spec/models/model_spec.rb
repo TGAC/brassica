@@ -61,7 +61,7 @@ RSpec.describe ActiveRecord::Base do
   it 'nullifies all belongs_to relations on destroy' do
     Api.writable_models.each do |model_klass|
       next if nullify_exclusions.include? model_klass # Some classes are not expected to follow this rule.
-      instance = create(model_klass)
+      instance = create(model_klass.name.underscore.to_sym)
       (all_belongs_to(model_klass) - [:user, :trait]).each do |belongs_to|
         unless instance.send("#{belongs_to}_id").nil?
           instance.send(belongs_to).destroy
@@ -75,7 +75,7 @@ RSpec.describe ActiveRecord::Base do
     Api.writable_models.each do |model_klass|
       # Exception created due to the fact that the custom validator present in PA interferes with this test
       unless model_klass == PlantAccession
-        instance = create(model_klass)
+        instance = create(model_klass.name.underscore.to_sym)
         all_belongs_to(model_klass).each do |belongs_to|
           expect{ instance.update("#{belongs_to}_id" => 555666) }.
             to raise_error ActiveRecord::InvalidForeignKey
@@ -96,7 +96,7 @@ RSpec.describe ActiveRecord::Base do
     it 'makes sure all basic searchable fields are displayed in tables' do
       @searchables.each do |searchable|
         next if searchable == Qtl
-        instance = create(searchable)
+        instance = create(searchable.name.underscore.to_sym)
         instance.as_indexed_json.each do |k, v|
           next if k == 'id' || k == 'trait_name'  # twice the same, doesn't hurt
           if v.instance_of? Hash

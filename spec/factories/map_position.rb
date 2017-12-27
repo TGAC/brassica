@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :map_position do
     sequence(:marker_assay_name) {|n| "#{Faker::Lorem.word}_#{n}"}
     mapping_locus { Faker::Lorem.word }
