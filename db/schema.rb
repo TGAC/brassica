@@ -858,6 +858,18 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "taxonomy_terms", ["name"], name: "taxonomy_terms_name_idx", unique: true, using: :btree
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
+  create_table "topological_factors", force: :cascade do |t|
+    t.integer  "parent_ids",                             array: true
+    t.string   "name",                      null: false
+    t.string   "term"
+    t.boolean  "canonical",  default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "topological_factors", ["name"], name: "index_topological_factors_on_name", unique: true, using: :btree
+  add_index "topological_factors", ["term"], name: "index_topological_factors_on_term", unique: true, using: :btree
+
   create_table "trait_descriptors", force: :cascade do |t|
     t.text     "descriptor_label"
     t.text     "category"
