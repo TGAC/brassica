@@ -1,10 +1,16 @@
 require "obo"
 require "obo/plant_treatment_type_importer"
+require "obo/topological_factor_importer"
 
 namespace :obo do
   desc "Load PlantTreatmentType model"
   task plant_treatment_types: :environment do
     Obo::PlantTreatmentTypeImporter.new("db/data/peco.obo").import_all
+  end
+
+  desc "Load TopologicalFactor model"
+  task topological_factors: :environment do
+    Obo::TopologicalFactorImporter.new("db/data/Crop_Experiment_Ontology.obo").import_all
   end
 
   desc 'Loads TaxonomyTerm model'
