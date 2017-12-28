@@ -7,6 +7,8 @@ module ApplicationHelper
             :home
           when 'about'
             :about
+          when 'about_bip'
+            :about_bip
           when 'api'
             :api
           else
