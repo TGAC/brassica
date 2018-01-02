@@ -4,7 +4,7 @@ class Admin::TraitsController < Admin::BaseController
   end
 
   def new
-    @trait = Trait.new
+    @trait = Trait.new(canonical: false)
   end
 
   def edit
