@@ -26,8 +26,8 @@
     - if design_factor_names.present?
       %b #{design_factor_names.size} column(s) for design factors
       selected in the previous step and
-    %b 2 column(s) for plant accession information
-    (accession id and accession assigning organisation - see below),
+    %b 3 column(s) for plant accession information
+    (accession id, accession assigning organisation and year it was produced - see below),
     %b another column with plant #{pl_pv_name} name
     (also explained below) and
     %b trait scores
@@ -96,13 +96,13 @@
   %h5 Trait scores ordering #{'and technical replicates' if rep_traits.present?}
   %p
     The first line will be treated as a header. Specific values in columns
-    #{design_factor_names.size + 5} and further
+    #{design_factor_names.size + 6} and further
     will be treated as scoring for the
     trait whose name matches the corresponding column header. If no match is found, the score will
     be stored by column index. That is, an unmatched column
-    #{design_factor_names.size + 6}
+    #{design_factor_names.size + 7}
     header will cause all column
-    #{design_factor_names.size + 6}
+    #{design_factor_names.size + 7}
     values to be treated as scores for the second trait (in the order of input)
     - if rep_traits.present?
       , or the second technical replicate of the first trait,
