@@ -19,6 +19,7 @@ class OrcidClient
     full_name = given_names ? given_names.content : ''
     family_name = info_xml.at_css('family-name')
     full_name += ' ' + family_name.content if family_name
+    full_name = info_xml.at_css('full-name') if full_name.blank?
     { status: :ok, full_name: full_name }
   end
 end

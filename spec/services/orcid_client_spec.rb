@@ -8,6 +8,7 @@ RSpec.describe OrcidClient do
       extra_info = OrcidClient.get_user_data ENV['ORCID_TEST_UID']
       expect(extra_info).not_to eq nil
       expect(extra_info[:status]).to eq :ok
+      # NOTE: ORCiD Sandbox ceased to send user's full name
       expect(extra_info[:full_name]).to eq ENV['ORCID_TEST_FULL_NAME']
     end
 
