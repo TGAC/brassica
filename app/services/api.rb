@@ -1,4 +1,6 @@
 class Api
+  InvalidParams = Class.new(RuntimeError)
+
   def self.models
     self.readable_models | self.writable_models
   end
