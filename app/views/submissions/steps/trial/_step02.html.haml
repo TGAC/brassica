@@ -10,7 +10,7 @@
 .form-group
   = content.label :trait_descriptor_list
   - options = options_for_submission_select(@content.existing_trait_descriptors, :trait_name)
-  - options.concat options_for_submission_select(@content.new_trait_descriptors, :trait, id: false)
+  - options.concat options_for_submission_select(@content.new_trait_descriptors, :trait_name, id: false)
   = content.select :trait_descriptor_list, options.html_safe, {},
     { multiple: true,
       class: 'trait-descriptor-list form-control',
@@ -58,6 +58,6 @@
       %button.btn.btn-primary.add-new-trait-descriptor-for-list{type: 'button'} Confirm
 
 - @content.new_trait_descriptors.each do |trait_descriptor|
-  %div{id: "new-trait-descriptor-#{trait_descriptor.trait.split.join('-').downcase}"}
+  %div{id: "new-trait-descriptor-#{trait_descriptor.trait_name.split.join('-').downcase}"}
     - @content.class.new_trait_descriptor_properties.each do |attr|
       = hidden_field_tag "submission[content][new_trait_descriptors][][#{attr}]", trait_descriptor.send(attr)

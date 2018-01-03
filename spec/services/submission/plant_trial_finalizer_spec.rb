@@ -26,7 +26,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
     let(:new_trait_descriptors_attrs) {
       [
         {
-          trait: trait.name,
+          trait: trait.id,
+          trait_name: trait.name,
           comments: "Impedit dolorem sunt dolorem voluptate.",
           data_provenance: "Et qui aut deserunt recusandae voluptatum alias quia aliquid.",
           data_owned_by: "Cormier and Sons",
@@ -35,7 +36,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
           materials: "Voluptate quas ipsam dolor et quia."
         },
         {
-          trait: trait_other.name,
+          trait: trait_other.id,
+          trait_name: trait_other.name,
           comments: "Dignissimos necessitatibus qui iste impedit itaque.",
           data_provenance: "Alias voluptates ea aut et quis sunt ad.",
           data_owned_by: "Bosco Inc",
@@ -98,7 +100,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
           'published' => true,
           'user_id' => submission.user.id
         )
-        expect(trait_descriptor.trait_name).to eq new_trait_descriptors_attrs[idx][:trait]
+        expect(trait_descriptor.trait_id).to eq new_trait_descriptors_attrs[idx][:trait]
+        expect(trait_descriptor.trait_name).to eq new_trait_descriptors_attrs[idx][:trait_name]
         expect(trait_descriptor.plant_part.try(:id)).to eq new_trait_descriptors_attrs[idx][:plant_part_id]
         expect(trait_descriptor.published_on).to be_within(5.seconds).of(Time.now)
       end

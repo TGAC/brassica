@@ -26,11 +26,9 @@ class Submission::PlantTrialFinalizer
 
   def create_new_trait_descriptors
     @new_trait_descriptors = (submission.content.step02.new_trait_descriptors || []).map do |attrs|
-      attrs = attrs.with_indifferent_access
+      attrs = attrs.with_indifferent_access.except(:trait_name)
       attrs = attrs.merge(common_data)
-      if attrs[:trait].present?
-        attrs[:trait] = Trait.find_by_name(attrs['trait'])
-      end
+      attrs[:trait] = Trait.find(attrs['trait'])
       TraitDescriptor.create!(attrs)
     end
   end
@@ -222,7 +220,7 @@ class Submission::PlantTrialFinalizer
     if trait.to_i.to_s == trait.to_s
       TraitDescriptor.find_by(id: trait)
     else
-      @new_trait_descriptors.detect{ |ntd| ntd.trait.name == trait }
+      @new_trait_descriptors.detect { |ntd| ntd.trait.name == trait }
     end
   end
 
