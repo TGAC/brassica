@@ -5,3 +5,16 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+module Seeds
+  def self.create_lamp_types
+    lamp_types = [
+      "fluorescent tubes",
+      "high intensity discharge (HID) lamps",
+      "light emitting diodes (LED)"
+    ]
+    lamp_types.each { |t| LampType.create_with(canonical: true).find_or_create_by!(name: t) }
+  end
+end
+
+Seeds.create_lamp_types

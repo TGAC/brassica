@@ -125,6 +125,15 @@ ActiveRecord::Schema.define(version: 20180202171044) do
 
   add_index "genotype_matrices", ["linkage_map_id"], name: "genotype_matrices_linkage_map_id_idx", using: :btree
 
+  create_table "lamp_types", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.boolean  "canonical",  default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "lamp_types", ["name"], name: "index_lamp_types_on_name", using: :btree
+
   create_table "linkage_groups", force: :cascade do |t|
     t.text     "linkage_group_label",                        null: false
     t.text     "linkage_group_name",                         null: false
