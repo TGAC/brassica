@@ -57,6 +57,15 @@ ActiveRecord::Schema.define(version: 20180202171044) do
 
   add_index "api_keys", ["token"], name: "api_keys_token_idx", unique: true, using: :btree
 
+  create_table "container_types", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.boolean  "canonical",  default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "container_types", ["name"], name: "index_container_types_on_name", using: :btree
+
   create_table "countries", force: :cascade do |t|
     t.string   "country_code", limit: 3, null: false
     t.text     "country_name"
@@ -124,6 +133,15 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   end
 
   add_index "genotype_matrices", ["linkage_map_id"], name: "genotype_matrices_linkage_map_id_idx", using: :btree
+
+  create_table "lamp_types", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.boolean  "canonical",  default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "lamp_types", ["name"], name: "index_lamp_types_on_name", using: :btree
 
   create_table "linkage_groups", force: :cascade do |t|
     t.text     "linkage_group_label",                        null: false
@@ -484,6 +502,14 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "plant_treatment_types", ["name"], name: "index_plant_treatment_types_on_name", unique: true, using: :btree
   add_index "plant_treatment_types", ["term"], name: "index_plant_treatment_types_on_term", unique: true, using: :btree
 
+  create_table "plant_trial_containers", force: :cascade do |t|
+    t.integer  "environment_id",    null: false
+    t.integer  "container_type_id", null: false
+    t.text     "description"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
   create_table "plant_trial_environments", force: :cascade do |t|
     t.integer  "plant_trial_id", null: false
     t.boolean  "co2_controlled"
@@ -492,6 +518,14 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   end
 
   add_index "plant_trial_environments", ["plant_trial_id"], name: "index_plant_trial_environments_on_plant_trial_id", using: :btree
+
+  create_table "plant_trial_lamps", force: :cascade do |t|
+    t.integer  "environment_id", null: false
+    t.integer  "lamp_type_id",   null: false
+    t.text     "description"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
 
   create_table "plant_trial_topological_descriptors", force: :cascade do |t|
     t.integer  "environment_id",        null: false
@@ -1004,7 +1038,11 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "plant_scoring_units", "plant_accessions", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "plant_trials", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_trial_containers", "container_types"
+  add_foreign_key "plant_trial_containers", "plant_trial_environments", column: "environment_id"
   add_foreign_key "plant_trial_environments", "plant_trials"
+  add_foreign_key "plant_trial_lamps", "lamp_types"
+  add_foreign_key "plant_trial_lamps", "plant_trial_environments", column: "environment_id"
   add_foreign_key "plant_trial_topological_descriptors", "plant_trial_environments", column: "environment_id"
   add_foreign_key "plant_trial_topological_descriptors", "topological_factors"
   add_foreign_key "plant_trial_treatment_applications", "plant_treatment_types", column: "treatment_type_id"
