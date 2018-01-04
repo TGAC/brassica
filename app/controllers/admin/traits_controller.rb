@@ -12,7 +12,7 @@ class Admin::TraitsController < Admin::BaseController
   end
 
   def create
-    @trait = Trait.new(trait_params)
+    @trait = Trait.new(create_params)
 
     if @trait.save
       redirect_to admin_traits_path, notice: "Trait '#{@trait.name}' created"
@@ -24,7 +24,7 @@ class Admin::TraitsController < Admin::BaseController
   def update
     @trait = Trait.find(params[:id])
 
-    if @trait.update(trait_params)
+    if @trait.update(update_params)
       redirect_to admin_traits_path, notice: "Trait '#{@trait.name}' updated"
     else
       render :edit
@@ -33,7 +33,11 @@ class Admin::TraitsController < Admin::BaseController
 
   private
 
-  def trait_params
+  def create_params
     params.require(:trait).permit(:name, :label, :description, :canonical, :data_provenance)
+  end
+
+  def update_params
+    params.require(:trait).permit(:label, :description, :canonical, :data_provenance)
   end
 end

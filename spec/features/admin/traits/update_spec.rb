@@ -11,7 +11,6 @@ RSpec.describe "Edit trait view" do
   end
 
   it "allows trait update" do
-    fill_in "Name", with: trait.name.reverse
     fill_in "Label", with: trait.label.reverse
     fill_in "Description", with: trait.description.reverse
     fill_in "Data provenance", with: trait.data_provenance.reverse
@@ -21,16 +20,13 @@ RSpec.describe "Edit trait view" do
     expect(page).to have_current_path(admin_traits_path)
     expect(page).to have_flash(:notice, "Trait '#{trait.reload.name}' updated")
 
-    expect(trait.attributes.symbolize_keys).to include(trait_attrs.transform_values(&:reverse))
+    expect(trait.attributes.symbolize_keys).to include(trait_attrs.except(:name).transform_values(&:reverse))
   end
 
   it "shows validation errors" do
-    fill_in "Name", with: ""
     fill_in "Label", with: ""
-
     click_on "Update Trait"
 
-    expect(page).to have_error("Please provide a trait name")
     expect(page).to have_error("Please provide a trait label")
   end
 end
