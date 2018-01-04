@@ -9,6 +9,8 @@ class PlantTrial::Treatment < ActiveRecord::Base
   has_many :fungicide_applications, class_name: "PlantTrial::FungicideTreatmentApplication", inverse_of: :treatment
   has_many :herbicide_applications, class_name: "PlantTrial::HerbicideTreatmentApplication", inverse_of: :treatment
   has_many :pesticide_applications, class_name: "PlantTrial::PesticideTreatmentApplication", inverse_of: :treatment
+  has_many :gas_applications, class_name: "PlantTrial::GaseousTreatmentApplication", inverse_of: :treatment
+  has_many :soil_applications, class_name: "PlantTrial::SoilTreatmentApplication", inverse_of: :treatment
 
   validates :plant_trial, presence: true
   validates :air_temperature_day, temperature: true, allow_nil: true
