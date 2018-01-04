@@ -2,6 +2,7 @@ class PlantTrial::Environment < ActiveRecord::Base
   belongs_to :plant_trial, touch: true, inverse_of: :environment
 
   has_many :topological_descriptors
+  has_many :lamps
 
   validates :plant_trial, presence: true
   validates :day_temperature, temperature: true, allow_nil: true

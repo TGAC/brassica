@@ -4,6 +4,7 @@ RSpec.describe PlantTrial::Environment do
   context "associations" do
     it { should belong_to(:plant_trial).touch(true).inverse_of(:environment) }
     it { should have_many(:topological_descriptors).class_name("PlantTrial::TopologicalDescriptor") }
+    it { should have_many(:lamps) }
   end
 
   context "validations" do
