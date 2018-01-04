@@ -6,6 +6,11 @@ namespace :obo do
   desc "Load PlantTreatmentType model"
   task plant_treatment_types: :environment do
     Obo::PlantTreatmentTypeImporter.new("db/data/peco.obo").import_all
+
+    PlantTreatmentType.
+      create_with(canonical: false, parent_ids: [PlantTreatmentType::ROOT_TERM]).
+      find_or_create_by!(name: "Soil temperature treatment",
+                         term: PlantTreatmentType::SOIL_TEMPERATURE_ROOT_TERM)
   end
 
   desc "Load TopologicalFactor model"
