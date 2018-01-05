@@ -502,6 +502,14 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "plant_treatment_types", ["name"], name: "index_plant_treatment_types_on_name", unique: true, using: :btree
   add_index "plant_treatment_types", ["term"], name: "index_plant_treatment_types_on_term", unique: true, using: :btree
 
+  create_table "plant_trial_containers", force: :cascade do |t|
+    t.integer  "environment_id",    null: false
+    t.integer  "container_type_id", null: false
+    t.text     "description"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
   create_table "plant_trial_environments", force: :cascade do |t|
     t.integer  "plant_trial_id",               null: false
     t.float    "day_temperature"
@@ -1063,6 +1071,8 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "plant_scoring_units", "plant_accessions", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "plant_trials", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_trial_containers", "container_types"
+  add_foreign_key "plant_trial_containers", "plant_trial_environments", column: "environment_id"
   add_foreign_key "plant_trial_environments", "plant_trials"
   add_foreign_key "plant_trial_lamps", "lamp_types"
   add_foreign_key "plant_trial_lamps", "plant_trial_environments", column: "environment_id"
