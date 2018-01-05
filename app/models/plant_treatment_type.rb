@@ -16,6 +16,25 @@ class PlantTreatmentType < ActiveRecord::Base
 
   validates :name, :term, presence: true
 
+  def self.descendants_of(term)
+    term = term.term if term.is_a?(self)
+
+    query = <<-SQL.strip_heredoc
+      WITH RECURSIVE descendant_plant_treatment_types(id, parent_ids, name, term)
+      AS (
+        SELECT ptt.id, ptt.parent_ids, ptt.name, ptt.term
+        FROM plant_treatment_types ptt WHERE ptt.term = ?
+      UNION ALL
+        SELECT ptt.id, ptt.parent_ids, ptt.name, ptt.term
+        FROM plant_treatment_types ptt, descendant_plant_treatment_types dptt
+        WHERE dptt.id = ANY(ptt.parent_ids)
+      )
+      SELECT id FROM descendant_plant_treatment_types
+    SQL
+
+    where("id IN (#{query})", term)
+  end
+
   def parents
     PlantTreatmentType.where(id: parent_ids) if parent_ids.present?
   end
