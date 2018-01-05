@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :design_factor do
     sequence(:design_factor_name) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
     institute_id { Faker::Company.name }

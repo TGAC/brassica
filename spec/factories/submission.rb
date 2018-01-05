@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :submission do
     submission_type { %i(population trial).sample }
     user
@@ -32,12 +32,12 @@ FactoryGirl.define do
 
           submission.step = :step04
 
-          FactoryGirl.create(:taxonomy_term, name: submission.content.step02.taxonomy_term)
-          FactoryGirl.create(:population_type, population_type: submission.content.step01.population_type)
+          FactoryBot.create(:taxonomy_term, name: submission.content.step02.taxonomy_term)
+          FactoryBot.create(:population_type, population_type: submission.content.step01.population_type)
         elsif submission.trial?
-          plant_population = FactoryGirl.create(:plant_population, user: submission.user)
-          country = FactoryGirl.create(:country)
-          trait_descriptor = FactoryGirl.create(:trait_descriptor)
+          plant_population = FactoryBot.create(:plant_population, user: submission.user)
+          country = FactoryBot.create(:country)
+          trait_descriptor = FactoryBot.create(:trait_descriptor)
 
           submission.content.update(:step01, plant_trial_name: random_word,
                                              plant_trial_description: Faker::Lorem.sentence,

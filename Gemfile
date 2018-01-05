@@ -68,7 +68,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails', '< 5'
   gem 'faker'
   gem 'shoulda-matchers'
   gem 'rspec-html-matchers'

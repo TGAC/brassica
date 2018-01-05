@@ -1,0 +1,19 @@
+%table.table.table-condensed.table-browse.table-hover.data-table#traits
+  %thead
+    %tr
+      %th= Trait.human_attribute_name(:name)
+      %th= Trait.human_attribute_name(:label)
+      %th= Trait.human_attribute_name(:description)
+      %th= Trait.human_attribute_name(:canonical)
+      %th= Trait.human_attribute_name(:data_provenance)
+      %th
+
+  - traits.each do |trait|
+    %tr
+      %td= trait.name
+      %td= trait.label
+      %td= trait.description
+      %td= trait.canonical ? "Yes" : "No"
+      %td= trait.data_provenance
+      %td.actions
+        = link_to "Edit", edit_admin_trait_path(trait), class: "btn btn-default btn-sm"

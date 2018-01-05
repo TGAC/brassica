@@ -19,6 +19,7 @@
 tags
 
 # Configuration
+config/admins.yml
 config/database.yml
 .env
 

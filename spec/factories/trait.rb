@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :trait do
     sequence(:name) {|n| "#{Faker::Lorem.word}_#{n}"}
     description { Faker::Lorem.sentence }

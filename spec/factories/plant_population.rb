@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :plant_population do
     sequence(:name) {|n| "#{Faker::Lorem.characters(5)}_#{n}"}
     canonical_population_name { Faker::Lorem.word }

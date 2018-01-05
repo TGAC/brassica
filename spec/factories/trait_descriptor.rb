@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :trait_descriptor do
     sequence(:descriptor_label) { Faker::Lorem.characters(14) }
     category { Faker::Lorem.word + ' ' + Faker::Lorem.word }

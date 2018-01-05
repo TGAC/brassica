@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :primer do
     sequence(:primer) {|n| "#{Faker::Lorem.word}_#{n}"}
     sequence_id { Faker::Number.number(7).to_s }

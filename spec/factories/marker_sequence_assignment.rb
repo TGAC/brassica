@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :marker_sequence_assignment do
     sequence(:marker_set) {|n| "#{Faker::Lorem.word}_#{n}"}
     canonical_marker_name { Faker::Lorem.word }

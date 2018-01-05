@@ -19,7 +19,7 @@ If you are interested in learning how to submit data to the portal, training mat
 Currently, the web application is still under development and also changes to the database schema are possible. Despite these ongoing developments, navigation, data submissions and -download from the EI-hosted BIP version via the web-interface and the API should be possible.
 
 ## Cite
-Eckes AH, Gubała T, Nowakowski P et al. Introducing the Brassica Information Portal: Towards integrating genotypic and phenotypic Brassica crop data [version 1; referees: awaiting peer review]. F1000Research 2017, 6:465 (doi: 10.12688/f1000research.11301.1) 
+Eckes AH, Gubała T, Nowakowski P et al. Introducing the Brassica Information Portal: Towards integrating genotypic and phenotypic Brassica crop data [version 1; referees: awaiting peer review]. F1000Research 2017, 6:465 (doi: 10.12688/f1000research.11301.1)
 
 Tomasz Gubała, Tomasz Szymczyszyn, Piotr Nowakowski, Bogdan Chucherko, Annemarie H. Eckes, Sarah C. Dyer, & Wiktor Jurkowski. (2017). TGAC/brassica: v1.0.0 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.466050
 https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
@@ -27,7 +27,7 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 
 ## Dependencies
 
-* Ruby >= 2.0  
+* Ruby >= 2.0
 * MRI 2.2.x
 * PostgreSQL
 * Elasticsearch 1.4.3, Java 7
@@ -54,6 +54,7 @@ is quick and easy).
 
 
 ## Installation
+
 To start installation clone brassica repository:
 
     git clone  https://github.com/TGAC/brassica.git
@@ -77,6 +78,11 @@ This will load production data, migrate it and initialize ES indices.
 
 The `app:bootstrap` task may be used at a later time to reset database to its
 initial state but make sure that no instance of the app is running when calling the task.
+
+Also, make sure `config/admins.yml` is in place and contains ORCiD identifiers of users with admin privileges:
+
+    cp config/admins.yml.sample config/admins.yml
+
 
 ### R packages
 

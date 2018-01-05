@@ -1,7 +1,8 @@
 RSpec.shared_examples "API-deletable resource" do |model_klass|
   model_name = model_klass.name.underscore
+
   let(:parsed_response) { JSON.parse(response.body) }
-  let(:subject) { create(model_klass) }
+  let(:subject) { create(model_name.to_sym) }
 
   describe '#revocable?' do
     it 'implements revocable? method' do

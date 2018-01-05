@@ -1,7 +1,7 @@
 class Trait < ActiveRecord::Base
   has_many :trait_descriptors
 
-  validates :name, uniqueness: true
+  validates :name, presence: true, uniqueness: true
   validates :label, presence: true
 
   include Filterable

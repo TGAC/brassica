@@ -20,7 +20,7 @@ set :chruby_ruby, 'ruby-2.2.1'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/puma.rb', '.env')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/admins.yml', 'config/puma.rb', '.env')
 
 # Default value for linked_dirs is []
 set :linked_dirs, fetch(:linked_dirs, []).

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :qtl do
     sequence(:qtl_rank) { Faker::Lorem.characters(14) }
     sequence(:map_qtl_label) { Faker::Lorem.characters(14) }

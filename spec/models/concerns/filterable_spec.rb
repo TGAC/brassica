@@ -63,7 +63,7 @@ RSpec.describe Filterable do
 
     it 'returns fetched records for further scoping' do
       @searchable.each do |searchable|
-        s = create(searchable)
+        s = create(searchable.name.underscore.to_sym)
         s.send(:as_indexed_json).each do |k,v|
           if v.instance_of?(String)
             s.update_attribute(k, 'Wrapped query string')

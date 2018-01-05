@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :plant_part do
     sequence(:plant_part) {|n| "#{Faker::Lorem.word}_#{n}"}
     description { Faker::Lorem.sentence }
