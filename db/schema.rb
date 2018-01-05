@@ -57,6 +57,15 @@ ActiveRecord::Schema.define(version: 20180202171044) do
 
   add_index "api_keys", ["token"], name: "api_keys_token_idx", unique: true, using: :btree
 
+  create_table "container_types", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.boolean  "canonical",  default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "container_types", ["name"], name: "index_container_types_on_name", using: :btree
+
   create_table "countries", force: :cascade do |t|
     t.string   "country_code", limit: 3, null: false
     t.text     "country_name"

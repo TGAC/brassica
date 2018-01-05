@@ -15,6 +15,12 @@ module Seeds
     ]
     lamp_types.each { |t| LampType.create_with(canonical: true).find_or_create_by!(name: t) }
   end
+
+  def self.create_container_types
+    container_types = ["pot", "Petri dish", "well", "tray"]
+    container_types.each { |t| ContainerType.create_with(canonical: true).find_or_create_by!(name: t) }
+  end
 end
 
 Seeds.create_lamp_types
+Seeds.create_container_types
