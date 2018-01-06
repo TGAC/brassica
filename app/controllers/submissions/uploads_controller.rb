@@ -1,7 +1,6 @@
 class Submissions::UploadsController < ApplicationController
-
-  prepend_before_filter :authenticate_user!
-  before_filter :require_submission_owner
+  prepend_before_action :authenticate_user!
+  before_action :require_submission_owner
 
   def new
     Submission::TraitScoreTemplateGenerator.new(submission).call do |file|

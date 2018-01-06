@@ -1,5 +1,4 @@
 class PlantLinesController < ApplicationController
-
   def index
     page = params[:page] || 1
     plant_lines = PlantLine.filter(params).visible(current_user.try(:id)).order(:plant_line_name)
@@ -10,5 +9,4 @@ class PlantLinesController < ApplicationController
       total_count: plant_lines.count
     }
   end
-
 end

@@ -1,5 +1,5 @@
 class Analyses::DataFilesController < ApplicationController
-  prepend_before_filter :authenticate_user!
+  prepend_before_action :authenticate_user!
 
   rescue_from Encoding::InvalidByteSequenceError do
     render json: { errors: ["Invalid file encoding. Expected plain-text or UTF-8 encoded file."] }, status: 422

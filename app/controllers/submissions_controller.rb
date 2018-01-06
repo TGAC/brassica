@@ -1,6 +1,5 @@
 class SubmissionsController < ApplicationController
-
-  before_filter :authenticate_user!, except: :new
+  before_action :authenticate_user!, except: :new
 
   def index
     @submissions = current_user.submissions.recent_first

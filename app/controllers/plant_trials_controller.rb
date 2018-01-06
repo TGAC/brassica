@@ -1,5 +1,4 @@
 class PlantTrialsController < ApplicationController
-
   def index
     page = params[:page] || 1
     plant_trials = PlantTrial.filter(params).visible(current_user.try(:id)).order(:plant_trial_name)
@@ -23,5 +22,4 @@ class PlantTrialsController < ApplicationController
       render nothing: true, status: :unauthorized
     end
   end
-
 end

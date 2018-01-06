@@ -1,5 +1,5 @@
 class AnalysesController < ApplicationController
-  before_filter :authenticate_user!, if: :require_user?
+  before_action :authenticate_user!, if: :require_user?
 
   def index
     @analyses = current_user.analyses.recent_first

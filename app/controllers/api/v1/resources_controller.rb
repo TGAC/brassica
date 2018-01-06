@@ -1,9 +1,9 @@
 class Api::V1::ResourcesController < Api::BaseController
   include Pagination
 
-  before_filter :authenticate_api_key!
-  before_filter :require_allowed_model
-  before_filter :require_strictly_correct_params, only: :create
+  before_action :authenticate_api_key!
+  before_action :require_allowed_model
+  before_action :require_strictly_correct_params, only: :create
 
   rescue_from 'ActiveRecord::InvalidForeignKey' do |exception|
     message = exception.message.split("\n").try(:second)
@@ -174,5 +174,4 @@ class Api::V1::ResourcesController < Api::BaseController
   def create_params
     Api::CreateParams.new(model, params).permitted_params
   end
-
 end

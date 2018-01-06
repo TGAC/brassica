@@ -1,5 +1,4 @@
 class TraitDescriptorsController < ApplicationController
-
   def index
     page = params[:page] || 1
     descriptors = TraitDescriptor.includes(:trait).references(:trait)
@@ -14,5 +13,4 @@ class TraitDescriptorsController < ApplicationController
       total_count: descriptors.count
     }
   end
-
 end

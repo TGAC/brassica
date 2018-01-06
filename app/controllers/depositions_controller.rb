@@ -1,6 +1,5 @@
 class DepositionsController < ApplicationController
-
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def new
     @deposition = Deposition.new(submission: submission, user: current_user)

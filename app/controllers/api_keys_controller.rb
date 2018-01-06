@@ -1,6 +1,5 @@
 class ApiKeysController < ApplicationController
-
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   def show
     @api_key = current_user.api_key
