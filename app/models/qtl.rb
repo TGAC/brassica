@@ -22,15 +22,14 @@ class Qtl < ActiveRecord::Base
     qtlj_subquery = QtlJob.visible(uid)
 
     query = all.
-      joins {[
-        processed_trait_dataset,
-        td_subquery.as('trait_descriptors').on { processed_trait_datasets.trait_descriptor_id == trait_descriptors.id }.outer,
-        t_subquery.as('traits').on { trait_descriptors.trait_id == traits.id }.outer,
-        lg_subquery.as('linkage_groups').on { linkage_group_id == linkage_groups.id }.outer,
-        lm_subquery.as('linkage_maps').on { linkage_groups.linkage_map_id == linkage_maps.id }.outer,
-        pp_subquery.as('plant_populations').on { linkage_maps.plant_population_id == plant_populations.id }.outer,
-        qtlj_subquery.as('qtl_jobs').on { qtl_job_id == qtl_jobs.id }.outer
-      ]}
+      joins(:processed_trait_dataset).
+      joins("LEFT OUTER JOIN #{td_subquery.as('trait_descriptors').to_sql} ON processed_trait_datasets.trait_descriptor_id = trait_descriptors.id").
+      joins("LEFT OUTER JOIN #{t_subquery.as('traits').to_sql} ON trait_descriptors.trait_id = traits.id").
+      joins("LEFT OUTER JOIN #{lg_subquery.as('linkage_groups').to_sql} ON qtl.linkage_group_id = linkage_groups.id").
+      joins("LEFT OUTER JOIN #{lm_subquery.as('linkage_maps').to_sql} ON linkage_groups.linkage_map_id = linkage_maps.id").
+      joins("LEFT OUTER JOIN #{pp_subquery.as('plant_populations').to_sql} ON linkage_maps.plant_population_id = plant_populations.id").
+      joins("LEFT OUTER JOIN #{qtlj_subquery.as('qtl_jobs').to_sql} ON qtl.qtl_job_id = qtl_jobs.id")
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
     query.pluck(*(table_columns + ref_columns))

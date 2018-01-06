@@ -34,14 +34,12 @@ module Relatable extend ActiveSupport::Concern
         relation = get_related_model(count_column.split(/ as /i)[0])
         related_klass = adjust_related_name(relation).classify.constantize
         fkey = reverse_relation_key(relation)
-        self_table = self.table_name
         subquery = related_klass.hidden(uid).
                                  group(fkey).
-                                 select{ [fkey, count(id).as(hidden)] }
-        query = query.joins{ subquery.
-                             as(relation).
-                             on{ __send__(relation).send(fkey).eq(__send__(self_table).send('id')) }.
-                             outer }
+                                 selecting { [fkey, count(id).as("hidden")] }
+
+        query = query.joins("LEFT OUTER JOIN #{subquery.as(relation).to_sql} ON #{self.table_name}.id = #{relation}.#{fkey}")
+
       end
       query
     end

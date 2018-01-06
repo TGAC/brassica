@@ -11,9 +11,16 @@ module Joinable
           if include
             query = query.includes(relation.to_sym)
           else
-            subqueries = query.joins_values.select{|v| v.class == Squeel::Nodes::SubqueryJoin}
-            symbols = subqueries.collect{ |s| s.subquery.right }
-            query = query.joins(relation.to_sym) unless symbols.include? relation.pluralize
+            join_tables = query.joins_values.select { |v| v.is_a?(Symbol) }.map(&:to_s)
+
+            # TODO: what about other joins? it probably should handle handwritten inner joins too
+            join_subqueries = query.joins_values.select { |v| v.to_s.starts_with?("LEFT OUTER JOIN") }
+
+            join_tables = join_tables + join_subqueries.map do |v|
+              v.match(/LEFT OUTER JOIN \(.*\) (.*) ON/).try(:[], 1)
+            end.compact
+
+            query = query.joins(relation.to_sym) unless join_tables.include?(relation.pluralize)
           end
         end
         query

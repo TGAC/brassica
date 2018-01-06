@@ -23,16 +23,14 @@ class TraitScore < ActiveRecord::Base
     td_subquery = TraitDescriptor.visible(uid)
     t_subquery = Trait.all
 
-    query = all
-    query = query.joins {[
-      psu_subquery.as('plant_scoring_units').on { plant_scoring_unit_id == plant_scoring_units.id }.outer,
-      pt_subquery.as('plant_trials').on { plant_scoring_units.plant_trial_id == plant_trials.id }.outer,
-      pp_subquery.as('plant_populations').on { plant_trials.plant_population_id == plant_populations.id }.outer,
-      pa_subquery.as('plant_accessions').on { plant_scoring_units.plant_accession_id == plant_accessions.id }.outer,
-      pl_subquery.as('plant_lines').on { plant_accessions.plant_line_id == plant_lines.id }.outer,
-      td_subquery.as('trait_descriptors').on { trait_descriptor_id == trait_descriptors.id }.outer,
-      t_subquery.as('traits').on { trait_descriptors.trait_id == traits.id }.outer
-    ]}
+    query = all.
+      joins("LEFT OUTER JOIN #{psu_subquery.as('plant_scoring_units').to_sql} ON plant_scoring_unit_id = plant_scoring_units.id").
+      joins("LEFT OUTER JOIN #{pt_subquery.as('plant_trials').to_sql} ON plant_scoring_units.plant_trial_id = plant_trials.id").
+      joins("LEFT OUTER JOIN #{pp_subquery.as('plant_populations').to_sql} ON plant_trials.plant_population_id = plant_populations.id").
+      joins("LEFT OUTER JOIN #{pa_subquery.as('plant_accessions').to_sql} ON plant_scoring_units.plant_accession_id = plant_accessions.id").
+      joins("LEFT OUTER JOIN #{pl_subquery.as('plant_lines').to_sql} ON plant_accessions.plant_line_id = plant_lines.id").
+      joins("LEFT OUTER JOIN #{td_subquery.as('trait_descriptors').to_sql} ON trait_descriptor_id = trait_descriptors.id").
+      joins("LEFT OUTER JOIN #{t_subquery.as('traits').to_sql} ON trait_descriptors.trait_id = traits.id")
 
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))

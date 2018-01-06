@@ -31,11 +31,10 @@ class TraitDescriptor < ActiveRecord::Base
     pp_subquery = PlantPart.all
 
     query = all.
-      joins {[
-        pt_subquery.as('plant_trials_subquery').on { trait_descriptors.id == plant_trials_subquery.trait_descriptor_id }.outer,
-        t_subquery.as('traits').on { trait_descriptors.trait_id == traits.id }.outer,
-        pp_subquery.as('plant_parts').on { trait_descriptors.plant_part_id == plant_parts.id }.outer
-      ]}
+      joins("LEFT OUTER JOIN #{pt_subquery.as('plant_trials_subquery').to_sql} ON trait_descriptors.id = plant_trials_subquery.trait_descriptor_id").
+      joins("LEFT OUTER JOIN #{t_subquery.as('traits').to_sql} ON trait_descriptors.trait_id = traits.id").
+      joins("LEFT OUTER JOIN #{pp_subquery.as('plant_parts').to_sql} ON trait_descriptors.plant_part_id = plant_parts.id")
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
     query = join_counters(query, uid)

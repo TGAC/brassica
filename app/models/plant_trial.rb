@@ -50,7 +50,7 @@ class PlantTrial < ActiveRecord::Base
 
   # NOTE: this one works per-trial and provides data for so-called 'pivot' trial scoring table
   def scoring_table_data(user_id: nil, extended: false)
-    ts = TraitScore.arel_table
+    trait_scores_table = TraitScore.arel_table
 
     psu_subquery = PlantScoringUnit.visible(user_id)
     td_subquery = TraitDescriptor.visible(user_id)
@@ -61,22 +61,19 @@ class PlantTrial < ActiveRecord::Base
     end
 
     all_scores = TraitScore.
-      joins {
-        [
-          psu_subquery.as('plant_scoring_units').on { plant_scoring_unit_id == plant_scoring_units.id }.outer,
-          pa_subquery.as('plant_accessions').on { plant_accessions.id == plant_scoring_units.plant_accession_id }.outer,
-          td_subquery.as('trait_descriptors').on { trait_descriptor_id == trait_descriptors.id }.outer
-        ] +
-        (
-          extended ? [
-            pl_subquery.as('plant_lines').on { plant_lines.id == plant_accessions.plant_line_id }.outer,
-            df_subquery.as('design_factors').on { design_factors.id == plant_scoring_units.design_factor_id }.outer
-          ] : []
-        )
-      }
+      joins("LEFT OUTER JOIN #{psu_subquery.as('plant_scoring_units').to_sql} ON trait_scores.plant_scoring_unit_id = plant_scoring_units.id").
+      joins("LEFT OUTER JOIN #{pa_subquery.as('plant_accessions').to_sql} ON plant_accessions.id = plant_scoring_units.plant_accession_id").
+      joins("LEFT OUTER JOIN #{td_subquery.as('trait_descriptors').to_sql} ON trait_scores.trait_descriptor_id = trait_descriptors.id")
+
+    if extended
+      all_scores = all_scores.
+        joins("LEFT OUTER JOIN #{pl_subquery.as('plant_lines').to_sql} ON plant_lines.id = plant_accessions.plant_line_id").
+        joins("LEFT OUTER JOIN #{df_subquery.as('design_factors').to_sql} ON design_factors.id = plant_scoring_units.design_factor_id")
+    end
+
     all_scores = all_scores.
       where(plant_scoring_units: { plant_trial_id: self.id }).
-      where(ts[:user_id].eq(user_id).or(ts[:published].eq(true))).
+      where(trait_scores_table[:user_id].eq(user_id).or(trait_scores_table[:published].eq(true))).
       order('plant_scoring_units.scoring_unit_name asc, trait_descriptors.id asc').
       group_by(&:plant_scoring_unit_id)
 
@@ -108,9 +105,9 @@ class PlantTrial < ActiveRecord::Base
           ] : []
         ) +
           trait_descriptor_ids.map do |td_id|
-          scores_for_trait = scores.select{ |s| s.trait_descriptor_id == td_id.to_i}
+          scores_for_trait = scores.select { |s| s.trait_descriptor_id == td_id.to_i }
           (1..replicate_number_map[td_id]).map do |replicate_number|
-            replicate = scores_for_trait.detect{ |s| s.technical_replicate_number == replicate_number }
+            replicate = scores_for_trait.detect { |s| s.technical_replicate_number == replicate_number }
             replicate ? replicate.score_value : '-'
           end
         end.flatten +

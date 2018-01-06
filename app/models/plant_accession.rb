@@ -33,11 +33,10 @@ class PlantAccession < ActiveRecord::Base
     pl_subquery = PlantLine.visible(uid)
 
     query = all.
-      joins {[
-        pl_subquery.as('plant_lines').on { plant_lines.id == plant_accessions.plant_line_id }.outer,
-        pv_subquery.as('plant_varieties').on { plant_varieties.id == plant_accessions.plant_variety_id }.outer,
-        pv_subquery.as('plant_line_varieties').on { plant_line_varieties.id == plant_lines.plant_variety_id }.outer
-    ]}
+      joins("LEFT OUTER JOIN #{pl_subquery.as('plant_lines').to_sql} ON plant_lines.id = plant_accessions.plant_line_id").
+      joins("LEFT OUTER JOIN #{pv_subquery.as('plant_varieties').to_sql} ON plant_varieties.id = plant_accessions.plant_variety_id").
+      joins("LEFT OUTER JOIN #{pv_subquery.as('plant_line_varieties').to_sql} ON plant_line_varieties.id = plant_lines.plant_variety_id")
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
 

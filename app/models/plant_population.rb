@@ -44,12 +44,11 @@ class PlantPopulation < ActiveRecord::Base
     subquery = PlantLine.visible(uid)
 
     query = PlantPopulation.
-      joins {[
-        subquery.as('plant_lines').on { female_parent_line_id == plant_lines.id }.outer,
-        subquery.as('male_parent_lines_plant_populations').on { male_parent_line_id == male_parent_lines_plant_populations.id }.outer,
-        taxonomy_term.outer,
-        population_type.outer
-      ]}
+      joins("LEFT OUTER JOIN #{subquery.as('plant_lines').to_sql} ON plant_populations.female_parent_line_id = plant_lines.id").
+      joins("LEFT OUTER JOIN #{subquery.as('male_parent_lines_plant_populations').to_sql} ON plant_populations.male_parent_line_id = male_parent_lines_plant_populations.id").
+      joins("LEFT OUTER JOIN taxonomy_terms ON plant_populations.taxonomy_term_id = taxonomy_terms.id").
+      joins("LEFT OUTER JOIN pop_type_lookup ON plant_populations.population_type_id = pop_type_lookup.id")
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.
       where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))

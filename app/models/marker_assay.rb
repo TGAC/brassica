@@ -47,11 +47,10 @@ class MarkerAssay < ActiveRecord::Base
     probe_subquery = Probe.visible(uid)
 
     query = MarkerAssay.
-      joins {[
-        primer_subquery.as('primers').on { primer_a_id == primers.id }.outer,
-        primer_subquery.as('primer_bs_marker_assays').on { primer_b_id == primer_bs_marker_assays.id }.outer,
-        probe_subquery.as('probes').on { probe_id == probes.id }.outer
-      ]}
+      joins("LEFT OUTER JOIN #{primer_subquery.as('primers').to_sql} ON primers.id = marker_assays.primer_a_id").
+      joins("LEFT OUTER JOIN #{primer_subquery.as('primer_bs_marker_assays').to_sql} ON primer_bs_marker_assays.id = marker_assays.primer_b_id").
+      joins("LEFT OUTER JOIN #{probe_subquery.as('probes').to_sql} ON probes.id = marker_assays.probe_id")
+
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.
       where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
