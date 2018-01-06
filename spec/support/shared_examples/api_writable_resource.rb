@@ -38,14 +38,14 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
     describe "POST /api/v1/#{model_name.pluralize}" do
       it "returns 401" do
-        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
+        get "/api/v1/#{model_name.pluralize}", headers: { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).not_to be_empty
       end
 
       it "shows gentle reminder if one is using demo key" do
-        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => demo_key }
+        get "/api/v1/#{model_name.pluralize}", headers: { "X-BIP-Api-Key" => demo_key }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).to eq "Please use your own, personal API key"
@@ -84,7 +84,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "creates an object" do
           expect {
-            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+            post "/api/v1/#{model_name.pluralize}", params: { model_name => model_attrs },
+                                                    headers: { "X-BIP-Api-Key" => api_key.token }
           }.to change {
             model_klass.count
           }.by(1)
@@ -97,8 +98,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         if Api.publishable_models.include?(model.klass)
           it "creates private object" do
             expect {
-              post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs.merge(published: false) },
-              { "X-BIP-Api-Key" => api_key.token }
+              post "/api/v1/#{model_name.pluralize}", params: { model_name => model_attrs.merge(published: false) },
+                                                      headers: { "X-BIP-Api-Key" => api_key.token }
             }.to change {
               model_klass.count
             }.by(1)
@@ -110,7 +111,9 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         end
 
         it "sets correct annotations" do
-          post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+          post "/api/v1/#{model_name.pluralize}", params: { model_name => model_attrs },
+                                                  headers: { "X-BIP-Api-Key" => api_key.token }
+
           expect(response).to be_success
           expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
           expect(parsed_response[model_name]['entered_by_whom']).to eq api_key.user.full_name
@@ -124,7 +127,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
             :date_entered => Date.today - 3.days,
             :entered_by_whom => 'This was not me!'
           )
-          post "/api/v1/#{model_name.pluralize}", { model_name => better_attrs }, { "X-BIP-Api-Key" => api_key.token }
+          post "/api/v1/#{model_name.pluralize}", params: { model_name => better_attrs },
+                                                  headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(response).to be_success
           expect(parsed_response[model_name]['date_entered']).to eq Date.today.to_s
@@ -133,7 +137,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "assigns HABTM associations" do
           if habtm_assocs.present?
-            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+            post "/api/v1/#{model_name.pluralize}", params: { model_name => model_attrs },
+                                                    headers: { "X-BIP-Api-Key" => api_key.token }
 
             expect(response).to be_success
 
@@ -156,7 +161,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "returns errors" do
           expect {
-            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+            post "/api/v1/#{model_name.pluralize}", params: { model_name => model_attrs },
+                                                    headers: { "X-BIP-Api-Key" => api_key.token }
           }.not_to change {
             model_klass.count
           }
@@ -187,7 +193,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
         it "returns errors" do
           if related_models.present?
             expect {
-              post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+              post "/api/v1/#{model_name.pluralize}", params: { model_name => model_attrs },
+                                                      headers: { "X-BIP-Api-Key" => api_key.token }
             }.not_to change {
               model_klass.count
             }
@@ -209,7 +216,7 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "returns errors on wrong model attribute name" do
           expect {
-            post "/api/v1/#{model_name.pluralize}", { model_name => model_attrs }, { "X-BIP-Api-Key" => api_key.token }
+            post "/api/v1/#{model_name.pluralize}", params: { model_name => model_attrs }, headers: { "X-BIP-Api-Key" => api_key.token }
           }.not_to change {
             model_klass.count
           }
@@ -222,7 +229,8 @@ RSpec.shared_examples "API-writable resource" do |model_klass|
 
         it "returns error on wrong model name" do
           expect {
-            post "/api/v1/#{model_name.pluralize}", { "wrong_name" => { "does" => "not matter" } }, { "X-BIP-Api-Key" => api_key.token }
+            post "/api/v1/#{model_name.pluralize}", params: { "wrong_name" => { "does" => "not matter" } },
+                                                    headers: { "X-BIP-Api-Key" => api_key.token }
           }.not_to change {
             model_klass.count
           }

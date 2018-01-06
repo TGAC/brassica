@@ -53,7 +53,7 @@ RSpec.describe "API V1" do
 
     it 'makes sure there are no dangling belongs_to references left' do
       expect(plant_population.male_parent_line).to eq parent_line
-      delete "/api/v1/plant_lines/#{parent_line.id}", {}, { "X-BIP-Api-Key" => api_key.token }
+      delete "/api/v1/plant_lines/#{parent_line.id}", headers: { "X-BIP-Api-Key" => api_key.token }
 
       expect(response.status).to eq 204
       expect(plant_population.reload.male_parent_line_id).to be_nil
@@ -62,7 +62,7 @@ RSpec.describe "API V1" do
     it 'makes sure there are no habtm references left' do
       expect(plant_population.reload.plant_lines.count).to eq 2
       expect(PlantPopulationList.count).to eq 2
-      delete "/api/v1/plant_lines/#{plant_population.plant_lines.first.id}", {}, { "X-BIP-Api-Key" => api_key.token }
+      delete "/api/v1/plant_lines/#{plant_population.plant_lines.first.id}", headers: { "X-BIP-Api-Key" => api_key.token }
 
       expect(response.status).to eq 204
       expect(PlantPopulationList.count).to eq 1
@@ -76,14 +76,15 @@ RSpec.describe "API V1" do
 
     it 'does not accept plant populations without establishing_organisation' do
       expect {
-        post '/api/v1/plant_populations', {
+        post '/api/v1/plant_populations', params: {
           plant_population: {
             name: 'foo',
             taxonomy_term_id: tt.id,
             population_type_id: pt.id
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantPopulation.count }.by(0)
+
       expect(response.status).to eq 422
       expect(parsed_response['errors'].length).to eq 1
       expect(parsed_response['errors'].first['message']).
@@ -97,14 +98,14 @@ RSpec.describe "API V1" do
 
     it 'does not accept plant accessions without PL or PV' do
       expect {
-        post "/api/v1/plant_accessions", {
+        post "/api/v1/plant_accessions", params: {
           plant_accession: {
             plant_accession: 'foo',
             plant_line_id: nil,
             plant_variety_id: nil,
             originating_organisation: 'oo'
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(0)
 
       expect(response.status).to eq 422
@@ -117,14 +118,14 @@ RSpec.describe "API V1" do
 
     it 'does not accept plant accessions with both PL and PV' do
       expect {
-        post "/api/v1/plant_accessions", {
+        post "/api/v1/plant_accessions", params: {
           plant_accession: {
             plant_accession: 'foo',
             plant_line_id: pl.id,
             plant_variety_id: pv.id,
             originating_organisation: 'oo'
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(0)
 
       expect(response.status).to eq 422
@@ -137,31 +138,31 @@ RSpec.describe "API V1" do
 
     it 'accepts plant accessions with either PL or PV but not both' do
       expect {
-        post "/api/v1/plant_accessions", {
+        post "/api/v1/plant_accessions", params: {
           plant_accession: {
             plant_accession: 'foo',
             plant_line_id: pl.id,
             plant_variety_id: nil,
             originating_organisation: 'oo'
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(1)
 
       expect {
-        post "/api/v1/plant_accessions", {
+        post "/api/v1/plant_accessions", params: {
           plant_accession: {
             plant_accession: 'bar',
             plant_line_id: nil,
             plant_variety_id: pv.id,
             originating_organisation: 'oo'
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(1)
     end
 
     it 'does not accept plant accession if another accession with identical PA, OO and YP fields exists' do
       expect {
-        post "/api/v1/plant_accessions", {
+        post "/api/v1/plant_accessions", params: {
           plant_accession: {
             plant_accession: 'foo',
             plant_line_id: nil,
@@ -169,11 +170,11 @@ RSpec.describe "API V1" do
             originating_organisation: 'oo',
             year_produced: '2017'
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(1)
 
       expect {
-        post "/api/v1/plant_accessions", {
+        post "/api/v1/plant_accessions", params: {
           plant_accession: {
             plant_accession: 'foo',
             plant_line_id: nil,
@@ -181,7 +182,7 @@ RSpec.describe "API V1" do
             originating_organisation: 'oo',
             year_produced: '2017'
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { PlantAccession.count }.by(0)
 
       expect(response.status).to eq 422
@@ -193,7 +194,7 @@ RSpec.describe "API V1" do
   context 'when submitting a design factor' do
     it 'does not allow non-array value for design_factors' do
       expect {
-        post "/api/v1/design_factors", {
+        post "/api/v1/design_factors", params: {
           design_factor: {
             design_factor_name: 'foo',
             institute_id: 'foo',
@@ -201,7 +202,7 @@ RSpec.describe "API V1" do
             design_unit_counter: 'foo',
             design_factors: 'non array value'
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { DesignFactor.count }.by(0)
 
       expect(response.status).to eq 422
@@ -210,7 +211,7 @@ RSpec.describe "API V1" do
 
     it 'does not allow empty array value for design_factors' do
       expect {
-        post "/api/v1/design_factors", {
+        post "/api/v1/design_factors", params: {
           design_factor: {
             design_factor_name: 'foo',
             institute_id: 'foo',
@@ -218,7 +219,7 @@ RSpec.describe "API V1" do
             design_unit_counter: 'foo',
             design_factors: []
           }
-        }, { "X-BIP-Api-Key" => api_key.token }
+        }, headers: { "X-BIP-Api-Key" => api_key.token }
       }.to change { DesignFactor.count }.by(0)
 
       expect(response.status).to eq 422
@@ -233,7 +234,7 @@ RSpec.describe "API V1" do
     it 'returns only owned resources' do
       expect(PlantVariety.count).to eq 3
 
-      get "/api/v1/plant_varieties?only_mine=true", {}, { "X-BIP-Api-Key" => api_key.token }
+      get "/api/v1/plant_varieties?only_mine=true", headers: { "X-BIP-Api-Key" => api_key.token }
       expect(response.status).to eq 200
       expect(parsed_response).to have_key('plant_varieties')
       expect(parsed_response['plant_varieties'].count).to eq 2
@@ -243,7 +244,7 @@ RSpec.describe "API V1" do
 
     it 'can be combined with other filters' do
       get "/api/v1/plant_varieties?only_mine=true&plant_variety[query][plant_variety_name]=#{owned[0].plant_variety_name}",
-          {}, { "X-BIP-Api-Key" => api_key.token }
+          headers: { "X-BIP-Api-Key" => api_key.token }
       expect(response.status).to eq 200
       expect(parsed_response).to have_key('plant_varieties')
       expect(parsed_response['plant_varieties'].count).to eq 1
@@ -252,7 +253,7 @@ RSpec.describe "API V1" do
     end
 
     it 'is turned off by default' do
-      get "/api/v1/plant_varieties", {}, { "X-BIP-Api-Key" => api_key.token }
+      get "/api/v1/plant_varieties", headers: { "X-BIP-Api-Key" => api_key.token }
       expect(response.status).to eq 200
       expect(parsed_response).to have_key('plant_varieties')
       expect(parsed_response['plant_varieties'].count).to eq 3

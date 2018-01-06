@@ -5,7 +5,7 @@ RSpec.describe "Submission management" do
   context "with no user signed in" do
     describe "GET /submissions" do
       it "redirects to submissions" do
-        get "/submissions", {}, { 'HTTP_REFERER' => new_submission_path }
+        get "/submissions", headers: { 'HTTP_REFERER' => new_submission_path }
         expect(response).to redirect_to(new_submission_path)
       end
     end
@@ -42,7 +42,7 @@ RSpec.describe "Submission management" do
 
         describe "POST /submissions" do
           it "creates submission of given type and redirects to edit" do
-            post "/submissions", submission: { submission_type: submission_type }
+            post "/submissions", params: { submission: { submission_type: submission_type } }
             expect(response).to redirect_to(edit_submission_path(Submission.last))
           end
         end
@@ -186,12 +186,12 @@ RSpec.describe "Submission management" do
           let(:submission) { create :submission, submission_type.to_sym, user: user, finalized: false }
 
           it "ignores submission type updates" do
-            put "/submissions/#{submission.id}", submission: { submission_type: 'qtl', content: { foo: 'bar' } }
+            put "/submissions/#{submission.id}", params: { submission: { submission_type: 'qtl', content: { foo: 'bar' } } }
             expect(submission.reload.send("#{submission_type}?")).to be_truthy
           end
 
           it "ignores not-permitted params" do
-            put "/submissions/#{submission.id}", submission: { content: { unknown_property: true } }
+            put "/submissions/#{submission.id}", params: { submission: { content: { unknown_property: true } } }
             expect(submission.reload.content.unknown_property).to be nil
           end
 
@@ -204,7 +204,7 @@ RSpec.describe "Submission management" do
                                     edit_submission_path(submission)
                                   end
 
-              put "/submissions/#{submission.id}", step_params
+              put "/submissions/#{submission.id}", params: step_params
 
               if step_params.present?
                 expect(submission.reload.content.to_h).to include(step_params[:submission][:content])
@@ -223,14 +223,14 @@ RSpec.describe "Submission management" do
             end
 
             it "resets submission step if completed step was given" do
-              expect { put "/submissions/#{submission.id}", step: 0 }.to \
+              expect { put "/submissions/#{submission.id}", params: { step: 0 } }.to \
                 change { submission.reload.step }.from("step02").to("step01")
 
               expect(response).to redirect_to(edit_submission_path(submission))
             end
 
             it "does nothing if given step was not completed" do
-              expect { put "/submissions/#{submission.id}", step: 2 }.not_to \
+              expect { put "/submissions/#{submission.id}", params: { step: 2 } }.not_to \
                 change { submission.reload.step }.from("step02")
 
               expect(response).to redirect_to(edit_submission_path(submission))
@@ -245,7 +245,7 @@ RSpec.describe "Submission management" do
               before { allow_any_instance_of(finalizer_klass).to receive(:call).and_return(false) }
 
               it "redirects to first step with :validate option" do
-                put "/submissions/#{submission.id}", update_params.values.last
+                put "/submissions/#{submission.id}", params: update_params.values.last
 
                 expect(response).to redirect_to(edit_submission_path(submission, validate: true))
               end

@@ -37,7 +37,7 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
 
     describe "DELETE /api/v1/#{model_name.pluralize}/:id" do
       it "returns 401" do
-        delete "/api/v1/#{model_name.pluralize}/#{subject.id}", {}, { "X-BIP-Api-Key" => api_key.token }
+        delete "/api/v1/#{model_name.pluralize}/#{subject.id}", headers: { "X-BIP-Api-Key" => api_key.token }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).not_to be_empty
@@ -52,7 +52,7 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
       it 'prevents destroying published resource' do
         subject.update_attributes!(published: true, published_on: 8.days.ago)
         expect {
-          delete "/api/v1/#{model_name.pluralize}/#{subject.id}", {}, { "X-BIP-Api-Key" => api_key.token }
+          delete "/api/v1/#{model_name.pluralize}/#{subject.id}", headers: { "X-BIP-Api-Key" => api_key.token }
         }.to change {
           model_klass.count
         }.by(0)
@@ -64,7 +64,7 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
       it 'destroys resource still in its revocability period' do
         subject.update_attributes!(published: true, published_on: Time.now)
         expect {
-          delete "/api/v1/#{model_name.pluralize}/#{subject.id}", {}, { "X-BIP-Api-Key" => api_key.token }
+          delete "/api/v1/#{model_name.pluralize}/#{subject.id}", headers: { "X-BIP-Api-Key" => api_key.token }
         }.to change {
           model_klass.count
         }.by(-1)
@@ -75,7 +75,7 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
       it 'prevents destroying forbidden resource' do
         subject.update_attributes!(published: false)
         expect {
-          delete "/api/v1/#{model_name.pluralize}/#{subject.id}", {}, { "X-BIP-Api-Key" => create(:api_key).token }
+          delete "/api/v1/#{model_name.pluralize}/#{subject.id}", headers: { "X-BIP-Api-Key" => create(:api_key).token }
         }.to change {
           model_klass.count
         }.by(0)
@@ -86,7 +86,7 @@ RSpec.shared_examples "API-deletable resource" do |model_klass|
 
       it 'returns 404 for nonexistent resource' do
         expect {
-          delete "/api/v1/#{model_name.pluralize}/505505", {}, { "X-BIP-Api-Key" => api_key.token }
+          delete "/api/v1/#{model_name.pluralize}/505505", headers: { "X-BIP-Api-Key" => api_key.token }
         }.to change {
           model_klass.count
         }.by(0)

@@ -23,7 +23,7 @@ RSpec.shared_examples "API-revocable resource" do |model_klass|
       let!(:resource) { create model_name }
 
       it "returns 401" do
-        patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", {}, { "X-BIP-Api-Key" => "invalid" }
+        patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", headers: { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).not_to be_empty
@@ -39,8 +39,7 @@ RSpec.shared_examples "API-revocable resource" do |model_klass|
         let!(:resource) { create model_name, published: false, user: api_key.user }
 
         it "returns 403" do
-          patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", { },
-            { "X-BIP-Api-Key" => api_key.token }
+          patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(response.status).to eq 403
           expect(parsed_response['reason']).to eq("This resource is not published")
@@ -53,8 +52,7 @@ RSpec.shared_examples "API-revocable resource" do |model_klass|
         }
 
         it "returns 403" do
-          patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", { },
-            { "X-BIP-Api-Key" => api_key.token }
+          patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(response.status).to eq 403
           expect(parsed_response['reason']).to eq("This resource is irrevocable")
@@ -67,8 +65,7 @@ RSpec.shared_examples "API-revocable resource" do |model_klass|
         }
 
         it "revokes publication" do
-          patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", { },
-            { "X-BIP-Api-Key" => api_key.token }
+          patch "/api/v1/#{model_name.pluralize}/#{resource.id}/revoke", headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(response).to be_success
           expect(resource.reload).not_to be_published

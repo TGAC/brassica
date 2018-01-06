@@ -30,14 +30,14 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
     describe "GET /api/v1/#{model_name.pluralize}" do
       it "returns 401" do
-        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => "invalid" }
+        get "/api/v1/#{model_name.pluralize}", headers: { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).not_to be_empty
       end
 
       it "shows gentle reminder if one is using demo key" do
-        get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => demo_key }
+        get "/api/v1/#{model_name.pluralize}", headers: { "X-BIP-Api-Key" => demo_key }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).to eq "Please use your own, personal API key"
@@ -48,7 +48,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
       let!(:resource) { create model_name.to_sym }
 
       it "returns 401" do
-        get "/api/v1/#{model_name.pluralize}/#{resource.id}", {}, { "X-BIP-Api-Key" => "invalid" }
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", headers: { "X-BIP-Api-Key" => "invalid" }
 
         expect(response.status).to eq 401
         expect(parsed_response['reason']).not_to be_empty
@@ -64,7 +64,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         let!(:resources) { create_list(model_name.to_sym, 3) }
 
         it "renders existing resources" do
-          get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => api_key.token }
+          get "/api/v1/#{model_name.pluralize}", headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(response).to be_success
           expect(parsed_response).to have_key(model_name.pluralize)
@@ -76,7 +76,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
           if resource.has_attribute?(:published)
             resource.update_attribute(:published, false)
           end
-          get "/api/v1/#{model_name.pluralize}", { }, { "X-BIP-Api-Key" => api_key.token }
+          get "/api/v1/#{model_name.pluralize}", headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(response).to be_success
           expect(parsed_response).to have_key(model_name.pluralize)
@@ -89,7 +89,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         let!(:resources) { create_list(model_name.to_sym, 3) }
 
         it "paginates returned resources" do
-          get "/api/v1/#{model_name.pluralize}", {}, { "X-BIP-Api-Key" => api_key.token }
+          get "/api/v1/#{model_name.pluralize}", headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(parsed_response['meta']).to include(
             'page' => 1,
@@ -100,7 +100,8 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         end
 
         it "allows pagination options" do
-          get "/api/v1/#{model_name.pluralize}", { page: 2, per_page: 1 }, { "X-BIP-Api-Key" => api_key.token }
+          get "/api/v1/#{model_name.pluralize}", params: { page: 2, per_page: 1 },
+                                                 headers: { "X-BIP-Api-Key" => api_key.token }
 
           expect(parsed_response['meta']).to include('page' => 2, 'per_page' => 1, 'total_count' => 3)
           expect(parsed_response[model_name.pluralize].count).to eq 1
@@ -117,7 +118,8 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
           it "uses .filter if params given" do
             expect(model_klass).to receive(:filter).with(filter_params).and_call_original
 
-            get "/api/v1/#{model_name.pluralize}", { model_name => filter_params }, { "X-BIP-Api-Key" => api_key.token }
+            get "/api/v1/#{model_name.pluralize}", params: { model_name => filter_params },
+                                                   headers: { "X-BIP-Api-Key" => api_key.token }
 
             expect(response).to be_success
           end
@@ -137,7 +139,8 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
 
                 expect(model_klass).to receive(:filter).with(query).and_call_original
 
-                get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
+                get "/api/v1/#{model_name.pluralize}", params: { model_name => query },
+                                                       headers: { "X-BIP-Api-Key" => api_key.token }
               end
             end
           end
@@ -146,7 +149,8 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
             resource = create(model_name.to_sym)
             query = { query: { id: resource.id } }
 
-            get "/api/v1/#{model_name.pluralize}", { model_name => query }, { "X-BIP-Api-Key" => api_key.token }
+            get "/api/v1/#{model_name.pluralize}", params: { model_name => query },
+                                                   headers: { "X-BIP-Api-Key" => api_key.token }
 
             expect(response).to be_success
             expect(parsed_response).to have_key(model_name.pluralize)
@@ -163,7 +167,8 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
             expect(Search).to receive(:new).at_least(1).with(term).and_call_original
             expect(model_klass).to receive(:filter).with(fetch_params).and_call_original
 
-            get "/api/v1/#{model_name.pluralize}", { model_name => fetch_params }, { "X-BIP-Api-Key" => api_key.token }
+            get "/api/v1/#{model_name.pluralize}", params: { model_name => fetch_params },
+                                                   headers: { "X-BIP-Api-Key" => api_key.token }
 
             expect(response).to be_success
           end
@@ -176,14 +181,14 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
       let(:parsed_object) { JSON.parse(response.body)[model_name] }
 
       it "returns requested resource" do
-        get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", headers: { "X-BIP-Api-Key" => api_key.token }
 
         expect(response).to be_success
         expect(parsed_response).to have_key(model_name)
       end
 
       it "never shows blacklisted columns" do
-        get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", headers: { "X-BIP-Api-Key" => api_key.token }
 
         expect(parsed_object).not_to have_key('user_id')
         expect(parsed_object).not_to have_key('user')
@@ -195,7 +200,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
         if resource.has_attribute?(:published)
           resource.update_attribute(:published, false)
         end
-        get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+        get "/api/v1/#{model_name.pluralize}/#{resource.id}", headers: { "X-BIP-Api-Key" => api_key.token }
 
         if resource.has_attribute?(:published)
           expect(response.status).to eq 401
@@ -209,7 +214,7 @@ RSpec.shared_examples "API-readable resource" do |model_klass|
       context 'when run for Relatable model' do
         if model_klass.ancestors.include?(Relatable)
           it "excludes counters" do
-            get "/api/v1/#{model_name.pluralize}/#{resource.id}", { }, { "X-BIP-Api-Key" => api_key.token }
+            get "/api/v1/#{model_name.pluralize}/#{resource.id}", headers: { "X-BIP-Api-Key" => api_key.token }
 
             model_klass.count_columns.each do |count_column|
               count_column = count_column.split(/ as /i)[-1]

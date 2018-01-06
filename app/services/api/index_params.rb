@@ -9,9 +9,9 @@ class Api::IndexParams
   end
 
   def params
-    (request_params[model.name].presence || {}).tap do |params|
+    (request_params[model.name]&.to_h || {}).tap do |params|
       if request_params[:only_mine]
-        params[:query] = (params[:query] || {}).merge(user_id: user.id)
+        params[:query] = (params[:query]&.to_h || {}).merge(user_id: user.id)
       end
     end
   end
