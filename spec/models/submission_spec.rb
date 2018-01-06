@@ -95,7 +95,7 @@ RSpec.describe Submission do
   describe '#submitted_object' do
     it 'behaves bad with unexpected submission type' do
       submission = create(:finalized_submission, :population)
-      submission.update_column(:submission_type, 'unexpected')
+      submission.update_column(:submission_type, 777)
       expect{ submission.submitted_object }.
         to raise_error NoMethodError
     end
