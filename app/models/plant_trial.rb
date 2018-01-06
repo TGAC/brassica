@@ -119,7 +119,7 @@ class PlantTrial < ActiveRecord::Base
     TraitDescriptor.
       joins(trait_scores: :plant_scoring_unit).
       where(plant_scoring_units: { plant_trial_id: id }).
-      order('trait_descriptors.id asc').uniq
+      order('trait_descriptors.id asc').distinct
   end
 
   # Gives technical replicate numbers for each trait descriptor
