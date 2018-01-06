@@ -46,6 +46,9 @@ gem 'roo'
 gem 'roo-xls'
 gem 'writeexcel'
 
+# TODO: replace controller tests with request specs and remove this gem
+gem 'rails-controller-testing'
+
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
 

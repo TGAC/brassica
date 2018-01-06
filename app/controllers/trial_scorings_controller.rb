@@ -15,7 +15,7 @@ class TrialScoringsController < ApplicationController
       end
       format.zip do
         send_data Submission::PlantTrialZipExporter.new.call(@plant_trial, cache_key).read,
-                  filename: "plant_trial_#{@plant_trial.plant_trial_name.parameterize('_')}.zip",
+                  filename: "plant_trial_#{@plant_trial.plant_trial_name.parameterize(separator: '_')}.zip",
                   type: 'application/zip'
       end
     end

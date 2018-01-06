@@ -35,7 +35,7 @@ module Filterable extend ActiveSupport::Concern
     private
 
     def self.filter_params(unsafe_params)
-      unsafe_params = ActionController::Parameters.new(unsafe_params)
+      unsafe_params = ActionController::Parameters.new(unsafe_params) unless unsafe_params.is_a?(ActionController::Parameters)
       unsafe_params.permit(permitted_params)
     end
 
