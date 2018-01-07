@@ -1,0 +1,13 @@
+Upgraded gems to check:
+
+- capistrano
+- devise
+- puma
+- thin
+- coffee-rails
+- sass-rails
+- compass-rails
+- omniauth-orcid, omniauth
+- draper
+- squeel -> baby_squeel
+- reform
