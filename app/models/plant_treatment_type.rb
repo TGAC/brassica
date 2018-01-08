@@ -14,6 +14,7 @@ class PlantTreatmentType < ActiveRecord::Base
   SOIL_ROOT_TERM = "PECO:0007049"
   GASEOUS_ROOT_TERM = "PECO:0007023"
   MECHANICAL_ROOT_TERM = "PECO:0007373"
+  SALT_ROOT_TERM = "PECO:0007185"
 
   validates :name, presence: true
   validates :term, presence: true, if: :canonical?
