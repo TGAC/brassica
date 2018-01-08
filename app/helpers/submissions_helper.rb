@@ -85,6 +85,13 @@ module SubmissionsHelper
     link_to "Delete", url, options
   end
 
+  def submission_template_link(path)
+    link_to path, class: 'btn btn-success' do
+      content_tag(:i, nil, class: %w(fa fa-download)) +
+        content_tag(:span, "Download template")
+    end
+  end
+
   private
 
   def decorator(submission)

@@ -25,7 +25,7 @@ gem 'omniauth-orcid'
 gem 'nokogiri'
 
 gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
+gem 'elasticsearch-rails', '< 2'
 
 gem 'reform', '~> 1.2.6'
 gem 'obo'

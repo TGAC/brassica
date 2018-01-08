@@ -434,7 +434,7 @@ DEPENDENCIES
   dotenv-rails
   draper (~> 2.1.0)
   elasticsearch-model
-  elasticsearch-rails
+  elasticsearch-rails (< 2)
   exception_notification
   factory_bot_rails (< 5)
   faker

@@ -1,8 +1,20 @@
-.alert.alert-info
-  %p
-    One possibility to define plant Lines related to this population is to upload information
-    in a CSV file. This is especially suitable for cases when a lot of plant lines have to be
-    submitted.
+.info-block
+  %h5 Template download
+
+  .row
+    .col-md-9
+      %p
+        One possibility to define plant lines related to this population is to upload information
+        in a CSV file. This is especially suitable for cases when a lot of plant lines have to be
+        submitted. Please use the button next to this text to download the template in CSV format.
+        Please, leave the header (the first line) intact, and paste your data, in columns,
+        below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
+        columns even if you do not submit any values for them.
+
+    .col-md-3.text-right
+      = submission_template_link('/manuals/plant_lines_template.csv')
+
+  %h5 Template structure
 
   %p
     The <b>Species</b> column should provide the taxonomy name for a given line (e.g. "B. napus"). The
@@ -17,48 +29,42 @@
 
   %p
     Following five columns characterise the plant line itself:
-    %ul
-      %li the <b>Plant line</b> column value is required, it should provide the name of the line, and it should be unique to each submitted plant line
-      %li <b>Common name</b> (optional) - a name that is widely recognized by the breeder community
-      %li <b>Previous line name</b> (optional) - the old name of the plant line, if it was changed
-      %li
-        <b>Genetic status</b> (optional) - the name of the design method used to obtain this
-        line (i.e. open pollinated, inbred, substitution lines)
-      %li
-        <b>Sequence</b> (optional) - an identifier of the line sequence, in an external database,
-        like NCBI SRA; identifiers starting with SR will be automatically recognized as SRA submissions.
+
+  %ul
+    %li the <b>Plant line</b> column value is required, it should provide the name of the line, and it should be unique to each submitted plant line
+    %li <b>Common name</b> (optional) - a name that is widely recognized by the breeder community
+    %li <b>Previous line name</b> (optional) - the old name of the plant line, if it was changed
+    %li
+      <b>Genetic status</b> (optional) - the name of the design method used to obtain this
+      line (i.e. open pollinated, inbred, substitution lines)
+    %li
+      <b>Sequence</b> (optional) - an identifier of the line sequence, in an external database,
+      like NCBI SRA; identifiers starting with SR will be automatically recognized as SRA submissions.
 
   %p
     Further set of three columns pertains to <b>plant accession</b> information. Each new, submitted
     plant line should be (though it isn't strictly required by the submission wizard) related to
     a plant accession entry. This entry is defined by three elements:
-    %ul
-      %li
-        %b Plant accession
-        which names the accession (use the unique accession identification from your organisation, e.g. Notthm_BnASSYST_001)
-      %li
-        %b Originating organisation
-        which names the organisation which named this accession (e.g. Nottingham)
-      %li
-        %b Year produced
-        which sets the year of the accession (e.g. 2012).
 
+  %ul
+    %li
+      %b Plant accession
+      which names the accession (use the unique accession identification from your organisation, e.g. Notthm_BnASSYST_001)
+    %li
+      %b Originating organisation
+      which names the organisation which named this accession (e.g. Nottingham)
+    %li
+      %b Year produced
+      which sets the year of the accession (e.g. 2012).
+
+  %p
     If you provide the plant accession information, you are <i>required to supply values for all three
     columns</i>. Also, your organisation should ensure the unique naming of accession - so you never
     duplicate the <b>Plant accession</b> value in the context of the same <b>Originating organisation</b>.
 
-  %p
-    For your convenience please use
-    %b
-      = link_to 'the ready template', '/manuals/plant_lines_template.csv'
-    in a CSV format. Please download it, leave the header (the first line) intact, and paste your data, in columns,
-    below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
-    columns even if you do not submit any values for them.
-
 .errors.hidden
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
-
   = hidden_field_tag "submission_upload[upload_type]", "plant_lines"
 
   .form-group.fileinput{ class: "#{'hidden' if @content.upload}" }

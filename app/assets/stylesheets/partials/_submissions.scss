@@ -119,3 +119,27 @@
     }
   }
 }
+
+.edit-trial-submission, .edit-population-submission {
+  .info-block {
+    @extend .alert, .alert-info;
+
+    ul {
+      margin: 1rem 0;
+    }
+
+    h5 {
+      margin-top: 2rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .help-block {
+    ul {
+      margin: 0.5rem 0;
+    }
+  }
+}
