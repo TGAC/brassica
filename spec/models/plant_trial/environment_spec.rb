@@ -6,6 +6,7 @@ RSpec.describe PlantTrial::Environment do
     it { should have_many(:topological_descriptors).class_name("PlantTrial::TopologicalDescriptor") }
     it { should have_many(:lamps) }
     it { should have_many(:containers) }
+    it { should have_many(:rooting_media) }
   end
 
   context "validations" do

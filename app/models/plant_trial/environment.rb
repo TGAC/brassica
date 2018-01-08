@@ -4,6 +4,7 @@ class PlantTrial::Environment < ActiveRecord::Base
   has_many :topological_descriptors
   has_many :lamps
   has_many :containers
+  has_many :rooting_media
 
   validates :plant_trial, presence: true
   validates :day_temperature, temperature: true, allow_nil: true
