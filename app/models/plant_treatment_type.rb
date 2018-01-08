@@ -26,7 +26,8 @@ class PlantTreatmentType < ActiveRecord::Base
   AIR_ROOT_TERM = "PECO:0007161"
   WATER_TEMPERATURE_ROOT_TERM = "PECO:0007160"
 
-  validates :name, :term, presence: true
+  validates :name, presence: true
+  validates :term, presence: true, if: :canonical?
 
   def self.descendants_of(term)
     term = term.term if term.is_a?(self)

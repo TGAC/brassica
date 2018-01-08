@@ -42,6 +42,7 @@ class Obo::PlantTreatmentTypeImporter
   def import_treatment(element)
     PlantTreatmentType.create!(name: element.tagvalues.fetch("name")[0],
                                term: element.id,
+                               canonical: true,
                                parent_ids: parent_treatments(element).pluck(:id))
   end
 

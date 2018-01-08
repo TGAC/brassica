@@ -492,11 +492,12 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "plant_scoring_units", ["user_id"], name: "index_plant_scoring_units_on_user_id", using: :btree
 
   create_table "plant_treatment_types", force: :cascade do |t|
-    t.integer  "parent_ids",              array: true
-    t.string   "name",       null: false
-    t.string   "term",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "parent_ids",                             array: true
+    t.string   "name",                      null: false
+    t.string   "term"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.boolean  "canonical",  default: true, null: false
   end
 
   add_index "plant_treatment_types", ["name"], name: "index_plant_treatment_types_on_name", unique: true, using: :btree
