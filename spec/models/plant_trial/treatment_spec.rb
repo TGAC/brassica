@@ -13,6 +13,7 @@ RSpec.describe PlantTrial::Treatment do
     it { should have_many(:pesticide_applications).class_name("PlantTrial::PesticideTreatmentApplication") }
     it { should have_many(:gas_applications).class_name("PlantTrial::GaseousTreatmentApplication") }
     it { should have_many(:soil_applications).class_name("PlantTrial::SoilTreatmentApplication") }
+    it { should have_many(:mechanical_applications).class_name("PlantTrial::MechanicalTreatmentApplication") }
   end
 
   context "validations" do
