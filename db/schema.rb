@@ -555,6 +555,16 @@ ActiveRecord::Schema.define(version: 20180202171044) do
     t.datetime "updated_at",     null: false
   end
 
+  create_table "plant_trial_rooting_media", force: :cascade do |t|
+    t.integer  "environment_id", null: false
+    t.integer  "medium_type_id", null: false
+    t.text     "description"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "plant_trial_rooting_media", ["environment_id", "medium_type_id"], name: "idx_plant_trial_rooting_media", using: :btree
+
   create_table "plant_trial_topological_descriptors", force: :cascade do |t|
     t.integer  "environment_id",        null: false
     t.integer  "topological_factor_id", null: false
@@ -1076,6 +1086,8 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "plant_trial_environments", "plant_trials"
   add_foreign_key "plant_trial_lamps", "lamp_types"
   add_foreign_key "plant_trial_lamps", "plant_trial_environments", column: "environment_id"
+  add_foreign_key "plant_trial_rooting_media", "plant_treatment_types", column: "medium_type_id"
+  add_foreign_key "plant_trial_rooting_media", "plant_trial_environments", column: "environment_id"
   add_foreign_key "plant_trial_topological_descriptors", "plant_trial_environments", column: "environment_id"
   add_foreign_key "plant_trial_topological_descriptors", "topological_factors"
   add_foreign_key "plant_trial_treatment_applications", "plant_treatment_types", column: "treatment_type_id"
