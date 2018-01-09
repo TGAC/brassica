@@ -1,0 +1,7 @@
+rs# alleles chrom pos strand assembly# center protLSID assayLSID panelLSID QCcode SNP0001 SNP0002 SNP0003 SNP0004
+snp0001 A/C chr10 88481 ignored ignored ignored ignored ignored ignored ignored AA AA AC NN
+snp0002 C/T chr10 94427 ignored ignored ignored ignored ignored ignored ignored TT TT TT TT
+snp0003 A/G chr10 101955 ignored ignored ignored ignored ignored ignored ignored AA AA AA AA
+snp0004 A/C chr10 103934 ignored ignored ignored ignored ignored ignored ignored AA AA AA AA
+snp0005 C/T chr10 116070 ignored ignored ignored ignored ignored ignored ignored CC CC CC CC
+snp0006 C/T chr10 121636 ignored ignored ignored ignored ignored ignored ignored CC CT CC CT
