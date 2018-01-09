@@ -72,7 +72,7 @@
               = file_field_tag "analysis_data_file[file]", class: 'genotype-data-file', id: 'genotype-data-file'
 
             %small.help-block
-              Please upload the genotype VCF or CSV file here. Max file size is 50 MiB.
+              Please upload the genotype VCF, HapMap or CSV file here. Max file size is 50 MiB.
 
         .genotype-data-file{ class: ('hidden' unless @form.genotype_data_file) }
           %span.file-name= @form.genotype_data_file.try(:file_file_name)

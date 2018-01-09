@@ -16,6 +16,8 @@ class Analysis::DataFile < ActiveRecord::Base
                    attachment_size: { less_than: 50.megabytes },
                    attachment_file_name: { matches: /\.(vcf|hapmap|csv|txt)\Z/ }
 
+  validates :file_format, inclusion: { in: %w(vcf hapmap csv txt), message: :invalid_for_gwas_genotype }, if: :gwas_genotype?
+
   do_not_validate_attachment_file_type :file
 
   before_validation :assign_file_format, on: :create
@@ -40,7 +42,7 @@ class Analysis::DataFile < ActiveRecord::Base
 
     if path.match(/.vcf\z/)
       self.file_format = :vcf
-    elsif File.read(path, 3) == "rs#"
+    elsif File.read(path, 3).to_s.starts_with?("rs")
       self.file_format = :hapmap
     elsif CSV_CONTENT_TYPES.include?(file.content_type)
       self.file_format = :csv
