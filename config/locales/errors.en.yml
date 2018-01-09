@@ -19,6 +19,7 @@ en:
               malformed_csv: "Genotype CSV file is malformed and cannot be read."
               not_a_hapmap: "Genotype file does not seem to be a HapMap file."
               not_a_vcf: "Genotype file does not seem to be a VCF file."
+              invalid_hapmap_column: "Genotype file contains unexpected column '%{column}' (expected '%{expected}')."
 
             map_data_file:
               no_id_column: "No 'ID' column found in map CSV file."

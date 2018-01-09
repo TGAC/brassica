@@ -6,8 +6,17 @@ RSpec.describe Analysis::Gwas::GenotypeHapmapParser do
 
     subject { described_class.new.call(io) }
 
-    context "given good input" do
+    context "given good input (normal headers)" do
       let(:file) { fixture_file("hapmap/multisample.txt", "text/plain") }
+
+      it "returns valid result" do
+        expect(subject).to be_valid
+        expect(subject.sample_ids).to eq(%w(NA19625 NA19700 NA19701 NA19702))
+      end
+    end
+
+    context "given good input (GAPIT headers)" do
+      let(:file) { fixture_file("hapmap/multisample.gapit.txt", "text/plain") }
 
       it "returns valid result" do
         expect(subject).to be_valid
@@ -22,6 +31,15 @@ RSpec.describe Analysis::Gwas::GenotypeHapmapParser do
         expect(subject).not_to be_valid
         expect(subject.errors).to include(:no_mutations)
         expect(subject.errors).to include(:no_samples)
+      end
+    end
+
+    context "given malformed hapmap input (wrong column)" do
+      let(:file) { fixture_file("hapmap/invalid-column.txt", "text/plain") }
+
+      it "returns error information" do
+        expect(subject).not_to be_valid
+        expect(subject.errors).to include([:invalid_hapmap_column, column: "allele", expected: "alleles"])
       end
     end
 

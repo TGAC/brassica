@@ -1,0 +1,1 @@
+rs# allele chrom pos strand assembly# center protLSID assayLSID panelLSID QCcode

@@ -57,7 +57,7 @@ RSpec.describe Analysis::Gwas::GenotypeHapmapToCsvConverter do
     end
 
     context "invalid file" do
-      let(:hapmap_path) { Rails.root.join(*%w(spec fixtures files hapmap invalid.txt)).to_s }
+      let(:hapmap_path) { Rails.root.join(*%w(spec fixtures files hapmap invalid-value.txt)).to_s }
 
       it "fails with error" do
         expect { subject.call(hapmap_path) }.

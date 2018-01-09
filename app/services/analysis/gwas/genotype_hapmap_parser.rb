@@ -5,8 +5,14 @@ class Analysis
 
       def call(io)
         Result.new(io).tap do |result|
-          if result.columns[0...HEADER_COLUMNS.size] != HEADER_COLUMNS
+          if result.columns.size < HEADER_COLUMNS.size
             result.errors << :not_a_hapmap
+          end
+
+          result.columns[0...HEADER_COLUMNS.size].each.with_index do |column, idx|
+            if column.chomp("#").chomp("LSID") != HEADER_COLUMNS[idx].chomp("#").chomp("LSID")
+              result.errors << [:invalid_hapmap_column, column: column, expected: HEADER_COLUMNS[idx]]
+            end
           end
 
           if result.sample_ids.blank?
