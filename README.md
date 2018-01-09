@@ -101,7 +101,10 @@ system-wide, with `sudo`, or just for your user):
 
 ### Configuration
 
-Please also make sure to set these environment variables in your `.env` file:
+Please also make sure to set required environment variables in your `.env` file. You can use `.env.sample` as
+a template.
+
+#### GWAS
 
 ```
 ANALYSIS_EXEC_DIR=<full path to analysis working directory>
