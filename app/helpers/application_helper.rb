@@ -94,4 +94,10 @@ module ApplicationHelper
     # this may result in a visual glitch, but is not very important.
     File.open(path, "r") { |file| file.read(limit) }.force_encoding("UTF-8")
   end
+
+  def support_email_link(label, subject = nil)
+    url = "mailto:#{ENV.fetch("SUPPORT_EMAIL")}"
+    url = url + "?subject=#{subject}"
+    link_to label, url
+  end
 end
