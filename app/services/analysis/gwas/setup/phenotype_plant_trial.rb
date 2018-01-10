@@ -16,7 +16,7 @@ class Analysis
           plant_trial = PlantTrial.visible(analysis.owner_id).find(analysis.meta.fetch("plant_trial_id"))
           pheno_csv_file, trait_names = Analysis::Gwas::PlantTrialPhenotypeCsvBuilder.new.build_csv(plant_trial)
 
-          traits_to_remove = save_traits_to_remove(pheno_csv_file)
+          traits_to_remove, _ = analyze_pheno_csv_file(pheno_csv_file)
 
           return :all_traits_removed if traits_to_remove && trait_names.size == traits_to_remove.size
 

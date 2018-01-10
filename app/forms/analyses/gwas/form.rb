@@ -70,7 +70,7 @@ module Analyses
         end
 
         if geno && geno.valid? && pheno && pheno.valid?
-          if geno.sample_ids.try(:sort) != pheno.sample_ids.try(:sort)
+          if (geno.sample_ids & pheno.sample_ids).empty?
             errors.add(:base, :geno_pheno_samples_mismatch)
           end
         end

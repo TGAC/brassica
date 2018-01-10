@@ -5,6 +5,7 @@ class Analysis
     # except for underscore.
     class CsvNormalizer
       def call(file, remove_columns: [], remove_rows: [])
+        rows_retained = 0
         normalized_csv = CSV.generate(force_quotes: true) do |csv|
           CSV.open(file.path, "r") do |existing_csv|
             headers = existing_csv.readline
@@ -27,17 +28,28 @@ class Analysis
                   val.strip
                 end
               end.compact
+
+              rows_retained += 1
             end
           end
         end
 
-        tmpfile = NamedTempfile.new(".csv")
-        tmpfile.original_filename = "#{File.basename(file.original_filename, ".csv")}.normalized.csv"
-        tmpfile << normalized_csv
-        tmpfile.flush
-        tmpfile.rewind
+        return :all_rows_removed if rows_retained < 2
+
+        tmpfile = create_tmpfile(file.original_filename, normalized_csv)
 
         [:ok, tmpfile]
+      end
+
+      private
+
+      def create_tmpfile(original_filename, normalized_csv)
+        NamedTempfile.new(".csv").tap do |tmpfile|
+          tmpfile.original_filename = "#{File.basename(original_filename, ".csv")}.normalized.csv"
+          tmpfile << normalized_csv
+          tmpfile.flush
+          tmpfile.rewind
+        end
       end
     end
   end

@@ -29,7 +29,7 @@ en:
           data for the analysis.<br/>
 
     show:
-      gwas:
+      gwas_data_files:
         gwas_genotype: Genotype
         gwas_map: Map
         gwas_phenotype: Phenotype
@@ -39,4 +39,5 @@ en:
         failure_reason:
           all_mutations_removed: All mutations were excluded from analysis due to lack of variability between samples.
           all_traits_removed: All traits were excluded from analysis due to lack of variability between samples.
+          all_samples_removed: All samples were excluded from analysis because of no overlap between genotype and phenotype data.
           shell_job_error: The analysis failed. Please, consult 'Std error' and 'Std output' for more information.

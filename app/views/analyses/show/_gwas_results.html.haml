@@ -1,14 +1,20 @@
 - if @analysis.success?
-  - if @analysis.removed_mutations.present?
+  - if @analysis.removed_inputs?
     .alert.alert-warning
-      Following mutations were excluded from the input due to lack of variability:
-      = @analysis.removed_mutations.join(", ")
+      - if @analysis.removed_mutations.present?
+        %p
+          Following mutations were excluded from the input due to lack of variability:
+          = @analysis.removed_mutations.join(", ")
 
-  - if @analysis.removed_traits.present?
-    .alert.alert-warning
-      Following traits were excluded from the input due to lack of variability:
-      = @analysis.removed_traits.join(", ")
+      - if @analysis.removed_traits.present?
+        %p
+          Following traits were excluded from the input due to lack of variability:
+          = @analysis.removed_traits.join(", ")
 
+      - if @analysis.removed_samples.present?
+        %p
+          Following samples were excluded because they were missing from genotype/phenotype data:
+          = @analysis.removed_samples.join(", ")
 
   - cutoff = @manhattan.fetch(:cutoff)
   - if cutoff > 0
