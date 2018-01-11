@@ -30,8 +30,11 @@
     %thead
       %tr
         %th SNP
-        %th Chromosome
-        %th Position
+
+        - if @analysis.map?
+          %th Chromosome
+          %th Position
+
         %th -log<sub>10</sub>(P)
         %th Trait
 

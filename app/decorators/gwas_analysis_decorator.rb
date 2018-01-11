@@ -1,6 +1,10 @@
 class GwasAnalysisDecorator < Draper::Decorator
   delegate_all
 
+  def map?
+    data_files.gwas_map.present?
+  end
+
   def removed_inputs?
     removed_traits.present? || removed_mutations.present? || removed_samples.present?
   end

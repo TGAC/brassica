@@ -7,7 +7,7 @@
   = nav_item("Std error", tab: :analysis_std_err, disabled: !@analysis.finished?)
 
 .tab-content.clearfix
-  #analysis_results.tab-pane.active{ role: :tabpanel }
+  #analysis_results.tab-pane.active{ role: :tabpanel, class: @analysis.map? ? "with-map" : "no-map"  }
     = render "analyses/show/gwas_results"
 
   #analysis_data_files.tab-pane{ role: :tabpanel, class: (:active if @analysis.idle? || @analysis.running?) }
