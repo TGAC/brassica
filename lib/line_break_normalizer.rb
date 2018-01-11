@@ -1,8 +1,12 @@
 class LineBreakNormalizer
   def call(filepath)
     File.open(filepath, "r") do |src|
+      data = src.read
+
+      fail Encoding::InvalidByteSequenceError unless data.valid_encoding?
+
       Tempfile.open("") do |dst|
-        src.read.split(/\r\n|\r|\n/).each do |line|
+        data.split(/\r\n|\r|\n/).each do |line|
           dst << "#{line}\n"
         end
 

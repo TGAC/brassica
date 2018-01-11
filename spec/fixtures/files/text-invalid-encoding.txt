@@ -1,0 +1,2 @@
+Species,Plant variety,Crop type,Plant line,Common name,Previous line name,Genetic status,Sequence,Plant accession,Originating organisation,Year produced,
+Brassica napus,Liragrªn,Winter fodder,BnASSYST-195,oilseed rape,,,SRR3134181,a-0000195,,,

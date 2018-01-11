@@ -94,4 +94,8 @@ module ApplicationHelper
     # this may result in a visual glitch, but is not very important.
     File.open(path, "r") { |file| file.read(limit) }.force_encoding("UTF-8")
   end
+
+  def wiki_link(label, term = label, options = {})
+    link_to label, "https://en.wikipedia.org/wiki/#{term}", options.reverse_merge(target: "_blank")
+  end
 end

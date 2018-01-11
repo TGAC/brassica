@@ -53,6 +53,10 @@
   .nav-tabs {
     margin-bottom: 10px;
   }
+
+  .info-block {
+    @extend .alert, .alert-info;
+  }
 }
 
 .show-analysis {
