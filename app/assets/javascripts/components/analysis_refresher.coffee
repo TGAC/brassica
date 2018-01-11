@@ -16,8 +16,8 @@ window.AnalysisRefresher = class AnalysisRefresher extends Component
         dataType: "json"
         url: window.location.href,
         cache: false
-        success: (analysis) =>
-          this.processResponse(analysis.status)
+        success: (response) =>
+          this.processResponse(response.analysis.status)
 
     setTimeout(ajax, @timeout)
 
