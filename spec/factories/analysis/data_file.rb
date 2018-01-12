@@ -64,10 +64,10 @@ FactoryBot.define do
       file { fixture_file("gwas-phenotypes-no-relevant-traits.csv", "text/csv") }
     end
 
-    trait :gwas_results do
+    trait :gwasser_results do
       role "output"
       data_type "gwas_results"
-      file { fixture_file("gwas-results.csv", "text/csv") }
+      file { fixture_file("gwasser-results.csv", "text/csv") }
     end
   end
 end

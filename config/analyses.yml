@@ -5,7 +5,7 @@ development:
   <<: *default
 
 test:
-  gwas: <%= "#{Rails.root.join("spec", "bin", "gwas_mock.rb")} --railsRoot #{Rails.root}" %>
+  gwas: <%= "#{Rails.root.join("spec", "bin", "gwasser_mock.rb")} --railsRoot #{Rails.root}" %>
 
 production:
   <<: *default

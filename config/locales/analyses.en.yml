@@ -7,7 +7,7 @@ en:
       failure: Failure
 
     analysis_type:
-      gwas: GWAS
+      gwasser: GWASSER
 
   analyses:
     new:
@@ -21,7 +21,7 @@ en:
         common: |
           Further contextual help will be provided at each step of analysis setup.
           Only you will have access to the results produced by the analysis.
-        gwas: |
+        gwasser: |
           The following process allows you to perform
           <a href='https://en.wikipedia.org/wiki/Genome-wide_association_study'
           target='_blank' title='Genome-wide association study'><b>GWAS</b></a>

@@ -33,8 +33,8 @@ class AnalysesController < ApplicationController
 
     respond_to do |format|
       format.json do
-        if @analysis.gwas? && @analysis.success?
-          results = Analysis::Gwas::ManhattanPlot.new(@analysis).call.fetch(:traits).map do |trait_name, mutations, _|
+        if @analysis.gwasser? && @analysis.success?
+          results = Analysis::Gwasser::ManhattanPlot.new(@analysis).call.fetch(:traits).map do |trait_name, mutations, _|
             mutations.map { |m| m[1] = "%.4f" % m[1]; m << trait_name }
           end.flatten(1)
 
@@ -49,9 +49,9 @@ class AnalysesController < ApplicationController
       format.html do
         if request.xhr?
           render partial: "analysis_item", layout: false, locals: { analysis: @analysis }
-        elsif @analysis.gwas?
-          @analysis = GwasAnalysisDecorator.decorate(@analysis)
-          @manhattan = Analysis::Gwas::ManhattanPlot.
+        elsif @analysis.gwasser?
+          @analysis = Analysis::GwasserDecorator.decorate(@analysis)
+          @manhattan = Analysis::Gwasser::ManhattanPlot.
             new(@analysis, cutoff: (params[:cutoff].to_f if params.key?(:cutoff))).call
         end
       end
@@ -92,6 +92,6 @@ class AnalysesController < ApplicationController
   end
 
   def form_klass
-    Analyses::Gwas::Form
+    Analyses::Gwasser::Form
   end
 end

@@ -3,8 +3,8 @@ FactoryBot.define do
     owner(factory: :user)
     sequence(:name) { |n| "Analysis #{n}" }
 
-    trait :gwas do
-      analysis_type "gwas"
+    trait :gwasser do
+      analysis_type "gwasser"
       meta(
         "phenos": %w(trait5 trait6 trait7),
         "cov": %w()
