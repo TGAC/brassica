@@ -39,7 +39,7 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 * Elasticsearch 2.4.6, Java 7
 * R >= 3.2.2
 * [GWASSER](https://github.com/kammerer/GWASSER) (forked from [cyverseuk/GWASSER](https://github.com/cyverseuk/GWASSER))
-
+* [GAPIT](http://www.maizegenetics.net/gapit)
 
 
 ### Elasticsearch
@@ -97,12 +97,28 @@ respective elements of the application can call them, spawning new system proces
 
 After installation you will need to setup your R environment. Run the "R" executable
 in your shell and issue the following commands from R prompt (you may do that either
-system-wide, with `sudo`, or just for your user):
+system-wide, with `sudo`, or just for your user).
+
+
+#### GWASSER dependencies
 
  - `install.packages('lme4')`
  - `install.packages('argparse')`
  - `install.packages('dplyr')`
  - `install.packages('lmerTest')`
+
+
+#### GAPIT dependencies
+
+ - `source("http://www.bioconductor.org/biocLite.R")`
+ - `biocLite('multtest')`
+ - `biocLite('chopsticks')`
+ - `install.packages('gplots')`
+ - `install.packages('genetics')`
+ - `install.packages('LDheatmap')`
+ - `install.packages('ape')`
+ - `install.packages('EMMREML')`
+ - `install.packages('scatterplot3d')`
 
 
 ### Configuration
@@ -120,6 +136,7 @@ GWAS_SCRIPT=<full path to the GWASSER.R executable script>
 The analysis working directory needs to be an empty directory writable by the
 application. It is used to run analysis script and store temporary outputs.
 The `GWASSER.R` script should be made executable.
+
 
 ## Background workers
 
