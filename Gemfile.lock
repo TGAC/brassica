@@ -149,7 +149,7 @@ GEM
       activesupport (> 3)
       elasticsearch (> 0.4)
       hashie
-    elasticsearch-rails (0.1.6)
+    elasticsearch-rails (2.0.1)
     elasticsearch-transport (1.0.6)
       faraday
       multi_json
@@ -434,7 +434,7 @@ DEPENDENCIES
   dotenv-rails
   draper (~> 2.1.0)
   elasticsearch-model
-  elasticsearch-rails (< 2)
+  elasticsearch-rails (~> 2)
   exception_notification
   factory_bot_rails (< 5)
   faker
