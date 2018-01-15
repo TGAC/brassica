@@ -1,6 +1,5 @@
 Upgraded gems to check:
 
-- capistrano
 - devise
 - puma
 - thin
@@ -10,4 +9,3 @@ Upgraded gems to check:
 - omniauth-orcid, omniauth
 - draper
 - squeel -> baby_squeel
-- reform
