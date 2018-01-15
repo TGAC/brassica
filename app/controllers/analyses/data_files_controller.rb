@@ -9,11 +9,11 @@ class Analyses::DataFilesController < ApplicationController
     data_type = params[:data_type]
     generator = case data_type
                 when "gwas_genotype"
-                  Analysis::Gwasser::GenotypeCsvTemplateGenerator.new(plant_trial)
+                  Analysis::GenotypeCsvTemplateGenerator.new(plant_trial)
                 when "gwas_phenotype"
-                  Analysis::Gwasser::PhenotypeCsvTemplateGenerator.new
+                  Analysis::PhenotypeCsvTemplateGenerator.new
                 when "gwas_map"
-                  Analysis::Gwasser::MapCsvTemplateGenerator.new
+                  Analysis::MapCsvTemplateGenerator.new
                 end
 
     if generator

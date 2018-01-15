@@ -5,7 +5,7 @@ class Analysis
     class GenotypeHapmapToCsvConverter
       def call(path)
         File.open(path, "r") do |hapmap_file|
-          hapmap_data = Analysis::Gwasser::GenotypeHapmapParser.new.call(hapmap_file)
+          hapmap_data = Analysis::GenotypeHapmapParser.new.call(hapmap_file)
 
           raise unless hapmap_data.valid?
 

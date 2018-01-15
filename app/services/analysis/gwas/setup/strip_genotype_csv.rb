@@ -1,8 +1,8 @@
 class Analysis
-  class Gwas
-    class Setup
+  module Gwas
+    module Setup
       class StripGenotypeCsv
-        include Helpers
+        include Gwas::Helpers
 
         def initialize(analysis)
           @analysis = analysis

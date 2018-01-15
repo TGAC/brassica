@@ -69,6 +69,12 @@ FactoryBot.define do
       data_type "gwas_results"
       file { fixture_file("gwasser-results.csv", "text/csv") }
     end
+
+    trait :gapit_results do
+      role "output"
+      data_type "gwas_results"
+      file { fixture_file("gapit-results.csv", "text/csv") }
+    end
   end
 end
 

@@ -39,6 +39,10 @@ module Analyses
         plant_trial_id.present?
       end
 
+      def genotype_csv_based?
+        genotype_data_file.try(:file_format) == "csv"
+      end
+
       def genotype_data_file
         data_file = Analysis::DataFile.gwas_genotype.find_by(id: genotype_data_file_id)
         AnalysisDataFileDecorator.decorate(data_file) if data_file
@@ -101,26 +105,26 @@ module Analyses
       end
 
       def build_plant_trial_pheno_data
-        Analysis::Gwasser::PlantTrialPhenotypeCsvBuilder.new.build(plant_trial)
+        Analysis::PlantTrialPhenotypeCsvBuilder.new.build(plant_trial)
       end
 
       def genotype_data_parser
         case genotype_data_file.try(:file_format)
         when "hapmap"
-          Analysis::Gwasser::GenotypeHapmapParser.new
+          Analysis::GenotypeHapmapParser.new
         when "vcf"
-          Analysis::Gwasser::GenotypeVcfParser.new
+          Analysis::GenotypeVcfParser.new
         else
-          Analysis::Gwasser::GenotypeCsvParser.new
+          Analysis::GenotypeCsvParser.new
         end
       end
 
       def map_data_parser
-        Analysis::Gwasser::MapCsvParser.new
+        Analysis::MapCsvParser.new
       end
 
       def phenotype_data_parser
-        Analysis::Gwasser::PhenotypeCsvParser.new
+        Analysis::PhenotypeCsvParser.new
       end
 
       def plant_trial

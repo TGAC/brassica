@@ -14,7 +14,7 @@ RSpec.feature "Analysis creation" do
   end
 
   context "with no input" do
-    scenario "shows error messages" do
+    scenario "shows error messages", js: true do
       click_link("Start!")
       click_button("Run")
 

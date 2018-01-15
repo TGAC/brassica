@@ -22,6 +22,13 @@ class Analysis::ShellRunner
     raise
   end
 
+  def exec_dir
+    @exec_dir ||= File.join(
+      Rails.application.config_for(:jobs).fetch('execution_dir'),
+      analysis.id.to_s
+    )
+  end
+
   def store_result(file_name, data_type:)
     path = File.join(exec_dir, "results", file_name)
     store_file(path, data_type: data_type)
@@ -47,6 +54,8 @@ class Analysis::ShellRunner
   end
 
   def run_job_command(job_command)
+    job_command = "cd #{exec_dir}; #{job_command}"
+
     logger.info "Executing following command line: #{job_command}"
 
     # Start job in another process, capturing both output streams
@@ -88,13 +97,6 @@ class Analysis::ShellRunner
 
   def std_out_path
     File.join(exec_dir, 'std_out.txt')
-  end
-
-  def exec_dir
-    @exec_dir ||= File.join(
-      Rails.application.config_for(:jobs).fetch('execution_dir'),
-      analysis.id.to_s
-    )
   end
 
   def logger

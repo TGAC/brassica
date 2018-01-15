@@ -5,7 +5,7 @@ class Analysis
     class GenotypeVcfToCsvConverter
       def call(path)
         File.open(path, "r") do |vcf_file|
-          vcf_data = Analysis::Gwasser::GenotypeVcfParser.new.call(vcf_file)
+          vcf_data = Analysis::GenotypeVcfParser.new.call(vcf_file)
 
           raise unless vcf_data.valid?
 

@@ -10,5 +10,9 @@ FactoryBot.define do
         "cov": %w()
       )
     end
+
+    trait :gapit do
+      analysis_type "gapit"
+    end
   end
 end

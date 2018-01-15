@@ -84,8 +84,8 @@
           = delete_analysis_data_file_button(@form.genotype_data_file,
             class: 'btn btn-default delete-genotype-data-file')
 
-      .form-group{ class: ('hidden' unless @form.map_data_file) }
-        = label_tag :map_data_file, 'Genotype map'
+      .form-group{ class: ('hidden' unless @form.map_data_file || @form.genotype_csv_based?) }
+        = label_tag :map_data_file, 'Genotype map', class: 'required'
         = render partial: "/analyses/new/map_data_file_help"
 
         .map-data-file-errors.errors.hidden

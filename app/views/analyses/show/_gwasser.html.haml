@@ -8,14 +8,14 @@
 
 .tab-content.clearfix
   #analysis_results.tab-pane.active{ role: :tabpanel, class: @analysis.map? ? "with-map" : "no-map"  }
-    = render "analyses/show/gwas_results"
+    = render partial: "analyses/show/gwas_results", locals: { with_map: @analysis.map? }
 
   #analysis_data_files.tab-pane{ role: :tabpanel, class: (:active if @analysis.idle? || @analysis.running?) }
-    = render "analyses/show/gwas_data_files"
+    = render partial: "analyses/show/gwas_data_files"
 
   - if @analysis.finished?
     #analysis_std_out.tab-pane{ role: :tabpanel }
-      = render "analyses/show/gwas_std_out"
+      = render partial: "analyses/show/gwas_std_out"
 
     #analysis_std_err.tab-pane{ role: :tabpanel }
-      = render "analyses/show/gwas_std_err"
+      = render partial: "analyses/show/gwas_std_err"

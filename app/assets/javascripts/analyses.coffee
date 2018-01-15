@@ -1,5 +1,6 @@
 $ ->
-  new GwasserAnalysis('.new-gwasser-analysis').init()
+  new GwasAnalysis('.new-gwasser-analysis').init()
+  new GwasAnalysis('.new-gapit-analysis').init()
   new ManhattanPlot('#gwas-manhattan-plot').init()
   new AnalysisRefresher('.show-analysis').init()
   new AnalysisListRefresher('.analyses').init()

@@ -1,6 +1,6 @@
 class Analysis
   class Gwasser
-    include Setup::Helpers
+    include Gwas::Helpers
 
     def initialize(analysis, runner: nil)
       @analysis = analysis
@@ -43,7 +43,7 @@ class Analysis
 
       unless @selected_traits.present?
         File.open(phenotype_data_file.file.path, "r") do |file|
-          result = Analysis::Gwasser::PhenotypeCsvParser.new.call(file)
+          result = Analysis::PhenotypeCsvParser.new.call(file)
           @selected_traits = result.trait_ids
         end
       end
@@ -72,7 +72,7 @@ class Analysis
     end
 
     def gwasser_script
-      Rails.application.config_for(:analyses).fetch("gwas")
+      Rails.application.config_for(:analyses).fetch("gwasser")
     end
   end
 end
