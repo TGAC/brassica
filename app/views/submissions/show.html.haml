@@ -8,10 +8,7 @@
     .col-sm-4.text-right
       = render partial: "/submissions/show/status", locals: { submission: @submission, mode: :private }
 
-  .panel.panel-default
-
-    %ul.list-group
-      = render "submissions/show/#{@submission.object.submission_type}"
+  = render partial: "/submissions/show/values", locals: { submission: @submission }
 
   .row
     .col-sm-6

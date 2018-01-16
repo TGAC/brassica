@@ -48,15 +48,18 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def plant_lines
-    plant_line_ids = object.content.step03.plant_line_list.select { |el| el.to_i.to_s == el }
+    plant_line_ids = plant_line_list.select { |el| el.to_i.to_s == el }
     return [] if plant_line_ids.blank?
     @plant_lines ||= PlantLine.visible(user_id).find(plant_line_ids)
   end
 
   def plant_line_names
     @plant_line_names ||=
-      plant_lines.map(&:plant_line_name) |
-      object.content.step03.plant_line_list.reject { |el| el.to_i.to_s == el }
+      plant_lines.map(&:plant_line_name) | plant_line_list.reject { |el| el.to_i.to_s == el }
+  end
+
+  def plant_line_list
+    object.content.step03.plant_line_list || []
   end
 
   def parent_line_names
@@ -103,5 +106,23 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
 
   def comments
     object.content.step04.comments.presence
+  end
+
+  def submission_attributes
+    [
+      [:population_name, "Population name", h.data_tables_path(model: :plant_populations, query: { id: submitted_object_id })],
+      [:description],
+      [:owned_by],
+      [:establishing_organisation],
+      [:population_type],
+      [:species_name, "Species"],
+      [:plant_line_names, 'Plant lines', h.data_tables_path(model: :plant_lines, query: { "plant_populations.id": submitted_object_id })],
+      [:female_parent_line_name, 'Female parent line', h.data_tables_path(model: :plant_lines, query: { id: female_parent_line.try(:id) })],
+      [:male_parent_line_name, 'Male parent line', h.data_tables_path(model: :plant_lines, query: { id: male_parent_line.try(:id) })],
+      [:data_owned_by],
+      [:data_provenance],
+      [:comments],
+      [:doi, 'DOI']
+    ]
   end
 end
