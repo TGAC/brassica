@@ -32,11 +32,10 @@ class PlantAccession < ActiveRecord::Base
     pv_subquery = PlantVariety.visible(uid)
     pl_subquery = PlantLine.visible(uid)
 
-    query = all.
+    query = PlantAccession.from(PlantVarietyAccession.all, "plant_accessions").
       joins {[
         pl_subquery.as('plant_lines').on { plant_lines.id == plant_accessions.plant_line_id }.outer,
         pv_subquery.as('plant_varieties').on { plant_varieties.id == plant_accessions.plant_variety_id }.outer,
-        pv_subquery.as('plant_line_varieties').on { plant_line_varieties.id == plant_lines.plant_variety_id }.outer
     ]}
     query = (params && (params[:query] || params[:fetch])) ? filter(params, query) : query
     query = query.where(arel_table[:user_id].eq(uid).or(arel_table[:published].eq(true)))
@@ -49,7 +48,7 @@ class PlantAccession < ActiveRecord::Base
     [
       'plant_accession',
       'plant_lines.plant_line_name',
-      'CASE WHEN plant_varieties.id IS NULL THEN plant_line_varieties.plant_variety_name ELSE plant_varieties.plant_variety_name END AS plant_variety_name',
+      'plant_varieties.plant_variety_name',
       'plant_accession_derivation',
       'originating_organisation',
       'year_produced',
@@ -69,23 +68,24 @@ class PlantAccession < ActiveRecord::Base
     ]
   end
 
+  def self.ref_columns
+    [
+      'plant_line_id',
+      'plant_varieties.id',
+    ]
+  end
+
   def self.permitted_params
     [
       :fetch,
       query: params_for_filter(table_columns) +
         [
           'plant_lines.id',
+          'plant_varieties.id',
           'user_id',
           'id',
           'id' => []
         ]
-    ]
-  end
-
-  def self.ref_columns
-    [
-      'plant_line_id',
-      'COALESCE (plant_varieties.id, plant_line_varieties.id)'
     ]
   end
 

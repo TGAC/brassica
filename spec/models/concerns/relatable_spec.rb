@@ -26,58 +26,85 @@ RSpec.describe Relatable do
     end
   end
 
-  context 'for all Relatable models' do
-    relatable_models.each do |klass|
-      klass.count_columns.each_with_index do |count_column, i|
-        relation = count_column.split(/ as /i)[0]
-        relation.gsub!('_count','')
-        relation = 'qtls' if relation == 'qtl'  # unfortunate special case... :(
-        it "does not count inaccessible #{relation} records related to #{klass}" do
-          model = adjust_model(klass.name.underscore, relation)
-          related = create(adjust_counter_name(relation).singularize)
-          subject = related.send(model)
-          create(adjust_counter_name(relation).singularize,
-                 model => subject, published: false)
+  relatable_models.each do |klass|
+    klass.count_columns.each_with_index do |count_column, i|
+      relation = count_column.split(/ as /i)[0]
+      relation.gsub!('_count','')
+      relation = 'qtls' if relation == 'qtl'  # unfortunate special case... :(
 
-          expect(subject.send(relation).count).to eq 2
-          expect(subject.reload.send("#{relation}_count")).to eq 2
+      it "does not count inaccessible #{relation} records related to #{klass}" do
+        model = adjust_model(klass.name.underscore, relation)
+        related = create_related(klass, relation)
+        subject = related.send(model)
+        create_related(klass, relation, model => subject, published: false)
 
-          td = klass.table_data.detect{ |row| row.last == subject.id }
-          expect(td).not_to be_empty
-          index = - klass.ref_columns.size - klass.count_columns.size + i
-          expect(td[index]).to eq 1
-        end
+        expect(subject.send(relation).count).to eq 2
+        expect(subject.reload.send("#{relation}_count")).to eq 2
 
-        it "counts in private owned #{relation} records for #{klass}" do
-          model = adjust_model(klass.name.underscore, relation)
-          related = create(adjust_counter_name(relation).singularize)
-          subject = related.send(model)
-          owned = create(adjust_counter_name(relation).singularize,
-                         model => subject, published: false, user: create(:user))
+        td = klass.table_data.detect{ |row| row.last == subject.id }
+        expect(td).not_to be_empty
+        index = - klass.ref_columns.size - klass.count_columns.size + i
+        expect(td[index]).to eq 1
+      end
 
-          expect(subject.send(relation).count).to eq 2
-          expect(subject.reload.send("#{relation}_count")).to eq 2
+      it "counts in private owned #{relation} records for #{klass}" do
+        model = adjust_model(klass.name.underscore, relation)
+        related = create_related(klass, relation)
+        subject = related.send(model)
+        owned = create_related(klass, relation, model => subject, published: false, user: create(:user))
 
-          td = klass.table_data(nil, owned.user_id).detect{ |row| row.last == subject.id }
-          expect(td).not_to be_empty
-          index = - klass.ref_columns.size - klass.count_columns.size + i
-          expect(td[index]).to eq 2
-        end
+        expect(subject.send(relation).count).to eq 2
+        expect(subject.reload.send("#{relation}_count")).to eq 2
 
-        it "requires all models related to #{klass} to allow correct filter param" do
-          next if klass == Primer
-          klass.counter_names.each do |model|
-            permitted_params = model.classify.constantize.send(:permitted_params)
-            expect(permitted_params).not_to be_empty
-            expect(permitted_params.dup.extract_options![:query]).
-                to include "#{klass.table_name}.id"
-          end
+        td = klass.table_data(nil, owned.user_id).detect{ |row| row.last == subject.id }
+        expect(td).not_to be_empty
+        index = - klass.ref_columns.size - klass.count_columns.size + i
+        expect(td[index]).to eq 2
+      end
+
+      it "requires all models related to #{klass} to allow correct filter param" do
+        next if klass == Primer
+        klass.counter_names.each do |model|
+          permitted_params = model.classify.constantize.send(:permitted_params)
+          expect(permitted_params).not_to be_empty
+          expect(permitted_params.dup.extract_options![:query]).
+              to include "#{klass.table_name}.id"
         end
       end
     end
   end
 
+  describe ".privacy_adjusted_count_columns" do
+    it "ignores specified columns" do
+      # NOTE that plant_accessions_count column does not actually exist
+      expect(PlantVariety.privacy_adjusted_count_columns).
+        to eq ["(plant_varieties.plant_accessions_count - coalesce(plant_accessions.hidden, 0)) AS plant_accessions_count"]
+
+      expect(PlantVariety.privacy_adjusted_count_columns(except: ["plant_accessions_count"])).to eq []
+    end
+  end
+
+  describe ".join_counters" do
+    it "ignores specified columns" do
+      expect(PlantVariety.join_counters(PlantVariety.all).to_sql).to include "LEFT OUTER JOIN"
+      expect(PlantVariety.join_counters(PlantVariety.all, except: ["plant_accessions_count"]).to_sql).
+        not_to include "LEFT OUTER JOIN"
+    end
+  end
+
   private
+
+  def create_related(klass, relation, *args)
+    model_name = adjust_counter_name(relation).singularize
+
+    if klass == PlantVariety && model_name == "plant_accession"
+      create(:plant_accession, :with_variety, *args)
+    elsif klass == PlantLine && model_name == "plant_accession"
+      create(:plant_accession, *args)
+    else
+      create(model_name, *args)
+    end
+  end
 
   def adjust_counter_name(counter_name)
     counter_name.end_with?('_a', '_b') ? counter_name[0..-3] : counter_name

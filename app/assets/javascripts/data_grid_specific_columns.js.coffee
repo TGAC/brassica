@@ -92,7 +92,7 @@ window.configs =
         render: (data, type, full, meta) ->
           modelIdUrl('plant_lines', data, full[full.length - 3])
       ,
-        targets: 'plant_accessions_plant_variety_name_column'
+        targets: 'plant_varieties_plant_variety_name_column'
         render: (data, type, full, meta) ->
           modelIdUrl('plant_varieties', data, full[full.length - 2])
       ]

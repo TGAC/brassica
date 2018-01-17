@@ -79,16 +79,15 @@ RSpec.describe Annotable do
 
   context 'when model is Pluckable as well' do
     it 'plucks at least the id column' do
-      annotable_tables.each do |table|
-        klass = table.singularize.camelize.constantize
-        if klass.ancestors.include? Pluckable
+      annotable_tables.
+        map { |table| [table, table.singularize.camelize.constantize] }.
+        select { |table, klass| klass.ancestors.include?(Pluckable) }.
+        each do |table, klass|
           expect(klass.ref_columns.last).to eq "#{table}.id"
           klass.destroy_all
           instances = create_list(table.singularize, 3)
-          expect(klass.pluck_columns.map(&:last)).
-            to match_array instances.map(&:id)
+          expect(klass.pluck_columns.map(&:last)).to match_array instances.map(&:id)
         end
-      end
     end
   end
 end

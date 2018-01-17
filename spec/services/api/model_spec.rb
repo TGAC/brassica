@@ -6,7 +6,7 @@ RSpec.describe Api::Model do
       pv_assocs = Api::Model.new("plant_variety").has_many_associations
       pp_assocs = Api::Model.new("plant_population").has_many_associations
 
-      expect(pv_assocs.map(&:name)).to match_array %w(plant_lines plant_accessions)
+      expect(pv_assocs.map(&:name)).to match_array %w(plant_lines plant_accessions plant_variety_accessions)
       expect(pv_assocs.first.to_h).to include(
         name: 'plant_lines',
         primary_key: 'id',
