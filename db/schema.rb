@@ -363,7 +363,7 @@ ActiveRecord::Schema.define(version: 20180228122047) do
   add_index "plant_accessions", ["user_id"], name: "index_plant_accessions_on_user_id", using: :btree
 
   create_table "plant_lines", force: :cascade do |t|
-    t.text     "plant_line_name",                    null: false
+    t.text     "plant_line_name",                       null: false
     t.text     "common_name"
     t.text     "plant_variety_name"
     t.text     "named_by_whom"
@@ -381,9 +381,10 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "published",           default: true, null: false
+    t.boolean  "published",              default: true, null: false
     t.string   "sequence_identifier"
     t.datetime "published_on"
+    t.integer  "plant_accessions_count", default: 0,    null: false
   end
 
   add_index "plant_lines", ["plant_line_name"], name: "plant_lines_plant_line_name_idx", unique: true, using: :btree

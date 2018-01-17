@@ -23,6 +23,7 @@ class PlantLine < ActiveRecord::Base
 
   include Filterable
   include Pluckable
+  include Relatable
   include Searchable
   include Publishable
   include TableData
@@ -71,6 +72,12 @@ class PlantLine < ActiveRecord::Base
           'id',
           'id' => []
         ]
+    ]
+  end
+
+  def self.count_columns
+    [
+      'plant_accessions_count'
     ]
   end
 

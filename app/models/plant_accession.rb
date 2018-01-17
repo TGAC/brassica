@@ -1,5 +1,5 @@
 class PlantAccession < ActiveRecord::Base
-  belongs_to :plant_line
+  belongs_to :plant_line, counter_cache: true
   belongs_to :plant_variety
   belongs_to :user
 
@@ -81,6 +81,7 @@ class PlantAccession < ActiveRecord::Base
       :fetch,
       query: params_for_filter(table_columns) +
         [
+          'plant_lines.id',
           'user_id',
           'id',
           'id' => []
