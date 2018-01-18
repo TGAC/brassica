@@ -2,7 +2,7 @@ class Analysis
   class Gwas
     class GenotypeCsvParser
       def call(io)
-        Analysis::CsvParser.new.call(io, Result).tap do |result|
+        CsvParser.new.call(io, Result).tap do |result|
           check_errors(result)
         end
       end
@@ -19,7 +19,7 @@ class Analysis
         parser_result.rewind
       end
 
-      class Result < Analysis::CsvParser::Result
+      class Result < CsvParser::Result
         def mutation_ids
           headers - %w(ID)
         end

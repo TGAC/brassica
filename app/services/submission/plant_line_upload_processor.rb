@@ -1,59 +1,44 @@
-class Submission::PlantLineParser
+# Parses CSV, populates #errors and #logs attributes on upload object.
+class Submission::PlantLineUploadProcessor
 
-  attr_reader :plant_lines
+  attr_reader :plant_lines, :plant_accessions
 
-  def initialize(upload)
+  def initialize(upload, io = nil)
     @upload = upload
+    @io = io || File.open(@upload.file.path, "r")
   end
 
   def call
     @upload.log "Starting Plant Lines file parsing [file name: #{@upload.file_file_name}]"
 
-    begin
-      parse_header
-      parse_plant_lines if @upload.errors.empty?
-    rescue EOFError => e
-      @upload.log "Input file finished"
-    rescue ArgumentError => e
-      @upload.log "Detected wrong file format - please make sure the file is not encoded (e.g. you are uploading an xls, instead of a text file)."
-    end
+    parse_upload
+    process_upload if @upload.errors.empty?
+    update_submission if @upload.errors.empty?
 
-    if @upload.errors.empty?
-      @upload.submission.content.append(:step03,
-                                        plant_line_list: plant_line_names,
-                                        new_plant_lines: @plant_lines,
-                                        new_plant_varieties: @plant_varieties,
-                                        new_plant_accessions: @plant_accessions)
-      @upload.submission.content.update(:step03, uploaded_plant_lines: @plant_lines)
-      @upload.submission.save!
-      @upload.submission.content.save!
-    end
+  rescue EOFError => e
+    @upload.log "Input file finished"
+  rescue ArgumentError => e
+    # TODO make this more specific, detect bad utf-8 encoding
+    @upload.log "Detected wrong file format - please make sure the file is not encoded (e.g. you are uploading an xls, instead of a text file)."
+  ensure
+    @io.close
   end
 
   private
 
-  def parse_header
-    header = csv.readline
-    if header.blank?
-      @upload.errors.add(:file, :no_header_plant_lines)
-      return
-    end
-
-    header_columns.each do |column_name|
-      if header.index(column_name).nil?
-        @upload.errors.add(:file, "no_#{column_name.downcase.parameterize('_')}_header".to_sym)
-      end
-    end
+  def parse_upload
+    @parsed_upload = Submission::PlantLineCsvParser.new.call(@io)
+    @parsed_upload.errors.each { |e| @upload.errors.add(:file, *e) }
   end
 
-  def parse_plant_lines
+  def process_upload
     @upload.log "Parsing Plant Lines data"
     @plant_lines = []
     @plant_varieties = {}
     @plant_accessions = {}
-    csv.each do |row|
+    @parsed_upload.each do |row|
       next unless correct_input?(row)
-      species, plant_variety_name, crop_type, plant_line_name, common_name, previous_line_name, genetic_status, sequence, plant_accession, originating_organisation, year_produced = parse_row(row)
+      species, plant_variety_name, crop_type, plant_line_name, common_name, previous_line_name, genetic_status, sequence, plant_accession, originating_organisation, year_produced = row
       if new_plant_variety?(plant_variety_name)
         @plant_varieties[plant_line_name] = {
           plant_variety_name: plant_variety_name,
@@ -82,16 +67,19 @@ class Submission::PlantLineParser
     @upload.log "Detected #{@plant_varieties.size} plant line(s) of new (i.e. not existing in BIP) plant variety(ies)."
   end
 
-  def csv
-    @csv ||= CSV.new(input)
-  end
-
-  def input
-    @input ||= File.open(@upload.file.path)
+  def update_submission
+    @upload.submission.content.append(:step03,
+                                      plant_line_list: plant_line_names,
+                                      new_plant_lines: @plant_lines,
+                                      new_plant_varieties: @plant_varieties,
+                                      new_plant_accessions: @plant_accessions)
+    @upload.submission.content.update(:step03, uploaded_plant_lines: @plant_lines)
+    @upload.submission.save!
+    @upload.submission.content.save!
   end
 
   def correct_input?(row)
-    species, _plant_variety_name, _crop_type, plant_line_name, _common_name, _previous_line_name, _genetic_status, _sequence, plant_accession, originating_organisation, year_produced = parse_row(row)
+    species, _plant_variety_name, _crop_type, plant_line_name, _common_name, _previous_line_name, _genetic_status, _sequence, plant_accession, originating_organisation, year_produced = row
     return false if plant_line_name.blank?
     if plant_line_names.include? plant_line_name
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined in the uploaded file."
@@ -116,10 +104,6 @@ class Submission::PlantLineParser
       return true
     end
     false
-  end
-
-  def parse_row(row)
-    row.map { |d| d.nil? ? '' : d.strip }
   end
 
   def plant_line_names
@@ -156,21 +140,5 @@ class Submission::PlantLineParser
 
   def current_plant_lines
     @current_plant_lines ||= @upload.submission.content.step03.plant_line_list || []
-  end
-
-  def header_columns
-    [
-      "Species",
-      "Plant variety",
-      "Crop type",
-      "Plant line",
-      "Common name",
-      "Previous line name",
-      "Genetic status",
-      "Sequence",
-      "Plant accession",
-      "Originating organisation",
-      "Year produced"
-    ]
   end
 end
