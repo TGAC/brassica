@@ -9,3 +9,5 @@ Upgraded gems to check:
 - omniauth-orcid, omniauth
 - draper
 - squeel -> baby_squeel
+- webmock
+- haml
