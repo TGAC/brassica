@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -26,9 +25,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "owner_id",                    null: false
     t.integer  "associated_pid"
     t.datetime "finished_at"
+    t.index ["owner_id", "analysis_type"], name: "index_analyses_on_owner_id_and_analysis_type", using: :btree
   end
-
-  add_index "analyses", ["owner_id", "analysis_type"], name: "index_analyses_on_owner_id_and_analysis_type", using: :btree
 
   create_table "analysis_data_files", force: :cascade do |t|
     t.datetime "created_at",                    null: false
@@ -43,37 +41,34 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "owner_id",                      null: false
     t.integer  "origin",            default: 0, null: false
     t.string   "file_format"
+    t.index ["analysis_id", "role", "data_type"], name: "index_analysis_data_files_on_analysis_id_and_role_and_data_type", using: :btree
+    t.index ["owner_id"], name: "index_analysis_data_files_on_owner_id", using: :btree
   end
-
-  add_index "analysis_data_files", ["analysis_id", "role", "data_type"], name: "index_analysis_data_files_on_analysis_id_and_role_and_data_type", using: :btree
-  add_index "analysis_data_files", ["owner_id"], name: "index_analysis_data_files_on_owner_id", using: :btree
 
   create_table "api_keys", force: :cascade do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "token",      null: false
     t.integer  "user_id",    null: false
+    t.index ["token"], name: "api_keys_token_idx", unique: true, using: :btree
   end
-
-  add_index "api_keys", ["token"], name: "api_keys_token_idx", unique: true, using: :btree
 
   create_table "container_types", force: :cascade do |t|
     t.string   "name",                      null: false
     t.boolean  "canonical",  default: true, null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_container_types_on_name", using: :btree
   end
 
-  add_index "container_types", ["name"], name: "index_container_types_on_name", using: :btree
 
   create_table "countries", force: :cascade do |t|
     t.string   "country_code", limit: 3, null: false
     t.text     "country_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["country_code"], name: "countries_country_code_idx", unique: true, using: :btree
   end
-
-  add_index "countries", ["country_code"], name: "countries_country_code_idx", unique: true, using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -87,9 +82,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.string   "queue"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
-
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "design_factors", force: :cascade do |t|
     t.text     "design_factor_name"
@@ -108,12 +102,11 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.boolean  "published",           default: true, null: false
     t.datetime "published_on"
     t.integer  "user_id"
+    t.index ["design_factor_name"], name: "design_factors_design_factor_name_idx", using: :btree
+    t.index ["institute_id"], name: "idx_143500_institute_id", using: :btree
+    t.index ["published"], name: "index_design_factors_on_published", using: :btree
+    t.index ["user_id"], name: "index_design_factors_on_user_id", using: :btree
   end
-
-  add_index "design_factors", ["design_factor_name"], name: "design_factors_design_factor_name_idx", using: :btree
-  add_index "design_factors", ["institute_id"], name: "idx_143500_institute_id", using: :btree
-  add_index "design_factors", ["published"], name: "index_design_factors_on_published", using: :btree
-  add_index "design_factors", ["user_id"], name: "index_design_factors_on_user_id", using: :btree
 
   create_table "genotype_matrices", force: :cascade do |t|
     t.text     "matrix_compiled_by",       null: false
@@ -130,18 +123,16 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "linkage_map_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["linkage_map_id"], name: "genotype_matrices_linkage_map_id_idx", using: :btree
   end
-
-  add_index "genotype_matrices", ["linkage_map_id"], name: "genotype_matrices_linkage_map_id_idx", using: :btree
 
   create_table "lamp_types", force: :cascade do |t|
     t.string   "name",                      null: false
     t.boolean  "canonical",  default: true, null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_lamp_types_on_name", using: :btree
   end
-
-  add_index "lamp_types", ["name"], name: "index_lamp_types_on_name", using: :btree
 
   create_table "linkage_groups", force: :cascade do |t|
     t.text     "linkage_group_label",                        null: false
@@ -165,12 +156,11 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "qtls_count",                  default: 0,    null: false
     t.boolean  "published",                   default: true, null: false
     t.datetime "published_on"
+    t.index ["linkage_group_label"], name: "linkage_groups_linkage_group_label_idx", unique: true, using: :btree
+    t.index ["linkage_group_name"], name: "idx_143534_linkage_group_name", using: :btree
+    t.index ["published"], name: "index_linkage_groups_on_published", using: :btree
+    t.index ["user_id"], name: "index_linkage_groups_on_user_id", using: :btree
   end
-
-  add_index "linkage_groups", ["linkage_group_label"], name: "linkage_groups_linkage_group_label_idx", unique: true, using: :btree
-  add_index "linkage_groups", ["linkage_group_name"], name: "idx_143534_linkage_group_name", using: :btree
-  add_index "linkage_groups", ["published"], name: "index_linkage_groups_on_published", using: :btree
-  add_index "linkage_groups", ["user_id"], name: "index_linkage_groups_on_user_id", using: :btree
 
   create_table "linkage_maps", force: :cascade do |t|
     t.text     "linkage_map_label",                             null: false
@@ -195,12 +185,11 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.boolean  "published",                      default: true, null: false
     t.datetime "published_on"
+    t.index ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", unique: true, using: :btree
+    t.index ["plant_population_id"], name: "linkage_maps_plant_population_id_idx", using: :btree
+    t.index ["published"], name: "index_linkage_maps_on_published", using: :btree
+    t.index ["user_id"], name: "index_linkage_maps_on_user_id", using: :btree
   end
-
-  add_index "linkage_maps", ["linkage_map_label"], name: "linkage_maps_linkage_map_label_idx", unique: true, using: :btree
-  add_index "linkage_maps", ["plant_population_id"], name: "linkage_maps_plant_population_id_idx", using: :btree
-  add_index "linkage_maps", ["published"], name: "index_linkage_maps_on_published", using: :btree
-  add_index "linkage_maps", ["user_id"], name: "index_linkage_maps_on_user_id", using: :btree
 
   create_table "map_locus_hits", force: :cascade do |t|
     t.text     "consensus_group_assignment",                null: false
@@ -224,14 +213,13 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.date     "date_entered"
     t.boolean  "published",                  default: true, null: false
     t.datetime "published_on"
+    t.index ["linkage_group_id"], name: "map_locus_hits_linkage_group_id_idx", using: :btree
+    t.index ["linkage_map_id"], name: "map_locus_hits_linkage_map_id_idx", using: :btree
+    t.index ["map_position_id"], name: "map_locus_hits_map_position_id_idx", using: :btree
+    t.index ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
+    t.index ["published"], name: "index_map_locus_hits_on_published", using: :btree
+    t.index ["user_id"], name: "index_map_locus_hits_on_user_id", using: :btree
   end
-
-  add_index "map_locus_hits", ["linkage_group_id"], name: "map_locus_hits_linkage_group_id_idx", using: :btree
-  add_index "map_locus_hits", ["linkage_map_id"], name: "map_locus_hits_linkage_map_id_idx", using: :btree
-  add_index "map_locus_hits", ["map_position_id"], name: "map_locus_hits_map_position_id_idx", using: :btree
-  add_index "map_locus_hits", ["population_locus_id"], name: "map_locus_hits_population_locus_id_idx", using: :btree
-  add_index "map_locus_hits", ["published"], name: "index_map_locus_hits_on_published", using: :btree
-  add_index "map_locus_hits", ["user_id"], name: "index_map_locus_hits_on_user_id", using: :btree
 
   create_table "map_positions", force: :cascade do |t|
     t.text     "marker_assay_name"
@@ -252,16 +240,15 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "marker_assay_id"
     t.boolean  "published",            default: true, null: false
     t.datetime "published_on"
+    t.index ["linkage_group_id"], name: "map_positions_linkage_group_id_idx", using: :btree
+    t.index ["map_position"], name: "idx_143597_map_position", using: :btree
+    t.index ["mapping_locus"], name: "map_positions_mapping_locus_idx", using: :btree
+    t.index ["marker_assay_id"], name: "map_positions_marker_assay_id_idx", using: :btree
+    t.index ["marker_assay_name"], name: "map_positions_marker_assay_name_idx", using: :btree
+    t.index ["population_locus_id"], name: "map_positions_population_locus_id_idx", using: :btree
+    t.index ["published"], name: "index_map_positions_on_published", using: :btree
+    t.index ["user_id"], name: "index_map_positions_on_user_id", using: :btree
   end
-
-  add_index "map_positions", ["linkage_group_id"], name: "map_positions_linkage_group_id_idx", using: :btree
-  add_index "map_positions", ["map_position"], name: "idx_143597_map_position", using: :btree
-  add_index "map_positions", ["mapping_locus"], name: "map_positions_mapping_locus_idx", using: :btree
-  add_index "map_positions", ["marker_assay_id"], name: "map_positions_marker_assay_id_idx", using: :btree
-  add_index "map_positions", ["marker_assay_name"], name: "map_positions_marker_assay_name_idx", using: :btree
-  add_index "map_positions", ["population_locus_id"], name: "map_positions_population_locus_id_idx", using: :btree
-  add_index "map_positions", ["published"], name: "index_map_positions_on_published", using: :btree
-  add_index "map_positions", ["user_id"], name: "index_map_positions_on_user_id", using: :btree
 
   create_table "marker_assays", force: :cascade do |t|
     t.text     "marker_assay_name",                            null: false
@@ -289,18 +276,17 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "map_positions_count",           default: 0,    null: false
     t.boolean  "published",                     default: true, null: false
     t.datetime "published_on"
+    t.index ["canonical_marker_name"], name: "marker_assays_canonical_marker_name_idx", using: :btree
+    t.index ["marker_assay_name"], name: "marker_assays_marker_assay_name_idx", unique: true, using: :btree
+    t.index ["marker_sequence_assignment_id"], name: "marker_assays_marker_sequence_assignment_id_idx", using: :btree
+    t.index ["primer_a_id"], name: "marker_assays_primer_a_id_idx", using: :btree
+    t.index ["primer_a_name"], name: "marker_assays_primer_a_idx", using: :btree
+    t.index ["primer_b_id"], name: "marker_assays_primer_b_id_idx", using: :btree
+    t.index ["primer_b_name"], name: "marker_assays_primer_b_idx", using: :btree
+    t.index ["probe_id"], name: "marker_assays_probe_id_idx", using: :btree
+    t.index ["published"], name: "index_marker_assays_on_published", using: :btree
+    t.index ["user_id"], name: "index_marker_assays_on_user_id", using: :btree
   end
-
-  add_index "marker_assays", ["canonical_marker_name"], name: "marker_assays_canonical_marker_name_idx", using: :btree
-  add_index "marker_assays", ["marker_assay_name"], name: "marker_assays_marker_assay_name_idx", unique: true, using: :btree
-  add_index "marker_assays", ["marker_sequence_assignment_id"], name: "marker_assays_marker_sequence_assignment_id_idx", using: :btree
-  add_index "marker_assays", ["primer_a_id"], name: "marker_assays_primer_a_id_idx", using: :btree
-  add_index "marker_assays", ["primer_a_name"], name: "marker_assays_primer_a_idx", using: :btree
-  add_index "marker_assays", ["primer_b_id"], name: "marker_assays_primer_b_id_idx", using: :btree
-  add_index "marker_assays", ["primer_b_name"], name: "marker_assays_primer_b_idx", using: :btree
-  add_index "marker_assays", ["probe_id"], name: "marker_assays_probe_id_idx", using: :btree
-  add_index "marker_assays", ["published"], name: "index_marker_assays_on_published", using: :btree
-  add_index "marker_assays", ["user_id"], name: "index_marker_assays_on_user_id", using: :btree
 
   create_table "marker_sequence_assignments", force: :cascade do |t|
     t.text     "marker_set",              null: false
@@ -314,9 +300,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.text     "data_owned_by"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
   end
-
-  add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
 
   create_table "measurement_units", force: :cascade do |t|
     t.integer  "parent_ids",                              array: true
@@ -326,10 +311,9 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.boolean  "canonical",   default: true, null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.index ["name", "term"], name: "index_measurement_units_on_name_and_term", unique: true, using: :btree
+    t.index ["term"], name: "index_measurement_units_on_term", unique: true, using: :btree
   end
-
-  add_index "measurement_units", ["name", "term"], name: "index_measurement_units_on_name_and_term", unique: true, using: :btree
-  add_index "measurement_units", ["term"], name: "index_measurement_units_on_term", unique: true, using: :btree
 
   create_table "plant_accessions", force: :cascade do |t|
     t.text     "plant_accession",                           null: false
@@ -354,16 +338,15 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.boolean  "published",                  default: true, null: false
     t.datetime "published_on"
     t.integer  "plant_variety_id"
+    t.index ["plant_accession", "originating_organisation", "year_produced"], name: "plant_accessions_pa_oo_yp_idx", unique: true, using: :btree
+    t.index ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
+    t.index ["plant_variety_id"], name: "index_plant_accessions_on_plant_variety_id", using: :btree
+    t.index ["published"], name: "index_plant_accessions_on_published", using: :btree
+    t.index ["user_id"], name: "index_plant_accessions_on_user_id", using: :btree
   end
 
-  add_index "plant_accessions", ["plant_accession", "originating_organisation", "year_produced"], name: "plant_accessions_pa_oo_yp_idx", unique: true, using: :btree
-  add_index "plant_accessions", ["plant_line_id"], name: "plant_accessions_plant_line_id_idx", using: :btree
-  add_index "plant_accessions", ["plant_variety_id"], name: "index_plant_accessions_on_plant_variety_id", using: :btree
-  add_index "plant_accessions", ["published"], name: "index_plant_accessions_on_published", using: :btree
-  add_index "plant_accessions", ["user_id"], name: "index_plant_accessions_on_user_id", using: :btree
-
   create_table "plant_lines", force: :cascade do |t|
-    t.text     "plant_line_name",                    null: false
+    t.text     "plant_line_name",                       null: false
     t.text     "common_name"
     t.text     "plant_variety_name"
     t.text     "named_by_whom"
@@ -381,17 +364,16 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "published",           default: true, null: false
+    t.boolean  "published",              default: true, null: false
     t.string   "sequence_identifier"
     t.datetime "published_on"
+    t.index ["plant_line_name"], name: "plant_lines_plant_line_name_idx", unique: true, using: :btree
+    t.index ["plant_variety_id"], name: "plant_lines_plant_variety_id_idx", using: :btree
+    t.index ["plant_variety_name"], name: "idx_143729_plant_variety", using: :btree
+    t.index ["published"], name: "index_plant_lines_on_published", using: :btree
+    t.index ["taxonomy_term_id"], name: "index_plant_lines_on_taxonomy_term_id", using: :btree
+    t.index ["user_id"], name: "index_plant_lines_on_user_id", using: :btree
   end
-
-  add_index "plant_lines", ["plant_line_name"], name: "plant_lines_plant_line_name_idx", unique: true, using: :btree
-  add_index "plant_lines", ["plant_variety_id"], name: "plant_lines_plant_variety_id_idx", using: :btree
-  add_index "plant_lines", ["plant_variety_name"], name: "idx_143729_plant_variety", using: :btree
-  add_index "plant_lines", ["published"], name: "index_plant_lines_on_published", using: :btree
-  add_index "plant_lines", ["taxonomy_term_id"], name: "index_plant_lines_on_taxonomy_term_id", using: :btree
-  add_index "plant_lines", ["user_id"], name: "index_plant_lines_on_user_id", using: :btree
 
   create_table "plant_parts", force: :cascade do |t|
     t.text     "plant_part",                              null: false
@@ -406,9 +388,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "updated_at"
     t.string   "label",             default: "CROPSTORE", null: false
     t.boolean  "canonical",         default: false,       null: false
+    t.index ["plant_part"], name: "plant_parts_plant_part_idx", unique: true, using: :btree
   end
-
-  add_index "plant_parts", ["plant_part"], name: "plant_parts_plant_part_idx", unique: true, using: :btree
 
   create_table "plant_population_lists", force: :cascade do |t|
     t.text     "sort_order"
@@ -424,13 +405,12 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.boolean  "published",           default: true, null: false
     t.datetime "published_on"
+    t.index ["plant_line_id", "plant_population_id"], name: "unique_ppl_idx", unique: true, using: :btree
+    t.index ["plant_line_id"], name: "plant_population_lists_plant_line_id_idx", using: :btree
+    t.index ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
+    t.index ["published"], name: "index_plant_population_lists_on_published", using: :btree
+    t.index ["user_id"], name: "index_plant_population_lists_on_user_id", using: :btree
   end
-
-  add_index "plant_population_lists", ["plant_line_id", "plant_population_id"], name: "unique_ppl_idx", unique: true, using: :btree
-  add_index "plant_population_lists", ["plant_line_id"], name: "plant_population_lists_plant_line_id_idx", using: :btree
-  add_index "plant_population_lists", ["plant_population_id"], name: "plant_population_lists_plant_population_id_idx", using: :btree
-  add_index "plant_population_lists", ["published"], name: "index_plant_population_lists_on_published", using: :btree
-  add_index "plant_population_lists", ["user_id"], name: "index_plant_population_lists_on_user_id", using: :btree
 
   create_table "plant_populations", force: :cascade do |t|
     t.text     "name",                                        null: false
@@ -461,16 +441,15 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "updated_at"
     t.boolean  "published",                    default: true, null: false
     t.datetime "published_on"
+    t.index ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree
+    t.index ["male_parent_line_id"], name: "plant_populations_male_parent_line_id_idx", using: :btree
+    t.index ["name"], name: "plant_populations_name_idx", unique: true, using: :btree
+    t.index ["population_type"], name: "plant_populations_population_type_idx", using: :btree
+    t.index ["population_type_id"], name: "plant_populations_population_type_id_idx", using: :btree
+    t.index ["published"], name: "index_plant_populations_on_published", using: :btree
+    t.index ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
+    t.index ["user_id"], name: "index_plant_populations_on_user_id", using: :btree
   end
-
-  add_index "plant_populations", ["female_parent_line_id"], name: "plant_populations_female_parent_line_id_idx", using: :btree
-  add_index "plant_populations", ["male_parent_line_id"], name: "plant_populations_male_parent_line_id_idx", using: :btree
-  add_index "plant_populations", ["name"], name: "plant_populations_name_idx", unique: true, using: :btree
-  add_index "plant_populations", ["population_type"], name: "plant_populations_population_type_idx", using: :btree
-  add_index "plant_populations", ["population_type_id"], name: "plant_populations_population_type_id_idx", using: :btree
-  add_index "plant_populations", ["published"], name: "index_plant_populations_on_published", using: :btree
-  add_index "plant_populations", ["taxonomy_term_id"], name: "index_plant_populations_on_taxonomy_term_id", using: :btree
-  add_index "plant_populations", ["user_id"], name: "index_plant_populations_on_user_id", using: :btree
 
   create_table "plant_scoring_units", force: :cascade do |t|
     t.text     "scoring_unit_name",                       null: false
@@ -495,14 +474,13 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.boolean  "published",                default: true, null: false
     t.datetime "published_on"
     t.string   "biosamples_id"
+    t.index ["design_factor_id"], name: "plant_scoring_units_design_factor_id_idx", using: :btree
+    t.index ["plant_accession_id"], name: "plant_scoring_units_plant_accession_id_idx", using: :btree
+    t.index ["plant_trial_id"], name: "plant_scoring_units_plant_trial_id_idx", using: :btree
+    t.index ["published"], name: "index_plant_scoring_units_on_published", using: :btree
+    t.index ["scoring_unit_name"], name: "plant_scoring_units_scoring_unit_name_idx", using: :btree
+    t.index ["user_id"], name: "index_plant_scoring_units_on_user_id", using: :btree
   end
-
-  add_index "plant_scoring_units", ["design_factor_id"], name: "plant_scoring_units_design_factor_id_idx", using: :btree
-  add_index "plant_scoring_units", ["plant_accession_id"], name: "plant_scoring_units_plant_accession_id_idx", using: :btree
-  add_index "plant_scoring_units", ["plant_trial_id"], name: "plant_scoring_units_plant_trial_id_idx", using: :btree
-  add_index "plant_scoring_units", ["published"], name: "index_plant_scoring_units_on_published", using: :btree
-  add_index "plant_scoring_units", ["scoring_unit_name"], name: "plant_scoring_units_scoring_unit_name_idx", using: :btree
-  add_index "plant_scoring_units", ["user_id"], name: "index_plant_scoring_units_on_user_id", using: :btree
 
   create_table "plant_treatment_types", force: :cascade do |t|
     t.integer  "parent_ids",                             array: true
@@ -511,10 +489,10 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.boolean  "canonical",  default: true, null: false
+    t.index ["name"], name: "index_plant_treatment_types_on_name", unique: true, using: :btree
+    t.index ["term"], name: "index_plant_treatment_types_on_term", unique: true, using: :btree
   end
 
-  add_index "plant_treatment_types", ["name"], name: "index_plant_treatment_types_on_name", unique: true, using: :btree
-  add_index "plant_treatment_types", ["term"], name: "index_plant_treatment_types_on_term", unique: true, using: :btree
 
   create_table "plant_trial_containers", force: :cascade do |t|
     t.integer  "environment_id",    null: false
@@ -530,9 +508,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
     t.string   "ph"
+    t.index ["plant_trial_id"], name: "index_plant_trial_environments_on_plant_trial_id", using: :btree
   end
-
-  add_index "plant_trial_environments", ["plant_trial_id"], name: "index_plant_trial_environments_on_plant_trial_id", using: :btree
 
   create_table "plant_trial_lamps", force: :cascade do |t|
     t.integer  "environment_id", null: false
@@ -551,9 +528,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "unit_id",      null: false
+    t.index ["context_type", "context_id", "property"], name: "idx_plant_trial_measurement_values", unique: true, using: :btree
   end
-
-  add_index "plant_trial_measurement_values", ["context_type", "context_id", "property"], name: "idx_plant_trial_measurement_values", unique: true, using: :btree
 
   create_table "plant_trial_rooting_media", force: :cascade do |t|
     t.integer  "environment_id", null: false
@@ -561,9 +537,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.text     "description"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["environment_id", "medium_type_id"], name: "idx_plant_trial_rooting_media", using: :btree
   end
-
-  add_index "plant_trial_rooting_media", ["environment_id", "medium_type_id"], name: "idx_plant_trial_rooting_media", using: :btree
 
   create_table "plant_trial_topological_descriptors", force: :cascade do |t|
     t.integer  "environment_id",        null: false
@@ -571,9 +546,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.text     "description",           null: false
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+    t.index ["environment_id", "topological_factor_id"], name: "index_plant_trial_topological_descriptors", unique: true, using: :btree
   end
-
-  add_index "plant_trial_topological_descriptors", ["environment_id", "topological_factor_id"], name: "index_plant_trial_topological_descriptors", unique: true, using: :btree
 
   create_table "plant_trial_treatment_applications", force: :cascade do |t|
     t.string   "sti_type",          null: false
@@ -582,17 +556,15 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.text     "description"
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
+    t.index ["treatment_id", "treatment_type_id"], name: "idx_plant_trial_treatment_applications", using: :btree
   end
-
-  add_index "plant_trial_treatment_applications", ["treatment_id", "treatment_type_id"], name: "idx_plant_trial_treatment_applications", using: :btree
 
   create_table "plant_trial_treatments", force: :cascade do |t|
     t.integer  "plant_trial_id", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["plant_trial_id"], name: "index_plant_trial_treatments_on_plant_trial_id", using: :btree
   end
-
-  add_index "plant_trial_treatments", ["plant_trial_id"], name: "index_plant_trial_treatments_on_plant_trial_id", using: :btree
 
   create_table "plant_trials", force: :cascade do |t|
     t.text     "plant_trial_name",                                   null: false
@@ -632,12 +604,11 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "layout_file_size"
     t.datetime "layout_updated_at"
     t.integer  "study_type",                limit: 2
+    t.index ["country_id"], name: "plant_trials_country_id_idx", using: :btree
+    t.index ["plant_trial_name"], name: "plant_trials_plant_trial_name_idx", unique: true, using: :btree
+    t.index ["published"], name: "index_plant_trials_on_published", using: :btree
+    t.index ["user_id"], name: "index_plant_trials_on_user_id", using: :btree
   end
-
-  add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
-  add_index "plant_trials", ["plant_trial_name"], name: "plant_trials_plant_trial_name_idx", unique: true, using: :btree
-  add_index "plant_trials", ["published"], name: "index_plant_trials_on_published", using: :btree
-  add_index "plant_trials", ["user_id"], name: "index_plant_trials_on_user_id", using: :btree
 
   create_table "plant_varieties", force: :cascade do |t|
     t.string   "plant_variety_name"
@@ -658,29 +629,26 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.boolean  "published",             default: true, null: false
     t.datetime "published_on"
+    t.index ["plant_variety_name"], name: "plant_varieties_plant_variety_name_idx", unique: true, using: :btree
+    t.index ["published"], name: "index_plant_varieties_on_published", using: :btree
+    t.index ["user_id"], name: "index_plant_varieties_on_user_id", using: :btree
   end
-
-  add_index "plant_varieties", ["plant_variety_name"], name: "plant_varieties_plant_variety_name_idx", unique: true, using: :btree
-  add_index "plant_varieties", ["published"], name: "index_plant_varieties_on_published", using: :btree
-  add_index "plant_varieties", ["user_id"], name: "index_plant_varieties_on_user_id", using: :btree
 
   create_table "plant_variety_country_of_origin", id: false, force: :cascade do |t|
     t.integer "country_id"
     t.integer "plant_variety_id"
+    t.index ["country_id"], name: "plant_variety_country_of_origin_country_id_idx", using: :btree
+    t.index ["plant_variety_id", "country_id"], name: "unique_pv_coo_idx", unique: true, using: :btree
+    t.index ["plant_variety_id"], name: "plant_variety_country_of_origin_plant_variety_id_idx", using: :btree
   end
-
-  add_index "plant_variety_country_of_origin", ["country_id"], name: "plant_variety_country_of_origin_country_id_idx", using: :btree
-  add_index "plant_variety_country_of_origin", ["plant_variety_id", "country_id"], name: "unique_pv_coo_idx", unique: true, using: :btree
-  add_index "plant_variety_country_of_origin", ["plant_variety_id"], name: "plant_variety_country_of_origin_plant_variety_id_idx", using: :btree
 
   create_table "plant_variety_country_registered", id: false, force: :cascade do |t|
     t.integer "country_id"
     t.integer "plant_variety_id"
+    t.index ["country_id"], name: "plant_variety_country_registered_country_id_idx", using: :btree
+    t.index ["plant_variety_id", "country_id"], name: "unique_pv_cr_idx", unique: true, using: :btree
+    t.index ["plant_variety_id"], name: "plant_variety_country_registered_plant_variety_id_idx", using: :btree
   end
-
-  add_index "plant_variety_country_registered", ["country_id"], name: "plant_variety_country_registered_country_id_idx", using: :btree
-  add_index "plant_variety_country_registered", ["plant_variety_id", "country_id"], name: "unique_pv_cr_idx", unique: true, using: :btree
-  add_index "plant_variety_country_registered", ["plant_variety_id"], name: "plant_variety_country_registered_plant_variety_id_idx", using: :btree
 
   create_table "pop_type_lookup", force: :cascade do |t|
     t.text     "population_type",  null: false
@@ -688,9 +656,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.text     "assigned_by_whom"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
   end
-
-  add_index "pop_type_lookup", ["population_type"], name: "pop_type_lookup_population_type_idx", using: :btree
 
   create_table "population_loci", force: :cascade do |t|
     t.text     "mapping_locus",                       null: false
@@ -709,13 +676,12 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.boolean  "published",            default: true, null: false
     t.datetime "published_on"
+    t.index ["mapping_locus"], name: "population_loci_mapping_locus_idx", using: :btree
+    t.index ["marker_assay_id"], name: "population_loci_marker_assay_id_idx", using: :btree
+    t.index ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
+    t.index ["published"], name: "index_population_loci_on_published", using: :btree
+    t.index ["user_id"], name: "index_population_loci_on_user_id", using: :btree
   end
-
-  add_index "population_loci", ["mapping_locus"], name: "population_loci_mapping_locus_idx", using: :btree
-  add_index "population_loci", ["marker_assay_id"], name: "population_loci_marker_assay_id_idx", using: :btree
-  add_index "population_loci", ["plant_population_id"], name: "population_loci_plant_population_id_idx", using: :btree
-  add_index "population_loci", ["published"], name: "index_population_loci_on_published", using: :btree
-  add_index "population_loci", ["user_id"], name: "index_population_loci_on_user_id", using: :btree
 
   create_table "primers", force: :cascade do |t|
     t.text     "primer",                                 null: false
@@ -735,11 +701,10 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.boolean  "published",               default: true, null: false
     t.datetime "published_on"
+    t.index ["primer"], name: "primers_primer_idx", unique: true, using: :btree
+    t.index ["published"], name: "index_primers_on_published", using: :btree
+    t.index ["user_id"], name: "index_primers_on_user_id", using: :btree
   end
-
-  add_index "primers", ["primer"], name: "primers_primer_idx", unique: true, using: :btree
-  add_index "primers", ["published"], name: "index_primers_on_published", using: :btree
-  add_index "primers", ["user_id"], name: "index_primers_on_user_id", using: :btree
 
   create_table "probes", force: :cascade do |t|
     t.text     "probe_name",                             null: false
@@ -758,12 +723,11 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.date     "date_entered"
     t.boolean  "published",               default: true, null: false
     t.datetime "published_on"
+    t.index ["probe_name"], name: "probes_probe_name_idx", unique: true, using: :btree
+    t.index ["published"], name: "index_probes_on_published", using: :btree
+    t.index ["taxonomy_term_id"], name: "probes_taxonomy_term_id_idx", using: :btree
+    t.index ["user_id"], name: "index_probes_on_user_id", using: :btree
   end
-
-  add_index "probes", ["probe_name"], name: "probes_probe_name_idx", unique: true, using: :btree
-  add_index "probes", ["published"], name: "index_probes_on_published", using: :btree
-  add_index "probes", ["taxonomy_term_id"], name: "probes_taxonomy_term_id_idx", using: :btree
-  add_index "probes", ["user_id"], name: "index_probes_on_user_id", using: :btree
 
   create_table "processed_trait_datasets", force: :cascade do |t|
     t.text     "processed_trait_dataset_name", null: false
@@ -778,11 +742,10 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "trait_descriptor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["plant_trial_id"], name: "processed_trait_datasets_plant_trial_id_idx", using: :btree
+    t.index ["processed_trait_dataset_name"], name: "processed_trait_datasets_processed_trait_dataset_name_idx", unique: true, using: :btree
+    t.index ["trait_descriptor_id"], name: "processed_trait_datasets_trait_descriptor_id_idx", using: :btree
   end
-
-  add_index "processed_trait_datasets", ["plant_trial_id"], name: "processed_trait_datasets_plant_trial_id_idx", using: :btree
-  add_index "processed_trait_datasets", ["processed_trait_dataset_name"], name: "processed_trait_datasets_processed_trait_dataset_name_idx", unique: true, using: :btree
-  add_index "processed_trait_datasets", ["trait_descriptor_id"], name: "processed_trait_datasets_trait_descriptor_id_idx", using: :btree
 
   create_table "qtl", force: :cascade do |t|
     t.text     "qtl_rank",                                  null: false
@@ -812,13 +775,12 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "user_id"
     t.boolean  "published",                  default: true, null: false
     t.datetime "published_on"
+    t.index ["linkage_group_id"], name: "qtl_linkage_group_id_idx", using: :btree
+    t.index ["processed_trait_dataset_id"], name: "qtl_processed_trait_dataset_id_idx", using: :btree
+    t.index ["published"], name: "index_qtl_on_published", using: :btree
+    t.index ["qtl_job_id"], name: "qtl_qtl_job_id_idx", using: :btree
+    t.index ["user_id"], name: "index_qtl_on_user_id", using: :btree
   end
-
-  add_index "qtl", ["linkage_group_id"], name: "qtl_linkage_group_id_idx", using: :btree
-  add_index "qtl", ["processed_trait_dataset_id"], name: "qtl_processed_trait_dataset_id_idx", using: :btree
-  add_index "qtl", ["published"], name: "index_qtl_on_published", using: :btree
-  add_index "qtl", ["qtl_job_id"], name: "qtl_qtl_job_id_idx", using: :btree
-  add_index "qtl", ["user_id"], name: "index_qtl_on_user_id", using: :btree
 
   create_table "qtl_jobs", force: :cascade do |t|
     t.text     "qtl_job_name",                                  null: false
@@ -844,14 +806,13 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "linkage_map_id"
     t.boolean  "published",                      default: true, null: false
     t.datetime "published_on"
+    t.index ["linkage_map_id"], name: "qtl_jobs_linkage_map_id_idx", using: :btree
+    t.index ["linkage_map_label"], name: "qtl_jobs_linkage_map_label_idx", using: :btree
+    t.index ["published"], name: "index_qtl_jobs_on_published", using: :btree
+    t.index ["qtl_job_name"], name: "qtl_jobs_qtl_job_name_idx", unique: true, using: :btree
+    t.index ["qtl_software", "qtl_method"], name: "idx_144140_qtl_software", using: :btree
+    t.index ["user_id"], name: "index_qtl_jobs_on_user_id", using: :btree
   end
-
-  add_index "qtl_jobs", ["linkage_map_id"], name: "qtl_jobs_linkage_map_id_idx", using: :btree
-  add_index "qtl_jobs", ["linkage_map_label"], name: "qtl_jobs_linkage_map_label_idx", using: :btree
-  add_index "qtl_jobs", ["published"], name: "index_qtl_jobs_on_published", using: :btree
-  add_index "qtl_jobs", ["qtl_job_name"], name: "qtl_jobs_qtl_job_name_idx", unique: true, using: :btree
-  add_index "qtl_jobs", ["qtl_software", "qtl_method"], name: "idx_144140_qtl_software", using: :btree
-  add_index "qtl_jobs", ["user_id"], name: "index_qtl_jobs_on_user_id", using: :btree
 
   create_table "restriction_enzymes", force: :cascade do |t|
     t.text     "restriction_enzyme", null: false
@@ -859,9 +820,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.text     "data_provenance"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["restriction_enzyme"], name: "restriction_enzymes_restriction_enzyme_idx", unique: true, using: :btree
   end
-
-  add_index "restriction_enzymes", ["restriction_enzyme"], name: "restriction_enzymes_restriction_enzyme_idx", unique: true, using: :btree
 
   create_table "submission_uploads", force: :cascade do |t|
     t.integer  "submission_id",     null: false
@@ -872,9 +832,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
+    t.index ["submission_id"], name: "index_submission_uploads_on_submission_id", using: :btree
   end
-
-  add_index "submission_uploads", ["submission_id"], name: "index_submission_uploads_on_submission_id", using: :btree
 
   create_table "submissions", force: :cascade do |t|
     t.integer  "user_id",                             null: false
@@ -887,11 +846,10 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "submitted_object_id"
     t.boolean  "published",           default: false, null: false
     t.string   "doi"
+    t.index ["finalized"], name: "index_submissions_on_finalized", using: :btree
+    t.index ["submission_type"], name: "index_submissions_on_submission_type", using: :btree
+    t.index ["user_id"], name: "index_submissions_on_user_id", using: :btree
   end
-
-  add_index "submissions", ["finalized"], name: "index_submissions_on_finalized", using: :btree
-  add_index "submissions", ["submission_type"], name: "index_submissions_on_submission_type", using: :btree
-  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
   create_table "taxonomy_terms", force: :cascade do |t|
     t.string   "label",                           null: false
@@ -901,11 +859,10 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "updated_at",                      null: false
     t.boolean  "canonical",        default: true
     t.string   "ncbi_taxon"
+    t.index ["label"], name: "index_taxonomy_terms_on_label", using: :btree
+    t.index ["name"], name: "taxonomy_terms_name_idx", unique: true, using: :btree
+    t.index ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
   end
-
-  add_index "taxonomy_terms", ["label"], name: "index_taxonomy_terms_on_label", using: :btree
-  add_index "taxonomy_terms", ["name"], name: "taxonomy_terms_name_idx", unique: true, using: :btree
-  add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
   create_table "topological_factors", force: :cascade do |t|
     t.integer  "parent_ids",                             array: true
@@ -914,10 +871,9 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.boolean  "canonical",  default: true, null: false
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_topological_factors_on_name", unique: true, using: :btree
+    t.index ["term"], name: "index_topological_factors_on_term", unique: true, using: :btree
   end
-
-  add_index "topological_factors", ["name"], name: "index_topological_factors_on_name", unique: true, using: :btree
-  add_index "topological_factors", ["term"], name: "index_topological_factors_on_term", unique: true, using: :btree
 
   create_table "trait_descriptors", force: :cascade do |t|
     t.text     "descriptor_label"
@@ -955,15 +911,14 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "published_on"
     t.integer  "trait_id",                                null: false
     t.integer  "plant_part_id"
+    t.index ["category"], name: "idx_144197_category", using: :btree
+    t.index ["descriptor_label"], name: "trait_descriptors_descriptor_label_idx", using: :btree
+    t.index ["descriptor_name"], name: "idx_144197_descriptor_name", using: :btree
+    t.index ["plant_part_id"], name: "index_trait_descriptors_on_plant_part_id", using: :btree
+    t.index ["published"], name: "index_trait_descriptors_on_published", using: :btree
+    t.index ["trait_id"], name: "index_trait_descriptors_on_trait_id", using: :btree
+    t.index ["user_id"], name: "index_trait_descriptors_on_user_id", using: :btree
   end
-
-  add_index "trait_descriptors", ["category"], name: "idx_144197_category", using: :btree
-  add_index "trait_descriptors", ["descriptor_label"], name: "trait_descriptors_descriptor_label_idx", using: :btree
-  add_index "trait_descriptors", ["descriptor_name"], name: "idx_144197_descriptor_name", using: :btree
-  add_index "trait_descriptors", ["plant_part_id"], name: "index_trait_descriptors_on_plant_part_id", using: :btree
-  add_index "trait_descriptors", ["published"], name: "index_trait_descriptors_on_published", using: :btree
-  add_index "trait_descriptors", ["trait_id"], name: "index_trait_descriptors_on_trait_id", using: :btree
-  add_index "trait_descriptors", ["user_id"], name: "index_trait_descriptors_on_user_id", using: :btree
 
   create_table "trait_grades", force: :cascade do |t|
     t.text     "trait_grade",         null: false
@@ -975,9 +930,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.integer  "trait_descriptor_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
   end
-
-  add_index "trait_grades", ["trait_descriptor_id"], name: "trait_grades_trait_descriptor_id_idx", using: :btree
 
   create_table "trait_scores", force: :cascade do |t|
     t.text     "score_value"
@@ -997,12 +951,11 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.boolean  "published",                  default: true, null: false
     t.datetime "published_on"
     t.integer  "technical_replicate_number", default: 1,    null: false
+    t.index ["plant_scoring_unit_id"], name: "trait_scores_plant_scoring_unit_id_idx", using: :btree
+    t.index ["published"], name: "index_trait_scores_on_published", using: :btree
+    t.index ["trait_descriptor_id"], name: "trait_scores_trait_descriptor_id_idx", using: :btree
+    t.index ["user_id"], name: "index_trait_scores_on_user_id", using: :btree
   end
-
-  add_index "trait_scores", ["plant_scoring_unit_id"], name: "trait_scores_plant_scoring_unit_id_idx", using: :btree
-  add_index "trait_scores", ["published"], name: "index_trait_scores_on_published", using: :btree
-  add_index "trait_scores", ["trait_descriptor_id"], name: "trait_scores_trait_descriptor_id_idx", using: :btree
-  add_index "trait_scores", ["user_id"], name: "index_trait_scores_on_user_id", using: :btree
 
   create_table "traits", force: :cascade do |t|
     t.string   "label",                          null: false
@@ -1012,10 +965,9 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.string   "data_provenance"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
+    t.index ["label"], name: "index_traits_on_label", using: :btree
+    t.index ["name"], name: "traits_name_idx", unique: true, using: :btree
   end
-
-  add_index "traits", ["label"], name: "index_traits_on_label", using: :btree
-  add_index "traits", ["name"], name: "traits_name_idx", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "login",                          null: false
@@ -1028,9 +980,8 @@ ActiveRecord::Schema.define(version: 20180228122047) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.index ["login"], name: "index_users_on_login", unique: true, using: :btree
   end
-
-  add_index "users", ["login"], name: "index_users_on_login", unique: true, using: :btree
 
   add_foreign_key "analyses", "users", column: "owner_id", on_delete: :cascade
   add_foreign_key "analysis_data_files", "analyses"
