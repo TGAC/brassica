@@ -28,7 +28,7 @@ class Analyses::DataFilesController < ApplicationController
   def create
     data_file = Analysis::DataFile.create(create_params)
 
-    postprocess_data_file(data_file)
+    postprocess_data_file(data_file) if data_file.valid?
 
     render json: decorate_data_file(data_file), status: data_file.valid? ? :created : :unprocessable_entity
   end

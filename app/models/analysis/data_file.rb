@@ -16,7 +16,8 @@ class Analysis::DataFile < ActiveRecord::Base
                    attachment_size: { less_than: 50.megabytes },
                    attachment_file_name: { matches: /\.(vcf|hapmap|csv|txt)\Z/ }
 
-  validates :file_format, inclusion: { in: %w(vcf hapmap csv txt), message: :invalid_for_gwas_genotype }, if: :gwas_genotype?
+  validates :file_format, inclusion: { in: %w(vcf hapmap csv txt), message: :invalid_for_gwas_genotype },
+                          if: :gwas_genotype?
 
   do_not_validate_attachment_file_type :file
 
