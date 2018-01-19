@@ -32,6 +32,8 @@ ActiveRecord::Migration.maintain_test_schema!
 
 Rails.application.eager_load!
 
+WebMock.enable!
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
