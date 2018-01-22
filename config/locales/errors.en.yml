@@ -3,6 +3,46 @@ en:
   activerecord:
     errors:
       models:
+        plant_accession:
+          attributes:
+            plant_line_id:
+              not_with_plant_variety: A plant accession may not be simultaneously linked to a plant line and a plant variety.
+              blank: A plant accession must be linked to either a plant line or a plant variety.
+            plant_variety_id:
+              not_with_plant_line: A plant accession may not be simultaneously linked to a plant line and a plant variety.
+              blank: A plant accession must be linked to either a plant line or a plant variety.
+
+        submission/upload:
+          attributes:
+            file:
+              no_header: 'No correct header provided. At least four columns are expected.'
+              no_header_plant_lines: 'No correct header provided.'
+              no_plant_accession_header: 'No correct header provided. Please provide the "Plant accession" column.'
+              no_originating_organisation_header: 'No correct header provided. Please provide the "Originating organisation" column.'
+              no_year_produced_header: 'No correct header provided. Please provide the "Year produced" column.'
+              no_plant_line_header: 'No correct header provided. Please provide the "Plant line" column.'
+              no_common_name_header: 'No correct header provided. Please provide the "Common name" column.'
+              no_previous_line_name_header: 'No correct header provided. Please provide the "Previous line name" column.'
+              no_genetic_status_header: 'No correct header provided. Please provide the "Genetic status" column.'
+              no_sequence_header: 'No correct header provided. Please provide the "Sequence" column.'
+              no_line_or_variety_header: 'No correct header provided. Please provide either the "Plant line" or the "Plant variety" column.'
+              no_plant_variety_header: 'No correct header provided. Please provide the "Plant variety" column.'
+              no_species_header: 'No correct header provided. Please provide the "Species" column.'
+              no_crop_type_header: 'No correct header provided. Please provide the "Crop type" column.'
+              non_unique_mapping: 'Detected non unique column headers mapping
+                to traits. Please check the column names.'
+        trait:
+          attributes:
+            name:
+              blank: Please provide a trait name.
+              taken: A trait with this name already exists.
+
+            label:
+              blank: Please provide a trait label.
+
+  activemodel:
+    errors:
+      models:
         analysis:
           attributes:
             base:
@@ -104,39 +144,3 @@ en:
                 Technical replicate numbers must be present and greater than zero. Please leave the value at '1' if
                 you don't use technical replicates.
 
-        plant_accession:
-          attributes:
-            plant_line_id:
-              not_with_plant_variety: A plant accession may not be simultaneously linked to a plant line and a plant variety.
-              blank: A plant accession must be linked to either a plant line or a plant variety.
-            plant_variety_id:
-              not_with_plant_line: A plant accession may not be simultaneously linked to a plant line and a plant variety.
-              blank: A plant accession must be linked to either a plant line or a plant variety.
-
-        submission/upload:
-          attributes:
-            file:
-              no_header: 'No correct header provided. At least four columns are expected.'
-              no_header_plant_lines: 'No correct header provided.'
-              no_plant_accession_header: 'No correct header provided. Please provide the "Plant accession" column.'
-              no_originating_organisation_header: 'No correct header provided. Please provide the "Originating organisation" column.'
-              no_year_produced_header: 'No correct header provided. Please provide the "Year produced" column.'
-              no_plant_line_header: 'No correct header provided. Please provide the "Plant line" column.'
-              no_common_name_header: 'No correct header provided. Please provide the "Common name" column.'
-              no_previous_line_name_header: 'No correct header provided. Please provide the "Previous line name" column.'
-              no_genetic_status_header: 'No correct header provided. Please provide the "Genetic status" column.'
-              no_sequence_header: 'No correct header provided. Please provide the "Sequence" column.'
-              no_line_or_variety_header: 'No correct header provided. Please provide either the "Plant line" or the "Plant variety" column.'
-              no_plant_variety_header: 'No correct header provided. Please provide the "Plant variety" column.'
-              no_species_header: 'No correct header provided. Please provide the "Species" column.'
-              no_crop_type_header: 'No correct header provided. Please provide the "Crop type" column.'
-              non_unique_mapping: 'Detected non unique column headers mapping
-                to traits. Please check the column names.'
-        trait:
-          attributes:
-            name:
-              blank: Please provide a trait name.
-              taken: A trait with this name already exists.
-
-            label:
-              blank: Please provide a trait label.
