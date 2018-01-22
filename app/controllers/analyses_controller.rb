@@ -90,7 +90,7 @@ class AnalysesController < ApplicationController
   end
 
   def form
-    form_klass.new(Hashie::Mash.new(form_params))
+    form_klass.new(form_payload_klass.new(form_params))
   end
 
   def form_klass
@@ -107,5 +107,9 @@ class AnalysesController < ApplicationController
 
   def analysis_type
     @analysis.try(:analysis_type) || analysis_params.fetch(:analysis_type)
+  end
+
+  def form_payload_klass
+    Analyses::Gwas::Form::Payload
   end
 end

@@ -146,3 +146,11 @@ class FactoryBot::SyntaxRunner
 end
 
 Delayed::Worker.delay_jobs = false
+
+# Hack to avoid "forwarding to private method" warning since Ruby 2.4 changed the behaviour of Forwardable module.
+# See https://bugs.ruby-lang.org/issues/12782
+class Rack::Test::UploadedFile
+  def pos
+    @tempfile.pos
+  end
+end

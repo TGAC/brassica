@@ -3,6 +3,12 @@ module Analyses
     class Form < BaseForm
       include Reform::Form::ActiveModel
 
+      # Hack to avoid "forwarding to private method" warning since Ruby 2.4 changed the behaviour of
+      # Forwardable module. See https://bugs.ruby-lang.org/issues/12782
+      class Payload < Hashie::Mash
+        def to_key; nil; end
+      end
+
       model :analysis
 
       property :owner
