@@ -39,7 +39,7 @@ RSpec.describe Api::CreateParams do
           'plant_line_name' => 'Foo'
         } }
         request_params = ActionController::Parameters.new(pl_attrs)
-        permitted_params = Api::CreateParams.new(Api::Model.new('plant_line'), request_params).permitted_params
+        permitted_params = Api::CreateParams.new(Api::Model.new('plant_line'), request_params).permitted_params.to_h
 
         expect(permitted_params).to eq('plant_line_name' => 'Foo')
       end
