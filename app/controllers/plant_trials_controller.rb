@@ -17,9 +17,9 @@ class PlantTrialsController < ApplicationController
                 type: plant_trial.layout_content_type,
                 filename: plant_trial.layout_file_name
     elsif plant_trial
-      render nothing: true, status: :not_found
+      head :not_found
     else
-      render nothing: true, status: :unauthorized
+      head :unauthorized
     end
   end
 end

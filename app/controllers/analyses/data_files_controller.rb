@@ -21,7 +21,7 @@ class Analyses::DataFilesController < ApplicationController
         content_type: 'text/csv; charset=UTF-8; header=present',
         disposition: "attachment; filename=#{data_type.dasherize}-template.csv"
     else
-      render nothing: true
+      head :ok
     end
   end
 
