@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:kammerer/activerecord-delay_touching.git
+  remote: https://github.com/kammerer/activerecord-delay_touching.git
   revision: 2c8c3c96dd1ea5454e732ad45db71fd4be6a3e23
   specs:
     activerecord-delay_touching (1.0.1)
@@ -542,4 +542,4 @@ DEPENDENCIES
   writeexcel
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
