@@ -53,4 +53,10 @@ class Search
       window?.history?.pushState({ cause: 'search' }, null, "/?search=#{term}")
 
 $ ->
-  new Search('.search', '.search-results', '.search-example').prepare()
+  if (window.location.pathname == "/")
+    $(window).on 'popstate', (e) ->
+      # Do not interfere with anchor-link navigation
+      if window.location.hash == ""
+        window.location.replace window.location.href
+
+    new Search('.search', '.search-results', '.search-example').prepare()
