@@ -19,7 +19,7 @@ gem 'quiet_assets'
 
 gem 'dotenv-rails'
 
-gem 'devise', '~> 3.4.0'
+gem 'devise', '~> 4.4'
 gem 'omniauth'
 gem 'omniauth-orcid'
 gem 'nokogiri'

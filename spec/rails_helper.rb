@@ -59,7 +59,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.include Warden::Test::Helpers, type: :request
   config.include Warden::Test::Helpers, type: :controller
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include RSpecHtmlMatchers
   config.include FixtureHelper
   include CommonHelpers
