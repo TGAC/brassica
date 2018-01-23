@@ -2,9 +2,7 @@ class AnalysisDataFileDecorator < Draper::Decorator
   delegate_all
 
   def file_format_name
-    return unless file_format.present?
-
-    I18n.t("analyses.new.form.#{file_format}")
+    I18n.t("analyses.new.form.#{file_format.presence || :unknown}")
   end
 
   def as_json(*)

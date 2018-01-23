@@ -47,6 +47,8 @@ RSpec.describe Analysis::Gwas do
               to change { analysis.reload.status }.
               from("idle").to("success")
 
+            expect(analysis.meta).to include('geno_samples' => (1..95).map { |n| "plant#{n}" })
+            expect(analysis.meta).to include('pheno_samples' => (6..100).map { |n| "plant#{n}" })
             expect(analysis.meta).to include('removed_mutations' => %w(snp1 snp2))
             expect(analysis.meta).to include('removed_traits' => %w(trait1))
           end

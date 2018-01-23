@@ -48,6 +48,7 @@ en:
             base:
               geno_pheno_samples_mismatch: Samples in genotype and phenotype data files do not match.
               geno_map_mutations_mismatch: Mutations in genotype and map data files do not match.
+
             name:
               blank: Please provide a name for analysis.
 
@@ -58,6 +59,7 @@ en:
               malformed_csv: "Genotype CSV file is malformed and cannot be read."
               not_a_hapmap: "Genotype file does not seem to be a HapMap file."
               not_a_vcf: "Genotype file does not seem to be a VCF file."
+              invalid_hapmap_column: "Genotype file contains unexpected column '%{column}' (expected '%{expected}')."
 
             map_data_file:
               no_id_column: "No 'ID' column found in map CSV file."
@@ -69,6 +71,11 @@ en:
               blank: Please upload a phenotype data file.
               no_id_column: "No 'ID' column found in phenotype CSV file."
               malformed_csv: "Phenotype CSV file is malformed and cannot be read."
+
+        analysis/data_file:
+          attributes:
+            file_format:
+              invalid_for_gwas_genotype: "not supported for GWAS genotype data"
 
         submission:
           attributes:

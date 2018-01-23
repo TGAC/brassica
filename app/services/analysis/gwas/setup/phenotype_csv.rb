@@ -13,7 +13,7 @@ class Analysis
         end
 
         def call
-          save_traits_to_remove
+          analyze_pheno_csv_file
 
           pheno_status, pheno_csv_file = normalize_pheno_csv
 

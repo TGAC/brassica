@@ -4,6 +4,7 @@ RSpec.describe LineBreakNormalizer do
   let(:cr_file) { fixture_file("text-cr.txt", "text/plain") }
   let(:crlf_file) { fixture_file("text-crlf.txt", "text/plain") }
   let(:lf_file) { fixture_file("text-lf.txt", "text/plain") }
+  let(:bad_file) { fixture_file("text-invalid-encoding.txt", "text/plain") }
 
   let!(:lf_text) { File.read(lf_file.path) }
 
@@ -23,5 +24,9 @@ RSpec.describe LineBreakNormalizer do
     subject.call(lf_file.path)
 
     expect(File.read(lf_file.path)).to eq(lf_text)
+  end
+
+  it 'fails with badly encoded files' do
+    expect { subject.call(bad_file.path) }.to raise_error(Encoding::InvalidByteSequenceError)
   end
 end

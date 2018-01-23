@@ -12,7 +12,7 @@ RSpec.describe Analysis::Gwas::PhenotypeCsvParser do
       expect(subject).to be_valid
       expect(subject.headers).to eq(headers)
       expect(subject.csv.pos).to eq(subject.rewind(skip_header: true))
-      expect(subject.csv.readline[0]).to eq("plant1")
+      expect(subject.csv.readline[0]).to eq("plant6")
       expect(subject.csv.readline.size).to eq(1 + 10)
     end
   end

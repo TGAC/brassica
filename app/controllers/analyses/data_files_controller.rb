@@ -1,6 +1,10 @@
 class Analyses::DataFilesController < ApplicationController
   prepend_before_filter :authenticate_user!
 
+  rescue_from Encoding::InvalidByteSequenceError do
+    render json: { errors: ["Invalid file encoding. Expected plain-text or UTF-8 encoded file."] }, status: 422
+  end
+
   def new
     data_type = params[:data_type]
     generator = case data_type
@@ -24,10 +28,9 @@ class Analyses::DataFilesController < ApplicationController
   def create
     data_file = Analysis::DataFile.create(create_params)
 
-    postprocess_data_file(data_file)
+    postprocess_data_file(data_file) if data_file.valid?
 
-    render json: decorate_data_file(data_file),
-      status: data_file.valid? ? :created : :unprocessable_entity
+    render json: decorate_data_file(data_file), status: data_file.valid? ? :created : :unprocessable_entity
   end
 
   def destroy

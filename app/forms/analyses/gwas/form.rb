@@ -62,21 +62,21 @@ module Analyses
         pheno = prepare_pheno_data
 
         if geno && !geno.valid?
-          geno.errors.each { |error| errors.add(:genotype_data_file, error) }
+          geno.errors.each { |error| errors.add(:genotype_data_file, *error) }
         end
 
         if pheno && !pheno.valid?
-          pheno.errors.each { |error| errors.add(:phenotype_data_file, error) }
+          pheno.errors.each { |error| errors.add(:phenotype_data_file, *error) }
         end
 
         if geno && geno.valid? && pheno && pheno.valid?
-          if geno.sample_ids.try(:sort) != pheno.sample_ids.try(:sort)
+          if (geno.sample_ids & pheno.sample_ids).empty?
             errors.add(:base, :geno_pheno_samples_mismatch)
           end
         end
 
         if map && !map.valid?
-          map.errors.each { |error| errors.add(:map_data_file, error) }
+          map.errors.each { |error| errors.add(:map_data_file, *error) }
         end
 
         if geno && geno.valid? && map && map.valid?

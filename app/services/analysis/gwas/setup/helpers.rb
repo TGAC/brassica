@@ -42,14 +42,18 @@ class Analysis
           )
         end
 
-        # Return headers of columns for which there is less than two distinct
+        # Scans the file and returns:
+        #
+        # * Headers of columns for which there is less than two distinct
         # values (NA does not count). Such columns cannot be passed as input
         # for GWASSER.
+        # * Elements of first column (except "ID").
         #
         # TODO: this could actually be done by CsvNormalizer itself saving
         # one pass through csv file
-        def find_csv_columns_to_remove(csv_file)
+        def analyze_csv_file(csv_file)
           values_by_col_name = Hash.new { |h, k| h[k] = Set.new }
+          row_names = []
 
           CSV.open(csv_file.path) do |csv|
             headers = csv.readline
@@ -57,27 +61,36 @@ class Analysis
             csv.each do |row|
               row.each.with_index do |val, col_idx|
                 values_by_col_name[headers[col_idx]] << val
+                row_names << val if col_idx == 0
               end
             end
           end
 
-          values_by_col_name.
+          col_names_to_remove = values_by_col_name.
             select { |col_name, values| (values - ["NA"]).size < 2 }.
             keys - ["ID"]
+
+          [col_names_to_remove, row_names]
         end
 
-        def save_mutations_to_remove(geno_csv_file = genotype_data_file(:csv).file)
-          find_csv_columns_to_remove(geno_csv_file).tap do |mutations|
-            analysis.meta['removed_mutations'] = mutations
-            analysis.save!
-          end
+        def analyze_geno_csv_file(geno_csv_file = genotype_data_file(:csv).file)
+          analyze_csv_file(geno_csv_file).tap { |metadata| save_genotype_metadata(*metadata) }
         end
 
-        def save_traits_to_remove(pheno_csv_file = phenotype_data_file.file)
-          find_csv_columns_to_remove(pheno_csv_file).tap do |traits|
-            analysis.meta['removed_traits'] = traits
-            analysis.save!
-          end
+        def analyze_pheno_csv_file(pheno_csv_file = phenotype_data_file.file)
+          analyze_csv_file(pheno_csv_file).tap { |metadata| save_phenotype_metadata(*metadata) }
+        end
+
+        def save_genotype_metadata(removed_mutations, samples)
+          analysis.meta['removed_mutations'] = removed_mutations
+          analysis.meta['geno_samples'] = samples
+          analysis.save!
+        end
+
+        def save_phenotype_metadata(removed_traits, samples)
+          analysis.meta['removed_traits'] = removed_traits
+          analysis.meta['pheno_samples'] = samples
+          analysis.save!
         end
       end
     end

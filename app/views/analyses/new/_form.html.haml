@@ -3,6 +3,9 @@
     #{t("analysis.analysis_type.#{@analysis.analysis_type}")} analysis
 
   %div{ class: "new-#{@analysis.analysis_type}-analysis" }
+    .info-block
+      %p <b>Important:</b> All uploaded files needs to be encoded as plain-text or valid #{wiki_link "UTF-8"}.
+
     = render partial: '/errors', locals: { errors: @form.errors }
 
     = fields_for(@form, builder: BaseFormBuilder) do |f|
@@ -14,7 +17,7 @@
 
       .form-group
         %label.required Phenotype/trait data
-        .alert.alert-info Choose the source of phenotypic data by selecting a plant trial or uploading a file.
+        .info-block Choose the source of phenotypic data by selecting a plant trial or uploading a file.
 
       %ul.nav.nav-tabs
         %li{ class: ("active" unless @form.phenotype_data_file) }
@@ -72,7 +75,7 @@
               = file_field_tag "analysis_data_file[file]", class: 'genotype-data-file', id: 'genotype-data-file'
 
             %small.help-block
-              Please upload the genotype VCF or CSV file here. Max file size is 50 MiB.
+              Please upload the genotype VCF, HapMap or CSV file here. Max file size is 50 MiB.
 
         .genotype-data-file{ class: ('hidden' unless @form.genotype_data_file) }
           %span.file-name= @form.genotype_data_file.try(:file_file_name)

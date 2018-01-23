@@ -64,7 +64,7 @@ class Analysis
         end
 
         def sample_ids
-          return if header.lines.empty?
+          return [] if header.lines.empty?
           @sample_ids ||= header.samples
         end
 

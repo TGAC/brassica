@@ -27,7 +27,7 @@ class Analysis
         def sample_ids
           id_col_idx = headers.index("ID")
 
-          return unless id_col_idx
+          return [] unless id_col_idx
 
           @sample_ids ||= csv.each.map { |row| row[id_col_idx] }
         end

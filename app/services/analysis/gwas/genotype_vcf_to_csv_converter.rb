@@ -34,7 +34,8 @@ class Analysis
             :ok,
             generate_genotype_csv(mutation_names, sample_data),
             generate_map_csv(mutation_names, mutation_data),
-            removed_mutation_names
+            removed_mutation_names,
+            sample_data.keys
           ]
         end
       end

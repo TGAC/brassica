@@ -7,7 +7,6 @@ class Analysis
         @analysis = analysis
       end
 
-      # TODO: do not generate normalized files if it is not necessary
       def call
         strategies = [
           Analysis::Gwas::Setup::GenotypeCsv.new(@analysis),
@@ -15,7 +14,9 @@ class Analysis
           Analysis::Gwas::Setup::GenotypeHapmap.new(@analysis),
           Analysis::Gwas::Setup::GenotypeVcf.new(@analysis),
           Analysis::Gwas::Setup::PhenotypePlantTrial.new(@analysis),
-          Analysis::Gwas::Setup::PhenotypeCsv.new(@analysis)
+          Analysis::Gwas::Setup::PhenotypeCsv.new(@analysis),
+          Analysis::Gwas::Setup::StripGenotypeCsv.new(@analysis),
+          Analysis::Gwas::Setup::StripPhenotypeCsv.new(@analysis)
         ]
 
         strategies.select(&:applicable?).each do |strategy|

@@ -13,7 +13,7 @@ class Analysis
         end
 
         def call
-          save_mutations_to_remove
+          analyze_geno_csv_file
 
           geno_status, geno_csv_file = normalize_geno_csv
 
