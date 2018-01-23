@@ -2,7 +2,7 @@
   %h2.page-title
     My submissions
 
-    .actions= new_submission_button
+    %span.actions= new_submission_button
 
   - if @submissions.present?
     = render partial: 'submissions_list', locals: { submissions: @submissions, mode: :private }

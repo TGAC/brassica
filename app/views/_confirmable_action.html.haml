@@ -10,6 +10,6 @@
   = other_content.html_safe if defined?(other_content)
   %a{ href: "[data-confirmation=#{object.id}]",
       class: "btn #{btn_class} #{btn_size}",
-      title: title,
+      title: html_escape_once(title),
       data: { toggle: 'replace', html: 'true' }}
     = label

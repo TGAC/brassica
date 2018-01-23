@@ -17,7 +17,7 @@
             Published data can be revoked for 7 days from the publication.<br>
             This submission was published on #{l submission.published_on.utc, format: :short} UTC
 
-        %span{data: {toggle: :tooltip, html: 'true'}, title: tooltip}
+        %span{ data: { toggle: :tooltip, html: 'true' }, title: html_escape_once(tooltip) }
           %i.fa.fa-info-circle
 
       - else
