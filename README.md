@@ -30,7 +30,7 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 * Ruby >= 2.0
 * MRI 2.2.x
 * PostgreSQL
-* Elasticsearch 1.4.3, Java 7
+* Elasticsearch 2.4.6, Java 7
 * R >= 3.2.2
 * [GWASSER](https://github.com/kammerer/GWASSER) (forked from [cyverseuk/GWASSER](https://github.com/cyverseuk/GWASSER))
 
@@ -101,7 +101,10 @@ system-wide, with `sudo`, or just for your user):
 
 ### Configuration
 
-Please also make sure to set these environment variables in your `.env` file:
+Please also make sure to set required environment variables in your `.env` file. You can use `.env.sample` as
+a template.
+
+#### GWAS
 
 ```
 ANALYSIS_EXEC_DIR=<full path to analysis working directory>

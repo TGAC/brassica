@@ -35,13 +35,12 @@ module SubmissionsHelper
   end
 
   def submission_value(submission, attr, label = nil, url = nil)
-    value = decorator(submission).send(attr)
+    value = submission.send(attr)
     value = value.join(", ") if value.is_a?(Array)
     label ||= attr.to_s.humanize
     url = nil unless submission.finalized?
 
-    render partial: "submissions/show/value",
-           locals: { value: value, label: label, url: url }
+    [value, label, url] if value.present?
   end
 
   def submission_form(submission, &block)

@@ -20,6 +20,10 @@
     %h4 Add new <b>Trait descriptor</b>
 
   .panel-body{"data-dirty-context": "new-trait-descriptor"}
+    .info-block
+      <b>Important:</b> If the trait you look for is missing you need to contact us
+      by #{support_email_link("email", "[BIP] New trait request")} and it will be added to our database.
+
     .form-group
       = label_tag :trait, nil, class: 'required'
       = select_tag :trait, [], class: 'trait form-control required', 'data-placeholder': 'Select a value'

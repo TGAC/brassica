@@ -161,4 +161,30 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   def design_factor_names
     object.content.step03.design_factor_names || []
   end
+
+  def submission_attributes
+    [
+      [:plant_trial_name, "Plant trial name", h.data_tables_path(model: :plant_trials, query: { id: submitted_object_id })],
+      [:project_descriptor, 'Project'],
+      [:species_name, 'Species'],
+      [:plant_trial_description, 'Trial description'],
+      [:trial_year],
+      [:country_name, 'Country'],
+      [:institute_id],
+      [:trial_location_site_name, 'Site'],
+      [:place_name],
+      [:latitude],
+      [:longitude],
+      [:altitude],
+      [:terrain],
+      [:soil_type],
+      [:statistical_factors],
+      [:design_factor_names],
+      [:layout_link, 'Layout image'],
+      [:data_owned_by],
+      [:data_provenance],
+      [:comments],
+      [:doi, 'DOI'],
+    ]
+  end
 end

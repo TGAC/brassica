@@ -98,4 +98,10 @@ module ApplicationHelper
   def wiki_link(label, term = label, options = {})
     link_to label, "https://en.wikipedia.org/wiki/#{term}", options.reverse_merge(target: "_blank")
   end
+
+  def support_email_link(label, subject = nil)
+    url = "mailto:#{ENV.fetch("SUPPORT_EMAIL")}"
+    url = url + "?subject=#{subject}"
+    link_to label, url
+  end
 end
