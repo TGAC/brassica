@@ -1,4 +1,4 @@
-class TraitDescriptor < ActiveRecord::Base
+class TraitDescriptor < ApplicationRecord
   belongs_to :user
   belongs_to :trait
   belongs_to :plant_part

@@ -1,4 +1,4 @@
-class Qtl < ActiveRecord::Base
+class Qtl < ApplicationRecord
   self.table_name = 'qtl'
 
   belongs_to :processed_trait_dataset

@@ -1,4 +1,4 @@
-class Trait < ActiveRecord::Base
+class Trait < ApplicationRecord
   has_many :trait_descriptors
 
   validates :name, presence: true, uniqueness: true

@@ -1,4 +1,4 @@
-class TraitScore < ActiveRecord::Base
+class TraitScore < ApplicationRecord
   belongs_to :plant_scoring_unit, counter_cache: true, touch: true
   belongs_to :trait_descriptor, counter_cache: true, touch: true
   belongs_to :user

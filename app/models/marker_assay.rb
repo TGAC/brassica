@@ -1,4 +1,4 @@
-class MarkerAssay < ActiveRecord::Base
+class MarkerAssay < ApplicationRecord
   belongs_to :marker_sequence_assignment
 
   belongs_to :restriction_enzyme_a,

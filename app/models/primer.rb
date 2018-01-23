@@ -1,4 +1,4 @@
-class Primer < ActiveRecord::Base
+class Primer < ApplicationRecord
   belongs_to :user
 
   after_update { marker_assays_a.each(&:touch) }

@@ -1,4 +1,4 @@
-class PlantPart < ActiveRecord::Base
+class PlantPart < ApplicationRecord
   has_many :trait_descriptors
 
   validates :plant_part,

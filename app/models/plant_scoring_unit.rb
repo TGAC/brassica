@@ -1,4 +1,4 @@
-class PlantScoringUnit < ActiveRecord::Base
+class PlantScoringUnit < ApplicationRecord
   belongs_to :design_factor
   belongs_to :plant_trial, counter_cache: true, touch: true
   belongs_to :plant_accession, counter_cache: true, touch: true

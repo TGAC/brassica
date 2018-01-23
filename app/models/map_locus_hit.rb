@@ -1,4 +1,4 @@
-class MapLocusHit < ActiveRecord::Base
+class MapLocusHit < ApplicationRecord
   belongs_to :linkage_map, counter_cache: true, touch: true
   belongs_to :linkage_group, counter_cache: true, touch: true
   belongs_to :map_position, counter_cache: true, touch: true

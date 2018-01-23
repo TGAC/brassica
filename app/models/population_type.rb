@@ -1,4 +1,4 @@
-class PopulationType < ActiveRecord::Base
+class PopulationType < ApplicationRecord
   self.table_name = 'pop_type_lookup'
 
   has_many :plant_populations

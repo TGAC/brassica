@@ -1,4 +1,4 @@
-class QtlJob < ActiveRecord::Base
+class QtlJob < ApplicationRecord
   belongs_to :linkage_map
   belongs_to :user
 

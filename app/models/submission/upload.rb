@@ -1,4 +1,4 @@
-class Submission::Upload < ActiveRecord::Base
+class Submission::Upload < ApplicationRecord
 
   enum upload_type: %i(trait_scores plant_trial_layout plant_lines plant_trial_environment plant_trial_treatment)
   belongs_to :submission

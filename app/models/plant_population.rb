@@ -1,4 +1,4 @@
-class PlantPopulation < ActiveRecord::Base
+class PlantPopulation < ApplicationRecord
   belongs_to :taxonomy_term
   belongs_to :population_type
   belongs_to :male_parent_line, class_name: 'PlantLine',

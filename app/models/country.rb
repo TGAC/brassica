@@ -1,4 +1,4 @@
-class Country < ActiveRecord::Base
+class Country < ApplicationRecord
 
   has_and_belongs_to_many :originating_plant_varieties,
                           class_name: 'PlantVariety',

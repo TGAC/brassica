@@ -1,4 +1,4 @@
-class PopulationLocus < ActiveRecord::Base
+class PopulationLocus < ApplicationRecord
   belongs_to :plant_population, counter_cache: true, touch: true
   belongs_to :marker_assay, counter_cache: true, touch: true
   belongs_to :user

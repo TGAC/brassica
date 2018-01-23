@@ -1,4 +1,4 @@
-class MarkerSequenceAssignment < ActiveRecord::Base
+class MarkerSequenceAssignment < ApplicationRecord
   has_many :marker_assays
 
   validates :marker_set,

@@ -1,4 +1,4 @@
-class TaxonomyTerm < ActiveRecord::Base
+class TaxonomyTerm < ApplicationRecord
   belongs_to :parent,
              class_name: 'TaxonomyTerm',
              foreign_key: 'taxonomy_term_id'

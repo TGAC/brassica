@@ -62,7 +62,7 @@ RSpec.describe Annotable do
   end
 
   it 'makes sure all pubmed models are Annotable' do
-    ActiveRecord::Base.descendants.each do |model|
+    ActiveRecord::Base.descendants.reject(&:abstract_class?).each do |model|
       if model.column_names.include? 'pubmed_id'
         expect(annotable_tables).to include model.table_name
       end

@@ -1,4 +1,4 @@
-class PlantAccession < ActiveRecord::Base
+class PlantAccession < ApplicationRecord
   belongs_to :plant_line
   belongs_to :plant_variety
   belongs_to :user

@@ -1,4 +1,4 @@
-class GenotypeMatrix < ActiveRecord::Base
+class GenotypeMatrix < ApplicationRecord
   belongs_to :linkage_map
 
   validates :matrix_compiled_by,

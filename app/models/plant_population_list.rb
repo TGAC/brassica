@@ -1,4 +1,4 @@
-class PlantPopulationList < ActiveRecord::Base
+class PlantPopulationList < ApplicationRecord
   belongs_to :plant_line
   belongs_to :plant_population, counter_cache: true, touch: true
   belongs_to :user

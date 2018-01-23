@@ -1,4 +1,4 @@
-class PlantLine < ActiveRecord::Base
+class PlantLine < ApplicationRecord
   belongs_to :plant_variety
   belongs_to :taxonomy_term
   belongs_to :user

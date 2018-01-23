@@ -1,4 +1,4 @@
-class Probe < ActiveRecord::Base
+class Probe < ApplicationRecord
   belongs_to :taxonomy_term
   belongs_to :user
 

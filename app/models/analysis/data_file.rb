@@ -1,4 +1,4 @@
-class Analysis::DataFile < ActiveRecord::Base
+class Analysis::DataFile < ApplicationRecord
   BASE_DATA_TYPES = %w(std_out std_err)
   GWAS_DATA_TYPES = %w(gwas_genotype gwas_phenotype gwas_map gwas_results gwas_aux_results)
 

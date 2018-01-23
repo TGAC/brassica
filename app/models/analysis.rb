@@ -1,4 +1,4 @@
-class Analysis < ActiveRecord::Base
+class Analysis < ApplicationRecord
   enum analysis_type: %w(gwasser gapit)
   enum status: %w(idle running success failure)
 

@@ -1,4 +1,4 @@
-class TraitGrade < ActiveRecord::Base
+class TraitGrade < ApplicationRecord
   belongs_to :trait_descriptor
 
   validates :trait_grade,

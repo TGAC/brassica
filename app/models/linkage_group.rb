@@ -1,4 +1,4 @@
-class LinkageGroup < ActiveRecord::Base
+class LinkageGroup < ApplicationRecord
   belongs_to :linkage_map, counter_cache: true, touch: true
   belongs_to :user
 

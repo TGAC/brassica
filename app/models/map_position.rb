@@ -1,4 +1,4 @@
-class MapPosition < ActiveRecord::Base
+class MapPosition < ApplicationRecord
   belongs_to :linkage_group, counter_cache: true, touch: true
   belongs_to :population_locus, counter_cache: true, touch: true
   belongs_to :marker_assay, counter_cache: true, touch: true

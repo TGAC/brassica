@@ -1,4 +1,4 @@
-class DesignFactor < ActiveRecord::Base
+class DesignFactor < ApplicationRecord
   COMMON_NAMES = %w(location room polytunnel greenhouse occasion treatment
                     bench rep area-pair block sub-block row col plot pot)
 

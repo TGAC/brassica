@@ -1,4 +1,4 @@
-class PlantVariety < ActiveRecord::Base
+class PlantVariety < ApplicationRecord
   belongs_to :user
 
   has_and_belongs_to_many :countries_of_origin,

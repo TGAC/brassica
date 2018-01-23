@@ -1,4 +1,4 @@
-class Submission < ActiveRecord::Base
+class Submission < ApplicationRecord
 
   STEPS = {
     "population" => %w(step01 step02 step03 step04 step05),
