@@ -1,4 +1,4 @@
-class JobBase < ActiveJob::Base
+class ApplicationJob < ActiveJob::Base
   rescue_from(StandardError, ScriptError) do |exception|
     ExceptionNotifier.notify_exception(
       exception,

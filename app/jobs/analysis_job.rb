@@ -1,4 +1,4 @@
-class AnalysisJob < JobBase
+class AnalysisJob < ApplicationJob
   def perform(analysis)
     case analysis.analysis_type
     when "gwasser"
