@@ -147,6 +147,7 @@ RSpec.describe ActiveRecord::Base do
   context 'publishable records' do
     let(:omitted_tables) {
       [
+        'ar_internal_metadata',
         'analyses',
         'analysis_data_files',
         'api_keys',
@@ -193,7 +194,8 @@ RSpec.describe ActiveRecord::Base do
     end
 
     it 'does not allow ownerless unpublished records' do
-      ActiveRecord::Base.send(:subclasses).
+      ActiveRecord::Base.descendants.
+        reject(&:abstract_class?).
         reject { |model| model.table_name.in?(omitted_tables) }.
         select { |model| (model.column_names & ['user_id', 'published']).length == 2 }.
         each do |model|
@@ -213,7 +215,7 @@ RSpec.describe ActiveRecord::Base do
 
   context 'when having includes in json_options' do
     it 'never includes publishable models' do
-      ActiveRecord::Base.send(:subclasses).each do |model|
+      ActiveRecord::Base.descendants.each do |model|
         if model.respond_to?(:json_options) && model.json_options[:include].present?
           model.json_options[:include].each do |included_relation|
             related_model = model.reflect_on_association(included_relation).klass
