@@ -30,14 +30,17 @@ RSpec.describe Annotable do
         ).merge(
           instance.has_attribute?('pubmed_id') ? { 'pubmed_id' => instance.pubmed_id } : {}
         ).merge(
-          instance.respond_to?('revocable?') ? { 'revocable?' => instance.revocable? } : {}
-        ).merge(
-          instance.respond_to?('private?') ? { 'private?' => instance.private? } : {}
-        ).merge(
           instance.respond_to?('trait_name') ? { 'trait_name' => instance.trait_name } : {}
         )
-        expect(instance.annotations_as_json).
-          to eq test_hash.merge('doi' => instance.try(:submission).try(:doi))
+
+        if Api.publishable_models.include?(instance.class)
+          test_hash.merge!(
+            'revocable?' => instance.revocable?,
+            'private?' => instance.private?
+          )
+        end
+
+        expect(instance.annotations_as_json).to eq test_hash.merge('doi' => instance.doi)
         expect(test_hash.values.map(&:nil?)).to all be_falsey
       rescue ArgumentError => e
         no_factory << table.singularize
