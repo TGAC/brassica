@@ -20,6 +20,7 @@ class PlantTreatmentType < ActiveRecord::Base
   RAINFALL_ROOT_TERM = "PECO:0007181"
   WATERING_ROOT_TERM = "PECO:0007383"
   GRAVITY_ROOT_TERM = "PECO:0007146"
+  RADIATION_ROOT_TERM = "PECO:0007151"
 
   validates :name, presence: true
   validates :term, presence: true, if: :canonical?
