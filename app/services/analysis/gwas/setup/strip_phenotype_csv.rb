@@ -18,12 +18,14 @@ class Analysis
 
           pheno_status, pheno_csv_file = strip_pheno_csv
 
-          check_pheno_status(pheno_status).tap do |status|
-            if status == :ok
-              phenotype_data_file.destroy
-              create_csv_data_file(pheno_csv_file, data_type: :gwas_phenotype)
-            end
+          if pheno_status == :ok
+            phenotype_data_file.destroy
+            create_csv_data_file(pheno_csv_file, data_type: :gwas_phenotype)
+
+            pheno_status = remove_irrelevant_traits
           end
+
+          check_pheno_status(pheno_status)
         end
 
         private
@@ -36,6 +38,19 @@ class Analysis
 
         def strip_pheno_csv
           normalize_csv(phenotype_data_file.file, remove_rows: analysis.meta['pheno_samples'] - common_samples)
+        end
+
+        def remove_irrelevant_traits
+          analyze_pheno_csv_file { |traits_to_remove, _| append_phenotype_metadata(traits_to_remove) }
+
+          pheno_status, pheno_csv_file = normalize_pheno_csv
+
+          if pheno_status == :ok
+            phenotype_data_file.destroy
+            create_csv_data_file(pheno_csv_file, data_type: :gwas_phenotype)
+          end
+
+          pheno_status
         end
 
         def check_pheno_status(status)

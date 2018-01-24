@@ -49,7 +49,7 @@ class Analysis
         # for GWASSER.
         # * Elements of first column (except "ID").
         #
-        # TODO: this could actually be done by CsvNormalizer itself saving
+        # TODO: this could initially be done by CsvNormalizer itself saving
         # one pass through csv file
         def analyze_csv_file(csv_file)
           values_by_col_name = Hash.new { |h, k| h[k] = Set.new }
@@ -74,11 +74,15 @@ class Analysis
         end
 
         def analyze_geno_csv_file(geno_csv_file = genotype_data_file(:csv).file)
-          analyze_csv_file(geno_csv_file).tap { |metadata| save_genotype_metadata(*metadata) }
+          analyze_csv_file(geno_csv_file).tap do |metadata|
+            block_given? ? yield(metadata) : save_genotype_metadata(*metadata)
+          end
         end
 
         def analyze_pheno_csv_file(pheno_csv_file = phenotype_data_file.file)
-          analyze_csv_file(pheno_csv_file).tap { |metadata| save_phenotype_metadata(*metadata) }
+          analyze_csv_file(pheno_csv_file).tap do |metadata|
+            block_given? ? yield(metadata) : save_phenotype_metadata(*metadata)
+          end
         end
 
         def save_genotype_metadata(removed_mutations, samples)
@@ -90,6 +94,16 @@ class Analysis
         def save_phenotype_metadata(removed_traits, samples)
           analysis.meta['removed_traits'] = removed_traits
           analysis.meta['pheno_samples'] = samples
+          analysis.save!
+        end
+
+        def append_genotype_metadata(removed_mutations)
+          analysis.meta['removed_mutations'] += removed_mutations
+          analysis.save!
+        end
+
+        def append_phenotype_metadata(removed_traits)
+          analysis.meta['removed_traits'] += removed_traits
           analysis.save!
         end
       end

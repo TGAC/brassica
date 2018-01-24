@@ -18,12 +18,14 @@ class Analysis
 
           geno_status, geno_csv_file = strip_geno_csv
 
-          check_geno_status(geno_status).tap do |status|
-            if status == :ok
-              genotype_data_file(:csv).destroy
-              create_csv_data_file(geno_csv_file, data_type: :gwas_genotype)
-            end
+          if geno_status == :ok
+            genotype_data_file(:csv).destroy
+            create_csv_data_file(geno_csv_file, data_type: :gwas_genotype)
+
+            geno_status = remove_irrelevant_mutations
           end
+
+          check_geno_status(geno_status)
         end
 
         private
@@ -41,9 +43,23 @@ class Analysis
         def check_geno_status(status)
           case status
           when :ok then :ok
+          when :all_columns_removed then :all_mutations_removed
           when :all_rows_removed then :all_samples_removed
           else fail "Invalid status: #{status}"
           end
+        end
+
+        def remove_irrelevant_mutations
+          analyze_geno_csv_file { |mutations_to_remove, _| append_genotype_metadata(mutations_to_remove) }
+
+          geno_status, geno_csv_file = normalize_geno_csv
+
+          if geno_status == :ok
+            genotype_data_file(:csv).destroy
+            create_csv_data_file(geno_csv_file, data_type: :gwas_genotype)
+          end
+
+          geno_status
         end
       end
     end
