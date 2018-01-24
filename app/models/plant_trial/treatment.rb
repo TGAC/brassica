@@ -19,6 +19,7 @@ class PlantTrial::Treatment < ActiveRecord::Base
   has_many :watering_applications, class_name: "PlantTrial::WateringTreatmentApplication", inverse_of: :treatment
   has_many :gravity_applications, class_name: "PlantTrial::GravityTreatmentApplication", inverse_of: :treatment
   has_many :radiation_applications, class_name: "PlantTrial::RadiationTreatmentApplication", inverse_of: :treatment
+  has_many :ph_applications, class_name: "PlantTrial::PhTreatmentApplication", inverse_of: :treatment
 
   validates :plant_trial, presence: true
   validates :air_temperature_day, temperature: true, allow_nil: true
