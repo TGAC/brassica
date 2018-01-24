@@ -25,6 +25,7 @@ class Analysis
                   # TODO: make sure normalized names are unique
                   val.strip.gsub(/\W+/, '_')
                 else
+                  # TODO: replace NaN with NA
                   val.strip
                 end
               end.compact
