@@ -549,6 +549,7 @@ ActiveRecord::Schema.define(version: 20180202171044) do
     t.json     "constraints"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.integer  "unit_id",      null: false
   end
 
   add_index "plant_trial_measurement_values", ["context_type", "context_id", "property"], name: "idx_plant_trial_measurement_values", unique: true, using: :btree
@@ -1079,6 +1080,7 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "plant_trial_environments", "plant_trials"
   add_foreign_key "plant_trial_lamps", "lamp_types"
   add_foreign_key "plant_trial_lamps", "plant_trial_environments", column: "environment_id"
+  add_foreign_key "plant_trial_measurement_values", "measurement_units", column: "unit_id"
   add_foreign_key "plant_trial_rooting_media", "plant_treatment_types", column: "medium_type_id"
   add_foreign_key "plant_trial_rooting_media", "plant_trial_environments", column: "environment_id"
   add_foreign_key "plant_trial_topological_descriptors", "plant_trial_environments", column: "environment_id"

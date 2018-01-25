@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe PlantTrial::MeasurementValue do
   describe "associations" do
     it { should belong_to(:context) }
+    it { should belong_to(:unit).class_name("MeasurementUnit") }
   end
 
   describe "validations" do
