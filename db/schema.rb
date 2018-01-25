@@ -318,6 +318,19 @@ ActiveRecord::Schema.define(version: 20180202171044) do
 
   add_index "marker_sequence_assignments", ["canonical_marker_name"], name: "marker_sequence_assignments_canonical_marker_name_idx", using: :btree
 
+  create_table "measurement_units", force: :cascade do |t|
+    t.integer  "parent_ids",                              array: true
+    t.string   "name",                       null: false
+    t.string   "term"
+    t.string   "description",                null: false
+    t.boolean  "canonical",   default: true, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "measurement_units", ["name", "term"], name: "index_measurement_units_on_name_and_term", unique: true, using: :btree
+  add_index "measurement_units", ["term"], name: "index_measurement_units_on_term", unique: true, using: :btree
+
   create_table "plant_accessions", force: :cascade do |t|
     t.text     "plant_accession",                           null: false
     t.text     "plant_accession_derivation"

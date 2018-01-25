@@ -1,6 +1,7 @@
 require "obo"
 require "obo/plant_treatment_type_importer"
 require "obo/topological_factor_importer"
+require "obo/measurement_unit_importer"
 
 namespace :obo do
   desc "Load PlantTreatmentType model"
@@ -16,6 +17,11 @@ namespace :obo do
   desc "Load TopologicalFactor model"
   task topological_factors: :environment do
     Obo::TopologicalFactorImporter.new("db/data/Crop_Experiment_Ontology.obo").import_all
+  end
+
+  desc "Load MeasurementUnit model"
+  task measurement_units: :environment do
+    Obo::MeasurementUnitImporter.new("db/data/unit.obo").import_all
   end
 
   desc 'Loads TaxonomyTerm model'
