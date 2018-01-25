@@ -30,6 +30,18 @@ en:
               no_species_header: 'has no correct header provided. Please provide the "Species" column.'
               no_crop_type_header: 'has no correct header provided. Please provide the "Crop type" column.'
               non_unique_mapping: 'Detected non unique column headers mapping to traits. Please check the column names.'
+              no_environment_sheet: "contents invalid. 'Environment' sheet missing."
+              no_treatment_sheet: "contents invalid. 'Treatment' sheet missing."
+              environment_term_missing: "contents invalid. Missing type for '%{property}.'"
+              treatment_term_missing: "contents invalid. Missing treatment type for '%{treatment}.'"
+              invalid_environment_sheet_headers: "contents invalid. 'Environment' sheet columns seem to be altered."
+              invalid_treatment_sheet_headers: "contents invalid. 'Treatment' sheet columns seem to be altered."
+              environment_data_empty: "contains no data."
+              treatment_data_empty: "contains no data."
+              invalid_unit: "contains invalid unit '%{unit}' for '%{property}.'"
+              invalid_value: "contains invalid value '%{value}' for '%{property}.' %{cause}"
+              multiple_values: "contains multiple values for '%{property}' but a single value is required."
+
         trait:
           attributes:
             name:
@@ -149,4 +161,3 @@ en:
               invalid: |
                 Technical replicate numbers must be present and greater than zero. Please leave the value at '1' if
                 you don't use technical replicates.
-

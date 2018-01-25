@@ -57,11 +57,16 @@ class Submissions::UploadsController < ApplicationController
   end
 
   def process_upload(upload)
-    if upload.trait_scores?
-      Submission::TraitScoreParser.new(upload).call
-    elsif upload.plant_lines?
-      Submission::PlantLineParser.new(upload).call
-    end
+    processors = {
+      "trait_scores" => Submission::TraitScoreParser,
+      "plant_lines" => Submission::PlantLineParser,
+      "plant_trial_environment" => Submission::PlantTrialEnvironmentProcessor,
+      "plant_trial_treatment" => Submission::PlantTrialTreatmentProcessor
+    }
+
+    return unless processors.key?(upload.upload_type)
+
+    processors.fetch(upload.upload_type).new(upload).call
   end
 
   def decorate_upload(upload)

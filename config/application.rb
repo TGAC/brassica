@@ -51,3 +51,4 @@ ActionView::Base.default_form_builder = BaseFormBuilder
 
 IMAGE_CONTENT_TYPES = %w(image/png image/jpeg image/gif)
 CSV_CONTENT_TYPES = %w(text/csv text/plain application/vnd.ms-excel)
+XLS_CONTENT_TYPES = %w(application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)

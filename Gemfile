@@ -43,6 +43,8 @@ gem 'delayed_job'
 gem 'delayed_job_active_record', '~> 4.1.1'
 gem 'bio-vcf', '~> 0.9.2'
 gem 'whenever', '~> 0.9.7'
+gem 'roo'
+gem 'roo-xls'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc

@@ -7,11 +7,6 @@ RSpec.describe PlantTrial::MeasurementValue do
   end
 
   describe "validations" do
-    context "with temperature: true constraint" do
-      subject { described_class.new(constraints: { temperature: true }) }
-      it { should validate_as_temperature(:value) }
-    end
-
     context "with ration: true constaint" do
       subject { described_class.new(constraints: { ratio: true }) }
       it { should validate_as_ratio(:value) }
