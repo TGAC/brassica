@@ -27,12 +27,10 @@ RSpec.describe PlantTrial::Treatment do
     it { should have_many(:ph_applications).class_name("PlantTrial::PhTreatmentApplication") }
     it { should have_many(:water_temperature_applications).
          class_name("PlantTrial::WaterTemperatureTreatmentApplication") }
+    it { should have_many(:measurement_values) }
   end
 
   context "validations" do
-    it { should validate_as_temperature(:air_temperature_day).allow_nil }
-    it { should validate_as_temperature(:air_temperature_night).allow_nil }
-    it { should validate_as_non_negative(:salt).allow_nil }
-    it { should validate_as_temperature(:watering_temperature).allow_nil }
+    it { should validate_presence_of(:plant_trial) }
   end
 end

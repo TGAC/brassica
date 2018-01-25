@@ -1,5 +1,16 @@
 class PlantTrial::Treatment < ActiveRecord::Base
+  def self.measured_properties
+    {
+      air_temperature_day: { temperature: true },
+      air_temperature_night: { temperature: true },
+      salt: { non_negative: true },
+      watering_temperature: { temperature: true }
+    }
+  end
+
   belongs_to :plant_trial, touch: true, inverse_of: :treatment
+
+  has_many :measurement_values, as: :context
 
   has_many :air_applications, class_name: "PlantTrial::AirTreatmentApplication", inverse_of: :treatment
   has_many :antibiotic_applications, class_name: "PlantTrial::AntibioticTreatmentApplication", inverse_of: :treatment
@@ -25,8 +36,4 @@ class PlantTrial::Treatment < ActiveRecord::Base
   has_many :ph_applications, class_name: "PlantTrial::PhTreatmentApplication", inverse_of: :treatment
 
   validates :plant_trial, presence: true
-  validates :air_temperature_day, temperature: true, allow_nil: true
-  validates :air_temperature_night, temperature: true, allow_nil: true
-  validates :salt, non_negative: true, allow_nil: true
-  validates :watering_temperature, temperature: true, allow_nil: true
 end

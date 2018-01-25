@@ -528,6 +528,18 @@ ActiveRecord::Schema.define(version: 20180202171044) do
     t.datetime "updated_at",     null: false
   end
 
+  create_table "plant_trial_measurement_values", force: :cascade do |t|
+    t.integer  "context_id"
+    t.string   "context_type"
+    t.float    "value",        null: false
+    t.string   "property",     null: false
+    t.json     "constraints"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "plant_trial_measurement_values", ["context_type", "context_id", "property"], name: "idx_plant_trial_measurement_values", unique: true, using: :btree
+
   create_table "plant_trial_rooting_media", force: :cascade do |t|
     t.integer  "environment_id", null: false
     t.integer  "medium_type_id", null: false
