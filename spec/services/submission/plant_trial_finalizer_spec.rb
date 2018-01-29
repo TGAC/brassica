@@ -45,7 +45,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       ]
     }
-    let(:layout_upload) { create(:upload, :plant_trial_layout, submission: submission) }
+    let(:layout_upload) { create(:submission_upload, :plant_trial_layout, submission: submission) }
 
     before do
       submission.content.update(:step01, plant_trial_attrs)

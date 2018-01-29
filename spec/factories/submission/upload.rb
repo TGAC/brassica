@@ -1,7 +1,7 @@
 include ActionDispatch::TestProcess
 
 FactoryBot.define do
-  factory :upload, class: Submission::Upload do
+  factory :submission_upload, class: Submission::Upload do
     upload_type 'trait_scores'
     file { fixture_file("score_upload.txt", 'text/plain') }
     association :submission, submission_type: :trial
