@@ -19,7 +19,7 @@ class PlantAccession < ActiveRecord::Base
             length: { is: 4 },
             allow_blank: true
 
-  validate :plant_line_xor_plant_variety
+  validate :check_plant_line_xor_plant_variety
   validates :plant_line_id, presence: true, if: 'plant_variety_id.nil?'
   validates :plant_variety_id, presence: true, if: 'plant_line_id.nil?'
 
@@ -43,13 +43,6 @@ class PlantAccession < ActiveRecord::Base
 
     query = join_counters(query, uid)
     query.pluck(*(table_columns + privacy_adjusted_count_columns + ref_columns))
-  end
-
-  def plant_line_xor_plant_variety
-    if plant_line_id.present? && plant_variety_id.present?
-      errors.add(:plant_line_id, :not_with_plant_variety)
-      errors.add(:plant_variety_id, :not_with_plant_line)
-    end
   end
 
   def self.table_columns
@@ -118,4 +111,13 @@ class PlantAccession < ActiveRecord::Base
   end
 
   include Annotable
+
+  private
+
+  def check_plant_line_xor_plant_variety
+    if plant_line_id.present? && plant_variety_id.present?
+      errors.add(:plant_line_id, :not_with_plant_variety)
+      errors.add(:plant_variety_id, :not_with_plant_line)
+    end
+  end
 end
