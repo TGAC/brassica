@@ -46,6 +46,7 @@ gem 'whenever', '~> 0.9.7'
 gem 'roo'
 gem 'roo-xls'
 gem 'writeexcel'
+gem 'scenic', '~> 1.4'
 
 # bundle exec rake doc:rails generates the API under doc/api.
 # gem 'sdoc', '~> 0.4.0',          group: :doc
