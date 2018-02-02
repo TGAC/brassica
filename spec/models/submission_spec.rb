@@ -28,7 +28,7 @@ RSpec.describe Submission do
     end
 
     it "returns true if any content for given step is present" do
-      expect(subject.content_for?(0)).to be_falsey
+      expect(subject.content_for?(0)).to be_truthy
       expect(subject.content_for?(1)).to be_truthy
       expect(subject.content_for?(2)).to be_falsey
       expect(subject.content_for?(3)).to be_falsey
@@ -112,16 +112,18 @@ RSpec.describe Submission do
   describe '#content' do
     before {
       subject.content = {
-        :step01 => { :foo => 1, :bar => "ble" },
-        :step02 => { :baz => [1, 2, 3], :blah => {} }
+        foo: 1,
+        bar: "ble",
+        baz: [1, 2, 3],
+        blah: {}
       }
     }
 
     it 'allows to access step content' do
-      expect(subject.content.step01.foo).to eq 1
-      expect(subject.content.step01.bar).to eq "ble"
-      expect(subject.content.step02.baz).to eq [1, 2, 3]
-      expect(subject.content.step02.blah).to eq({})
+      expect(subject.content.foo).to eq 1
+      expect(subject.content.bar).to eq "ble"
+      expect(subject.content.baz).to eq [1, 2, 3]
+      expect(subject.content.blah).to eq({})
     end
   end
 
@@ -229,25 +231,26 @@ RSpec.describe Submission do
       submission.save!
     end
 
-    it "clears step04 of trial submission if step02 content is changed" do
-      expect(submission.content.step04.to_h).not_to be_blank
+    it "clears :upload_if of trial submission if step02 content is changed" do
+      expect(submission.content.upload_id).not_to be_blank
       submission.content.update(:step02, trait_descriptor_list: ["trait X"])
       submission.save!
-      expect(submission.reload.content.step04.to_h).to be_blank
+      expect(submission.reload.content.upload_id).to be_blank
     end
 
-    it "does not clear step04 of trial submission if step02 content is not changed" do
-      expect(submission.content.step04.to_h).not_to be_blank
+    it "does not clear :upload_id of trial submission if step02 content is not changed" do
+      expect(submission.content.upload_id).not_to be_blank
       submission.content.update(:step02, trait_descriptor_list: [])
       submission.save!
-      expect(submission.reload.content.step04.to_h).not_to be_blank
+      expect(submission.reload.content.upload_id).not_to be_blank
     end
 
-    it "leaves step06 of trial submission intact if step02 content is changed" do
-      expect(submission.content.step06.to_h).not_to be_blank
-      submission.content.update(:step02, trait_descriptor_list: ["trait X"])
-      submission.save!
-      expect(submission.reload.content.step06.to_h).not_to be_blank
+    it "leaves the rest of trial submission intact if step02 content is changed" do
+      expect(submission.content.to_h.except(:upload_id)).not_to be_blank
+      expect do
+        submission.content.update(:step02, trait_descriptor_list: ["trait X"])
+        submission.save!
+      end.not_to change { submission.content.to_h.except(:upload_id, :trait_descriptor_list) }
     end
   end
 end

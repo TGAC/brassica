@@ -181,7 +181,7 @@ RSpec.describe "Submission management" do
 
           it "ignores not-permitted params" do
             put "/submissions/#{submission.id}", submission: { content: { unknown_property: true } }
-            expect(submission.reload.content.step01.unknown_property).to be nil
+            expect(submission.reload.content.unknown_property).to be nil
           end
 
           it "can be traversed from first to last step and finalized" do
@@ -194,7 +194,7 @@ RSpec.describe "Submission management" do
                                   end
 
               put "/submissions/#{submission.id}", step_params
-              expect(submission.reload.content.send(step).to_h).to include(step_params[:submission][:content])
+              expect(submission.reload.content.to_h).to include(step_params[:submission][:content])
               expect(response).to redirect_to(expected_redirect)
             end
 

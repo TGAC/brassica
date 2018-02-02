@@ -187,8 +187,8 @@ RSpec.describe Submission::PlantLineParser do
 
     it 'assigns step03 content with parsed information' do
       subject.call
-      expect(upload.submission.content.step03.plant_line_list).to eq ['pl_ok_newpv_newpa', 'pl_ok_nopa']
-      expect(upload.submission.content.step03.new_plant_lines).to eq [
+      expect(upload.submission.content.plant_line_list).to eq ['pl_ok_newpv_newpa', 'pl_ok_nopa']
+      expect(upload.submission.content.new_plant_lines).to eq [
         {
           'plant_line_name' => 'pl_ok_newpv_newpa',
           'plant_variety_name' => 'Alesi',
@@ -208,13 +208,13 @@ RSpec.describe Submission::PlantLineParser do
           'sequence_identifier' => 'SRR3134398'
         }
       ]
-      expect(upload.submission.content.step03.new_plant_varieties).to eq({
+      expect(upload.submission.content.new_plant_varieties).to eq({
         'pl_ok_newpv_newpa' => {
           'plant_variety_name' => 'Alesi',
           'crop_type' => 'Winter oilseed rape'
         }
       })
-      expect(upload.submission.content.step03.new_plant_accessions).to eq({
+      expect(upload.submission.content.new_plant_accessions).to eq({
         'pl_ok_newpv_newpa' => {
           'plant_accession' => 'New accession X',
           'originating_organisation' => 'EI',

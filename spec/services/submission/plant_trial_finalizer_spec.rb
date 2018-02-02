@@ -182,7 +182,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
     context 'when dealing with plant lines and plant varieties' do
       it 'creates or assigns plant varieties for new accessions only' do
         submission.content.update(:step04,
-          submission.content.step03.to_h.merge(
+          submission.content.to_h.merge(
             lines_or_varieties: {
               'p1' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety to be created' },
               'p2' => { relation_class_name: 'PlantVariety', relation_record_name: 'New variety not to be created' },
@@ -204,7 +204,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
       it 'assigns plant lines for new accessions only' do
         submission.content.update(:step04,
-          submission.content.step03.to_h.merge(
+          submission.content.to_h.merge(
             lines_or_varieties: {
               'p1' => { relation_class_name: 'PlantLine', relation_record_name: existing_line.plant_line_name },
               'p2' => { relation_class_name: 'PlantLine', relation_record_name: 'New line not to be created' },
@@ -224,7 +224,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
       it 'does not mind nil PL/PV values for existing accession PSUs' do
         submission.content.update(:step04,
-          submission.content.step03.to_h.merge(
+          submission.content.to_h.merge(
             trait_scores: {
               'p1' => {}
             },
@@ -246,7 +246,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         # We let nil PV/PL through the parser, for existing PA.
         # So we need to check in the finalizer if they still exist
         submission.content.update(:step04,
-          submission.content.step03.to_h.merge(
+          submission.content.to_h.merge(
             lines_or_varieties: {
               'p1' => { relation_class_name: 'PlantVariety', relation_record_name: nil },
               'p2' => { relation_class_name: 'PlantVariety', relation_record_name: nil },
@@ -264,7 +264,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
     context 'when parsing technical replicate data' do
       before :each do
         submission.content.update(:step04,
-          submission.content.step03.to_h.merge(
+          submission.content.to_h.merge(
             trait_mapping: { 0 => 0, 1 => 0, 2 => 1, 3 => 2, 4 => 2 },
             replicate_numbers: { 0 => 1, 1 => 2, 2 => 0, 3 => 1, 4 => 2 },
             trait_scores: {
@@ -296,7 +296,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
     context 'when parsing design factors' do
       before :each do
         submission.content.update(:step04,
-          submission.content.step03.to_h.merge(
+          submission.content.to_h.merge(
             design_factor_names: ['polytunnel', 'rep', 'sub_block', 'pot_number'],
             design_factors: {
               'p1' => ['A', '1', '1', '1'],

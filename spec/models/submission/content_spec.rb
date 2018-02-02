@@ -1,31 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe Submission::Content do
-  let(:content) { { step01: { name: 'Bar' } } }
+  let(:content) { { name: 'Bar' } }
   let(:submission) { Submission.new(content: content) }
 
   subject { described_class.new(submission) }
 
-  it "allows to access submission's step contents" do
-    expect(subject.step01.name).to eq 'Bar'
-    expect(subject[:step01].name).to eq 'Bar'
+  context "with non-empty content" do
+    it "allows dot syntax access" do
+      expect(subject.name).to eq 'Bar'
+    end
+
+    it "allows hash-like access" do
+      expect(subject[:name]).to eq 'Bar'
+      expect(subject["name"]).to eq 'Bar'
+    end
   end
 
-  it "returns empty struct for each blank step" do
-    expect(subject.step02).to eq(OpenStruct.new)
-    expect(subject.step03).to eq(OpenStruct.new)
-    expect(subject.step04).to eq(OpenStruct.new)
+  context "with empty content" do
+    let(:content) { {} }
+    it { should eq(OpenStruct.new) }
   end
 
   context "#update" do
     it "updates submission" do
       subject.update(:step01, name: 'Baz')
-      expect(submission.content.step01.name).to eq 'Baz'
+      expect(submission.content.name).to eq 'Baz'
+      expect(submission.content.last_step).to eq "step01"
     end
 
     it "skips blank values in arrays" do
       subject.update(:step02, plant_line_list: ['', 'Baz', 'Blah'])
-      expect(submission.content.step02.plant_line_list).to eq ['Baz', 'Blah']
+      expect(submission.content.plant_line_list).to eq ['Baz', 'Blah']
     end
 
     it "raises with invalid step" do
@@ -34,24 +40,24 @@ RSpec.describe Submission::Content do
 
     it 'preserves older keys with no new values' do
       subject.update(:step01, description: 'New, updated value')
-      expect(submission.content.step01.name).to eq 'Bar'
-      expect(submission.content.step01.description).to eq 'New, updated value'
+      expect(submission.content.name).to eq 'Bar'
+      expect(submission.content.description).to eq 'New, updated value'
     end
   end
 
   context "#append" do
     let(:content) {
-      { step01: { int: 1, arr: ["a", "c"], h: { a: 1, c: 3 } } }
+      { int: 1, arr: ["a", "c"], h: { a: 1, c: 3 } }
     }
 
     it "appends new elements to array values" do
       subject.append(:step01, arr: ["b"])
-      expect(submission.content.step01.arr).to eq(["a", "c", "b"])
+      expect(submission.content.arr).to eq(["a", "c", "b"])
     end
 
     it "appends elements to hashes" do
       subject.append(:step01, h: { b: 2 })
-      expect(submission.content.step01.h).to eq("a" => 1, "b" => 2, "c" => 3)
+      expect(submission.content.h).to eq("a" => 1, "b" => 2, "c" => 3)
     end
 
     it "fails for scalar values" do
@@ -68,12 +74,8 @@ RSpec.describe Submission::Content do
 
   context "#clear" do
     it "updates submission" do
-      subject.clear(:step01)
-      expect(submission.content.step01.to_h).to eq({})
-    end
-
-    it "raises with invalid step" do
-      expect { subject.clear(:step_fiz) }.to raise_error(Submission::InvalidStep, "No step step_fiz")
+      subject.clear(:name)
+      expect(submission.content.to_h).to eq({})
     end
   end
 end

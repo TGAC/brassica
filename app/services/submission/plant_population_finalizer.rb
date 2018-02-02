@@ -23,9 +23,9 @@ class Submission::PlantPopulationFinalizer
   attr_accessor :submission
 
   def create_new_plant_lines
-    new_plant_varieties = submission.content.step03.new_plant_varieties || {}
-    new_plant_accessions = submission.content.step03.new_plant_accessions || {}
-    @new_plant_lines = (submission.content.step03.new_plant_lines || []).map do |attrs|
+    new_plant_varieties = submission.content.new_plant_varieties || {}
+    new_plant_accessions = submission.content.new_plant_accessions || {}
+    @new_plant_lines = (submission.content.new_plant_lines || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
       attrs = attrs.merge(
@@ -58,22 +58,22 @@ class Submission::PlantPopulationFinalizer
   end
 
   def create_plant_population
-    attrs = common_data
+    attr_names = [:name, :description, :establishing_organisation, :population_type, :owned_by]
+    attrs = common_data.merge(submission.content.to_h.slice(*attr_names))
 
-    attrs.merge!(submission.content.step01.to_h)
-    if population_type = PopulationType.find_by!(population_type: submission.content.step01.population_type)
+    if population_type = PopulationType.find_by!(population_type: submission.content.population_type)
       attrs.merge!(population_type: population_type)
     end
 
-    taxonomy_term = TaxonomyTerm.find_by(name: submission.content.step02.taxonomy_term)
+    taxonomy_term = TaxonomyTerm.find_by(name: submission.content.taxonomy_term)
     attrs.merge!(taxonomy_term: taxonomy_term)
     %i[female_parent_line male_parent_line].each do |parent_line_attr|
-      if parent_line = PlantLine.find_by(plant_line_name: submission.content.step02[parent_line_attr])
+      if parent_line = PlantLine.find_by(plant_line_name: submission.content[parent_line_attr])
         attrs.merge!(parent_line_attr => parent_line)
       end
     end
 
-    attrs.merge!(submission.content.step04.to_h.except(:visibility))
+    attrs.merge!(submission.content.to_h.slice(:data_owned_by, :data_provenance, :comments))
     attrs.delete(:owned_by)
 
     if PlantPopulation.where(name: attrs[:name]).exists?
@@ -86,13 +86,13 @@ class Submission::PlantPopulationFinalizer
   end
 
   def create_plant_population_lists
-    @plant_population_lists = submission.content.step03.plant_line_list.select(&:present?).map do |id_or_name|
+    @plant_population_lists = submission.content.plant_line_list.select(&:present?).map do |id_or_name|
       plant_line = PlantLine.where_id_or_name(id_or_name).first!
       PlantPopulationList.create!(
         common_data.merge(
           plant_population: plant_population,
           plant_line: plant_line,
-          data_provenance: submission.content.step04.data_provenance
+          data_provenance: submission.content.data_provenance
         )
       )
     end
@@ -112,7 +112,7 @@ class Submission::PlantPopulationFinalizer
   end
 
   def publish?
-    @publish ||= submission.content.step04.visibility.to_s == 'published'
+    @publish ||= submission.content.visibility.to_s == 'published'
   end
 
   def common_data

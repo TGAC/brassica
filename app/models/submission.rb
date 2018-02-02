@@ -34,8 +34,10 @@ class Submission < ActiveRecord::Base
   end
 
   def content_for?(step)
+    return false if content.last_step.blank?
+
     step = steps[step.to_i] if step.to_s =~ /\A\d+\z/
-    content[step].to_h.present?
+    steps.index(step.to_s) <= steps.index(content.last_step)
   end
 
   def step_forward
@@ -128,14 +130,11 @@ class Submission < ActiveRecord::Base
     return unless trial?
     return unless content_changed?
 
-    step02_was = content_was[:step02] || {}
-    step02 = content[:step02] || {}
-
-    old_trait_descriptor_list = (step02_was[:trait_descriptor_list] || []).map(&:to_s)
-    new_trait_descriptor_list = (step02[:trait_descriptor_list] || []).map(&:to_s)
+    old_trait_descriptor_list = (content_was[:trait_descriptor_list] || []).map(&:to_s)
+    new_trait_descriptor_list = (content[:trait_descriptor_list] || []).map(&:to_s)
 
     if old_trait_descriptor_list != new_trait_descriptor_list
-      content.clear(:step04)
+      content.clear(:upload_id)
     end
   end
 

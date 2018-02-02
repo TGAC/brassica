@@ -32,8 +32,8 @@ FactoryBot.define do
 
           submission.step = :step04
 
-          FactoryBot.create(:taxonomy_term, name: submission.content.step02.taxonomy_term)
-          FactoryBot.create(:population_type, population_type: submission.content.step01.population_type)
+          FactoryBot.create(:taxonomy_term, name: submission.content.taxonomy_term)
+          FactoryBot.create(:population_type, population_type: submission.content.population_type)
         elsif submission.trial?
           plant_population = FactoryBot.create(:plant_population, user: submission.user)
           country = FactoryBot.create(:country)

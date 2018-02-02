@@ -389,13 +389,13 @@ RSpec.describe Submission::TraitScoreParser do
       upload.submission.content.update(:step04, trait_scores: { 'plant' => { 1 => '5' }})
       input_is ''
       subject.call
-      expect(upload.submission.content.step04.trait_scores).to be_nil
-      expect(upload.submission.content.step04.trait_mapping).to be_nil
-      expect(upload.submission.content.step04.replicate_numbers).to be_nil
-      expect(upload.submission.content.step04.design_factors).to be_nil
-      expect(upload.submission.content.step04.design_factor_names).to be_nil
-      expect(upload.submission.content.step04.accessions).to be_nil
-      expect(upload.submission.content.step04.lines_or_varieties).to be_nil
+      expect(upload.submission.content.trait_scores).to be_nil
+      expect(upload.submission.content.trait_mapping).to be_nil
+      expect(upload.submission.content.replicate_numbers).to be_nil
+      expect(upload.submission.content.design_factors).to be_nil
+      expect(upload.submission.content.design_factor_names).to be_nil
+      expect(upload.submission.content.accessions).to be_nil
+      expect(upload.submission.content.lines_or_varieties).to be_nil
     end
 
     it 'ignores any score in index grater than traits number' do
