@@ -9,5 +9,5 @@ class PlantTrial::RootingMedium < ActiveRecord::Base
     class_name: "PlantTreatmentType"
 
   validates :environment, :medium_type, presence: true
-  validates :medium_type_id, inclusion: { in: ->(_) { PlantTreatmentType.descendants_of(PlantTrial::RootingMedium.root_term).pluck(:id) } }
+  validates :medium_type, inclusion: { in: ->(_) { PlantTreatmentType.descendants_of(PlantTrial::RootingMedium.root_term) } }
 end

@@ -15,5 +15,5 @@ class PlantTrial::TreatmentApplication < ActiveRecord::Base
     class_name: "PlantTreatmentType"
 
   validates :treatment, :treatment_type, presence: true
-  validates :treatment_type_id, inclusion: { in: ->(treatment_application) { treatment_application.class.treatment_types.pluck(:id) } }
+  validates :treatment_type, inclusion: { in: ->(treatment_application) { treatment_application.class.treatment_types } }
 end

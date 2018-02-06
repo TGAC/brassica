@@ -43,7 +43,7 @@ RSpec.describe Submission::PlantTrialTreatmentProcessor do
         it "appends data to sumission's content" do
           subject.call
 
-          expect(submission.content.step04.treatment["antibiotic_applications"]).
+          expect(submission.content.treatment["antibiotic_applications"]).
             to eq([["unknown treatment", "20mM; 20ml per plant; every week"]])
         end
       end

@@ -111,12 +111,9 @@ RSpec.describe Submission::PlantTrialEnvironmentProcessor do
         } }
 
         it "appends data to sumission's content" do
-          pending
-
           subject.call
 
-          expect(submission.content.treatment["antibiotic_applications"]).
-            to eq([["unknown treatment", "20mM; 20ml per plant; every week"]])
+          expect(submission.content.environment["lamps"]).to eq([["fluorescent tubes", "super bright"]])
         end
       end
 

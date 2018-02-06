@@ -34,4 +34,10 @@ class PlantTrial::Treatment < ActiveRecord::Base
   has_many :ph_applications, class_name: "PlantTrial::PhTreatmentApplication", inverse_of: :treatment
 
   validates :plant_trial, presence: true
+
+  def treatment_applications
+    self.class.treatment_types.flat_map do |type|
+      send("#{type}_applications").to_a
+    end
+  end
 end
