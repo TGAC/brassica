@@ -70,15 +70,16 @@ class Submissions::UploadsController < ApplicationController
   end
 
   def decorate_upload(upload)
-    case
-    when upload.trait_scores?
-      SubmissionTraitScoresUploadDecorator.decorate(upload)
-    when upload.plant_trial_layout?
-      SubmissionPlantTrialLayoutUploadDecorator.decorate(upload)
-    when upload.plant_lines?
-      SubmissionPlantLinesUploadDecorator.decorate(upload)
-    else
-      SubmissionUploadDecorator.decorate(upload)
-    end
+    decorators = {
+      "trait_scores" => SubmissionTraitScoresUploadDecorator,
+      "plant_lines" => SubmissionPlantLinesUploadDecorator,
+      "plant_trial_environment" => SubmissionPlantTrialEnvironmentUploadDecorator,
+      "plant_trial_treatment" => SubmissionPlantTrialTreatmentUploadDecorator,
+      "plant_trial_layout" => SubmissionPlantTrialLayoutUploadDecorator
+    }
+
+    return SubmissionUploadDecorator.decorate(upload) unless decorators.key?(upload.upload_type)
+
+    decorators.fetch(upload.upload_type).decorate(upload)
   end
 end

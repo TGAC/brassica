@@ -1,27 +1,33 @@
-.uploaded-layout{ class: "#{'hidden' unless @content.layout_upload}" }
+.uploaded-plant-trial-environment{ class: "#{'hidden' unless @content.environment_upload}" }
+  %pre.parser-logs.alert.alert-warning.hidden
+  %pre.parser-errors.alert.alert-danger.hidden
+
+  %pre.parser-summary.alert.alert-success{ class: "#{'hidden' unless @content.environment_upload}" }
+    - if @content.environment_upload
+      :preserve
+        #{@content.environment_upload.parser_summary.join("\n")}
+
+  %pre.parser-warnings.alert.alert-danger{ class: "#{'hidden' unless @content.environment_upload && @content.environment_upload.parser_warnings.present?}" }
+    - if @content.environment_upload && @content.environment_upload.parser_warnings.present?
+      :preserve
+        #{@content.treatment_upload.parser_warnings.join("\n")}
+
   .form-group
-    = label_tag :layout, 'Trial layout'
+    = label_tag :environment_upload, 'Uploaded Environment data file'
+    %div
+      %span.file-name= @content.environment_upload.try(:file_file_name)
+      = delete_submission_upload_button(@content.environment_upload,
+        class: 'btn btn-default delete-plant-trial-environment-upload')
 
-    = link_to(@content.layout_upload.try(:file_url), target: "_blank") do
-      %img.layout-image{ src: @content.layout_upload.try(:file_url, :small) }
+  .info-block.parser-note
+    %p
+      Please review the above results. If there were any critical errors during the process,
+      the red section will try to give some hints regarding their nature. You may then try to fix
+      the file accordingly, delete the current upload and re-upload the fixed file.
 
-    %div.alert.alert-warning
-      %p
-        Uploaded file name:
-        = succeed '.' do
-          %strong
-            %span.file-name= @content.layout_upload.try(:file_file_name)
-      %p
-        Please click the thumbnail above to see the full size version. In order to save the image in BIP,
-        you need to click either
-        %strong Save & edit later
-        or
-        %strong Send
-        button. Use the
-        %strong Delete
-        button right below to replace the image with another one.
-      %p
-        = delete_submission_upload_button(@content.layout_upload,
-          class: 'btn btn-default delete-layout-upload')
+    %p
+      Otherwise, if you think the parsing went properly, use the <b>NEXT</b> button to confirm
+      these changes and proceed with further steps of submission.
 
-= content.hidden_field :layout_upload_id
+= content.hidden_field :environment_upload_id
+

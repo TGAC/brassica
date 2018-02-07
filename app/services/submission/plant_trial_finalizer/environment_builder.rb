@@ -13,7 +13,7 @@ class Submission::PlantTrialFinalizer::EnvironmentBuilder
       select { |property| environment_content.key?(property.to_s) }.
       each { |property| build_associated_objects(property) }
 
-    environment.co2_controlled = environment_content["co2_controlled"]
+    environment.co2_controlled = (environment_content["co2_controlled"] == "controlled")
 
     environment
   end

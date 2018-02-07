@@ -87,9 +87,16 @@ class SubmissionsController < ApplicationController
 
   def step_content_form(submission, step_content_params = nil)
     klass_name = "Submissions::#{submission.submission_type.capitalize}::#{submission.step.to_s.classify}ContentForm"
-    klass = klass_name.constantize
-    step_content_params ||= submission_content_params.permit(klass.permitted_properties)
-    klass.new(Hashie::Mash.new(step_content_params || {}))
+    form_klass = klass_name.constantize
+    permitted_attrs = form_klass.permitted_properties
+
+    step_content_params ||= if permitted_attrs.present?
+      submission_content_params.permit(permitted_attrs)
+    else
+      {}
+    end
+
+    form_klass.new(Hashie::Mash.new(step_content_params || {}))
   end
 
   def submission_params

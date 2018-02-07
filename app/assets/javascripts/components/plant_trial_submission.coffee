@@ -27,6 +27,8 @@ window.PlantTrialSubmission = class PlantTrialSubmission extends Submission
       @$(".#{field}-wrapper").comboField()
 
     @bindTraitScoresUpload()
+    @bindEnvironmentUpload()
+    @bindTreatmentUpload()
     @bindLayoutUpload()
     @bindNewTraitDescriptorControls()
     @bindDesignFactorNameComboFields()
@@ -43,62 +45,13 @@ window.PlantTrialSubmission = class PlantTrialSubmission extends Submission
           event.stopPropagation()
 
   bindTraitScoresUpload: =>
-    @$('.trait-scores-upload').fileupload
-      data_type: 'json'
+    @bindDataUpload("trait-scores", "upload_id")
 
-      add: (event, data) =>
-        @$('.fileinput-button').addClass('disabled')
-        data.submit()
+  bindEnvironmentUpload: =>
+    @bindDataUpload("plant-trial-environment", "environment_upload_id")
 
-      done: (event, data) =>
-        $(".errors").addClass('hidden').text("")
-
-        @$('#submission_content_upload_id').val(data.result.id)
-
-        @$('.fileinput').addClass('hidden')
-        @$('.fileinput-button').removeClass('disabled')
-        @$('.uploaded-trait-scores').removeClass('hidden')
-        @$('.uploaded-trait-scores .file-name').text(data.result.file_file_name)
-        @$('.uploaded-trait-scores .delete-trait-scores-upload').attr(href: data.result.delete_url)
-        @$('.uploaded-trait-scores .parser-logs').removeClass('hidden')
-        @$('.uploaded-trait-scores .parser-logs').text(data.result.logs.join('\n'))
-        if data.result.errors.length > 0
-          @$('.uploaded-trait-scores .parser-errors').removeClass('hidden')
-          @$('.uploaded-trait-scores .parser-errors').text(data.result.errors.join('\n'))
-          @$('.uploaded-trait-scores .parser-summary').addClass('hidden')
-          @$('.uploaded-trait-scores .parser-summary').text('')
-        else
-          if data.result.warnings.length > 0
-            @$('.uploaded-trait-scores .parser-warnings').removeClass('hidden')
-            @$('.uploaded-trait-scores .parser-warnings').text(data.result.warnings.join('\n'))
-          else
-            @$('.uploaded-trait-scores .parser-warnings').addClass('hidden')
-            @$('.uploaded-trait-scores .parser-warnings').text('')
-          @$('.uploaded-trait-scores .parser-errors').addClass('hidden')
-          @$('.uploaded-trait-scores .parser-errors').text('')
-          @$('.uploaded-trait-scores .parser-summary').removeClass('hidden')
-          @$('.uploaded-trait-scores .parser-summary').text(data.result.summary.join('\n'))
-
-      fail: (event, data) =>
-        if data.jqXHR.status == 401
-          window.location.reload()
-        else if data.jqXHR.status == 422
-          @$('.fileinput-button').removeClass('disabled')
-
-          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
-          $.each(data.jqXHR.responseJSON.errors, (_, error) =>
-            $li = $("<li></li>").text(error)
-            $errors.find("ul").append($li)
-          )
-        else
-          @$('.fileinput-button').removeClass('disabled')
-
-          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
-          $errors.find("ul").append($("<li></li>").text("Unexpected server response: #{data.jqXHR.status} #{data.jqXHR.statusText}"))
-
-    @$('.delete-trait-scores-upload').on 'ajax:success', (data, status, xhr) =>
-      @$('.fileinput').removeClass('hidden')
-      @$('.uploaded-trait-scores').addClass('hidden')
+  bindTreatmentUpload: =>
+    @bindDataUpload("plant-trial-treatment", "treatment_upload_id")
 
   bindLayoutUpload: =>
     @$('.layout-upload').fileupload
@@ -142,6 +95,72 @@ window.PlantTrialSubmission = class PlantTrialSubmission extends Submission
     @$('.delete-layout-upload').on 'ajax:success', (data, status, xhr) =>
       @$('.fileinput').removeClass('hidden')
       @$('.uploaded-layout').addClass('hidden')
+
+  bindDataUpload: (upload_name, attr) =>
+    @$(".#{upload_name}-upload").fileupload
+      data_type: 'json'
+
+      add: (event, data) =>
+        @$('.fileinput-button').addClass('disabled')
+        data.submit()
+
+      done: (event, data) =>
+        $(".errors").addClass('hidden').text("")
+
+        @$("#submission_content_#{attr}").val(data.result.id)
+
+        @$('.fileinput').addClass('hidden')
+        @$('.fileinput-button').removeClass('disabled')
+        @$(".uploaded-#{upload_name}").removeClass('hidden')
+        @$(".uploaded-#{upload_name} .file-name").text(data.result.file_file_name)
+        @$(".uploaded-#{upload_name} .delete-#{upload_name}-upload").attr(href: data.result.delete_url)
+
+
+        if data.result.logs?.length > 0
+          @$(".uploaded-#{upload_name} .parser-logs").removeClass('hidden')
+          @$(".uploaded-#{upload_name} .parser-logs").text(data.result.logs.join('\n'))
+        else
+          @$(".uploaded-#{upload_name} .parser-logs").addClass('hidden')
+          @$(".uploaded-#{upload_name} .parser-logs").text('')
+
+        if data.result.errors?.length > 0
+          @$(".uploaded-#{upload_name} .parser-errors").removeClass('hidden')
+          @$(".uploaded-#{upload_name} .parser-errors").text(data.result.errors.join('\n'))
+          @$(".uploaded-#{upload_name} .parser-summary").addClass('hidden')
+          @$(".uploaded-#{upload_name} .parser-summary").text('')
+        else
+          if data.result.warnings?.length > 0
+            @$(".uploaded-#{upload_name} .parser-warnings").removeClass('hidden')
+            @$(".uploaded-#{upload_name} .parser-warnings").text(data.result.warnings.join('\n'))
+          else
+            @$(".uploaded-#{upload_name} .parser-warnings").addClass('hidden')
+            @$(".uploaded-#{upload_name} .parser-warnings").text('')
+
+          @$(".uploaded-#{upload_name} .parser-errors").addClass('hidden')
+          @$(".uploaded-#{upload_name} .parser-errors").text('')
+          @$(".uploaded-#{upload_name} .parser-summary").removeClass('hidden')
+          @$(".uploaded-#{upload_name} .parser-summary").text(data.result.summary.join('\n'))
+
+      fail: (event, data) =>
+        if data.jqXHR.status == 401
+          window.location.reload()
+        else if data.jqXHR.status == 422
+          @$('.fileinput-button').removeClass('disabled')
+
+          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
+          $.each(data.jqXHR.responseJSON.errors, (_, error) =>
+            $li = $("<li></li>").text(error)
+            $errors.find("ul").append($li)
+          )
+        else
+          @$('.fileinput-button').removeClass('disabled')
+
+          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
+          $errors.find("ul").append($("<li></li>").text("Unexpected server response: #{data.jqXHR.status} #{data.jqXHR.statusText}"))
+
+    @$(".delete-#{upload_name}-upload").on 'ajax:success', (data, status, xhr) =>
+      @$(".fileinput").removeClass('hidden')
+      @$(".uploaded-#{upload_name}").addClass('hidden')
 
   bindNewTraitDescriptorControls: =>
     @$('.trait-descriptor-list').on 'select2:unselect', (event) =>

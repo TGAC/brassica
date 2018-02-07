@@ -1,20 +1,13 @@
-.info-block
-  If available, please upload an image of the layout of your trial (see
-  #{link_to "example", "/images/plant-trial-layout-example.jpg", target: "_blank"}
-  published by the
-  #{link_to "OREGIN", "http://oregin.info/", target: "_blank"}
-  Diversity Trial project).
-
 .errors.hidden
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do
+  = hidden_field_tag "submission_upload[upload_type]", "plant_trial_environment"
 
-  = hidden_field_tag "submission_upload[upload_type]", "plant_trial_layout"
-
-  .form-group.fileinput{ class: "#{'hidden' if @content.layout_upload}" }
+  .form-group.fileinput{ class: "#{'hidden' if @content.environment_upload}" }
     .btn.btn-primary.fileinput-button
       %span Choose a file...
-      = file_field_tag "submission_upload[file]", class: 'layout-upload',
-        accept: "image/jpeg, image/png, image/gif"
+      = file_field_tag "submission_upload[file]", class: 'plant-trial-environment-upload',
+        accept: "application/vnd.ms-excel"
 
-    %small.help-block Accepted file formats are *.png, *.jpg and *.gif.
+    %small.help-block
+      Please upload the XLS file containing Environment data here.

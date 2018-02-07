@@ -8,8 +8,8 @@ RSpec.describe PlantTrial::MeasurementValue do
 
   describe "validations" do
     context "with ration: true constaint" do
-      subject { described_class.new(constraints: { ratio: true }) }
-      it { should validate_as_ratio(:value) }
+      subject { described_class.new(constraints: { percentage: true }) }
+      it { should validate_as_percentage(:value) }
     end
 
     context "with non_negative: true constaint" do

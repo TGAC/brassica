@@ -1,88 +1,195 @@
-.info-block
-  %p
-    The BIP service assumes that each row in the trait scoring sheet, that you are going to submit,
-    represents a so-called <b>plant scoring unit</b>. For raw data it may simply be an individual
-    plant in your experiment. For processed data a plant scoring unit may represent a set of plants,
-    related to each other in some way. It is mandatory to provide plant accession information
-    for each plant scoring unit in the scoring sheet to be submitted.
+- pl_pv_name = 'line'
+- pl_pv_name = 'variety' if submission.content.lines_or_varieties == 'plant_varieties'
+- design_factor_names = submission.content.design_factor_names || []
+- technical_replicate_numbers = submission.content.technical_replicate_numbers || {}
+- rep_traits = technical_replicate_numbers.select{ |k,v| v.to_i > 1 }.to_a
 
-  %p
-    In case you would like to check what plant accessions are currently registered in the BIP, please use the
-    = link_to 'plant accessions table view', data_tables_path(model: 'plant_accessions'), target: '_blank'
-    (you may filter data in that table with the <b>Search</b> text field).
+.panel-group#templates
+  .panel.panel-info
+    .panel-heading
+      %h4.panel-title
+        %a{ role: :button, data: { toggle: :collapse, parent: "#templates" }, href: "#scoring-template" }
+          Scoring template
 
-  %p
-    If you submit raw data, you will have an option to submit technical replicate readings as
-    well as design factors (for instance, ordinal numbers for plots, reps and so forth).
+    .panel-collapse.collapse#scoring-template
+      .panel-body
+        .row
+          .col-md-9
+            %p
+              Please use the button next to this text to download a trait scoring sheet template in CSV format. The template has been created
+              according to the choices you have made so far in this submission. If you see that the headers don’t correspond
+              to the data you want to submit, navigate back to previous submission steps and amend them accordingly.
+              An altered template can then be downloaded at this step.
 
-.fieldset
-  %legend Origin of genetic material used in this trial
-  .form-group
-    = content.label :lines_or_varieties, "Plant lines", value: 'plant_lines', class: 'radio-inline' do
-      = content.radio_button :lines_or_varieties, 'plant_lines', checked: true
-      Plant lines
-    = content.label :lines_or_varieties, "Plant varieties", value: 'plant_varieties', class: 'radio-inline' do
-      = content.radio_button :lines_or_varieties, 'plant_varieties'
-      Plant varieties
-    %small.help-block
-      Per each plant scoring unit submitted, the source of genetic material should be provided.
-      It may either be a <b>plant line</b> or a <b>plant variety (cultivar)</b>.
-      This choice depends on the type of experiment you are conducting. You should select
-      the <b>Plant lines</b> option if you
-      %ul
-        %li created new genetic material (using, for instance, crossing or mutagenesis) in the course of your project,
-        %li or you use former plant line genetic material which is not (yet) recognized as a variety or a cultivar.
-      In other cases you should probably select the the <b>Plant varieties</b> option.
+          .col-md-3.text-right
+            = submission_template_link(new_submission_upload_path(submission))
 
-- if submission.raw_data?
-  %fieldset
-    %legend Design factors
-    .info-block
-      %p
-        Please select the appropriate statistical design factors suitable for your experimental setup from
-        the drop-down fields. Start by selecting the <b>highest design factor first</b>
-        and proceed with the next ones in <b>decreasing</b> size.
-
-      %p
-        If your factors are not present in the list provided, please add them manually. While creating new
-        factors, please make sure you comply with the rule to submit them in decreasing size, so with the
-        highest missing factor (e.g. treatment) first, to lowest missing factor (e.g. plot).
-        You are able to mix both predefined factors, from the drop-down list, and your own factor names.
-
-    - values = @content.design_factor_names
-    - (0...10).each do |idx|
-      .form-group{ class: (:hidden if idx > 0 && values[idx - 1].blank?) }
-        - options = options_for_select(DesignFactor::COMMON_NAMES, values[idx])
-        = content.combo_field "design_factor_names[]", options, value: values[idx],
-            label: "Design factor #{idx + 1}", idx: idx
-
-  %fieldset
-    %legend Technical replicate numbers
-    .info-block
-      %p
-        If you are using <i>technical replicates</i> in your experiment, please
-        set the number of replicates you are scoring per trait. Leaving the value
-        at <b>1</b> means you are not using technical replicates for a given trait.
-
-      - if submission.sorted_trait_names.size > 1
+        %h5 Trait scoring sheet structure
         %p
-          You can have varying number of technical replicates for different traits.
+          The next step requires you to upload a file with scoring values. The required format is simple and features
+          %b unique plant scoring unit identification in the first column
+          (please go back to step 2 for a short definition of a plant scoring unit), followed by
+          - if design_factor_names.present?
+            %b #{design_factor_names.size} column(s) for design factors
+            selected in the previous step and
+          %b 3 column(s) for plant accession information
+          (accession id, accession assigning organisation and year it was produced - see below),
+          %b another column with plant #{pl_pv_name} name
+          (also explained below) and
+          %b trait scores
+          (including potential technical replicate scores) in further columns.
+          The number of columns depends on
 
-    - sorted_trait_names = submission.sorted_trait_names
-    - col_count = [4, sorted_trait_names.size].min
-    - col_size = 12 / col_count
+        %ul
+          %li how many <b>traits</b> you selected in the second step of this submission,
+          %li how many <b>design factors</b> you defined in the third step (raw data only),
+          %li how many <b>technical replicates</b> you plan to submit (raw data only).
 
-    - sorted_trait_names.each_slice(col_count).with_index do |trait_names, row_idx|
-      .form-group
+        %p
+          All values should be separated by commas (<code>,</code>). In cases where a value is missing,
+          please remember to provide the correct number of commas anyway. Sticking to this template
+          should guarantee correct parsing of score values when you upload the file. Please, paste your data, in columns,
+          below the header (thus replacing the placeholder <code>... - replace it</code> values).
+
+        %h5 Plant accession information
+        %p
+          Accession-related fields (<b>Plant accession</b> identifier - in column #{design_factor_names.size + 2}, the
+          <b>Originating organisation</b>
+          which issued this accession number - in column #{design_factor_names.size + 3}, and the <b>Year produced</b> -
+          in column #{design_factor_names.size + 4} are mandatory. If you do not have an Accession defined
+          for your plants, please create one yourself (for example, using
+          %code
+            = '<institute_name>_<seedbag_id>'
+          ).
+          It will serve as a placeholder identifier for the unique genetic material used in your trials.
+          Accordingly, it is important that you are able to relate back to the identifier when cross-linking
+          with the corresponding genetic data.
+
+        %h5 Plant #{pl_pv_name} column
+        %p
+          This column is especially important if you
+          %b submit new accessions
+          (i.e. ones which are not present
+          in BIP). Every such new accession will be recorded in BIP and it will be related to a <b>plant #{pl_pv_name}</b>.
+
+          - if pl_pv_name == 'line'
+            If there are new plant lines created in the course of your experiment, or if you are using existing
+            plant lines which are not present in BIP at the moment, we request that you submit these
+            new plant lines first, using the
+            = succeed '.' do
+              = link_to 'Plant population submission procedure', new_submission_path, target: '_blank'
+            Afterwards you will be able to return to this step and proceed with trial data submission
+            (to save your draft submission, click the <b>Save & edit later</b> button).
+
+          - else
+            If you are using plant varieties (cultivars) which are not listed in BIP, please provide their names
+            in column #{design_factor_names.size + 4}. These names will then be recorded in BIP as new
+            plant varieties related to your plant accession.
+
+        %p
+          - if pl_pv_name == 'line'
+            For the list of plant lines currently registered in BIP, you may
+            = succeed '.' do
+              = link_to 'consult this data table', data_tables_path(model: 'plant_lines'), target: '_blank'
+            Please use the values from the <b>Line name</b> column when referring to existing plant lines
+            in your CSV file in order to avoid duplications due to differences in spelling..
+
+          - else
+            If you are using plant varieties (cultivars) known to BIP, you may
+            = link_to 'consult this data table', data_tables_path(model: 'plant_varieties'), target: '_blank'
+            in order to find their names.
+            Please use the values from the <b>Variety</b> column when referring to existing plant varieties
+            in your CSV file in order to avoid duplications due to differences in spelling.
+
+        %h5 Trait scores ordering #{'and technical replicates' if rep_traits.present?}
+        %p
+          The first line will be treated as a header. Specific values in columns
+          #{design_factor_names.size + 6} and further
+          will be treated as scoring for the
+          trait whose name matches the corresponding column header. If no match is found, the score will
+          be stored by column index. That is, an unmatched column
+          #{design_factor_names.size + 7}
+          header will cause all column
+          #{design_factor_names.size + 7}
+          values to be treated as scores for the second trait (in the order of input)
+          - if rep_traits.present?
+            , or the second technical replicate of the first trait,
+          defined during the first step of this submission.
+          Please <b>be careful when pasting your trait scores beneath the correct headers</b>
+          as they may not appear in the order they are recorded in your source spreadsheet.
+
+        - if rep_traits.present?
+          %p
+            Scoring for technical replicates should be submitted in trait-rep order. For instance, for
+            #{rep_traits[0][1]} technical replicates of #{rep_traits[0][0]} scores, the column with values
+            measured for the second technical replicate should directly follow the column with scores for
+            the first technical replicate (no other trait scores in between).
+
+        %p
+          In order to avoid any ordering related issues, <b>please use the CSV template</b>
+          provided to you above - this template's header has all trait name
+          - if rep_traits.present?
+            and technical replicate
+          columns in the proper order.
+
+  .panel.panel-info
+    .panel-heading
+      %h4.panel-title
+        %a{ role: :button, data: { toggle: :collapse, parent: "#templates" }, href: "#environment-template" }
+          Environment template
+
+    .panel-collapse.collapse#environment-template
+      .panel-body
         .row
-          - trait_names.each do |trait_name|
-            %div{ class: "col-md-#{col_size}" }= content.label :technical_replicate_numbers, trait_name
+          .col-md-9
+            %p Please use the button next to this text to download a template in XLS format.
 
+          .col-md-3.text-right
+            = submission_template_link('/manuals/plant_trial_environment.xls')
+
+        %h5 Template structure
+        %p
+          The template includes several environment properties as defined by
+          the #{link_to "MIAPPE", "http://www.miappe.org/", target: "_blank"} standard.
+          Most of these properties can be described by providing single numerical value and corresponding
+          unit.
+
+        %p
+          There are some exceptions (<i>Type of lamps used</i>, <i>Container type</i>, <i>Rooting medium</i>)
+          which do not follow this rule and require choice of an item from drop-down list (orange field) with
+          optional description (yellow field). Entering new value instead of using drop-down list is also acceptable.
+          More than one value can be provided by using subsequent columns.
+
+        %p
+          Finally, <i>pH</i> is another exception as it requires to provide pH value (orange field) at
+          corresponding depth range (yellow field). Subsequent columns can be used to describe pH at
+          different depths.
+
+  .panel.panel-info
+    .panel-heading
+      %h4.panel-title
+        %a{ role: :button, data: { toggle: :collapse, parent: "#templates" }, href: "#treatment-template" }
+          Treatment template
+
+    .panel-collapse.collapse#treatment-template
+      .panel-body
         .row
-          - trait_names.each.with_index do |trait_name, col_idx|
-            - idx = row_idx * col_count + col_idx
+          .col-md-9
+            %p Please use the button next to this text to download a template in XLS format.
 
-            %div{ class: "col-md-#{col_size}", data: { idx: idx } }
-              = content.text_field :technical_replicate_numbers,
-                  value: @content.technical_replicate_numbers[idx] || 1,
-                  label: false, name: "submission[content][technical_replicate_numbers][]"
+          .col-md-3.text-right
+            = submission_template_link('/manuals/plant_trial_treatment.xls')
+
+        %h5 Template structure
+        %p
+          The template lists several treatment categories as defined by
+          the #{link_to "MIAPPE", "http://www.miappe.org/", target: "_blank"} standard.
+          For each category you can describe what treatments were applied by providing:
+
+        %ul
+          %li name of the treatment (orange field)
+          %li detailed description (yellow field, optional).
+
+        There is no limit for the number of treatments you can include for each category. If possible, please select
+        treatment name from the provided drop-down list. However, if required term cannot be found you can enter
+        any name and it will be added to the database.

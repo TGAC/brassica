@@ -1,2 +1,32 @@
-= render partial: "submissions/annotations", locals: { model: PlantTrial, collapsible: false, form: content }
-= render partial: "submissions/steps/visibility", locals: { form: content }
+.uploaded-plant-trial-treatment{ class: "#{'hidden' unless @content.treatment_upload}" }
+  %pre.parser-logs.alert.alert-warning.hidden
+  %pre.parser-errors.alert.alert-danger.hidden
+
+  %pre.parser-summary.alert.alert-success{ class: "#{'hidden' unless @content.treatment_upload}" }
+    - if @content.treatment_upload
+      :preserve
+        #{@content.treatment_upload.parser_summary.join("\n")}
+
+  %pre.parser-warnings.alert.alert-danger{ class: "#{'hidden' unless @content.treatment_upload && @content.treatment_upload.parser_warnings.present?}" }
+    - if @content.treatment_upload && @content.treatment_upload.parser_warnings.present?
+      :preserve
+        #{@content.treatment_upload.parser_warnings.join("\n")}
+
+  .form-group
+    = label_tag :treatment_upload, 'Uploaded Treatment data file'
+    %div
+      %span.file-name= @content.treatment_upload.try(:file_file_name)
+      = delete_submission_upload_button(@content.treatment_upload,
+        class: 'btn btn-default delete-plant-trial-treatment-upload')
+
+  .info-block.parser-note
+    %p
+      Please review the above results. If there were any critical errors during the process,
+      the red section will try to give some hints regarding their nature. You may then try to fix
+      the file accordingly, delete the current upload and re-upload the fixed file.
+
+    %p
+      Otherwise, if you think the parsing went properly, use the <b>NEXT</b> button to confirm
+      these changes and proceed with further steps of submission.
+
+= content.hidden_field :treatment_upload_id

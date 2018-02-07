@@ -142,4 +142,15 @@
       margin: 0.5rem 0;
     }
   }
+
+  #templates {
+    h5 {
+      font-weight: bold;
+      margin-top: 2rem;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
 }

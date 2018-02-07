@@ -39,19 +39,19 @@ FactoryBot.define do
           country = FactoryBot.create(:country)
           trait_descriptor = FactoryBot.create(:trait_descriptor)
 
-          submission.content.update(:step01, plant_trial_name: random_word,
+          submission.content.update(:step01, trait_descriptor_list: [trait_descriptor.id.to_s])
+          submission.content.update(:step08, plant_trial_name: random_word,
                                              plant_trial_description: Faker::Lorem.sentence,
                                              project_descriptor: random_word,
                                              plant_population_id: plant_population.id,
                                              trial_year: 1999,
                                              institute_id: Faker::Company.name,
                                              place_name: random_word,
-                                             country_id: country.id)
-          submission.content.update(:step02, trait_descriptor_list: [trait_descriptor.id.to_s])
-          submission.content.update(:step06, comments: Faker::Lorem.sentence,
+                                             country_id: country.id,
+                                             comments: Faker::Lorem.sentence,
                                              visibility: submission.published? ? 'published' : 'private')
 
-          submission.step = :step06
+          submission.step = :step08
         else
           raise "Factory does not support finalized #{submission.submission_type} submissions"
         end
