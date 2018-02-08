@@ -2,7 +2,7 @@ default: &default
   authorize_params:
     scope: /authenticate
   client_options:
-    site: http://pub.orcid.org
+    site: https://pub.orcid.org/v2.1
     authorize_url: http://orcid.org/oauth/authorize?show_login=true
     token_url: https://pub.orcid.org/oauth/token
 
@@ -10,7 +10,7 @@ sandbox: &sandbox
   authorize_params:
     scope: /authenticate
   client_options:
-    site: http://sandbox.orcid.org
+    site: https://sandbox.orcid.org/v2.1
     authorize_url: http://sandbox.orcid.org/oauth/authorize?show_login=true
     token_url: https://sandbox.orcid.org/oauth/token
 
