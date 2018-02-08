@@ -13,7 +13,7 @@ class SubmissionsController < ApplicationController
 
   def edit
     @submission = current_user.submissions.find(params[:id])
-    @content = step_content_form(@submission, @submission.content[@submission.step])
+    @content = step_content_form(@submission, @submission.content)
     @content.valid? if params[:validate]
     @submission = decorator(@submission)
   end

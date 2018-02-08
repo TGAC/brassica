@@ -28,11 +28,11 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def population_name
-    @population_name ||= object.content.step01.name.presence
+    @population_name ||= object.content.name.presence
   end
 
   def establishing_organisation
-    @establishing_organisation ||= object.content.step01.establishing_organisation.presence
+    @establishing_organisation ||= object.content.establishing_organisation.presence
   end
 
   def species_name
@@ -40,11 +40,11 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def taxonomy_term
-    @taxonomy_term ||= object.content.step02.taxonomy_term.presence
+    @taxonomy_term ||= object.content.taxonomy_term.presence
   end
 
   def population_type
-    @population_type ||= object.content.step01.population_type.presence
+    @population_type ||= object.content.population_type.presence
   end
 
   def plant_lines
@@ -59,7 +59,7 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def plant_line_list
-    object.content.step03.plant_line_list || []
+    object.content.plant_line_list || []
   end
 
   def parent_line_names
@@ -77,15 +77,15 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def female_parent_line_name
-    object.content.step02.female_parent_line.presence
+    object.content.female_parent_line.presence
   end
 
   def male_parent_line_name
-    object.content.step02.male_parent_line.presence
+    object.content.male_parent_line.presence
   end
 
   def description
-    object.content.step01.description.presence || ''
+    object.content.description.presence || ''
   end
 
   def affiliation
@@ -93,19 +93,19 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
   end
 
   def owned_by
-    object.content.step01.owned_by.presence
+    object.content.owned_by.presence
   end
 
   def data_owned_by
-    object.content.step04.data_owned_by.presence
+    object.content.data_owned_by.presence
   end
 
   def data_provenance
-    object.content.step04.data_provenance.presence
+    object.content.data_provenance.presence
   end
 
   def comments
-    object.content.step04.comments.presence
+    object.content.comments.presence
   end
 
   def submission_attributes

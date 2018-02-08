@@ -25,7 +25,7 @@ class Submission::PlantTrialFinalizer
   attr_accessor :submission
 
   def create_new_trait_descriptors
-    @new_trait_descriptors = (submission.content.step02.new_trait_descriptors || []).map do |attrs|
+    @new_trait_descriptors = (submission.content.new_trait_descriptors || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       attrs = attrs.merge(common_data)
       if attrs[:trait].present?
@@ -98,9 +98,9 @@ class Submission::PlantTrialFinalizer
   end
 
   def create_scoring
-    trait_mapping = submission.content.step04.trait_mapping
-    trait_scores = submission.content.step04.trait_scores || {}
-    replicate_numbers = submission.content.step04.replicate_numbers || {}
+    trait_mapping = submission.content.trait_mapping
+    trait_scores = submission.content.trait_scores || {}
+    replicate_numbers = submission.content.replicate_numbers || {}
 
     @new_plant_scoring_units = trait_scores.map do |plant_id, scores|
       unless accessions[plant_id] && accessions[plant_id]['plant_accession'] && accessions[plant_id]['originating_organisation']
@@ -164,22 +164,26 @@ class Submission::PlantTrialFinalizer
   end
 
   def create_plant_trial
-    attrs = submission.content.step01.to_h.merge(common_data)
-    design_factor_names = submission.content.step04.design_factor_names || []
+    attr_names = [:plant_trial_name, :project_descriptor, :plant_population_id, :plant_trial_description, :trial_year,
+                  :institute_id, :country_id, :trial_location_site_name, :place_name, :latitude, :longitude, :altitude,
+                  :terrain, :soil_type, :statistical_factors, :data_status]
 
-    if plant_population = PlantPopulation.find_by(id: submission.content.step01.plant_population_id)
+    attrs = submission.content.to_h.slice(*attr_names).merge(common_data)
+    design_factor_names = submission.content.design_factor_names || []
+
+    if plant_population = PlantPopulation.find_by(id: submission.content.plant_population_id)
       attrs.merge!(plant_population_id: plant_population.id)
     else
-      submission.content.update(:step01, submission.content.step01.to_h.except('plant_population_id'))
+      submission.content.update(:step01, submission.content.to_h.slice(*attr_names).except(:plant_population_id))
       submission.save!
       rollback(0)
     end
 
-    if layout_upload = Submission::Upload.find_by(id: submission.content.step05.layout_upload_id)
+    if layout_upload = Submission::Upload.find_by(id: submission.content.layout_upload_id)
       attrs.merge!(layout: layout_upload.file)
     end
 
-    attrs.merge!(submission.content.step06.to_h.except(:visibility))
+    attrs.merge!(submission.content.to_h.slice(:data_owned_by, :data_provenance, :comments))
     attrs.merge!(design_factors: describe_design_factors(design_factor_names))
     attrs.merge!(published: publish?)
 
@@ -204,7 +208,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def publish?
-    @publish ||= submission.content.step06.visibility.to_s == 'published'
+    @publish ||= submission.content.visibility.to_s == 'published'
   end
 
   def common_data
@@ -218,7 +222,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def get_nth_trait_descriptor(n)
-    trait = submission.content.step02.trait_descriptor_list[n]
+    trait = submission.content.trait_descriptor_list[n]
     if trait.to_i.to_s == trait.to_s
       TraitDescriptor.find_by(id: trait)
     else
@@ -231,19 +235,19 @@ class Submission::PlantTrialFinalizer
   end
 
   def design_factors
-    submission.content.step04.design_factors || {}
+    submission.content.design_factors || {}
   end
 
   def design_factor_names
-    submission.content.step04.design_factor_names || []
+    submission.content.design_factor_names || []
   end
 
   def accessions
-    submission.content.step04.accessions
+    submission.content.accessions
   end
 
   def lines_or_varieties
-    submission.content.step04.lines_or_varieties || {}
+    submission.content.lines_or_varieties || {}
   end
 
   private
@@ -253,7 +257,7 @@ class Submission::PlantTrialFinalizer
   end
 
   def reset_trait_descriptors_counters
-    submission.content.step02.trait_descriptor_list.size.times do |i|
+    submission.content.trait_descriptor_list.size.times do |i|
       reset_trait_score_counter(get_nth_trait_descriptor(i))
     end
   end

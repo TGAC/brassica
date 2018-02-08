@@ -28,11 +28,11 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   end
 
   def plant_trial_name
-    @plant_trial_name ||= object.content.step01.plant_trial_name.presence
+    @plant_trial_name ||= object.content.plant_trial_name.presence
   end
 
   def project_descriptor
-    @project_descriptor ||= object.content.step01.project_descriptor.presence
+    @project_descriptor ||= object.content.project_descriptor.presence
   end
 
   def species_name
@@ -41,12 +41,12 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
 
   def plant_population
     return @plant_population if defined?(@plant_population)
-    return if object.content.step01.plant_population_id.blank?
-    @plant_population = PlantPopulation.find_by(id: object.content.step01.plant_population_id)
+    return if object.content.plant_population_id.blank?
+    @plant_population = PlantPopulation.find_by(id: object.content.plant_population_id)
   end
 
   def trait_descriptors
-    tds = object.content.step02.trait_descriptor_list.try(:select, &:present?) || []
+    tds = object.content.trait_descriptor_list.try(:select, &:present?) || []
     existing_tds = tds.select { |td| td.to_s.match(/\A\d+\z/) }
     new_tds = tds - existing_tds
     new_tds | TraitDescriptor.includes(:trait).references(:trait).where(id: existing_tds).pluck('traits.name')
@@ -55,7 +55,7 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   # Takes new TD names and hits the DB for old TDs for their names; sorts
   def sorted_trait_names
     return @sorted_trait_names if @sorted_trait_names
-    trait_list = object.content.step02.trait_descriptor_list || []
+    trait_list = object.content.trait_descriptor_list || []
     @sorted_trait_names = trait_list.compact.map do |trait_item|
       if trait_item.to_i.to_s != trait_item.to_s
         trait_item
@@ -71,15 +71,15 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   end
 
   def plant_trial_description
-    object.content.step01.plant_trial_description
+    object.content.plant_trial_description
   end
 
   def trial_year
-    object.content.step01.trial_year
+    object.content.trial_year
   end
 
   def country_name
-    country_id = object.content.step01.country_id
+    country_id = object.content.country_id
     return unless country_id.present?
     Country.find(country_id).country_name
   end
@@ -89,53 +89,53 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   end
 
   def institute_id
-    object.content.step01.institute_id
+    object.content.institute_id
   end
 
   def trial_location_site_name
-    object.content.step01.trial_location_site_name
+    object.content.trial_location_site_name
   end
 
   def place_name
-    object.content.step01.place_name
+    object.content.place_name
   end
 
   def latitude
-    object.content.step01.latitude
+    object.content.latitude
   end
 
   def longitude
-    object.content.step01.longitude
+    object.content.longitude
   end
 
   def altitude
-    alt = object.content.step01.altitude
+    alt = object.content.altitude
     return unless alt.present?
     "#{alt} m"
   end
 
   def terrain
-    object.content.step01.terrain
+    object.content.terrain
   end
 
   def soil_type
-    object.content.step01.soil_type
+    object.content.soil_type
   end
 
   def statistical_factors
-    object.content.step01.statistical_factors
+    object.content.statistical_factors
   end
 
   def data_owned_by
-    object.content.step06.data_owned_by.presence
+    object.content.data_owned_by.presence
   end
 
   def data_provenance
-    object.content.step06.data_provenance.presence
+    object.content.data_provenance.presence
   end
 
   def comments
-    object.content.step06.comments.presence
+    object.content.comments.presence
   end
 
   def layout_url
@@ -151,15 +151,15 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   end
 
   def raw_data?
-    object.content.step01.data_status == 'raw_data'
+    object.content.data_status == 'raw_data'
   end
 
   def technical_replicate_numbers
-    object.content.step03.technical_replicate_numbers.presence || []
+    object.content.technical_replicate_numbers.presence || []
   end
 
   def design_factor_names
-    object.content.step03.design_factor_names || []
+    object.content.design_factor_names || []
   end
 
   def submission_attributes

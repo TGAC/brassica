@@ -1,7 +1,7 @@
 - pl_pv_name = 'line'
-- pl_pv_name = 'variety' if submission.content.step03.lines_or_varieties == 'plant_varieties'
-- design_factor_names = submission.content.step03.design_factor_names || []
-- technical_replicate_numbers = submission.content.step03.technical_replicate_numbers || {}
+- pl_pv_name = 'variety' if submission.content.lines_or_varieties == 'plant_varieties'
+- design_factor_names = submission.content.design_factor_names || []
+- technical_replicate_numbers = submission.content.technical_replicate_numbers || {}
 - rep_traits = technical_replicate_numbers.select{ |k,v| v.to_i > 1 }.to_a
 
 .info-block

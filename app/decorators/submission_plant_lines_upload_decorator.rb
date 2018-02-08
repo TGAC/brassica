@@ -6,6 +6,6 @@ class SubmissionPlantLinesUploadDecorator < SubmissionUploadDecorator
   private
 
   def uploaded_plant_lines
-    submission.content.step03.uploaded_plant_lines
+    submission.content.uploaded_plant_lines
   end
 end

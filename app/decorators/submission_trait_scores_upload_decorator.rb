@@ -151,11 +151,11 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
   end
 
   def accessions
-    object.submission.content.step04.accessions
+    object.submission.content.accessions
   end
 
   def lines_or_varieties
-    submission.content.step04.lines_or_varieties || {}
+    submission.content.lines_or_varieties || {}
   end
 
   def trait_names
@@ -163,14 +163,14 @@ class SubmissionTraitScoresUploadDecorator < SubmissionUploadDecorator
   end
 
   def trait_mapping
-    object.submission.content.step04.trait_mapping
+    object.submission.content.trait_mapping
   end
 
   def replicate_numbers
-    object.submission.content.step04.replicate_numbers
+    object.submission.content.replicate_numbers
   end
 
   def trait_scores
-    object.submission.content.step04.trait_scores || {}
+    object.submission.content.trait_scores || {}
   end
 end
