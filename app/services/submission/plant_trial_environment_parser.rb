@@ -25,8 +25,7 @@ class Submission::PlantTrialEnvironmentParser
       rooting_container_type: "Container height",
       rooting_count: "Number of plants per container",
       sowing_density: "Sowing density",
-      # TODO:
-      # "pH",
+      ph: "Soil pH",
       medium_temperature: "Medium temperature",
       soil_porosity: "Porosity",
       soil_penetration: "Soil penetration stength",

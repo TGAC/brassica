@@ -343,6 +343,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
           day_temperature: ["degree Celcius", 20],
           night_temperature: ["degree Celcius", 10],
           co2_controlled: "controlled",
+          ph: [[7.5, "30-40"], [6.5], [4.5, "10-20"]],
           lamps: [["fluorescent tubes", "2 per plant"], ["new secret lamps", nil]],
           containers: [["new secret containers", nil]],
           topological_descriptors: [["slope", "45 degree"]],
@@ -363,6 +364,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
 
         expect(environment).to be_persisted
         expect(environment.co2_controlled).to be_truthy
+        expect(environment.ph).to eq("7.5:30-40; 6.5; 4.5:10-20")
         expect(environment.lamps[0].lamp_type).to eq(LampType.find_by!(name: "fluorescent tubes"))
         expect(environment.lamps[0].description).to eq("2 per plant")
         expect(environment.lamps[1].lamp_type).to eq(LampType.find_by!(name: "new secret lamps"))

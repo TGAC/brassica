@@ -26,7 +26,7 @@ class Submission::PlantTrialEnvironmentProcessor
         compact.
         each { |property, label, unit_name, value| result[property] = [unit_name, value] }
 
-      PlantTrial::Environment.dictionary_properties.
+      (PlantTrial::Environment.dictionary_properties + [:ph]).
         select { |property| environment.key?(property) }.
         map { |property| process_dictionary_property(environment, property) }.
         compact.

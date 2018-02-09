@@ -20,7 +20,7 @@ class SubmissionPlantTrialEnvironmentUploadDecorator < SubmissionUploadDecorator
           summary << "#{label}: #{value} #{unit_name}"
         end
 
-      PlantTrial::Environment.dictionary_properties.map(&:to_s).
+      (PlantTrial::Environment.dictionary_properties + [:ph]).map(&:to_s).
         select { |property| environment.key?(property) }.
         each do |property|
           values = environment.fetch(property)

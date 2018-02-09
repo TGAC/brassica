@@ -48,5 +48,4 @@ class PlantTrial::Environment < ActiveRecord::Base
   validates :plant_trial, presence: true
 
   validates :co2_controlled, inclusion: { in: [true, false] }, allow_nil: true
-  # TODO: validates :ph, ph_range: true
 end

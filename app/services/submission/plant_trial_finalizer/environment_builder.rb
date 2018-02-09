@@ -15,6 +15,10 @@ class Submission::PlantTrialFinalizer::EnvironmentBuilder
 
     environment.co2_controlled = (environment_content["co2_controlled"] == "controlled")
 
+    if environment_content["ph"].present?
+      environment.ph = environment_content["ph"].map { |v| v.join(":") }.join("; ")
+    end
+
     environment
   end
 
