@@ -473,9 +473,91 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "plant_scoring_units", ["scoring_unit_name"], name: "plant_scoring_units_scoring_unit_name_idx", using: :btree
   add_index "plant_scoring_units", ["user_id"], name: "index_plant_scoring_units_on_user_id", using: :btree
 
+  create_table "plant_treatment_types", force: :cascade do |t|
+    t.integer  "parent_ids",              array: true
+    t.string   "name",       null: false
+    t.string   "term",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "plant_treatment_types", ["name"], name: "index_plant_treatment_types_on_name", unique: true, using: :btree
+  add_index "plant_treatment_types", ["term"], name: "index_plant_treatment_types_on_term", unique: true, using: :btree
+
+  create_table "plant_trial_environments", force: :cascade do |t|
+    t.integer  "plant_trial_id",               null: false
+    t.float    "day_temperature"
+    t.float    "night_temperature"
+    t.float    "temperature_change"
+    t.float    "ppfd_canopy"
+    t.float    "ppfd_plant"
+    t.float    "light_period"
+    t.float    "light_intensity"
+    t.float    "light_intensity_range"
+    t.float    "outside_light"
+    t.float    "rfr_ratio"
+    t.float    "daily_uvb"
+    t.float    "total_light"
+    t.boolean  "co2_controlled"
+    t.float    "co2_light"
+    t.float    "co2_dark"
+    t.float    "relative_humidity_light"
+    t.float    "relative_humidity_dark"
+    t.float    "rooting_container_volume"
+    t.float    "rooting_container_height"
+    t.integer  "rooting_count"
+    t.float    "sowing_density"
+    t.float    "soil_porosity"
+    t.float    "soil_penetration"
+    t.float    "soil_organic_matter"
+    t.float    "medium_temperature"
+    t.float    "water_retention"
+    t.float    "nitrogen_concentration_start"
+    t.float    "nitrogen_concentration_end"
+    t.float    "conductivity"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
+
+  add_index "plant_trial_environments", ["plant_trial_id"], name: "index_plant_trial_environments_on_plant_trial_id", using: :btree
+
+  create_table "plant_trial_topological_descriptors", force: :cascade do |t|
+    t.integer  "environment_id",        null: false
+    t.integer  "topological_factor_id", null: false
+    t.text     "description",           null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "plant_trial_topological_descriptors", ["environment_id", "topological_factor_id"], name: "index_plant_trial_topological_descriptors", unique: true, using: :btree
+
+  create_table "plant_trial_treatment_applications", force: :cascade do |t|
+    t.string   "sti_type",          null: false
+    t.integer  "treatment_id",      null: false
+    t.integer  "treatment_type_id", null: false
+    t.text     "description"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "plant_trial_treatment_applications", ["treatment_id", "treatment_type_id"], name: "idx_plant_trial_treatment_applications", using: :btree
+
+  create_table "plant_trial_treatments", force: :cascade do |t|
+    t.integer  "plant_trial_id",        null: false
+    t.float    "air_temperature_day"
+    t.float    "air_temperature_night"
+    t.float    "salt"
+    t.float    "watering_temperature"
+    t.text     "other"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+  end
+
+  add_index "plant_trial_treatments", ["plant_trial_id"], name: "index_plant_trial_treatments_on_plant_trial_id", using: :btree
+
   create_table "plant_trials", force: :cascade do |t|
-    t.text     "plant_trial_name",                         null: false
-    t.text     "project_descriptor",                       null: false
+    t.text     "plant_trial_name",                                   null: false
+    t.text     "project_descriptor",                                 null: false
     t.text     "plant_trial_description"
     t.text     "trial_year"
     t.text     "institute_id"
@@ -500,16 +582,17 @@ ActiveRecord::Schema.define(version: 20180202171044) do
     t.integer  "country_id"
     t.integer  "plant_population_id"
     t.integer  "pubmed_id"
-    t.integer  "plant_scoring_units_count", default: 0,    null: false
+    t.integer  "plant_scoring_units_count",           default: 0,    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
-    t.boolean  "published",                 default: true, null: false
+    t.boolean  "published",                           default: true, null: false
     t.datetime "published_on"
     t.string   "layout_file_name"
     t.string   "layout_content_type"
     t.integer  "layout_file_size"
     t.datetime "layout_updated_at"
+    t.integer  "study_type",                limit: 2
   end
 
   add_index "plant_trials", ["country_id"], name: "plant_trials_country_id_idx", using: :btree
@@ -785,6 +868,18 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_index "taxonomy_terms", ["name"], name: "taxonomy_terms_name_idx", unique: true, using: :btree
   add_index "taxonomy_terms", ["taxonomy_term_id"], name: "index_taxonomy_terms_on_taxonomy_term_id", using: :btree
 
+  create_table "topological_factors", force: :cascade do |t|
+    t.integer  "parent_ids",                             array: true
+    t.string   "name",                      null: false
+    t.string   "term"
+    t.boolean  "canonical",  default: true, null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "topological_factors", ["name"], name: "index_topological_factors_on_name", unique: true, using: :btree
+  add_index "topological_factors", ["term"], name: "index_topological_factors_on_term", unique: true, using: :btree
+
   create_table "trait_descriptors", force: :cascade do |t|
     t.text     "descriptor_label"
     t.text     "category"
@@ -942,6 +1037,12 @@ ActiveRecord::Schema.define(version: 20180202171044) do
   add_foreign_key "plant_scoring_units", "plant_accessions", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "plant_trials", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_scoring_units", "users", on_update: :cascade, on_delete: :nullify
+  add_foreign_key "plant_trial_environments", "plant_trials"
+  add_foreign_key "plant_trial_topological_descriptors", "plant_trial_environments", column: "environment_id"
+  add_foreign_key "plant_trial_topological_descriptors", "topological_factors"
+  add_foreign_key "plant_trial_treatment_applications", "plant_treatment_types", column: "treatment_type_id"
+  add_foreign_key "plant_trial_treatment_applications", "plant_trial_treatments", column: "treatment_id"
+  add_foreign_key "plant_trial_treatments", "plant_trials"
   add_foreign_key "plant_trials", "countries", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_trials", "plant_populations", on_update: :cascade, on_delete: :nullify
   add_foreign_key "plant_trials", "users", on_update: :cascade, on_delete: :nullify
