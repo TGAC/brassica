@@ -162,6 +162,36 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     object.content.design_factor_names || []
   end
 
+  def environment
+    return unless environment_upload
+
+    upload = SubmissionPlantTrialEnvironmentUploadDecorator.decorate(environment_upload)
+
+    h.content_tag(:pre, upload.parser_summary.join("\n"))
+  end
+
+  def treatment
+    return unless treatment_upload
+
+    upload = SubmissionPlantTrialTreatmentUploadDecorator.decorate(treatment_upload)
+
+    h.content_tag(:pre, upload.parser_summary.join("\n"))
+  end
+
+  def environment_upload
+    return @environment_upload if defined?(@environment_upload)
+    return unless content.environment_upload_id
+
+    @environment_upload = uploads.plant_trial_environment.find_by(id: content.environment_upload_id)
+  end
+
+  def treatment_upload
+    return @treatment_upload if defined?(@treatment_upload)
+    return unless content.treatment_upload_id
+
+    @treatment_upload = uploads.plant_trial_treatment.find_by(id: content.treatment_upload_id)
+  end
+
   def submission_attributes
     [
       [:plant_trial_name, "Plant trial name", h.data_tables_path(model: :plant_trials, query: { id: submitted_object_id })],
@@ -185,6 +215,8 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
       [:data_provenance],
       [:comments],
       [:doi, 'DOI'],
+      [:environment, 'Environment'],
+      [:treatment, 'Treatment']
     ]
   end
 end
