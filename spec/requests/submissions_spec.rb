@@ -134,7 +134,8 @@ RSpec.describe "Submission management" do
                     visibility: "private",
                     data_owned_by: "X",
                     data_provenance: "Y",
-                    comments: "..."
+                    comments: "...",
+                    study_type: "growth_chamber"
                   }
                 }
               }

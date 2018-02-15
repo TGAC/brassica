@@ -6,6 +6,7 @@ module Submissions
       property :plant_population_id
 
       property :plant_trial_description
+      property :study_type
       property :trial_year
       property :institute_id
       property :country_id

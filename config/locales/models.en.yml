@@ -3,3 +3,11 @@ en:
     attributes:
       analysis/data_file:
         file_file_name: "File name"
+
+    enums:
+      plant_trial:
+        study_type:
+          greenhouse: "Greenhouse"
+          field: "Field"
+          greenhouse_then_field: "Greenhouse then field"
+          growth_chamber: "Growth chamber"

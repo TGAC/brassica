@@ -168,7 +168,7 @@ class Submission::PlantTrialFinalizer
   def create_plant_trial
     attr_names = [:plant_trial_name, :project_descriptor, :plant_population_id, :plant_trial_description, :trial_year,
                   :institute_id, :country_id, :trial_location_site_name, :place_name, :latitude, :longitude, :altitude,
-                  :terrain, :soil_type, :statistical_factors, :data_status]
+                  :terrain, :soil_type, :statistical_factors, :data_status, :study_type]
 
     attrs = submission.content.to_h.slice(*attr_names).merge(common_data)
     design_factor_names = submission.content.design_factor_names || []

@@ -192,12 +192,17 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
     @treatment_upload = uploads.plant_trial_treatment.find_by(id: content.treatment_upload_id)
   end
 
+  def study_type
+    I18n.t(content.study_type, scope: "activerecord.enums.plant_trial.study_type")
+  end
+
   def submission_attributes
     [
       [:plant_trial_name, "Plant trial name", h.data_tables_path(model: :plant_trials, query: { id: submitted_object_id })],
       [:project_descriptor, 'Project'],
       [:species_name, 'Species'],
       [:plant_trial_description, 'Trial description'],
+      [:study_type, 'Study type'],
       [:trial_year],
       [:country_name, 'Country'],
       [:institute_id],

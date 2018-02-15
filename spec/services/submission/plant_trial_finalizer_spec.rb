@@ -76,8 +76,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       )
       submission.content.update(:step05, layout_upload_id: layout_upload.id)
-      submission.content.update(:step06, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments).merge(visibility: 'published')
+      submission.content.update(:step08, plant_trial_attrs.slice(
+        :study_type, :data_owned_by, :data_provenance, :comments).merge(visibility: 'published')
       )
     end
 
@@ -114,6 +114,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(PlantTrial.last.published).to be_truthy
       expect(PlantTrial.last.user).to eq submission.user
       expect(PlantTrial.last.published_on).to be_within(5.seconds).of(Time.now)
+      expect(PlantTrial.last.study_type).to eq "greenhouse"
     end
 
     it 'associates created plant trial with plant population' do
