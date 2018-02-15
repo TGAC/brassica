@@ -37,20 +37,20 @@ RSpec.describe Submission::PlantTrialTreatmentProcessor do
     context "for ontology-based relationship" do
       context "with given term" do
         let(:treatment_data) { {
-          antibiotic_applications: ["Antibiotic regime", [["unknown treatment", "20mM; 20ml per plant; every week"]]]
+          antibiotic: ["Antibiotic regime", [["unknown treatment", "20mM; 20ml per plant; every week"]]]
         } }
 
         it "appends data to sumission's content" do
           subject.call
 
-          expect(submission.content.treatment["antibiotic_applications"]).
+          expect(submission.content.treatment["antibiotic"]).
             to eq([["unknown treatment", "20mM; 20ml per plant; every week"]])
         end
       end
 
       context "with missing term" do
         let(:treatment_data) { {
-          antibiotic_applications: ["Antibiotic regime", [[nil, "20mM; 20ml per plant; every week"]]]
+          antibiotic: ["Antibiotic regime", [[nil, "20mM; 20ml per plant; every week"]]]
         } }
 
         it "appends error to upload" do

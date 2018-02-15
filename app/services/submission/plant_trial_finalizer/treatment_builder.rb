@@ -27,7 +27,7 @@ class Submission::PlantTrialFinalizer::TreatmentBuilder
   def build_treatment_application(property)
     values = treatment_content.fetch(property.to_s)
     values.each do |name, description|
-      treatment_application = treatment.send(property).build(description: description)
+      treatment_application = treatment.send("#{property}_applications").build(description: description)
       treatment_application.treatment_type = find_or_build_treatment_type(treatment_application, name)
     end
   end

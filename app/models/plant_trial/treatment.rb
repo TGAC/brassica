@@ -1,11 +1,8 @@
 class PlantTrial::Treatment < ActiveRecord::Base
   def self.treatment_types
-    [:air_applications, :antibiotic_applications, :chemical_applications, :biotic_applications,
-     :fertilizer_applications, :hormone_applications, :fungicide_applications, :herbicide_applications,
-     :pesticide_applications, :gas_applications, :soil_applications, :soil_temperature_applications,
-     :mechanical_applications, :salt_applications, :season_applications, :humidity_applications,
-     :rainfall_applications, :watering_applications, :water_temperature_applications,
-     :gravity_applications, :radiation_applications, :ph_applications]
+    [:air, :antibiotic, :chemical, :biotic, :fertilizer, :hormone, :fungicide, :herbicide,
+     :pesticide, :gas, :soil, :soil_temperature, :mechanical, :salt, :season, :humidity,
+     :rainfall, :watering, :water_temperature, :gravity, :radiation, :ph]
   end
 
   belongs_to :plant_trial, touch: true, inverse_of: :treatment

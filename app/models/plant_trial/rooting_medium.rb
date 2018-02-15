@@ -1,5 +1,4 @@
 class PlantTrial::RootingMedium < ActiveRecord::Base
-  # TODO: Should really reference PlantTreatmentTypes? Perhaps distinct model/table would be more appropriate.
   def self.root_term
     PlantTreatmentType::GROWTH_MEDIUM_ROOT_TERM
   end

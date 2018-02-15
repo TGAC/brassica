@@ -10,8 +10,7 @@ RSpec.describe Submission::PlantTrialFinalizer::TreatmentBuilder do
   describe "building treatment applications" do
     context "when treatment type exists" do
       let(:treatment_data) { {
-        hormone_applications: [["cytokinin treatment", "Makes them grow fast"],
-                               ["auxin treatment", "Makes them grow big"]]
+        hormone: [["cytokinin treatment", "Makes them grow fast"], ["auxin treatment", "Makes them grow big"]]
       } }
 
       let!(:root_treatment_type) { create(:plant_treatment_type, name: "growth hormone treatment",
@@ -39,7 +38,7 @@ RSpec.describe Submission::PlantTrialFinalizer::TreatmentBuilder do
 
     context "when treatment type cannot be found" do
       let(:treatment_data) { {
-        gas_applications: [["N2O treatment", "Used as a sedative before picking crops"]]
+        gas: [["N2O treatment", "Used as a sedative before picking crops"]]
       } }
 
       let!(:root_treatment_type) { create(:plant_treatment_type, name: "growth hormone treatment",

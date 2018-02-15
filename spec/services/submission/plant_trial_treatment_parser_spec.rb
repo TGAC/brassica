@@ -13,35 +13,35 @@ RSpec.describe Submission::PlantTrialTreatmentParser do
 
     it "returns filled in treatments" do
       expect(subject.treatment).to eq({
-        antibiotic_applications: ["Antibiotic regime", [["hygromycin treatment", "20mM; 20ml per plant; every week"]]],
-        chemical_applications: ["Chemical administration", [["bion", "13,5mM; 5ml per plant; every 15 days"]]],
-        season_applications: [
+        antibiotic: ["Antibiotic regime", [["hygromycin treatment", "20mM; 20ml per plant; every week"]]],
+        chemical: ["Chemical administration", [["bion", "13,5mM; 5ml per plant; every 15 days"]]],
+        season: [
           "Seasonal environment", [["dry season treatment", "really dry"], ["kharif season treatment", nil]]
         ],
-        biotic_applications: ["Biotic treatment", [["Spodoptera praefica treatment", nil]]],
-        fungicide_applications: ["Fungicide regime", [["benzothiadiazole treatment", "strong stuff"]]],
-        gas_applications: ["Gaseous regime", [["anaerobic environment treatment", "CO2"]]],
-        fertilizer_applications: [
+        biotic: ["Biotic treatment", [["Spodoptera praefica treatment", nil]]],
+        fungicide: ["Fungicide regime", [["benzothiadiazole treatment", "strong stuff"]]],
+        gas: ["Gaseous regime", [["anaerobic environment treatment", "CO2"]]],
+        fertilizer: [
           "Fertilizer regime", [["ammonium nitrate treatment", nil], ["bone meal treatment", nil],
                                 ["sodium nitrate treatment", nil], ["fish meal treatment", nil]]
         ],
-        gravity_applications: ["Gravity", [["zero gravity treatment", nil]]],
-        hormone_applications: ["Growth hormone regime", [["auxin treatment", nil]]],
-        mechanical_applications: ["Mechanical treatment", [["mechanical damage treatment", nil]]],
-        humidity_applications: ["Humidity regimen", [["humidity treatment", "Constant 100% humidity"]]],
-        herbicide_applications: ["Herbicide regime", [["diuron treatment", nil]]],
-        radiation_applications: ["Radiation regime", [["IR light treatment", nil]]],
-        rainfall_applications: ["Rainfall regime", [["rainfall treatment", nil]]],
-        pesticide_applications: ["Pesticide regime", [["benzothiadiazole treatment", nil]]],
-        ph_applications: ["pH regime", [["basic pH growth media environment treatment", nil]]],
-        air_applications: ["Air treatment regime", [["freezing air temperature treatment", nil]]],
-        watering_applications: ["Watering regime", [["watering treatment", nil]]],
-        water_temperature_applications: [
+        gravity: ["Gravity", [["zero gravity treatment", nil]]],
+        hormone: ["Growth hormone regime", [["auxin treatment", nil]]],
+        mechanical: ["Mechanical treatment", [["mechanical damage treatment", nil]]],
+        humidity: ["Humidity regimen", [["humidity treatment", "Constant 100% humidity"]]],
+        herbicide: ["Herbicide regime", [["diuron treatment", nil]]],
+        radiation: ["Radiation regime", [["IR light treatment", nil]]],
+        rainfall: ["Rainfall regime", [["rainfall treatment", nil]]],
+        pesticide: ["Pesticide regime", [["benzothiadiazole treatment", nil]]],
+        ph: ["pH regime", [["basic pH growth media environment treatment", nil]]],
+        air: ["Air treatment regime", [["freezing air temperature treatment", nil]]],
+        watering: ["Watering regime", [["watering treatment", nil]]],
+        water_temperature: [
           "Water temperature regime", [["cold water temperature treatment", "4 degree Celcius"]]
         ],
-        soil_temperature_applications: ["Soil temperature regime", [["Soil temperature treatment", nil]]],
-        soil_applications: ["Soil treatment regime", [["loam soil treatment", nil]]],
-        salt_applications: ["Salt regime", [["sodium chloride treatment", nil]]]
+        soil_temperature: ["Soil temperature regime", [["Soil temperature treatment", nil]]],
+        soil: ["Soil treatment regime", [["loam soil treatment", nil]]],
+        salt: ["Salt regime", [["sodium chloride treatment", nil]]]
       })
     end
   end
