@@ -8,6 +8,6 @@ class RemoveStepsFromSubmissionContent < ActiveRecord::Migration
   end
 
   def down
-    fail ActiveRecordd::IrreversibleMigration
+    fail ActiveRecord::IrreversibleMigration
   end
 end
