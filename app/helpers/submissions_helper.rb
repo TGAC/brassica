@@ -40,7 +40,7 @@ module SubmissionsHelper
     label ||= attr.to_s.humanize
     url = nil unless submission.finalized?
 
-    [value, label, url] if value.present?
+    [attr, value, label, url] if value.present?
   end
 
   def submission_form(submission, &block)

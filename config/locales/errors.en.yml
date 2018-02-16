@@ -41,6 +41,7 @@ en:
               invalid_unit: "contains invalid unit '%{unit}' for '%{property}.'"
               invalid_value: "contains invalid value '%{value}' for '%{property}.' %{cause}"
               multiple_values: "contains multiple values for '%{property}' but a single value is required."
+              description_missing: "contents invalid. Description missing for term in '%{property}.'"
 
         trait:
           attributes:

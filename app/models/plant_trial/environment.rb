@@ -10,7 +10,7 @@ class PlantTrial::Environment < ActiveRecord::Base
       light_intensity: { non_negative: true },
       light_intensity_range: { non_negative: true },
       outside_light_loss: { non_negative: true },
-      rfr_ratio: { percentage: true },
+      rfr_ratio: { non_negative: true },
       daily_uvb: { non_negative: true },
       total_light: { non_negative: true },
       co2_light: { non_negative: true },

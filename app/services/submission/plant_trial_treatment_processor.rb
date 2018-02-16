@@ -7,12 +7,13 @@ class Submission::PlantTrialTreatmentProcessor
   def call
     parser_result = @parser.call(@upload.file.path)
 
-    if parser_result.valid?
-      treatment = process_treatment(parser_result.treatment)
-      update_submission_content(treatment) if @upload.errors.empty?
-    else
+    unless parser_result.valid?
       parser_result.errors.each { |error| @upload.errors.add(:file, *error) }
+      return
     end
+
+    treatment = process_treatment(parser_result.treatment)
+    update_submission_content(treatment) if @upload.errors.empty?
   end
 
   private
@@ -22,7 +23,7 @@ class Submission::PlantTrialTreatmentProcessor
       PlantTrial::Treatment.treatment_types.
         select { |property| treatment.key?(property) }.
         map { |property| process_dictionary_property(treatment, property) }.
-        compact.
+        compact.uniq.
         each { |property, label, values| result[property] = values }
 
       @upload.errors.add(:file, :treatment_data_empty) if result.empty? && @upload.errors.empty?

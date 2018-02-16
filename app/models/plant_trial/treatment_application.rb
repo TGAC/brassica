@@ -1,4 +1,3 @@
-# TODO: rename to PlantTrial::Treatment (and find a better name for current PlantTrial::Treatment)
 class PlantTrial::TreatmentApplication < ActiveRecord::Base
   self.inheritance_column = :sti_type
 

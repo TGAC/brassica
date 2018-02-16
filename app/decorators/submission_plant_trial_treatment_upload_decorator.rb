@@ -1,8 +1,7 @@
 class SubmissionPlantTrialTreatmentUploadDecorator < SubmissionUploadDecorator
   def as_json(*)
     super.merge(
-      summary: (parser_summary unless new_record?),
-      warnings: (parser_warnings unless new_record?)
+      summary: (parser_summary unless new_record?)
     )
   end
 
@@ -21,9 +20,5 @@ class SubmissionPlantTrialTreatmentUploadDecorator < SubmissionUploadDecorator
           summary << "#{label}:\n#{values.map { |v| " - #{v.join("; ")}" }.join("\n")}"
         end
     end
-  end
-
-  def parser_warnings
-    []
   end
 end

@@ -1,19 +1,19 @@
 class Submission::PlantTrialEnvironmentProcessor
   def initialize(upload, parser = Submission::PlantTrialEnvironmentParser.new)
     @upload = upload
-    @submission = upload.submission
     @parser = parser
   end
 
   def call
     parser_result = @parser.call(@upload.file.path)
 
-    if parser_result.valid?
-      environment = process_environment(parser_result.environment)
-      update_submission_content(environment) if @upload.errors.empty?
-    else
+    unless parser_result.valid?
       parser_result.errors.each { |error| @upload.errors.add(:file, *error) }
+      return
     end
+
+    environment = process_environment(parser_result.environment)
+    update_submission_content(environment) if @upload.errors.empty?
   end
 
   private
@@ -22,20 +22,20 @@ class Submission::PlantTrialEnvironmentProcessor
     {}.tap do |result|
       PlantTrial::Environment.measured_properties.
         select { |property, _| environment.key?(property) }.
-        map { |property, constraints| process_property(environment, property, constraints) }.
-        compact.
+        map { |property, constraints| process_measured_property(environment, property, constraints) }.
+        compact.uniq.
         each { |property, label, unit_name, value| result[property] = [unit_name, value] }
 
       (PlantTrial::Environment.dictionary_properties + [:ph]).
         select { |property| environment.key?(property) }.
         map { |property| process_dictionary_property(environment, property) }.
-        compact.
+        compact.uniq.
         each { |property, label, values| result[property] = values }
 
       [:co2_controlled].
         select { |property| environment.key?(property) }.
-        map { |property| process_boolean_property(environment, property) }.
-        compact.
+        map { |property| process_enum_property(environment, property) }.
+        compact.uniq.
         each { |property, label, value| result[property] = value }
 
       @upload.errors.add(:file, :environment_data_empty) if result.empty? && @upload.errors.empty?
@@ -47,7 +47,7 @@ class Submission::PlantTrialEnvironmentProcessor
     @upload.submission.save!
   end
 
-  def process_property(data, property, constraints)
+  def process_measured_property(data, property, constraints)
     label, values = data.fetch(property)
 
     if values.size > 1
@@ -92,10 +92,17 @@ class Submission::PlantTrialEnvironmentProcessor
       return
     end
 
+    if :topological_descriptors == property
+      if values.any? { |_term, description| description.blank? }
+        @upload.errors.add(:file, :description_missing, property: label)
+        return
+      end
+    end
+
     [property, label, values.map(&:compact)]
   end
 
-  def process_boolean_property(data, property)
+  def process_enum_property(data, property)
     label, values = data.fetch(property)
 
     if values.size > 1

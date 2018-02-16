@@ -29,9 +29,12 @@ en:
         in a CSV format. Download it, leave the header (the first line) intact, and paste your data, in columns,
         below the header. Please do not remove any columns even if you leave them empty. See template content and Step 3 for details.
       trial: |
-        With Trail submission you are able to upload new trait scoring information to BIP.
+        With Trial submission you are able to upload new trait scoring information to BIP.
         The process lets you describe trial conditions and environment, to indicate
-        what traits were scored and how, and finally to upload the list of scoring.
+        what traits were scored and how, and finally to upload the list of scoring. Steps 1-3 are
+        a preparation which will allow you to download spreadsheet templates helpful in organizing your data and
+        its later submission.
+
       qtl:
       linkage_map:
 

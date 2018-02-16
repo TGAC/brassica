@@ -104,7 +104,7 @@ RSpec.describe Submission::PlantTrialEnvironmentProcessor do
       end
     end
 
-    context "for ontology-based relationship" do
+    context "for ontology-based relationship except :topological_descriptors" do
       context "with given term" do
         let(:environment_data) { {
           lamps: ["Lamps", [["fluorescent tubes", "super bright"]]]
@@ -130,7 +130,47 @@ RSpec.describe Submission::PlantTrialEnvironmentProcessor do
       end
     end
 
-    context "for boolean property" do
+    context "for ontology-based relationship :topological_descriptors" do
+      context "with given term" do
+        let(:environment_data) { {
+          topological_descriptors: ["Plot topology", [["Slope aspect", "North"]]]
+        } }
+
+        it "appends data to sumission's content" do
+          subject.call
+
+          expect(submission.content.environment["topological_descriptors"]).
+            to eq([["Slope aspect", "North"]])
+        end
+      end
+
+      context "with missing term" do
+        let(:environment_data) { {
+          topological_descriptors: ["Plot topology", [[nil, "North"]]]
+        } }
+
+        it "appends error to upload" do
+          subject.call
+
+          expect(upload.errors[:file]).to match_array(["contents invalid. Missing type for 'Plot topology.'"])
+        end
+      end
+
+      context "with missing description" do
+        let(:environment_data) { {
+          topological_descriptors: ["Plot topology", [["Slope aspect", nil]]]
+        } }
+
+        it "appends error to upload" do
+          subject.call
+
+          expect(upload.errors[:file]).
+            to match_array(["contents invalid. Description missing for term in 'Plot topology.'"])
+        end
+      end
+    end
+
+    context "for enum property" do
       context "with multiple values" do
         let(:environment_data) { {
           co2_controlled: ["Athmospheric CO2 concentration", [["controlled", nil], ["uncontrolled", nil]]]

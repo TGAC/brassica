@@ -166,7 +166,20 @@ RSpec.describe ActiveRecord::Base do
         'trait_grades',
         'plant_parts',
         'restriction_enzymes',
-        'traits'
+        'traits',
+        'plant_treatment_types',
+        'plant_trial_environments',
+        'plant_trial_treatments',
+        'plant_trial_measurement_values',
+        'plant_trial_treatment_applications',
+        'plant_trial_lamps',
+        'plant_trial_containers',
+        'plant_trial_topological_descriptors',
+        'plant_trial_rooting_media',
+        'lamp_types',
+        'container_types',
+        'topological_factors',
+        'measurement_units'
       ]
     }
 

@@ -34,6 +34,10 @@
     margin-top: 2px;
     font-size: small;
   }
+  .submission-attribute-environment strong, .submission-attribute-treatment strong {
+    display: block;
+    margin-bottom: 0.8rem;
+  }
 }
 
 .edit-submission {
@@ -152,5 +156,9 @@
         margin-top: 0;
       }
     }
+  }
+
+  .btn.toggle-annotations {
+    margin-bottom: 15px;
   }
 }

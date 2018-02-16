@@ -58,7 +58,8 @@ RSpec.describe Submission::PlantTrialEnvironmentParser do
         water_retention: ["Water retention capacity", [["gram per gram dry weight", nil]]],
         containers: ["Container type", [["pot", nil]]],
         rooting_media: ["Rooting medium", [["clay soil", "high red clay content"]]],
-        co2_controlled: ["Atmospheric CO2 concentration", [["uncontrolled", nil]]]
+        co2_controlled: ["Atmospheric CO2 concentration", [["uncontrolled", nil]]],
+        sowing_density: ["Sowing density", [["count per plot", nil]]]
       })
     end
   end

@@ -193,7 +193,7 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
   end
 
   def study_type
-    I18n.t(content.study_type, scope: "activerecord.enums.plant_trial.study_type")
+    I18n.t(content.study_type, scope: "activerecord.enums.plant_trial.study_type") if content.study_type
   end
 
   def submission_attributes

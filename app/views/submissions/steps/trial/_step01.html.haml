@@ -52,9 +52,9 @@
       - values = TraitDescriptor.visible(current_user.id).attribute_values('units_of_measurements')
       - option_tags = options_for_select(values)
       = combo_field_tag :units_of_measurements, nil, option_tags, class: 'units-of-measurements', required: true,
-          label: t('submission.steps.trial.step02.new_trait_descriptor_attributes.units_of_measurements')
+          label: t('submission.steps.trial.step01.new_trait_descriptor_attributes.units_of_measurements')
       %small.help-block
-        = t 'submission.steps.trial.step02.new_trait_descriptor_attribute_hints.units_of_measurements'
+        = t 'submission.steps.trial.step01.new_trait_descriptor_attribute_hints.units_of_measurements'
 
     .form-group
       = label_tag :scoring_method, nil, class: 'required'

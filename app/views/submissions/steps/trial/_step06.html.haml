@@ -7,11 +7,6 @@
       :preserve
         #{@content.treatment_upload.parser_summary.join("\n")}
 
-  %pre.parser-warnings.alert.alert-danger{ class: "#{'hidden' unless @content.treatment_upload && @content.treatment_upload.parser_warnings.present?}" }
-    - if @content.treatment_upload && @content.treatment_upload.parser_warnings.present?
-      :preserve
-        #{@content.treatment_upload.parser_warnings.join("\n")}
-
   .form-group
     = label_tag :treatment_upload, 'Uploaded Treatment data file'
     %div

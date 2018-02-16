@@ -30,7 +30,7 @@ class Submission::PlantTrialTreatmentParser
     xls = Roo::Excel.new(filename)
 
     errors = check_errors(xls)
-    treatment = errors.empty? ? parse_sheet(xls, "Treatment", self.class.treatment_labels) : {}
+    treatment = errors.blank? ? parse_sheet(xls, "Treatment", self.class.treatment_labels) : {}
 
     Result.new(errors, treatment)
   end
@@ -40,12 +40,11 @@ class Submission::PlantTrialTreatmentParser
   def check_errors(xls)
     return [:no_treatment_sheet] unless xls.sheets.include?("Treatment")
     return [:too_few_rows_in_treatment_sheet] if xls.last_row("Treatment").to_i < 4
+    return [:invalid_treatment_sheet_headers] unless treatment_sheet_headers_valid?(xls)
+  end
 
-    [].tap do |errors|
-      unless  xls.row(1, "Treatment")[0...treatment_sheet_headers.size] == treatment_sheet_headers
-        errors << :invalid_treatment_sheet_headers
-      end
-    end
+  def treatment_sheet_headers_valid?(xls)
+    xls.row(1, "Treatment")[0...treatment_sheet_headers.size] == treatment_sheet_headers
   end
 
   def treatment_sheet_headers
@@ -75,8 +74,9 @@ class Submission::PlantTrialTreatmentParser
     [label, data]
   end
 
+  # "Normalize" attribute label in case spreadsheet software mangles whitespace somehow.
   def label_id(label)
-    label.split(/\s+/).join("-").underscore
+    label.split(/\s+/).join.underscore
   end
 
   class Result

@@ -43,7 +43,7 @@ class Submission::PlantTrialEnvironmentParser
     xls = Roo::Excel.new(filename)
 
     errors = check_errors(xls)
-    environment = errors.empty? ? parse_sheet(xls, "Environment", self.class.environment_labels) : {}
+    environment = errors.blank? ? parse_sheet(xls, "Environment", self.class.environment_labels) : {}
 
     Result.new(errors, environment)
   end
@@ -53,12 +53,11 @@ class Submission::PlantTrialEnvironmentParser
   def check_errors(xls)
     return [:no_environment_sheet] unless xls.sheets.include?("Environment")
     return [:too_few_rows_in_environment_sheet] if xls.last_row("Environment").to_i < 4
+    return [:invalid_environment_sheet_headers] unless environment_sheet_headers_valid?(xls)
+  end
 
-    [].tap do |errors|
-      unless  xls.row(1, "Environment")[0...environment_sheet_headers.size] == environment_sheet_headers
-        errors << :invalid_environment_sheet_headers
-      end
-    end
+  def environment_sheet_headers_valid?(xls)
+    xls.row(1, "Environment")[0...environment_sheet_headers.size] == environment_sheet_headers
   end
 
   def environment_sheet_headers
@@ -88,8 +87,9 @@ class Submission::PlantTrialEnvironmentParser
     [label, data]
   end
 
+  # "Normalize" attribute label in case spreadsheet software mangles whitespace somehow.
   def label_id(label)
-    label.split(/\s+/).join("-").underscore
+    label.split(/\s+/).join.underscore
   end
 
   class Result
