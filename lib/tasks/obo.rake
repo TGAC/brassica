@@ -7,11 +7,6 @@ namespace :obo do
   desc "Load PlantTreatmentType model"
   task plant_treatment_types: :environment do
     Obo::PlantTreatmentTypeImporter.new("db/data/peco.obo").import_all
-
-    PlantTreatmentType.
-      create_with(canonical: false, parent_ids: [PlantTreatmentType::ROOT_TERM]).
-      find_or_create_by!(name: "Soil temperature treatment",
-                         term: PlantTreatmentType::SOIL_TEMPERATURE_ROOT_TERM)
   end
 
   desc "Load TopologicalFactor model"
@@ -22,25 +17,6 @@ namespace :obo do
   desc "Load MeasurementUnit model"
   task measurement_units: :environment do
     Obo::MeasurementUnitImporter.new("db/data/unit.obo").import_all
-
-    non_canonical_units = {
-      "mol m−2s−1" => "A photosynthetic photon flux density (PPDF) unit.",
-      "μmol m–2 s–1" => "A photosynthetic photon flux density (PPDF) unit.",
-      "mole per mole" => "A light quality unit denoting ratio of different kinds of
-                          light, e.g. red light to far red light ratio (XEO:00036).",
-      "gram per gram dry weight" => "Defines the potential energy of water per unit mass
-                                     of water in the soil (XEO:00126).",
-      "S m–1" => "An electrical condictivity unit.",
-      "dS m–1" => "An electrical condictivity unit.",
-      "count per plot" => "Sowing density unit.",
-      "pascal per square meter" => "Soil penetration strength unit"
-    }
-
-    non_canonical_units.each do |name, description|
-      MeasurementUnit.
-        create_with(canonical: false).
-        find_or_create_by!(name: name, description: description)
-    end
   end
 
   desc 'Loads TaxonomyTerm model'
