@@ -4,8 +4,14 @@ The Brassica Information Portal (BIP) is a web repository for population and tra
 Release embargos can be placed on datasets to reflect the need for scientists to publish their data in time with associated publications. The repository can be easily browsed thanks to a set of user-friendly query interfaces. Data download can be achieved using the API to feed into downstream analysis tools or via the web-interface.
 
 The portal caters for the growing interest in phenotype data storage, reproducibility, and user controlled data sharing and analysis in integrated genotype-phenotype association studies aimed for crop improvement.
-The use of ontologies and nomenclature will make it easier to make conclusions on genotype-phenotype relationships within and across Brassica species. We currently use [Plant and Trait Ontology](http://archive.gramene.org/plant_ontology/ontology_browse.html#tax) as reference ontologies for plants. And [GR_tax ontology ](http://archive.gramene.org/plant_ontology/ontology_browse.html#tax)to cover Brassica taxonomy.
-Marker sequences are currently cross-referenced with resources such as [Genebank(NCBI)](https://www.ncbi.nlm.nih.gov/genbank/) and [EnsemblPlants](https://plants.ensembl.org/index.html) where possible, which will be expanded in the future.
+The use of ontologies and nomenclature will make it easier to make conclusions on genotype-phenotype relationships within and across Brassica species.
+We currently use [Plant and Trait Ontology](http://archive.gramene.org/plant_ontology/ontology_browse.html#tax) as reference ontologies for plants,
+[GR_tax ontology ](http://archive.gramene.org/plant_ontology/ontology_browse.html#tax) to cover Brassica taxonomy,
+[Plant Experimental Conditions Ontology](http://browser.planteome.org/amigo/term/EO:0007359) and
+[Crop Research Ontology](http://www.cropontology.org/ontology/CO_715/Crop%20Research) to describe plant treatment and
+environment, and [Unit Ontology](https://github.com/bio-ontology-research-group/unit-ontology) for measurement units.
+Marker sequences are currently cross-referenced with resources such as [Genebank(NCBI)](https://www.ncbi.nlm.nih.gov/genbank/)
+and [EnsemblPlants](https://plants.ensembl.org/index.html) where possible, which will be expanded in the future.
 
 It is a Rails web application is released as a free and open source project (see the LICENSE.txt file). The underlying database schema is derived from the CropStoreDB schema ver.7, with the original version developed by <a href="mailto:Graham.King@scu.edu.au">Graham King</a> and Pierre Carion at [Rothamsted Research](https://www.rothamsted.ac.uk/).
 
