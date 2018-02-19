@@ -17,6 +17,10 @@ module Seeds
       create_with(canonical: false, parent_ids: [root_type.id]).
       find_or_create_by!(name: "Soil temperature treatment", term: PlantTreatmentType::SOIL_TEMPERATURE_ROOT_TERM)
 
+    PlantTreatmentType.
+      create_with(canonical: false, parent_ids: [root_type.id]).
+      find_or_create_by!(name: "Other treatment", term: PlantTreatmentType::OTHER_ROOT_TERM)
+
     mechanical_root_type = PlantTreatmentType.find_by!(term: PlantTreatmentType::MECHANICAL_ROOT_TERM)
     mechanical_treatment_types = ["bending", "wounding"]
     mechanical_treatment_types.each do |t|

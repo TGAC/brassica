@@ -25,6 +25,7 @@ class PlantTreatmentType < ActiveRecord::Base
   PH_ROOT_TERM = "PECO:0007171"
   AIR_ROOT_TERM = "PECO:0007161"
   WATER_TEMPERATURE_ROOT_TERM = "PECO:0007160"
+  OTHER_ROOT_TERM = "BIP-OTHER"
 
   validates :name, presence: true
   validates :term, presence: true, if: :canonical?

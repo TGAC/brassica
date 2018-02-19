@@ -41,7 +41,8 @@ RSpec.describe Submission::PlantTrialTreatmentParser do
         ],
         soil_temperature: ["Soil temperature regime", [["Soil temperature treatment", nil]]],
         soil: ["Soil treatment regime", [["loam soil treatment", nil]]],
-        salt: ["Salt regime", [["sodium chloride treatment", nil]]]
+        salt: ["Salt regime", [["sodium chloride treatment", nil]]],
+        other: ["Other", [["bulbulization", "high frequency"]]]
       })
     end
   end

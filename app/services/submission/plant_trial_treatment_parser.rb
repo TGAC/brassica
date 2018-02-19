@@ -22,7 +22,8 @@ class Submission::PlantTrialTreatmentParser
       water_temperature: "Water temperature regime",
       watering: "Watering regime",
       pesticide: "Pesticide regime",
-      ph: "pH regime"
+      ph: "pH regime",
+      other: "Other"
     }
   end
 

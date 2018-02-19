@@ -2,7 +2,7 @@ class PlantTrial::Treatment < ActiveRecord::Base
   def self.treatment_types
     [:air, :antibiotic, :chemical, :biotic, :fertilizer, :hormone, :fungicide, :herbicide,
      :pesticide, :gas, :soil, :soil_temperature, :mechanical, :salt, :season, :humidity,
-     :rainfall, :watering, :water_temperature, :gravity, :radiation, :ph]
+     :rainfall, :watering, :water_temperature, :gravity, :radiation, :ph, :other]
   end
 
   belongs_to :plant_trial, touch: true, inverse_of: :treatment
@@ -29,6 +29,7 @@ class PlantTrial::Treatment < ActiveRecord::Base
   has_many :gravity_applications, class_name: "PlantTrial::GravityTreatmentApplication", inverse_of: :treatment
   has_many :radiation_applications, class_name: "PlantTrial::RadiationTreatmentApplication", inverse_of: :treatment
   has_many :ph_applications, class_name: "PlantTrial::PhTreatmentApplication", inverse_of: :treatment
+  has_many :other_applications, class_name: "PlantTrial::OtherTreatmentApplication", inverse_of: :treatment
 
   validates :plant_trial, presence: true
 
