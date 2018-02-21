@@ -173,6 +173,11 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
             $li = $("<li></li>").text(error)
             $errors.find("ul").append($li)
           )
+        else
+          @$('.fileinput-button').removeClass('disabled')
+
+          $errors = $(".errors").text("").removeClass('hidden').append("<ul></ul>")
+          $errors.find("ul").append($("<li></li>").text("Unexpected server response: #{data.jqXHR.status} #{data.jqXHR.statusText}"))
 
     @$('.delete-plant-lines-upload').on 'ajax:success', (data, status, xhr) =>
       @$('.fileinput').removeClass('hidden')
