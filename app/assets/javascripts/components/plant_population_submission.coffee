@@ -46,6 +46,7 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
     @$('.add-new-plant-line-for-list').on 'click', (event) =>
       @validateNewPlantLineForList((plantLineData) =>
         @appendToSelectedPlantLineLists(plantLineData)
+        @appendNewPlantLineData(plantLineData)
         @dirtyTracker.resetContext("new-plant-line")
       )
 
@@ -88,19 +89,23 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
 
   hasNewPlantLine: (data) =>
     fieldName = "submission[content][new_plant_lines][][plant_line_name]"
-    $("[name='#{fieldName}'][value=#{data.plant_line_name}]").length > 0
+    $("[name='#{fieldName}'][value='#{data.plant_line_name}']").length > 0
+
+  hasExistingPlantLine: (data) =>
+    $("#submission_content_plant_line_list option[value='#{data.id}']").length > 0
 
   appendToSelectedPlantLineLists: (data) =>
     $select = @$('.plant-line-list')
     selectedValues = $select.val() || []
 
-    $option = $('<option></option>').attr(value: data.plant_line_name).text(data.plant_line_name)
+    $option = $('<option></option>').attr(value: data.id || data.plant_line_name).text(data.plant_line_name)
     $select.append($option)
 
-    selectedValues.push(data.plant_line_name)
+    selectedValues.push(data.id || data.plant_line_name)
     $select.val(selectedValues)
     $select.trigger('change') # required to notify select2 about changes, see https://github.com/select2/select2/issues/3057
 
+  appendNewPlantLineData: (data) =>
     # add all PL attributes to DOM so it can be sent with form
     $form = @$el.find('form')
     $container = $('<div></div>').attr(id: @newPlantLineForListContainerId(data.plant_line_name), class: "new-plant-line-attrs")
@@ -116,7 +121,7 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
     $("##{@newPlantLineForListContainerId(plant_line_name)}").remove()
 
     $select = @$('.plant-line-list')
-    $option = $select.find("option[value=#{plant_line_name}]")
+    $option = $select.find("option[value='#{plant_line_name}']")
     $option.remove()
 
     this.resetNewPlantLines() if $select.find("option").length == 0
@@ -158,8 +163,14 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
           @$('.uploaded-plant-lines .parser-errors').addClass('hidden')
           @$('.uploaded-plant-lines .parser-errors').text('')
 
-          $.each(data.result.uploaded_plant_lines, (_, uploadedPlantLine) =>
-            @appendToSelectedPlantLineLists(uploadedPlantLine) unless @hasNewPlantLine(uploadedPlantLine)
+          $.each(data.result.uploaded_new_plant_lines, (_, plantLineData) =>
+            unless @hasNewPlantLine(plantLineData)
+              @appendToSelectedPlantLineLists(plantLineData)
+              @appendNewPlantLineData(plantLineData)
+          )
+
+          $.each(data.result.uploaded_existing_plant_lines, (_, plantLineData) =>
+            @appendToSelectedPlantLineLists(plantLineData) unless @hasExistingPlantLine(plantLineData)
           )
 
       fail: (event, data) =>

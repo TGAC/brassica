@@ -62,6 +62,10 @@
     columns</i>. Also, your organisation should ensure the unique naming of accession - so you never
     duplicate the <b>Plant accession</b> value in the context of the same <b>Originating organisation</b>.
 
+  %p
+    When including plant lines already defined in BIP it is best to skip all optional information. Otherwise, any
+    conflicts with existing data will prevent plant lines from being included in submitted population.
+
 .errors.hidden
 
 = form_tag submission_uploads_path(submission), multipart: true, method: :post do

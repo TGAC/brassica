@@ -23,7 +23,7 @@ module Submissions
       # Do not allow :new_plant_lines to include existing :plant_line_name
       validate do
         new_plant_lines.each do |new_plant_line|
-          if plant_line_exists?("plant_line_name ILIKE ?", new_plant_line.plant_line_name)
+          if plant_line_exists?(plant_line_name: new_plant_line.plant_line_name)
             errors.add(:new_plant_lines, :taken, name: new_plant_line.plant_line_name)
           end
         end

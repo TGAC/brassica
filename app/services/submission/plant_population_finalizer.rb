@@ -25,12 +25,13 @@ class Submission::PlantPopulationFinalizer
   def create_new_plant_lines
     new_plant_varieties = submission.content.new_plant_varieties || {}
     new_plant_accessions = submission.content.new_plant_accessions || {}
+
     @new_plant_lines = (submission.content.new_plant_lines || []).map do |attrs|
       attrs = attrs.with_indifferent_access
       taxonomy_term = TaxonomyTerm.find_by!(name: attrs.delete(:taxonomy_term))
-      attrs = attrs.merge(
-        taxonomy_term_id: taxonomy_term.id
-      ).merge(common_data)
+      attrs = attrs.
+        merge(taxonomy_term_id: taxonomy_term.id).
+        merge(common_data)
 
       if (plant_variety = new_plant_varieties[attrs[:plant_line_name]]).present? || attrs[:plant_variety_name].present?
         plant_variety_name = plant_variety.try(:[], 'plant_variety_name') || attrs[:plant_variety_name]

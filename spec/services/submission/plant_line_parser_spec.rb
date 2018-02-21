@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Submission::PlantLineParser do
   let(:upload) { create(:upload, :plant_lines) }
+  let(:submission) { upload.submission }
   subject { described_class.new(upload) }
 
   describe '#parse_header' do
@@ -47,53 +48,41 @@ RSpec.describe Submission::PlantLineParser do
     it 'does nothing with empty input' do
       input_is ''
       subject.send(:parse_plant_lines)
-      expect(subject.plant_lines).to eq []
+      expect(subject.plant_line_names).to eq []
     end
 
-    it 'saves plant line information' do
+    it 'saves new plant line information' do
       input_is 'Brassica napus,,,pl'
       subject.send(:parse_plant_lines)
-      expect(subject.plant_lines).to eq [{
+      expect(subject.new_plant_lines).to eq [{
         plant_line_name: 'pl',
-        plant_variety_name: '',
+        plant_variety_name: nil,
         taxonomy_term: 'Brassica napus',
-        common_name: nil,
-        previous_line_name: nil,
-        genetic_status: nil,
-        sequence_identifier: nil
       }]
     end
 
-    it 'handles optional plant line information' do
+    it 'handles optional new plant line information' do
       input_is 'Brassica napus,,,pl,cn,pln,gs,seq'
       subject.send(:parse_plant_lines)
-      expect(subject.plant_lines[0][:common_name]).to eq 'cn'
-      expect(subject.plant_lines[0][:previous_line_name]).to eq 'pln'
-      expect(subject.plant_lines[0][:genetic_status]).to eq 'gs'
-      expect(subject.plant_lines[0][:sequence_identifier]).to eq 'seq'
+      expect(subject.new_plant_lines[0][:common_name]).to eq 'cn'
+      expect(subject.new_plant_lines[0][:previous_line_name]).to eq 'pln'
+      expect(subject.new_plant_lines[0][:genetic_status]).to eq 'gs'
+      expect(subject.new_plant_lines[0][:sequence_identifier]).to eq 'seq'
     end
 
     it 'handles empty newlines properly' do
       input_is "Brassica napus,,,pl1\n\nBrassica napus,,,pl2\n\n"
       subject.send(:parse_plant_lines)
-      expect(subject.plant_lines).to eq [
+      expect(subject.new_plant_lines).to eq [
         {
           plant_line_name: 'pl1',
-          plant_variety_name: '',
+          plant_variety_name: nil,
           taxonomy_term: 'Brassica napus',
-          common_name: nil,
-          previous_line_name: nil,
-          genetic_status: nil,
-          sequence_identifier: nil
         },
         {
           plant_line_name: 'pl2',
-          plant_variety_name: '',
+          plant_variety_name: nil,
           taxonomy_term: 'Brassica napus',
-          common_name: nil,
-          previous_line_name: nil,
-          genetic_status: nil,
-          sequence_identifier: nil
         }
       ]
     end
@@ -101,27 +90,95 @@ RSpec.describe Submission::PlantLineParser do
     it 'reports incorrect taxonomy term in species column' do
       input_is 'Brassica nullus,,,pl'
       subject.send(:parse_plant_lines)
-      expect(subject.plant_lines).to eq []
+      expect(subject.plant_line_names).to eq []
       expect(upload.logs).
         to include 'Ignored row for pl since taxonomy unit called Brassica nullus was not found in BIP.'
     end
 
-    it 'filters out duplicated plant lines' do
+    it 'filters out duplicated new plant lines' do
       input_is "Brassica napus,,,pl\nBrassica napus,,,pl"
       subject.send(:parse_plant_lines)
-      expect(subject.plant_lines.size).to eq 1
+      expect(subject.new_plant_lines.size).to eq 1
       expect(upload.logs).
         to include "Ignored row for pl since a plant line with that name is already defined in the uploaded file."
     end
 
-    it 'blocks recreating of already existing plant line' do
+    it 'allows use of existing plant line' do
       pl = create(:plant_line)
-      input_is "Brassica napus,,,#{pl.plant_line_name}"
+      pl_attrs = pl.attributes.slice("plant_line_name", "common_name", "previous_line_name", "genetic_status", "sequence_identifier")
+      input_is "#{pl.taxonomy_term.name},,," + pl_attrs.values.join(",")
       subject.send(:parse_plant_lines)
-      expect(subject.plant_lines).to eq []
-      expect(upload.logs).to include
-        "Ignored row for #{pl.plant_line_name} since a plant line with that name is already present in BIP."\
-        "Please use the 'Plant line list' field to add this existing plant line to the submitted population."
+      expect(subject.new_plant_lines).to eq []
+      expect(subject.plant_line_names).to eq [pl.plant_line_name]
+    end
+
+    it 'blocks use of existing plant line with wrong species' do
+      create(:taxonomy_term, name: "Brassica invalida")
+      pl = create(:plant_line)
+      input_is "Brassica invalida,,,#{pl.plant_line_name}"
+      subject.send(:parse_plant_lines)
+      expect(subject.plant_line_names).to eq []
+      expect(upload.logs).
+        to include "Ignored row for #{pl.plant_line_name} since a plant line with that name is already present in BIP but uploaded data does not match existing record."
+    end
+
+    it 'blocks use of existing plant line with wrong plant line information' do
+      pl = create(:plant_line)
+      input_is "#{pl.taxonomy_term.name},,,#{pl.plant_line_name},wrong-stuff"
+      subject.send(:parse_plant_lines)
+      expect(subject.plant_line_names).to eq []
+      expect(upload.logs).
+        to include "Ignored row for #{pl.plant_line_name} since a plant line with that name is already present in BIP but uploaded data does not match existing record."
+    end
+
+    context "override of previously defined content" do
+      it 'allows override of existing plant line with existing plant line' do
+        pl = create(:plant_line)
+
+        submission.content.update(:step03, plant_line_list: pl.plant_line_name)
+        submission.save!
+
+        input_is "#{pl.taxonomy_term.name},,,#{pl.plant_line_name}"
+        subject.send(:parse_plant_lines)
+        expect(subject.plant_line_names).to eq [pl.plant_line_name]
+        expect(subject.new_plant_lines).to eq []
+      end
+
+      it 'blocks override of new plant line with new plant line' do
+        submission.content.update(:step03, plant_line_list: ["new-pl"],
+                                           new_plant_lines: [{ plant_line_name: "new-pl",
+                                                               plant_variety_name: "new-pv",
+                                                               taxonomy_term: "Brassica napus" }])
+        submission.save!
+
+        input_is "Brassica napus,,,new-pl"
+        subject.send(:parse_plant_lines)
+        expect(submission.reload.content.plant_line_list).to eq ["new-pl"]
+        expect(submission.content.new_plant_lines).
+          to eq [{ "plant_line_name" => "new-pl", "plant_variety_name" => "new-pv", "taxonomy_term" => "Brassica napus" }]
+
+        expect(upload.logs).
+          to include "Ignored row for new-pl since a plant line with that name is already defined. "\
+                     "Please clear the 'Plant line list' field before re-uploading a CSV file."
+      end
+
+      it 'blocks override of new plant line by existing plant line' do
+        pl = create(:plant_line)
+
+        submission.content.update(:step03, plant_line_list: [pl.plant_line_name],
+                                           new_plant_lines: [{ plant_line_name: pl.plant_line_name,
+                                                               taxonomy_term: "Brassica napus" }])
+        submission.save!
+
+        input_is "#{pl.taxonomy_term.name},,,#{pl.plant_line_name}"
+        subject.send(:parse_plant_lines)
+        expect(submission.reload.content.plant_line_list).to eq [pl.plant_line_name]
+        expect(submission.content.new_plant_lines).to eq [{ "plant_line_name" => pl.plant_line_name,
+                                                            "taxonomy_term" => "Brassica napus" }]
+        expect(upload.logs).
+          to include "Ignored row for #{pl.plant_line_name} since a plant line with that name is already defined. "\
+                     "Please clear the 'Plant line list' field before re-uploading a CSV file."
+      end
     end
 
     context 'managing plant variety information' do
@@ -129,16 +186,25 @@ RSpec.describe Submission::PlantLineParser do
         pv = create(:plant_variety)
         input_is "Brassica napus,#{pv.plant_variety_name},,pl"
         subject.send(:parse_plant_lines)
-        expect(subject.plant_lines[0][:plant_variety_name]).to eq pv.plant_variety_name
-        expect(subject.instance_variable_get(:@plant_varieties)).to eq({})
+        expect(subject.new_plant_lines[0][:plant_variety_name]).to eq pv.plant_variety_name
+        expect(subject.new_plant_varieties).to eq({})
       end
 
       it 'saves new plant variety information with specified crop type' do
         input_is "Brassica napus,pv,ct,pl"
         subject.send(:parse_plant_lines)
-        expect(subject.plant_lines[0][:plant_variety_name]).to eq 'pv'
-        expect(subject.instance_variable_get(:@plant_varieties)).
+        expect(subject.new_plant_lines[0][:plant_variety_name]).to eq 'pv'
+        expect(subject.new_plant_varieties).
           to eq({ 'pl' => { plant_variety_name: 'pv', crop_type: 'ct' }})
+      end
+
+      it 'blocks use of existing plant line with wrong plant variety information' do
+        pl = create(:plant_line, :with_variety)
+        input_is "#{pl.taxonomy_term.name},wrong-pv-name,,#{pl.plant_line_name}"
+        subject.send(:parse_plant_lines)
+        expect(subject.plant_line_names).to eq []
+        expect(upload.logs).
+          to include "Ignored row for #{pl.plant_line_name} since a plant line with that name is already present in BIP but uploaded data does not match existing record."
       end
     end
 
@@ -153,13 +219,21 @@ RSpec.describe Submission::PlantLineParser do
         end
       end
 
-      it 'prevents reusing existing plant accession for new plant lines' do
-        pa = create(:plant_accession)
-        input_is "Brassica napus,,,pl,,,,,#{pa.plant_accession},\"#{pa.originating_organisation}\",#{pa.year_produced}"
+      it 'allows use of existing plant accession with matching plant line' do
+        pl = create(:plant_line)
+        pa = create(:plant_accession, plant_line: pl)
+        input_is "#{pl.taxonomy_term.name},,,#{pl.plant_line_name},,,,,#{pa.plant_accession},\"#{pa.originating_organisation}\",#{pa.year_produced}"
         subject.send(:parse_plant_lines)
-        expect(upload.logs).to include
-          "Ignored row for pl since it refers to a plant accession which currently exists in BIP."\
-          "If your intention was to refer to an existing accession, please leave the Plant accession, Originating organisation and Year produced values blank for this plant line."
+        expect(subject.plant_line_names).to eq [pl.plant_line_name]
+        expect(subject.new_plant_accessions).to be_empty
+      end
+
+      it 'blocks use of existing plant accession for new plant lines' do
+        pa = create(:plant_accession)
+        input_is "Brassica napus,,,wrong-pl-name,,,,,#{pa.plant_accession},\"#{pa.originating_organisation}\",#{pa.year_produced}"
+        subject.send(:parse_plant_lines)
+        expect(subject.plant_line_names).to eq []
+        expect(upload.logs).to include "Ignored row for wrong-pl-name since it refers to a plant accession which currently exists in BIP and belongs to other plant line."
       end
 
       it 'detects repetition of plant accession information in the file' do
@@ -172,8 +246,8 @@ RSpec.describe Submission::PlantLineParser do
       it 'saves new plant accession information for new plant lines' do
         input_is "Brassica napus,,,pl,,,,,pa,oo,2017"
         subject.send(:parse_plant_lines)
-        expect(subject.instance_variable_get(:@plant_accessions)).
-          to eq({ 'pl' => { plant_accession: 'pa', originating_organisation: 'oo', year_produced: '2017' }})
+        expect(subject.new_plant_accessions).
+          to eq('pl' => { plant_accession: 'pa', originating_organisation: 'oo', year_produced: '2017' })
       end
     end
   end
@@ -185,18 +259,14 @@ RSpec.describe Submission::PlantLineParser do
       create(:plant_accession, plant_accession: 'whri2004_C1', originating_organisation: 'WHRI', year_produced: '2004')
     end
 
-    it 'assigns step03 content with parsed information' do
+    it 'assigns content with parsed information' do
       subject.call
-      expect(upload.submission.content.plant_line_list).to eq ['pl_ok_newpv_newpa', 'pl_ok_nopa']
-      expect(upload.submission.content.new_plant_lines).to eq [
+      expect(submission.content.plant_line_list).to eq ['pl_ok_newpv_newpa', 'pl_ok_nopa']
+      expect(submission.content.new_plant_lines).to eq [
         {
           'plant_line_name' => 'pl_ok_newpv_newpa',
           'plant_variety_name' => 'Alesi',
           'taxonomy_term' => 'Brassica napus',
-          'common_name' => '',
-          'previous_line_name' => '',
-          'genetic_status' => '',
-          'sequence_identifier' => ''
         },
         {
           'plant_line_name' => 'pl_ok_nopa',
@@ -208,13 +278,13 @@ RSpec.describe Submission::PlantLineParser do
           'sequence_identifier' => 'SRR3134398'
         }
       ]
-      expect(upload.submission.content.new_plant_varieties).to eq({
+      expect(submission.content.new_plant_varieties).to eq({
         'pl_ok_newpv_newpa' => {
           'plant_variety_name' => 'Alesi',
           'crop_type' => 'Winter oilseed rape'
         }
       })
-      expect(upload.submission.content.new_plant_accessions).to eq({
+      expect(submission.content.new_plant_accessions).to eq({
         'pl_ok_newpv_newpa' => {
           'plant_accession' => 'New accession X',
           'originating_organisation' => 'EI',
