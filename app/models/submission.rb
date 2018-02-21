@@ -134,6 +134,7 @@ class Submission < ActiveRecord::Base
     new_trait_descriptor_list = (content[:trait_descriptor_list] || []).map(&:to_s)
 
     if old_trait_descriptor_list != new_trait_descriptor_list
+      # FIXME: probably should clear some of the parsed upload data too
       content.clear(:upload_id)
     end
   end
