@@ -119,6 +119,7 @@ system-wide, with `sudo`, or just for your user).
  - `install.packages('ape')`
  - `install.packages('EMMREML')`
  - `install.packages('scatterplot3d')`
+ - `install.packages('argparse')`
 
 
 ### Configuration
@@ -130,12 +131,14 @@ a template.
 
 ```
 ANALYSIS_EXEC_DIR=<full path to analysis working directory>
-GWAS_SCRIPT=<full path to the GWASSER.R executable script>
+GWAS_GWASSER_SCRIPT=<full path to the GWASSER.R executable script>
+GWAS_GAPIT_SCRIPT=<full path to the app dir>/lib/GAPIT/runner.R
+GWAS_GAPIT_DIR=<full path to a dir containing gapit_functions.txt and emma.txt>
 ```
 
 The analysis working directory needs to be an empty directory writable by the
 application. It is used to run analysis script and store temporary outputs.
-The `GWASSER.R` script should be made executable.
+The scripts pointed to by config variables should be made executable.
 
 
 ## Background workers
@@ -170,11 +173,11 @@ To perform deploy run:
 If any changes were introduced to ES index definitions or data migrations
 affecting indices were performed it is necessary to reindex data:
 
-  bin/cap production search:reindex:all
+    bin/cap production search:reindex:all
 
 Or:
 
-  bin/cap production search:reindex:model CLASS=<class name>
+    bin/cap production search:reindex:model CLASS=<class name>
 
 
 ## Testing

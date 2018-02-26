@@ -10,10 +10,6 @@ suppressMessages(library(compiler))
 suppressMessages(library(scatterplot3d))
 suppressMessages(library(argparse))
 
-# TODO: use local GAPIT files
-source("http://zzlab.net/GAPIT/gapit_functions.txt")
-source("http://zzlab.net/GAPIT/emma.txt")
-
 processArgs <- function(){
   parser <- ArgumentParser(description = "Basic GAPIT runner script")
 
@@ -42,6 +38,13 @@ processArgs <- function(){
                       nargs = 1,
                       help = "Genotype Map file")
 
+  parser$add_argument('--gapitDir',
+                      dest = 'gapitDir',
+                      type = "character",
+                      nargs = 1,
+                      help = "Folder with GAPIT source.",
+                      required = TRUE)
+
   parser$add_argument('--outDir',
                       dest = 'outDir',
                       type = "character",
@@ -65,6 +68,9 @@ processResults <- function(outDir) {
 
 if (!interactive()) {
   args <- processArgs()
+
+  source(paste0(args$gapitDir, "/gapit_functions.txt"))
+  source(paste0(args$gapitDir, "/emma.txt"))
 
   G = GM = GD = NULL
 

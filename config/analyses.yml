@@ -1,6 +1,7 @@
 default: &default
   gwasser: <%= ENV['GWAS_GWASSER_SCRIPT'] %>
   gapit: <%= ENV['GWAS_GAPIT_SCRIPT'] %>
+  gapit_dir: <%= ENV['GWAS_GAPIT_DIR'] %>
 
 development:
   <<: *default
@@ -8,6 +9,7 @@ development:
 test:
   gwasser: <%= "#{Rails.root.join("spec", "bin", "gwasser_mock.rb")} --railsRoot #{Rails.root}" %>
   gapit: <%= "#{Rails.root.join("spec", "bin", "gapit_mock.rb")} --railsRoot #{Rails.root}" %>
+  gapit_dir: <%= ENV['GWAS_GAPIT_DIR'] %>
 
 production:
   <<: *default

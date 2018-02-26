@@ -7,12 +7,13 @@ require 'shellwords'
 options = {}
 
 OptionParser.new do |opts|
-  opts.banner = "Usage: gapit.rb"
+  opts.banner = "Usage: gapit_mock.rb"
 
   opts.on("--Y PHENO-FILE") { |y_file| options[:y] = y_file }
   opts.on("--G GENO-HAPMAP-FILE") { |g_file| }
   opts.on("--GD GENO-CSV-FILE") { |gd_file| }
   opts.on("--GM MAP-CSV-FILE") { |gm_file| }
+  opts.on("--gapitDir GAPIT_DIR", String, "GAPIT source directory") { |gapit_dir| }
 
   opts.on("--outDir OUTDIR", String, "Output directory") do |outdir|
     options[:outdir] = outdir

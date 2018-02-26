@@ -56,6 +56,7 @@ class Analysis
 
     def job_command
       args = [
+        "--gapitDir", gapit_dir,
         "--outDir", runner.results_dir,
         "--Y", phenotype_data_file.file.path
       ]
@@ -78,6 +79,10 @@ class Analysis
 
     def gapit_script
       Rails.application.config_for(:analyses).fetch("gapit")
+    end
+
+    def gapit_dir
+      Rails.application.config_for(:analyses).fetch("gapit_dir")
     end
   end
 end
