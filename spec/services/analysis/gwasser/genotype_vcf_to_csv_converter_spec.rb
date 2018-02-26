@@ -61,5 +61,10 @@ RSpec.describe Analysis::Gwasser::GenotypeVcfToCsvConverter do
         expect(csv.readlines.map { |r| r[0] }).to eq(mutation_names - mutation_names_to_ignore)
       end
     end
+
+    it "returns metadata" do
+      expect(subject[3]).to match_array(mutation_names_to_ignore)
+      expect(subject[4]).to eq(sample_names)
+    end
   end
 end

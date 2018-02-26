@@ -73,35 +73,40 @@ class Analysis
 
       def analyze_geno_csv_file(geno_csv_file = genotype_data_file(:csv).file)
         analyze_csv_file(geno_csv_file).tap do |metadata|
-          block_given? ? yield(metadata) : save_genotype_metadata(*metadata)
+          if block_given?
+            yield(metadata)
+          else
+            save_genotype_metadata(removed_mutations: metadata[0], samples: metadata[1])
+          end
         end
       end
 
       def analyze_pheno_csv_file(pheno_csv_file = phenotype_data_file.file)
         analyze_csv_file(pheno_csv_file).tap do |metadata|
-          block_given? ? yield(metadata) : save_phenotype_metadata(*metadata)
+          block_given? ? yield(metadata) : save_phenotype_metadata(removed_traits: metadata[0], samples: metadata[1])
         end
       end
 
-      def save_genotype_metadata(removed_mutations, samples)
-        analysis.meta['removed_mutations'] = removed_mutations
-        analysis.meta['geno_samples'] = samples
+      def save_genotype_metadata(removed_mutations: nil, samples: nil, chromosomes: nil)
+        analysis.meta['removed_mutations'] = removed_mutations if removed_mutations
+        analysis.meta['geno_samples'] = samples if samples
+        analysis.meta['chromosomes'] = chromosomes if chromosomes
         analysis.save!
       end
 
-      def save_phenotype_metadata(removed_traits, samples)
-        analysis.meta['removed_traits'] = removed_traits
-        analysis.meta['pheno_samples'] = samples
+      def save_phenotype_metadata(removed_traits: nil, samples: nil)
+        analysis.meta['removed_traits'] = removed_traits if removed_traits
+        analysis.meta['pheno_samples'] = samples if samples
         analysis.save!
       end
 
-      def append_genotype_metadata(removed_mutations)
-        analysis.meta['removed_mutations'] += removed_mutations
+      def append_genotype_metadata(removed_mutations: nil)
+        analysis.meta['removed_mutations'] += removed_mutations if removed_mutations
         analysis.save!
       end
 
-      def append_phenotype_metadata(removed_traits)
-        analysis.meta['removed_traits'] += removed_traits
+      def append_phenotype_metadata(removed_traits: nil)
+        analysis.meta['removed_traits'] += removed_traits if removed_traits
         analysis.save!
       end
     end

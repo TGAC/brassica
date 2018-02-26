@@ -41,7 +41,9 @@ class Analysis
         end
 
         def remove_irrelevant_traits
-          analyze_pheno_csv_file { |traits_to_remove, _| append_phenotype_metadata(traits_to_remove) }
+          analyze_pheno_csv_file do |traits_to_remove, _|
+            append_phenotype_metadata(removed_traits: traits_to_remove)
+          end
 
           pheno_status, pheno_csv_file = normalize_pheno_csv
 

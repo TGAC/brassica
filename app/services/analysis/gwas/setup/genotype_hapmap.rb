@@ -20,7 +20,7 @@ class Analysis
             create_csv_data_file(geno_csv_file, data_type: :gwas_genotype)
             create_csv_data_file(map_csv_file, data_type: :gwas_map)
 
-            save_genotype_metadata(removed_mutations, samples)
+            save_genotype_metadata(removed_mutations: removed_mutations, samples: samples)
           end
 
           status
