@@ -1,6 +1,12 @@
 class Analysis::GwasDecorator < Draper::Decorator
   delegate_all
 
+  def failure_reason
+    reason, msg = meta['failure_reason'] || :shell_job_error
+
+    [h.t(".failure_reason.#{reason}"), msg].join(" ")
+  end
+
   def map?
     data_files.gwas_map.present?
   end

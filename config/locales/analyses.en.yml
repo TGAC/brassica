@@ -49,4 +49,5 @@ en:
           all_mutations_removed: All mutations were excluded from analysis due to lack of variability between samples.
           all_traits_removed: All traits were excluded from analysis due to lack of variability between samples.
           all_samples_removed: All samples were excluded from analysis because of no overlap between genotype and phenotype data.
+          setup_error: Data preprocessing failed.
           shell_job_error: The analysis failed. Please, consult 'Std error' and 'Std output' for more information.

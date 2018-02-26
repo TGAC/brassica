@@ -109,8 +109,8 @@ class Analysis
 
       def verify_mutation(mutation)
         alleles = mutation.split("/")
-        fail "Invalid mutation specification '#{mutation}'" unless alleles.size == 2
-        fail "Value #{alleles} not valid in mutation specification" if alleles.any? { |allele| base_codes.exclude?(allele) }
+        fail "Invalid mutation specification '#{mutation}'." unless alleles.size == 2
+        fail "Value #{alleles} not valid in mutation specification." if alleles.any? { |allele| base_codes.exclude?(allele) }
       end
 
       def verify_sample(sample)

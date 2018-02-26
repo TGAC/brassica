@@ -8,12 +8,7 @@ class Analysis
     end
 
     def call
-      status = setup.call
-
-      unless status == :ok
-        runner.mark_as_failure(status)
-        return
-      end
+      return unless perform_setup == :ok
 
       runner.call(job_command) do
         store_results
@@ -30,6 +25,14 @@ class Analysis
 
     def runner
       @runner ||= Analysis::ShellRunner.new(analysis)
+    end
+
+    def perform_setup
+      setup.call.tap do |status|
+        runner.mark_as_failure(status) unless status == :ok
+      end
+    rescue => ex
+      runner.mark_as_failure([:setup_error, ex.to_s])
     end
 
     def store_results
