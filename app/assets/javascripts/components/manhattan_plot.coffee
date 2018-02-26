@@ -4,7 +4,8 @@ window.ManhattanPlot = class ManhattanPlot extends Component
 
     data = @$el.data()
 
-    @$plotEl = @$el.append("<div>").addClass("hidden")
+    @$plotEl = @$el.append("<div class='hidden'>")
+    @$plotEl.css({ height: "600px" })
     @chromosomes = data.chromosomes
     @cutoff = data.cutoff
     @traces = this.prepareTraces(data.traits)
