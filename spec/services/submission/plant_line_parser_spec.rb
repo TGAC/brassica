@@ -10,7 +10,7 @@ RSpec.describe Submission::PlantLineParser do
       input_is ''
       subject.send(:parse_header)
       expect(upload.errors[:file]).
-        to eq ['No correct header provided.']
+        to eq ['has no correct header provided.']
     end
 
     header = [
@@ -31,7 +31,7 @@ RSpec.describe Submission::PlantLineParser do
         input_is header.reject{ |c| c == column_name }.join(',')
         subject.send(:parse_header)
         expect(upload.errors[:file]).
-          to eq ["No correct header provided. Please provide the \"#{column_name}\" column."]
+          to eq ["has no correct header provided. Please provide the \"#{column_name}\" column."]
       end
     end
 
