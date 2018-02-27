@@ -103,7 +103,15 @@ RSpec.describe Submission::PlantLineParser do
         to include "Ignored row for pl since a plant line with that name is already defined in the uploaded file."
     end
 
-    it 'allows use of existing plant line' do
+    it 'allows use of existing plant' do
+      create(:plant_line, plant_line_name: "pl")
+      input_is ",,,pl"
+      subject.send(:parse_plant_lines)
+      expect(subject.new_plant_lines).to eq []
+      expect(subject.plant_line_names).to eq ["pl"]
+    end
+
+    it 'allows use of existing plant line with correct data' do
       pl = create(:plant_line)
       pl_attrs = pl.attributes.slice("plant_line_name", "common_name", "previous_line_name", "genetic_status", "sequence_identifier")
       input_is "#{pl.taxonomy_term.name},,," + pl_attrs.values.join(",")
@@ -254,14 +262,18 @@ RSpec.describe Submission::PlantLineParser do
 
   describe '#call' do
     before(:each) do
-      create(:taxonomy_term, name: 'Brassica napus')
+      tt = create(:taxonomy_term, name: 'Brassica napus')
+      create(:plant_line, plant_line_name: "existing_pl")
+      create(:plant_line, plant_line_name: "existing_pl_newpa", taxonomy_term: tt)
       create(:plant_variety, plant_variety_name: 'Valesca')
       create(:plant_accession, plant_accession: 'whri2004_C1', originating_organisation: 'WHRI', year_produced: '2004')
     end
 
     it 'assigns content with parsed information' do
       subject.call
-      expect(submission.content.plant_line_list).to eq ['pl_ok_newpv_newpa', 'pl_ok_nopa']
+      expect(submission.content.plant_line_list).
+        to eq ['pl_ok_newpv_newpa', 'pl_ok_nopa', 'existing_pl', 'existing_pl_newpa']
+
       expect(submission.content.new_plant_lines).to eq [
         {
           'plant_line_name' => 'pl_ok_newpv_newpa',
@@ -289,6 +301,11 @@ RSpec.describe Submission::PlantLineParser do
           'plant_accession' => 'New accession X',
           'originating_organisation' => 'EI',
           'year_produced' => '2017'
+        },
+        'existing_pl_newpa' => {
+          'plant_accession' => 'New accession Y',
+          'originating_organisation' => 'EI',
+          'year_produced' => '2018'
         }
       })
     end

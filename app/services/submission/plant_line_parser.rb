@@ -95,17 +95,17 @@ class Submission::PlantLineParser
 
     return false if plant_line_name.blank?
 
-    if taxonomy_term_name.blank?
-      @upload.log "Ignored row for #{plant_line_name} since Species name is missing."
-    elsif TaxonomyTerm.find_by_name(taxonomy_term_name).blank?
-      @upload.log "Ignored row for #{plant_line_name} since taxonomy unit called #{taxonomy_term_name} was not found in BIP."
-    elsif reused_plant_line?(plant_line_name)
+    if reused_plant_line?(plant_line_name)
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined in the uploaded file."
     elsif current_new_plant_lines.include?(plant_line_name)
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined. Please clear the 'Plant line list' field before re-uploading a CSV file."
     elsif existing_plant_line?(plant_line_name) && !existing_plant_line_match?(pl_attrs, pv_attrs)
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already present in BIP "\
                   "but uploaded data does not match existing record."
+    elsif taxonomy_term_name.blank? && !existing_plant_line?(plant_line_name)
+      @upload.log "Ignored row for #{plant_line_name} since Species name is missing."
+    elsif taxonomy_term_name.present? && TaxonomyTerm.find_by_name(taxonomy_term_name).blank?
+      @upload.log "Ignored row for #{plant_line_name} since taxonomy unit called #{taxonomy_term_name} was not found in BIP."
     elsif existing_plant_accession?(pa_attrs) && !existing_plant_accession_match?(pa_attrs, plant_line_name)
       @upload.log "Ignored row for #{plant_line_name} since it refers to a plant accession which currently exists in BIP and belongs to other plant line."
     elsif incomplete_plant_accession?(pa_attrs)
@@ -173,10 +173,11 @@ class Submission::PlantLineParser
 
   def existing_plant_line_match?(pl_attrs, pv_attrs)
     existing_line = existing_plant_line(pl_attrs.fetch(:plant_line_name))
+    taxonomy_term = pl_attrs[:taxonomy_term]
 
     return false if pv_attrs.any? { |attr, val| existing_line.plant_variety.try(attr) != val }
     return false if pl_attrs.except(:taxonomy_term).any? { |attr, val| existing_line.try(attr) != val }
-    return false if pl_attrs.fetch(:taxonomy_term) != existing_line.taxonomy_term.try(:name)
+    return false if taxonomy_term && taxonomy_term != existing_line.taxonomy_term.try(:name)
 
     true
   end
