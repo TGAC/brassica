@@ -18,16 +18,7 @@ class Submission::PlantLineParser
       @upload.log "Detected wrong file format - please make sure the file is not encoded (e.g. you are uploading an xls, instead of a text file)."
     end
 
-    if @upload.errors.empty?
-      @upload.submission.content.append(:step03,
-                                        plant_line_list: @plant_line_names,
-                                        new_plant_lines: @new_plant_lines,
-                                        new_plant_varieties: @new_plant_varieties,
-                                        new_plant_accessions: @new_plant_accessions)
-      @upload.submission.content.update(:step03, uploaded_plant_lines: @plant_line_names)
-      @upload.submission.save!
-      @upload.submission.content.save!
-    end
+    update_submission_content if @upload.errors.empty?
   end
 
   private
@@ -79,6 +70,36 @@ class Submission::PlantLineParser
     @upload.log "Detected #{@new_plant_varieties.size} plant line(s) of new (i.e. not existing in BIP) plant variety(ies)."
   end
 
+  def update_submission_content
+    remove_overriden_content
+    append_uploaded_content
+
+    @upload.submission.save!
+  end
+
+  def remove_overriden_content
+    current_new_plant_lines = @upload.submission.content.new_plant_lines || []
+    current_new_plant_varieties = @upload.submission.content.new_plant_varieties || {}
+    current_new_plant_accessions = @upload.submission.content.new_plant_accessions || {}
+
+    overriden_new_plant_lines =
+      current_new_plant_lines.select { |npl| @plant_line_names.include?(npl.fetch("plant_line_name")) }
+
+    @upload.submission.content.update(:step03,
+                                      new_plant_lines: current_new_plant_lines - overriden_new_plant_lines,
+                                      new_plant_varieties: current_new_plant_varieties.except(*@plant_line_names),
+                                      new_plant_accessions: current_new_plant_accessions.except(*@plant_line_names))
+  end
+
+  def append_uploaded_content
+    @upload.submission.content.append(:step03,
+                                      plant_line_list: @plant_line_names,
+                                      new_plant_lines: @new_plant_lines,
+                                      new_plant_varieties: @new_plant_varieties,
+                                      new_plant_accessions: @new_plant_accessions)
+    @upload.submission.content.update(:step03, uploaded_plant_lines: @plant_line_names)
+  end
+
   def csv
     @csv ||= CSV.new(input)
   end
@@ -97,8 +118,6 @@ class Submission::PlantLineParser
 
     if reused_plant_line?(plant_line_name)
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined in the uploaded file."
-    elsif current_new_plant_lines.include?(plant_line_name)
-      @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already defined. Please clear the 'Plant line list' field before re-uploading a CSV file."
     elsif existing_plant_line?(plant_line_name) && !existing_plant_line_match?(pl_attrs, pv_attrs)
       @upload.log "Ignored row for #{plant_line_name} since a plant line with that name is already present in BIP "\
                   "but uploaded data does not match existing record."
@@ -190,10 +209,6 @@ class Submission::PlantLineParser
 
   def current_plant_lines
     @current_plant_lines ||= @upload.submission.content.plant_line_list || []
-  end
-
-  def current_new_plant_lines
-    @current_new_plant_lines ||= (@upload.submission.content.new_plant_lines || []).map { |pl| pl["plant_line_name"] }
   end
 
   def header_columns

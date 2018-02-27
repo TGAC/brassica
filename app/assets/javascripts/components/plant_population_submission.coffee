@@ -89,7 +89,8 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
 
   hasNewPlantLine: (data) =>
     fieldName = "submission[content][new_plant_lines][][plant_line_name]"
-    $("[name='#{fieldName}'][value='#{data.plant_line_name}']").length > 0
+    selector = "[name='#{fieldName}'][value='#{data.plant_line_name}']"
+    $(selector).length > 0
 
   hasExistingPlantLine: (data) =>
     $("#submission_content_plant_line_list option[value='#{data.id}']").length > 0
@@ -107,7 +108,7 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
 
   appendNewPlantLineData: (data) =>
     # add all PL attributes to DOM so it can be sent with form
-    $form = @$el.find('form')
+    $form = @$el.find('form.edit-submission')
     $container = $('<div></div>').attr(id: @newPlantLineForListContainerId(data.plant_line_name), class: "new-plant-line-attrs")
     $container.appendTo($form)
 
@@ -127,7 +128,7 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
     this.resetNewPlantLines() if $select.find("option").length == 0
 
   resetNewPlantLines: =>
-    $form = @$el.find('form')
+    $form = @$el.find('form.edit-submission')
     $form.find(".new-plant-line-attrs").remove()
 
     $container = $('<div></div>').attr(id: @newPlantLineForListContainerId(""), class: "new-plant-line-attrs")
@@ -163,13 +164,15 @@ window.PlantPopulationSubmission = class PlantPopulationSubmission extends Submi
           @$('.uploaded-plant-lines .parser-errors').addClass('hidden')
           @$('.uploaded-plant-lines .parser-errors').text('')
 
+
           $.each(data.result.uploaded_new_plant_lines, (_, plantLineData) =>
-            unless @hasNewPlantLine(plantLineData)
-              @appendToSelectedPlantLineLists(plantLineData)
-              @appendNewPlantLineData(plantLineData)
+            @removeNewPlantLineFromList(plantLineData.plant_line_name) if @hasNewPlantLine(plantLineData)
+            @appendToSelectedPlantLineLists(plantLineData)
+            @appendNewPlantLineData(plantLineData)
           )
 
           $.each(data.result.uploaded_existing_plant_lines, (_, plantLineData) =>
+            @removeNewPlantLineFromList(plantLineData.plant_line_name) if @hasNewPlantLine(plantLineData)
             @appendToSelectedPlantLineLists(plantLineData) unless @hasExistingPlantLine(plantLineData)
           )
 

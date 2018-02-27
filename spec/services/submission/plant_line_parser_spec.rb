@@ -140,52 +140,59 @@ RSpec.describe Submission::PlantLineParser do
     end
 
     context "override of previously defined content" do
+      before { allow(subject).to receive(:parse_header) }
+
       it 'allows override of existing plant line with existing plant line' do
         pl = create(:plant_line)
 
-        submission.content.update(:step03, plant_line_list: pl.plant_line_name)
+        submission.content.update(:step03, plant_line_list: [pl.plant_line_name])
         submission.save!
 
         input_is "#{pl.taxonomy_term.name},,,#{pl.plant_line_name}"
-        subject.send(:parse_plant_lines)
-        expect(subject.plant_line_names).to eq [pl.plant_line_name]
-        expect(subject.new_plant_lines).to eq []
+        subject.call
+        expect(submission.reload.content.plant_line_list).to eq [pl.plant_line_name]
+        expect(submission.content.new_plant_varieties).to be_blank
+        expect(submission.content.new_plant_accessions).to be_blank
       end
 
-      it 'blocks override of new plant line with new plant line' do
-        submission.content.update(:step03, plant_line_list: ["new-pl"],
-                                           new_plant_lines: [{ plant_line_name: "new-pl",
-                                                               plant_variety_name: "new-pv",
-                                                               taxonomy_term: "Brassica napus" }])
+      it 'allows override of new plant line with new plant line' do
+        submission.content.update(:step03,
+          plant_line_list: ["new-pl"],
+          new_plant_lines: [{ plant_line_name: "new-pl", plant_variety_name: "new-pv", taxonomy_term: "Brassica napus" }],
+          new_plant_varieties: { "new-pl" => { "plant_variety_name" => "new-pv" } },
+          new_plant_accessions: { "new-pl" => { "plant_accession" => "new-pa" } }
+        )
         submission.save!
 
-        input_is "Brassica napus,,,new-pl"
-        subject.send(:parse_plant_lines)
+        input_is "Brassica napus,new-pv-2,,new-pl"
+        subject.call
+        expect(upload.errors).to be_blank
         expect(submission.reload.content.plant_line_list).to eq ["new-pl"]
         expect(submission.content.new_plant_lines).
-          to eq [{ "plant_line_name" => "new-pl", "plant_variety_name" => "new-pv", "taxonomy_term" => "Brassica napus" }]
+          to eq [{ "plant_line_name" => "new-pl", "plant_variety_name" => "new-pv-2", "taxonomy_term" => "Brassica napus" }]
 
-        expect(upload.logs).
-          to include "Ignored row for new-pl since a plant line with that name is already defined. "\
-                     "Please clear the 'Plant line list' field before re-uploading a CSV file."
+        expect(submission.content.new_plant_varieties).to eq("new-pl" => { "plant_variety_name" => "new-pv-2" })
+        expect(submission.content.new_plant_accessions).to be_blank
       end
 
-      it 'blocks override of new plant line by existing plant line' do
+      it 'allows override of new plant line by existing plant line' do
         pl = create(:plant_line)
 
-        submission.content.update(:step03, plant_line_list: [pl.plant_line_name],
-                                           new_plant_lines: [{ plant_line_name: pl.plant_line_name,
-                                                               taxonomy_term: "Brassica napus" }])
+        submission.content.update(:step03,
+          plant_line_list: [pl.plant_line_name],
+          new_plant_lines: [{ plant_line_name: pl.plant_line_name, plant_variety_name: "new-pv", taxonomy_term: "Brassica napus" }],
+          new_plant_varieties: { pl.plant_line_name => { "plant_variety_name" => "new-pv" } },
+          new_plant_accessions: { pl.plant_line_name => { "plant_accession" => "new-pa" } }
+        )
         submission.save!
 
         input_is "#{pl.taxonomy_term.name},,,#{pl.plant_line_name}"
-        subject.send(:parse_plant_lines)
+        subject.call
+        expect(upload.errors).to be_blank
         expect(submission.reload.content.plant_line_list).to eq [pl.plant_line_name]
-        expect(submission.content.new_plant_lines).to eq [{ "plant_line_name" => pl.plant_line_name,
-                                                            "taxonomy_term" => "Brassica napus" }]
-        expect(upload.logs).
-          to include "Ignored row for #{pl.plant_line_name} since a plant line with that name is already defined. "\
-                     "Please clear the 'Plant line list' field before re-uploading a CSV file."
+        expect(submission.content.new_plant_lines).to be_blank
+        expect(submission.content.new_plant_varieties).to be_blank
+        expect(submission.content.new_plant_accessions).to be_blank
       end
     end
 
