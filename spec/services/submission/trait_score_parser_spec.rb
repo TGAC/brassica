@@ -11,7 +11,7 @@ RSpec.describe Submission::TraitScoreParser do
         input_is 'single column name'
         subject.send(:parse_header)
         expect(upload.errors[:file]).
-          to eq ['No correct header provided. At least four columns are expected.']
+          to eq ['has no correct header provided. At least four columns are expected.']
       end
 
       it 'does nothing with a four-column header' do
@@ -30,14 +30,14 @@ RSpec.describe Submission::TraitScoreParser do
         input_is 'id,pa,oo,yp,pl'
         subject.send(:parse_header)
         expect(upload.errors[:file]).
-          to eq ['No correct header provided. Please provide the "Plant accession" column.']
+          to eq ['has no correct header provided. Please provide the "Plant accession" column.']
       end
 
       it 'complains if there is neither Plant line nor Plant variety column' do
         input_is 'id,Plant accession,oo,yp,pl'
         subject.send(:parse_header)
         expect(upload.errors[:file]).
-          to eq ['No correct header provided. Please provide either the "Plant line" or the "Plant variety" column.']
+          to eq ['has no correct header provided. Please provide either the "Plant line" or the "Plant variety" column.']
       end
     end
 

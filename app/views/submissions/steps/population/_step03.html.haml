@@ -85,6 +85,6 @@
       %button.btn.btn-primary.add-new-plant-line-for-list{type: 'button'} Confirm
 
 - @content.new_plant_lines.each do |plant_line|
-  %div{ id: "new-plant-line-#{plant_line.plant_line_name.split.join('-').downcase}" }
+  %div{ id: "new-plant-line-#{plant_line.plant_line_name.split.join('-').downcase}", class: "new-plant-line-attrs" }
     - @content.class.new_plant_line_properties.each do |attr|
       = hidden_field_tag "submission[content][new_plant_lines][][#{attr}]", plant_line.send(attr)

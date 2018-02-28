@@ -4,3 +4,5 @@ Brassica napus,Valesca,Winter oilseed rape,pl_wrong_repeated_pa,,,,,New accessio
 Brassica napus,Valesca,Winter oilseed rape,pl_ok_nopa,Correct plant line,pl_ok_old,inbred,SRR3134398
 Brassica napus,Valesca,Winter oilseed rape,pl_wrong_partial_pa,,,,,,My org,2014
 Brassica napus,Valesca,Winter oilseed rape,pl_wrong_existing_pa,,,,,whri2004_C1,WHRI,2004
+,,,existing_pl
+,,,existing_pl_newpa,,,,,New accession Y,EI,2018
