@@ -56,6 +56,17 @@ RSpec.describe Analysis::Gapit do
             expect(analysis.meta).to include('pheno_samples' => (6..50).map { |n| "plant#{n}" })
             expect(analysis.meta).to include('removed_mutations' => %w(snp1 snp2))
             expect(analysis.meta).to include('removed_traits' => %w(trait1))
+            expect(analysis.meta).to include('traits_results' => {
+              "trait2" => "GAPIT..trait2.GWAS.Results.csv",
+              "trait3" => "GAPIT..trait3.GWAS.Results.csv",
+              "trait4" => "GAPIT..trait4.GWAS.Results.csv",
+              "trait5" => "GAPIT..trait5.GWAS.Results.csv",
+              "trait6" => "GAPIT..trait6.GWAS.Results.csv",
+              "trait7" => "GAPIT..trait7.GWAS.Results.csv",
+              "trait8" => "GAPIT..trait8.GWAS.Results.csv",
+              "trait9" => "GAPIT..trait9.GWAS.Results.csv",
+              "trait10" => "GAPIT..trait10.GWAS.Results.csv"
+            })
           end
 
           it "stores output files for analysed traits" do

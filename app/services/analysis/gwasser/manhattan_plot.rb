@@ -42,13 +42,10 @@ class Analysis
       def process_trait(data_file)
         neg_log10_p_values = {}
         mutations = nil
-
-        # TODO: looks brittle - maybe metadata should be added to datafiles?
-        trait = data_file.file_file_name.match(/SNPAssociation-Full-(.*)\.csv$/)[1]
+        trait = analysis.meta.fetch("traits_results").invert.fetch(data_file.file_file_name)
 
         CSV.foreach(data_file.file.path) do |name, _, neg_log10_p|
-          # TODO: fix GWASSER so that it does not output invalid row ID.1
-          next if name =~ /\AID(\.1)?\z/
+          next if name == "ID"
 
           neg_log10_p_values[name] = neg_log10_p
         end

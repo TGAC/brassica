@@ -1,13 +1,7 @@
 require "rails_helper"
 
 RSpec.describe Analysis::Gwasser::ManhattanPlot do
-  let!(:analysis) { create(:analysis, :gwasser) }
-  let!(:gwas_results_data_files) {
-    analysis.meta["phenos"].map do |trait_name|
-      create(:analysis_data_file, :gwasser_results, analysis: analysis, owner: analysis.owner,
-             file: fixture_file("gwasser-results-SNPAssociation-Full-#{trait_name}.csv", "text/csv"))
-    end
-  }
+  let!(:analysis) { create(:analysis, :gwasser_with_results) }
 
   subject { described_class.new(analysis).call }
 

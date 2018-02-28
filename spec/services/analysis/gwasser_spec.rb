@@ -33,14 +33,14 @@ RSpec.describe Analysis::Gwasser do
   subject { described_class.new(analysis) }
 
   describe "#call" do
-    let(:selected_traits) { analysis.meta.fetch("phenos") }
-
     context "phenotype data file based analysis" do
       context "valid CSV phenotype data" do
         let!(:phenotype_data_file) { csv_phenotype_data_file }
 
         context "valid CSV genotype data" do
           let!(:genotype_data_file) { csv_genotype_data_file }
+
+          let(:selected_traits) { analysis.meta.fetch("phenos") }
 
           it "runs successfully" do
             expect { subject.call }.
@@ -51,6 +51,11 @@ RSpec.describe Analysis::Gwasser do
             expect(analysis.meta).to include('pheno_samples' => (6..50).map { |n| "plant#{n}" })
             expect(analysis.meta).to include('removed_mutations' => %w(snp1 snp2))
             expect(analysis.meta).to include('removed_traits' => %w(trait1))
+            expect(analysis.meta).to include('traits_results' => {
+              "trait5" => "SNPAssociation-Full-trait5.csv",
+              "trait6" => "SNPAssociation-Full-trait6.csv",
+              "trait7" => "SNPAssociation-Full-trait7.csv"
+            })
           end
 
           it "stores output files for selected traits" do

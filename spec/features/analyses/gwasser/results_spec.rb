@@ -2,7 +2,7 @@ require "features_helper"
 
 RSpec.feature "GWASSER results" do
   let(:user) { create(:user) }
-  let(:analysis) { create(:analysis, :gwasser, status: :success, owner: user) }
+  let(:analysis) { create(:analysis, :gwasser_with_results, status: :success, owner: user) }
 
   let!(:std_out) {
     create(:analysis_data_file, :std_out, owner: user, analysis: analysis, file: std_out_content)
@@ -14,13 +14,6 @@ RSpec.feature "GWASSER results" do
   let!(:gwas_genotype) { create(:analysis_data_file, :gwas_genotype_csv, owner: user, analysis: analysis) }
   let!(:gwas_phenotype) { create(:analysis_data_file, :gwas_phenotype, owner: user, analysis: analysis) }
   let!(:gwas_map) { create(:analysis_data_file, :gwas_map, owner: user, analysis: analysis, file: gwas_map_content) }
-
-  let!(:gwas_results_data_files) {
-    analysis.meta["phenos"].map do |trait_name|
-      create(:analysis_data_file, :gwasser_results, analysis: analysis, owner: analysis.owner,
-             file: fixture_file("gwasser-results-SNPAssociation-Full-#{trait_name}.csv", "text/csv"))
-    end
-  }
 
   let(:gwas_map_content) { tempfile("ID,Chr,cM\nsnp1,1,14\nsnp2,2,4\nsnp3,1,3", ["gwas-map", ".csv"]) }
   let(:std_out_content) { tempfile("Some standard output text", ["std-out", ".txt"]) }
@@ -52,7 +45,7 @@ RSpec.feature "GWASSER results" do
       end
 
       within(".output-panel") do
-        gwas_results_data_files.each do |data_file|
+        analysis.data_files.gwas_results.each do |data_file|
           expect(page).to have_css("a", text: data_file.file_file_name)
         end
       end

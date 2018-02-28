@@ -36,9 +36,11 @@ class Analysis
     end
 
     def store_results
-      selected_traits.each do |trait|
-        runner.store_result("SNPAssociation-Full-#{trait}.csv", data_type: :gwas_results)
-      end
+      result_files = selected_traits.map { |trait| "SNPAssociation-Full-#{trait}.csv" }
+      result_files.each { |filename| runner.store_result(filename, data_type: :gwas_results) }
+
+      analysis.meta["traits_results"] = Hash[selected_traits.zip(result_files)]
+      analysis.save!
     end
 
     def selected_traits

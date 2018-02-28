@@ -41,9 +41,7 @@ class Analysis
 
       def process_trait(data_file)
         mutations = []
-
-        # TODO: looks brittle - maybe metadata should be added to datafiles?
-        trait = data_file.file_file_name.match(/GAPIT\.\.(.*)\.GWAS\.Results\.csv$/)[1]
+        trait = analysis.meta.fetch("traits_results").invert.fetch(data_file.file_file_name)
 
         CSV.foreach(data_file.file.path) do |name, chrom_idx, pos, p, _maf, _nobs, _, _, _|
           next if name == "SNP"

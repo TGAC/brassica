@@ -2,7 +2,7 @@ require "features_helper"
 
 RSpec.feature "GAPIT results" do
   let(:user) { create(:user) }
-  let(:analysis) { create(:analysis, :gapit, status: :success, owner: user) }
+  let(:analysis) { create(:analysis, :gapit_with_results, status: :success, owner: user) }
 
   let!(:std_out) {
     create(:analysis_data_file, :std_out, owner: user, analysis: analysis, file: std_out_content)
@@ -14,13 +14,6 @@ RSpec.feature "GAPIT results" do
   let!(:gwas_genotype) { create(:analysis_data_file, :gwas_genotype_csv, owner: user, analysis: analysis) }
   let!(:gwas_phenotype) { create(:analysis_data_file, :gwas_phenotype, owner: user, analysis: analysis) }
   let!(:gwas_map) { create(:analysis_data_file, :gwas_map, owner: user, analysis: analysis) }
-
-  let!(:gwas_results_data_files) {
-    (2..10).map { |n| "trait#{n}" }.map do |trait_name|
-      create(:analysis_data_file, :gapit_results, analysis: analysis, owner: analysis.owner,
-             file: fixture_file("gapit/GAPIT..#{trait_name}.GWAS.Results.csv", "text/csv"))
-    end
-  }
 
   let(:std_out_content) { tempfile("Some standard output text", ["std-out", ".txt"]) }
   let(:std_err_content) { tempfile("", ["std-err", ".txt"]) }
@@ -53,7 +46,7 @@ RSpec.feature "GAPIT results" do
       end
 
       within(".output-panel") do
-        gwas_results_data_files.each do |data_file|
+        analysis.data_files.gwas_results.each do |data_file|
           expect(page).to have_css("a", text: data_file.file_file_name)
         end
       end
