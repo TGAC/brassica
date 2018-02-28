@@ -52,6 +52,9 @@ class AnalysesController < ApplicationController
         elsif @analysis.gwasser? || @analysis.gapit?
           @analysis = decorator_klass.decorate(@analysis)
           @manhattan = manhattan_plot_klass.new(@analysis, cutoff: (params[:cutoff].to_f if params.key?(:cutoff))).call
+          @results = @analysis.data_files.output.
+            where(data_type: Analysis::DataFile.data_types.values_at("gwas_results", "gwas_aux_results")).
+            order(:file_file_name)
         end
       end
     end

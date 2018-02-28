@@ -78,7 +78,8 @@ class Analysis::ShellRunner
 
   def store_file(path, data_type:)
     File.open(path, "r") do |file|
-      analysis.data_files.create!(owner: analysis.owner, role: :output, file: file, data_type: data_type)
+      analysis.data_files.create!(owner: analysis.owner, role: :output, origin: :generated,
+                                  file: file, data_type: data_type)
     end
   end
 

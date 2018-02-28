@@ -16,7 +16,7 @@
       .panel-title Output
 
     %ul.list-group
-      - @analysis.data_files.output.gwas_results.order(:created_at).each do |data_file|
+      - @results.each do |data_file|
         %li.list-group-item
           = link_to data_file.file_file_name, data_file.file.url
           %span= number_to_human_size(data_file.file.size)

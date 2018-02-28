@@ -36,9 +36,14 @@ class Analysis
     end
 
     def store_results
-      selected_traits.each do |trait|
-        runner.store_result("GAPIT..#{trait}.GWAS.Results.csv", data_type: :gwas_results)
-      end
+      result_files = selected_traits.map { |trait| "GAPIT..#{trait}.GWAS.Results.csv" }
+      aux_result_files = Dir.
+        glob(File.join(runner.results_dir, "*")).
+        reject { |filename| File.directory?(filename) }.
+        map { |filename| File.basename(filename) } - result_files
+
+      result_files.each { |filename| runner.store_result(filename, data_type: :gwas_results) }
+      aux_result_files.each { |filename| runner.store_result(filename, data_type: :gwas_aux_results) }
     end
 
     def selected_traits
