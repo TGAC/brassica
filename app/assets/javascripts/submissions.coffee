@@ -1,5 +1,4 @@
 $ ->
-  window.pp = new PlantPopulationSubmission('.edit-population-submission')
-  window.pp.init()
+  new PlantPopulationSubmission('.edit-population-submission').init()
   new PlantTrialSubmission('.edit-trial-submission').init()
 
