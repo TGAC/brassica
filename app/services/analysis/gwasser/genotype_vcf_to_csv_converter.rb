@@ -74,11 +74,10 @@ class Analysis
             sample_values << [sample_name, value]
           end
 
-          mutation_name = "#{record.id}_#{record.ref}_#{alternative}".strip.gsub(/\W/, '_')
+          mutation_name = "#{record.id}_#{record.ref}_#{alternative}".strip
           unique_values = sample_values.map { |_, val| val }.uniq
 
           if (unique_values - ["NA"]).size > 1
-            # TODO: make sure normalized names are unique
             mutation_names << mutation_name
             mutation_data << [record.chrom.to_s.strip, record.pos.to_s.strip]
 

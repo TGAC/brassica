@@ -49,14 +49,11 @@ class Analysis
       # If there is no variation (i.e. there is only one distinct value apart
       # from NA for each sample) for the mutation then record is silently skipped.
       #
-      # Special characters apart from underscore are stripped from sample and
-      # mutation identifiers.
-      #
       # record - hapmap record
       #
       # Returns a hash containing mutation name, position and value for each sample.
       def process_record(record)
-        mutation_name = record.rs.strip.gsub(/\W/, '_')
+        mutation_name = record.rs.strip
         mutation_data = [record.chrom, record.pos]
         sample_values = []
 

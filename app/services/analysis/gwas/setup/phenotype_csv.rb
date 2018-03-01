@@ -26,10 +26,6 @@ class Analysis
 
         attr_accessor :analysis
 
-        def normalize_pheno_csv
-          normalize_csv(phenotype_data_file.file, remove_columns: analysis.meta['removed_traits'])
-        end
-
         def check_pheno_status(status)
           case status
           when :ok then :ok

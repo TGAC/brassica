@@ -17,8 +17,8 @@ class Analysis
         scope.generated.first || scope.uploaded.first
       end
 
-      def normalize_csv(file, remove_columns: [], remove_rows: [])
-        Analysis::CsvNormalizer.new.call(file, remove_columns: remove_columns, remove_rows: remove_rows)
+      def normalize_csv(*args)
+        Analysis::CsvNormalizer.new.call(*args)
       end
 
       def normalize_geno_csv(geno_csv_file = genotype_data_file(:csv).file)
@@ -26,7 +26,7 @@ class Analysis
       end
 
       def normalize_pheno_csv(pheno_csv_file = phenotype_data_file.file)
-        normalize_csv(pheno_csv_file, remove_columns: analysis.meta['removed_traits'])
+        normalize_csv(pheno_csv_file, normalize_first_row: true, remove_columns: analysis.meta['removed_traits'])
       end
 
       def create_csv_data_file(file, data_type:)
@@ -95,7 +95,7 @@ class Analysis
       end
 
       def save_phenotype_metadata(removed_traits: nil, samples: nil)
-        analysis.meta['removed_traits'] = removed_traits if removed_traits
+        analysis.meta['removed_traits'] = removed_traits.map { |trait| trait.gsub(/\W/, '_') } if removed_traits
         analysis.meta['pheno_samples'] = samples if samples
         analysis.save!
       end
@@ -106,7 +106,7 @@ class Analysis
       end
 
       def append_phenotype_metadata(removed_traits: nil)
-        analysis.meta['removed_traits'] += removed_traits if removed_traits
+        analysis.meta['removed_traits'] += removed_traits.map { |trait| trait.gsub(/\W/, '_') } if removed_traits
         analysis.save!
       end
     end

@@ -24,14 +24,14 @@ OptionParser.new do |opts|
   end
 end.parse!
 
-gwas_results_path = File.join(options[:rails_root], "spec", "fixtures", "files", "gapit-results.csv")
-
 traits = File.
   open(options[:y], "r") { |f| f.readline }.
   gsub(/[\n\"]/, '').split(",").
   tap { |parts| parts.delete("ID") }
 
 traits.each do |trait|
-  target_path = "#{File.join(options[:outdir], "GAPIT..#{trait}.GWAS.Results.csv")}"
-  FileUtils.cp(gwas_results_path, target_path)
+  filename = "GAPIT..#{trait}.GWAS.Results.csv"
+  source_path = File.join(options[:rails_root], "spec", "fixtures", "files", "gapit", filename)
+  target_path = File.join(options[:outdir], filename)
+  FileUtils.cp(source_path, target_path) if File.exists?(source_path)
 end

@@ -53,9 +53,12 @@ class Analysis
         if map_csv_data_file = analysis.data_files.gwas_map.first
           File.open(map_csv_data_file.file.path, "r") do |file|
             map_data = Analysis::MapCsvParser.new.call(file)
+
             mutations = map_data.csv.map do |name, chrom, pos|
+              safe_R_name = name.gsub(/\W/, ".")
+
               # TODO: handle NA values without casting to floats
-              [name, neg_log10_p_values[name.gsub(/\W/, '_')].to_f, chrom, pos.to_i]
+              [name, neg_log10_p_values[safe_R_name].to_f, chrom, pos.to_i]
             end
           end
 

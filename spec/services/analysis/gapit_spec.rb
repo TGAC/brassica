@@ -45,27 +45,27 @@ RSpec.describe Analysis::Gapit do
           let!(:genotype_data_file) { csv_genotype_data_file }
           let!(:map_data_file) { csv_map_data_file }
 
-          let(:analysed_traits) { (2..10).map { |n| "trait#{n}" } }
+          let(:analysed_traits) { (2..10).map { |n| "trait_#{n}" } }
 
           it "runs successfully" do
             expect { subject.call }.
               to change { analysis.reload.status }.
               from("idle").to("success")
 
-            expect(analysis.meta).to include('geno_samples' => (1..95).map { |n| "plant#{n}" })
-            expect(analysis.meta).to include('pheno_samples' => (6..50).map { |n| "plant#{n}" })
-            expect(analysis.meta).to include('removed_mutations' => %w(snp1 snp2))
-            expect(analysis.meta).to include('removed_traits' => %w(trait1))
+            expect(analysis.meta).to include('geno_samples' => (1..95).map { |n| "plant-#{n}" })
+            expect(analysis.meta).to include('pheno_samples' => (6..50).map { |n| "plant-#{n}" })
+            expect(analysis.meta).to include('removed_mutations' => %w(snp-1 snp-2))
+            expect(analysis.meta).to include('removed_traits' => %w(trait_1))
             expect(analysis.meta).to include('traits_results' => {
-              "trait2" => "GAPIT..trait2.GWAS.Results.csv",
-              "trait3" => "GAPIT..trait3.GWAS.Results.csv",
-              "trait4" => "GAPIT..trait4.GWAS.Results.csv",
-              "trait5" => "GAPIT..trait5.GWAS.Results.csv",
-              "trait6" => "GAPIT..trait6.GWAS.Results.csv",
-              "trait7" => "GAPIT..trait7.GWAS.Results.csv",
-              "trait8" => "GAPIT..trait8.GWAS.Results.csv",
-              "trait9" => "GAPIT..trait9.GWAS.Results.csv",
-              "trait10" => "GAPIT..trait10.GWAS.Results.csv"
+              "trait_2" => "GAPIT..trait_2.GWAS.Results.csv",
+              "trait_3" => "GAPIT..trait_3.GWAS.Results.csv",
+              "trait_4" => "GAPIT..trait_4.GWAS.Results.csv",
+              "trait_5" => "GAPIT..trait_5.GWAS.Results.csv",
+              "trait_6" => "GAPIT..trait_6.GWAS.Results.csv",
+              "trait_7" => "GAPIT..trait_7.GWAS.Results.csv",
+              "trait_8" => "GAPIT..trait_8.GWAS.Results.csv",
+              "trait_9" => "GAPIT..trait_9.GWAS.Results.csv",
+              "trait_10" => "GAPIT..trait_10.GWAS.Results.csv"
             })
           end
 
@@ -104,8 +104,8 @@ RSpec.describe Analysis::Gapit do
 
             expect(analysis.data_files.gwas_genotype.csv.count).to eq(1)
 
-            expect(analysis.meta).to include('removed_mutations' => %w(snp4_G_C))
-            expect(analysis.meta).to include('removed_traits' => %w(trait1))
+            expect(analysis.meta).to include('removed_mutations' => %w(snp-4_G_C))
+            expect(analysis.meta).to include('removed_traits' => %w(trait_1))
           end
         end
 
@@ -141,7 +141,7 @@ RSpec.describe Analysis::Gapit do
       let!(:trait_descriptors) { create_list(:trait_descriptor, 5) }
       let!(:plant_scoring_units) {
         1.upto(100).map { |idx|
-          create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: "plant#{idx}")
+          create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: "plant-#{idx}")
         }
       }
 
@@ -174,7 +174,7 @@ RSpec.describe Analysis::Gapit do
             to change { analysis.reload.status }.
             from("idle").to("success")
 
-          expect(analysis.meta).to include('removed_mutations' => %w(snp4_G_C))
+          expect(analysis.meta).to include('removed_mutations' => %w(snp-4_G_C))
           expect(analysis.meta).to include('removed_traits' => [trait_descriptors.first.trait_name])
         end
       end

@@ -97,7 +97,7 @@ RSpec.feature "Analysis creation" do
     let!(:trait_descriptors) { create_list(:trait_descriptor, 5) }
     let!(:plant_scoring_units) {
       1.upto(100).map { |idx|
-        create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: "plant#{idx}")
+        create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: "plant-#{idx}")
       }
     }
     let!(:trait_scores) {

@@ -6,13 +6,13 @@ RSpec.describe Analysis::Gwasser::GenotypeVcfToCsvConverter do
 
     let(:sample_names) { %w(Original s1t1 s2t1 s3t1 s1t2 s2t2 s3t2) }
     let(:mutation_names) {
-      %w(1_10257_A_C 1_10291_C_T 1_10297_C_T 1_10303_C_T 1_10315_C_T 1_10321_C_T
-          1_10327_T_C 1_10583_G_A 1_10665_C_G
-          1_10694_C_G 1_10723_C_G 1_12783_G_A 1_13116_T_G 1_13118_A_G 1_13178_G_A
-          1_13302_C_T 1_13757_G_A X13868_A_G X13868_A_T X13868_A_C)
+      %w(1.10257_A_C 1.10291_C_T 1.10297_C_T 1.10303_C_T 1.10315_C_T 1.10321_C_T
+          1.10327_T_C 1.10583_G_A 1.10665_C_G
+          1.10694_C_G 1.10723_C_G 1.12783_G_A 1.13116_T_G 1.13118_A_G 1.13178_G_A
+          1.13302_C_T 1.13757_G_A X13868_A_G X13868_A_T X13868_A_C)
     }
     let(:mutation_names_to_ignore) {
-      %w(1_10291_C_T 1_10583_G_A 1_10327_T_C 1_10694_C_G 1_13118_A_G 1_13116_T_G 1_12783_G_A)
+      %w(1.10291_C_T 1.10583_G_A 1.10327_T_C 1.10694_C_G 1.13118_A_G 1.13116_T_G 1.12783_G_A)
     }
 
     let(:output_values) {

@@ -5,17 +5,17 @@ FactoryBot.define do
 
     trait :gwasser do
       analysis_type "gwasser"
-      meta("phenos": %w(trait5 trait6 trait7))
+      meta("phenos": %w(trait_5 trait_6 trait_7))
     end
 
     trait :gwasser_with_results do
       analysis_type "gwasser"
       meta(
-        "phenos": %w(trait5 trait6 trait7),
+        "phenos": %w(trait_5 trait_6 trait_7),
         "traits_results": {
-          "trait5" => "SNPAssociation-Full-trait5.csv",
-          "trait6" => "SNPAssociation-Full-trait6.csv",
-          "trait7" => "SNPAssociation-Full-trait7.csv"
+          "trait_5" => "SNPAssociation-Full-trait_5.csv",
+          "trait_6" => "SNPAssociation-Full-trait_6.csv",
+          "trait_7" => "SNPAssociation-Full-trait_7.csv"
         }
       )
 
@@ -37,15 +37,15 @@ FactoryBot.define do
       analysis_type "gapit"
       meta(
         "traits_results": {
-          "trait2": "GAPIT..trait2.GWAS.Results.csv",
-          "trait3": "GAPIT..trait3.GWAS.Results.csv",
-          "trait4": "GAPIT..trait4.GWAS.Results.csv",
-          "trait5": "GAPIT..trait5.GWAS.Results.csv",
-          "trait6": "GAPIT..trait6.GWAS.Results.csv",
-          "trait7": "GAPIT..trait7.GWAS.Results.csv",
-          "trait8": "GAPIT..trait8.GWAS.Results.csv",
-          "trait9": "GAPIT..trait9.GWAS.Results.csv",
-          "trait10": "GAPIT..trait10.GWAS.Results.csv"
+          "trait_2" => "GAPIT..trait_2.GWAS.Results.csv",
+          "trait_3" => "GAPIT..trait_3.GWAS.Results.csv",
+          "trait_4" => "GAPIT..trait_4.GWAS.Results.csv",
+          "trait_5" => "GAPIT..trait_5.GWAS.Results.csv",
+          "trait_6" => "GAPIT..trait_6.GWAS.Results.csv",
+          "trait_7" => "GAPIT..trait_7.GWAS.Results.csv",
+          "trait_8" => "GAPIT..trait_8.GWAS.Results.csv",
+          "trait_9" => "GAPIT..trait_9.GWAS.Results.csv",
+          "trait_10" => "GAPIT..trait_10.GWAS.Results.csv"
         }
       )
 

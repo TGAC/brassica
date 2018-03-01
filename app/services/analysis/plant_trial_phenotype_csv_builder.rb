@@ -35,11 +35,11 @@ class Analysis
             sample = sample.map { |val| val == "-" ? "NA" : val }
             scores = data.trait_id_indices.map { |idx| sample[idx] }
 
-            csv << [sample[0].gsub(/\W/, '_')] + scores
+            csv << [sample[0]] + scores
           end
         end
 
-        csv_file.original_filename = "plant-trail-phenotype.csv"
+        csv_file.original_filename = "plant-trial-phenotype.csv"
         csv_file.flush
         csv_file.rewind
       end

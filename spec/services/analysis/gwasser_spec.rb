@@ -47,14 +47,14 @@ RSpec.describe Analysis::Gwasser do
               to change { analysis.reload.status }.
               from("idle").to("success")
 
-            expect(analysis.meta).to include('geno_samples' => (1..95).map { |n| "plant#{n}" })
-            expect(analysis.meta).to include('pheno_samples' => (6..50).map { |n| "plant#{n}" })
-            expect(analysis.meta).to include('removed_mutations' => %w(snp1 snp2))
-            expect(analysis.meta).to include('removed_traits' => %w(trait1))
+            expect(analysis.meta).to include('geno_samples' => (1..95).map { |n| "plant-#{n}" })
+            expect(analysis.meta).to include('pheno_samples' => (6..50).map { |n| "plant-#{n}" })
+            expect(analysis.meta).to include('removed_mutations' => %w(snp-1 snp-2))
+            expect(analysis.meta).to include('removed_traits' => %w(trait_1))
             expect(analysis.meta).to include('traits_results' => {
-              "trait5" => "SNPAssociation-Full-trait5.csv",
-              "trait6" => "SNPAssociation-Full-trait6.csv",
-              "trait7" => "SNPAssociation-Full-trait7.csv"
+              "trait_5" => "SNPAssociation-Full-trait_5.csv",
+              "trait_6" => "SNPAssociation-Full-trait_6.csv",
+              "trait_7" => "SNPAssociation-Full-trait_7.csv"
             })
           end
 
@@ -93,8 +93,8 @@ RSpec.describe Analysis::Gwasser do
 
             expect(analysis.data_files.gwas_genotype.csv.count).to eq(1)
 
-            expect(analysis.meta).to include('removed_mutations' => %w(snp4_G_C))
-            expect(analysis.meta).to include('removed_traits' => %w(trait1))
+            expect(analysis.meta).to include('removed_mutations' => %w(snp-4_G_C))
+            expect(analysis.meta).to include('removed_traits' => %w(trait_1))
           end
         end
 
@@ -130,7 +130,7 @@ RSpec.describe Analysis::Gwasser do
       let!(:trait_descriptors) { create_list(:trait_descriptor, 5) }
       let!(:plant_scoring_units) {
         1.upto(100).map { |idx|
-          create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: "plant#{idx}")
+          create(:plant_scoring_unit, plant_trial: plant_trial, scoring_unit_name: "plant-#{idx}")
         }
       }
 
@@ -163,7 +163,7 @@ RSpec.describe Analysis::Gwasser do
             to change { analysis.reload.status }.
             from("idle").to("success")
 
-          expect(analysis.meta).to include('removed_mutations' => %w(snp4_G_C))
+          expect(analysis.meta).to include('removed_mutations' => %w(snp-4_G_C))
           expect(analysis.meta).to include('removed_traits' => [trait_descriptors.first.trait_name])
         end
       end

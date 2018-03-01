@@ -2,8 +2,11 @@ class Analysis
   # Copies given CSV file intended to be used as GWASSER input making sure
   # that its headers and sample names do not contain special characters
   # except for underscore.
+  #
+  # TODO: do not needlesly normalize names of samples and mutations, only names of traits need to be normalized.
+  # TODO: find better name, CsvPrefilter?
   class CsvNormalizer
-    def call(file, remove_columns: [], remove_rows: [])
+    def call(file, normalize_first_column: false, normalize_first_row: false, remove_columns: [], remove_rows: [])
       rows_retained = 0
       normalized_csv = CSV.generate(force_quotes: true) do |csv|
         CSV.open(file.path, "r") do |existing_csv|
@@ -20,7 +23,9 @@ class Analysis
             csv << row.map.with_index do |val, col_idx|
               next if remove_col_idxes.include?(col_idx)
 
-              if row_idx == 0 || col_idx == 0
+              normalize_value = (row_idx == 0 && normalize_first_row) || (col_idx == 0 && normalize_first_column)
+
+              if normalize_value
                 # TODO: make sure normalized names are unique
                 val.strip.gsub(/\W+/, '_')
               else

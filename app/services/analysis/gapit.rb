@@ -36,7 +36,7 @@ class Analysis
     end
 
     def store_results
-      result_files = traits.map { |trait| "GAPIT..#{trait}.GWAS.Results.csv" }
+      result_files = analyzed_traits.map { |trait| "GAPIT..#{trait}.GWAS.Results.csv" }
       aux_result_files = Dir.
         glob(File.join(runner.results_dir, "*")).
         reject { |filename| File.directory?(filename) }.
@@ -45,18 +45,16 @@ class Analysis
       result_files.each { |filename| runner.store_result(filename, data_type: :gwas_results) }
       aux_result_files.each { |filename| runner.store_result(filename, data_type: :gwas_aux_results) }
 
-      analysis.meta["traits_results"] = Hash[traits.zip(result_files)]
+      analysis.meta["traits_results"] = Hash[analyzed_traits.zip(result_files)]
       analysis.save!
     end
 
-    def traits
-      return @traits if defined?(@traits)
+    def analyzed_traits
+      return @analyzed_traits if defined?(@analyzed_traits)
 
-      File.open(phenotype_data_file.file.path, "r") do |file|
-        @traits = Analysis::PhenotypeCsvParser.new.call(file).trait_ids
+      @analyzed_traits = Dir["#{runner.results_dir}/*.GWAS.Results.csv"].map do |filename|
+        filename.match(/GAPIT\.\.(.+).GWAS.Results.csv/)[1]
       end
-
-      @traits
     end
 
     def job_command
