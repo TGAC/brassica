@@ -4,11 +4,13 @@
 
   %pre.parser-summary.alert.alert-success{ class: "#{'hidden' unless @content.upload}" }
     - if @content.upload
-      = raw @content.upload.parser_summary.join('</br>')
+      :preserve
+        #{@content.upload.parser_summary.join("\n")}
 
   %pre.parser-warnings.alert.alert-danger{ class: "#{'hidden' unless @content.upload && @content.upload.parser_warnings.present?}" }
     - if @content.upload && @content.upload.parser_warnings.present?
-      = raw @content.upload.parser_warnings.join('</br>')
+      :preserve
+        #{@content.upload.parser_warnings.join("\n")}
 
   .form-group
     = label_tag :upload, 'Uploaded file'

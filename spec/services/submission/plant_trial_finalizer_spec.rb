@@ -45,7 +45,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       ]
     }
-    let(:layout_upload) { create(:upload, :plant_trial_layout, submission: submission) }
+    let(:layout_upload) { create(:submission_upload, :plant_trial_layout, submission: submission) }
 
     before do
       submission.content.update(:step01, plant_trial_attrs)
@@ -76,8 +76,8 @@ RSpec.describe Submission::PlantTrialFinalizer do
         }
       )
       submission.content.update(:step05, layout_upload_id: layout_upload.id)
-      submission.content.update(:step06, plant_trial_attrs.slice(
-        :data_owned_by, :data_provenance, :comments).merge(visibility: 'published')
+      submission.content.update(:step08, plant_trial_attrs.slice(
+        :study_type, :data_owned_by, :data_provenance, :comments).merge(visibility: 'published')
       )
     end
 
@@ -114,6 +114,7 @@ RSpec.describe Submission::PlantTrialFinalizer do
       expect(PlantTrial.last.published).to be_truthy
       expect(PlantTrial.last.user).to eq submission.user
       expect(PlantTrial.last.published_on).to be_within(5.seconds).of(Time.now)
+      expect(PlantTrial.last.study_type).to eq "greenhouse"
     end
 
     it 'associates created plant trial with plant population' do
@@ -337,6 +338,79 @@ RSpec.describe Submission::PlantTrialFinalizer do
       end
     end
 
+    context "when parsing environment data" do
+      before do
+        submission.content.update(:step04, environment: {
+          day_temperature: ["degree Celcius", 20],
+          night_temperature: ["degree Celcius", 10],
+          co2_controlled: "controlled",
+          ph: [[7.5, "30-40"], [6.5], [4.5, "10-20"]],
+          lamps: [["fluorescent tubes", "2 per plant"], ["new secret lamps", nil]],
+          containers: [["new secret containers", nil]],
+          topological_descriptors: [["slope", "45 degree"]],
+          rooting_media: [["clay soil", "high red clay content"]]
+        })
+      end
+
+      before do
+        create(:lamp_type, name: "fluorescent tubes")
+        create(:measurement_unit, name: "degree Celcius")
+        create(:plant_treatment_type, name: "plant growth medium treatment", term: "PECO:0007147")
+      end
+
+      it "records environment properties" do
+        subject.call
+
+        environment = PlantTrial.last.environment
+
+        expect(environment).to be_persisted
+        expect(environment.co2_controlled).to be_truthy
+        expect(environment.ph).to eq("7.5:30-40; 6.5; 4.5:10-20")
+        expect(environment.lamps[0].lamp_type).to eq(LampType.find_by!(name: "fluorescent tubes"))
+        expect(environment.lamps[0].description).to eq("2 per plant")
+        expect(environment.lamps[1].lamp_type).to eq(LampType.find_by!(name: "new secret lamps"))
+        expect(environment.lamps[1].description).to be_nil
+        expect(environment.containers[0].container_type).to eq(ContainerType.find_by!(name: "new secret containers"))
+        expect(environment.containers[0].description).to be_nil
+        expect(environment.topological_descriptors[0].topological_factor).
+          to eq(TopologicalFactor.find_by!(name: "slope"))
+        expect(environment.topological_descriptors[0].description).to eq("45 degree")
+        expect(environment.rooting_media[0].medium_type).to eq(PlantTreatmentType.find_by!(name: "clay soil"))
+        expect(environment.rooting_media[0].description).to eq("high red clay content")
+      end
+    end
+
+    context "when parsing treatment data" do
+      before do
+        submission.content.update(:step04, treatment: {
+          pesticide: [["diuron treatment", "Sprayed the hell out of them pests!"],
+                      ["new secret treatment", "Not telling anything"]]
+        })
+      end
+
+      before do
+        root_treatment_type = create(:plant_treatment_type, name: "pesticide treatment",
+                                                            term: PlantTreatmentType::PESTICIDE_ROOT_TERM)
+        create(:plant_treatment_type, name: "diuron treatment", parent_ids: [root_treatment_type.id])
+      end
+
+      it "records environment properties" do
+        subject.call
+
+        treatment = PlantTrial.last.treatment
+
+        expect(treatment).to be_persisted
+        expect(treatment.pesticide_applications[0].treatment_type).
+          to eq(PlantTreatmentType.find_by!(name: "diuron treatment"))
+
+        expect(treatment.pesticide_applications[1].treatment_type).
+          to eq(PlantTreatmentType.find_by!(name: "new secret treatment"))
+
+        expect(treatment.pesticide_applications[0].description).to eq("Sprayed the hell out of them pests!")
+        expect(treatment.pesticide_applications[1].description).to eq("Not telling anything")
+      end
+    end
+
     it 'makes submission and created objects published' do
       subject.call
 
@@ -441,7 +515,6 @@ RSpec.describe Submission::PlantTrialFinalizer do
         expect{ subject.call }.to change{ related_object_count }.by(0)
         expect(submission.finalized?).to be_falsey
       end
-
     end
 
     def related_object_count

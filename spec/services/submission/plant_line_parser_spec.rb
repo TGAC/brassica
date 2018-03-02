@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Submission::PlantLineParser do
-  let(:upload) { create(:upload, :plant_lines) }
+  let(:upload) { create(:submission_upload, :plant_lines) }
   let(:submission) { upload.submission }
   subject { described_class.new(upload) }
 

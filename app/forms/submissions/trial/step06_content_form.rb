@@ -1,12 +1,12 @@
 module Submissions
   module Trial
     class Step06ContentForm < PlantTrialForm
-      property :visibility, default: 'private'
-      property :data_owned_by
-      property :data_provenance
-      property :comments
+      property :treatment_upload_id
 
-      validates :visibility, inclusion: { in: %w(published private) }
+      def treatment_upload
+        upload = Submission::Upload.plant_trial_treatment.find_by(id: treatment_upload_id)
+        SubmissionPlantTrialTreatmentUploadDecorator.decorate(upload) if upload
+      end
     end
   end
 end

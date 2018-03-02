@@ -104,4 +104,24 @@ module ApplicationHelper
     url = url + "?subject=#{subject}"
     link_to label, url
   end
+
+  def named_link(name, label = nil)
+    urls = {
+      plant_ontology: ["Plant Ontology", 'http://archive.gramene.org/plant_ontology/'],
+      trait_ontology: ['Trait Ontology', 'http://archive.gramene.org/db/ontology/search?id=TO:0000387'],
+      gr_tax_ontology: ['GR_tax ontology','http://archive.gramene.org/db/ontology/search?id=GR_tax:017502'],
+      plant_experimental_conditions_ontology: ['Plant Experimental Conditions Ontology',
+                                               'http://browser.planteome.org/amigo/term/EO:0007359'],
+      crop_research_ontology: ["Crop Research Ontology",
+                               "http://www.cropontology.org/ontology/CO_715/Crop%20Research"],
+      unit_ontology: ["Unit Ontology", "https://github.com/bio-ontology-research-group/unit-ontology"],
+      ncbi_sra: ['Sequence Read Archive (NCBI)','https://www.ncbi.nlm.nih.gov/sra'],
+      ensembl_plants: ['EnsemblPlants','http://plants.ensembl.org/index.html'],
+    }
+
+    label ||= urls.fetch(name).first
+    url = urls.fetch(name).last
+
+    link_to label, url, target: "_blank"
+  end
 end

@@ -1,0 +1,13 @@
+.errors.hidden
+
+= form_tag submission_uploads_path(submission), multipart: true, method: :post do
+  = hidden_field_tag "submission_upload[upload_type]", "plant_trial_treatment"
+
+  .form-group.fileinput{ class: "#{'hidden' if @content.treatment_upload}" }
+    .btn.btn-primary.fileinput-button
+      %span Choose a file...
+      = file_field_tag "submission_upload[file]", class: 'plant-trial-treatment-upload',
+        accept: "application/vnd.ms-excel"
+
+    %small.help-block
+      Please upload the XLS file containing Treatment data here.

@@ -29,34 +29,35 @@ en:
         in a CSV format. Download it, leave the header (the first line) intact, and paste your data, in columns,
         below the header. Please do not remove any columns even if you leave them empty. See template content and Step 3 for details.
       trial: |
-        With Trail submission you are able to upload new trait scoring information to BIP.
+        With Trial submission you are able to upload new trait scoring information to BIP.
         The process lets you describe trial conditions and environment, to indicate
-        what traits were scored and how, and finally to upload the list of scoring.
+        what traits were scored and how, and finally to upload the list of scoring. Steps 1-3 are
+        a preparation which will allow you to download spreadsheet templates helpful in organizing your data and
+        its later submission.
+
       qtl:
       linkage_map:
 
     steps:
       population:
         step01:
-          heading: Basic information.
+          heading: Basic information
           body: Provide a unique name and a description of your population. Select the population type.
         step02:
-          heading: Taxonomy.
+          heading: Taxonomy
           body: Choose the species and the origin of the population you are submitting.
         step03:
-          heading: Plant lines.
+          heading: Plant lines
           body: |
             Define the list of plant lines connected with the submitted population.
             You can either use the CSV file template (suitable for larger populations) or manual form submission.
         step04:
-          heading: Provenance.
+          heading: Provenance
           body: Identify the owner of the submitted data and describe its provenance.
+
       trial:
         step01:
-          heading: Trial information.
-          body: Provide detailed description about the performed plant trial. Give as much information as possible.
-        step02:
-          heading: Traits.
+          heading: Traits
           body: Choose plant traits that were scored in the course of this trial, or define new trait descriptors.
           new_trait_descriptor_attributes:
             category: Trait category
@@ -64,20 +65,30 @@ en:
           new_trait_descriptor_attribute_hints:
             category: Select, or provide, the category of trait.
             units_of_measurements: Select, or write down, the unit of measurement when scoring this trait.
-        step03:
-          heading: Scoring template design.
+        step02:
+          heading: Scoring template design
           body: |
             Provide us with information important for the scoring template design. The template will then be created
             automatically, in order to help you upload your trait data correctly.
+        step03:
+          heading: Template download
+          body: |
+            Download generated templates for trial scoring, environment and treatment information.
         step04:
-          heading: Scoring.
+          heading: Scoring
           body: Upload tabular list of scores given to plants per each trait scored.
         step05:
-          heading: Trial layout.
-          body: If available, please upload an image of the layout of your trial
+          heading: Environment
+          body: Upload information about trial environment.
         step06:
-          heading: Provenance.
-          body: Identify the owner of the submitted data and describe its provenance.
+          heading: Treatment
+          body: Upload information about employed plant treatment.
+        step07:
+          heading: Trial layout
+          body: If available, please upload an image of the layout of your trial
+        step08:
+          heading: Trial information
+          body: Provide detailed description about the performed plant trial. Give as much information as possible.
       qtl:
       linkage_map:
 

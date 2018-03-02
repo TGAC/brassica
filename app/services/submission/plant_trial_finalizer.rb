@@ -12,6 +12,8 @@ class Submission::PlantTrialFinalizer
     ActiveRecord::Base.transaction do
       ActiveRecord::Base.delay_touching do
         create_plant_trial
+        create_plant_trial_environment
+        create_plant_trial_treatment
         create_new_trait_descriptors
         create_scoring
         update_submission
@@ -166,7 +168,7 @@ class Submission::PlantTrialFinalizer
   def create_plant_trial
     attr_names = [:plant_trial_name, :project_descriptor, :plant_population_id, :plant_trial_description, :trial_year,
                   :institute_id, :country_id, :trial_location_site_name, :place_name, :latitude, :longitude, :altitude,
-                  :terrain, :soil_type, :statistical_factors, :data_status]
+                  :terrain, :soil_type, :statistical_factors, :data_status, :study_type]
 
     attrs = submission.content.to_h.slice(*attr_names).merge(common_data)
     design_factor_names = submission.content.design_factor_names || []
@@ -192,6 +194,24 @@ class Submission::PlantTrialFinalizer
     else
       @plant_trial = PlantTrial.create!(attrs.except(:data_status))
     end
+  end
+
+  def create_plant_trial_environment
+    return unless submission.content.environment.present?
+
+    builder = Submission::PlantTrialFinalizer::EnvironmentBuilder.new(submission, @plant_trial)
+    environment = builder.call
+    environment.rooting_media.map(&:medium_type).select(&:new_record?).each(&:save!)
+    environment.save!
+  end
+
+  def create_plant_trial_treatment
+    return unless submission.content.treatment.present?
+
+    builder = Submission::PlantTrialFinalizer::TreatmentBuilder.new(submission, @plant_trial)
+    treatment = builder.call
+    treatment.treatment_applications.map(&:treatment_type).select(&:new_record?).each(&:save!)
+    treatment.save!
   end
 
   def update_submission

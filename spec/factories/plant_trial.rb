@@ -15,6 +15,7 @@ FactoryBot.define do
     plant_population
     user
     annotable
+    study_type "greenhouse"
   end
 
   trait :with_layout do

@@ -70,6 +70,52 @@ RSpec.describe "Submission management" do
               step01: {
                 submission: {
                   content: {
+                    trait_descriptor_list: [trait_descriptor.id.to_s],
+                    data_status: 'raw_data'
+                  }
+                }
+              },
+              step02: {
+                submission: {
+                  content: {
+                    lines_or_varieties: "plant_lines",
+                    technical_replicate_numbers: ["1"],
+                    design_factor_names: ["plot", "pot"]
+                  }
+                }
+              },
+              step03: {},
+              step04: {
+                submission: {
+                  content: {
+                    upload_id: "664"
+                  }
+                }
+              },
+              step05: {
+                submission: {
+                  content: {
+                    environment_upload_id: "665"
+                  }
+                }
+              },
+              step06: {
+                submission: {
+                  content: {
+                    treatment_upload_id: "666"
+                  }
+                }
+              },
+              step07: {
+                submission: {
+                  content: {
+                    layout_upload_id: "667"
+                  }
+                }
+              },
+              step08: {
+                submission: {
+                  content: {
                     plant_trial_name: "Trial A",
                     plant_trial_description: "Trial A brief description.",
                     project_descriptor: "Project A",
@@ -85,47 +131,11 @@ RSpec.describe "Submission management" do
                     terrain: "Heavenly pasture",
                     soil_type: "ST4",
                     statistical_factors: "XYZ",
-                    data_status: 'plant_varieties'
-                  }
-                }
-              },
-              step02: {
-                submission: {
-                  content: {
-                    trait_descriptor_list: [trait_descriptor.id.to_s]
-                  }
-                }
-              },
-              step03: {
-                submission: {
-                  content: {
-                    lines_or_varieties: "plant_lines",
-                    technical_replicate_numbers: ["1"],
-                    design_factor_names: ["plot", "pot"]
-                  }
-                }
-              },
-              step04: {
-                submission: {
-                  content: {
-                    upload_id: "666"
-                  }
-                }
-              },
-              step05: {
-                submission: {
-                  content: {
-                    layout_upload_id: "667"
-                  }
-                }
-              },
-              step06: {
-                submission: {
-                  content: {
                     visibility: "private",
                     data_owned_by: "X",
                     data_provenance: "Y",
-                    comments: "..."
+                    comments: "...",
+                    study_type: "growth_chamber"
                   }
                 }
               }
@@ -194,7 +204,11 @@ RSpec.describe "Submission management" do
                                   end
 
               put "/submissions/#{submission.id}", step_params
-              expect(submission.reload.content.to_h).to include(step_params[:submission][:content])
+
+              if step_params.present?
+                expect(submission.reload.content.to_h).to include(step_params[:submission][:content])
+              end
+
               expect(response).to redirect_to(expected_redirect)
             end
 
@@ -230,7 +244,8 @@ RSpec.describe "Submission management" do
               before { allow_any_instance_of(finalizer_klass).to receive(:call).and_return(false) }
 
               it "redirects to first step with :validate option" do
-                put "/submissions/#{submission.id}", submission: { content: { comments: "Lorem ipsum" } }
+                put "/submissions/#{submission.id}", update_params.values.last
+
                 expect(response).to redirect_to(edit_submission_path(submission, validate: true))
               end
             end

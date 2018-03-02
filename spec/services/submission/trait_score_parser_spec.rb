@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Submission::TraitScoreParser do
 
-  let(:upload) { create(:upload) }
+  let(:upload) { create(:submission_upload) }
   subject { described_class.new(upload) }
 
   describe '#parse_header' do

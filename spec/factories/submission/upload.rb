@@ -1,7 +1,7 @@
 include ActionDispatch::TestProcess
 
 FactoryBot.define do
-  factory :upload, class: Submission::Upload do
+  factory :submission_upload, class: Submission::Upload do
     upload_type 'trait_scores'
     file { fixture_file("score_upload.txt", 'text/plain') }
     association :submission, submission_type: :trial
@@ -19,6 +19,18 @@ FactoryBot.define do
       upload_type 'plant_lines'
       file { fixture_file("plant_lines_upload.txt", 'text/plain') }
       association :submission, submission_type: :population
+    end
+
+    trait :plant_trial_environment do
+      upload_type 'plant_trial_environment'
+      file { fixture_file("plant-trial-environment.xls", 'application/vnd.ms-excel') }
+      association :submission, submission_type: :trial
+    end
+
+    trait :plant_trial_treatment do
+      upload_type 'plant_trial_treatment'
+      file { fixture_file("plant-trial-treatment.xls", 'application/vnd.ms-excel') }
+      association :submission, submission_type: :trial
     end
   end
 end

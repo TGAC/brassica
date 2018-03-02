@@ -3,8 +3,8 @@
 - if submission_values.present?
   .panel.panel-default
     %ul.list-group
-      - submission_values.each do |value, label, url|
-        %li.list-group-item
+      - submission_values.each do |attr, value, label, url|
+        %li.list-group-item{ class: "submission-attribute-#{attr.to_s.dasherize}" }
           = render partial: "submissions/show/value", locals: { value: value, label: label, url: url }
 
 - else

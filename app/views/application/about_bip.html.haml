@@ -131,17 +131,12 @@
     standards.
     If you have or are aware of other trait types that we do not cover yet, please get in touch or add them to BRATO directly.
     Your contributions are most welcome!
-    We currently use
-    = link_to 'Plant','http://archive.gramene.org/plant_ontology/'
-    and
-    = link_to 'Trait Ontology','http://archive.gramene.org/db/ontology/search?id=TO:0000387'
-    as reference ontologies for plants and
-    = link_to 'GR_tax ontology','http://archive.gramene.org/db/ontology/search?id=GR_tax:017502'
-    to cover Brassica taxonomy. Marker sequences are currently cross-referenced with resources such as
-    = link_to 'Sequence Read Archive (NCBI)','https://www.ncbi.nlm.nih.gov/sra'
-    and
-    = link_to 'EnsemblPlants','http://plants.ensembl.org/index.html'
-    where possible.
+    We currently use #{named_link(:plant_ontology, "Plant")} and #{named_link(:trait_ontology)} as reference
+    ontologies for plants, #{named_link(:gr_tax_ontology)} to cover Brassica taxonomy,
+    #{named_link(:plant_experimental_conditions_ontology)} and #{named_link(:crop_research_ontology)} to describe
+    plant treatment and environment, and #{named_link(:unit_ontology)} for measurement units. Marker
+    sequences are currently cross-referenced with resources such as
+    #{named_link(:ncbi_sra)} and #{named_link(:ensembl_plants)} where possible.
 
   %h4 Data privacy
 
