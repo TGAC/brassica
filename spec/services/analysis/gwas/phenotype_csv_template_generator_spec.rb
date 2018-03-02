@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Analysis::PhenotypeCsvTemplateGenerator do
+RSpec.describe Analysis::Gwas::PhenotypeCsvTemplateGenerator do
   subject { described_class.new.call }
 
   it "returns a CSV string" do

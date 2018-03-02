@@ -24,7 +24,7 @@ class Analysis
         attr_accessor :analysis
 
         def analyze_geno_hapmap_file
-          Analysis::GenotypeHapmapMetadataAnalyzer.new.call(genotype_data_file(:hapmap).file.path)
+          Analysis::Gwas::GenotypeHapmapMetadataAnalyzer.new.call(genotype_data_file(:hapmap).file.path)
         end
       end
     end

@@ -52,7 +52,7 @@ class Analysis
 
         if map_csv_data_file = analysis.data_files.gwas_map.first
           File.open(map_csv_data_file.file.path, "r") do |file|
-            map_data = Analysis::MapCsvParser.new.call(file)
+            map_data = Analysis::Gwas::MapCsvParser.new.call(file)
 
             mutations = map_data.csv.map do |name, chrom, pos|
               safe_R_name = name.gsub(/\W/, ".")

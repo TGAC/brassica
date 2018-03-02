@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Analysis::Gwasser::GenotypeHapmapToCsvConverter do
+RSpec.describe Analysis::Gwas::GenotypeHapmapToCsvConverter do
   describe "#call" do
     context "valid file" do
       let(:hapmap_path) { Rails.root.join(*%w(spec fixtures files hapmap multisample.txt)).to_s }

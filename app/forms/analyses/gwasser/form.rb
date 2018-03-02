@@ -105,26 +105,26 @@ module Analyses
       end
 
       def build_plant_trial_pheno_data
-        Analysis::PlantTrialPhenotypeCsvBuilder.new.build(plant_trial)
+        Analysis::Gwas::PlantTrialPhenotypeCsvBuilder.new.build(plant_trial)
       end
 
       def genotype_data_parser
         case genotype_data_file.try(:file_format)
         when "hapmap"
-          Analysis::GenotypeHapmapParser.new
+          Analysis::Gwas::GenotypeHapmapParser.new
         when "vcf"
-          Analysis::GenotypeVcfParser.new
+          Analysis::Gwas::GenotypeVcfParser.new
         else
-          Analysis::GenotypeCsvParser.new
+          Analysis::Gwas::GenotypeCsvParser.new
         end
       end
 
       def map_data_parser
-        Analysis::MapCsvParser.new
+        Analysis::Gwas::MapCsvParser.new
       end
 
       def phenotype_data_parser
-        Analysis::PhenotypeCsvParser.new
+        Analysis::Gwas::PhenotypeCsvParser.new
       end
 
       def plant_trial

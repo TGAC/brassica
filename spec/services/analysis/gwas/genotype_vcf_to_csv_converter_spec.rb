@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Analysis::Gwasser::GenotypeVcfToCsvConverter do
+RSpec.describe Analysis::Gwas::GenotypeVcfToCsvConverter do
   describe "#call" do
     let(:vcf_path) { Rails.root.join(*%w(spec fixtures files vcf multisample.vcf)).to_s }
 

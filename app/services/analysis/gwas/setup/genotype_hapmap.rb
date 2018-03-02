@@ -31,8 +31,7 @@ class Analysis
         attr_accessor :analysis
 
         def convert_genotype_hapmap_to_csv
-          # NOTE: no need to normalize as conversion already outputs correct files
-          Analysis::Gwasser::GenotypeHapmapToCsvConverter.new.call(genotype_data_file(:hapmap).file.path)
+          Analysis::Gwas::GenotypeHapmapToCsvConverter.new.call(genotype_data_file(:hapmap).file.path)
         end
       end
     end

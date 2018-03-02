@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Analysis::GenotypeCsvTemplateGenerator do
+RSpec.describe Analysis::Gwas::GenotypeCsvTemplateGenerator do
   context "with no plant trial given" do
     subject { described_class.new.call.split("\n") }
 

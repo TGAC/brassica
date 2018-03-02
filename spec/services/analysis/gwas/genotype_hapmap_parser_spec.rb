@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Analysis::GenotypeHapmapParser do
+RSpec.describe Analysis::Gwas::GenotypeHapmapParser do
   describe "#call" do
     let(:io) { StringIO.new(File.read(file)) }
 

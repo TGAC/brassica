@@ -48,7 +48,7 @@ class Analysis
 
       unless @selected_traits.present?
         File.open(phenotype_data_file.file.path, "r") do |file|
-          result = Analysis::PhenotypeCsvParser.new.call(file)
+          result = Analysis::Gwas::PhenotypeCsvParser.new.call(file)
           @selected_traits = result.trait_ids
         end
       end

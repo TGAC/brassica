@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Analysis::GenotypeVcfParser do
+RSpec.describe Analysis::Gwas::GenotypeVcfParser do
   describe "#call" do
     let(:io) { StringIO.new(File.read(file)) }
 

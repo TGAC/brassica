@@ -13,7 +13,7 @@ OptionParser.new do |opts|
   opts.on("--G GENO-HAPMAP-FILE") { |g_file| }
   opts.on("--GD GENO-CSV-FILE") { |gd_file| }
   opts.on("--GM MAP-CSV-FILE") { |gm_file| }
-  opts.on("--gapitDir GAPIT_DIR", String, "GAPIT source directory") { |gapit_dir| }
+  opts.on("--gapitDir GAPIT_DIR", "GAPIT source directory") { |gapit_dir| }
 
   opts.on("--outDir OUTDIR", String, "Output directory") do |outdir|
     options[:outdir] = outdir

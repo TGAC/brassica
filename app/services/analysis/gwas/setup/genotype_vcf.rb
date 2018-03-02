@@ -31,8 +31,7 @@ class Analysis
         attr_accessor :analysis
 
         def convert_genotype_vcf_to_csv
-          # NOTE: no need to normalize as conversion already outputs correct files
-          Analysis::Gwasser::GenotypeVcfToCsvConverter.new.call(genotype_data_file(:vcf).file.path)
+          Analysis::Gwas::GenotypeVcfToCsvConverter.new.call(genotype_data_file(:vcf).file.path)
         end
       end
     end

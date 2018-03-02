@@ -1,10 +1,9 @@
 class Analysis
-  # Copies given CSV file intended to be used as GWASSER input making sure
-  # that its headers and sample names do not contain special characters
-  # except for underscore.
+  # Copies given CSV file intended to be used as GWASSER input doing some of the following:
   #
-  # TODO: do not needlesly normalize names of samples and mutations, only names of traits need to be normalized.
-  # TODO: find better name, CsvPrefilter?
+  # * replace non-alphanumeric characters in row and column headers with underscores
+  # * remove specified columns
+  # * remove specified rows
   class CsvNormalizer
     def call(file, normalize_first_column: false, normalize_first_row: false, remove_columns: [], remove_rows: [])
       rows_retained = 0

@@ -122,7 +122,7 @@ class Analysis
         map_csv_data_file = analysis.data_files.gwas_map.first
 
         File.open(map_csv_data_file.file.path, "r") do |file|
-          map_data = Analysis::MapCsvParser.new.call(file)
+          map_data = Analysis::Gwas::MapCsvParser.new.call(file)
           @chromosome_names = map_data.csv.map { |_, chrom, _| chrom }.uniq
         end
       end
