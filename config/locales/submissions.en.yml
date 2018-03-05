@@ -50,7 +50,7 @@ en:
           heading: Plant lines
           body: |
             Define the list of plant lines connected with the submitted population.
-            You can either use the CSV file template (suitable for larger populations) or manual form submission.
+            You can either use the XLS file template (suitable for larger populations) or manual form submission.
         step04:
           heading: Provenance
           body: Identify the owner of the submitted data and describe its provenance.

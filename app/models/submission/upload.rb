@@ -13,10 +13,9 @@ class Submission::Upload < ActiveRecord::Base
 
   validates :submission, presence: true
   validates :file, attachment_presence: true, attachment_size: { less_than: 500.megabytes }
-  validates :file, attachment_content_type: { content_type: IMAGE_CONTENT_TYPES },
-    if: -> { plant_trial_layout? }
-  validates :file, attachment_content_type: { content_type: CSV_CONTENT_TYPES },
-    if: -> { trait_scores? || plant_lines? }
+  validates :file, attachment_content_type: { content_type: IMAGE_CONTENT_TYPES }, if: :plant_trial_layout?
+  validates :file, attachment_content_type: { content_type: CSV_CONTENT_TYPES }, if: :trait_scores?
+  validates :file, attachment_content_type: { content_type: XLS_CONTENT_TYPES }, if: :plant_lines?
   validates :file, attachment_content_type: { content_type: XLS_CONTENT_TYPES },
     if: -> { plant_trial_environment? || plant_trial_treatment? }
 
