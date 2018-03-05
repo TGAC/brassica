@@ -13,6 +13,7 @@ $step-info: #5b32d6;
 // sizing
 
 $bubble-size: 50px;
+$bubble-top-margin: 30px;
 $bubble-line-thickness: 1px;
 $border-thickness: 1px;
 $darken-amount: 30%;
@@ -52,22 +53,41 @@ $mobile-size: 400px;
   -moz-flex: 1;
   flex: 1;
 }
+
+.trial-before-after {
+  @extend .clearfix;
+
+  margin-top: -15px;
+  margin-bottom: 20px;
+
+  .before {
+    float: left;
+  }
+
+  .after {
+    float: right;
+  }
+}
+
 .step-indicator {
   @extend .flexer;
   margin: 0;
   padding: 0;
   font-size: 80%;
-  margin: 20px 0;
+  margin: 0 0 20px 0;
   position: relative;
+
   .panel {
     box-shadow: none;
-    .panel-heading,
-    .panel-body {
+    background: transparent;
+
+    .panel-heading, .panel-body {
       padding: 0 5px;
     }
   }
   > li {
     @extend .flexer-element;
+    @include border-radius(2px);
     list-style: none;
     text-align: center;
     width: auto;
@@ -75,8 +95,14 @@ $mobile-size: 400px;
     margin: 0;
     position: relative;
     text-overflow: ellipsis;
+    background-color: lighten(#b5ad15, 52%);
     color: $inactive;
     display: block;
+
+    &.separator {
+      flex-grow: 0.25;
+      background: transparent;
+    }
   }
   > li .step {
     background-color: $body-bg;
@@ -87,7 +113,7 @@ $mobile-size: 400px;
     display: block;
     font-size: 2.5em;
     line-height: 1.5;
-    margin: 0 auto 0.5em auto;
+    margin: $bubble-top-margin auto 0.5em auto;
     position: relative;
     z-index: 2;
 
@@ -99,7 +125,7 @@ $mobile-size: 400px;
     display: block;
     position: absolute;
     left: 0;
-    top: $bubble-size / 2 - $border-thickness;
+    top: $bubble-top-margin + $bubble-size / 2 - $border-thickness;
     width: 100%;
     height: $bubble-line-thickness;
     content: '';
