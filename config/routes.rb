@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   resources :analyses, except: [:edit]
 
   namespace :analyses do
-    resources :data_files, controller: 'data_files', only: [:new, :create, :destroy]
+    resources :data_files, controller: 'data_files', only: [:new, :create, :destroy, :show]
   end
 
   get 'search', to: 'searches#counts'

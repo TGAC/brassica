@@ -25,6 +25,12 @@ class Analyses::DataFilesController < ApplicationController
     end
   end
 
+  def show
+    data_file = current_user.data_files.find(params[:id])
+
+    send_file(data_file.file.path, filename: data_file.file_file_name, disposition: :attachment)
+  end
+
   def create
     data_file = Analysis::DataFile.create(create_params)
 
