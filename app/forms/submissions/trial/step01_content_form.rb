@@ -1,6 +1,7 @@
 module Submissions
   module Trial
     class Step01ContentForm < PlantTrialForm
+      property :plant_trial_name
       property :data_status
       property :trait_descriptor_list
 
@@ -21,7 +22,14 @@ module Submissions
         validates :scoring_method, presence: true
       end
 
+      validates :plant_trial_name, presence: true
       validates :trait_descriptor_list, length: { minimum: 1 }
+
+      validate do
+        if PlantTrial.where(plant_trial_name: plant_trial_name).exists?
+          errors.add(:plant_trial_name, :taken)
+        end
+      end
 
       # NOTE Left here for the moment we allow users to define their own trait names.
       validate do
@@ -64,6 +72,7 @@ module Submissions
 
       def self.permitted_properties
         [
+          :plant_trial_name,
           :data_status,
           {
             :trait_descriptor_list => [],

@@ -60,7 +60,7 @@ en:
 
       trial:
         step01:
-          heading: Traits
+          heading: Trial name & Traits
           body: Choose plant traits that were scored in the course of this trial, or define new trait descriptors.
           new_trait_descriptor_attributes:
             category: Trait category

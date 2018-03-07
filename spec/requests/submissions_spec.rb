@@ -70,6 +70,7 @@ RSpec.describe "Submission management" do
               step01: {
                 submission: {
                   content: {
+                    plant_trial_name: "Trial A",
                     trait_descriptor_list: [trait_descriptor.id.to_s],
                     data_status: 'raw_data'
                   }
@@ -116,7 +117,6 @@ RSpec.describe "Submission management" do
               step08: {
                 submission: {
                   content: {
-                    plant_trial_name: "Trial A",
                     plant_trial_description: "Trial A brief description.",
                     project_descriptor: "Project A",
                     plant_population_id: plant_population.id.to_s,
