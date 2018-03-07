@@ -4,9 +4,10 @@ class Submissions::UploadsController < ApplicationController
   before_filter :require_submission_owner
 
   def new
-    send_data Submission::TraitScoreTemplateGenerator.new(submission).call,
-              content_type: 'text/csv; charset=UTF-8; header=present',
-              disposition: 'attachment; filename=plant_trial_scoring_data.csv'
+    Submission::TraitScoreTemplateGenerator.new(submission).call do |file|
+      send_data file.read, disposition: 'attachment; filename=plant_trial_scoring_data.xls',
+                           type: 'application/vnd.ms-excel'
+    end
   end
 
   def create
