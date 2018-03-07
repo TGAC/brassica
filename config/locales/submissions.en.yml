@@ -47,11 +47,14 @@ en:
           heading: Taxonomy
           body: Choose the species and the origin of the population you are submitting.
         step03:
+          heading: Template download
+          body: Download XLS template for plant lines upload (suitable for larger populations).
+        step04:
           heading: Plant lines
           body: |
             Define the list of plant lines connected with the submitted population.
-            You can either use the XLS file template (suitable for larger populations) or manual form submission.
-        step04:
+            You can either use the XLS template or manual form submission.
+        step05:
           heading: Provenance
           body: Identify the owner of the submitted data and describe its provenance.
 

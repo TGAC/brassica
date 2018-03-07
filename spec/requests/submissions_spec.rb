@@ -162,14 +162,15 @@ RSpec.describe "Submission management" do
                   }
                 }
               },
-              step03: {
+              step03: {},
+              step04: {
                 submission: {
                   content: {
                     plant_line_list: [plant_line.id.to_s]
                   }
                 }
               },
-              step04: {
+              step05: {
                 submission: {
                   content: {
                     visibility: "private",

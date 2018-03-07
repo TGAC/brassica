@@ -26,11 +26,11 @@ FactoryBot.define do
           submission.content.update(:step02, taxonomy_term: random_word,
                                              female_parent_line: nil,
                                              male_parent_line: nil)
-          submission.content.update(:step03, plant_line_list: [])
-          submission.content.update(:step04, comments: Faker::Lorem.sentence,
+          submission.content.update(:step04, plant_line_list: [])
+          submission.content.update(:step05, comments: Faker::Lorem.sentence,
                                              visibility: submission.published? ? 'published' : 'private')
 
-          submission.step = :step04
+          submission.step = :step05
 
           FactoryBot.create(:taxonomy_term, name: submission.content.taxonomy_term)
           FactoryBot.create(:population_type, population_type: submission.content.population_type)

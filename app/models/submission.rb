@@ -1,7 +1,7 @@
 class Submission < ActiveRecord::Base
 
   STEPS = {
-    "population" => %w(step01 step02 step03 step04),
+    "population" => %w(step01 step02 step03 step04 step05),
     "trial" => %w(step01 step02 step03 step04 step05 step06 step07 step08)
   }
 
