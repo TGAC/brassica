@@ -15,10 +15,13 @@ class PlantPopulationSubmissionDecorator < SubmissionDecorator
 
   def further_details
     ''.tap do |l|
-      l << h.content_tag(:span, population_type, class: 'details')
+      if population_type.present?
+        l << h.content_tag(:span, population_type, class: 'details')
+      end
+
       if parent_line_names.present?
         l << h.content_tag(:span, 'Parents: ', class: 'text')
-        l << h.content_tag(:span, parent_line_names.join(" | "), class: 'details')
+        l << h.content_tag(:span, parent_line_names.join(" · "), class: 'details')
       end
     end.strip
   end

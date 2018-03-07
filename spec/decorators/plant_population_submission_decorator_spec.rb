@@ -59,7 +59,7 @@ RSpec.describe PlantPopulationSubmissionDecorator do
       expect(sd.further_details).
         to eq '<span class="details">pt</span>' +
               '<span class="text">Parents: </span>' +
-              '<span class="details">fpl | mpl</span>'
+              '<span class="details">fpl · mpl</span>'
     end
   end
 end
