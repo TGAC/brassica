@@ -15,10 +15,13 @@ en:
         submission/upload:
           attributes:
             file:
-              no_header: 'has no correct header provided. At least four columns are expected.'
+              no_trait_scores_sheet: "contents invalid. 'Trait scores' sheet missing."
+              invalid_trait_scores_header: "contents invalid. Header rows seem to be altered."
+              trait_scores_parsing_error: "could not be parsed. An unknown error occured: %{error}. Please make sure to use an actual XLS file."
               no_plant_lines_sheet: "contents invalid. 'Plant lines' sheet missing."
               plant_lines_parsing_error: "could not be parsed. An unknown error occured: %{error}. Please make sure to use an actual XLS file."
               invalid_plant_lines_header: "contents invalid. Header rows seem to be altered."
+              no_plant_scoring_unit_name_header: 'has no correct header provided. Please provide the "Plant scoring unit name" column.'
               no_plant_accession_header: 'has no correct header provided. Please provide the "Plant accession" column.'
               no_originating_organisation_header: 'has no correct header provided. Please provide the "Originating organisation" column.'
               no_year_produced_header: 'has no correct header provided. Please provide the "Year produced" column.'

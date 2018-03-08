@@ -59,7 +59,7 @@ class Submissions::UploadsController < ApplicationController
 
   def process_upload(upload)
     processors = {
-      "trait_scores" => Submission::TraitScoreParser,
+      "trait_scores" => Submission::TraitScoreProcessor,
       "plant_lines" => Submission::PlantLineProcessor,
       "plant_trial_environment" => Submission::PlantTrialEnvironmentProcessor,
       "plant_trial_treatment" => Submission::PlantTrialTreatmentProcessor

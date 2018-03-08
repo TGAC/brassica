@@ -139,6 +139,7 @@ class Submission::TraitScoreTemplateGenerator
       format.set_bold
       format.set_bg_color(14)
       format.set_border(1)
+      format.set_text_wrap(1)
       format.set_align('center')
       format.set_align('vcenter')
     end
