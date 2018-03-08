@@ -6,13 +6,13 @@ RSpec.describe Analysis::Gwas::PhenotypeCsvParser do
 
   context "with valid input" do
     let(:input) { fixture_file("gwas-phenotypes.csv", "text/csv") }
-    let(:headers) { %w(ID) + 1.upto(10).map { |id| "trait#{id}" } }
+    let(:headers) { %w(ID) + 1.upto(10).map { |id| "trait #{id}" } }
 
     it "returns valid result object" do
       expect(subject).to be_valid
       expect(subject.headers).to eq(headers)
       expect(subject.csv.pos).to eq(subject.rewind(skip_header: true))
-      expect(subject.csv.readline[0]).to eq("plant6")
+      expect(subject.csv.readline[0]).to eq("plant-6")
       expect(subject.csv.readline.size).to eq(1 + 10)
     end
   end

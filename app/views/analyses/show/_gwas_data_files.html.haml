@@ -5,7 +5,7 @@
   %table.table
     - @analysis.data_files.input.order(:created_at).each do |data_file|
       %tr
-        %td= link_to data_file.file_file_name, data_file.file.url
+        %td= link_to data_file.file_file_name, analyses_data_file_url(data_file)
         %td= t(".#{data_file.data_type}")
         %td= number_to_human_size(data_file.file.size)
         %td= t(".#{data_file.origin}")
@@ -16,7 +16,7 @@
       .panel-title Output
 
     %ul.list-group
-      - @analysis.data_files.output.gwas_results.order(:created_at).each do |data_file|
+      - @results.each do |data_file|
         %li.list-group-item
-          = link_to data_file.file_file_name, data_file.file.url
+          = link_to data_file.file_file_name, analyses_data_file_url(data_file)
           %span= number_to_human_size(data_file.file.size)

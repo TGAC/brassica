@@ -1,7 +1,7 @@
 require "csv"
 
 class Analysis
-  class Gwas
+  module Gwas
     class GenotypeHapmapToCsvConverter
       def call(path)
         File.open(path, "r") do |hapmap_file|
@@ -49,14 +49,11 @@ class Analysis
       # If there is no variation (i.e. there is only one distinct value apart
       # from NA for each sample) for the mutation then record is silently skipped.
       #
-      # Special characters apart from underscore are stripped from sample and
-      # mutation identifiers.
-      #
       # record - hapmap record
       #
       # Returns a hash containing mutation name, position and value for each sample.
       def process_record(record)
-        mutation_name = record.rs.strip.gsub(/\W/, '_')
+        mutation_name = record.rs.strip
         mutation_data = [record.chrom, record.pos]
         sample_values = []
 
@@ -109,8 +106,8 @@ class Analysis
 
       def verify_mutation(mutation)
         alleles = mutation.split("/")
-        fail "Invalid mutation specification '#{mutation}'" unless alleles.size == 2
-        fail "Value #{alleles} not valid in mutation specification" if alleles.any? { |allele| base_codes.exclude?(allele) }
+        fail "Invalid mutation specification '#{mutation}'." unless alleles.size == 2
+        fail "Value #{alleles} not valid in mutation specification." if alleles.any? { |allele| base_codes.exclude?(allele) }
       end
 
       def verify_sample(sample)

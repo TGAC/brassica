@@ -1,5 +1,5 @@
 class Analysis
-  class Gwas
+  module Gwas
     class GenotypeHapmapParser
       HEADER_COLUMNS = %w(rs# alleles chrom pos strand assembly# center protLSID assayLSID panelLSID QCcode)
 

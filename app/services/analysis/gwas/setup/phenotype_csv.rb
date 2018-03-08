@@ -1,8 +1,8 @@
 class Analysis
-  class Gwas
-    class Setup
+  module Gwas
+    module Setup
       class PhenotypeCsv
-        include Helpers
+        include Gwas::Helpers
 
         def initialize(analysis)
           @analysis = analysis
@@ -25,10 +25,6 @@ class Analysis
         private
 
         attr_accessor :analysis
-
-        def normalize_pheno_csv
-          normalize_csv(phenotype_data_file.file, remove_columns: analysis.meta['removed_traits'])
-        end
 
         def check_pheno_status(status)
           case status

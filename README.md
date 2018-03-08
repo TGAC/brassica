@@ -39,7 +39,7 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 * Elasticsearch 2.4.6, Java 7
 * R >= 3.2.2
 * [GWASSER](https://github.com/kammerer/GWASSER) (forked from [cyverseuk/GWASSER](https://github.com/cyverseuk/GWASSER))
-
+* [GAPIT](http://www.maizegenetics.net/gapit)
 
 
 ### Elasticsearch
@@ -97,12 +97,29 @@ respective elements of the application can call them, spawning new system proces
 
 After installation you will need to setup your R environment. Run the "R" executable
 in your shell and issue the following commands from R prompt (you may do that either
-system-wide, with `sudo`, or just for your user):
+system-wide, with `sudo`, or just for your user).
+
+
+#### GWASSER dependencies
 
  - `install.packages('lme4')`
  - `install.packages('argparse')`
  - `install.packages('dplyr')`
  - `install.packages('lmerTest')`
+
+
+#### GAPIT dependencies
+
+ - `source("http://www.bioconductor.org/biocLite.R")`
+ - `biocLite('multtest')`
+ - `biocLite('chopsticks')`
+ - `install.packages('gplots')`
+ - `install.packages('genetics')`
+ - `install.packages('LDheatmap')`
+ - `install.packages('ape')`
+ - `install.packages('EMMREML')`
+ - `install.packages('scatterplot3d')`
+ - `install.packages('argparse')`
 
 
 ### Configuration
@@ -114,12 +131,15 @@ a template.
 
 ```
 ANALYSIS_EXEC_DIR=<full path to analysis working directory>
-GWAS_SCRIPT=<full path to the GWASSER.R executable script>
+GWAS_GWASSER_SCRIPT=<full path to the GWASSER.R executable script>
+GWAS_GAPIT_SCRIPT=<full path to the app dir>/lib/GAPIT/runner.R
+GWAS_GAPIT_DIR=<full path to a dir containing gapit_functions.txt and emma.txt>
 ```
 
 The analysis working directory needs to be an empty directory writable by the
 application. It is used to run analysis script and store temporary outputs.
-The `GWASSER.R` script should be made executable.
+The scripts pointed to by config variables should be made executable.
+
 
 ## Background workers
 
@@ -153,11 +173,11 @@ To perform deploy run:
 If any changes were introduced to ES index definitions or data migrations
 affecting indices were performed it is necessary to reindex data:
 
-  bin/cap production search:reindex:all
+    bin/cap production search:reindex:all
 
 Or:
 
-  bin/cap production search:reindex:model CLASS=<class name>
+    bin/cap production search:reindex:model CLASS=<class name>
 
 
 ## Testing

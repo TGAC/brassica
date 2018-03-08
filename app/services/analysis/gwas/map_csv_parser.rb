@@ -1,5 +1,5 @@
 class Analysis
-  class Gwas
+  module Gwas
     class MapCsvParser
       def call(io)
         Analysis::CsvParser.new.call(io, Result).tap do |result|

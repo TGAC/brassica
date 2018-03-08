@@ -7,7 +7,8 @@ en:
       failure: Failure
 
     analysis_type:
-      gwas: GWAS
+      gwasser: GWASSER
+      gapit: GAPIT
 
   analyses:
     new:
@@ -21,12 +22,20 @@ en:
         common: |
           Further contextual help will be provided at each step of analysis setup.
           Only you will have access to the results produced by the analysis.
-        gwas: |
+        gwasser: |
+          The following process allows you to perform a simple
+          <a href='https://en.wikipedia.org/wiki/Genome-wide_association_study'
+          target='_blank' title='Genome-wide association study'><b>GWAS</b></a>
+          on data you submit using
+          <b><a href='https://github.com/cyverseuk/GWASSER' target='_blank'>GWASSER</a></b>
+          software package. You will need to provide genotype and phenotypic trait data for the analysis.
+        gapit: |
           The following process allows you to perform
           <a href='https://en.wikipedia.org/wiki/Genome-wide_association_study'
           target='_blank' title='Genome-wide association study'><b>GWAS</b></a>
-          on data you submit. You will need to provide genotype and phenotypic trait
-          data for the analysis.<br/>
+          on data you submit using
+          <b><a href='http://www.maizegenetics.net/gapit' target='_blank'>GAPIT</a></b>
+          software package. You will need to provide genotype and phenotypic trait data for the analysis.
 
     show:
       gwas_data_files:
@@ -40,4 +49,5 @@ en:
           all_mutations_removed: All mutations were excluded from analysis due to lack of variability between samples.
           all_traits_removed: All traits were excluded from analysis due to lack of variability between samples.
           all_samples_removed: All samples were excluded from analysis because of no overlap between genotype and phenotype data.
+          setup_error: Data preprocessing failed.
           shell_job_error: The analysis failed. Please, consult 'Std error' and 'Std output' for more information.

@@ -1,8 +1,8 @@
 class Analysis
-  class Gwas
-    class Setup
+  module Gwas
+    module Setup
       class GenotypeHapmap
-        include Helpers
+        include Gwas::Helpers
 
         def initialize(analysis)
           @analysis = analysis
@@ -20,7 +20,7 @@ class Analysis
             create_csv_data_file(geno_csv_file, data_type: :gwas_genotype)
             create_csv_data_file(map_csv_file, data_type: :gwas_map)
 
-            save_genotype_metadata(removed_mutations, samples)
+            save_genotype_metadata(removed_mutations: removed_mutations, samples: samples)
           end
 
           status
@@ -31,7 +31,6 @@ class Analysis
         attr_accessor :analysis
 
         def convert_genotype_hapmap_to_csv
-          # NOTE: no need to normalize as conversion already outputs correct files
           Analysis::Gwas::GenotypeHapmapToCsvConverter.new.call(genotype_data_file(:hapmap).file.path)
         end
       end

@@ -1,0 +1,21 @@
+= javascript_include_tag "plotly"
+
+%ul.analysis-nav.nav.nav-pills{ role: :tablist }
+  = nav_item("Results", tab: :analysis_results, active: @analysis.finished?)
+  = nav_item("Data files", tab: :analysis_data_files, active: !@analysis.finished?)
+  = nav_item("Std output", tab: :analysis_std_out, disabled: !@analysis.finished?)
+  = nav_item("Std error", tab: :analysis_std_err, disabled: !@analysis.finished?)
+
+.tab-content.clearfix
+  #analysis_results.tab-pane.active.with-map{ role: :tabpanel }
+    = render partial: "analyses/show/gwas_results", locals: { with_map: true }
+
+  #analysis_data_files.tab-pane{ role: :tabpanel, class: (:active if @analysis.idle? || @analysis.running?) }
+    = render partial: "analyses/show/gwas_data_files"
+
+  - if @analysis.finished?
+    #analysis_std_out.tab-pane{ role: :tabpanel }
+      = render partial: "analyses/show/gwas_std_out"
+
+    #analysis_std_err.tab-pane{ role: :tabpanel }
+      = render partial: "analyses/show/gwas_std_err"

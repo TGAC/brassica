@@ -1,6 +1,6 @@
 class Analysis::DataFile < ActiveRecord::Base
   BASE_DATA_TYPES = %w(std_out std_err)
-  GWAS_DATA_TYPES = %w(gwas_genotype gwas_phenotype gwas_map gwas_results)
+  GWAS_DATA_TYPES = %w(gwas_genotype gwas_phenotype gwas_map gwas_results gwas_aux_results)
 
   enum data_type: BASE_DATA_TYPES | GWAS_DATA_TYPES
   enum role: %w(input output)
@@ -12,9 +12,10 @@ class Analysis::DataFile < ActiveRecord::Base
   has_attached_file :file
 
   validates :owner, presence: true
-  validates :file, attachment_presence: true,
-                   attachment_size: { less_than: 50.megabytes },
-                   attachment_file_name: { matches: /\.(vcf|hapmap|csv|txt)\Z/ }
+  validates :file, attachment_presence: true
+  validates :file, attachment_size: { less_than: 50.megabytes },
+                   attachment_file_name: { matches: /\.(vcf|hapmap|csv|txt)\Z/ },
+                   if: :uploaded?
 
   validates :file_format, inclusion: { in: %w(vcf hapmap csv txt), message: :invalid_for_gwas_genotype },
                           if: :gwas_genotype?
@@ -22,7 +23,7 @@ class Analysis::DataFile < ActiveRecord::Base
   do_not_validate_attachment_file_type :file
 
   before_validation :assign_file_format, on: :create
-  after_commit :normalize_line_breaks, on: :create
+  after_commit :normalize_line_breaks, on: :create, if: :uploaded?
 
   delegate :url, to: :file, prefix: true
 

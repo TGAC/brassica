@@ -1,5 +1,5 @@
 class Analysis
-  class Gwas
+  module Gwas
     class MapCsvTemplateGenerator
       def call
         CSV.generate do |csv|

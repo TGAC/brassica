@@ -1,7 +1,7 @@
 require "bio-vcf"
 
 class Analysis
-  class Gwas
+  module Gwas
     class GenotypeVcfParser
       def call(io)
         header = parse(io)

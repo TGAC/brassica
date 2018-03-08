@@ -1,5 +1,5 @@
 class Analysis
-  class Gwas
+  module Gwas
     class GenotypeCsvTemplateGenerator
       def initialize(plant_trial = nil)
         @plant_trial = plant_trial

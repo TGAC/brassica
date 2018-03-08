@@ -2,15 +2,23 @@
   - if @analysis
     = render partial: "/analyses/new/form"
   - else
-    - type = :gwas
+    %p Choose analysis type:
 
-    %div{ role: 'tabpanel', class: "tab-pane active", id: type }
-      %h3.section-heading
-        Perform new #{t("analysis.analysis_type.#{type}")}
+    %ul.nav.nav-pills{ role: 'tablist' }
+      - Analysis.analysis_types.keys.each do |type|
+        %li{ role: 'presentation', class: (:active if type == "gwasser") }
+          %a{ href: "##{type}", role: 'tab', aria: { controls: type }, data: { toggle: 'tab' } }
+            = t("analysis.analysis_type.#{type}")
 
-      %p
-        = t(".description.#{type}").html_safe
-        = t('.description.common', type: type).html_safe
+    .tab-content
+      - Analysis.analysis_types.keys.each do |type|
+        %div{ role: 'tabpanel', class: "tab-pane #{:active if type == "gwasser"}", id: type }
+          %h3.section-heading
+            Perform new #{t("analysis.analysis_type.#{type}")} analysis
 
-      .text-center
-        = link_to 'Start!', new_analysis_path(analysis: { analysis_type: type }), class: 'new-analysis-big-btn'
+          %p
+            = t(".description.#{type}").html_safe
+            = t('.description.common', type: type).html_safe
+
+          .text-center
+            = link_to 'Start!', new_analysis_path(analysis: { analysis_type: type }), class: 'new-analysis-big-btn'

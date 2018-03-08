@@ -1,5 +1,5 @@
 class Analysis < ActiveRecord::Base
-  enum analysis_type: %w(gwas)
+  enum analysis_type: %w(gwasser gapit)
   enum status: %w(idle running success failure)
 
   # NOTE: there is :meta attribute stored as json

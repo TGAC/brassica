@@ -31,7 +31,7 @@
       %tr
         %th SNP
 
-        - if @analysis.map?
+        - if with_map
           %th Chromosome
           %th Position
 
@@ -39,6 +39,4 @@
         %th Trait
 
 - elsif @analysis.failure?
-  - failure_reason = @analysis.meta['failure_reason'] || :shell_job_error
-
-  .alert.alert-danger= t(".failure_reason.#{failure_reason}")
+  .alert.alert-danger= @analysis.failure_reason

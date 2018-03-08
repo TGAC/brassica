@@ -76,6 +76,7 @@ en:
               invalid_hapmap_column: "Genotype file contains unexpected column '%{column}' (expected '%{expected}')."
 
             map_data_file:
+              blank: Please upload a map data file.
               no_id_column: "No 'ID' column found in map CSV file."
               no_chr_column: "No 'Chr' column found in map CSV file."
               no_cm_column: "No 'cM' column found in map CSV file."

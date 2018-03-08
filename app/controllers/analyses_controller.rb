@@ -33,8 +33,8 @@ class AnalysesController < ApplicationController
 
     respond_to do |format|
       format.json do
-        if @analysis.gwas? && @analysis.success?
-          results = Analysis::Gwas::ManhattanPlot.new(@analysis).call.fetch(:traits).map do |trait_name, mutations, _|
+        if @analysis.success? && (@analysis.gwasser? || @analysis.gapit?)
+          results = manhattan_plot_klass.new(@analysis).call.fetch(:traits).map do |trait_name, mutations, _|
             mutations.map { |m| m[1] = "%.4f" % m[1]; m << trait_name }
           end.flatten(1)
 
@@ -49,10 +49,12 @@ class AnalysesController < ApplicationController
       format.html do
         if request.xhr?
           render partial: "analysis_item", layout: false, locals: { analysis: @analysis }
-        elsif @analysis.gwas?
-          @analysis = GwasAnalysisDecorator.decorate(@analysis)
-          @manhattan = Analysis::Gwas::ManhattanPlot.
-            new(@analysis, cutoff: (params[:cutoff].to_f if params.key?(:cutoff))).call
+        elsif @analysis.gwasser? || @analysis.gapit?
+          @analysis = decorator_klass.decorate(@analysis)
+          @manhattan = manhattan_plot_klass.new(@analysis, cutoff: (params[:cutoff].to_f if params.key?(:cutoff))).call
+          @results = @analysis.data_files.output.
+            where(data_type: Analysis::DataFile.data_types.values_at("gwas_results", "gwas_aux_results")).
+            order(:file_file_name)
         end
       end
     end
@@ -92,6 +94,18 @@ class AnalysesController < ApplicationController
   end
 
   def form_klass
-    Analyses::Gwas::Form
+    "Analyses::#{analysis_type.classify}::Form".constantize
+  end
+
+  def decorator_klass
+    "Analysis::#{analysis_type.classify}Decorator".constantize
+  end
+
+  def manhattan_plot_klass
+    "Analysis::#{analysis_type.classify}::ManhattanPlot".constantize
+  end
+
+  def analysis_type
+    @analysis.try(:analysis_type) || analysis_params.fetch(:analysis_type)
   end
 end

@@ -1,8 +1,8 @@
 class Analysis
-  class Gwas
-    class Setup
+  module Gwas
+    module Setup
       class StripGenotypeCsv
-        include Helpers
+        include Gwas::Helpers
 
         def initialize(analysis)
           @analysis = analysis
@@ -50,7 +50,9 @@ class Analysis
         end
 
         def remove_irrelevant_mutations
-          analyze_geno_csv_file { |mutations_to_remove, _| append_genotype_metadata(mutations_to_remove) }
+          analyze_geno_csv_file do |mutations_to_remove, _|
+            append_genotype_metadata(removed_mutations: mutations_to_remove)
+          end
 
           geno_status, geno_csv_file = normalize_geno_csv
 

@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :analysis_data_file, class: "Analysis::DataFile" do
     owner(factory: :user)
+    file { fixture_file("empty.txt", "text/plain") }
 
     trait :input do
       role "input"
@@ -64,10 +65,16 @@ FactoryBot.define do
       file { fixture_file("gwas-phenotypes-no-relevant-traits.csv", "text/csv") }
     end
 
-    trait :gwas_results do
+    trait :gwasser_results do
       role "output"
       data_type "gwas_results"
-      file { fixture_file("gwas-results.csv", "text/csv") }
+      file { fixture_file("gwasser-results.csv", "text/csv") }
+    end
+
+    trait :gapit_results do
+      role "output"
+      data_type "gwas_results"
+      file { fixture_file("gapit-results.csv", "text/csv") }
     end
   end
 end
