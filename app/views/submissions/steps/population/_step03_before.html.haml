@@ -5,14 +5,14 @@
     .col-md-9
       %p
         One possibility to define plant lines related to this population is to upload information
-        in a CSV file. This is especially suitable for cases when a lot of plant lines have to be
-        submitted. Please use the button next to this text to download the template in CSV format.
-        Please, leave the header (the first line) intact, and paste your data, in columns,
+        in a XLS file. This is especially suitable for cases when a lot of plant lines have to be
+        submitted. Please use the button next to this text to download the template in XLS format.
+        Please, leave the header intact, and paste your data, in columns,
         below the header (thus replacing the placeholder <code>... - replace it</code> values). Please do not remove
         columns even if you do not submit any values for them.
 
     .col-md-3.text-right
-      = submission_template_link('/manuals/plant_lines_template.csv')
+      = submission_template_link('/manuals/plant_lines_template.xls')
 
   %h5 Template structure
 
@@ -23,7 +23,7 @@
     = succeed ',' do
       = link_to 'plant varieties currently defined in BIP', data_tables_path(model: 'plant_varieties'), target: '_blank'
     or, in case the relevant varieties are
-    absent, to create your own. Any plant variety submitted in the CSV document, which is not
+    absent, to create your own. Any plant variety submitted in the XLS document, which is not
     found inside BIP, will be created as a new plant variety table record. In such a case, the
     following column value of <b>Crop type</b> is set as the new plant variety crop type property.
 
@@ -77,4 +77,4 @@
       = file_field_tag "submission_upload[file]", class: 'plant-lines-upload'
     %small.help-block
       When you are done preparing your plant lines data sheet, according to the manual presented above,
-      please upload the ready CSV file here.
+      please upload the ready XLS file here.

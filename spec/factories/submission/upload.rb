@@ -17,7 +17,7 @@ FactoryBot.define do
 
     trait :plant_lines do
       upload_type 'plant_lines'
-      file { fixture_file("plant_lines_upload.txt", 'text/plain') }
+      file { fixture_file("plant_lines.xls", 'application/vnd.ms-excel') }
       association :submission, submission_type: :population
     end
 
