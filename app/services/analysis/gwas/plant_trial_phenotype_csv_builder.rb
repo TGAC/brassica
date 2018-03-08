@@ -1,12 +1,12 @@
 class Analysis
-    module Gwas
+  module Gwas
     class PlantTrialPhenotypeCsvBuilder
       def build(plant_trial)
         documents = exporter(plant_trial).documents
 
         trait_descriptors = CSV.new(documents.fetch(:trait_descriptors))
         trait_id_idx = trait_descriptors.readline.index("Trait")
-        trait_ids = trait_descriptors.map { |row| row[trait_id_idx] }
+        trait_ids = trait_descriptors.map { |row| row[trait_id_idx] }.sort
 
         trait_scoring = CSV.new(documents.fetch(:trait_scoring))
         trait_scoring_headers = trait_scoring.readline
