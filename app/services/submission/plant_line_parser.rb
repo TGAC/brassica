@@ -19,7 +19,7 @@ class Submission::PlantLineParser
     return [:invalid_plant_lines_header] unless valid_first_column?(xls)
 
     header_columns.each.with_index.select do |column_name, idx|
-      # NOTE: +1 for hidden first column
+      # NOTE: +1 for first column
       xls.row(1, "Plant lines")[idx + 1].blank?
     end.map do |column_name, _|
       :"no_#{column_name.downcase.parameterize('_')}_header"
