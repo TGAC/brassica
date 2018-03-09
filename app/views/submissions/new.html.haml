@@ -27,7 +27,7 @@
 
           %p.submission-description
             - if s_type == "population"
-              != t("submission.description.#{s_type}", plant_lines_template_url: '/manuals/plant_lines_template.csv')
+              != t("submission.description.#{s_type}", plant_lines_template_url: '/manuals/plant_lines_template.xls')
             - else
               != t("submission.description.#{s_type}")
 

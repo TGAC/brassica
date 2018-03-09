@@ -16,7 +16,7 @@
         .row
           .col-md-9
             %p
-              Please use the button next to this text to download a trait scoring sheet template in CSV format. The template has been created
+              Please use the button next to this text to download a trait scoring sheet template in XLS format. The template has been created
               according to the choices you have made so far in this submission. If you see that the headers don’t correspond
               to the data you want to submit, navigate back to previous submission steps and amend them accordingly.
               An altered template can then be downloaded at this step.
@@ -27,7 +27,7 @@
         %h5 Trait scoring sheet structure
         %p
           The next step requires you to upload a file with scoring values. The required format is simple and features
-          %b unique plant scoring unit identification in the first column
+          %b unique plant scoring unit identification column
           (please go back to step 2 for a short definition of a plant scoring unit), followed by
           - if design_factor_names.present?
             %b #{design_factor_names.size} column(s) for design factors
@@ -46,30 +46,27 @@
           %li how many <b>technical replicates</b> you plan to submit (raw data only).
 
         %p
-          All values should be separated by commas (<code>,</code>). In cases where a value is missing,
-          please remember to provide the correct number of commas anyway. Sticking to this template
-          should guarantee correct parsing of score values when you upload the file. Please, paste your data, in columns,
-          below the header (thus replacing the placeholder <code>... - replace it</code> values).
+          Sticking to this template should guarantee correct parsing of score values when you upload the file. Please,
+          paste your data, in columns, below the header (thus replacing the placeholder <code>... - replace it</code>
+          values).
+
+        - column_letters = ("A".."Z").to_a
 
         %h5 Plant accession information
         %p
-          Accession-related fields (<b>Plant accession</b> identifier - in column #{design_factor_names.size + 2}, the
-          <b>Originating organisation</b>
-          which issued this accession number - in column #{design_factor_names.size + 3}, and the <b>Year produced</b> -
-          in column #{design_factor_names.size + 4} are mandatory. If you do not have an Accession defined
-          for your plants, please create one yourself (for example, using
-          %code
-            = '<institute_name>_<seedbag_id>'
-          ).
+          Accession-related fields (<b>Plant accession</b> identifier -
+          in column <b>#{column_letters[design_factor_names.size + 2]}</b>, the <b>Originating organisation</b>
+          which issued this accession number - in column <b>#{column_letters[design_factor_names.size + 3]}</b>,
+          and the <b>Year produced</b> - in column <b>#{column_letters[design_factor_names.size + 4]}</b> are mandatory.
+          If you do not have an Accession defined for your plants, please create one yourself (for example,
+          using <code>#{'<institute_name>_<seedbag_id>'}</code>).
           It will serve as a placeholder identifier for the unique genetic material used in your trials.
           Accordingly, it is important that you are able to relate back to the identifier when cross-linking
           with the corresponding genetic data.
 
         %h5 Plant #{pl_pv_name} column
         %p
-          This column is especially important if you
-          %b submit new accessions
-          (i.e. ones which are not present
+          This column is especially important if you <b>submit new accessions</b> (i.e. ones which are not present
           in BIP). Every such new accession will be recorded in BIP and it will be related to a <b>plant #{pl_pv_name}</b>.
 
           - if pl_pv_name == 'line'
@@ -83,7 +80,7 @@
 
           - else
             If you are using plant varieties (cultivars) which are not listed in BIP, please provide their names
-            in column #{design_factor_names.size + 4}. These names will then be recorded in BIP as new
+            in column <b>#{column_letters[design_factor_names.size + 4]}</b>. These names will then be recorded in BIP as new
             plant varieties related to your plant accession.
 
         %p
@@ -92,25 +89,22 @@
             = succeed '.' do
               = link_to 'consult this data table', data_tables_path(model: 'plant_lines'), target: '_blank'
             Please use the values from the <b>Line name</b> column when referring to existing plant lines
-            in your CSV file in order to avoid duplications due to differences in spelling..
+            in your XLS file in order to avoid duplications due to differences in spelling..
 
           - else
             If you are using plant varieties (cultivars) known to BIP, you may
             = link_to 'consult this data table', data_tables_path(model: 'plant_varieties'), target: '_blank'
             in order to find their names.
             Please use the values from the <b>Variety</b> column when referring to existing plant varieties
-            in your CSV file in order to avoid duplications due to differences in spelling.
+            in your XLS file in order to avoid duplications due to differences in spelling.
 
         %h5 Trait scores ordering #{'and technical replicates' if rep_traits.present?}
         %p
           The first line will be treated as a header. Specific values in columns
-          #{design_factor_names.size + 6} and further
-          will be treated as scoring for the
+          <b>#{column_letters[design_factor_names.size + 6]}</b> and further will be treated as scoring for the
           trait whose name matches the corresponding column header. If no match is found, the score will
-          be stored by column index. That is, an unmatched column
-          #{design_factor_names.size + 7}
-          header will cause all column
-          #{design_factor_names.size + 7}
+          be stored by column index. That is, an unmatched column <b>#{column_letters[design_factor_names.size + 7]}</b>
+          header will cause all column <b>#{column_letters[design_factor_names.size + 7]}</b>
           values to be treated as scores for the second trait (in the order of input)
           - if rep_traits.present?
             , or the second technical replicate of the first trait,
@@ -126,7 +120,7 @@
             the first technical replicate (no other trait scores in between).
 
         %p
-          In order to avoid any ordering related issues, <b>please use the CSV template</b>
+          In order to avoid any ordering related issues, <b>please use the XLS template</b>
           provided to you above - this template's header has all trait name
           - if rep_traits.present?
             and technical replicate

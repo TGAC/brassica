@@ -9,7 +9,7 @@ en:
 
     description:
       common: |
-        You will also be able to provide data ownership and provenance information.</br>
+        </br>You will also be able to provide data ownership and provenance information.
         Submitted data is by default private. This means that it is only visible and accessible to you.
         You can change this at the last step of the submission or any time after the submission. Once this is done, the
         data will be accessible for all users of the Portal.
