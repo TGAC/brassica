@@ -19,3 +19,11 @@
       .panel
         .panel-heading
           %h4= t("submission.steps.#{submission_type}.#{step_name}.heading")
+
+    - if submission_type == "trial" && step_no == 2
+      %li.separator
+
+- if submission_type == "trial"
+  .trial-before-after
+    %span.before Before the trial
+    %span.after After the trial

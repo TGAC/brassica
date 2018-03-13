@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SubmissionTraitScoresUploadDecorator do
-  let(:upload) { create(:submission_upload) }
+  let(:upload) { create(:submission_upload, :trait_scores) }
   let(:sd) { described_class.decorate(upload) }
   let(:existing_accession) { create(:plant_accession) }
   let(:existing_line) { create(:plant_line) }

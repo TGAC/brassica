@@ -1,7 +1,6 @@
 module Submissions
   module Trial
     class Step08ContentForm < PlantTrialForm
-      property :plant_trial_name
       property :project_descriptor
       property :plant_population_id
 
@@ -24,7 +23,6 @@ module Submissions
       property :data_provenance
       property :comments
 
-      validates :plant_trial_name, presence: true
       validates :plant_trial_description, presence: true
       validates :project_descriptor, presence: true
       validates :plant_population_id, presence: true
@@ -43,12 +41,6 @@ module Submissions
                                              less_than_or_equal_to: Date.today.year }
       validates :place_name, presence: true
       validates :visibility, inclusion: { in: %w(published private) }
-
-      validate do
-        if PlantTrial.where(plant_trial_name: plant_trial_name).exists?
-          errors.add(:plant_trial_name, :taken)
-        end
-      end
 
       def plant_population
         return unless plant_population_id.present?

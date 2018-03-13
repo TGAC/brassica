@@ -9,7 +9,7 @@ en:
 
     description:
       common: |
-        You will also be able to provide data ownership and provenance information.</br>
+        </br>You will also be able to provide data ownership and provenance information.
         Submitted data is by default private. This means that it is only visible and accessible to you.
         You can change this at the last step of the submission or any time after the submission. Once this is done, the
         data will be accessible for all users of the Portal.
@@ -47,17 +47,20 @@ en:
           heading: Taxonomy
           body: Choose the species and the origin of the population you are submitting.
         step03:
+          heading: Template download
+          body: Download XLS template for plant lines upload (suitable for larger populations).
+        step04:
           heading: Plant lines
           body: |
             Define the list of plant lines connected with the submitted population.
-            You can either use the XLS file template (suitable for larger populations) or manual form submission.
-        step04:
+            You can either use the XLS template or manual form submission.
+        step05:
           heading: Provenance
           body: Identify the owner of the submitted data and describe its provenance.
 
       trial:
         step01:
-          heading: Traits
+          heading: Trial name & Traits
           body: Choose plant traits that were scored in the course of this trial, or define new trait descriptors.
           new_trait_descriptor_attributes:
             category: Trait category

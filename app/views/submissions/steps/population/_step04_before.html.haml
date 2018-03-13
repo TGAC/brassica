@@ -1,0 +1,12 @@
+.errors.hidden
+
+= form_tag submission_uploads_path(submission), multipart: true, method: :post do
+  = hidden_field_tag "submission_upload[upload_type]", "plant_lines"
+
+  .form-group.fileinput{ class: "#{'hidden' if @content.upload}" }
+    .btn.btn-primary.fileinput-button
+      %span Choose a file...
+      = file_field_tag "submission_upload[file]", class: 'plant-lines-upload'
+    %small.help-block
+      When you are done preparing your plant lines data sheet, according to the manual presented above,
+      please upload the ready XLS file here.

@@ -69,19 +69,19 @@ class Submission::PlantLineProcessor
     overriden_new_plant_lines =
       current_new_plant_lines.select { |npl| @plant_line_names.include?(npl.fetch("plant_line_name")) }
 
-    @upload.submission.content.update(:step03,
+    @upload.submission.content.update(:step04,
                                       new_plant_lines: current_new_plant_lines - overriden_new_plant_lines,
                                       new_plant_varieties: current_new_plant_varieties.except(*@plant_line_names),
                                       new_plant_accessions: current_new_plant_accessions.except(*@plant_line_names))
   end
 
   def append_uploaded_content
-    @upload.submission.content.append(:step03,
+    @upload.submission.content.append(:step04,
                                       plant_line_list: @plant_line_names,
                                       new_plant_lines: @new_plant_lines,
                                       new_plant_varieties: @new_plant_varieties,
                                       new_plant_accessions: @new_plant_accessions)
-    @upload.submission.content.update(:step03, uploaded_plant_lines: @plant_line_names)
+    @upload.submission.content.update(:step04, uploaded_plant_lines: @plant_line_names)
   end
 
   def correct_input?(pv_attrs, pl_attrs, pa_attrs)

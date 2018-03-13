@@ -26,6 +26,10 @@
   }
 }
 
+.submission-description {
+  margin-bottom: 2rem;
+}
+
 .show-submission {
   .status {
     margin-bottom: 2px;
@@ -154,6 +158,15 @@
 
       &:first-child {
         margin-top: 0;
+      }
+    }
+
+    .panel-heading {
+      padding: 0;
+
+      .panel-title a {
+        padding: 10px 15px;
+        display: block;
       }
     }
   }

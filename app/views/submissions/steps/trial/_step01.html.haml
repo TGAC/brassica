@@ -1,83 +1,90 @@
-.info-block
-  Before uploading your trait score sheet, please choose <b>existing trait descriptors</b>
-  that were scored in the course of this trial, or define <b>new trait descriptors.</b>
-  Further instructions are found below.
-  Examples of plant traits in the database are: 'oleic acid content' or ' seed mature time'.
-
 .form-group
-  = label_tag "Submitted trait scoring data status"
-  %br
-  = content.label :data_status, "Raw data", value: 'raw_data', class: 'radio-inline' do
-    = content.radio_button :data_status, 'raw_data', checked: true
-    Raw data
-  = content.label :data_status, "Processed data", value: 'processed_data', class: 'radio-inline' do
-    = content.radio_button :data_status, 'processed_data'
-    Processed data
-  %small.help-block
-    Please provide information on the nature of your data. Select
-    %b Raw data
-    if you plan to submit trait scoring values unprocessed in any way. You can also submit technical replicate
-    readings, if you have them, by selecting this option. Please select
-    %b Processed data
-    if you have performed some processing (e.g., mean computation, selected values exclusion) with the
-    scoring data prior to the submission. If you would like to upload both types of data set (i.e., raw and processed
-    data), please do that using two separate Trial submissions.
+  = content.text_field :plant_trial_name, required: true,
+    help: 'Please, provide convenient <b>name</b> for this scoring trial. It has to be <b>unique</b>.'
 
-.form-group
-  = content.label :trait_descriptor_list
-  - options = options_for_submission_select(@content.existing_trait_descriptors, :trait_name)
-  - options.concat options_for_submission_select(@content.new_trait_descriptors, :trait, id: false)
-  = content.select :trait_descriptor_list, options.html_safe, {},
-    { multiple: true,
-      class: 'trait-descriptor-list form-control',
-      'data-placeholder': "Select trait descriptors" }
+%fieldset
+  %legend Traits
 
-%button.btn.btn-default.new-trait-descriptor-for-list{ type: :button } Add new Trait descriptor
+  .info-block
+    Before uploading your trait score sheet, please choose <b>existing trait descriptors</b>
+    that were scored in the course of this trial, or define <b>new trait descriptors.</b>
+    Further instructions are found below.
+    Examples of plant traits in the database are: 'oleic acid content' or ' seed mature time'.
 
-.panel.panel-info.new-trait-descriptor-for-list.hidden
-  .panel-heading
-    %h4 Add new <b>Trait descriptor</b>
+  .form-group
+    = label_tag "Submitted trait scoring data status"
+    %br
+    = content.label :data_status, "Raw data", value: 'raw_data', class: 'radio-inline' do
+      = content.radio_button :data_status, 'raw_data', checked: true
+      Raw data
+    = content.label :data_status, "Processed data", value: 'processed_data', class: 'radio-inline' do
+      = content.radio_button :data_status, 'processed_data'
+      Processed data
+    %small.help-block
+      Please provide information on the nature of your data. Select
+      %b Raw data
+      if you plan to submit trait scoring values unprocessed in any way. You can also submit technical replicate
+      readings, if you have them, by selecting this option. Please select
+      %b Processed data
+      if you have performed some processing (e.g., mean computation, selected values exclusion) with the
+      scoring data prior to the submission. If you would like to upload both types of data set (i.e., raw and processed
+      data), please do that using two separate Trial submissions.
 
-  .panel-body{"data-dirty-context": "new-trait-descriptor"}
-    .info-block
-      <b>Important:</b> If the trait you look for is missing you need to contact us
-      by #{support_email_link("email", "[BIP] New trait request")} and it will be added to our database.
+  .form-group
+    = content.label :trait_descriptor_list
+    - options = options_for_submission_select(@content.existing_trait_descriptors, :trait_name)
+    - options.concat options_for_submission_select(@content.new_trait_descriptors, :trait, id: false)
+    = content.select :trait_descriptor_list, options.html_safe, {},
+      { multiple: true,
+        class: 'trait-descriptor-list form-control',
+        'data-placeholder': "Select trait descriptors" }
 
-    .form-group
-      = label_tag :trait, nil, class: 'required'
-      = select_tag :trait, [], class: 'trait form-control required', 'data-placeholder': 'Select a value'
-      %small.help-block Select the trait definition.
+  %button.btn.btn-default.new-trait-descriptor-for-list{ type: :button } Add new Trait descriptor
 
-    .form-group
-      - values = TraitDescriptor.visible(current_user.id).attribute_values('units_of_measurements')
-      - option_tags = options_for_select(values)
-      = combo_field_tag :units_of_measurements, nil, option_tags, class: 'units-of-measurements', required: true,
-          label: t('submission.steps.trial.step01.new_trait_descriptor_attributes.units_of_measurements')
-      %small.help-block
-        = t 'submission.steps.trial.step01.new_trait_descriptor_attribute_hints.units_of_measurements'
+  .panel.panel-info.new-trait-descriptor-for-list.hidden
+    .panel-heading
+      %h4 Add new <b>Trait descriptor</b>
 
-    .form-group
-      = label_tag :scoring_method, nil, class: 'required'
-      = text_area_tag :scoring_method, nil, class: 'form-control required'
-      %small.help-block Describe in detail how the measurement is to be performed.
+    .panel-body{"data-dirty-context": "new-trait-descriptor"}
+      .info-block
+        <b>Important:</b> If the trait you look for is missing you need to contact us
+        by #{support_email_link("email", "[BIP] New trait request")} and it will be added to our database.
 
-    .form-group
-      = label_tag :materials
-      = text_area_tag :materials, nil, class: 'form-control'
-      %small.help-block Materials required for scoring.
+      .form-group
+        = label_tag :trait, nil, class: 'required'
+        = select_tag :trait, [], class: 'trait form-control required', 'data-placeholder': 'Select a value'
+        %small.help-block Select the trait definition.
 
-    .form-group
-      = label_tag :plant_part_id, nil
-      = select_tag :plant_part_id, [], class: 'plant-part-id form-control', 'data-placeholder': 'Select a plant part'
-      %small.help-block Select the part of plant one should use for scoring this trait.
+      .form-group
+        - values = TraitDescriptor.visible(current_user.id).attribute_values('units_of_measurements')
+        - option_tags = options_for_select(values)
+        = combo_field_tag :units_of_measurements, nil, option_tags, class: 'units-of-measurements', required: true,
+            label: t('submission.steps.trial.step01.new_trait_descriptor_attributes.units_of_measurements')
+        %small.help-block
+          = t 'submission.steps.trial.step01.new_trait_descriptor_attribute_hints.units_of_measurements'
 
-    = render partial: "submissions/annotations", locals: { model: TraitDescriptor }
+      .form-group
+        = label_tag :scoring_method, nil, class: 'required'
+        = text_area_tag :scoring_method, nil, class: 'form-control required'
+        %small.help-block Describe in detail how the measurement is to be performed.
 
-    .action-buttons
-      %button.btn.btn-default.cancel-new-trait-descriptor-for-list{type: 'button'} Cancel
-      %button.btn.btn-primary.add-new-trait-descriptor-for-list{type: 'button'} Confirm
+      .form-group
+        = label_tag :materials
+        = text_area_tag :materials, nil, class: 'form-control'
+        %small.help-block Materials required for scoring.
 
-- @content.new_trait_descriptors.each do |trait_descriptor|
-  %div{id: "new-trait-descriptor-#{trait_descriptor.trait.split.join('-').downcase}"}
-    - @content.class.new_trait_descriptor_properties.each do |attr|
-      = hidden_field_tag "submission[content][new_trait_descriptors][][#{attr}]", trait_descriptor.send(attr)
+      .form-group
+        = label_tag :plant_part_id, nil
+        = select_tag :plant_part_id, [], class: 'plant-part-id form-control', 'data-placeholder': 'Select a plant part'
+        %small.help-block Select the part of plant one should use for scoring this trait.
+
+      = render partial: "submissions/annotations", locals: { model: TraitDescriptor }
+
+      .action-buttons
+        %button.btn.btn-default.cancel-new-trait-descriptor-for-list{type: 'button'} Cancel
+        %button.btn.btn-primary.add-new-trait-descriptor-for-list{type: 'button'} Confirm
+
+  - @content.new_trait_descriptors.each do |trait_descriptor|
+    %div{id: "new-trait-descriptor-#{trait_descriptor.trait.split.join('-').downcase}"}
+      - @content.class.new_trait_descriptor_properties.each do |attr|
+        = hidden_field_tag "submission[content][new_trait_descriptors][][#{attr}]", trait_descriptor.send(attr)

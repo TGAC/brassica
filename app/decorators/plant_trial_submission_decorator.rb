@@ -15,10 +15,13 @@ class PlantTrialSubmissionDecorator < SubmissionDecorator
 
   def further_details
     ''.tap do |l|
-      l << h.content_tag(:span, project_descriptor, class: 'details')
+      if project_descriptor.present?
+        l << h.content_tag(:span, project_descriptor, class: 'details')
+      end
+
       if trait_descriptors.present?
         l << h.content_tag(:span, 'Traits scored: ', class: 'text')
-        l << h.content_tag(:span, trait_descriptors.join(" | "), class: 'details')
+        l << h.content_tag(:span, trait_descriptors.join(" · "), class: 'details')
       end
     end.strip
   end

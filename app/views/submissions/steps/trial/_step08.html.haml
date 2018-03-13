@@ -1,8 +1,4 @@
 .form-group
-  = content.text_field :plant_trial_name, required: true,
-    help: 'Please, provide convenient <b>name</b> for this scoring trial. It has to be <b>unique</b>.'
-
-.form-group
   - project_descriptors = PlantTrial.visible(current_user.id).attribute_values(:project_descriptor)
   - options = options_for_select(project_descriptors, @content.project_descriptor)
   - if options.present?

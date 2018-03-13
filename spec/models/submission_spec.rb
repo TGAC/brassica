@@ -41,6 +41,7 @@ RSpec.describe Submission do
       expect(build(:submission, step: "step02").step_no).to eq(1)
       expect(build(:submission, step: "step03").step_no).to eq(2)
       expect(build(:submission, step: "step04").step_no).to eq(3)
+      expect(build(:submission, step: "step05").step_no).to eq(4)
     end
   end
 
@@ -73,7 +74,7 @@ RSpec.describe Submission do
       %w(population trial).each do |t|
         submission.submission_type = t
         expect(submission.valid?).to be_truthy
-        expect(submission.send(t+'?')).to be_truthy
+        expect(submission.send(t + '?')).to be_truthy
       end
       expect { submission.submission_type = 'wrong_submission_type' }.
         to raise_error ArgumentError
