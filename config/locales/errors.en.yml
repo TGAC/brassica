@@ -126,6 +126,7 @@ en:
               duplicated: "A trait descriptor with name \"%{name}\" is defined more than once."
 
             plant_trial_name:
+              taken: A trial with that name already exists.
               blank: Please provide a trial name.
 
             plant_trial_description:
