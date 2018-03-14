@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe DataTablesController do
+  before { Rails.cache.clear }
+
   context 'when unauthenticated' do
     describe '#index' do
       it 'requires model param to work' do
@@ -102,9 +104,7 @@ RSpec.describe DataTablesController do
         expect(json['data']).to eq []
       end
 
-      context 'when using cache' do
-        before(:each) { Rails.cache.clear }
-
+      describe 'caching' do
         it 'caches response when nothing new happened' do
           expect(PlantLine).to receive(:table_data).once.and_return([])
           get :index, format: :json, params: { model: 'plant_lines' }
@@ -249,9 +249,7 @@ RSpec.describe DataTablesController do
         expect(json['data'].map(&:last)).to match_array [pp1, pp2].map(&:id)
       end
 
-      context 'when using cache' do
-        before(:each) { Rails.cache.clear }
-
+      describe 'caching' do
         it 'uses different cache key for different user' do
           expect(PlantLine).to receive(:table_data).thrice.and_return([])
           get :index, format: :json, params: { model: 'plant_lines' }

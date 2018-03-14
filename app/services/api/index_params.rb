@@ -9,7 +9,8 @@ class Api::IndexParams
   end
 
   def params
-    (request_params[model.name]&.to_h || {}).tap do |params|
+    # NOTE: Filterable module takes care of param-safety
+    (request_params.to_unsafe_h[model.name] || {}).tap do |params|
       if request_params[:only_mine]
         params[:query] = (params[:query]&.to_h || {}).merge(user_id: user.id)
       end
