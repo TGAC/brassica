@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 5.0', '< 5.1'
 gem 'activerecord-delay_touching', git: 'https://github.com/kammerer/activerecord-delay_touching.git'
-gem 'pg'
+gem 'pg', '< 1.0'
 gem 'puma'
 gem 'daemons'
 gem 'haml-rails'
