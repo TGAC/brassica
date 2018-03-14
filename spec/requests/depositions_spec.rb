@@ -26,7 +26,7 @@ RSpec.describe "Depositions management" do
 
           it "performs deposition and assigns a DOI" do
             VCR.use_cassette('zenodo') do
-              post "/depositions", deposition: { submission_id: submission.id }
+              post "/depositions", params: { deposition: { submission_id: submission.id } }
             end
 
             expect(response).to redirect_to submission_path(submission)
@@ -40,7 +40,7 @@ RSpec.describe "Depositions management" do
               to receive(:query_url).and_return('http://total.rubbish/')
 
             VCR.use_cassette('zenodo') do
-              post "/depositions", deposition: { submission_id: submission.id }
+              post "/depositions", params: { deposition: { submission_id: submission.id } }
             end
 
             expect(response).to redirect_to submission_path(submission)
