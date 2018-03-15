@@ -34,8 +34,8 @@ class Api::CreateParams
   end
 
   def scalar_attrs
-    model.klass.attribute_names.select do |attribute_name|
-      !model.klass.columns_hash[attribute_name].array
+    model.klass.attribute_names.reject do |attribute_name|
+      attribute_name.ends_with?("_count") || model.klass.columns_hash[attribute_name].array
     end
   end
 
