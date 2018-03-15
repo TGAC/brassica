@@ -1,4 +1,4 @@
-class PlantTrial::Treatment < ActiveRecord::Base
+class PlantTrial::Treatment < ApplicationRecord
   def self.treatment_types
     [:air, :antibiotic, :chemical, :biotic, :fertilizer, :hormone, :fungicide, :herbicide,
      :pesticide, :gas, :soil, :soil_temperature, :mechanical, :salt, :season, :humidity,

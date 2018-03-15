@@ -1,4 +1,4 @@
-class PlantTrial::RootingMedium < ActiveRecord::Base
+class PlantTrial::RootingMedium < ApplicationRecord
   def self.root_term
     PlantTreatmentType::GROWTH_MEDIUM_ROOT_TERM
   end

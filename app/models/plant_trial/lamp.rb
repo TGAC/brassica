@@ -1,5 +1,5 @@
 # Models "Type of lamps used" attribute as defined by MIAPPE.
-class PlantTrial::Lamp < ActiveRecord::Base
+class PlantTrial::Lamp < ApplicationRecord
   self.table_name = "plant_trial_lamps"
 
   belongs_to :environment, class_name: "PlantTrial::Environment"

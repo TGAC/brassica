@@ -1,4 +1,4 @@
-class PlantTrial::MeasurementValue < ActiveRecord::Base
+class PlantTrial::MeasurementValue < ApplicationRecord
   def self.environment_properties
     @environment_properties ||= PlantTrial::Environment.measured_properties.keys
   end

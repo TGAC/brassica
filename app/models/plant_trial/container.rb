@@ -1,5 +1,5 @@
 # Models "Container type" attribute as defined by MIAPPE.
-class PlantTrial::Container < ActiveRecord::Base
+class PlantTrial::Container < ApplicationRecord
   self.table_name = "plant_trial_containers"
 
   belongs_to :environment, class_name: "PlantTrial::Environment"

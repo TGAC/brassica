@@ -1,4 +1,4 @@
-class MeasurementUnit < ActiveRecord::Base
+class MeasurementUnit < ApplicationRecord
   ROOT_TERM = "UO:0000000"
 
   validates :name, :description, presence: true

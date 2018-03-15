@@ -1,6 +1,6 @@
 # Represents a plant treatment as defined in the Plant Experimental Conditions
 # Ontology by term PECO:0001001 and its descendants.
-class PlantTreatmentType < ActiveRecord::Base
+class PlantTreatmentType < ApplicationRecord
   ROOT_TERM = "PECO:0001001"
   BIOTIC_ROOT_TERM = "PECO:0007357"
   CHEMICAL_ROOT_TERM = "PECO:0007189"

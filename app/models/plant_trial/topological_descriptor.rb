@@ -1,4 +1,4 @@
-class PlantTrial::TopologicalDescriptor < ActiveRecord::Base
+class PlantTrial::TopologicalDescriptor < ApplicationRecord
   self.table_name = "plant_trial_topological_descriptors"
 
   belongs_to :environment, class_name: "PlantTrial::Environment"

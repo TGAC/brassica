@@ -1,3 +1,3 @@
-class ContainerType < ActiveRecord::Base
+class ContainerType < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 end

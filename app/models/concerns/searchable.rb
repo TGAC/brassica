@@ -53,7 +53,7 @@ module Searchable extend ActiveSupport::Concern
   end
 
   def self.classes
-    ActiveRecord::Base.descendants.select do |klass|
+    ApplicationRecord.descendants.select do |klass|
       klass.ancestors.include?(Searchable)
     end
   end

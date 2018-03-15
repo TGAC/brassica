@@ -1,4 +1,4 @@
-class PlantTrial::Environment < ActiveRecord::Base
+class PlantTrial::Environment < ApplicationRecord
   def self.measured_properties
     {
       day_temperature: { numericality: true },

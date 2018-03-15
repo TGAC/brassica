@@ -1,4 +1,4 @@
-class PlantTrial::TreatmentApplication < ActiveRecord::Base
+class PlantTrial::TreatmentApplication < ApplicationRecord
   self.inheritance_column = :sti_type
 
   def self.root_term
