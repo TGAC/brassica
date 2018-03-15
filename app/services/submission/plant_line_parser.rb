@@ -22,7 +22,7 @@ class Submission::PlantLineParser
       # NOTE: +1 for first column
       xls.row(1, "Plant lines")[idx + 1].blank?
     end.map do |column_name, _|
-      :"no_#{column_name.downcase.parameterize('_')}_header"
+      :"no_#{column_name.downcase.parameterize(separator: '_')}_header"
     end
   end
 

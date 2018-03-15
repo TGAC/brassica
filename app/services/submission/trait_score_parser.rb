@@ -28,7 +28,7 @@ class Submission::TraitScoreParser
       required_header_columns.
         reject { |column_name| header.include?(column_name) }.
         each do |column_name|
-          errors << :"no_#{column_name.downcase.parameterize('_')}_header"
+          errors << :"no_#{column_name.downcase.parameterize(separator: '_')}_header"
         end
     end
   end
