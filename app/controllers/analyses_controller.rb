@@ -110,6 +110,6 @@ class AnalysesController < ApplicationController
   end
 
   def form_payload_klass
-    Analyses::Gwas::Form::Payload
+    Analyses::Gwasser::Form::Payload
   end
 end
