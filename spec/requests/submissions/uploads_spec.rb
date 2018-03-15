@@ -12,7 +12,7 @@ RSpec.describe "Submission uploads" do
       end
 
       it "returns 401 for xhr request" do
-        xhr :post, "/submissions/#{submission.id}/uploads"
+        post "/submissions/#{submission.id}/uploads", xhr: true
         expect(response.status).to be 401
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe "Submission uploads" do
 
         expect(response).to be_success
         expect(response.content_type).to eq "application/vnd.ms-excel"
-        expect(response.headers).to include("Content-Disposition" => "attachment; filename=plant_trial_scoring_data.xls")
+        expect(response.headers["Content-Disposition"]).to eq("attachment; filename=plant_trial_scoring_data.xls")
       end
     end
   end
