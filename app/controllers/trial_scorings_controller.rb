@@ -24,7 +24,7 @@ class TrialScoringsController < ApplicationController
   private
 
   def cache_key
-    params.reject{ |k,_| %w(_ controller action).include? k }.merge({
+    params.to_unsafe_h.slice(*%w(_ controller action)).merge({
       latest_change: data_latest_updated_at,
       count: data_count
     })
