@@ -195,6 +195,7 @@ RSpec.describe ActiveRecord::Base do
     it 'does not allow ownerless unpublished records' do
       ActiveRecord::Base.send(:subclasses).
         reject { |model| model.table_name.in?(omitted_tables) }.
+        reject { |model| model.try(:read_only?) }.
         select { |model| (model.column_names & ['user_id', 'published']).length == 2 }.
         each do |model|
           record = model.new(user: nil, published: false)

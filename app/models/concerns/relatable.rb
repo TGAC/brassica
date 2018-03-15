@@ -18,8 +18,8 @@ module Relatable extend ActiveSupport::Concern
       end
     end
 
-    def self.privacy_adjusted_count_columns
-      count_columns.map do |column|
+    def self.privacy_adjusted_count_columns(except: [])
+      (count_columns - except).map do |column|
         counter_column = column.split(/ as /i)[0]
         as_column = column.split(/ as /i)[-1]
         "(#{table_name}.#{counter_column} - coalesce(#{get_related_model(counter_column)}.hidden, 0)) AS #{as_column}"
@@ -29,8 +29,8 @@ module Relatable extend ActiveSupport::Concern
     # Left outer joins all countable relations in order to deduct the number
     # of 'hidden' records (i.e. related records that are not visible to the
     # uid user).
-    def self.join_counters(query, uid = nil)
-      count_columns.each do |count_column|
+    def self.join_counters(query, uid = nil, except: [])
+      (count_columns - except).each do |count_column|
         relation = get_related_model(count_column.split(/ as /i)[0])
         related_klass = adjust_related_name(relation).classify.constantize
         fkey = reverse_relation_key(relation)

@@ -41,6 +41,9 @@ RSpec.describe PlantVariety do
     it 'gets proper data table columns' do
       pv = create(:plant_variety)
 
+      create(:plant_line, :with_has_many_associations, plant_variety: pv)
+      create(:plant_accession, plant_line: nil, plant_variety: pv)
+
       table_data = PlantVariety.table_data
       expect(table_data.count).to eq 1
       expect(table_data[0]).to eq [
@@ -53,8 +56,11 @@ RSpec.describe PlantVariety do
         pv.quoted_parentage,
         pv.female_parent,
         pv.male_parent,
+        pv.plant_variety_accessions.count,
         pv.id
       ]
+
+      expect(pv.plant_variety_accessions.count).to eq(3)
     end
 
     it 'retrieves published data only' do

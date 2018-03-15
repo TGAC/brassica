@@ -116,6 +116,7 @@ RSpec.describe PlantLine do
         pl.sequence_identifier,
         pl.data_owned_by,
         pl.organisation,
+        pl.plant_accessions.count,
         pl.plant_variety.id,
         pl.id
       ]

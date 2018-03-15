@@ -18,7 +18,7 @@ class Api::Decorator < Draper::Decorator
       ].flatten
 
       associations.each do |association|
-        next if expanded_association?(association)
+        next if expanded_association?(association) || excluded_association?(association)
         json[association.param] = object.send(association.name).pluck(association.primary_key)
       end
     end
@@ -31,8 +31,16 @@ class Api::Decorator < Draper::Decorator
   end
 
   def expanded_association?(association)
-    object.class.respond_to?(:json_options) &&
-      object.class.json_options[:include].include?(association.name.to_sym)
+    return false unless object.class.respond_to?(:json_options)
+
+    includes = Array.wrap(object.class.json_options[:include])
+    includes.include?(association.name.to_sym)
   end
 
+  def excluded_association?(association)
+    return false unless object.class.respond_to?(:json_options)
+
+    excludes = Array.wrap(object.class.json_options[:except])
+    excludes.include?(association.name.to_sym)
+  end
 end

@@ -50,7 +50,8 @@ class Api::CreateParams
   end
 
   def blacklisted_attrs
-    %w(id user_id created_at updated_at date_entered entered_by_whom published_on)
+    %w(id user_id created_at updated_at date_entered entered_by_whom published_on) +
+      model.klass.attribute_names.select { |name| name.ends_with?("_count") }
   end
 
 end
