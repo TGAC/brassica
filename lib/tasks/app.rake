@@ -32,7 +32,15 @@ namespace :app do
   def restore_cropstore_dump
     db_config = Rails.application.config_for(:database)
     env = { "PGUSER" => db_config["username"], "PGPASSWORD" => db_config["password"] }
-    cmd = "pg_restore -O -d #{db_config["database"]} db/cropstore_web_20160616_1214.dump"
+    cmd = [
+      "pg_restore -O",
+      "-h #{db_config.fetch("host")}",
+      "-p #{db_config.fetch("port")}",
+      "-d #{db_config.fetch("database")}",
+      ("-w" unless db_config["password"].present?),
+      "db/cropstore_web_20160616_1214.dump"
+    ].compact.join(" ")
+
     unless system(env, cmd)
       raise "Cropstore dump restoration failed: #{$?}"
     end
@@ -43,7 +51,12 @@ namespace :app do
   end
 
   def build_elasticsearch_indices
-    Rake::Task['elasticsearch:import:all'].invoke
+    ActiveRecord::Base.descendants.
+      select { |klass| klass.ancestors.include?(Elasticsearch::Model) }.
+      each do |klass|
+        puts "   - #{klass}"
+        klass.import(force: true)
+      end
   end
 
   def silence_stdout

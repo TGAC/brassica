@@ -1,0 +1,20 @@
+version: '2.3'
+
+services:
+  postgres:
+    image: postgres:9
+    command: postgres
+    environment:
+      - POSTGRES_PASSWORD=$BRASSICA_DATABASE_PASSWORD
+    volumes:
+      - ${PWD}/tmp/postgres-data-development:/var/lib/postgresql
+    ports:
+      - "$BRASSICA_DATABASE_PORT:5432"
+
+  elasticsearch:
+    image: bitnami/elasticsearch:2.4.4-r2
+    volumes:
+      - ${PWD}/config/elasticsearch-config.yml:/bitnami/elasticsearch/conf/elasticsearch.yml
+      - ${PWD}/tmp/elasticsearch-data-development:/bitnami/elasticsearch/data
+    ports:
+      - "9200:9200"
