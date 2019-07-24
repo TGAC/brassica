@@ -33,16 +33,20 @@ https://zenodo.org/badge/DOI/10.5281/zenodo.466050.svg
 
 ## Dependencies
 
-* Ruby >= 2.0
+* Ruby >= 2.2
 * MRI 2.2.x
-* PostgreSQL
+* PostgreSQL 9
 * Elasticsearch 2.4.6, Java 7
 * R >= 3.2.2
 * [GWASSER](https://github.com/kammerer/GWASSER) (forked from [cyverseuk/GWASSER](https://github.com/cyverseuk/GWASSER))
 * [GAPIT](http://www.maizegenetics.net/gapit)
 
+The easiest way to handle PostgreSQL and Elasticsearch is by using
+Docker (see Installation below).
 
 ### Elasticsearch
+
+If you don't want to use Docker you need to install Elasticsearch manually.
 
 In Debian / Ubuntu / Mint Linux installation might be as easy as:
 
@@ -74,6 +78,11 @@ Make sure `config/database.yml` is in place and contains correct configuration:
     cp config/database.yml.sample config/database.yml
 
 Database user must be allowed to create databases and enable extensions.
+
+You can use `docker-compose` and enclosed `docker-compose.yml` to setup
+both PostgreSQL and Elasticsearch:
+
+    docker-compose up
 
 Create and bootstrap the database:
 
