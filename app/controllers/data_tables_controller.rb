@@ -30,7 +30,16 @@ class DataTablesController < ApplicationController
 
   def prepare_grid_data
     objects = model_klass.table_data(params, current_user.try(:id))
+    html_escape_grid_data(objects)
     ApplicationDecorator.decorate(objects).as_grid_data
+  end
+
+  def html_escape_grid_data(objects)
+    objects.each do |object|
+      object.map! do |value|
+        value.is_a?(String) ? ERB::Util.html_escape(value) : value
+      end
+    end
   end
 
   def model_param
